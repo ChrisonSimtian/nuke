@@ -140,7 +140,7 @@ partial class Build
         new PublishTarget
         {
             Name = "github-packages",
-            Source = "https://nuget.pkg.github.com/ChrisonSimtian/index.json",
+            Source = "https://nuget.pkg.github.com/Fallout-build/index.json",
             ApiKey = From<ICreateGitHubRelease>().GitHubToken,
         },
         new PublishTarget
