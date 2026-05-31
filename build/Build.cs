@@ -127,30 +127,40 @@ partial class Build
 
     [Parameter] [Secret] readonly string NuGetApiKey;
 
-    // Publishing to nuget.org now that the Fallout.* rename has landed (#54).
-    // Requires NUGET_API_KEY in repo secrets — see release.yml.
-    string IPublish.NuGetSource => "https://api.nuget.org/v3/index.json";
-    string IPublish.NuGetApiKey => NuGetApiKey;
+    // Two publish channels (FALLOUT001 — see IPublish.PublishTargets). Routing replaces the
+    // old single-feed push + the hand-rolled `dotnet nuget push` in the workflows (#333):
+    //   - github-packages: EVERY package, incl. the Nuke.* shims — that ID is owned by the
+    //     original NUKE maintainer (#47), so the shims only ever go here. Keyed by the GitHub token.
+    //   - nuget.org: Fallout.* ONLY, never the Nuke.* shims. Keyed by NUGET_API_KEY.
+    // Select per run from CI with `dotnet fallout Publish --publish-to <name>`. PublishTarget.SkipDuplicate
+    // (default true) keeps re-runs idempotent if a version already exists on a feed.
+#pragma warning disable FALLOUT001 // opting our own build into the experimental multi-channel publish surface
+    IEnumerable<PublishTarget> IPublish.PublishTargets => new[]
+    {
+        new PublishTarget
+        {
+            Name = "github-packages",
+            Source = "https://nuget.pkg.github.com/ChrisonSimtian/index.json",
+            ApiKey = From<ICreateGitHubRelease>().GitHubToken,
+        },
+        new PublishTarget
+        {
+            Name = "nuget.org",
+            Source = "https://api.nuget.org/v3/index.json",
+            ApiKey = NuGetApiKey,
+            IncludePackages = new[] { "Fallout.*" },
+            ExcludePackages = new[] { "Nuke.*" },
+        },
+    };
+#pragma warning restore FALLOUT001
 
+    // The workflows now gate which channel publishes (via --publish-to); no on-branch
+    // requirement here. Missing keys fail per-target inside Publish, so a stray local
+    // `dotnet fallout Publish` is safe (no key → clear error, no push).
     Target IPublish.Publish => _ => _
         .Inherit<IPublish>()
         .Consumes(From<IPack>().Pack)
-        .Requires(() => GitRepository.IsOnMainBranch() && Host is GitHubActions && GitHubActions.Workflow == ReleaseWorkflow)
         .WhenSkipped(DependencyBehavior.Execute);
-
-    // Filter `Nuke.*` shim packages out of the nuget.org push — that ID is owned by
-    // the original NUKE maintainer. The shims still build and pack as artifacts; they
-    // are pushed to GitHub Packages by a follow-up step in .github/workflows/release.yml
-    // (#47).
-    IEnumerable<AbsolutePath> IPublish.PushPackageFiles
-        => From<IPack>().PackagesDirectory.GlobFiles("*.nupkg")
-            .Where(x => !x.NameWithoutExtension.StartsWith("Nuke.", StringComparison.OrdinalIgnoreCase));
-
-    // `--skip-duplicate` makes nuget push idempotent: if a version is already on the feed,
-    // skip it instead of erroring. Lets us rerun release.yml safely when a single package
-    // fails mid-batch without nuking the whole pipeline on retry.
-    Configure<DotNetNuGetPushSettings> IPublish.PushSettings => _ => _
-        .EnableSkipDuplicate();
 
     IEnumerable<AbsolutePath> NuGetPackageFiles
         => From<IPack>().PackagesDirectory.GlobFiles("*.nupkg");

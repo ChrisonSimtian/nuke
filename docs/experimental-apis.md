@@ -48,7 +48,7 @@ Status values: **Experimental** (live, opt-in), **Promoted** (attribute removed,
 
 | ID | Surface | Introduced | Status | Notes |
 |----|---------|------------|--------|-------|
-| _none allocated yet_ | — | — | — | First experimental API to land claims `FALLOUT001`. |
+| `FALLOUT001` | `Fallout.Components.IPublish.PublishTargets` / `.PublishTo` (multi-channel publishing) | 2026.1 | Experimental | Fan a single `Pack` output across multiple feeds with per-feed package-ID routing (`PublishTarget`). Shape may change while the CD model firms up (epic #332). Promote by deleting the attribute once `ReleaseChannel`/`DeploymentTarget` (#334) settle. |
 
 <!--
 Allocation example (do not uncomment unless a real API is marked):
