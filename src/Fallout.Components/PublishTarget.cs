@@ -14,7 +14,10 @@ namespace Fallout.Components;
 /// everything, nuget.org for <c>Fallout.*</c> only). Part of the experimental
 /// multi-channel publishing surface (<c>FALLOUT001</c>).
 /// </summary>
-public sealed record PublishTarget
+// A sealed class (not a record) so the transition-shim generator skips it: it can't
+// derive a Nuke.* shim from a sealed type (CS0509), and this is a new type with no
+// pre-rename consumers to bridge. We don't rely on record value-equality / `with`.
+public sealed class PublishTarget
 {
     /// <summary>Logical name, used by the <c>--publish-to</c> selector (e.g. <c>github-packages</c>, <c>nuget.org</c>).</summary>
     public required string Name { get; init; }
