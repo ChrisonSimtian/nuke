@@ -1,37 +1,51 @@
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Components;
 
-// macOS and Windows runs are reserved for post-merge validation on the
-// long-lived branches (experimental, main, release/YYYY, support/*). PRs and
-// feature-branch pushes get Linux-only for fast, cheap feedback. Cross-platform
-// regressions on those branches surface as a red commit — same fail-fast model.
+// Cross-platform (macOS/Windows) full Test+Pack is gated to RELEASE INTENT
+// (#318/#326): it runs only on a PR into a production branch (release/YYYY,
+// support/*) and on a release tag push (v*) — never on routine pushes to
+// main/experimental, never on a per-merge basis. On main/experimental "we've
+// got our edge": the ubuntu-latest PR gate + the alpha/preview pipelines.
+// (workflow_dispatch as a manual cross-platform trigger isn't emitted here —
+// the generator only writes workflow_dispatch when it has inputs; GitHub's
+// built-in run re-run covers the on-demand case.)
+//
+// concurrency cancel-in-progress (#322): superseded runs are cancelled rather
+// than stacked. Never applied to release.yml (a publish must not be cancelled).
 [GitHubActions(
     "macos-latest",
     GitHubActionsImage.MacOsLatest,
     FetchDepth = 0,
-    Submodules = GitHubActionsSubmodules.Recursive,
-    OnPushBranches = new[] { ExperimentalBranch, MainBranch, ReleaseBranchPattern, SupportBranchPattern },
+    ConcurrencyGroup = "${{ github.workflow }}-${{ github.ref }}",
+    ConcurrencyCancelInProgress = true,
+    OnPushTags = new[] { "v*" },
+    OnPullRequestBranches = new[] { ReleaseBranchPattern, SupportBranchPattern },
+    OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
     InvokedTargets = new[] { nameof(ITest.Test), nameof(IPack.Pack) },
     PublishArtifacts = false)]
 [GitHubActions(
     "windows-latest",
     GitHubActionsImage.WindowsLatest,
     FetchDepth = 0,
-    Submodules = GitHubActionsSubmodules.Recursive,
-    OnPushBranches = new[] { ExperimentalBranch, MainBranch, ReleaseBranchPattern, SupportBranchPattern },
+    ConcurrencyGroup = "${{ github.workflow }}-${{ github.ref }}",
+    ConcurrencyCancelInProgress = true,
+    OnPushTags = new[] { "v*" },
+    OnPullRequestBranches = new[] { ReleaseBranchPattern, SupportBranchPattern },
+    OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
     InvokedTargets = new[] { nameof(ITest.Test), nameof(IPack.Pack) },
     PublishArtifacts = false)]
-// pull_request only — same-repo branches would otherwise fire both push and
-// pull_request events on every push, double-running the validation.
-//
-// CheckoutRef = github.head_ref pins checkout to the PR source branch instead of the merge SHA,
-// keeping HEAD attached so GitHubTasksTest.GitHubRepositoryFromLocalDirectoryTest (which reads
-// .git/HEAD via GitRepository.FromLocalDirectory) resolves a non-null branch.
+// The Linux PR gate — the only required status check. pull_request only:
+// feature-branch pushes run zero CI until a PR is opened against a long-lived
+// branch (#327). CheckoutRef = github.head_ref pins checkout to the PR source
+// branch instead of the merge SHA, keeping HEAD attached so
+// GitHubTasksTest.GitHubRepositoryFromLocalDirectoryTest (which reads .git/HEAD
+// via GitRepository.FromLocalDirectory) resolves a non-null branch.
 [GitHubActions(
     "ubuntu-latest",
     GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
-    Submodules = GitHubActionsSubmodules.Recursive,
+    ConcurrencyGroup = "${{ github.workflow }}-${{ github.ref }}",
+    ConcurrencyCancelInProgress = true,
     CheckoutRef = "${{ github.head_ref }}",
     // Trigger for PRs targeting experimental, main, or any release/YYYY / support/*
     // branch — all are long-lived and protected; all require the ubuntu-latest check.

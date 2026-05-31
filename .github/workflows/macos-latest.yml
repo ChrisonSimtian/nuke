@@ -18,11 +18,20 @@ name: macos-latest
 
 on:
   push:
+    tags:
+      - 'v*'
+  pull_request:
     branches:
-      - experimental
-      - main
       - 'release/*'
       - 'support/*'
+    paths-ignore:
+      - 'docs/**'
+      - '.assets/**'
+      - '**/*.md'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   macos-latest:
@@ -31,7 +40,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          submodules: recursive
           fetch-depth: 0
       - name: 'Cache: .fallout/temp, ~/.nuget/packages'
         uses: actions/cache@v4

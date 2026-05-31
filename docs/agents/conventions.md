@@ -34,9 +34,25 @@ public sealed class NewPluginHost
 - **Channel discipline differs.** On the `experimental` (alpha) / `main` (preview) test lanes, churn is expected and the attribute is a courtesy. On a `release/YYYY` **production line**, any risky-but-shipped public surface **must** wear `[Experimental]` — that contract is what keeps the stable line trustworthy while still carrying new work.
 - **Don't apply it speculatively.** Because the diagnostic is error-by-default, marking an API that's already used internally breaks the build everywhere it's referenced. Only add `[Experimental]` to a genuinely not-yet-stable API, and suppress every internal usage in the same change so the build stays green.
 
+## CI pipeline & triggers
+
+Shaped by [milestone #18](https://github.com/ChrisonSimtian/Fallout/milestone/18) and the [ADR-0004](../adr/0004-calendar-versioning-and-dual-pace-channels.md) ladder. Invariants:
+
+- **Feature branches run zero CI until a PR is opened.** Push triggers list **only** long-lived branches; nothing fires on `feature/*`, `bugfix/*`, etc. until they're PR'd against `experimental`/`main`/`release/*`/`support/*`. Do **not** add a working-branch pattern to any `OnPush*`/`branches:` trigger.
+- **The Linux PR gate (`ubuntu-latest`) is the only required check** — runs on PRs to the four long-lived branches.
+- **`experimental` (push) → `-alpha`, `main` (push) → `-preview`** to GitHub Packages (`experimental.yml` / `preview.yml`).
+- **Cross-platform `windows`/`macos` are gated to release intent** — PR-to-`release/*`/`support/*` or a `v*` tag push only. They do **not** run on `main`/`experimental` pushes. ("On `main` we've got our edge.")
+- **`concurrency: cancel-in-progress` on every build workflow except `release.yml`** — never cancel a publish mid-flight.
+- **Canonical CI-ignore paths:** `docs/**`, `.assets/**`, `**/*.md` — applied to every PR/push trigger.
+- The `ubuntu-latest` / `windows-latest` / `macos-latest` workflows are **generated** from `build/Build.CI.GitHubActions.cs` — edit the attributes + constants there and regenerate (`./build.sh`), never hand-edit the `.yml`. `experimental.yml` / `preview.yml` / `release.yml` are hand-written.
+- **Every publishing lane runs `Test` before it publishes** (#324). `experimental.yml`, `preview.yml`, and `release.yml` all run a single `dotnet fallout Test Pack` invocation — NUKE executes it as discrete internal stages (Restore → Compile → Test → Pack) and fails at the breaking stage, so a test failure stops the job before the push step. Don't split a lane into separate `dotnet fallout Compile`/`Test`/`Pack` steps — each invocation re-runs the dependency graph (double-compile); the single invocation *is* the staged build.
+- **Caching** (#328): every workflow caches `~/.nuget/packages` + `.fallout/temp`, keyed on `global.json` + `**/*.csproj` + `Directory.Packages.props` (the dependency-affecting set), with a `restore-keys:` prefix fallback for partial restores. There is no `packages.lock.json` to add to the key, and build outputs (`bin`/`obj`) are deliberately **not** cached (stale-artifact correctness risk).
+
 ## What not to do
 
 - Don't reintroduce `source/` — production code lives under `src/`, tests under `tests/`. Same for `images/` (now `.assets/`).
+- Don't add `main`/`experimental` (or any working-branch pattern) to the **push** triggers of the cross-platform workflows — they're release-intent-gated on purpose (milestone #18 / #318 / #326).
+- Don't add `submodules: recursive` to checkouts — there are no submodules (no `.gitmodules`); it's a dead init step.
 - Don't add `secret`/`default` defaults to tool JSON files (see CONTRIBUTING.md).
 - Don't introduce a new test framework or assertion library — stay on xUnit + FluentAssertions + Verify.
 - Don't commit `output/` or any `bin/`/`obj/` directory.

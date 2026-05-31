@@ -94,7 +94,6 @@ jobs:
         with:
           ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0           # Nerdbank.GitVersioning needs full history
-          submodules: recursive    # vendor/vs-solutionpersistence
       - name: 'Cache: .fallout/temp, ~/.nuget/packages'
         uses: actions/cache@v4
         with:
@@ -102,6 +101,8 @@ jobs:
             .fallout/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-release-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props', 'version.json') }}
+          restore-keys: |
+            ${{ runner.os }}-release-
       - name: 'Setup: .NET SDK'
         uses: actions/setup-dotnet@v4
         with:
