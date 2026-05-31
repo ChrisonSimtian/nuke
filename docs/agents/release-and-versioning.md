@@ -92,7 +92,7 @@ If you only discover the breaking nature mid-review, apply all relevant steps be
 | Job | Environment | Fires on tag push? | What ships | Gating |
 |---|---|---|---|---|
 | `publish-nuget-org` | `nuget-org` | **No — opt-in only** via `workflow_dispatch` flag | `Fallout.*.nupkg` to https://api.nuget.org/v3/index.json | Workflow flag + approval-gated env |
-| `publish-github-packages` | `github-packages` | Yes | **All** `*.nupkg` (Fallout.* + Nuke.*) to https://nuget.pkg.github.com/ChrisonSimtian/index.json | None |
+| `publish-github-packages` | `github-packages` | Yes | **All** `*.nupkg` (Fallout.* + Nuke.*) to https://nuget.pkg.github.com/Fallout-build/index.json | None |
 | `publish-github-releases` | `github-releases` | Yes | All `*.nupkg` attached to a GitHub Release on the tag, auto-generated notes | None |
 
 ### Test lanes (from `experimental` and `main`)

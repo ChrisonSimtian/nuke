@@ -83,7 +83,7 @@ jobs:
           for pkg in "${packages[@]}"; do
             echo "Pushing $pkg to GitHub Packages (alpha)..."
             dotnet nuget push "$pkg" \
-              --source "https://nuget.pkg.github.com/ChrisonSimtian/index.json" \
+              --source "https://nuget.pkg.github.com/Fallout-build/index.json" \
               --api-key "${{ secrets.GITHUB_TOKEN }}" \
               --skip-duplicate
           done
