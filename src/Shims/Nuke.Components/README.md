@@ -11,7 +11,7 @@ Limitations are the same as the `Nuke.Common` shim — see [`../Nuke.Common/READ
 Add this fork's GitHub Packages feed to your `nuget.config`:
 
 ```xml
-<add key="fallout-shims" value="https://nuget.pkg.github.com/ChrisonSimtian/index.json" />
+<add key="fallout-shims" value="https://nuget.pkg.github.com/Fallout-build/index.json" />
 ```
 
 Then bump your `Nuke.Components` package reference to the latest 10.3.x or later.

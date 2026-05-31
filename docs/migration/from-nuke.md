@@ -82,7 +82,7 @@ The shim ships on **GitHub Packages** (not nuget.org — that namespace belongs 
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <packageSources>
-    <add key="fallout-shims" value="https://nuget.pkg.github.com/ChrisonSimtian/index.json" />
+    <add key="fallout-shims" value="https://nuget.pkg.github.com/Fallout-build/index.json" />
   </packageSources>
   <packageSourceCredentials>
     <fallout-shims>

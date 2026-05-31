@@ -74,7 +74,7 @@ jobs:
           for pkg in "${shims[@]}"; do
             echo "Pushing $pkg to GH Packages..."
             dotnet nuget push "$pkg" \
-              --source "https://nuget.pkg.github.com/ChrisonSimtian/index.json" \
+              --source "https://nuget.pkg.github.com/Fallout-build/index.json" \
               --api-key "${{ secrets.GITHUB_TOKEN }}" \
               --skip-duplicate
           done
