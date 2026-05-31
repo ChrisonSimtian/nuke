@@ -36,6 +36,7 @@
   <Project Path="src\Fallout.Utilities\Fallout.Utilities.csproj" />
   <Project Path="tests\Fallout.Build.Tests\Fallout.Build.Tests.csproj" />
   <Project Path="tests\Fallout.Common.Tests\Fallout.Common.Tests.csproj" />
+  <Project Path="tests\Fallout.Components.Tests\Fallout.Components.Tests.csproj" />
   <Project Path="tests\Fallout.Core.Tests\Fallout.Core.Tests.csproj" />
   <Project Path="tests\Fallout.Cli.Tests\Fallout.Cli.Tests.csproj" />
   <Project Path="tests\Fallout.Migrate.Tests\Fallout.Migrate.Tests.csproj" />
