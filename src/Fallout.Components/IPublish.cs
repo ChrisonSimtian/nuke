@@ -39,6 +39,18 @@ public interface IPublish : IPack, ITest
     /// <summary>Extra per-push configuration applied to every target's <c>dotnet nuget push</c>.</summary>
     Configure<DotNetNuGetPushSettings> PushSettings => _ => _;
 
+    /// <summary>Per-package push configuration applied (with <see cref="PushSettings"/>) to every target.</summary>
+    Configure<DotNetNuGetPushSettings> PackagePushSettings => _ => _;
+
+    /// <summary>
+    /// Legacy single-feed base settings (source + key from <see cref="NuGetSource"/>/<see cref="NuGetApiKey"/>).
+    /// Retained for back-compat; the multi-channel <see cref="Publish"/> path sets source/key per
+    /// <see cref="PublishTarget"/> instead, so it does not apply this.
+    /// </summary>
+    sealed Configure<DotNetNuGetPushSettings> PushSettingsBase => _ => _
+        .SetSource(NuGetSource)
+        .SetApiKey(NuGetApiKey);
+
     /// <summary>Candidate package set routed across the selected targets. Defaults to every packed <c>*.nupkg</c>.</summary>
     IEnumerable<AbsolutePath> PushPackageFiles => PackagesDirectory.GlobFiles("*.nupkg");
 
@@ -83,7 +95,8 @@ public interface IPublish : IPack, ITest
                         .When(target.SkipDuplicate, _ => _.EnableSkipDuplicate())
                         .Apply(PushSettings)
                         .CombineWith(routed, (_, v) => _
-                            .SetTargetPath(v)),
+                            .SetTargetPath(v))
+                        .Apply(PackagePushSettings),
                     PushDegreeOfParallelism,
                     PushCompleteOnFailure);
             }

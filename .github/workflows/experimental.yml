@@ -64,26 +64,13 @@ jobs:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
         run: dotnet tool restore
-      # build + unit-test before publishing alpha (#324). One invocation: NUKE runs
-      # this as discrete internal stages (Restore → Compile → Test → Pack) and fails
-      # at the breaking stage — separate `dotnet fallout` steps would re-run the
-      # dependency graph (double-compile), so we keep it a single invocation.
-      # If Test fails, the job stops here and nothing is published.
-      - name: 'Run: Test + Pack'
-        run: dotnet fallout Test Pack
-      - name: 'Push: all *.nupkg to GitHub Packages (alpha)'
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-          packages=(output/packages/*.nupkg)
-          if [ ${#packages[@]} -eq 0 ]; then
-            echo "::error::No packages found — nothing to publish to the experimental channel."
-            exit 1
-          fi
-          for pkg in "${packages[@]}"; do
-            echo "Pushing $pkg to GitHub Packages (alpha)..."
-            dotnet nuget push "$pkg" \
-              --source "https://nuget.pkg.github.com/ChrisonSimtian/index.json" \
-              --api-key "${{ secrets.GITHUB_TOKEN }}" \
-              --skip-duplicate
-          done
+      # Test + Pack + push alpha → GitHub Packages, all through our own framework (#333) —
+      # dogfooding `dotnet fallout Publish` instead of a hand-rolled `dotnet nuget push`.
+      # `Publish` depends on Test + Pack, so NUKE runs Restore → Compile → Test → Pack →
+      # Publish as discrete internal stages and fails at the breaking stage; if Test fails
+      # the job stops before any push. Which packages go where (Fallout.* + Nuke.* → GitHub
+      # Packages) is decided by Build.cs IPublish.PublishTargets, not here.
+      - name: 'Publish: alpha → GitHub Packages'
+        run: dotnet fallout Publish --publish-to github-packages
+        env:
+          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
