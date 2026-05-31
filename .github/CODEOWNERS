@@ -8,5 +8,5 @@
 # changelogs, etc.) have no code owner and are gated only by the required CI
 # status check.
 
-/src/**     @ChrisonSimtian
-/tests/**   @ChrisonSimtian
+/src/**     @Fallout-build/maintainers
+/tests/**   @Fallout-build/maintainers

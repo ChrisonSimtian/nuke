@@ -45,14 +45,14 @@ Until automated dual-publish lands (tracked in [#69](https://github.com/ChrisonS
 dotnet pack src/Shims/Nuke.Common/Nuke.Common.csproj -c Release
 dotnet nuget push **/Nuke.Common.*.nupkg `
     --api-key $env:GITHUB_TOKEN `
-    --source https://nuget.pkg.github.com/ChrisonSimtian/index.json
+    --source https://nuget.pkg.github.com/Fallout-build/index.json
 ```
 
 ## Migration path
 
 For projects that just want their `class Build : NukeBuild { ... }` to compile against our framework:
 
-1. Add `https://nuget.pkg.github.com/ChrisonSimtian/index.json` as a NuGet source (`nuget.config`).
+1. Add `https://nuget.pkg.github.com/Fallout-build/index.json` as a NuGet source (`nuget.config`).
 2. Bump the `Nuke.Common` package version to the latest published here.
 3. Build. If the shim covers what you use, you're done. Otherwise:
 4. Run `fallout-migrate` to rewrite the remaining references.
