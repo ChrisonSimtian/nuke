@@ -1,9 +1,10 @@
-﻿using System;
-using System.IO;
+using System;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentFTP;
 using Serilog;
-#pragma warning disable SYSLIB0014
 
 namespace Fallout.Common.IO;
 
@@ -11,73 +12,85 @@ public static class FtpTasks
 {
     public static NetworkCredential FtpCredentials { get; set; }
 
-    public static void FtpUploadDirectoryRecursively(string directory, string hostRoot)
+    public static void FtpUploadDirectoryRecursively(string host, string directory, string serverRoot)
     {
-        Log.Information("Uploading directory {Directory} to {HostRoot} ...", directory, hostRoot);
+        FtpUploadDirectoryRecursivelyAsync(host, directory, serverRoot).GetAwaiter().GetResult();
+    }
+
+    public static async Task FtpUploadDirectoryRecursivelyAsync(
+        string host,
+        string directory,
+        string serverRoot,
+        CancellationToken cancellationToken = default)
+    {
+        Log.Information("Uploading directory {Directory} to {ServerRoot} ...", directory, serverRoot);
 
         var files = Globbing.GlobFiles(directory, "**/*").ToList();
+
+        await using var client = CreateClient(host);
+        await client.Connect(cancellationToken);
+
         for (var index = 0; index < files.Count; index++)
         {
             var file = files[index];
             var relativePath = PathConstruction.GetRelativePath(directory, file);
-            var hostPath = $"{hostRoot}/{relativePath}";
+            var serverPath = CombineServerPath(serverRoot, relativePath);
 
-            FtpUploadFileInternal(file, hostPath, $"[{index + 1}/{files.Count}] ");
+            Log.Debug("[{Index}/{Count}] Uploading to {ServerPath} ...", index + 1, files.Count, serverPath);
+            await client.UploadFile(
+                file,
+                serverPath,
+                createRemoteDir: true,
+                token: cancellationToken);
         }
     }
 
-    public static void FtpUploadFile(string file, string hostDestination)
+    public static void FtpUploadFile(string host, string file, string serverDestination)
     {
-        FtpUploadFileInternal(file, hostDestination);
+        FtpUploadFileAsync(host, file, serverDestination).GetAwaiter().GetResult();
     }
 
-    private static void FtpUploadFileInternal(string file, string hostDestination, string prefix = null)
+    public static async Task FtpUploadFileAsync(
+        string host,
+        string file,
+        string serverDestination,
+        CancellationToken cancellationToken = default)
     {
-        Log.Debug($"{prefix}Uploading to {{HostDestination}} ...", hostDestination);
+        Log.Debug("Uploading to {ServerDestination} ...", serverDestination);
 
-        ControlFlow.ExecuteWithRetry(() =>
-        {
-            FtpMakeDirectory(GetParentPath(hostDestination));
-
-            var request = WebRequest.Create(hostDestination);
-            request.Credentials = FtpCredentials;
-            request.Method = WebRequestMethods.Ftp.UploadFile;
-
-            var content = File.ReadAllBytes(file);
-            request.ContentLength = content.Length;
-
-            using var requestStream = request.GetRequestStream();
-            requestStream.Write(content, offset: 0, count: content.Length);
-            requestStream.Close();
-
-            // TODO: check response
-            //var response = (FtpWebResponse) request.GetResponse ();
-            //response.Close ();
-        });
+        await using var client = CreateClient(host);
+        await client.Connect(cancellationToken);
+        await client.UploadFile(
+            file,
+            serverDestination,
+            createRemoteDir: true,
+            token: cancellationToken);
     }
 
-    public static void FtpMakeDirectory(string path)
+    public static void FtpMakeDirectory(string host, string path)
     {
-        var parentPath = GetParentPath(path);
-        if (parentPath != path)
-            FtpMakeDirectory(parentPath);
-
-        var request = WebRequest.Create(path);
-        request.Method = WebRequestMethods.Ftp.MakeDirectory;
-        request.Credentials = FtpCredentials;
-        try
-        {
-            request.GetResponse().Dispose();
-        }
-        catch
-        {
-            // ignored
-        }
+        FtpMakeDirectoryAsync(host, path).GetAwaiter().GetResult();
     }
 
-    private static string GetParentPath(string path)
+    public static async Task FtpMakeDirectoryAsync(
+        string host,
+        string path,
+        CancellationToken cancellationToken = default)
     {
-        var uri = new Uri(path);
-        return uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length);
+        await using var client = CreateClient(host);
+        await client.Connect(cancellationToken);
+        await client.CreateDirectory(path, force: true, token: cancellationToken);
+    }
+
+    private static AsyncFtpClient CreateClient(string host)
+    {
+        var credentials = FtpCredentials ?? new NetworkCredential();
+        return new AsyncFtpClient(host, credentials);
+    }
+
+    private static string CombineServerPath(string serverRoot, string relativePath)
+    {
+        var normalizedRelative = relativePath.Replace('\\', '/');
+        return $"{serverRoot.TrimEnd('/')}/{normalizedRelative.TrimStart('/')}";
     }
 }
