@@ -73,10 +73,10 @@ public partial class TeamCity : Host, IBuildServer
     {
         _messageSink = messageSink ?? Console.WriteLine;
 
-        _systemProperties = Lazy.Create(() => ParseDictionary(EnvironmentInfo.GetVariable("TEAMCITY_BUILD_PROPERTIES_FILE")));
-        _configurationProperties = Lazy.Create(() => ParseDictionary(SystemProperties?["teamcity.configuration.properties.file"]));
-        _runnerProperties = Lazy.Create(() => ParseDictionary(SystemProperties?["teamcity.runner.properties.file"]));
-        _recentlyFailedTests = Lazy.Create(() =>
+        _systemProperties = new(() => ParseDictionary(EnvironmentInfo.GetVariable("TEAMCITY_BUILD_PROPERTIES_FILE")));
+        _configurationProperties = new(() => ParseDictionary(SystemProperties?["teamcity.configuration.properties.file"]));
+        _runnerProperties = new(() => ParseDictionary(SystemProperties?["teamcity.runner.properties.file"]));
+        _recentlyFailedTests = new(() =>
         {
             var file = (AbsolutePath) SystemProperties?["teamcity.tests.recentlyFailedTests.file"];
             return file.FileExists()
@@ -104,15 +104,18 @@ public partial class TeamCity : Host, IBuildServer
     public string AuthPassword => SystemProperties["teamcity.auth.password"];
     public string ProjectId => ConfigurationProperties?["teamcity.project.id"];
     public long BuildId => long.Parse(ConfigurationProperties?["teamcity.build.id"] ?? 0.ToString());
-    public bool IsBuildPersonal => bool.Parse(SystemProperties?.GetValueOrDefault("build.is.personal") ?? bool.FalseString);
-    public bool IsPullRequest => ConfigurationProperties?.GetValueOrDefault("teamcity.pullRequest.number") != null;
+    public bool IsBuildPersonal => bool.Parse(GetConfigurationValue(SystemProperties, "build.is.personal") ?? bool.FalseString);
+    public bool IsPullRequest => GetConfigurationValue(ConfigurationProperties, "teamcity.pullRequest.number") != null;
     public long? PullRequestNumber => IsPullRequest ? long.Parse(ConfigurationProperties["teamcity.pullRequest.number"]) : null;
     public string PullRequestSourceBranch => IsPullRequest ? ConfigurationProperties["teamcity.pullRequest.source.branch"] : null;
     public string PullRequestTargetBranch => IsPullRequest ? ConfigurationProperties["teamcity.pullRequest.target.branch"] : null;
     public string PullRequestTitle => IsPullRequest ? ConfigurationProperties["teamcity.pullRequest.title"] : null;
 
-    [NoConvert] public string BranchName => ConfigurationProperties?.GetValueOrDefault("teamcity.build.branch")
+    [NoConvert] public string BranchName => GetConfigurationValue(ConfigurationProperties, "teamcity.build.branch")
         .NotNull("Configuration property 'teamcity.build.branch' is null. See https://youtrack.jetbrains.com/issue/TW-62888.");
+
+    private static string GetConfigurationValue(IReadOnlyDictionary<string, string> properties, string key)
+        => properties != null && properties.TryGetValue(key, out var value) ? value : null;
 
     public void DisableServiceMessages()
     {

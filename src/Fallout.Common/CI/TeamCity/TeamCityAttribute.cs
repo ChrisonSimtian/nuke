@@ -254,7 +254,7 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
             {
                 Type = TeamCityParameterType.Password,
                 Name = x,
-                DefaultValue = guids.GetValueOrDefault(x),
+                DefaultValue = guids.TryGetValue(x, out var guid) ? guid : null,
                 Display = TeamCityParameterDisplay.Hidden
             });
     }

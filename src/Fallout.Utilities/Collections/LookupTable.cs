@@ -39,13 +39,13 @@ public class LookupTable<TKey, TValue>(Dictionary<TKey, List<TValue>> dictionary
 
     public void Add(TKey key, TValue value)
     {
-        var list = (_dictionary[key] = _dictionary.GetValueOrDefault(key, new List<TValue>())).NotNull();
+        var list = (_dictionary[key] = _dictionary.TryGetValue(key, out var existing) ? existing : new List<TValue>()).NotNull();
         list.Add(value);
     }
 
     public void AddRange(TKey key, IEnumerable<TValue> values)
     {
-        var list = (_dictionary[key] = _dictionary.GetValueOrDefault(key, new List<TValue>())).NotNull();
+        var list = (_dictionary[key] = _dictionary.TryGetValue(key, out var existing) ? existing : new List<TValue>()).NotNull();
         foreach (var value in values)
             list.Add(value);
     }
@@ -57,7 +57,8 @@ public class LookupTable<TKey, TValue>(Dictionary<TKey, List<TValue>> dictionary
 
     public void Remove(TKey key, TValue value)
     {
-        _dictionary.GetValueOrDefault(key)?.Remove(value);
+        if (_dictionary.TryGetValue(key, out var list))
+            list?.Remove(value);
     }
 
     public void Clear()

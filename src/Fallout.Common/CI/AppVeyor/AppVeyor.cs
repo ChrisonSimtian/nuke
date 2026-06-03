@@ -34,7 +34,7 @@ public partial class AppVeyor : Host, IBuildServer
 
     internal static bool IsRunningAppVeyor => EnvironmentInfo.HasVariable("APPVEYOR");
 
-    private readonly Lazy<Tool> _cli = Lazy.Create(() => IsRunningAppVeyor ? ToolResolver.GetEnvironmentOrPathTool("appveyor") : null);
+    private readonly Lazy<Tool> _cli = new(() => IsRunningAppVeyor ? ToolResolver.GetEnvironmentOrPathTool("appveyor") : null);
     private int _messageCount;
 
     internal AppVeyor()

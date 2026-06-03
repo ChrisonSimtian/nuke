@@ -64,7 +64,8 @@ public static class CompletionUtility
             }
             else if (property.Value.TryGetProperty("$ref", out var refProperty))
             {
-                var definition = definitions.GetValueOrDefault(refProperty.GetString().NotNull().Split('/').LastOrDefault());
+                var definitionKey = refProperty.GetString().NotNull().Split('/').LastOrDefault();
+                definitions.TryGetValue(definitionKey, out var definition);
                 return GetValues(definition);
             }
 
@@ -106,7 +107,8 @@ public static class CompletionUtility
                 .TakeUntil(ArgumentParser.IsArgument)
                 .Select(ArgumentParser.GetArgumentMemberName);
 
-            var items = completionItems.GetValueOrDefault(parameter)?.Except(passedItems, StringComparer.OrdinalIgnoreCase) ??
+            var items = (completionItems.TryGetValue(parameter, out var parameterItems) ? parameterItems : null)
+                            ?.Except(passedItems, StringComparer.OrdinalIgnoreCase) ??
                         new string[0];
 
             if (parameter.EqualsOrdinalIgnoreCase(Constants.InvokedTargetsParameterName))

@@ -29,12 +29,12 @@ public partial class GitHubActions : Host, IBuildServer
 
     internal GitHubActions()
     {
-        _eventContext = Lazy.Create(() =>
+        _eventContext = new(() =>
         {
             var content = File.ReadAllText(EventPath);
             return JsonNode.Parse(content)?.AsObject() ?? new JsonObject();
         });
-        _httpClient = Lazy.Create(() =>
+        _httpClient = new(() =>
         {
             var base64Auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($":{Token.NotNull()}"));
 
@@ -44,7 +44,7 @@ public partial class GitHubActions : Host, IBuildServer
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64Auth);
             return client;
         });
-        _jobId = Lazy.Create(GetJobId);
+        _jobId = new(GetJobId);
     }
 
     string IBuildServer.Branch => Ref;

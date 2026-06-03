@@ -179,7 +179,7 @@ public static partial class ReflectionUtility
         {
             var memberName = interfaceMembers.Key;
             var memberType = interfaceMembers.First().MemberType;
-            var classMember = classMembers.GetValueOrDefault(memberName);
+            var classMember = classMembers.TryGetValue(memberName, out var member) ? member : null;
 
             if (filterQuasiOverridden && classMember == null && interfaceMembers.Count() > 1)
             {
