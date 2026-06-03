@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyModel" />
+    <PackageReference Include="Spectre.Console" />
     <PackageReference Include="Serilog.Formatting.Compact" />
     <PackageReference Include="Serilog.Formatting.Compact.Reader" />
     <PackageReference Include="Serilog.Sinks.Console" />
