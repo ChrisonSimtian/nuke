@@ -4,26 +4,25 @@ using System.Linq;
 
 namespace Fallout.Common.Utilities.Collections;
 
-partial class EnumerableExtensions
+public static partial class EnumerableExtensions
 {
     private static readonly Random s_randomNumberGenerator = new Random();
 
+    /// <summary>
+    /// Returns a single random element from the collection. No MoreLINQ/BCL equivalent — kept.
+    /// </summary>
     public static T Random<T>(this IEnumerable<T> collection)
     {
         var array = collection.ToArray();
         return array[s_randomNumberGenerator.Next(array.Length)];
     }
 
+    /// <summary>
+    /// Returns the elements of the collection in random order.
+    /// </summary>
+    [Obsolete("Use MoreLinq.MoreEnumerable.Shuffle (from the morelinq package) instead. This forwarder will be removed in a future major.")]
     public static ICollection<T> Randomize<T>(this ICollection<T> collection)
     {
-        var list = collection.ToList();
-        var count = list.Count;
-        while (count > 1) {
-            count--;
-            var k = s_randomNumberGenerator.Next(count + 1);
-            (list[k], list[count]) = (list[count], list[k]);
-        }
-
-        return list;
+        return MoreLinq.MoreEnumerable.Shuffle(collection).ToList();
     }
 }
