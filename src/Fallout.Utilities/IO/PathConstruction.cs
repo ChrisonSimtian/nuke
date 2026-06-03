@@ -17,6 +17,10 @@ namespace Fallout.Common.IO;
 /// used intentionally. Casting with <c>(AbsolutePath)</c> ensures that the path is rooted as Windows/Unix/UNC-path. The operators
 /// <c>/</c> and <c>+</c> allow to append sub-directories.</p>
 /// <p>Resulting paths are automatically normalized if possible. So <c>C:\foo\..\bar\.</c> will become <c>C:\bar</c>.</p>
+/// <p>Deliberately hand-rolled rather than delegated to a NuGet path library: the BCL
+/// <see cref="System.IO.Path"/> API is string-typed and OS-dependent, whereas this type-safe,
+/// OS-independent path model is a core selling point of the framework. See
+/// <see href="https://github.com/ChrisonSimtian/Fallout/blob/main/docs/dependencies-kept.md">docs/dependencies-kept.md</see>.</p>
 /// </summary>
 /// <example>
 /// <code>

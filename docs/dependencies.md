@@ -6,6 +6,8 @@ A flat overview of the non-trivial libraries Fallout pulls in, what each is for,
 
 Central package versions are pinned in `Directory.Packages.props`; this page links each entry back to it.
 
+For the flip side — areas we keep **hand-rolled on purpose** instead of pulling in a library (crypto, paths, CI config writers, schema) — see [dependencies-kept.md](dependencies-kept.md).
+
 ---
 
 ## Microsoft / .NET BCL

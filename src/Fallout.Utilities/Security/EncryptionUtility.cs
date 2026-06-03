@@ -28,6 +28,11 @@ namespace Fallout.Common.Utilities;
 /// See <see href="https://github.com/ChrisonSimtian/Fallout/issues/212">#212</see> for the security
 /// audit that motivated the v2 format.
 /// </summary>
+/// <remarks>
+/// Deliberately built on the BCL crypto primitives (<see cref="AesGcm"/> + <see cref="Rfc2898DeriveBytes"/>),
+/// not a third-party crypto library. The construction is OWASP-aligned and security-audited (#212); no
+/// swap is warranted. See <see href="https://github.com/ChrisonSimtian/Fallout/blob/main/docs/dependencies-kept.md">docs/dependencies-kept.md</see>.
+/// </remarks>
 internal static class EncryptionUtility
 {
     private const string V1Prefix = "v1:";

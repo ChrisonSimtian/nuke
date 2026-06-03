@@ -4,6 +4,17 @@ using System.Linq;
 
 namespace Fallout.Common.Utilities;
 
+/// <summary>
+/// Low-level, indentation-aware line writer backing the CI/CD configuration generators
+/// (<c>ConfigurationEntity.Write</c> in <c>Fallout.Common.CI.*</c>).
+/// </summary>
+/// <remarks>
+/// Deliberately hand-rolled, not replaced by a serializer (e.g. YamlDotNet). TeamCity and
+/// SpaceAutomation targets emit a <b>Kotlin DSL</b>, which no YAML/JSON serializer can produce; the
+/// YAML targets (GitHub Actions, Azure Pipelines, AppVeyor) need exact control over comments, quoting,
+/// and indentation that a serializer would silently rewrite. See
+/// <see href="https://github.com/ChrisonSimtian/Fallout/blob/main/docs/dependencies-kept.md">docs/dependencies-kept.md</see>.
+/// </remarks>
 public class CustomFileWriter
 {
     private readonly StreamWriter _streamWriter;

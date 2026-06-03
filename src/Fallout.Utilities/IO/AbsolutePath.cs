@@ -13,6 +13,13 @@ namespace Fallout.Common.IO;
 /// <summary>
 /// Represents an absolute path without distinction between files and directories.
 /// </summary>
+/// <remarks>
+/// Deliberately hand-rolled, not delegated to a NuGet path library. The BCL <see cref="System.IO.Path"/>
+/// API is string-typed and OS-dependent; this type plus <see cref="PathConstruction"/> give a
+/// type-safe, OS-independent path model (rooted/relative distinction, <c>/</c> and <c>+</c> operators,
+/// automatic normalization) that is a core selling point of the framework. See
+/// <see href="https://github.com/ChrisonSimtian/Fallout/blob/main/docs/dependencies-kept.md">docs/dependencies-kept.md</see>.
+/// </remarks>
 [Serializable]
 [TypeConverter(typeof(TypeConverter))]
 [DebuggerDisplay("{" + nameof(_path) + "}")]

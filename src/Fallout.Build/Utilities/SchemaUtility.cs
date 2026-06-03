@@ -20,6 +20,9 @@ namespace Fallout.Common.Execution;
 /// can autocomplete and validate the consumer's <c>parameters.json</c>. Hand-rolled on top of
 /// <see cref="JsonNode"/> — no NJsonSchema, no Newtonsoft. The output shape is the draft-04 envelope
 /// the NUKE ecosystem has emitted since day one (definitions block + allOf[user, base]).
+/// The exact output shape is a contract consumed by <c>Fallout.Cli</c>, so it stays hand-rolled
+/// rather than swapped for a schema library. See
+/// <see href="https://github.com/ChrisonSimtian/Fallout/blob/main/docs/dependencies-kept.md">docs/dependencies-kept.md</see>.
 /// </summary>
 public static class SchemaUtility
 {
