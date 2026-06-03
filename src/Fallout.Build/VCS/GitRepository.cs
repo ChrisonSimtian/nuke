@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Fallout.Common.CI;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
+using LibGit2Sharp;
 
 namespace Fallout.Common.Git;
 
@@ -40,14 +40,15 @@ public class GitRepository
     public static GitRepository FromLocalDirectory(AbsolutePath directory)
     {
         var rootDirectory = directory.FindParentOrSelf(x => x.ContainsDirectory(".git")).NotNull($"No parent Git directory for '{directory}'");
-        var gitDirectory = rootDirectory / ".git";
 
-        var head = GetHead(gitDirectory);
-        var branch = (GetBranchFromCI() ?? GetHeadIfAttached(head))?.TrimStart("refs/heads/").TrimStart("origin/");
-        var commit = GetCommitFromCI() ?? GetCommitFromHead(gitDirectory, head);
-        var tags = GetTagsFromCommit(gitDirectory, commit);
-        var (remoteName, remoteBranch) = GetRemoteNameAndBranch(gitDirectory, branch);
-        var (protocol, endpoint, identifier) = GetRemoteConnectionFromConfig(gitDirectory, remoteName ?? FallbackRemoteName);
+        using var repository = new Repository(rootDirectory);
+
+        var head = GetHead(repository);
+        var branch = (GetBranchFromCI() ?? GetHeadBranch(repository))?.TrimStart("refs/heads/").TrimStart("origin/");
+        var commit = GetCommitFromCI() ?? repository.Head.Tip?.Sha;
+        var tags = GetTagsFromCommit(repository, commit);
+        var (remoteName, remoteBranch) = GetRemoteNameAndBranch(repository, branch);
+        var (protocol, endpoint, identifier) = GetRemoteConnectionFromConfig(repository, remoteName ?? FallbackRemoteName);
 
         return new GitRepository(
             protocol,
@@ -62,54 +63,32 @@ public class GitRepository
             remoteBranch);
     }
 
-    private static (string Name, string Branch) GetRemoteNameAndBranch(AbsolutePath gitDirectory, string branch)
+    private static string GetHead(Repository repository)
+    {
+        // Mirrors the value previously read from .git/HEAD: the symbolic ref for an
+        // attached head (refs/heads/<branch>), or the commit sha for a detached head.
+        var head = repository.Head;
+        return head.Reference is SymbolicReference symbolic
+            ? symbolic.TargetIdentifier
+            : head.Tip?.Sha;
+    }
+
+    private static string GetHeadBranch(Repository repository)
+    {
+        var head = repository.Head;
+        return head.Reference is SymbolicReference symbolic ? symbolic.TargetIdentifier : null;
+    }
+
+    private static (string Name, string Branch) GetRemoteNameAndBranch(Repository repository, string branch)
     {
         if (branch == null)
             return (null, null);
 
-        var configFile = gitDirectory / "config";
-        var configFileContent = configFile.ReadAllLines();
-        var data = configFileContent
-            .Select(x => x.Trim())
-            .SkipWhile(x => x != $"[branch {branch.DoubleQuote()}]")
-            .Skip(1)
-            .TakeWhile(x => !x.StartsWith("["))
-            .Select(x => x.Split('='))
-            .ToDictionary(x => x.ElementAt(0).Trim(), x => x.ElementAt(1).Trim());
-        return data.TryGetValue("remote", out var remote) && data.TryGetValue("merge", out var merge)
-            ? (remote, merge.TrimStart("refs/heads/"))
-            : (null, null);
-    }
+        var trackedBranch = repository.Branches[branch]?.TrackedBranch;
+        if (trackedBranch == null || !trackedBranch.IsRemote)
+            return (null, null);
 
-    internal static string GetHeadIfAttached(string head)
-    {
-        return head.StartsWith("refs/heads/") ? head : null;
-    }
-
-    internal static string GetCommitFromHead(AbsolutePath gitDirectory, string head)
-    {
-        if (!head.StartsWith("refs/heads/"))
-            return head;
-
-        var headRefFile = gitDirectory / head;
-        if (headRefFile.Exists())
-            return headRefFile.ReadAllLines().First();
-
-        var commit = GetPackedRefs(gitDirectory)
-            .Where(x => x.Reference == head)
-            .Select(x => x.Commit)
-            .FirstOrDefault();
-
-        commit.NotNull("Could not find commit information");
-
-        return commit;
-    }
-
-    private static string GetHead(AbsolutePath gitDirectory)
-    {
-        var headFile = gitDirectory / "HEAD";
-        Assert.FileExists(headFile);
-        return headFile.ReadAllText().TrimStart("ref: ").Trim();
+        return (trackedBranch.RemoteName, trackedBranch.UpstreamBranchCanonicalName?.TrimStart("refs/heads/"));
     }
 
     internal static string GetBranchFromCI()
@@ -122,68 +101,63 @@ public class GitRepository
         return (Host.Instance as IBuildServer)?.Commit;
     }
 
-    private static IReadOnlyCollection<string> GetTagsFromCommit(AbsolutePath gitDirectory, string commit)
+    private static IReadOnlyCollection<string> GetTagsFromCommit(Repository repository, string commit)
     {
         if (commit == null)
             return Array.Empty<string>();
 
-        var packedTags = GetPackedRefs(gitDirectory)
-            .Where(x => x.Commit == commit && x.Reference.StartsWithOrdinalIgnoreCase("refs/tags"))
-            .Select(x => x.Reference.TrimStart("refs/tags/"));
-
-        var tagsDirectory = gitDirectory / "refs" / "tags";
-        var localTags = tagsDirectory
-            .GlobFiles("**/*")
-            .Where(x => x.ReadAllText().Trim() == commit)
-            .Select(x => tagsDirectory.GetUnixRelativePathTo(x).ToString());
-
-        return localTags.Concat(packedTags).ToList();
+        return repository.Tags
+            .Where(x => x.Target.Sha == commit)
+            .Select(x => x.FriendlyName)
+            .ToList();
     }
 
-    private static IEnumerable<(string Commit, string Reference)> GetPackedRefs(AbsolutePath gitDirectory)
+    private static (GitProtocol? Protocol, string Endpoint, string Identifier) GetRemoteConnectionFromConfig(
+        Repository repository,
+        string remote)
     {
-        var packedRefsFile = gitDirectory / "packed-refs";
-        if (!packedRefsFile.Exists())
-            return Array.Empty<(string Commit, string Reference)>();
-
-        return packedRefsFile.ReadAllLines()
-            .Where(x => !x.StartsWith("#") && !x.StartsWith("^"))
-            .Select(x => x.Split(' '))
-            .Select(x => (Commit: x[0], Reference: x[1]));
+        var url = repository.Network.Remotes[remote]?.Url;
+        return url == null
+            ? (null, null, null)
+            : GetRemoteConnectionFromUrl(url);
     }
 
     private static (GitProtocol Protocol, string Endpoint, string Identifier) GetRemoteConnectionFromUrl(string url)
     {
-        var regex = new Regex(
-            @"^(?'protocol'\w+)?(\:\/\/)?(?>(?'user'.*)@)?(?'endpoint'[^\/:]+)(?>\:(?'port'\d+))?[\/:](?'identifier'.*?)\/?(?>\.git)?$");
-        var match = regex.Match(url.NotNull().Trim());
+        url = url.NotNull().Trim();
 
-        Assert.True(match.Success, $"Url '{url}' could not be parsed.");
-        var protocol = match.Groups["protocol"].Value.EqualsOrdinalIgnoreCase(GitProtocol.Https.ToString())
-            ? GitProtocol.Https
-            : GitProtocol.Ssh;
-        return (protocol, match.Groups["endpoint"].Value, match.Groups["identifier"].Value);
+        // Standard schemes (https://, ssh://, git://, http://) parse cleanly via Uri.
+        // SCP-like syntax (git@host:path) is not a valid Uri, so it is handled separately.
+        if (Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.HostNameType != UriHostNameType.Unknown)
+        {
+            var protocol = uri.Scheme.EqualsOrdinalIgnoreCase(Uri.UriSchemeHttps)
+                ? GitProtocol.Https
+                : GitProtocol.Ssh;
+            return (protocol, uri.Host, NormalizeIdentifier(uri.AbsolutePath));
+        }
+
+        return ParseScpLikeUrl(url);
     }
 
-    private static (GitProtocol? Protocol, string Endpoint, string Identifier) GetRemoteConnectionFromConfig(
-        AbsolutePath gitDirectory,
-        string remote)
+    private static (GitProtocol Protocol, string Endpoint, string Identifier) ParseScpLikeUrl(string url)
     {
-        var configFile = gitDirectory / "config";
-        var configFileContent = configFile.ReadAllLines();
-        var url = configFileContent
-            .Select(x => x.Trim())
-            .SkipWhile(x => x != $"[remote {remote.DoubleQuote()}]")
-            .Skip(1)
-            .TakeWhile(x => !x.StartsWith("["))
-            .SingleOrDefault(x => x.StartsWithOrdinalIgnoreCase("url = "))
-            ?.Split('=').ElementAt(1)
-            .Trim();
+        // Forms: [user@]host:path or [user@]host/path (no scheme prefix).
+        var withoutUser = url.Contains('@') ? url.Substring(url.IndexOf('@') + 1) : url;
 
-        if (url == null)
-            return (null, null, null);
+        var separatorIndex = withoutUser.IndexOfAny(new[] { ':', '/' });
+        Assert.True(separatorIndex > 0, $"Url '{url}' could not be parsed.");
 
-        return GetRemoteConnectionFromUrl(url);
+        var endpoint = withoutUser.Substring(0, separatorIndex);
+        var path = withoutUser.Substring(separatorIndex + 1);
+
+        return (GitProtocol.Ssh, endpoint, NormalizeIdentifier(path));
+    }
+
+    private static string NormalizeIdentifier(string path)
+    {
+        return path
+            .Trim('/')
+            .TrimEnd(".git");
     }
 
     public GitRepository(

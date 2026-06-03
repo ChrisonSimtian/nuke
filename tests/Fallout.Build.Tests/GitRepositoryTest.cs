@@ -27,6 +27,10 @@ public class GitRepositoryTest
     [InlineData("https://git.test.org:1234/test/test", "git.test.org", "test/test")]
     [InlineData("git://git.test.org:1234/test/test", "git.test.org", "test/test")]
     [InlineData("git://git.test.org/test/test", "git.test.org", "test/test")]
+    [InlineData("ssh://git@github.com:22/nuke-build/nuke.git", "github.com", "nuke-build/nuke")]
+    [InlineData("http://git.test.org/test/test.git", "git.test.org", "test/test")]
+    [InlineData("file://server/share/repo.git", "server", "share/repo")]
+    [InlineData(@"\\server\share\repo.git", "server", "share/repo")]
     public void FromUrlTest(string url, string endpoint, string identifier)
     {
         var repository = GitRepository.FromUrl(url);
