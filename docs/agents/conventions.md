@@ -12,6 +12,18 @@ Three groups: conventions to respect, things never to do, and the tool-wrapper r
 - **No per-file license headers.** The MIT notice lives in [`LICENSE`](../../LICENSE) at the repo root, and NuGet packages declare MIT via `PackageLicenseExpression`. Per-file headers were stripped in v11 (one source of truth + the header URL would have rotted on the repo-org transfer). Vendored third-party code keeps its own copyright headers — don't touch those (e.g. files under `src/Persistence/Fallout.Persistence.Solution/` retain Microsoft's MIT notice).
 - **`[Experimental]` for opt-in unstable public APIs.** Not-yet-stable public surface is marked with `[Experimental("FALLOUT0xx")]` rather than held back or shipped silently. See [the `[Experimental]` convention](#experimental-for-opt-in-unstable-apis) below and the [diagnostic-ID registry](../experimental-apis.md).
 
+## Writing style for issues, PRs, and commits
+
+Applies to AI tools and humans. Many readers are non-native English speakers — keep it readable.
+
+- Be short and precise. Lead with the point.
+- Prefer bullet points over paragraphs.
+- Use plain, simple English. Short sentences, common words.
+- Cut filler: no preamble, no hedging, no AI-flavored padding.
+- Say what changed and why. Drop the rest.
+
+Covers GitHub issues, PR titles/bodies/comments, and commit messages.
+
 ## `[Experimental]` for opt-in unstable APIs
 
 Per [ADR-0004 §5](../adr/0004-calendar-versioning-and-dual-pace-channels.md), public APIs that aren't ready to commit to a stability guarantee are marked with [`System.Diagnostics.CodeAnalysis.ExperimentalAttribute`](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute) instead of being held back or shipped silently. The attribute ships in the .NET 8+ BCL — **no package reference needed** (the repo targets .NET 10).
