@@ -35,7 +35,7 @@ internal class UpdateNotificationAttribute : BuildExtensionAttributeBase, IOnBui
             {
                 "--- UPDATE RECOMMENDED FROM 5.1.0 ---",
                 "1. Update your global tool",
-                "   dotnet tool update Fallout.Cli -g",
+                "   dotnet tool update Fallout.GlobalTools -g",
                 "2. Update your build",
                 "   fallout :update",
                 "3. Confirm on update for configuration file and build scripts",

@@ -34,7 +34,7 @@ fallout [arguments]
 </Tabs>
 
 :::info
-The bootstrappers are thin: they provision the .NET SDK if it isn't already installed, run `dotnet tool restore` (to pin the `Fallout.Cli` version from `.config/dotnet-tools.json`), then forward to `dotnet fallout`. Once `dotnet` is on your `PATH` and tools are restored, `fallout [arguments]` and `./build.sh [arguments]` do the same thing.
+The bootstrappers are thin: they provision the .NET SDK if it isn't already installed, run `dotnet tool restore` (to pin the `Fallout.GlobalTools` version from `.config/dotnet-tools.json`), then forward to `dotnet fallout`. Once `dotnet` is on your `PATH` and tools are restored, `fallout [arguments]` and `./build.sh [arguments]` do the same thing.
 :::
 
 :::info

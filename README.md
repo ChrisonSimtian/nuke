@@ -52,13 +52,13 @@ fallout-migrate
 ## Install
 
 ```sh
-dotnet tool install -g Fallout.Cli
+dotnet tool install -g Fallout.GlobalTools
 ```
 
 The CLI installs as `fallout`. Verify with `fallout --help`.
 
 > [!NOTE]
-> **Upgrading from `Fallout.GlobalTool`?** The package was renamed to `Fallout.Cli` for install ergonomics — same `fallout` command, friendlier ID. Uninstall the old one first so you don't end up with two tools claiming the same command:
+> **Upgrading from `Fallout.GlobalTool`?** The dotnet-tool package is now `Fallout.GlobalTools` — same `fallout` command. Uninstall the old one first so you don't end up with two tools claiming the same command:
 >
 > ```sh
 > dotnet tool uninstall -g Fallout.GlobalTool

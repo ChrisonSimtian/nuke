@@ -2,7 +2,7 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "fallout.cli": {
+    "fallout.globaltools": {
       "version": "_FALLOUT_CLI_VERSION_",
       "commands": [
         "fallout"

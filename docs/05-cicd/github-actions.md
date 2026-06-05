@@ -98,7 +98,7 @@ jobs:
 ```
 
 :::info
-The generated workflow uses `actions/setup-dotnet` to install the .NET SDK on the runner, then `dotnet tool restore` to install the `Fallout.Cli` version pinned in `.config/dotnet-tools.json`, then `dotnet fallout <targets>` to run your build. Your repository needs a `.config/dotnet-tools.json` manifest with `Fallout.Cli` pinned — `fallout :setup` creates one automatically.
+The generated workflow uses `actions/setup-dotnet` to install the .NET SDK on the runner, then `dotnet tool restore` to install the `Fallout.GlobalTools` version pinned in `.config/dotnet-tools.json`, then `dotnet fallout <targets>` to run your build. Your repository needs a `.config/dotnet-tools.json` manifest with `Fallout.GlobalTools` pinned — `fallout :setup` creates one automatically.
 :::
 
 </details>

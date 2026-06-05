@@ -45,7 +45,7 @@ This is locked by the bridge-package design — `[TypeForwardedTo]` requires the
 | `Nuke.Common.Utilities` (+ `.Collections`, `.Net`) | `Fallout.Common.Utilities` | |
 | `Nuke.Common.ValueInjection` | `Fallout.Common.ValueInjection` | |
 | `Nuke.Components` | `Fallout.Components` | |
-| `Nuke.GlobalTool` (+ `.Rewriting.Cake`) | `Fallout.Cli` | Renamed from `Fallout.GlobalTool` post-rebrand for install ergonomics (`dotnet tool install Fallout.Cli`). Command name stays `fallout`. |
+| `Nuke.GlobalTool` (+ `.Rewriting.Cake`) | `Fallout.Cli` | Project/namespace/assembly is `Fallout.Cli`. The **published package id is `Fallout.GlobalTools`** (`dotnet tool install Fallout.GlobalTools`) — decoupled from the assembly name on purpose. Command name stays `fallout`. |
 | `Nuke.MSBuildTasks` | `Fallout.MSBuildTasks` | |
 | `Nuke.SourceGenerators` | `Fallout.SourceGenerators` | |
 | `Nuke.Utilities.Text.Json` | `Fallout.Utilities.Text.Json` | |

@@ -44,7 +44,7 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 - Branch from your PR's base (`main` for deliberate non-breaking work, `experimental` for fast/breaking work). Name your branch `feature/<slug>`, `bugfix/<slug>`, or `chore/<slug>`.
 - Make sure your employer allows the contribution.
 - Read [AGENTS.md](AGENTS.md) for the codebase conventions — package versions go in `Directory.Packages.props`, tests live next to code, no per-file license headers (the `LICENSE` file at the root is the single source of truth). (AGENTS.md is the canonical brief for both human contributors and AI tools; `CLAUDE.md` and `.github/copilot-instructions.md` point to it.)
-- The bootstrappers are now thin: `./build.ps1` / `./build.sh` provision .NET if needed, then run `dotnet tool restore` + `dotnet fallout "$@"`. The `Fallout.Cli` version is pinned in `.config/dotnet-tools.json`.
+- The bootstrappers are now thin: `./build.ps1` / `./build.sh` provision .NET if needed, then run `dotnet tool restore` + `dotnet fallout "$@"`. The `Fallout.GlobalTools` version is pinned in `.config/dotnet-tools.json`.
 - Run `./build.ps1 Test` (or `./build.sh Test`, or directly `dotnet fallout Test` once your tools are restored) locally first.
 
 ### When writing the PR

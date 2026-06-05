@@ -6,6 +6,9 @@
     <RollForward>LatestMajor</RollForward>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>fallout</ToolCommandName>
+    <!-- Published package id. Decoupled from the assembly/namespace (Fallout.Cli) on purpose:
+         the install name users type is Fallout.GlobalTools; the command stays `fallout`. -->
+    <PackageId>Fallout.GlobalTools</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

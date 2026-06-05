@@ -1,7 +1,14 @@
 ---
 title: Fallout.GlobalTool → Fallout.Cli
 description: Migrating from the renamed Fallout CLI NuGet package. Short guide — the command name didn't change, just the package ID.
+draft: true
 ---
+
+<!-- DRAFT / unpublished. The `Fallout.Cli` package id this guide describes was never
+     released to nuget.org and is being superseded by `Fallout.GlobalTools` before first
+     public release, so there is nobody to migrate. Kept out of the published site until
+     the rename settles; do not publish a Fallout.Cli → Fallout.GlobalTools migration. -->
+
 
 In v11, the dotnet-tool NuGet package id was renamed: **`Fallout.GlobalTool` → `Fallout.Cli`**. The **command name stays `fallout`**, so build scripts and shell invocations don't change. The only thing that moves is the install/restore reference.
 
