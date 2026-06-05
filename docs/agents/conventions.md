@@ -4,12 +4,12 @@ Three groups: conventions to respect, things never to do, and the tool-wrapper r
 
 ## Conventions worth respecting
 
-- **Centralized package versions** — add new packages to `Directory.Packages.props`, never inline. Adding a *meaningful* library (not a tiny transitive helper)? Add a row to [docs/dependencies.md](../dependencies.md) in the same PR — reviewers will ask.
+- **Centralized package versions** — add new packages to `Directory.Packages.props`, never inline. Adding a *meaningful* library (not a tiny transitive helper)? Add a row to [docs/dependencies.md](https://github.com/Fallout-build/Fallout/blob/main/docs/dependencies.md) in the same PR — reviewers will ask.
 - **Tool wrappers**: copy/paste from neighbours; cover full commands; use `<c>`, `<a>`, `<ul>`/`<ol>`, `<em>`, `<para/>` in `help`; don't write `secret: false` or `default: xxx`. See [Tool wrapper recipe](#tool-wrapper-recipe) below.
 - **Tests next to code, separate folder**: every `Foo` project under `src/` has a sibling `Foo.Tests` project under `tests/`. Mirror the namespace.
 - **No IDE-specific style files committed.** `.editorconfig` and `*.DotSettings` were removed during the takeover — relying on `dotnet format` defaults and review.
 - **Telemetry opt-out is set in test runs** (`FALLOUT_TELEMETRY_OPTOUT=true`). Keep it that way.
-- **No per-file license headers.** The MIT notice lives in [`LICENSE`](../../LICENSE) at the repo root, and NuGet packages declare MIT via `PackageLicenseExpression`. Per-file headers were stripped in v11 (one source of truth + the header URL would have rotted on the repo-org transfer). Vendored third-party code keeps its own copyright headers — don't touch those (e.g. files under `src/Persistence/Fallout.Persistence.Solution/` retain Microsoft's MIT notice).
+- **No per-file license headers.** The MIT notice lives in [`LICENSE`](https://github.com/Fallout-build/Fallout/blob/main/LICENSE) at the repo root, and NuGet packages declare MIT via `PackageLicenseExpression`. Per-file headers were stripped in v11 (one source of truth + the header URL would have rotted on the repo-org transfer). Vendored third-party code keeps its own copyright headers — don't touch those (e.g. files under `src/Persistence/Fallout.Persistence.Solution/` retain Microsoft's MIT notice).
 - **`[Experimental]` for opt-in unstable public APIs.** Not-yet-stable public surface is marked with `[Experimental("FALLOUT0xx")]` rather than held back or shipped silently. See [the `[Experimental]` convention](#experimental-for-opt-in-unstable-apis) below and the [diagnostic-ID registry](../experimental-apis.md).
 
 ## Writing style for issues, PRs, and commits

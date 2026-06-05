@@ -71,7 +71,7 @@ Every project under `src/` has a sibling under `tests/` (e.g. `src/Fallout.Commo
 - **Central package versions.** All `PackageReference` versions live in `Directory.Packages.props`. Never inline `Version=` on a `PackageReference` — the build will error.
 - **Smart `PackageReference`.** `Directory.Build.targets` rewrites `PackageReference`s that match a project in the current solution into `ProjectReference`s. Lets us reference our own packages by ID across the dev/release boundary.
 - **`AssemblyInfo.cs` at root.** Shared `InternalsVisibleTo` declarations. Included automatically via `Directory.Build.props`.
-- **No per-file license headers.** The MIT notice lives in [`LICENSE`](../LICENSE) at the repo root. NuGet packages declare MIT via `PackageLicenseExpression` in `Directory.Build.props`. Vendored Microsoft code under `src/Persistence/Fallout.Persistence.Solution/` keeps its own headers — leave those alone.
+- **No per-file license headers.** The MIT notice lives in [`LICENSE`](https://github.com/Fallout-build/Fallout/blob/main/LICENSE) at the repo root. NuGet packages declare MIT via `PackageLicenseExpression` in `Directory.Build.props`. Vendored Microsoft code under `src/Persistence/Fallout.Persistence.Solution/` keeps its own headers — leave those alone.
 
 ## CI layout
 

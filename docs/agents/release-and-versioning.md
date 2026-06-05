@@ -38,7 +38,7 @@ Apply by mirroring `main`'s protection JSON to the new branch via the GitHub API
 
 **Validation workflows.** `ubuntu-latest` runs on every PR targeting `experimental`, `main`, `release/*`, or `support/*` (with `paths-ignore` for `docs/**`, `.assets/**`, `**/*.md`). `windows-latest` and `macos-latest` run on push to those branches — they're post-merge / release validation, not PR gates. This is a deliberate cost trade-off. (These three workflows are **generated** from `build/Build.CI.GitHubActions.cs` — change the branch lists in the `MainBranch`/`ExperimentalBranch`/`*BranchPattern` constants there and regenerate, don't hand-edit the `.yml`.)
 
-**Merging.** Both squash and rebase merge are enabled (plain merge commits are disabled by repo setting and would fail linear-history protection anyway). Squash is the default; rebase is opt-in for curated commit sequences. See [CONTRIBUTING.md → Merging](../../CONTRIBUTING.md#merging) for the convention.
+**Merging.** Both squash and rebase merge are enabled (plain merge commits are disabled by repo setting and would fail linear-history protection anyway). Squash is the default; rebase is opt-in for curated commit sequences. See [CONTRIBUTING.md → Merging](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md#merging) for the convention.
 
 ## Versioning
 
@@ -52,7 +52,7 @@ GitVersion is still installed as a transitional helper for `MajorMinorPatchVersi
 
 ## Versioning policy
 
-This project ships calendar versions that are valid [Semantic Versioning](https://semver.org/spec/v2.0.0.html) per [CHANGELOG.md](../../CHANGELOG.md). The rule is: **breaking changes are batched to the yearly major cut.**
+This project ships calendar versions that are valid [Semantic Versioning](https://semver.org/spec/v2.0.0.html) per [CHANGELOG.md](https://github.com/Fallout-build/Fallout/blob/main/CHANGELOG.md). The rule is: **breaking changes are batched to the yearly major cut.**
 
 - A breaking change may land on **`experimental` only**, is held for the next yearly major (it does **not** bump `version.json`'s major mid-year), and is recorded in `CHANGELOG.md` under the next-major `[Unreleased]` heading with a migration path.
 - **Neither `main` nor a `release/YYYY` production line takes a breaking change** mid-year — both are strictly non-breaking (minor = features, patch = fixes). A PR that breaks may target `experimental` only.
