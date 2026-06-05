@@ -6,11 +6,11 @@ Before you can set up a build project, you need to install Fallout's dedicated [
 
 ```powershell
 # terminal-command
-dotnet tool install Fallout.Cli --global
+dotnet tool install Fallout.GlobalTools --global
 ```
 
 :::tip
-For repos that already have a `.config/dotnet-tools.json` manifest with `Fallout.Cli` pinned (this is what `fallout :setup` creates), you can skip the global install and run `dotnet tool restore` instead — the local manifest version then takes precedence.
+For repos that already have a `.config/dotnet-tools.json` manifest with `Fallout.GlobalTools` pinned (this is what `fallout :setup` creates), you can skip the global install and run `dotnet tool restore` instead — the local manifest version then takes precedence.
 :::
 
 From now on, you can use the global tool to:

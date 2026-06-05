@@ -34,7 +34,7 @@ The setup will create a number of files in your repository and – if you've cho
 ```bash
 <root-directory>
 ├── .config
-│   └── dotnet-tools.json           # Local tool manifest pinning Fallout.Cli
+│   └── dotnet-tools.json           # Local tool manifest pinning Fallout.GlobalTools
 │
 ├── .fallout                        # Root directory marker
 │   ├── build.schema.json           # Build schema file
@@ -51,7 +51,7 @@ The setup will create a number of files in your repository and – if you've cho
 ```
 
 :::note
-The two thin bootstrappers (`build.ps1` and `build.sh`) provision the .NET SDK locally when it's not on `PATH`, then run `dotnet tool restore` and `dotnet fallout "$@"`. They're optional once you have a global `dotnet` install and have run `dotnet tool restore` at least once — but they're the safest way to run the build in CI and on a freshly-cloned machine. The `.config/dotnet-tools.json` manifest pins the exact `Fallout.Cli` version your build expects.
+The two thin bootstrappers (`build.ps1` and `build.sh`) provision the .NET SDK locally when it's not on `PATH`, then run `dotnet tool restore` and `dotnet fallout "$@"`. They're optional once you have a global `dotnet` install and have run `dotnet tool restore` at least once — but they're the safest way to run the build in CI and on a freshly-cloned machine. The `.config/dotnet-tools.json` manifest pins the exact `Fallout.GlobalTools` version your build expects.
 :::
 
 ## Project Structure
@@ -64,7 +64,7 @@ While you can enjoy writing most build-relevant logic inside your build console 
 ```powershell
 <root-directory>
 ├── .config
-│   └── dotnet-tools.json    # Local tool manifest (Fallout.Cli pin)
+│   └── dotnet-tools.json    # Local tool manifest (Fallout.GlobalTools pin)
 │
 ├── .fallout
 │   ├── parameters.json      # Parameters files
