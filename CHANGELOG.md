@@ -1,4 +1,10 @@
 # Changelog
+
+> **Deprecated** — this file is no longer actively maintained.
+> Going forward, release notes are published automatically via GitHub's release notes feature,
+> driven by PR labels and the configuration in [`.github/release.yml`](.github/release.yml).
+> See the [GitHub Releases page](https://github.com/ChrisonSimtian/Fallout/releases) for up-to-date release notes.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)

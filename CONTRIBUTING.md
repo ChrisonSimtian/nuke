@@ -49,6 +49,7 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 
 ### When writing the PR
 
+- **Write functional commit and PR titles** — describe what the change accomplishes, not how it's categorised. Do not use conventional-commit prefixes (`feat:`, `fix:`, `chore:`, `refactor:`, etc.). Good examples: "Add retry logic to the HTTP tool wrapper", "Fix null-reference in target dependency resolution". The `!` suffix (e.g. `fix(security)!: …`) is recognised only as a breaking-change detection signal, not a general style requirement.
 - Aim for qualitative, readable code that matches the surrounding style.
 - There's no committed `.editorconfig` or ReSharper/`*.DotSettings` file — they were removed during the takeover. Rely on `dotnet format` defaults and review; don't reintroduce them without a maintainer-level decision.
 - Add tests when meaningful — every `Foo` project has a sibling `Foo.Tests`.
