@@ -32,6 +32,6 @@ public class SolutionModelTest
     {
         var solution = SolutionFile.ReadSolution();
 
-        solution.GetAllProjects("*.Tests").Should().HaveCountGreaterOrEqualTo(2);
+        solution.GetAllProjects("*.Tests").Should().HaveCountGreaterThanOrEqualTo(2);
     }
 }
