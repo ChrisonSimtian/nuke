@@ -4,6 +4,8 @@
 
 Accepted (2026-05-29). **Amended (2026-05-30)** — see the amendment below; the channel model changed from "`main` is the edge channel" to a three-tier maturity ladder (`experimental` → `main` → `release/YYYY`). **Supersedes the versioning section of [ADR-0001](0001-release-branch-model.md) and extends its channel model**; the release-branch + tag-triggered multi-channel CD machinery from ADR-0001 and the nuget.org-opt-in policy from [ADR-0002](0002-v11-off-nuget-by-default.md) remain in force. Discussion thread: [#302](https://github.com/ChrisonSimtian/Fallout/discussions/302).
 
+> **§3 amended by [ADR-0007](0007-cut-release-branch-on-demand.md) (2026-06-08).** `release/YYYY` is now **cut on demand at the first release of the year, not preemptively from day one** — until then `main` (`-preview`) is the most-stable line. Everything else in §3 (the production tier, rc → GA, nuget.org-opt-in routing, rigorous review) is unchanged.
+
 ## Amendment (2026-05-30): three-tier channel ladder — `experimental` / `main` / `release`
 
 The originally-accepted decision made **`main` itself the unstable edge channel**. Feedback from [@dennisdoomen on #302](https://github.com/ChrisonSimtian/Fallout/discussions/302#discussioncomment) pushed back on principle-of-least-surprise grounds: a newcomer (or a consumer cloning the repo) expects `main` to be the *stable-ish* line that lands deliberate improvements and bug fixes — not the bleeding edge. This amendment adopts that, by **adding a dedicated fast lane below `main`** rather than making `main` the fast lane (i.e. it adopts a form of [Alternative A](#a-a-separate-long-lived-experimental--edge-branch), which the original decision rejected — see the revised rationale there).
