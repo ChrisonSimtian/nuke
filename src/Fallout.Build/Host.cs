@@ -47,7 +47,7 @@ public partial class Host
             $"{Y}╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝  ╚═════╝    ╚═╝   {R}",
             string.Empty,
             $"                       {D}.NET build system{R}",
-            $"                     {Y}☢{R} {D}survived the fallout{R}"
+            $"                     {Y}☢{R} {D}survived the NUKE{R}"
         }.ForEach(x => Debug(x.Replace(" ", " ")));
         Debug();
     }
