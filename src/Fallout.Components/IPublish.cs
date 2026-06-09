@@ -76,7 +76,8 @@ public interface IPublish : IPack, ITest
                     : $"--publish-to [{selection.JoinComma()}] matched none of the configured targets [{configured.Select(x => x.Name).JoinComma()}].");
 
             var candidates = PushPackageFiles.ToList();
-
+            Assert.True(candidates.Count > 0,
+                "No packages found — nothing to publish. Ensure Pack produced *.nupkg files (override IPublish.PushPackageFiles if needed).");
             foreach (var target in targets)
             {
                 Assert.True(!target.ApiKey.IsNullOrWhiteSpace(), $"Publish target '{target.Name}' has no API key.");
