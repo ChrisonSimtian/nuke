@@ -25,7 +25,7 @@ public sealed class PublishTarget
     /// <summary>NuGet feed URL packages are pushed to.</summary>
     public required string Source { get; init; }
 
-    /// <summary>API key for the feed; <see langword="null"/> when the source needs none.</summary>
+    /// <summary>API key for the feed (required).</summary>
     public string? ApiKey { get; init; }
 
     /// <summary>Package-name globs (<c>*</c>, <c>?</c>) this target accepts. Default: everything.</summary>
