@@ -13,15 +13,15 @@
 > Build automation for C#/.NET — the hard-fork successor to NUKE.
 
 [![Docs](https://img.shields.io/badge/docs-docs.fallout.build-blue?logo=readthedocs&logoColor=white)](https://docs.fallout.build/)
-[![CI](https://github.com/ChrisonSimtian/Fallout/actions/workflows/ubuntu-latest.yml/badge.svg)](https://github.com/ChrisonSimtian/Fallout/actions/workflows/ubuntu-latest.yml)
+[![CI](https://github.com/Fallout-build/Fallout/actions/workflows/ubuntu-latest.yml/badge.svg)](https://github.com/Fallout-build/Fallout/actions/workflows/ubuntu-latest.yml)
 [![NuGet](https://img.shields.io/nuget/v/Fallout.Common?label=Fallout.Common)](https://www.nuget.org/packages/Fallout.Common)
 [![NuGet downloads](https://img.shields.io/nuget/dt/Fallout.Common?label=downloads)](https://www.nuget.org/packages/Fallout.Common)
-[![Latest release](https://img.shields.io/github/v/release/ChrisonSimtian/Fallout?label=release)](https://github.com/ChrisonSimtian/Fallout/releases/latest)
-[![GitHub last commit](https://img.shields.io/github/last-commit/ChrisonSimtian/Fallout)](https://github.com/ChrisonSimtian/Fallout/commits/main)
+[![Latest release](https://img.shields.io/github/v/release/Fallout-build/Fallout?label=release)](https://github.com/Fallout-build/Fallout/releases/latest)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Fallout-build/Fallout)](https://github.com/Fallout-build/Fallout/commits/main)
 [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dot.net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Open issues](https://img.shields.io/github/issues/ChrisonSimtian/Fallout)](https://github.com/ChrisonSimtian/Fallout/issues)
-[![Open PRs](https://img.shields.io/github/issues-pr/ChrisonSimtian/Fallout)](https://github.com/ChrisonSimtian/Fallout/pulls)
+[![Open issues](https://img.shields.io/github/issues/Fallout-build/Fallout)](https://github.com/Fallout-build/Fallout/issues)
+[![Open PRs](https://img.shields.io/github/issues-pr/Fallout-build/Fallout)](https://github.com/Fallout-build/Fallout/pulls)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/ChrisonSimtian?label=sponsor&logo=githubsponsors&color=EA4AAA)](https://github.com/sponsors/ChrisonSimtian)
 
 > [!IMPORTANT]
@@ -31,7 +31,7 @@
 >
 > **What's next:** the rebrand completes and the internal foundation for a plugin architecture lands on the 2026 line; a later major ships the public `Fallout.Plugin.Sdk`. The full plan is in [**docs/roadmap.md**](docs/roadmap.md). Five RFCs are open now to shape the SDK — your input matters most before it firms up.
 >
-> Track the work in [milestone #6](https://github.com/ChrisonSimtian/Fallout/milestone/6) (rebrand + plugin foundation) and [milestone #7](https://github.com/ChrisonSimtian/Fallout/milestone/7) (public plugin SDK).
+> Track the work in [milestone #6](https://github.com/Fallout-build/Fallout/milestone/6) (rebrand + plugin foundation) and [milestone #7](https://github.com/Fallout-build/Fallout/milestone/7) (public plugin SDK).
 
 ## Based on NUKE
 
@@ -88,13 +88,13 @@ CI runs on every PR targeting `main`, `release/*`, or `support/*` across `ubuntu
 
 | Workflow | Status | Trigger |
 |---|---|---|
-| [`ubuntu-latest`](.github/workflows/ubuntu-latest.yml) | [![ubuntu-latest](https://img.shields.io/github/actions/workflow/status/ChrisonSimtian/Fallout/ubuntu-latest.yml?branch=main&label=&logo=ubuntu&logoColor=white&style=flat-square)](https://github.com/ChrisonSimtian/Fallout/actions/workflows/ubuntu-latest.yml) | PR to `main` / `release/*` / `support/*` (code paths) — **required check** |
-| [`windows-latest`](.github/workflows/windows-latest.yml) | [![windows-latest](https://img.shields.io/github/actions/workflow/status/ChrisonSimtian/Fallout/windows-latest.yml?branch=main&label=&logo=windows&logoColor=white&style=flat-square)](https://github.com/ChrisonSimtian/Fallout/actions/workflows/windows-latest.yml) | push to those branches (post-merge validation) |
-| [`macos-latest`](.github/workflows/macos-latest.yml) | [![macos-latest](https://img.shields.io/github/actions/workflow/status/ChrisonSimtian/Fallout/macos-latest.yml?branch=main&label=&logo=apple&logoColor=white&style=flat-square)](https://github.com/ChrisonSimtian/Fallout/actions/workflows/macos-latest.yml) | push to those branches (post-merge validation) |
-| [`preview`](.github/workflows/preview.yml) | [![preview](https://img.shields.io/github/actions/workflow/status/ChrisonSimtian/Fallout/preview.yml?branch=main&label=&logo=githubactions&logoColor=white&style=flat-square)](https://github.com/ChrisonSimtian/Fallout/actions/workflows/preview.yml) | push to `main` → `…-preview` prerelease to GitHub Packages |
-| [`release`](.github/workflows/release.yml) | [![release](https://img.shields.io/github/actions/workflow/status/ChrisonSimtian/Fallout/release.yml?branch=main&label=&logo=nuget&logoColor=white&style=flat-square)](https://github.com/ChrisonSimtian/Fallout/actions/workflows/release.yml) | tag push on `release/YYYY` (stable) or `support/*` (legacy/retired) — nuget.org opt-in |
+| [`ubuntu-latest`](.github/workflows/ubuntu-latest.yml) | [![ubuntu-latest](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/ubuntu-latest.yml?branch=main&label=&logo=ubuntu&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/ubuntu-latest.yml) | PR to `main` / `release/*` / `support/*` (code paths) — **required check** |
+| [`windows-latest`](.github/workflows/windows-latest.yml) | [![windows-latest](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/windows-latest.yml?branch=main&label=&logo=windows&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/windows-latest.yml) | push to those branches (post-merge validation) |
+| [`macos-latest`](.github/workflows/macos-latest.yml) | [![macos-latest](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/macos-latest.yml?branch=main&label=&logo=apple&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/macos-latest.yml) | push to those branches (post-merge validation) |
+| [`preview`](.github/workflows/preview.yml) | [![preview](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/preview.yml?branch=main&label=&logo=githubactions&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/preview.yml) | push to `main` → `…-preview` prerelease to GitHub Packages |
+| [`release`](.github/workflows/release.yml) | [![release](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/release.yml?branch=main&label=&logo=nuget&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/release.yml) | tag push on `release/YYYY` (stable) or `support/*` (legacy/retired) — nuget.org opt-in |
 
-Multi-provider CI support (Azure Pipelines, GitLab, TeamCity, AppVeyor) was removed during the takeover and is being revived demand-driven — see [#8](https://github.com/ChrisonSimtian/Fallout/issues/8).
+Multi-provider CI support (Azure Pipelines, GitLab, TeamCity, AppVeyor) was removed during the takeover and is being revived demand-driven — see [#8](https://github.com/Fallout-build/Fallout/issues/8).
 
 ## Activity
 
