@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: 📚 Documentation
-    url: https://github.com/ChrisonSimtian/Fallout#readme
+    url: https://github.com/Fallout-build/Fallout#readme
     about: Read the README and architecture notes. (Dedicated docs site coming with #41.)
   - name: 📋 Rebrand status
-    url: https://github.com/ChrisonSimtian/Fallout/milestone/1
+    url: https://github.com/Fallout-build/Fallout/milestone/1
     about: Track the in-progress NUKE → Fallout migration.

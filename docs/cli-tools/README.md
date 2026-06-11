@@ -20,4 +20,4 @@ Pulls the latest content from each tool's reference URL and overwrites the match
 
 Plain text scraped from the upstream HTML. Mostly raw `dotnet`, `git`, `paket`, etc. command help output. Useful as a quick diff signal when a tool gets a new flag; **not** intended as user-facing tutorial content.
 
-If you're looking for tutorial-style usage docs for a Fallout-wrapped tool, those will land here too — separately authored under each tool's name (e.g. `dotnet.md`) once we get around to writing them. See [#41](https://github.com/ChrisonSimtian/Fallout/issues/41) for the broader docs effort.
+If you're looking for tutorial-style usage docs for a Fallout-wrapped tool, those will land here too — separately authored under each tool's name (e.g. `dotnet.md`) once we get around to writing them. See [#41](https://github.com/Fallout-build/Fallout/issues/41) for the broader docs effort.

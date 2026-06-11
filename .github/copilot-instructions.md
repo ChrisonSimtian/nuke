@@ -1,6 +1,6 @@
 # Copilot instructions — Fallout
 
-This repository uses **[AGENTS.md](https://github.com/ChrisonSimtian/Fallout/blob/main/AGENTS.md)** at the repo root as the canonical brief for AI coding tools. Read it for the full guidance — project layout, semver policy, PR-creation flow, conventions, what-not-to-do list, and useful pointers.
+This repository uses **[AGENTS.md](https://github.com/Fallout-build/Fallout/blob/main/AGENTS.md)** at the repo root as the canonical brief for AI coding tools. Read it for the full guidance — project layout, semver policy, PR-creation flow, conventions, what-not-to-do list, and useful pointers.
 
 The most important rules in short:
 

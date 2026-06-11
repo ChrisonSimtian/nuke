@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (2026-05-29). Implementation shipped under [milestone #13](https://github.com/ChrisonSimtian/Fallout/milestone/13).
+Accepted (2026-05-29). Implementation shipped under [milestone #13](https://github.com/Fallout-build/Fallout/milestone/13).
 
 > **Amended by [ADR-0004](0004-calendar-versioning-and-dual-pace-channels.md) (2026-05-29, further amended 2026-05-30).** The **versioning** decision below (per-major semver, "any breaking change bumps the major") is superseded by calendar versioning (`YYYY.MINOR.PATCH`, breaking batched to the yearly cut), and the channel model gains published **test lanes** — `experimental` (`-alpha`) and `main` (`-preview`), both GitHub Packages only. The release-branch model, tag-triggered multi-channel CD, GitHub Environments, and cherry-pick/forward-port hotfix flow described here remain in force.
 >
@@ -12,7 +12,7 @@ Accepted (2026-05-29). Implementation shipped under [milestone #13](https://gith
 
 Pre-decision, Fallout's release pipeline auto-published on every merge to `main`. Nerdbank.GitVersioning bumped the patch via git-height, the tag fired, and `.github/workflows/release.yml` pushed to nuget.org. Two compounding problems surfaced:
 
-1. **Consumer-facing noise.** Every merge — including internal cleanup like the license-header strip ([#260](https://github.com/ChrisonSimtian/Fallout/pull/260)) — produced a Fallout.* release on nuget.org. Within a few days of v11-prep the patch counter climbed from `11.0.x` to `11.0.13+`. Each release fires a Dependabot upgrade PR in every downstream consumer repo. The fan-out cost to the userbase was disproportionate to the change content.
+1. **Consumer-facing noise.** Every merge — including internal cleanup like the license-header strip ([#260](https://github.com/Fallout-build/Fallout/pull/260)) — produced a Fallout.* release on nuget.org. Within a few days of v11-prep the patch counter climbed from `11.0.x` to `11.0.13+`. Each release fires a Dependabot upgrade PR in every downstream consumer repo. The fan-out cost to the userbase was disproportionate to the change content.
 
 2. **No hotfix path for older majors.** Once `main` advances to v12-prep territory, there's no clean way to ship a v11 patch for downstream consumers. The escape hatch would be reverting `main` to a v11 base, fixing, releasing, then reapplying v12 work — non-starter.
 
@@ -43,7 +43,7 @@ Three environments keyed by **channel**, not by major (the major is captured in 
 | `github-packages` | 2 — bleeding edge | Opt-in beta testers; Nuke.* transition shims | None |
 | `github-releases` | (bundled) | Archival + manual download | None |
 
-Future Tier 3 (Docker local NuGet server for pre-merge testing) tracked in [#279](https://github.com/ChrisonSimtian/Fallout/issues/279).
+Future Tier 3 (Docker local NuGet server for pre-merge testing) tracked in [#279](https://github.com/Fallout-build/Fallout/issues/279).
 
 ### Tag protection
 
@@ -73,7 +73,7 @@ Repository ruleset blocks creation/deletion/update of `v*` tags except by repo a
 
 ### Neutral
 
-- **CHANGELOG.md cadence unchanged.** PRs still add entries under `[Unreleased] — <next-major>` per the existing flow. The CHANGELOG-vs-GitHub-Releases reconciliation is a separate concern, tracked in [#263](https://github.com/ChrisonSimtian/Fallout/issues/263).
+- **CHANGELOG.md cadence unchanged.** PRs still add entries under `[Unreleased] — <next-major>` per the existing flow. The CHANGELOG-vs-GitHub-Releases reconciliation is a separate concern, tracked in [#263](https://github.com/Fallout-build/Fallout/issues/263).
 - **`Build.cs`'s `IPublish.Publish` target is now unused by CI** — the workflow calls `dotnet nuget push` and `gh release create` directly. The target stays available for local invocation. Consolidating or removing it is a possible future cleanup, not urgent.
 
 ## Alternatives considered
@@ -115,11 +115,11 @@ Treat the noise as a v13 problem; ship v11 under the existing model.
 
 ## References
 
-- [Milestone #13](https://github.com/ChrisonSimtian/Fallout/milestone/13) — work-breakdown.
-- [RFC #267](https://github.com/ChrisonSimtian/Fallout/issues/267) — design discussion.
+- [Milestone #13](https://github.com/Fallout-build/Fallout/milestone/13) — work-breakdown.
+- [RFC #267](https://github.com/Fallout-build/Fallout/issues/267) — design discussion.
 - [docs/branching-and-release.md](../branching-and-release.md) — maintainer runbook for the model.
 - [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md) — PR-flow + release-pipeline reference.
-- Related: [#262](https://github.com/ChrisonSimtian/Fallout/issues/262) (backwards-compat principle), [#263](https://github.com/ChrisonSimtian/Fallout/issues/263) (CHANGELOG vs GH Releases), [#279](https://github.com/ChrisonSimtian/Fallout/issues/279) (Tier 3 Docker).
+- Related: [#262](https://github.com/Fallout-build/Fallout/issues/262) (backwards-compat principle), [#263](https://github.com/Fallout-build/Fallout/issues/263) (CHANGELOG vs GH Releases), [#279](https://github.com/Fallout-build/Fallout/issues/279) (Tier 3 Docker).
 
 ## Memory artifacts (AI agent context)
 

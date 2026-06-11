@@ -4,8 +4,8 @@ A Docker-based NuGet server used to verify that `Fallout.*` changes work in a
 real consumer project **before** they merge — without polluting the
 GitHub Packages feed (Tier 2) with abandoned PR builds.
 
-Tracking issue: [#279](https://github.com/ChrisonSimtian/Fallout/issues/279).
-Channel taxonomy context: [#267](https://github.com/ChrisonSimtian/Fallout/issues/267).
+Tracking issue: [#279](https://github.com/Fallout-build/Fallout/issues/279).
+Channel taxonomy context: [#267](https://github.com/Fallout-build/Fallout/issues/267).
 
 | Tier | Channel              | Audience            | Status                          |
 | ---- | -------------------- | ------------------- | ------------------------------- |
@@ -107,7 +107,7 @@ docker compose -f tests/integration/docker-compose.yml down
 docker compose -f tests/integration/docker-compose.yml down -v
 ```
 
-## Deferred to follow-ups (tracked in [#279](https://github.com/ChrisonSimtian/Fallout/issues/279))
+## Deferred to follow-ups (tracked in [#279](https://github.com/Fallout-build/Fallout/issues/279))
 
 - Wiring `tests/Consumers/Fallout.Consumer.Local/` to restore from this feed
   automatically.

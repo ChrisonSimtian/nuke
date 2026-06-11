@@ -34,7 +34,7 @@ Repository insights allow you to design your targets in a flexible manner using 
 {/* snippet: repository-information-use-cases */}
 ```cs
 [GitRepository] readonly GitRepository Repository;
-string OriginalRepositoryUrl => "https://github.com/ChrisonSimtian/Fallout";
+string OriginalRepositoryUrl => "https://github.com/Fallout-build/Fallout";
 
 Target Deploy => _ => _
     .Requires(() => Repository.IsOnMainOrMasterBranch());

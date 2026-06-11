@@ -45,7 +45,7 @@ jobs:
       packages: write
     environment:
       name: github-packages
-      url: https://github.com/ChrisonSimtian/Fallout/packages
+      url: https://github.com/Fallout-build/Fallout/packages
     steps:
       - uses: actions/checkout@v6
         with:

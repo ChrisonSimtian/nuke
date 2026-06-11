@@ -32,7 +32,7 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 
 | Package | Purpose | Notes |
 |---|---|---|
-| `Azure.Identity`, `Azure.Security.KeyVault.{Certificates,Keys,Secrets}` | Power the `[AzureKeyVaultSecret]` value-injection attribute | Pure consumer-tool surface — currently in `Fallout.Common` but will split out under [#73](https://github.com/ChrisonSimtian/Fallout/issues/73). Consumers who don't use Azure today still pay for these. |
+| `Azure.Identity`, `Azure.Security.KeyVault.{Certificates,Keys,Secrets}` | Power the `[AzureKeyVaultSecret]` value-injection attribute | Pure consumer-tool surface — currently in `Fallout.Common` but will split out under [#73](https://github.com/Fallout-build/Fallout/issues/73). Consumers who don't use Azure today still pay for these. |
 
 ## GitHub
 
@@ -45,8 +45,8 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 | Package | Purpose | Notes |
 |---|---|---|
 | `NJsonSchema` + `.NewtonsoftJson` | Generate `build.schema.json` so IDEs can auto-complete `--params` | Drags `Newtonsoft.Json` transitively |
-| `Newtonsoft.Json` | Legacy JSON — direct usage in older codepaths | Long-term consolidation to `System.Text.Json` tracked in [#83](https://github.com/ChrisonSimtian/Fallout/issues/83) |
-| `Scriban` | Templating engine | Used by `Fallout.Cli` Cake rewriter only. **Open CVE NU1903 tracked in [#84](https://github.com/ChrisonSimtian/Fallout/issues/84).** |
+| `Newtonsoft.Json` | Legacy JSON — direct usage in older codepaths | Long-term consolidation to `System.Text.Json` tracked in [#83](https://github.com/Fallout-build/Fallout/issues/83) |
+| `Scriban` | Templating engine | Used by `Fallout.Cli` Cake rewriter only. **Open CVE NU1903 tracked in [#84](https://github.com/Fallout-build/Fallout/issues/84).** |
 
 ## Text, IO, archives
 
@@ -68,7 +68,7 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 
 | Package | Purpose | Status |
 |---|---|---|
-| `Microsoft.ApplicationInsights` | Telemetry client | **Dead weight today.** `Telemetry.cs` short-circuits because `InstrumentationKey = ""` (the original NUKE key was matkoch-owned, we don't reuse). Removal tracked in [#79](https://github.com/ChrisonSimtian/Fallout/issues/79). Re-introduce when we stand up a Fallout-owned endpoint. |
+| `Microsoft.ApplicationInsights` | Telemetry client | **Dead weight today.** `Telemetry.cs` short-circuits because `InstrumentationKey = ""` (the original NUKE key was matkoch-owned, we don't reuse). Removal tracked in [#79](https://github.com/Fallout-build/Fallout/issues/79). Re-introduce when we stand up a Fallout-owned endpoint. |
 
 ## Vendored source
 
@@ -82,7 +82,7 @@ Still on Matt's personal NuGet account; supply-chain SPOF, high-priority to repl
 
 | Package | Upstream equivalent | Tracked in |
 |---|---|---|
-| `matkoch.spectre.console` | `Spectre.Console` | [#78](https://github.com/ChrisonSimtian/Fallout/issues/78) — confirmed clean swap, just needs the PR |
+| `matkoch.spectre.console` | `Spectre.Console` | [#78](https://github.com/Fallout-build/Fallout/issues/78) — confirmed clean swap, just needs the PR |
 
 ## Testing
 
@@ -104,10 +104,10 @@ These are downloaded by `build/_build.csproj` for use during this repo's own bui
 | Tool | Purpose | Status |
 |---|---|---|
 | `ReportGenerator` | HTML coverage reports | Active. |
-| `JetBrains.ReSharper.GlobalTools` | InspectCode (static analysis) | **Decision pending** ([#75](https://github.com/ChrisonSimtian/Fallout/issues/75)) — keep, drop, or just drop from this repo's build. |
-| `Codecov.Tool` | Upload coverage to codecov.io | **Likely dead** — `IReportCoverage.ReportToCodecov` is `false`. Removal tracked in [#80](https://github.com/ChrisonSimtian/Fallout/issues/80). |
-| `GitVersion.Tool` | Version computation (legacy) | **Transitional** — fully replace with `Nerdbank.GitVersioning` per [#81](https://github.com/ChrisonSimtian/Fallout/issues/81). |
-| `xunit.runner.console` | Standalone xunit runner | **Likely redundant** with `Microsoft.NET.Test.Sdk`. Removal tracked in [#82](https://github.com/ChrisonSimtian/Fallout/issues/82). |
+| `JetBrains.ReSharper.GlobalTools` | InspectCode (static analysis) | **Decision pending** ([#75](https://github.com/Fallout-build/Fallout/issues/75)) — keep, drop, or just drop from this repo's build. |
+| `Codecov.Tool` | Upload coverage to codecov.io | **Likely dead** — `IReportCoverage.ReportToCodecov` is `false`. Removal tracked in [#80](https://github.com/Fallout-build/Fallout/issues/80). |
+| `GitVersion.Tool` | Version computation (legacy) | **Transitional** — fully replace with `Nerdbank.GitVersioning` per [#81](https://github.com/Fallout-build/Fallout/issues/81). |
+| `xunit.runner.console` | Standalone xunit runner | **Likely redundant** with `Microsoft.NET.Test.Sdk`. Removal tracked in [#82](https://github.com/Fallout-build/Fallout/issues/82). |
 
 ---
 

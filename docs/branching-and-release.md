@@ -1,6 +1,6 @@
 # Branching and release flow
 
-Maintainer reference for how Fallout branches, ships releases, hotfixes older lines, and uses GitHub Environments to gate publishes. Model defined by [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md) (calendar versioning + dual-pace channels), amending [ADR-0001](adr/0001-release-branch-model.md) / [milestone #13](https://github.com/ChrisonSimtian/Fallout/milestone/13) / [RFC #267](https://github.com/ChrisonSimtian/Fallout/issues/267). The `experimental` branch and its `-alpha` channel have since been collapsed into `main` ([ADR-0008](adr/0008-collapse-experimental-into-main.md), channel ladder superseded) — `main` is now the sole prerelease lane.
+Maintainer reference for how Fallout branches, ships releases, hotfixes older lines, and uses GitHub Environments to gate publishes. Model defined by [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md) (calendar versioning + dual-pace channels), amending [ADR-0001](adr/0001-release-branch-model.md) / [milestone #13](https://github.com/Fallout-build/Fallout/milestone/13) / [RFC #267](https://github.com/Fallout-build/Fallout/issues/267). The `experimental` branch and its `-alpha` channel have since been collapsed into `main` ([ADR-0008](adr/0008-collapse-experimental-into-main.md), channel ladder superseded) — `main` is now the sole prerelease lane.
 
 > **Audience.** Repository maintainers cutting releases or hotfixing older lines. Contributors filing PRs against `main` don't need to read this — see [CONTRIBUTING.md](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md) instead. AI coding tools should read both this file and [docs/agents/release-and-versioning.md](agents/release-and-versioning.md).
 
@@ -36,7 +36,7 @@ Releases fire to multiple channels, each with its own GitHub Environment:
 | `github-releases` env (bundled) | `release/*`, `support/*` tags | Same tag as the package publish | None | Same as the tag |
 | Docker local NuGet server | Per-PR / per-commit | None (local) | PR-derived | Available via `tests/integration/docker-compose.yml` |
 
-**Defaults:** `main` (preview) publishes to GitHub Packages only — **never nuget.org, never a GH Release**. `preview.yml` (main → `-preview`) is the only continuous publisher; the former `experimental.yml` workflow has been deleted ([ADR-0008](adr/0008-collapse-experimental-into-main.md)). Production tag pushes (`release/YYYY`, `support/*`) publish to GitHub Packages + GitHub Releases. nuget.org is **always opt-in** via the `workflow_dispatch` `publish-to-nugetorg` flag — used when a `release/YYYY` is stabilised enough for the broader consumer audience, or for a `support/v10` security patch. See [`project_release_channels` in agent memory](https://github.com/ChrisonSimtian/Fallout/issues/267#issuecomment-4570408325) and [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md).
+**Defaults:** `main` (preview) publishes to GitHub Packages only — **never nuget.org, never a GH Release**. `preview.yml` (main → `-preview`) is the only continuous publisher; the former `experimental.yml` workflow has been deleted ([ADR-0008](adr/0008-collapse-experimental-into-main.md)). Production tag pushes (`release/YYYY`, `support/*`) publish to GitHub Packages + GitHub Releases. nuget.org is **always opt-in** via the `workflow_dispatch` `publish-to-nugetorg` flag — used when a `release/YYYY` is stabilised enough for the broader consumer audience, or for a `support/v10` security patch. See [`project_release_channels` in agent memory](https://github.com/Fallout-build/Fallout/issues/267#issuecomment-4570408325) and [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md).
 
 ## Cutting a release
 
@@ -163,7 +163,7 @@ git push -u origin release/2027
 #    docs/agents/release-and-versioning.md → Branch protection on release/YYYY).
 #    NOTE: scripts/release-branch-protection.json does not exist yet; capture
 #    main's live protection JSON into it (or apply via repo Settings → Branches).
-gh api -X PUT repos/ChrisonSimtian/Fallout/branches/release/2027/protection \
+gh api -X PUT repos/Fallout-build/Fallout/branches/release/2027/protection \
     --input scripts/release-branch-protection.json
 
 # 4. On release/2027 (the branch itself), set version.json "version": "2027.0".
@@ -194,7 +194,7 @@ Branches are cheap. Deletion is destructive. Default to keeping.
 
 ## Tag protection
 
-A repository ruleset blocks creation/deletion/update of tags matching `v*` for non-admins ([ruleset 17017817](https://github.com/ChrisonSimtian/Fallout/rules/17017817)). Bypass actors: repo admins (`RepositoryRole 5`). Combined with the `nuget-org` env approval gate, that's two layers of "who can fire a production release."
+A repository ruleset blocks creation/deletion/update of tags matching `v*` for non-admins ([ruleset 17017817](https://github.com/Fallout-build/Fallout/rules/17017817)). Bypass actors: repo admins (`RepositoryRole 5`). Combined with the `nuget-org` env approval gate, that's two layers of "who can fire a production release."
 
 ## See also
 
@@ -202,6 +202,6 @@ A repository ruleset blocks creation/deletion/update of tags matching `v*` for n
 - [docs/adr/0004-calendar-versioning-and-dual-pace-channels.md](adr/0004-calendar-versioning-and-dual-pace-channels.md) — the versioning + channel decision (channel ladder superseded by ADR-0008).
 - [docs/adr/0008-collapse-experimental-into-main.md](adr/0008-collapse-experimental-into-main.md) — collapses the `experimental` branch and its `-alpha` channel into `main`.
 - [docs/adr/0001-release-branch-model.md](adr/0001-release-branch-model.md) — the release-branch + multi-channel CD model (versioning amended by 0004).
-- [milestone #13](https://github.com/ChrisonSimtian/Fallout/milestone/13) — full work-breakdown of how this shape was implemented.
-- [RFC #267](https://github.com/ChrisonSimtian/Fallout/issues/267) — original design discussion.
+- [milestone #13](https://github.com/Fallout-build/Fallout/milestone/13) — full work-breakdown of how this shape was implemented.
+- [RFC #267](https://github.com/Fallout-build/Fallout/issues/267) — original design discussion.
 - [CONTRIBUTING.md](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md) — contributor-facing flow.

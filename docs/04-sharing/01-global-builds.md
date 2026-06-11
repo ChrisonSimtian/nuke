@@ -48,7 +48,7 @@ dotnet nuget push MyBuild.<version>.nupkg --source <source> --api-key <token>
 ```
 
 :::note
-Currently, [single-file deployments](https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file/overview) are not supported. That means that the operating system must have the .NET SDK installed. Historical context lives in [upstream NUKE issue #822](https://github.com/nuke-build/nuke/issues/822); please file new requests on the [Fallout repository](https://github.com/ChrisonSimtian/Fallout/issues).
+Currently, [single-file deployments](https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file/overview) are not supported. That means that the operating system must have the .NET SDK installed. Historical context lives in [upstream NUKE issue #822](https://github.com/nuke-build/nuke/issues/822); please file new requests on the [Fallout repository](https://github.com/Fallout-build/Fallout/issues).
 :::
 
 ## Installation

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "https://raw.githubusercontent.com/ChrisonSimtian/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
+  "id": "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
   "title": "Tool specification schema file by NUKE",
   "definitions": {
     "DataClass": {

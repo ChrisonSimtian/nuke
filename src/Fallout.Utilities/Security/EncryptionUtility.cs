@@ -25,7 +25,7 @@ namespace Fallout.Common.Utilities;
 ///   </item>
 /// </list>
 ///
-/// See <see href="https://github.com/ChrisonSimtian/Fallout/issues/212">#212</see> for the security
+/// See <see href="https://github.com/Fallout-build/Fallout/issues/212">#212</see> for the security
 /// audit that motivated the v2 format.
 /// </summary>
 internal static class EncryptionUtility

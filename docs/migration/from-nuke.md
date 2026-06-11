@@ -1,6 +1,6 @@
 # Migrating from NUKE to Fallout
 
-Fallout is the hard-fork successor to [NUKE](https://github.com/nuke-build/nuke). If you maintain a NUKE-based build, this guide gets you running on Fallout in under five minutes. Why the rename and the relationship to upstream NUKE are explained in [the rebrand plan](https://github.com/ChrisonSimtian/Fallout/blob/main/docs/rebrand-plan.md).
+Fallout is the hard-fork successor to [NUKE](https://github.com/nuke-build/nuke). If you maintain a NUKE-based build, this guide gets you running on Fallout in under five minutes. Why the rename and the relationship to upstream NUKE are explained in [the rebrand plan](https://github.com/Fallout-build/Fallout/blob/main/docs/rebrand-plan.md).
 
 ## TL;DR
 
@@ -96,7 +96,7 @@ The shim ships on **GitHub Packages** (not nuget.org — that namespace belongs 
 You'll need a GitHub Personal Access Token with the `read:packages` scope. Then bump your `Nuke.Common` package version to the latest published on the shim feed and your build keeps compiling unchanged.
 
 **Caveats**:
-- The shim covers most public types but skips a few (sealed-class wrappers and static helper classes like `DotNetTasks` are not bridged yet — tracked in [#69](https://github.com/ChrisonSimtian/Fallout/issues/69)). If your build uses any of those, it won't compile against the shim and you'll need `fallout-migrate` after all.
+- The shim covers most public types but skips a few (sealed-class wrappers and static helper classes like `DotNetTasks` are not bridged yet — tracked in [#69](https://github.com/Fallout-build/Fallout/issues/69)). If your build uses any of those, it won't compile against the shim and you'll need `fallout-migrate` after all.
 - The shim is a transition aid, not a permanent home. It's removed in 12.0. Plan to migrate before then.
 
 ## Manual migration
@@ -121,7 +121,7 @@ The [`Fallout.Migrate.Analyzers`](https://www.nuget.org/packages/Fallout.Migrate
 
 ## If something breaks
 
-File an issue at [github.com/ChrisonSimtian/Fallout/issues](https://github.com/ChrisonSimtian/Fallout/issues). Include:
+File an issue at [github.com/Fallout-build/Fallout/issues](https://github.com/Fallout-build/Fallout/issues). Include:
 
 - Your build's `_build.csproj` (or relevant excerpt)
 - The output of `fallout-migrate --dry-run`
@@ -132,4 +132,4 @@ If `fallout-migrate` itself crashed, also attach the stack trace.
 
 ## Staying on NUKE
 
-If you'd prefer not to migrate, that's fine — [`nuke-build/nuke`](https://github.com/nuke-build/nuke) continues under its original maintainer's direction. Fallout doesn't displace it; we hard-forked because we wanted to take the codebase in a different direction (enterprise CI/CD focus, plugin architecture — see [the roadmap](https://github.com/ChrisonSimtian/Fallout/blob/main/docs/roadmap.md)). Bug fixes and improvements may flow between the two projects, but the codebases will diverge over time. Pick the one whose direction matches your needs.
+If you'd prefer not to migrate, that's fine — [`nuke-build/nuke`](https://github.com/nuke-build/nuke) continues under its original maintainer's direction. Fallout doesn't displace it; we hard-forked because we wanted to take the codebase in a different direction (enterprise CI/CD focus, plugin architecture — see [the roadmap](https://github.com/Fallout-build/Fallout/blob/main/docs/roadmap.md)). Bug fixes and improvements may flow between the two projects, but the codebases will diverge over time. Pick the one whose direction matches your needs.

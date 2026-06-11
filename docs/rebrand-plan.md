@@ -1,6 +1,6 @@
 # Rebrand plan: Nuke.* → Fallout.*
 
-Canonical reference for how the namespace/assembly rename and consumer migration work. Captures decisions originally made in [#31](https://github.com/ChrisonSimtian/Fallout/issues/31) and [#35](https://github.com/ChrisonSimtian/Fallout/issues/35) so they survive outside the issue tracker.
+Canonical reference for how the namespace/assembly rename and consumer migration work. Captures decisions originally made in [#31](https://github.com/Fallout-build/Fallout/issues/31) and [#35](https://github.com/Fallout-build/Fallout/issues/35) so they survive outside the issue tracker.
 
 This document is itself transient — it gets archived once the shim packages are sunset (see [Sunset timeline](#sunset-timeline)).
 
@@ -53,7 +53,7 @@ This is locked by the bridge-package design — `[TypeForwardedTo]` requires the
 
 ### Present-day project↔namespace mismatches
 
-Heads-up for whoever executes [#32](https://github.com/ChrisonSimtian/Fallout/issues/32): several projects under `src/` declare types under a namespace that doesn't match the project (assembly) name. The rename must update both axes independently.
+Heads-up for whoever executes [#32](https://github.com/Fallout-build/Fallout/issues/32): several projects under `src/` declare types under a namespace that doesn't match the project (assembly) name. The rename must update both axes independently.
 
 | Project (under `src/`) | Root namespace(s) it currently declares |
 |---|---|
@@ -78,7 +78,7 @@ All three are candidate work for a future major version *after* the shim package
 
 ## 2. Bridge strategy for existing NUKE consumers
 
-**Chosen approach (decided on [#35](https://github.com/ChrisonSimtian/Fallout/issues/35)):** type-forwarding shim packages published as `Nuke.<X>` on our GitHub Packages feed, complemented by a Roslyn codefix and a migration guide. A migrator CLI is optional, demand-driven.
+**Chosen approach (decided on [#35](https://github.com/Fallout-build/Fallout/issues/35)):** type-forwarding shim packages published as `Nuke.<X>` on our GitHub Packages feed, complemented by a Roslyn codefix and a migration guide. A migrator CLI is optional, demand-driven.
 
 ### Why this works without owning the `Nuke.*` IDs on nuget.org
 
@@ -97,9 +97,9 @@ Both families ship at the same version, in lockstep.
 
 **Path A — easiest (recommended for most existing users).** Add our GH Packages feed to `nuget.config`, bump `<PackageReference Include="Nuke.Common" Version="11.0.0" />`, done. Source compiles unchanged. Stay on `Nuke.<X>` indefinitely or cut over later.
 
-**Path B — clean cutover.** Replace `Nuke.<X>` package references with `Fallout.<X>`, rewrite `using Nuke.*` directives to `using Fallout.*`. The Roslyn codefix ([#36](https://github.com/ChrisonSimtian/Fallout/issues/36)) handles the in-IDE per-file case; the optional `Fallout.Migrate` CLI ([#48](https://github.com/ChrisonSimtian/Fallout/issues/48)) handles whole-repo bulk migration.
+**Path B — clean cutover.** Replace `Nuke.<X>` package references with `Fallout.<X>`, rewrite `using Nuke.*` directives to `using Fallout.*`. The Roslyn codefix ([#36](https://github.com/Fallout-build/Fallout/issues/36)) handles the in-IDE per-file case; the optional `Fallout.Migrate` CLI ([#48](https://github.com/Fallout-build/Fallout/issues/48)) handles whole-repo bulk migration.
 
-The migration guide ([#37](https://github.com/ChrisonSimtian/Fallout/issues/37)) documents both paths.
+The migration guide ([#37](https://github.com/Fallout-build/Fallout/issues/37)) documents both paths.
 
 ### Sunset timeline
 
@@ -115,10 +115,10 @@ Dates land on the timeline once `R0` ships.
 
 ## Implementation issues
 
-- [#32](https://github.com/ChrisonSimtian/Fallout/issues/32) — execute the namespace rename (P3)
-- [#33](https://github.com/ChrisonSimtian/Fallout/issues/33) — reserve `Fallout.*` package IDs (P4)
-- [#34](https://github.com/ChrisonSimtian/Fallout/issues/34) — rename `.csproj` files and project references (P4)
-- [#36](https://github.com/ChrisonSimtian/Fallout/issues/36) — Roslyn codefix for `using Nuke.* → Fallout.*` (P5)
-- [#37](https://github.com/ChrisonSimtian/Fallout/issues/37) — migration guide (P5)
-- [#47](https://github.com/ChrisonSimtian/Fallout/issues/47) — `Nuke.<X>` type-forwarding shim packages on GH Packages (P5)
-- [#48](https://github.com/ChrisonSimtian/Fallout/issues/48) — `Fallout.Migrate` CLI tool (P5, demand-driven)
+- [#32](https://github.com/Fallout-build/Fallout/issues/32) — execute the namespace rename (P3)
+- [#33](https://github.com/Fallout-build/Fallout/issues/33) — reserve `Fallout.*` package IDs (P4)
+- [#34](https://github.com/Fallout-build/Fallout/issues/34) — rename `.csproj` files and project references (P4)
+- [#36](https://github.com/Fallout-build/Fallout/issues/36) — Roslyn codefix for `using Nuke.* → Fallout.*` (P5)
+- [#37](https://github.com/Fallout-build/Fallout/issues/37) — migration guide (P5)
+- [#47](https://github.com/Fallout-build/Fallout/issues/47) — `Nuke.<X>` type-forwarding shim packages on GH Packages (P5)
+- [#48](https://github.com/Fallout-build/Fallout/issues/48) — `Fallout.Migrate` CLI tool (P5, demand-driven)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +13,7 @@ namespace Fallout.CodeGeneration.Model;
 public class Tool : IDeprecatable
 {
     [JsonPropertyName("$schema")]
-    public string Schema => "https://raw.githubusercontent.com/ChrisonSimtian/Fallout/main/src/Fallout.Tooling.Generator/schema.json";
+    public string Schema => "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json";
 
     [JsonIgnore] public string SpecificationFile { get; set; }
     [JsonIgnore] public string DefaultOutputFile => Path.ChangeExtension(SpecificationFile, "Generated.cs");

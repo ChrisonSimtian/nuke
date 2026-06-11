@@ -18,7 +18,7 @@ Short-lived branches (squash- or rebase-merged via PR): `feature/<slug>`, `bugfi
 
 No `develop` (literal) or `master` branches. The ladder flows **forward-only**: `main → release/YYYY`. The `support/*` lines are maintenance-only — security/critical fixes land via a PR targeting (or cherry-pick to) `support/v10` / `support/YYYY` (or the relevant `hotfix/v10.x`) and are tagged from there.
 
-CI providers in use: **GitHub Actions only** (others were dropped — see [#8](https://github.com/ChrisonSimtian/Fallout/issues/8) for the demand-driven revival roadmap).
+CI providers in use: **GitHub Actions only** (others were dropped — see [#8](https://github.com/Fallout-build/Fallout/issues/8) for the demand-driven revival roadmap).
 
 ### Branch protection on `release/YYYY` and `support/*`
 
@@ -106,7 +106,7 @@ Two layers of protection on the nuget.org path: the input flag opt-in, plus the 
 
 ### Nuke.* shims
 
-`Nuke.*` transition-shim package IDs are owned by the original NUKE maintainer on nuget.org (see [#47](https://github.com/ChrisonSimtian/Fallout/issues/47)) — they're permanently routed to GitHub Packages, never nuget.org, regardless of the input flag.
+`Nuke.*` transition-shim package IDs are owned by the original NUKE maintainer on nuget.org (see [#47](https://github.com/Fallout-build/Fallout/issues/47)) — they're permanently routed to GitHub Packages, never nuget.org, regardless of the input flag.
 
 ### Re-runs
 
@@ -125,13 +125,13 @@ Common use cases: re-running a transient-failed publish (`tag` only), or shippin
 
 ### Channel philosophy
 
-Per [RFC #267](https://github.com/ChrisonSimtian/Fallout/issues/267): nuget.org = production-grade & slow; GitHub Packages = faster cadence (the preview channel — `main`'s `-preview` prereleases + every tag's packages); GitHub Releases = bundled artifacts. A planned Tier 3 (Docker-based local NuGet server for pre-merge testing) shipped via [#279](https://github.com/ChrisonSimtian/Fallout/issues/279) — see `tests/integration/docker-compose.yml`.
+Per [RFC #267](https://github.com/Fallout-build/Fallout/issues/267): nuget.org = production-grade & slow; GitHub Packages = faster cadence (the preview channel — `main`'s `-preview` prereleases + every tag's packages); GitHub Releases = bundled artifacts. A planned Tier 3 (Docker-based local NuGet server for pre-merge testing) shipped via [#279](https://github.com/Fallout-build/Fallout/issues/279) — see `tests/integration/docker-compose.yml`.
 
-`NUGET_API_KEY` is scoped to the `nuget-org` GitHub Environment (per [#273](https://github.com/ChrisonSimtian/Fallout/issues/273)) — only resolves in the gated job. Prefix reservation tracked in [#33](https://github.com/ChrisonSimtian/Fallout/issues/33).
+`NUGET_API_KEY` is scoped to the `nuget-org` GitHub Environment (per [#273](https://github.com/Fallout-build/Fallout/issues/273)) — only resolves in the gated job. Prefix reservation tracked in [#33](https://github.com/Fallout-build/Fallout/issues/33).
 
 ## Adding a new `Fallout.X` package — first-publish gotcha
 
 nuget.org's `Fallout.*` prefix reservation is per-ID, not per-prefix-wildcard: CI's first `nuget push` for any never-published `Fallout.X` package ID returns `403 (does not have permission to access the specified package)` until someone manually web-uploads one nupkg to register the ID. **Two traps when doing that upload:**
 
-1. **Set the package owner to the org, not your personal account.** The nuget.org upload UI doesn't prompt you; ownership defaults to the uploading user's profile. If you forget, the package ID is reserved but the org's `NUGET_API_KEY` still 403s on subsequent pushes (the key is scoped to org-owned packages). Fix via `Manage Package → Owners → Add owner → <org>` then optionally remove your personal account. Or upload using credentials of the org's service account directly. See [#208](https://github.com/ChrisonSimtian/Fallout/issues/208) for what this looks like when it goes wrong.
+1. **Set the package owner to the org, not your personal account.** The nuget.org upload UI doesn't prompt you; ownership defaults to the uploading user's profile. If you forget, the package ID is reserved but the org's `NUGET_API_KEY` still 403s on subsequent pushes (the key is scoped to org-owned packages). Fix via `Manage Package → Owners → Add owner → <org>` then optionally remove your personal account. Or upload using credentials of the org's service account directly. See [#208](https://github.com/Fallout-build/Fallout/issues/208) for what this looks like when it goes wrong.
 2. **Validation can lag** the upload by 5–30 minutes. The package page may say "approved" while the API key permission hasn't propagated yet. Wait, then rerun the release pipeline (`gh run rerun <id> --failed`); `--skip-duplicate` makes the retry safe for already-published packages.

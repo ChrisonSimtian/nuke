@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (2026-05-29). **Amended (2026-05-30)** — see the amendment below; the channel model changed from "`main` is the edge channel" to a three-tier maturity ladder (`experimental` → `main` → `release/YYYY`). **Supersedes the versioning section of [ADR-0001](0001-release-branch-model.md) and extends its channel model**; the release-branch + tag-triggered multi-channel CD machinery from ADR-0001 and the nuget.org-opt-in policy from [ADR-0002](0002-v11-off-nuget-by-default.md) remain in force. Discussion thread: [#302](https://github.com/ChrisonSimtian/Fallout/discussions/302).
+Accepted (2026-05-29). **Amended (2026-05-30)** — see the amendment below; the channel model changed from "`main` is the edge channel" to a three-tier maturity ladder (`experimental` → `main` → `release/YYYY`). **Supersedes the versioning section of [ADR-0001](0001-release-branch-model.md) and extends its channel model**; the release-branch + tag-triggered multi-channel CD machinery from ADR-0001 and the nuget.org-opt-in policy from [ADR-0002](0002-v11-off-nuget-by-default.md) remain in force. Discussion thread: [#302](https://github.com/Fallout-build/Fallout/discussions/302).
 
 > **⚠️ §2 (channel ladder) superseded by [ADR-0008](0008-collapse-experimental-into-main.md) (2026-06-18).** The dedicated `experimental` (`-alpha`) lane added by the 2026-05-30 amendment below has been **removed** — it ran behind `main`, carried no unique work, and cost a publisher + a branch + a forward-port obligation for no realised benefit. **`main` (`-preview`, GitHub Packages only) is now the sole prerelease lane**; breaking work batches on `main` behind `[Experimental("FALLOUT0xx")]` rather than on a separate branch. Everything else in this ADR — calendar versioning (§1), the production line + `[Experimental]` + review tiers (§3–§6) — is unchanged. The amendment text below is preserved as history; read it through the lens of ADR-0008.
 
@@ -10,7 +10,7 @@ Accepted (2026-05-29). **Amended (2026-05-30)** — see the amendment below; the
 
 ## Amendment (2026-05-30): three-tier channel ladder — `experimental` / `main` / `release`
 
-The originally-accepted decision made **`main` itself the unstable edge channel**. Feedback from [@dennisdoomen on #302](https://github.com/ChrisonSimtian/Fallout/discussions/302#discussioncomment) pushed back on principle-of-least-surprise grounds: a newcomer (or a consumer cloning the repo) expects `main` to be the *stable-ish* line that lands deliberate improvements and bug fixes — not the bleeding edge. This amendment adopts that, by **adding a dedicated fast lane below `main`** rather than making `main` the fast lane (i.e. it adopts a form of [Alternative A](#a-a-separate-long-lived-experimental--edge-branch), which the original decision rejected — see the revised rationale there).
+The originally-accepted decision made **`main` itself the unstable edge channel**. Feedback from [@dennisdoomen on #302](https://github.com/Fallout-build/Fallout/discussions/302#discussioncomment) pushed back on principle-of-least-surprise grounds: a newcomer (or a consumer cloning the repo) expects `main` to be the *stable-ish* line that lands deliberate improvements and bug fixes — not the bleeding edge. This amendment adopts that, by **adding a dedicated fast lane below `main`** rather than making `main` the fast lane (i.e. it adopts a form of [Alternative A](#a-a-separate-long-lived-experimental--edge-branch), which the original decision rejected — see the revised rationale there).
 
 What changed:
 
@@ -150,7 +150,7 @@ Version ladder (SemVer prerelease ordering): `…-alpha.N` < `…-preview.N` < `
 
 A standing branch where the AI crowd works fast, promoting stabilised work to `main`.
 
-**Originally rejected, then adopted (2026-05-30 amendment).** The original decision rejected this to avoid continuous `experimental → main` divergence + cherry-pick-back merge-hell, instead making `main` *itself* the edge channel. The [#302](https://github.com/ChrisonSimtian/Fallout/discussions/302) feedback showed that cure was worse than the disease: an unstable `main` violates principle-of-least-surprise for the whole community, every day, to avoid a divergence cost that turns out to be **bounded** in practice (most work is non-breaking and promotes promptly; `[Experimental]` carries risky surface as non-breaking; promotion is forward-only). The amendment therefore adopts the dedicated `experimental` lane — but keeps the divergence-minimising tools (`[Experimental]`, same-core, forward-only promotion) that made the original objection answerable. See the [amendment](#amendment-2026-05-30-three-tier-channel-ladder--experimental--main--release) and [Consequences → Negative](#negative).
+**Originally rejected, then adopted (2026-05-30 amendment).** The original decision rejected this to avoid continuous `experimental → main` divergence + cherry-pick-back merge-hell, instead making `main` *itself* the edge channel. The [#302](https://github.com/Fallout-build/Fallout/discussions/302) feedback showed that cure was worse than the disease: an unstable `main` violates principle-of-least-surprise for the whole community, every day, to avoid a divergence cost that turns out to be **bounded** in practice (most work is non-breaking and promotes promptly; `[Experimental]` carries risky surface as non-breaking; promotion is forward-only). The amendment therefore adopts the dedicated `experimental` lane — but keeps the divergence-minimising tools (`[Experimental]`, same-core, forward-only promotion) that made the original objection answerable. See the [amendment](#amendment-2026-05-30-three-tier-channel-ladder--experimental--main--release) and [Consequences → Negative](#negative).
 
 ### B. Keep semver `vN` majors
 
@@ -176,4 +176,4 @@ Make daily builds literally `2026.05.29`.
 - [ADR-0002: v11 off nuget.org by default](0002-v11-off-nuget-by-default.md) — nuget.org-opt-in policy, retained.
 - [docs/branching-and-release.md](../branching-and-release.md) — maintainer runbook (updated for this model).
 - [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md) — agent-facing branching/versioning/PR-flow reference (updated for this model).
-- Discussion thread: [#302 — Calendar versioning + dual-pace channels (feedback)](https://github.com/ChrisonSimtian/Fallout/discussions/302).
+- Discussion thread: [#302 — Calendar versioning + dual-pace channels (feedback)](https://github.com/Fallout-build/Fallout/discussions/302).

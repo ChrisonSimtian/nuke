@@ -3,7 +3,7 @@
 - **Status:** Proposed
 - **Date:** 2026-05-24
 - **Deciders:** Fallout maintainers
-- **Relates to:** [ADR-0001](0001-cd-primitives-attributes-vs-tasks.md), RFC [#106](https://github.com/ChrisonSimtian/Fallout/issues/106), milestone [v12](https://github.com/ChrisonSimtian/Fallout/milestone/7) (plugin SDK), milestone [v13](https://github.com/ChrisonSimtian/Fallout/milestone/8) (CD vision)
+- **Relates to:** [ADR-0001](0001-cd-primitives-attributes-vs-tasks.md), RFC [#106](https://github.com/Fallout-build/Fallout/issues/106), milestone [v12](https://github.com/Fallout-build/Fallout/milestone/7) (plugin SDK), milestone [v13](https://github.com/Fallout-build/Fallout/milestone/8) (CD vision)
 
 ## Context
 
@@ -99,7 +99,7 @@ These are decisions the ADR does not close; they need follow-up work or a follow
 - **Windows + Linux credential stores.** `CredentialStore.SavePassword` / `TryGetPassword` only handle `PlatformFamily.OSX`. Windows DPAPI (`ProtectedData`) and Linux libsecret are missing — non-macOS users currently fall back to prompts every run. **Action:** separate issue, not blocking the convention but worth a tracking entry under v12 (since plugin authors on Windows will hit this first).
 - **Per-environment scoping.** GitHub Environments and Octopus environments both support env-scoped secrets. The convention above treats secret name as flat. Future: `[GitHubEnvironment("production", ImportSecrets = new[] { nameof(ProdDeployKey) })]` declares the secret as environment-scoped on the GitHub side; the C# field stays one declaration. Not in scope for this ADR; flagged for the CD work to bake in from day one.
 - **Secret rotation.** No framework concept today for "this secret should be rotated every N days." Probably never the framework's job (the secret store owns lifecycle) — but worth documenting that the build does not enforce rotation; that's a consumer policy.
-- **External secret-manager integrations.** Step 3 of the resolution chain is the extension point for remote stores. Azure Key Vault is the reference implementation today; 1Password, Bitwarden Secrets Manager, HashiCorp Vault, AWS Secrets Manager, GCP Secret Manager, Doppler, Infisical are tracked candidates. Each ships as a v12 plugin, not as in-tree code. Running list at issue [#168](https://github.com/ChrisonSimtian/Fallout/issues/168).
+- **External secret-manager integrations.** Step 3 of the resolution chain is the extension point for remote stores. Azure Key Vault is the reference implementation today; 1Password, Bitwarden Secrets Manager, HashiCorp Vault, AWS Secrets Manager, GCP Secret Manager, Doppler, Infisical are tracked candidates. Each ships as a v12 plugin, not as in-tree code. Running list at issue [#168](https://github.com/Fallout-build/Fallout/issues/168).
 
 ## Consequences
 
@@ -151,4 +151,4 @@ Skip the existing infrastructure; layer on a standard .NET configuration provide
 - `src/Fallout.Cli/Program.Secrets.cs` — encrypted parameters file CLI
 - `src/Fallout.Common/CI/GitHubActions/GitHubActionsAttribute.cs:217` — canonical name derivation (`SplitCamelHumpsWithKnownWords().JoinUnderscore().ToUpperInvariant()`)
 - `src/Fallout.Common/Tools/AzureKeyVault/AzureKeyVaultSecretAttribute.cs` — runtime value-provider precedent (step 3 of the resolution chain)
-- RFC [#113](https://github.com/ChrisonSimtian/Fallout/issues/113) — deployment agent (needs the resolution chain to authenticate to coordinators)
+- RFC [#113](https://github.com/Fallout-build/Fallout/issues/113) — deployment agent (needs the resolution chain to authenticate to coordinators)

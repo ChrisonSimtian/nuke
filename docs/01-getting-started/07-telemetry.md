@@ -26,7 +26,7 @@ Fallout will display a prompt similar to the following when executing a build pr
 Telemetry v1
 ------------
 Fallout collects anonymous usage data in order to help us improve your experience.
-Read more about scope, data points, and opt-out: https://github.com/ChrisonSimtian/Fallout#telemetry
+Read more about scope, data points, and opt-out: https://github.com/Fallout-build/Fallout#telemetry
 ```
 
 Once you confirm the notice, Fallout will either:
@@ -36,7 +36,7 @@ Once you confirm the notice, Fallout will either:
 
 ## Scope
 
-As a global tool and library, Fallout has [multiple events](https://github.com/ChrisonSimtian/Fallout/blob/main/src/Nuke.Build/Telemetry/Telemetry.Events.cs) where telemetry is collected:
+As a global tool and library, Fallout has [multiple events](https://github.com/Fallout-build/Fallout/blob/main/src/Nuke.Build/Telemetry/Telemetry.Events.cs) where telemetry is collected:
 
 - `BuildStarted` – when a build was started
 - `TargetSucceeded` – when a target succeeded (only `Restore`, `Compile`, `Test`)
@@ -49,9 +49,9 @@ Data for `BuildStarted` and `TargetSucceeded` is only collected when `IsServerBu
 
 ## Data Points
 
-The [telemetry data points](https://github.com/ChrisonSimtian/Fallout/blob/main/src/Nuke.Build/Telemetry/Telemetry.Properties.cs) do not collect personal data, such as usernames or email addresses. If we wire up an endpoint, the data will be sent securely to whichever back-end Fallout's maintainers configure — documented here when that happens.
+The [telemetry data points](https://github.com/Fallout-build/Fallout/blob/main/src/Nuke.Build/Telemetry/Telemetry.Properties.cs) do not collect personal data, such as usernames or email addresses. If we wire up an endpoint, the data will be sent securely to whichever back-end Fallout's maintainers configure — documented here when that happens.
 
-Protecting your privacy is important to us. If you suspect the telemetry plumbing has been re-enabled incorrectly or could collect sensitive data, file an issue on the [Fallout repository](https://github.com/ChrisonSimtian/Fallout/issues).
+Protecting your privacy is important to us. If you suspect the telemetry plumbing has been re-enabled incorrectly or could collect sensitive data, file an issue on the [Fallout repository](https://github.com/Fallout-build/Fallout/issues).
 
 The telemetry feature collects the following data:
 

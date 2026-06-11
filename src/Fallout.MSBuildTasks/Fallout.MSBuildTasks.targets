@@ -50,7 +50,7 @@
   <UsingTask TaskName="$(MSBuildThisFileName).EmbedPackagesForSelfContainedTask" AssemblyFile="$(FalloutTasksAssembly)" />
 
   <Target Name="FalloutExternalFiles" BeforeTargets="Restore" Condition="'@(FalloutExternalFiles)' != ''">
-    <Error Text="External files are no longer supported. Let us know if you're depending on this feature at https://github.com/ChrisonSimtian/Fallout/issues" />
+    <Error Text="External files are no longer supported. Let us know if you're depending on this feature at https://github.com/Fallout-build/Fallout/issues" />
   </Target>
 
   <Target Name="FalloutPackPackageTools" BeforeTargets="GenerateNuspec" Condition="'$(PackAsTool)' == 'True'">

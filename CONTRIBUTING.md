@@ -6,13 +6,13 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 
 ## Where to start
 
-- Discuss non-trivial changes in an [issue](https://github.com/ChrisonSimtian/Fallout/issues) first.
+- Discuss non-trivial changes in an [issue](https://github.com/Fallout-build/Fallout/issues) first.
 - Small fixes (typos, broken links, tool wrapper additions) can go straight to a PR against `main`.
 - **`main` feeds the production line.** `main` is the **integration trunk + sole `-preview` channel** — the default branch where both deliberate improvements/bug fixes *and* faster work land. Breaking changes also land on `main`, gated behind `[Experimental("FALLOUT0xx")]` (or held on a short-lived topic branch off `main` when they can't be gated) and batched to the yearly major. **Stable releases ship from `release/YYYY` branches** (the calendar-year production line, the nuget.org tier), and the legacy `support/v10` line takes security/critical fixes only (see [Branching and release flow](docs/branching-and-release.md) and [ADR-0004](docs/adr/0004-calendar-versioning-and-dual-pace-channels.md), as amended by [ADR-0008](docs/adr/0008-collapse-experimental-into-main.md), for the full model). **Branch from, and PR against, `main`.** The only time you target a production branch directly is for a maintainer-driven hotfix.
 
 ## Baseline contributions
 
-- Star the [GitHub project](https://github.com/ChrisonSimtian/Fallout/stargazers) to help others find it.
+- Star the [GitHub project](https://github.com/Fallout-build/Fallout/stargazers) to help others find it.
 - File issues with concrete reproduction steps, version info, and logs.
 - Help triage existing issues — confirming bugs or pointing to fixes counts.
 
@@ -34,7 +34,7 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 
 - Bugs blocking active enterprise CI/CD usage.
 - Regressions versus the last NUKE 10.x release.
-- Rebrand-track work (see the [Fallout rebrand milestone](https://github.com/ChrisonSimtian/Fallout/milestone/1)).
+- Rebrand-track work (see the [Fallout rebrand milestone](https://github.com/Fallout-build/Fallout/milestone/1)).
 - Demand-driven items where multiple users have weighed in.
 
 ## Pull requests

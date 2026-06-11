@@ -177,7 +177,7 @@ jobs:
       packages: write
     environment:
       name: github-packages
-      url: https://github.com/ChrisonSimtian/Fallout/packages
+      url: https://github.com/Fallout-build/Fallout/packages
     steps:
       - name: 'Setup: .NET SDK'
         uses: actions/setup-dotnet@v4
@@ -216,7 +216,7 @@ jobs:
       contents: write
     environment:
       name: github-releases
-      url: https://github.com/ChrisonSimtian/Fallout/releases
+      url: https://github.com/Fallout-build/Fallout/releases
     steps:
       - uses: actions/checkout@v6
       - name: 'Download: package artifacts'

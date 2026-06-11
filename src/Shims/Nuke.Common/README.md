@@ -39,7 +39,7 @@ These types have private/internal ctors and no public static factories, **and** 
 
 The shim packs normally as a build artifact (`Nuke.Common.<version>.nupkg`). The release pipeline's `Publish` target filters `Nuke.*` packages out of the nuget.org push — that ID is owned by the original NUKE maintainer. The produced nupkg can be uploaded to GitHub Packages or attached to a GitHub release.
 
-Until automated dual-publish lands (tracked in [#69](https://github.com/ChrisonSimtian/Fallout/issues/69)), the manual GH Packages push is:
+Until automated dual-publish lands (tracked in [#69](https://github.com/Fallout-build/Fallout/issues/69)), the manual GH Packages push is:
 
 ```pwsh
 dotnet pack src/Shims/Nuke.Common/Nuke.Common.csproj -c Release

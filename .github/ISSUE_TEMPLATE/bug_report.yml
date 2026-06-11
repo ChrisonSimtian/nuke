@@ -7,7 +7,7 @@ body:
       value: |
         _Hi there :wave: and thanks for taking the time to report a bug!_
         
-        _Before you continue, please check the [contribution guidelines](https://github.com/ChrisonSimtian/Fallout/blob/main/CONTRIBUTING.md)._
+        _Before you continue, please check the [contribution guidelines](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md)._
 
   - type: input
     id: usage-information
@@ -80,7 +80,7 @@ body:
     id: pull-request
     attributes:
       label: Could you help with a pull-request?
-      description: See the [contribution guidelines](https://github.com/ChrisonSimtian/Fallout/blob/main/CONTRIBUTING.md).
+      description: See the [contribution guidelines](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md).
       options:
         - "No"
         - "Yes"

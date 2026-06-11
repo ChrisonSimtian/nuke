@@ -87,7 +87,7 @@ Linux runs on PRs because it's cheap and fast; Windows and macOS are reserved fo
 ## What this doc deliberately does NOT cover
 
 - API design decisions inside individual projects — read the project's tests for those.
-- Rebrand status and migration strategy — see `AGENTS.md` and the [Fallout rebrand milestone](https://github.com/ChrisonSimtian/Fallout/milestone/1).
+- Rebrand status and migration strategy — see `AGENTS.md` and the [Fallout rebrand milestone](https://github.com/Fallout-build/Fallout/milestone/1).
 - Contribution workflow — see `CONTRIBUTING.md`.
 
 When in doubt, the structure is whatever this file says it is. If you change the layout, update this file in the same PR.

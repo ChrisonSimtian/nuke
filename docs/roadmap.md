@@ -12,7 +12,7 @@ Fallout is the hard-fork successor to [NUKE](https://github.com/nuke-build/nuke)
 
 ### Rebrand completion + plugin-architecture foundation (2026 line)
 
-**Milestone:** [Plugin architecture foundation & rebrand completion](https://github.com/ChrisonSimtian/Fallout/milestone/6)
+**Milestone:** [Plugin architecture foundation & rebrand completion](https://github.com/Fallout-build/Fallout/milestone/6)
 
 This milestone finishes the rebrand and lays the internal groundwork for a plugin model. It bundles two workstreams so consumers face a single migration wave instead of two:
 
@@ -29,11 +29,11 @@ This milestone finishes the rebrand and lays the internal groundwork for a plugi
 
 **What this milestone is not:** it ships **no public plugin SDK**. The internal interfaces (`IBuildMiddleware`, `ITargetLifecycleListener`, infrastructure interfaces) stay `internal`. Their shape needs to bake through dogfooding before becoming part of a public contract — see the SDK milestone below.
 
-The full ticket list is in [milestone #6](https://github.com/ChrisonSimtian/Fallout/milestone/6). Workstream A is the release-blocker; Workstream B slips to a later 2026 minor if it threatens the rebrand completion.
+The full ticket list is in [milestone #6](https://github.com/Fallout-build/Fallout/milestone/6). Workstream A is the release-blocker; Workstream B slips to a later 2026 minor if it threatens the rebrand completion.
 
 ### Public plugin SDK (later calendar major)
 
-**Milestone:** [Public plugin SDK](https://github.com/ChrisonSimtian/Fallout/milestone/7)
+**Milestone:** [Public plugin SDK](https://github.com/Fallout-build/Fallout/milestone/7)
 
 This milestone commits the public contract that third-party contributors compile their plugins against. After the foundation has been dogfooded, the shapes that prove themselves become public, additive-only API in `Fallout.Plugin.Sdk` 1.0:
 
@@ -47,21 +47,21 @@ The exact shape isn't pinned yet — that's what the RFCs are for.
 
 ### Beyond the plugin SDK — Continuous Delivery vision
 
-**Milestone:** [Continuous Delivery vision](https://github.com/ChrisonSimtian/Fallout/milestone/8)
+**Milestone:** [Continuous Delivery vision](https://github.com/Fallout-build/Fallout/milestone/8)
 
 Long-horizon direction: extend Fallout beyond CI into release management and deployment orchestration — the space currently owned by TeamCity, Octopus Deploy, and the release stages of Azure DevOps Pipelines. The wedge hypothesis is the same one that powers Fallout-on-CI: C#-native, code-first, single binary, leveraging the plugin SDK.
 
-Shape is genuinely TBD. The milestone collects RFCs and scoping work; no release-date commitment. Comment on [#106](https://github.com/ChrisonSimtian/Fallout/issues/106) with deployment shapes you'd want to use Fallout for.
+Shape is genuinely TBD. The milestone collects RFCs and scoping work; no release-date commitment. Comment on [#106](https://github.com/Fallout-build/Fallout/issues/106) with deployment shapes you'd want to use Fallout for.
 
 ## How to engage — RFCs open now
 
 Five RFC issues are open to shape the public plugin SDK. These are **self-RFCs**: each one ships an opinionated proposal and asks "tell me where I'm wrong" rather than "what should we do." Strong opinions backed by use cases are the most useful kind of comment.
 
-- [RFC #1 — Plugin contract shape](https://github.com/ChrisonSimtian/Fallout/issues/97): how a plugin declares itself.
-- [RFC #2 — Extension-point catalogue](https://github.com/ChrisonSimtian/Fallout/issues/98): what plugins can contribute.
-- [RFC #3 — SDK versioning policy](https://github.com/ChrisonSimtian/Fallout/issues/99): how the SDK evolves without breaking plugins.
-- [RFC #4 — Plugin discovery and load model](https://github.com/ChrisonSimtian/Fallout/issues/100): runtime mechanics, trust model.
-- [RFC #5 — Conflict resolution semantics](https://github.com/ChrisonSimtian/Fallout/issues/101): what happens when two plugins step on each other.
+- [RFC #1 — Plugin contract shape](https://github.com/Fallout-build/Fallout/issues/97): how a plugin declares itself.
+- [RFC #2 — Extension-point catalogue](https://github.com/Fallout-build/Fallout/issues/98): what plugins can contribute.
+- [RFC #3 — SDK versioning policy](https://github.com/Fallout-build/Fallout/issues/99): how the SDK evolves without breaking plugins.
+- [RFC #4 — Plugin discovery and load model](https://github.com/Fallout-build/Fallout/issues/100): runtime mechanics, trust model.
+- [RFC #5 — Conflict resolution semantics](https://github.com/Fallout-build/Fallout/issues/101): what happens when two plugins step on each other.
 
 **Comment by 2026-08-31.** After that date, each proposed shape locks, rolls into the implementing SDK-* issue named on the RFC, and the RFC closes as decided. The proposals are the working baseline; silence means assent.
 
@@ -75,10 +75,10 @@ The rebrand + plugin foundation ships on the **2026** line; the public plugin SD
 
 ## What this roadmap doesn't cover
 
-- The full backlog of bug fixes, polish, and incremental improvements outside the plugin-architecture theme. See [open issues](https://github.com/ChrisonSimtian/Fallout/issues) for those.
-- CI provider revival (Azure Pipelines, GitLab, TeamCity, etc.) — tracked as demand-driven in the [CI roadmap milestone](https://github.com/ChrisonSimtian/Fallout/milestone/4).
-- Continuous Delivery (deployment orchestration, environment promotion, release tracking) — see the [Continuous Delivery vision milestone](https://github.com/ChrisonSimtian/Fallout/milestone/8) for the placeholder RFC.
-- Long-tail design discussion without a release target — see the [Backlog milestone](https://github.com/ChrisonSimtian/Fallout/milestone/3).
+- The full backlog of bug fixes, polish, and incremental improvements outside the plugin-architecture theme. See [open issues](https://github.com/Fallout-build/Fallout/issues) for those.
+- CI provider revival (Azure Pipelines, GitLab, TeamCity, etc.) — tracked as demand-driven in the [CI roadmap milestone](https://github.com/Fallout-build/Fallout/milestone/4).
+- Continuous Delivery (deployment orchestration, environment promotion, release tracking) — see the [Continuous Delivery vision milestone](https://github.com/Fallout-build/Fallout/milestone/8) for the placeholder RFC.
+- Long-tail design discussion without a release target — see the [Backlog milestone](https://github.com/Fallout-build/Fallout/milestone/3).
 
 ## Versioning and stability promises
 

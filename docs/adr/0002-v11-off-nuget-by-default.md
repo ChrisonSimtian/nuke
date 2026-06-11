@@ -31,7 +31,7 @@ Make nuget.org publish **opt-in via a `workflow_dispatch` input flag**. Specific
 
 Companion change: **`publish-github-packages` now pushes all `*.nupkg`**, not just `Nuke.*`. GitHub Packages is the v11 release channel; every tag publishes the full set of Fallout.* + Nuke.* packages there.
 
-The Nuke.* shim packages always go to GitHub Packages (per [#47](https://github.com/ChrisonSimtian/Fallout/issues/47) — those IDs are owned by the original NUKE maintainer on nuget.org). This is unchanged.
+The Nuke.* shim packages always go to GitHub Packages (per [#47](https://github.com/Fallout-build/Fallout/issues/47) — those IDs are owned by the original NUKE maintainer on nuget.org). This is unchanged.
 
 ## Consequences
 
@@ -85,9 +85,9 @@ Per-branch field like `"publishToNugetOrg": true|false`. The workflow reads it.
 ## References
 
 - [ADR-0001: Release-branch model & multi-channel CD](0001-release-branch-model.md) — the parent decision.
-- [RFC #267](https://github.com/ChrisonSimtian/Fallout/issues/267) — original design discussion.
+- [RFC #267](https://github.com/Fallout-build/Fallout/issues/267) — original design discussion.
 - [docs/branching-and-release.md](../branching-and-release.md) — maintainer runbook (updated with the routine + stabilised release paths).
-- [#47](https://github.com/ChrisonSimtian/Fallout/issues/47) — Nuke.* shims live on GitHub Packages permanently.
+- [#47](https://github.com/Fallout-build/Fallout/issues/47) — Nuke.* shims live on GitHub Packages permanently.
 
 ## Memory artifacts (AI agent context)
 

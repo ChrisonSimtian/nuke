@@ -12,7 +12,7 @@ draft: true
 
 In v11, the dotnet-tool NuGet package id was renamed: **`Fallout.GlobalTool` → `Fallout.Cli`**. The **command name stays `fallout`**, so build scripts and shell invocations don't change. The only thing that moves is the install/restore reference.
 
-> If you've never installed `Fallout.GlobalTool`, you don't need this page — install `Fallout.Cli` directly per the [Install section in the README](https://github.com/ChrisonSimtian/Fallout#install).
+> If you've never installed `Fallout.GlobalTool`, you don't need this page — install `Fallout.Cli` directly per the [Install section in the README](https://github.com/Fallout-build/Fallout#install).
 
 ## TL;DR
 
@@ -55,7 +55,7 @@ The change is purely cosmetic at the NuGet metadata layer. No source-level API c
 
 | Package | Last published | Status |
 |---|---|---|
-| `Fallout.GlobalTool` | `10.3.40` | Frozen on nuget.org. **Unlisted** as part of the v11 semver cleanup (see [#220](https://github.com/ChrisonSimtian/Fallout/pull/220)). Existing installs keep working; `dotnet tool update` won't find newer versions. |
+| `Fallout.GlobalTool` | `10.3.40` | Frozen on nuget.org. **Unlisted** as part of the v11 semver cleanup (see [#220](https://github.com/Fallout-build/Fallout/pull/220)). Existing installs keep working; `dotnet tool update` won't find newer versions. |
 | `Fallout.Cli` | `11.0.x` (current) | Active. Receives all future tool releases. |
 
 The `10.3.41` through `10.3.47` patch releases of `Fallout.Cli` are **also unlisted** — they shipped under a patch number that hid breaking changes, fixed by the v11 major bump. Pin to **`11.0.0`** or later.
@@ -85,7 +85,7 @@ Confirm with `dotnet tool list` — the `fallout.cli` row should appear, the `fa
 
 Nothing to do. The shims call `dotnet fallout "$@"` — they look up the command by name, not by package ID, and `dotnet tool restore` resolves whatever your manifest pins.
 
-If your repo is still on the **old fat bootstrappers** (with the `BUILD_PROJECT_FILE` config block + explicit `dotnet build` + `dotnet run --project`), those don't depend on the global tool at all and keep working unchanged. To adopt the new shape, re-run `fallout :setup --force` after upgrading. See [the v11 CHANGELOG entry for #204](https://github.com/ChrisonSimtian/Fallout/blob/main/CHANGELOG.md) for what the new shape looks like.
+If your repo is still on the **old fat bootstrappers** (with the `BUILD_PROJECT_FILE` config block + explicit `dotnet build` + `dotnet run --project`), those don't depend on the global tool at all and keep working unchanged. To adopt the new shape, re-run `fallout :setup --force` after upgrading. See [the v11 CHANGELOG entry for #204](https://github.com/Fallout-build/Fallout/blob/main/CHANGELOG.md) for what the new shape looks like.
 
 ### Your repo's CI calls `dotnet fallout` directly (no shim)
 
@@ -97,7 +97,7 @@ The package is unlisted but still downloadable if you have an explicit pin in yo
 
 ## Refs
 
-- [#206](https://github.com/ChrisonSimtian/Fallout/pull/206) — the rename PR.
-- [#210](https://github.com/ChrisonSimtian/Fallout/pull/210) — README install section + the prompt to uninstall old CLI.
-- [#220](https://github.com/ChrisonSimtian/Fallout/pull/220) — the v11 semver-policy bump that catalysed unlisting the 10.3.41-47 range.
+- [#206](https://github.com/Fallout-build/Fallout/pull/206) — the rename PR.
+- [#210](https://github.com/Fallout-build/Fallout/pull/210) — README install section + the prompt to uninstall old CLI.
+- [#220](https://github.com/Fallout-build/Fallout/pull/220) — the v11 semver-policy bump that catalysed unlisting the 10.3.41-47 range.
 - [`from-nuke.md`](from-nuke.md) — if you're also migrating from NUKE, do that first; this guide is downstream of it.

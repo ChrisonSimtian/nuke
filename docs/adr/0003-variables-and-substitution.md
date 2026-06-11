@@ -3,7 +3,7 @@
 - **Status:** Proposed
 - **Date:** 2026-05-27
 - **Deciders:** Fallout maintainers
-- **Relates to:** [ADR-0002](0002-cross-provider-auth-and-secret-conventions.md) (secret model this layers on), issue [#213](https://github.com/ChrisonSimtian/Fallout/issues/213) (feature ask), milestone [v11](https://github.com/ChrisonSimtian/Fallout/milestone/6) (delivery), milestone [v12](https://github.com/ChrisonSimtian/Fallout/milestone/7) (plugin SDK seam promotion)
+- **Relates to:** [ADR-0002](0002-cross-provider-auth-and-secret-conventions.md) (secret model this layers on), issue [#213](https://github.com/Fallout-build/Fallout/issues/213) (feature ask), milestone [v11](https://github.com/Fallout-build/Fallout/milestone/6) (delivery), milestone [v12](https://github.com/Fallout-build/Fallout/milestone/7) (plugin SDK seam promotion)
 
 ## Context
 
@@ -251,9 +251,9 @@ Skip the `IVariableResolver` interface; rely on a source generator to bake varia
 ## References
 
 - [ADR-0002](0002-cross-provider-auth-and-secret-conventions.md) — the secret resolution chain this layers on
-- Issue [#213](https://github.com/ChrisonSimtian/Fallout/issues/213) — feature ask + design questions that motivated this ADR
-- Issue [#212](https://github.com/ChrisonSimtian/Fallout/issues/212) — corrected `v2:` encryption format that underpins sensitive variable storage
+- Issue [#213](https://github.com/Fallout-build/Fallout/issues/213) — feature ask + design questions that motivated this ADR
+- Issue [#212](https://github.com/Fallout-build/Fallout/issues/212) — corrected `v2:` encryption format that underpins sensitive variable storage
 - `src/Fallout.Build/ParameterAttribute.cs:34` — existing `[Parameter]` attribute (extended, not replaced)
 - `src/Fallout.Common/ValueInjection/` — current parameter-resolution code path; substitution engine lands alongside
 - `src/Fallout.Build/Utilities/SchemaUtility.cs` — `build.schema.json` generator; gains a `Variables` block emitter as part of implementation
-- Future SDK work tracked under milestone [v12](https://github.com/ChrisonSimtian/Fallout/milestone/7) — `IVariableResolver` / `ISubstitutionEngine` public promotion, plugin-author `Fallout.Plugin.Sdk.Abstractions` carve-out
+- Future SDK work tracked under milestone [v12](https://github.com/Fallout-build/Fallout/milestone/7) — `IVariableResolver` / `ISubstitutionEngine` public promotion, plugin-author `Fallout.Plugin.Sdk.Abstractions` carve-out

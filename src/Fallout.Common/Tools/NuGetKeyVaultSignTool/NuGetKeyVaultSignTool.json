@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ChrisonSimtian/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
+  "$schema": "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
   "name": "NuGetKeyVaultSignTool",
   "officialUrl": "https://github.com/novotnyllc/NuGetKeyVaultSignTool",
   "help": "NuGet Key Vault Sign Tool is similar to <c>nuget sign</c>, with the major difference being that it uses Azure Key Vault for performing the signing process. Similar usage configuration like <c>AzureSignTool</c>, except is used to sign nuget package.",

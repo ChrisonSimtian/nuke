@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ChrisonSimtian/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
+  "$schema": "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
   "references": [
     "https://fsprojects.github.io/Paket/paket-update.html#//div[@id='main']",
     "https://fsprojects.github.io/Paket/paket-restore.html#//div[@id='main']",

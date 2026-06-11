@@ -45,7 +45,7 @@ public static class WriterExtensions
     {
         var lines = new List<string>();
         // TODO: point at the Fallout docs site once #41 lands; until then, the README is the authoritative source.
-        lines.Add(("This is a <a href=\"https://github.com/ChrisonSimtian/Fallout\">"
+        lines.Add(("This is a <a href=\"https://github.com/Fallout-build/Fallout\">"
                    + "CLI wrapper with fluent API</a> that allows to modify the following arguments:").Paragraph());
         lines.AddRange(GetArgumentsList(task.SettingsClass));
 

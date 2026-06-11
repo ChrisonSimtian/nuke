@@ -1,5 +1,5 @@
 # Tier 3 release channel: local NuGet server for pre-merge testing.
-# See ./README.md for usage. Tracking issue: ChrisonSimtian/Fallout#279.
+# See ./README.md for usage. Tracking issue: Fallout-build/Fallout#279.
 #
 # This compose file spins up BaGet (https://github.com/loic-sharma/BaGet),
 # an open-source .NET-based NuGet server. The repo is stale (last commit

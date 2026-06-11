@@ -15,7 +15,7 @@
     <Copyright>Copyright $([System.DateTime]::Now.Year) Maintainers of Fallout</Copyright>
     <PackageTags>build automation continuous-integration tools orchestration</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/ChrisonSimtian/Fallout</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Fallout-build/Fallout</PackageProjectUrl>
     <!-- TODO: re-enable PackageIcon once we have a 256×256 PNG export of .assets/fallout-logo.svg.
          NuGet doesn't accept SVG for PackageIcon. -->
 <!--    <PackageIcon>icon.png</PackageIcon>-->

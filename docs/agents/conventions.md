@@ -48,7 +48,7 @@ public sealed class NewPluginHost
 
 ## CI pipeline & triggers
 
-Shaped by [milestone #18](https://github.com/ChrisonSimtian/Fallout/milestone/18) and the [ADR-0004](../adr/0004-calendar-versioning-and-dual-pace-channels.md) ladder (amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md), which collapsed `experimental` into `main`). Invariants:
+Shaped by [milestone #18](https://github.com/Fallout-build/Fallout/milestone/18) and the [ADR-0004](../adr/0004-calendar-versioning-and-dual-pace-channels.md) ladder (amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md), which collapsed `experimental` into `main`). Invariants:
 
 - **Feature branches run zero CI until a PR is opened.** Push triggers list **only** long-lived branches; nothing fires on `feature/*`, `bugfix/*`, etc. until they're PR'd against `main`/`release/*`/`support/*`. Do **not** add a working-branch pattern to any `OnPush*`/`branches:` trigger.
 - **The Linux PR gate (`ubuntu-latest`) is the only required check** — runs on PRs to the long-lived branches.

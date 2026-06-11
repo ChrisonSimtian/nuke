@@ -3,7 +3,7 @@
 - **Status:** Proposed
 - **Date:** 2026-05-24
 - **Deciders:** Fallout maintainers
-- **Relates to:** RFC [#106](https://github.com/ChrisonSimtian/Fallout/issues/106) (CD platform vision), RFC [#113](https://github.com/ChrisonSimtian/Fallout/issues/113) (deployment agent), milestone [v13](https://github.com/ChrisonSimtian/Fallout/milestone/8), epic [#139](https://github.com/ChrisonSimtian/Fallout/issues/139) (package-manager distribution)
+- **Relates to:** RFC [#106](https://github.com/Fallout-build/Fallout/issues/106) (CD platform vision), RFC [#113](https://github.com/Fallout-build/Fallout/issues/113) (deployment agent), milestone [v13](https://github.com/Fallout-build/Fallout/milestone/8), epic [#139](https://github.com/Fallout-build/Fallout/issues/139) (package-manager distribution)
 
 ## Context
 
@@ -116,7 +116,7 @@ Target PublishGitHubRelease => _ => _
     .Executes(async () =>
     {
         var release = await GitHubReleaseTasks.CreateGitHubRelease(s => s
-            .SetRepository("ChrisonSimtian/Fallout")
+            .SetRepository("Fallout-build/Fallout")
             .SetToken(GitHubToken)
             .SetTagName($"v{MajorMinorPatchVersion}")
             .SetName($"Fallout {MajorMinorPatchVersion}")
@@ -169,7 +169,7 @@ Target SyncGitHubEnvironments => _ => _
     .Executes(async () =>
     {
         foreach (var env in this.GetType().GetCustomAttributes<GitHubEnvironmentAttribute>())
-            await GitHubEnvironmentTasks.UpsertEnvironment(env, "ChrisonSimtian/Fallout", GitHubToken);
+            await GitHubEnvironmentTasks.UpsertEnvironment(env, "Fallout-build/Fallout", GitHubToken);
     });
 ```
 
@@ -190,7 +190,7 @@ Definition lives in API-land; reference lives in YAML. Clean split.
 
 Octopus is a richer domain (Projects, Releases, Channels, Lifecycles, Environments, Targets, Variables, Tenants), but the same two patterns cover it.
 
-**Placement:** unlike `Fallout.Common.GitHub` (which is first-party, in-tree), Octopus integration is expected to ship as the **first sample plugin** on top of the v12 plugin SDK (milestone [#7](https://github.com/ChrisonSimtian/Fallout/milestone/7)). The maintainer's own Octopus 2019 server has full API support, so the plugin doubles as a dogfooding vehicle for the SDK. This is a design-validation win: if a real consumer with a non-trivial provider can be built as a clean external plugin, the SDK has succeeded; if it forces awkward escape hatches, the SDK isn't ready. **The patterns below are framework-shape; the *namespace* and *package* are v12-plugin-shape.**
+**Placement:** unlike `Fallout.Common.GitHub` (which is first-party, in-tree), Octopus integration is expected to ship as the **first sample plugin** on top of the v12 plugin SDK (milestone [#7](https://github.com/Fallout-build/Fallout/milestone/7)). The maintainer's own Octopus 2019 server has full API support, so the plugin doubles as a dogfooding vehicle for the SDK. This is a design-validation win: if a real consumer with a non-trivial provider can be built as a clean external plugin, the SDK has succeeded; if it forces awkward escape hatches, the SDK isn't ready. **The patterns below are framework-shape; the *namespace* and *package* are v12-plugin-shape.**
 
 ```csharp
 // Pure tasks — per-release imperative
@@ -432,8 +432,8 @@ Skip the hand-rolled HTTP wrappers; depend on the official client libraries.
 
 ## References
 
-- RFC [#106](https://github.com/ChrisonSimtian/Fallout/issues/106) — Continuous Delivery vision
-- RFC [#113](https://github.com/ChrisonSimtian/Fallout/issues/113) — CD deployment agent
+- RFC [#106](https://github.com/Fallout-build/Fallout/issues/106) — Continuous Delivery vision
+- RFC [#113](https://github.com/Fallout-build/Fallout/issues/113) — CD deployment agent
 - Existing CI pattern: `src/Fallout.Common/CI/GitHubActions/`, `src/Fallout.Build/CICD/GenerateBuildServerConfigurationsAttribute.cs`
 - Existing task wrapper pattern: `src/Fallout.Common/Tools/GitHub/GitHubTasks.cs`
 - Existing runtime API client: `src/Fallout.Common/CI/GitHubActions/GitHubActions.Client.cs`
