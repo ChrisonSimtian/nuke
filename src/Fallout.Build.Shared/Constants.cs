@@ -46,19 +46,19 @@ internal static class Constants
 
     // Canonical project URLs. Until P7 (domain registration) lands, these all point at the GitHub fork.
     // To migrate to fallout.<tld>, edit FalloutWebsite / FalloutRepository here — call sites already use the constants.
-    internal const string FalloutOwner = "ChrisonSimtian";
+    internal const string FalloutOwner = "Fallout-build";
     internal const string FalloutRepoName = "Fallout";
-    internal const string FalloutWebsite = "https://github.com/" + FalloutOwner + "/" + FalloutRepoName;
+    internal const string FalloutWebsite = $"https://github.com/{FalloutOwner}/{FalloutRepoName}";
     internal const string FalloutRepository = FalloutWebsite;
-    internal const string FalloutRepositoryGit = FalloutWebsite + ".git";
-    internal const string FalloutRawRepository = "https://raw.githubusercontent.com/" + FalloutOwner + "/" + FalloutRepoName + "/main";
-    internal const string FalloutDocsUrl = FalloutWebsite;  // Replaced by docs.fallout.<tld> after #41.
-    internal const string FalloutTelemetryDocsUrl = FalloutWebsite + "#telemetry";
-    internal const string FalloutNotificationsUrl = FalloutRawRepository + "/notifications.json";
+    internal const string FalloutRepositoryGit = $"{FalloutWebsite}.git";
+    internal const string FalloutRawRepository = $"https://raw.githubusercontent.com/{FalloutOwner}/{FalloutRepoName}/main";
+    internal const string FalloutDocsUrl = "https://docs.fallout.build/";
+    internal const string FalloutTelemetryDocsUrl = $"{FalloutWebsite}#telemetry";
+    internal const string FalloutNotificationsUrl = $"{FalloutRawRepository}/notifications.json";
 
     // Upstream NUKE references — only for attribution / fallback recognition of legacy project URLs.
     internal const string UpstreamNukeRepository = "https://github.com/nuke-build/nuke";
-    internal const string UpstreamNukeRepositoryGit = UpstreamNukeRepository + ".git";
+    internal const string UpstreamNukeRepositoryGit = $"{UpstreamNukeRepository}.git";
 
     internal static AbsolutePath GlobalTemporaryDirectory => Path.GetTempPath();
     internal static AbsolutePath GlobalFalloutDirectory =>  EnvironmentInfo.SpecialFolder(SpecialFolders.UserProfile) / ".fallout";
