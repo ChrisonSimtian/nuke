@@ -78,10 +78,15 @@ public interface IPublish : IPack, ITest
             var candidates = PushPackageFiles.ToList();
             Assert.True(candidates.Count > 0,
                 "No packages found — nothing to publish. Ensure Pack produced *.nupkg files (override IPublish.PushPackageFiles if needed).");
+
+            // Validate every selected target's key up front: a missing key is a config error
+            // we can know before pushing anything, so fail fast rather than push some feeds and
+            // then break half-way. (Per-push failures stay independent — see PushCompleteOnFailure.)
+            var keyless = targets.Where(x => x.ApiKey.IsNullOrWhiteSpace()).Select(x => x.Name).ToList();
+            Assert.True(keyless.Count == 0, $"Publish target(s) [{keyless.JoinComma()}] have no API key.");
+
             foreach (var target in targets)
             {
-                Assert.True(!target.ApiKey.IsNullOrWhiteSpace(), $"Publish target '{target.Name}' has no API key.");
-
                 var routed = candidates.Where(x => target.Accepts(x.NameWithoutExtension)).ToList();
                 if (routed.Count == 0)
                 {

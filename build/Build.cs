@@ -154,12 +154,16 @@ partial class Build
     };
 #pragma warning restore FALLOUT001
 
-    // The workflows now gate which channel publishes (via --publish-to); no on-branch
-    // requirement here. Missing keys fail per-target inside Publish, so a stray local
-    // `dotnet fallout Publish` is safe (no key → clear error, no push).
+    // The workflows now gate *which* channel publishes (via --publish-to); the on-branch
+    // requirement is gone. We keep a CI guard, though: GitHubToken binds from the
+    // GITHUB_TOKEN env var (ICreateGitHubRelease.GitHubToken), which many developers have
+    // exported — without this, a stray local `dotnet fallout Publish` (no --publish-to →
+    // all targets) would actually push to GitHub Packages. Requiring GitHubActions blocks
+    // local pushes while still allowing every CI lane (experimental/preview/release).
     Target IPublish.Publish => _ => _
         .Inherit<IPublish>()
         .Consumes(From<IPack>().Pack)
+        .Requires(() => Host is GitHubActions)
         .WhenSkipped(DependencyBehavior.Execute);
 
     IEnumerable<AbsolutePath> NuGetPackageFiles
