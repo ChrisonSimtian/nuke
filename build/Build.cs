@@ -191,7 +191,12 @@ partial class Build
         .TriggeredBy<IPublish>()
         .ProceedAfterFailure()
         .Requires(() => From<ICreateGitHubRelease>().GitHubToken)
-        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch())
+        // Only cut a GitHub Release in the release workflow — never as a side-effect of a
+        // preview/alpha publish. This target is TriggeredBy<IPublish>, and since #333 the
+        // preview/experimental lanes dogfood `Publish`; gating on IsOnMainBranch alone would
+        // fire it on every preview push to main (it doesn't — GitHub Releases are production-
+        // only, and release.yml hand-rolls them via `gh release create`).
+        .OnlyWhenStatic(() => GitHubActions?.Workflow == ReleaseWorkflow)
         .Executes(async () =>
         {
             var client = GitHubTasks.GitHubClient;
