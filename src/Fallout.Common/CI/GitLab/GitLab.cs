@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Fallout.Common.Utilities;
 
 namespace Fallout.Common.CI.GitLab;
@@ -18,6 +17,10 @@ public partial class GitLab : Host, IBuildServer
 
     private const string SectionStartSequence = "\u001b[0K";
     private const string SectionResetSequence = "\r\u001b[0K";
+
+    protected override string LogoYellow => "[93m";
+
+    protected override string LogoDark => "[90m";
 
     private readonly Action<string> _messageSink;
 

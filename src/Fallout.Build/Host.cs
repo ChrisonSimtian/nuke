@@ -27,48 +27,53 @@ public partial class Host
 
     internal virtual string OutputTemplate => Logging.TimestampOutputTemplate;
 
+    // True-color ANSI for Fallout yellow (#F5C800). Modern terminals
+    // (Windows Terminal, VS Code, macOS Terminal.app, GitHub Actions logs)
+    // render this directly; older sinks ignore the escape bytes.
+
+    protected virtual string LogoYellow { get => "[38;2;245;200;0m"; }
+
+    protected virtual string LogoDark { get => "[2m"; }
+
+    protected virtual string LogoReset { get => "[0m"; }
+
     protected internal void WriteLogo()
     {
         Debug();
-        // True-color ANSI for Fallout yellow (#F5C800). Modern terminals
-        // (Windows Terminal, VS Code, macOS Terminal.app, GitHub Actions logs)
-        // render this directly; older sinks ignore the escape bytes.
-        string Y = Environment.GetEnvironmentVariable("GITLAB_CI") == "true"
-            ? "[93m"
-            : "[38;2;245;200;0m";
-        const string D = "[2m";
-        const string R = "[0m";
 
         new[]
         {
-            $"{Y}███████╗ █████╗ ██╗     ██╗      ██████╗ ██╗   ██╗████████╗{R}",
-            $"{Y}██╔════╝██╔══██╗██║     ██║     ██╔═══██╗██║   ██║╚══██╔══╝{R}",
-            $"{Y}█████╗  ███████║██║     ██║     ██║   ██║██║   ██║   ██║   {R}",
-            $"{Y}██╔══╝  ██╔══██║██║     ██║     ██║   ██║██║   ██║   ██║   {R}",
-            $"{Y}██║     ██║  ██║███████╗███████╗╚██████╔╝╚██████╔╝   ██║   {R}",
-            $"{Y}╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝  ╚═════╝    ╚═╝   {R}",
+            $"{LogoYellow}███████╗ █████╗ ██╗     ██╗      ██████╗ ██╗   ██╗████████╗{LogoReset}",
+            $"{LogoYellow}██╔════╝██╔══██╗██║     ██║     ██╔═══██╗██║   ██║╚══██╔══╝{LogoReset}",
+            $"{LogoYellow}█████╗  ███████║██║     ██║     ██║   ██║██║   ██║   ██║   {LogoReset}",
+            $"{LogoYellow}██╔══╝  ██╔══██║██║     ██║     ██║   ██║██║   ██║   ██║   {LogoReset}",
+            $"{LogoYellow}██║     ██║  ██║███████╗███████╗╚██████╔╝╚██████╔╝   ██║   {LogoReset}",
+            $"{LogoYellow}╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝  ╚═════╝    ╚═╝   {LogoReset}",
             string.Empty,
-            $"                       {D}.NET build system{R}",
-            $"                     {Y}☢{R} {D}survived the NUKE{R}"
+            $"                       {LogoDark}.NET build system{LogoReset}",
+            $"                     {LogoYellow}☢{LogoReset} {LogoDark}survived the NUKE{LogoReset}"
         }.ForEach(x => Debug(x.Replace(" ", " ")));
+
         Debug();
     }
 
     protected internal virtual IDisposable WriteBlock(string text)
     {
-        return DelegateDisposable.CreateBracket(
-            () =>
-            {
-                var formattedBlockText = text
-                    .Split(new[] { EnvironmentInfo.NewLine }, StringSplitOptions.None)
-                    .Select(Theme.FormatInformation);
+        return DelegateDisposable.CreateBracket(() =>
+        {
+            var formattedBlockText = text
+                .Split(new[]
+                {
+                    EnvironmentInfo.NewLine
+                }, StringSplitOptions.None)
+                .Select(Theme.FormatInformation);
 
-                Debug();
-                Debug("╬" + '═'.Repeat(text.Length + 5));
-                formattedBlockText.ForEach(x => Debug($"║ {x}"));
-                Debug("╬" + '═'.Repeat(Math.Max(text.Length - 4, 2)));
-                Debug();
-            });
+            Debug();
+            Debug("╬" + '═'.Repeat(text.Length + 5));
+            formattedBlockText.ForEach(x => Debug($"║ {x}"));
+            Debug("╬" + '═'.Repeat(Math.Max(text.Length - 4, 2)));
+            Debug();
+        });
     }
 
     protected internal virtual void ReportWarning(string text, string details = null)
@@ -146,18 +151,23 @@ public partial class Host
                 case ExecutionStatus.Skipped:
                     Debug(line);
                     break;
+
                 case ExecutionStatus.Succeeded:
                     Success(line);
                     break;
+
                 case ExecutionStatus.Aborted:
                 case ExecutionStatus.NotRun:
                     Warning(line);
                     break;
+
                 case ExecutionStatus.Failed:
                     Error(line);
                     break;
+
                 case ExecutionStatus.Collective:
                     break;
+
                 default:
                     throw new NotSupportedException(target.Status.ToString());
             }
