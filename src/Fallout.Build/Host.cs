@@ -33,7 +33,9 @@ public partial class Host
         // True-color ANSI for Fallout yellow (#F5C800). Modern terminals
         // (Windows Terminal, VS Code, macOS Terminal.app, GitHub Actions logs)
         // render this directly; older sinks ignore the escape bytes.
-        const string Y = "[38;2;245;200;0m";
+        string Y = Environment.GetEnvironmentVariable("GITLAB_CI") == "true"
+            ? "[93m"
+            : "[38;2;245;200;0m";
         const string D = "[2m";
         const string R = "[0m";
 
