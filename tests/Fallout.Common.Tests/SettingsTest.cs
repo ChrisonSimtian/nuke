@@ -43,7 +43,7 @@ public class SettingsTest
         var projectFile = RootDirectory / "src" / "Fallout.Common" / "Fallout.Common.csproj";
         var solutionFile = RootDirectory / "nuke-common.sln";
 
-        Assert(new MSBuildSettings()
+        Assert(new MsBuildSettings()
                 .SetProjectFile(projectFile)
                 .SetTargetPlatform(MSBuildTargetPlatform.MSIL)
                 .SetConfiguration("Release")
@@ -51,7 +51,7 @@ public class SettingsTest
                 .EnableNoLogo(),
             $"{projectFile.ToString().DoubleQuoteIfNeeded()} /p:Platform=AnyCPU /p:Configuration=Release /nodeReuse:false /nologo");
 
-        Assert(new MSBuildSettings()
+        Assert(new MsBuildSettings()
                 .SetProjectFile(solutionFile)
                 .SetTargetPlatform(MSBuildTargetPlatform.MSIL)
                 .EnableNodeReuse()

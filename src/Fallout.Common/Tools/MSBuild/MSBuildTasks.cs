@@ -22,7 +22,7 @@ partial class MSBuildTasks
 {
     protected override string GetToolPath(ToolOptions options = null)
     {
-        var msbuildOptions = options as MSBuildSettings;
+        var msbuildOptions = options as MsBuildSettings;
         return MSBuildToolPathResolver.Resolve(msbuildOptions?.MSBuildVersion, msbuildOptions?.MSBuildPlatform);
     }
 
@@ -40,7 +40,7 @@ partial class MSBuildTasks
     }
 }
 
-partial class MSBuildSettings
+partial class MsBuildSettings
 {
     private string FormatPlatform(MSBuildTargetPlatform value, PropertyInfo property)
     {

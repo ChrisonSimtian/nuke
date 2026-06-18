@@ -6,7 +6,7 @@ namespace Fallout.Common.CI.TeamCity;
 
 public static class MSBuildSettingsExtensions
 {
-    public static MSBuildSettings AddTeamCityLogger(this MSBuildSettings toolSettings)
+    public static MsBuildSettings AddTeamCityLogger(this MsBuildSettings toolSettings)
     {
         var teamCity = TeamCity.Instance.NotNull("TeamCity.Instance != null");
         var teamCityLogger = teamCity.ConfigurationProperties["teamcity.dotnet.msbuild.extensions4.0"];
