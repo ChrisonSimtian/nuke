@@ -26,7 +26,7 @@ Covers GitHub issues, PR titles/bodies/comments, and commit messages.
 
 ## `[Experimental]` for opt-in unstable APIs
 
-Per [ADR-0004 §5](../adr/0004-calendar-versioning-and-dual-pace-channels.md), public APIs that aren't ready to commit to a stability guarantee are marked with [`System.Diagnostics.CodeAnalysis.ExperimentalAttribute`](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute) instead of being held back or shipped silently. The attribute ships in the .NET 8+ BCL — **no package reference needed** (the repo targets .NET 10).
+Per [ADR-0004 §5](../adr/0004-calendar-versioning-and-dual-pace-channels.md) (channel ladder amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md)), public APIs that aren't ready to commit to a stability guarantee are marked with [`System.Diagnostics.CodeAnalysis.ExperimentalAttribute`](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute) instead of being held back or shipped silently. The attribute ships in the .NET 8+ BCL — **no package reference needed** (the repo targets .NET 10).
 
 ```csharp
 using System.Diagnostics.CodeAnalysis;
@@ -42,28 +42,28 @@ public sealed class NewPluginHost
 
 - **Diagnostic-ID scheme: `FALLOUT0xx`.** Each experimental surface gets its own ID (e.g. `FALLOUT001`), allocated **sequentially and never reused** — a retired ID stays retired. Register every allocation in the [diagnostic-ID registry](../experimental-apis.md) in the same PR that introduces it.
 - **Consumers must explicitly opt in.** `ExperimentalAttribute` is an *error-by-default* diagnostic: code that touches the API fails to compile until the consumer suppresses the exact ID — `#pragma warning disable FALLOUT001` around the call site, or `<NoWarn>$(NoWarn);FALLOUT001</NoWarn>` in their project. Opting into instability is therefore a conscious, per-API choice — which is right for a *framework* (a product devs build on), not an app.
-- **Promoting to stable = removing the attribute.** Because the feature already rode the test lanes (`experimental`/`main`) and was promoted forward, deleting the `[Experimental]` line is the whole promotion — no special cross-branch dance. This is what lets stabilised work feed into the production line without a divergent fork. Adding *or* removing `[Experimental]` is **not** a breaking change.
-- **Channel discipline differs.** On the `experimental` (alpha) / `main` (preview) test lanes, churn is expected and the attribute is a courtesy. On a `release/YYYY` **production line**, any risky-but-shipped public surface **must** wear `[Experimental]` — that contract is what keeps the stable line trustworthy while still carrying new work.
+- **Promoting to stable = removing the attribute.** Because the feature already rode the `main` test lane, deleting the `[Experimental]` line is the whole promotion — no special cross-branch dance. This is what lets stabilised work feed into the production line without a divergent fork. Adding *or* removing `[Experimental]` is **not** a breaking change.
+- **Channel discipline differs.** On the `main` (preview) test lane, churn is expected and the attribute is a courtesy. On a `release/YYYY` **production line**, any risky-but-shipped public surface **must** wear `[Experimental]` — that contract is what keeps the stable line trustworthy while still carrying new work. With the `experimental` branch retired ([ADR-0008](../adr/0008-collapse-experimental-into-main.md)), `[Experimental]` is now the primary mechanism for isolating unstable surface on `main` — including breaking changes batched toward the yearly major.
 - **Don't apply it speculatively.** Because the diagnostic is error-by-default, marking an API that's already used internally breaks the build everywhere it's referenced. Only add `[Experimental]` to a genuinely not-yet-stable API, and suppress every internal usage in the same change so the build stays green.
 
 ## CI pipeline & triggers
 
-Shaped by [milestone #18](https://github.com/ChrisonSimtian/Fallout/milestone/18) and the [ADR-0004](../adr/0004-calendar-versioning-and-dual-pace-channels.md) ladder. Invariants:
+Shaped by [milestone #18](https://github.com/ChrisonSimtian/Fallout/milestone/18) and the [ADR-0004](../adr/0004-calendar-versioning-and-dual-pace-channels.md) ladder (amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md), which collapsed `experimental` into `main`). Invariants:
 
-- **Feature branches run zero CI until a PR is opened.** Push triggers list **only** long-lived branches; nothing fires on `feature/*`, `bugfix/*`, etc. until they're PR'd against `experimental`/`main`/`release/*`/`support/*`. Do **not** add a working-branch pattern to any `OnPush*`/`branches:` trigger.
-- **The Linux PR gate (`ubuntu-latest`) is the only required check** — runs on PRs to the four long-lived branches.
-- **`experimental` (push) → `-alpha`, `main` (push) → `-preview`** to GitHub Packages (`experimental.yml` / `preview.yml`).
-- **Cross-platform `windows`/`macos` are gated to release intent** — PR-to-`release/*`/`support/*` or a `v*` tag push only. They do **not** run on `main`/`experimental` pushes. ("On `main` we've got our edge.")
+- **Feature branches run zero CI until a PR is opened.** Push triggers list **only** long-lived branches; nothing fires on `feature/*`, `bugfix/*`, etc. until they're PR'd against `main`/`release/*`/`support/*`. Do **not** add a working-branch pattern to any `OnPush*`/`branches:` trigger.
+- **The Linux PR gate (`ubuntu-latest`) is the only required check** — runs on PRs to the long-lived branches.
+- **`main` (push) → `-preview`** to GitHub Packages (`preview.yml`) — the sole continuous publisher now that `experimental.yml` is deleted.
+- **Cross-platform `windows`/`macos` are gated to release intent** — PR-to-`release/*`/`support/*` or a `v*` tag push only. They do **not** run on `main` pushes. ("On `main` we've got our edge.")
 - **`concurrency: cancel-in-progress` on every build workflow except `release.yml`** — never cancel a publish mid-flight.
 - **Canonical CI-ignore paths:** `docs/**`, `.assets/**`, `**/*.md` — applied to every PR/push trigger.
-- The `ubuntu-latest` / `windows-latest` / `macos-latest` workflows are **generated** from `build/Build.CI.GitHubActions.cs` — edit the attributes + constants there and regenerate (`./build.sh`), never hand-edit the `.yml`. `experimental.yml` / `preview.yml` / `release.yml` are hand-written.
-- **Every publishing lane runs `Test` before it publishes** (#324). `experimental.yml`, `preview.yml`, and `release.yml` all run a single `dotnet fallout Test Pack` invocation — NUKE executes it as discrete internal stages (Restore → Compile → Test → Pack) and fails at the breaking stage, so a test failure stops the job before the push step. Don't split a lane into separate `dotnet fallout Compile`/`Test`/`Pack` steps — each invocation re-runs the dependency graph (double-compile); the single invocation *is* the staged build.
+- The `ubuntu-latest` / `windows-latest` / `macos-latest` workflows are **generated** from `build/Build.CI.GitHubActions.cs` — edit the attributes + constants there and regenerate (`./build.sh`), never hand-edit the `.yml`. `preview.yml` / `release.yml` are hand-written.
+- **Every publishing lane runs `Test` before it publishes** (#324). `preview.yml` and `release.yml` both run a single `dotnet fallout Test Pack` invocation — NUKE executes it as discrete internal stages (Restore → Compile → Test → Pack) and fails at the breaking stage, so a test failure stops the job before the push step. Don't split a lane into separate `dotnet fallout Compile`/`Test`/`Pack` steps — each invocation re-runs the dependency graph (double-compile); the single invocation *is* the staged build.
 - **Caching** (#328): every workflow caches `~/.nuget/packages` + `.fallout/temp`, keyed on `global.json` + `**/*.csproj` + `Directory.Packages.props` (the dependency-affecting set), with a `restore-keys:` prefix fallback for partial restores. There is no `packages.lock.json` to add to the key, and build outputs (`bin`/`obj`) are deliberately **not** cached (stale-artifact correctness risk).
 
 ## What not to do
 
 - Don't reintroduce `source/` — production code lives under `src/`, tests under `tests/`. Same for `images/` (now `.assets/`).
-- Don't add `main`/`experimental` (or any working-branch pattern) to the **push** triggers of the cross-platform workflows — they're release-intent-gated on purpose (milestone #18 / #318 / #326).
+- Don't add `main` (or any working-branch pattern) to the **push** triggers of the cross-platform workflows — they're release-intent-gated on purpose (milestone #18 / #318 / #326).
 - Don't add `submodules: recursive` to checkouts — there are no submodules (no `.gitmodules`); it's a dead init step.
 - Don't add `secret`/`default` defaults to tool JSON files (see CONTRIBUTING.md).
 - Don't introduce a new test framework or assertion library — stay on xUnit + FluentAssertions + Verify.

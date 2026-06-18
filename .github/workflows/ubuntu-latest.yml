@@ -19,7 +19,6 @@ name: ubuntu-latest
 on:
   pull_request:
     branches:
-      - experimental
       - main
       - 'release/*'
       - 'support/*'

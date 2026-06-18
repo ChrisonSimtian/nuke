@@ -37,5 +37,6 @@ If you change a decision, do NOT silently rewrite the old ADR — add a new one 
 | [0002](0002-cross-provider-auth-and-secret-conventions.md) | Cross-provider auth and secret conventions | Proposed |
 | [0002](0002-v11-off-nuget-by-default.md) | v11 publishes to GitHub Packages by default; nuget.org opt-in | Accepted |
 | [0003](0003-variables-and-substitution.md) | Variables and `${…}` substitution layer | Proposed |
-| [0004](0004-calendar-versioning-and-dual-pace-channels.md) | Calendar versioning + dual-pace channels (edge/stable) + experimental APIs | Accepted (§3 amended by 0007) |
+| [0004](0004-calendar-versioning-and-dual-pace-channels.md) | Calendar versioning + dual-pace channels (edge/stable) + experimental APIs | Accepted (§3 amended by 0007; channel ladder §2 superseded by 0008) |
 | [0007](0007-cut-release-branch-on-demand.md) | Cut `release/YYYY` on demand, not preemptively | Accepted |
+| [0008](0008-collapse-experimental-into-main.md) | Collapse `experimental` into `main`; `main` is the sole prerelease lane | Accepted |

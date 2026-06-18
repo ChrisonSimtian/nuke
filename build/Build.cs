@@ -44,13 +44,10 @@ partial class Build
     AbsolutePath OutputDirectory => RootDirectory / "output";
     AbsolutePath SourceDirectory => RootDirectory / "source";
 
+    // The integration trunk and sole prerelease lane (ADR-0008). Per-commit
+    // -preview prereleases to GitHub Packages (see .github/workflows/preview.yml).
+    // Long-lived + protected, so it needs ubuntu-latest PR/push validation.
     const string MainBranch = "main";
-
-    // The fast / AI-assisted lane (ADR-0004, amended 2026-05-30). Per-commit
-    // -alpha prereleases to GitHub Packages (see .github/workflows/experimental.yml);
-    // breaking work accumulates here for the yearly major. Long-lived + protected,
-    // so it needs the same ubuntu-latest PR/push validation as main.
-    const string ExperimentalBranch = "experimental";
 
     // Glob matching the long-lived release-branch family: CalVer production lines
     // (release/2026, release/2027, ...).
@@ -159,7 +156,7 @@ partial class Build
     // GITHUB_TOKEN env var (ICreateGitHubRelease.GitHubToken), which many developers have
     // exported — without this, a stray local `dotnet fallout Publish` (no --publish-to →
     // all targets) would actually push to GitHub Packages. Requiring GitHubActions blocks
-    // local pushes while still allowing every CI lane (experimental/preview/release).
+    // local pushes while still allowing every CI lane (preview/release).
     Target IPublish.Publish => _ => _
         .Inherit<IPublish>()
         .Consumes(From<IPack>().Pack)
@@ -192,8 +189,8 @@ partial class Build
         .ProceedAfterFailure()
         .Requires(() => From<ICreateGitHubRelease>().GitHubToken)
         // Only cut a GitHub Release in the release workflow — never as a side-effect of a
-        // preview/alpha publish. This target is TriggeredBy<IPublish>, and since #333 the
-        // preview/experimental lanes dogfood `Publish`; gating on IsOnMainBranch alone would
+        // preview publish. This target is TriggeredBy<IPublish>, and since #333 the
+        // preview lane dogfoods `Publish`; gating on IsOnMainBranch alone would
         // fire it on every preview push to main (it doesn't — GitHub Releases are production-
         // only, and release.yml hand-rolls them via `gh release create`).
         .OnlyWhenStatic(() => GitHubActions?.Workflow == ReleaseWorkflow)

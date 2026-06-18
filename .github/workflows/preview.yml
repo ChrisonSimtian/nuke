@@ -12,8 +12,9 @@
 #     (they add the feed), so it causes none of the nuget.org Dependabot
 #     fan-out that ADR-0001 / ADR-0002 were avoiding.
 #
-# The faster, intentionally-unstable `-alpha` lane is `experimental` (experimental.yml).
-# Stable + legacy releases are deliberate and tag-triggered — see release.yml.
+# `main` is the sole continuous prerelease lane (ADR-0008 collapsed the former
+# `experimental` `-alpha` lane into `main`). Stable + legacy releases are
+# deliberate and tag-triggered — see release.yml.
 # Cross-platform validation on `main` pushes is covered by macos-latest.yml /
 # windows-latest.yml; this workflow's job is publishing, not gating.
 

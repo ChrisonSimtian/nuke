@@ -6,7 +6,7 @@ This document explains where Fallout is going and why. It's the canonical refere
 
 ## Where we are
 
-Fallout is the hard-fork successor to [NUKE](https://github.com/nuke-build/nuke). The rebrand from NUKE to Fallout is in flight — most of the renaming has landed; consumer-facing migration tooling, the documentation site port, and the coordinated announcement are still in progress. Active development ships on the **2026** line (fast lane = `experimental` → alpha, deliberate trunk = `main` → preview, production = `release/2026`); the NUKE-era `10.x` line (`support/v10`) is now a legacy maintenance line (security/critical fixes only).
+Fallout is the hard-fork successor to [NUKE](https://github.com/nuke-build/nuke). The rebrand from NUKE to Fallout is in flight — most of the renaming has landed; consumer-facing migration tooling, the documentation site port, and the coordinated announcement are still in progress. Active development ships on the **2026** line (`main` → preview is the sole prerelease lane, production = `release/2026`); the NUKE-era `10.x` line (`support/v10`) is now a legacy maintenance line (security/critical fixes only).
 
 ## The next two themed milestones
 

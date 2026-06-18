@@ -40,7 +40,7 @@ or, project-wide, in your `.csproj`:
 - An ID is **never reused** — once retired it stays retired, so a suppression can never silently re-bind to a different API.
 - Every allocation is recorded in the registry table below, in the same PR that introduces the attribute.
 - **Promoting an API to stable means deleting the `[Experimental]` attribute** (the feature already rode the trunk — no cross-branch cherry-pick). The ID's row moves to **Promoted** status and the ID is retired, not recycled. Adding or removing `[Experimental]` is not a breaking change.
-- **Channel discipline:** on the `experimental` (alpha) / `main` (preview) test lanes the attribute is a courtesy; on a `release/YYYY` production line any risky-but-shipped public surface **must** wear it.
+- **Channel discipline:** on the `main` (preview) test lane the attribute is a courtesy; on a `release/YYYY` production line any risky-but-shipped public surface **must** wear it. (Since [ADR-0008](adr/0008-collapse-experimental-into-main.md) `main` is the sole prerelease lane and the primary home for not-yet-stable surface, so gating it behind this attribute is what keeps the production cut clean.)
 
 ## Registry
 

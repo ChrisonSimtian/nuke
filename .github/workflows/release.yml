@@ -2,14 +2,15 @@
 # rationale (lets us bridge GitHub's NUGET_API_KEY secret to Fallout's
 # NuGetApiKey parameter, which would otherwise have to share a name).
 #
-# This is the DELIBERATE (production) release path. The fast test lanes —
-# experimental (-alpha) and main (-preview), both push → GitHub Packages — live
-# in experimental.yml / preview.yml. See ADR-0004 (amended 2026-05-30).
+# This is the DELIBERATE (production) release path. The fast test lane —
+# main (-preview), push → GitHub Packages — lives in preview.yml. See ADR-0004
+# (amended 2026-05-30), as further amended by ADR-0008 (which collapsed the
+# former experimental/-alpha lane into main).
 #
 # Shape:
 #   - Trigger: tag push `v*` on a production branch — CalVer production lines
 #     (release/2026 → tag v2026.1.3) or gitflow support lines (support/v10 → v10.x,
-#     support/2026 → v2026.x). main and experimental are NEVER tagged for release.
+#     support/2026 → v2026.x). main is NEVER tagged for release.
 #     Tags keep the `v` prefix so the `v*` tag-protection ruleset applies; the
 #     package version core is the bare CalVer/semver (e.g. 2026.1.3). Tag
 #     protection restricts who can create those tags to repo admins.

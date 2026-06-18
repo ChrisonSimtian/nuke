@@ -4,8 +4,8 @@ using Fallout.Components;
 // Cross-platform (macOS/Windows) full Test+Pack is gated to RELEASE INTENT
 // (#318/#326): it runs only on a PR into a production branch (release/YYYY,
 // support/*) and on a release tag push (v*) — never on routine pushes to
-// main/experimental, never on a per-merge basis. On main/experimental "we've
-// got our edge": the ubuntu-latest PR gate + the alpha/preview pipelines.
+// main, never on a per-merge basis. On main "we've got our edge": the
+// ubuntu-latest PR gate + the preview pipeline (.github/workflows/preview.yml).
 // (workflow_dispatch as a manual cross-platform trigger isn't emitted here —
 // the generator only writes workflow_dispatch when it has inputs; GitHub's
 // built-in run re-run covers the on-demand case.)
@@ -47,9 +47,9 @@ using Fallout.Components;
     ConcurrencyGroup = "${{ github.workflow }}-${{ github.ref }}",
     ConcurrencyCancelInProgress = true,
     CheckoutRef = "${{ github.head_ref }}",
-    // Trigger for PRs targeting experimental, main, or any release/YYYY / support/*
-    // branch — all are long-lived and protected; all require the ubuntu-latest check.
-    OnPullRequestBranches = new[] { ExperimentalBranch, MainBranch, ReleaseBranchPattern, SupportBranchPattern },
+    // Trigger for PRs targeting main or any release/YYYY / support/* branch —
+    // all are long-lived and protected; all require the ubuntu-latest check.
+    OnPullRequestBranches = new[] { MainBranch, ReleaseBranchPattern, SupportBranchPattern },
     OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
     InvokedTargets = new[] { nameof(ITest.Test), nameof(IPack.Pack) },
     PublishArtifacts = false)]
