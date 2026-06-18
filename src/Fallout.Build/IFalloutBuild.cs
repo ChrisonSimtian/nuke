@@ -51,7 +51,7 @@ public interface IFalloutBuild
     bool Continue { get; }
     Partition Partition { get; }
 
-    public T TryGetValue<T>(Expression<Func<T>> parameterExpression) where T : class;
+    T TryGetValue<T>(Expression<Func<T>> parameterExpression) where T : class;
 
-    public T TryGetValue<T>(Expression<Func<object>> parameterExpression);
+    T TryGetValue<T>(Expression<Func<object>> parameterExpression);
 }

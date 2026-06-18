@@ -16,7 +16,7 @@ namespace Fallout.Components;
 [ParameterPrefix(GitHubRelease)]
 public interface ICreateGitHubRelease : IHasGitRepository, IHasChangelog
 {
-    public const string GitHubRelease = nameof(GitHubRelease);
+    const string GitHubRelease = nameof(GitHubRelease);
 
     [Parameter] [Secret] string GitHubToken => TryGetValue(() => GitHubToken) ?? GitHubActions.Instance?.Token;
 

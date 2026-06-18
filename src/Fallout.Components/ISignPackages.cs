@@ -43,9 +43,9 @@ namespace Fallout.Components;
 [ParameterPrefix(SignPath)]
 public interface ISignPackages : IFalloutBuild
 {
-    public const string SignPath = nameof(SignPath);
+    const string SignPath = nameof(SignPath);
 
-    public record SignPathSettings(
+    record SignPathSettings(
         string OrganizationId,
         string ProjectSlug,
         string PolicySlug);
