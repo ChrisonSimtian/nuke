@@ -6,7 +6,7 @@ Accepted (2026-06-18). **Supersedes the channel-ladder section (§2) of [ADR-000
 
 ## Context
 
-ADR-0004's 2026-05-30 amendment introduced a three-tier channel ladder — `experimental` (`-alpha`) → `main` (`-preview`) → `release/YYYY` (production) — adding a standing `experimental` branch as the fast/AI-assisted lane. It did so to keep `main` stable-by-default (principle of least surprise, per [@dennisdoomen on #302](https://github.com/ChrisonSimtian/Fallout/discussions/302)), explicitly accepting a *bounded* amount of `experimental → main` divergence as the cost, and leaning on forward-only promotion + `[Experimental("FALLOUT0xx")]` to keep that divergence small.
+ADR-0004's 2026-05-30 amendment introduced a three-tier channel ladder — `experimental` (`-alpha`) → `main` (`-preview`) → `release/YYYY` (production) — adding a standing `experimental` branch as the fast/AI-assisted lane. It did so to keep `main` stable-by-default (principle of least surprise, per [@dennisdoomen on #302](https://github.com/Fallout-build/Fallout/discussions/302)), explicitly accepting a *bounded* amount of `experimental → main` divergence as the cost, and leaning on forward-only promotion + `[Experimental("FALLOUT0xx")]` to keep that divergence small.
 
 In practice the lane did not earn its keep:
 
@@ -47,7 +47,7 @@ The maintainer's call: remove the lane and lean entirely on the tools that were 
 
 ### Negative
 
-- **`main` carries faster, occasionally-unstable churn — the principle-of-least-surprise concern from [#302](https://github.com/ChrisonSimtian/Fallout/discussions/302) that *added* `experimental` is partially reintroduced.** Mitigation: `main` is GitHub-Packages-only `-preview`, **never** a nuget.org/production feed; a consumer who wants stability uses the `release/YYYY` tags / nuget.org, not a `main` checkout. The default branch carrying churn is acceptable precisely because it never auto-publishes to production. Risky public surface still wears `[Experimental]`. The trade — "newcomer cloning `main` finds a stable-ish trunk" for "one fewer long-lived branch and no divergence" — favours collapse now that the lane has proven underused.
+- **`main` carries faster, occasionally-unstable churn — the principle-of-least-surprise concern from [#302](https://github.com/Fallout-build/Fallout/discussions/302) that *added* `experimental` is partially reintroduced.** Mitigation: `main` is GitHub-Packages-only `-preview`, **never** a nuget.org/production feed; a consumer who wants stability uses the `release/YYYY` tags / nuget.org, not a `main` checkout. The default branch carrying churn is acceptable precisely because it never auto-publishes to production. Risky public surface still wears `[Experimental]`. The trade — "newcomer cloning `main` finds a stable-ish trunk" for "one fewer long-lived branch and no divergence" — favours collapse now that the lane has proven underused.
 - **Breaking work has no dedicated branch; discipline shifts entirely to `[Experimental]` + reviewer vigilance + the yearly-cut batching rule.** A breaking change merged to `main` without `[Experimental]` gating could otherwise leak into a `release/YYYY` cut — the **production-cut review is the backstop** (ADR-0004 §6: rigorous, unhurried review of the cut). This must be enforced at cut time.
 
 ### Neutral
@@ -76,4 +76,4 @@ Cut `release/YYYY` from day one (the pre-ADR-0007 model) so there's always a sta
 - [ADR-0002: v11 off nuget.org by default](0002-v11-off-nuget-by-default.md) — nuget.org-opt-in policy, retained.
 - [docs/branching-and-release.md](../branching-and-release.md) — maintainer runbook (updated for this model).
 - [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md) — agent-facing reference (updated for this model).
-- Discussion thread: [#302 — Calendar versioning + dual-pace channels](https://github.com/ChrisonSimtian/Fallout/discussions/302).
+- Discussion thread: [#302 — Calendar versioning + dual-pace channels](https://github.com/Fallout-build/Fallout/discussions/302).

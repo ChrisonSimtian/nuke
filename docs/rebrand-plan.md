@@ -82,7 +82,7 @@ All three are candidate work for a future major version *after* the shim package
 
 ### Why this works without owning the `Nuke.*` IDs on nuget.org
 
-GitHub Packages namespaces are per-org/user. `ChrisonSimtian/Nuke.Common` on GitHub Packages is a different package from `nuget.org/Nuke.Common`. We can publish bridge packages with the original IDs on our own feed without colliding with the upstream IDs that matkoch still owns. Consumers opt in by adding our feed to their `nuget.config`.
+GitHub Packages namespaces are per-org/user. `Fallout-build/Nuke.Common` on GitHub Packages is a different package from `nuget.org/Nuke.Common`. We can publish bridge packages with the original IDs on our own feed without colliding with the upstream IDs that matkoch still owns. Consumers opt in by adding our feed to their `nuget.config`.
 
 ### Package families published on the GH Packages feed
 
