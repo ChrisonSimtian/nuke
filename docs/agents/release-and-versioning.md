@@ -71,7 +71,9 @@ Milestones are **theme-based** (e.g. "Plugin Architecture Foundation & Rebrand C
 
 ## PR-creation flow
 
-At PR-creation time — not after, not as a follow-up — every PR gets:
+Write the PR description terse and to the canonical shape — see
+[issue-and-pr-style.md](issue-and-pr-style.md). At PR-creation time — not after,
+not as a follow-up — every PR gets:
 
 1. **A `target/YYYY` label** matching where it will release. Default to `target/<current-year>` (`target/2026`). If the PR carries a breaking change, it's held for the next yearly major — use `target/<next-year>`. Legacy v10 maintenance work uses `target/v10`. Pass via `--label target/2026` to `gh pr create`.
 
