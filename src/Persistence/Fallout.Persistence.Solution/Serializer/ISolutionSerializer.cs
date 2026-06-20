@@ -3,7 +3,7 @@
 
 using Fallout.Persistence.Solution.Model;
 
-namespace Fallout.Persistence.Solution;
+namespace Fallout.Persistence.Solution.Serializer;
 
 /// <summary>
 /// Represents a solution serializer.
@@ -45,7 +45,7 @@ public interface ISolutionSerializer
     /// For single file serializers, this checks the file extension.
     /// </summary>
     /// <param name="moniker">The moniker that represents the solution location.</param>
-    /// <returns>If this serilizer can open the solution.</returns>
+    /// <returns>If this serializer can open the solution.</returns>
     bool IsSupported(string moniker);
 }
 
@@ -86,7 +86,7 @@ public interface ISolutionSingleFileSerializer<TSettings> : ISolutionSerializer<
     /// <summary>
     /// Saves a solution model to a stream.
     /// </summary>
-    /// <param name="stream">The stream to save the file..</param>
+    /// <param name="stream">The stream to save the file.</param>
     /// <param name="model">The model to save.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Task to track the asynchronous call status.</returns>

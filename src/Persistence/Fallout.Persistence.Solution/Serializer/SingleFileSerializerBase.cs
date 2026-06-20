@@ -36,10 +36,11 @@ internal abstract class SingleFileSerializerBase<TSettings> : ISolutionSingleFil
 
     async Task<SolutionModel> ISolutionSerializer.OpenAsync(string moniker, CancellationToken cancellationToken)
     {
-        using (FileStream reader = File.OpenRead(moniker))
-        {
-            return await this.ReadModelAsync(moniker, reader, cancellationToken);
-        }
+        // Plain `using` (not `await using`): FileStream does not implement IAsyncDisposable on
+        // netstandard2.0, so `await using` fails to compile there (CS8417). Synchronous disposal
+        // of a local read stream is fine across all target frameworks.
+        using FileStream reader = File.OpenRead(moniker);
+        return await this.ReadModelAsync(moniker, reader, cancellationToken);
     }
 
     async Task ISolutionSerializer.SaveAsync(string moniker, SolutionModel model, CancellationToken cancellationToken)
@@ -50,10 +51,10 @@ internal abstract class SingleFileSerializerBase<TSettings> : ISolutionSingleFil
             _ = Directory.CreateDirectory(directory);
         }
 
-        using (FileStream writer = File.OpenWrite(moniker))
-        {
-            await this.WriteModelAsync(moniker, model, writer, cancellationToken);
-        }
+        // Plain `using` (not `await using`): see OpenAsync — FileStream is not IAsyncDisposable
+        // on netstandard2.0 (CS8417). Synchronous disposal of a local write stream is fine here.
+        using FileStream writer = File.OpenWrite(moniker);
+        await this.WriteModelAsync(moniker, model, writer, cancellationToken);
     }
 
     private protected abstract Task<SolutionModel> ReadModelAsync(string? fullPath, Stream reader, CancellationToken cancellationToken);
