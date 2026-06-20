@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Reflection;
 
 namespace Fallout.Common.Tools.CorFlags;
 
 partial class CorFlagsSettings
 {
-    string FormatBoolean(bool? value, PropertyInfo property)
+    private static string FormatBoolean(bool? value)
         => value switch
         {
             true => "+",

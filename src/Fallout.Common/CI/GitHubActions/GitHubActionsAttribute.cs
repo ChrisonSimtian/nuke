@@ -71,7 +71,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     public string PublishCondition { get; set; }
 
     public int TimeoutMinutes { get; set; }
-    
+
     public string EnvironmentName { get; set; }
     public string EnvironmentUrl { get; set; }
 
@@ -163,7 +163,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                    Name = image.GetValue().Replace(".", "_"),
                    EnvironmentName = EnvironmentName,
                    EnvironmentUrl = EnvironmentUrl,
-                   Steps = GetSteps(image, relevantTargets).ToArray(),
+                   Steps = GetSteps(relevantTargets).ToArray(),
                    Image = image,
                    TimeoutMinutes = TimeoutMinutes,
                    ConcurrencyGroup = JobConcurrencyGroup,
@@ -171,7 +171,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                };
     }
 
-    private IEnumerable<GitHubActionsStep> GetSteps(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
+    private IEnumerable<GitHubActionsStep> GetSteps(IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
         yield return new GitHubActionsCheckoutStep
                      {

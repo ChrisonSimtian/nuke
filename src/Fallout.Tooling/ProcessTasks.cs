@@ -156,7 +156,7 @@ public static class ProcessTasks
         }
 
         if (logInvocation)
-            LogInvocation(startInfo, outputFilter, environmentVariables != null);
+            LogInvocation(startInfo, outputFilter);
 
         var process = Process.Start(startInfo);
         if (process == null)
@@ -166,7 +166,7 @@ public static class ProcessTasks
         return new Process2(process, outputFilter, timeout, output);
     }
 
-    private static void LogInvocation(ProcessStartInfo startInfo, Func<string, string> outputFilter, bool hasEnvironmentVariables)
+    private static void LogInvocation(ProcessStartInfo startInfo, Func<string, string> outputFilter)
     {
         lock (s_lock)
         {

@@ -38,7 +38,7 @@ public static class CodeGenerator
         tool.SpecificationFile = specificationFile;
         tool.SourceFile = sourceFileProvider?.Invoke(tool);
         tool.Namespace = namespaceProvider?.Invoke(tool);
-        ApplyRuntimeInformation(tool, specificationFile, sourceFileProvider, namespaceProvider);
+        ApplyRuntimeInformation(tool);
 
         GenerateCode(tool, outputFileProvider?.Invoke(tool) ?? tool.DefaultOutputFile);
     }
@@ -58,10 +58,7 @@ public static class CodeGenerator
 
     // ReSharper disable once CognitiveComplexity
     private static void ApplyRuntimeInformation(
-        Tool tool,
-        string specificationFile,
-        Func<Tool, string> sourceFileProvider,
-        Func<Tool, string> namespaceProvider)
+        Tool tool)
     {
         foreach (var task in tool.Tasks)
         {

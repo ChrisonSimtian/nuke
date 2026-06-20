@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using Fallout.Common;
@@ -42,9 +41,7 @@ partial class Program
 
         WriteBuildScripts(
             scriptDirectory: buildScript.Parent,
-            rootDirectory,
-            buildDirectory: buildProjectFile.NotNull().Parent,
-            buildProjectName: Path.GetFileNameWithoutExtension(buildProjectFile));
+            rootDirectory);
     }
 
     private static void UpdateBuildProject(AbsolutePath buildScript)
