@@ -214,6 +214,17 @@ public class ConfigurationGenerationSpecs
 
             yield return
             (
+                "runs-on-labels",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push },
+                    InvokedTargets = new[] { nameof(Test) },
+                    RunsOnLabels = new[] { "self-hosted", "linux", "x64" }
+                }
+            );
+
+            yield return
+            (
                 null,
                 new TestSpaceAutomationAttribute("Name", "mcr.microsoft.com/dotnet/sdk:5.0")
                 {

@@ -93,6 +93,16 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
 
     public string[] InvokedTargets { get; set; } = new string[0];
 
+    /// <summary>
+    /// Runner labels emitted verbatim as <c>runs-on: [label1, label2, ...]</c>, for selecting a
+    /// self-hosted runner pool by OS/arch/capability (e.g. <c>["self-hosted", "linux", "x64"]</c>).
+    /// <para/>
+    /// When non-empty this replaces the <c>runs-on:</c> image for the job and requires exactly one
+    /// image (no matrix). The constructor-mandated <see cref="GitHubActionsImage"/> is then ignored
+    /// for <c>runs-on:</c> and only names the job.
+    /// </summary>
+    public string[] RunsOnLabels { get; set; } = new string[0];
+
     public GitHubActionsSubmodules Submodules
     {
         set => _submodules = value;
@@ -176,6 +186,10 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
             $"Workflows can only define either shorthand '{nameof(On)}' or '{nameof(On)}*' triggers");
         Assert.True(configuration.ShortTriggers.Length > 0 || configuration.DetailedTriggers.Length > 0,
             $"Workflows must define either shorthand '{nameof(On)}' or '{nameof(On)}*' triggers");
+        Assert.True(RunsOnLabels.Length == 0 || _images.Length == 1,
+            $"Cannot use '{nameof(RunsOnLabels)}' with multiple images; labels resolve a single job's runner");
+        Assert.True(RunsOnLabels.All(x => !x.IsNullOrWhiteSpace()),
+            $"'{nameof(RunsOnLabels)}' entries must not be null, empty, or whitespace");
 
         return configuration;
     }
@@ -185,6 +199,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         return new GitHubActionsJob
                {
                    Name = image.GetValue().Replace(".", "_"),
+                   RunsOnLabels = RunsOnLabels,
                    EnvironmentName = EnvironmentName,
                    EnvironmentUrl = EnvironmentUrl,
                    Steps = GetSteps(relevantTargets).ToArray(),

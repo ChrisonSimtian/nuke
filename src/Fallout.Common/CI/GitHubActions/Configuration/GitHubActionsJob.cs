@@ -10,6 +10,7 @@ public class GitHubActionsJob : ConfigurationEntity
 {
     public string Name { get; set; }
     public GitHubActionsImage Image { get; set; }
+    public string[] RunsOnLabels { get; set; } = new string[0];
     public int TimeoutMinutes { get; set; }
     public string ConcurrencyGroup { get; set; }
     public string EnvironmentName { get; set; }
@@ -24,7 +25,14 @@ public class GitHubActionsJob : ConfigurationEntity
         using (writer.Indent())
         {
             writer.WriteLine($"name: {Name}");
-            writer.WriteLine($"runs-on: {Image.GetValue()}");
+            if (RunsOnLabels.Length > 0)
+            {
+                writer.WriteLine($"runs-on: [{RunsOnLabels.JoinCommaSpace()}]");
+            }
+            else
+            {
+                writer.WriteLine($"runs-on: {Image.GetValue()}");
+            }
 
             if (TimeoutMinutes > 0)
             {
