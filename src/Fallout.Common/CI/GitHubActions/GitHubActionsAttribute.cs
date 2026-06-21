@@ -58,6 +58,22 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     public string[] OnWorkflowDispatchRequiredInputs { get; set; } = new string[0];
     public string OnCronSchedule { get; set; }
 
+    /// <summary>
+    /// Workflow-level environment variables, each entry in <c>KEY: value</c> form. Emitted once as a
+    /// top-level <c>env:</c> block (after <c>on:</c>) and inherited by every job and step — including
+    /// non-run steps such as checkout, cache, and artifact upload. Use for shared variables like
+    /// <c>DOTNET_NOLOGO: true</c> or a common <c>Configuration: Release</c>.
+    /// <para/>
+    /// Each entry is written verbatim as a YAML line, so values that need YAML quoting (e.g. ones
+    /// containing <c>*</c>, a leading <c>#</c>, or significant leading/trailing spaces) must be quoted
+    /// by the caller. Malformed entries (no key, whitespace in the key, or no space after the colon)
+    /// fail configuration generation with a build error rather than emitting broken YAML.
+    /// <para/>
+    /// Named <c>Env</c> rather than <c>Environment</c> to avoid confusion with the deployment
+    /// <c>environment:</c> keyword exposed via <see cref="EnvironmentName"/>.
+    /// </summary>
+    public string[] Env { get; set; } = new string[0];
+
     public string[] ImportSecrets { get; set; } = new string[0];
     public bool EnableGitHubToken { get; set; }
     public GitHubActionsPermissions[] WritePermissions { get; set; } = new GitHubActionsPermissions[0];
@@ -136,11 +152,25 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
 
     public override ConfigurationEntity GetConfiguration(IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
+        foreach (var variable in Env)
+        {
+            Assert.True(variable != null, $"'{nameof(Env)}' entries must not be null; expected 'KEY: value'");
+
+            var separatorIndex = variable.IndexOf(':');
+            Assert.True(separatorIndex > 0,
+                $"'{nameof(Env)}' entry '{variable}' must be in 'KEY: value' form with a non-empty key");
+            Assert.True(!variable.Substring(startIndex: 0, separatorIndex).Any(char.IsWhiteSpace),
+                $"'{nameof(Env)}' entry '{variable}' has whitespace in its key; expected 'KEY: value'");
+            Assert.True(separatorIndex == variable.Length - 1 || char.IsWhiteSpace(variable[separatorIndex + 1]),
+                $"'{nameof(Env)}' entry '{variable}' must have a space after the key's colon; expected 'KEY: value'");
+        }
+
         var configuration = new GitHubActionsConfiguration
                             {
                                 Name = _name,
                                 ShortTriggers = On,
                                 DetailedTriggers = GetTriggers().ToArray(),
+                                Env = Env,
                                 Permissions = WritePermissions.Select(x => (x, "write"))
                                     .Concat(ReadPermissions.Select(x => (x, "read"))).ToArray(),
                                 ConcurrencyGroup = ConcurrencyGroup,

@@ -11,6 +11,7 @@ public class GitHubActionsConfiguration : ConfigurationEntity
 
     public GitHubActionsTrigger[] ShortTriggers { get; set; }
     public GitHubActionsDetailedTrigger[] DetailedTriggers { get; set; }
+    public string[] Env { get; set; } = new string[0];
     public (GitHubActionsPermissions Type, string Permission)[] Permissions { get; set; }
     public string ConcurrencyGroup { get; set; }
     public bool ConcurrencyCancelInProgress { get; set; }
@@ -29,6 +30,16 @@ public class GitHubActionsConfiguration : ConfigurationEntity
             using (writer.Indent())
             {
                 DetailedTriggers.ForEach(x => x.Write(writer));
+            }
+        }
+
+        if (Env.Length > 0)
+        {
+            writer.WriteLine();
+            writer.WriteLine("env:");
+            using (writer.Indent())
+            {
+                Env.ForEach(x => writer.WriteLine(x));
             }
         }
 

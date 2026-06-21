@@ -179,6 +179,43 @@ public class ConfigurationGenerationTest
                 }
             );
 
+            // Workflow-level env: block — variables declared once and inherited by every job and
+            // step. Emitted after on: and before permissions:/jobs:. No permissions set here, so the
+            // env block is followed directly by jobs:.
+            yield return
+            (
+                "env-block",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push, GitHubActionsTrigger.PullRequest },
+                    InvokedTargets = new[] { nameof(Test) },
+                    Env = new[]
+                          {
+                              "DOTNET_CLI_TELEMETRY_OPTOUT: 1",
+                              "DOTNET_NOLOGO: true",
+                              "NUGET_XMLDOC_MODE: skip",
+                              "Configuration: Release"
+                          }
+                }
+            );
+
+            // Ordering guard: when Env, permissions, and concurrency are all set, the env: block must
+            // be emitted after on: and before permissions:/concurrency:/jobs:, with correct blank-line
+            // spacing between each block. The happy-path env-block case (no permissions) can't prove this.
+            yield return
+            (
+                "env-block-with-permissions",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push },
+                    InvokedTargets = new[] { nameof(Test) },
+                    Env = new[] { "DOTNET_NOLOGO: true", "Configuration: Release" },
+                    WritePermissions = new[] { GitHubActionsPermissions.Contents },
+                    ReadPermissions = new[] { GitHubActionsPermissions.Actions },
+                    ConcurrencyCancelInProgress = true
+                }
+            );
+
             yield return
             (
                 null,
