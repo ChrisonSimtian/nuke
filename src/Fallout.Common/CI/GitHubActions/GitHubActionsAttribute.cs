@@ -61,13 +61,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     /// <summary>
     /// Workflow-level environment variables, each entry in <c>KEY: value</c> form. Emitted once as a
     /// top-level <c>env:</c> block (after <c>on:</c>) and inherited by every job and step — including
-    /// non-run steps such as checkout, cache, and artifact upload. Use for shared variables like
-    /// <c>DOTNET_NOLOGO: true</c> or a common <c>Configuration: Release</c>.
-    /// <para/>
-    /// Each entry is written verbatim as a YAML line, so values that need YAML quoting (e.g. ones
-    /// containing <c>*</c>, a leading <c>#</c>, or significant leading/trailing spaces) must be quoted
-    /// by the caller. Malformed entries (no key, whitespace in the key, or no space after the colon)
-    /// fail configuration generation with a build error rather than emitting broken YAML.
+    /// non-run steps such as checkout, cache, and artifact upload, which per-step env can't reach.
     /// <para/>
     /// Named <c>Env</c> rather than <c>Environment</c> to avoid confusion with the deployment
     /// <c>environment:</c> keyword exposed via <see cref="EnvironmentName"/>.
