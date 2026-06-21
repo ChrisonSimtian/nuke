@@ -11,14 +11,14 @@ namespace Fallout.Common.Tests.CI;
 public class GitHubActionsEnvValidationTest
 {
     [Theory]
-    [InlineData(null)]                 // null entry — must be a clean ArgumentException, not an NRE
-    [InlineData("")]                   // empty entry
-    [InlineData("   ")]                // whitespace-only entry
-    [InlineData("MISSING_COLON")]      // no separator at all
-    [InlineData(": value")]            // empty key
-    [InlineData("KEY WITH SPACE: 1")]  // whitespace inside the key
-    [InlineData("KEY : value")]        // whitespace on the key (before the colon)
-    [InlineData("KEY:value")]          // no space after the colon — invalid YAML mapping
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("MISSING_COLON")]
+    [InlineData(": value")]
+    [InlineData("KEY WITH SPACE: 1")]
+    [InlineData("KEY : value")]
+    [InlineData("KEY:value")]
     public void Malformed_env_entry_throws(string badEntry)
     {
         var act = () => GetConfiguration(new[] { badEntry });
@@ -28,8 +28,8 @@ public class GitHubActionsEnvValidationTest
 
     [Theory]
     [InlineData("DOTNET_NOLOGO: true")]
-    [InlineData("Url: https://example.com")]  // first colon is the separator; colons in the value are fine
-    [InlineData("EMPTY_VALUE:")]              // colon at end-of-entry — a valid empty (null) value
+    [InlineData("Url: https://example.com")]
+    [InlineData("EMPTY_VALUE:")]
     public void Well_formed_env_entry_does_not_throw(string goodEntry)
     {
         var act = () => GetConfiguration(new[] { goodEntry });

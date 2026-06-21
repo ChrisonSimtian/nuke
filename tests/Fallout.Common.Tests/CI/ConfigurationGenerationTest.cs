@@ -179,9 +179,6 @@ public class ConfigurationGenerationTest
                 }
             );
 
-            // Workflow-level env: block — variables declared once and inherited by every job and
-            // step. Emitted after on: and before permissions:/jobs:. No permissions set here, so the
-            // env block is followed directly by jobs:.
             yield return
             (
                 "env-block",
@@ -199,9 +196,8 @@ public class ConfigurationGenerationTest
                 }
             );
 
-            // Ordering guard: when Env, permissions, and concurrency are all set, the env: block must
-            // be emitted after on: and before permissions:/concurrency:/jobs:, with correct blank-line
-            // spacing between each block. The happy-path env-block case (no permissions) can't prove this.
+            // Ordering guard: with Env, permissions, and concurrency all set, the env: block must be
+            // emitted after on: and before permissions:/concurrency:/jobs:, with correct blank lines.
             yield return
             (
                 "env-block-with-permissions",
