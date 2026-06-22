@@ -17,6 +17,9 @@ does not constrain an agent running `gh issue create`).
   There is no minimum length to hit.
 - **Cut filler.** No preamble, no restating the title, no hedging, no
   marketing tone ("elegant", "robust", "seamlessly"), no emoji section headers.
+- **Write for non-native English readers.** Plain words over idiom, short
+  sentences, no slang or cultural references — many contributors read English as
+  a second language. Clarity beats cleverness.
 - **Bullets over prose** for anything enumerable.
 - **Link, don't recap.** Reference issues (`#123`), PRs, docs, and code
   (`path/to/file.cs:42`) instead of pasting them.

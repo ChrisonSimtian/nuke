@@ -2,7 +2,7 @@
 
 Guidance for AI coding tools (Claude Code, GitHub Copilot, Cursor, Aider, Codex, etc.) working in this repo.
 
-This is the **canonical brief**. Tool-specific instruction files (`CLAUDE.md`, `.github/copilot-instructions.md`) point here.
+This is the **canonical brief**. GitHub Copilot reads this `AGENTS.md` natively; the `CLAUDE.md` tool-specific file points here.
 
 ## What this project is
 
