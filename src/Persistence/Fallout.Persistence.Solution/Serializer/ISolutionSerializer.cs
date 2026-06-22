@@ -3,7 +3,7 @@
 
 using Fallout.Persistence.Solution.Model;
 
-namespace Fallout.Persistence.Solution.Serializer;
+namespace Fallout.Persistence.Solution;
 
 /// <summary>
 /// Represents a solution serializer.
