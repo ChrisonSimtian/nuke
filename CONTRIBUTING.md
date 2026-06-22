@@ -82,13 +82,12 @@ Tool wrapper JSON lives under `src/Fallout.Common/Tools/<Tool>/<Tool>.json`. Whe
 
 ### Merging
 
-The repo allows both **squash** and **rebase** merge buttons; plain merge commits are disabled (branch protection requires linear history).
+**Rebase is the only merge button.** Squash and plain merge commits are both disabled by repo setting. We keep a **linear history** where every reviewed commit lands on `main` verbatim — it makes per-change diffs easy to read, keeps `git bisect`/`git blame`/revert precise, and gives change control a discrete, traceable record per logical change (a squash would collapse that into one opaque commit).
 
-- **Default to squash.** One PR → one commit on `main`. Cleanest log, tidiest `Nerdbank.GitVersioning` patch-version cadence, easiest revert.
-- **Choose rebase** if you've curated your commits into a logical sequence you want preserved on `main` (and you don't mind interactive-rebasing away review-fixup noise before merge).
-- If you're using rebase, run `git rebase -i` to squash "address review feedback" / "fix typo" commits before requesting final approval — every commit landing on `main` is a bisect target.
+- **Curate your commits before final approval.** Everything you rebase onto `main` becomes a permanent bisect target, so aim for one logical change per commit. Run `git rebase -i` to fold "address review feedback" / "fix typo" noise into the commits it belongs to.
+- **During review, prefer additional commits** (see above) for easy diffing, then tidy them into a clean sequence before the final approval and merge.
 
-The merger (typically a CODEOWNER) picks the button; the PR description can request a preference but isn't binding.
+The merger (typically a CODEOWNER) clicks **Rebase and merge** — there's no button to choose.
 
 ## Releases
 
