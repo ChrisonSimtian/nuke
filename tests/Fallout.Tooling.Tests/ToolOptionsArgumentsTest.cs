@@ -99,8 +99,8 @@ public class ToolOptionsArgumentsTest
         [Argument(Format = "{value}", FormatterType = typeof(Formatter), FormatterMethod = nameof(Formatter.FormatMinutes))]
         public TimeSpan Minutes => Get<TimeSpan>(() => Minutes);
 
-        private string FormatTime(DateTime datetime, PropertyInfo property) => datetime.ToString("t", CultureInfo.InvariantCulture);
-        private string FormatDate(DateTime datetime, PropertyInfo property) => datetime.ToString("d", CultureInfo.InvariantCulture);
+        private string FormatTime(DateTime datetime) => datetime.ToString("t", CultureInfo.InvariantCulture);
+        private string FormatDate(DateTime datetime) => datetime.ToString("d", CultureInfo.InvariantCulture);
     }
 
     private static class Formatter
@@ -124,7 +124,7 @@ public class ToolOptionsArgumentsTest
         [Argument(Format = "--param:{value}", Separator = " ", QuoteMultiple = true)] public IReadOnlyList<string> QuotedList => Get<List<string>>(() => QuotedList);
         [Argument(Format = "--param={value}", FormatterMethod = nameof(Format))] public IReadOnlyList<bool> FormattedList => Get<List<bool>>(() => FormattedList);
 
-        private string Format(bool value, PropertyInfo property) => value.ToString().ToUpperInvariant();
+        private string Format(bool value) => value.ToString().ToUpperInvariant();
     }
 
     private readonly Dictionary<string, object> _simpleDictionary = new() { ["key1"] = 1, ["key2"] = "foobar" };
@@ -143,7 +143,7 @@ public class ToolOptionsArgumentsTest
         [Argument(Format = "-- {key}={value}", Separator = " ")] public IReadOnlyDictionary<string, object> WhitespaceDictionary => Get<Dictionary<string, object>>(() => WhitespaceDictionary);
         [Argument(Format = "/p:{key}={value}", FormatterMethod = nameof(Format))] public IReadOnlyDictionary<string, object> FormattedDictionary => Get<Dictionary<string, object>>(() => FormattedDictionary);
 
-        private string Format(object value, PropertyInfo property) => value?.ToString()?.ToUpperInvariant();
+        private string Format(object value) => value?.ToString()?.ToUpperInvariant();
     }
 
     private readonly LookupTable<string, object> _simpleLookupTable = new() { ["key1"] = [1, 2], ["key2"] = [true, false] };
@@ -160,7 +160,7 @@ public class ToolOptionsArgumentsTest
         [Argument(Format = "--param:{key}={value}", Separator = ";", InnerSeparator = ",")] public ILookup<string, object> SeparatorLookup => Get<LookupTable<string, object>>(() => SeparatorLookup);
         [Argument(Format = "--param {key} {value}", InnerSeparator = "+", FormatterMethod = nameof(Format))] public ILookup<string, object> FormattedLookup => Get<LookupTable<string, object>>(() => FormattedLookup);
 
-        private string Format(object value, PropertyInfo property) => value?.ToString()?.ToUpperInvariant();
+        private string Format(object value) => value?.ToString()?.ToUpperInvariant();
     }
 
     [Fact]

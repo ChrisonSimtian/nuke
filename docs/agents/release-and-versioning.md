@@ -14,7 +14,7 @@ A two-tier maturity ladder (`main` → `release/YYYY`) feeding the production li
 - `support/YYYY` — a **retired** year production line (e.g. `support/2026` once 2027 supersedes it). Security/critical fixes only.
 - `release/v11` — **retired.** Nothing clean shipped under it (the `11.0.x` packages were unlisted); its rebrand/plugin work re-homed onto the `2026` line. Kept for archaeology, marked EoL — not a release target. Not renamed to `support/` (not a maintained line).
 
-Short-lived branches (squash- or rebase-merged via PR): `feature/<slug>`, `bugfix/<slug>`, `chore/<slug>`, `docs/<slug>`, `pr/<num>-<slug>`. They target `main`. Breaking work that cannot be gated behind `[Experimental("FALLOUT0xx")]` waits for the year cut on a short-lived topic branch off `main`.
+Short-lived branches (rebase-merged via PR): `feature/<slug>`, `bugfix/<slug>`, `chore/<slug>`, `docs/<slug>`, `pr/<num>-<slug>`. They target `main`. Breaking work that cannot be gated behind `[Experimental("FALLOUT0xx")]` waits for the year cut on a short-lived topic branch off `main`.
 
 No `develop` (literal) or `master` branches. The ladder flows **forward-only**: `main → release/YYYY`. The `support/*` lines are maintenance-only — security/critical fixes land via a PR targeting (or cherry-pick to) `support/v10` / `support/YYYY` (or the relevant `hotfix/v10.x`) and are tagged from there.
 
@@ -37,7 +37,7 @@ Apply by mirroring `main`'s protection JSON to the new branch via the GitHub API
 
 **Validation workflows.** `ubuntu-latest` runs on every PR targeting `main`, `release/*`, or `support/*` (with `paths-ignore` for `docs/**`, `.assets/**`, `**/*.md`). `windows-latest` and `macos-latest` run on push to those branches — they're post-merge / release validation, not PR gates. This is a deliberate cost trade-off. (These three workflows are **generated** from `build/Build.CI.GitHubActions.cs` — change the branch lists in the `MainBranch`/`*BranchPattern` constants there and regenerate, don't hand-edit the `.yml`.)
 
-**Merging.** Both squash and rebase merge are enabled (plain merge commits are disabled by repo setting and would fail linear-history protection anyway). Squash is the default; rebase is opt-in for curated commit sequences. See [CONTRIBUTING.md → Merging](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md#merging) for the convention.
+**Merging.** Rebase merge only — squash and plain merge commits are both disabled by repo setting (linear history). Every reviewed commit lands on `main` verbatim, so curate commits into a clean sequence before final approval. See [CONTRIBUTING.md → Merging](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md#merging) for the convention.
 
 ## Versioning
 
@@ -71,7 +71,9 @@ Milestones are **theme-based** (e.g. "Plugin Architecture Foundation & Rebrand C
 
 ## PR-creation flow
 
-At PR-creation time — not after, not as a follow-up — every PR gets:
+Write the PR description terse and to the canonical shape — see
+[issue-and-pr-style.md](issue-and-pr-style.md). At PR-creation time — not after,
+not as a follow-up — every PR gets:
 
 1. **A `target/YYYY` label** matching where it will release. Default to `target/<current-year>` (`target/2026`). If the PR carries a breaking change, it's held for the next yearly major — use `target/<next-year>`. Legacy v10 maintenance work uses `target/v10`. Pass via `--label target/2026` to `gh pr create`.
 

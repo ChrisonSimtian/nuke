@@ -17,12 +17,12 @@ public static class ControlFlow
 {
     public static void SuppressErrors(Action action, bool includeStackTrace = false, bool logWarning = true)
     {
-        SuppressErrorsIf(condition: true, action, includeStackTrace: includeStackTrace, logWarning: logWarning);
+        SuppressErrorsIf(condition: true, action, logWarning: logWarning);
     }
 
     public static T SuppressErrors<T>(Func<T> action, T defaultValue = default, bool includeStackTrace = false, bool logWarning = true)
     {
-        return (T)SuppressErrorsIf(condition: true, action, defaultValue, includeStackTrace, logWarning);
+        return (T)SuppressErrorsIf(condition: true, action, defaultValue, logWarning);
     }
 
     public static IEnumerable<T> SuppressErrors<T>(Func<IEnumerable<T>> action, bool includeStackTrace = false)
@@ -34,7 +34,6 @@ public static class ControlFlow
         bool condition,
         Delegate action,
         object defaultValue = null,
-        bool includeStackTrace = false,
         bool logWarning = true)
     {
         if (!condition)

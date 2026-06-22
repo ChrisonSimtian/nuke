@@ -1,0 +1,61 @@
+name: 📝 User Story
+description: "Describe a desired capability as a small, outcome-focused story."
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        _Keep it terse and scannable — Problem, Outcome, and how we'll know it's done._
+
+        _Before you continue, please check the [contribution guidelines](https://github.com/ChrisonSimtian/Fallout/blob/main/CONTRIBUTING.md)._
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What's wrong or missing, and for whom? 1–2 sentences.
+      placeholder: Building locally re-runs GenerateTools every time, costing ~30s per iteration.
+    validations:
+      required: true
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: What does "done" look like? Describe observable behaviour, not the implementation.
+      placeholder: Tool wrappers are only regenerated when their source JSON changes.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: Testable checkboxes. Drop this section if the Outcome is self-evident.
+      placeholder: |
+        - [ ] Unchanged JSON skips regeneration
+        - [ ] Changed JSON triggers regeneration
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional. Links, constraints, related issues (≤3 lines). Leave blank if none.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: pull-request
+    attributes:
+      label: Could you help with a pull-request?
+      description: See the [contribution guidelines](https://github.com/ChrisonSimtian/Fallout/blob/main/CONTRIBUTING.md).
+      options:
+        - "No"
+        - "Yes"
+    validations:
+      required: true

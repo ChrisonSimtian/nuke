@@ -112,7 +112,13 @@ partial class ToolOptions
                 var formatterType = attribute.FormatterType ?? GetType();
                 var formatterMethod = formatterType.GetMethod(attribute.FormatterMethod, ReflectionUtility.All);
                 var objValue = type != typeof(object) ? DeserializeWithCoercion(token, type) : NodeToString(token);
-                value = formatterMethod.GetValue<string>(obj: this, args: [objValue, property]);
+                // The PropertyInfo is an optional second argument: formatters that don't need it
+                // can declare just the value parameter. Pass args matching the method's arity so
+                // both `Format(value)` and `Format(value, PropertyInfo)` shapes are supported.
+                object[] formatterArgs = formatterMethod.GetParameters().Length == 1
+                    ? [objValue]
+                    : [objValue, property];
+                value = formatterMethod.GetValue<string>(obj: this, args: formatterArgs);
             }
             else
             {

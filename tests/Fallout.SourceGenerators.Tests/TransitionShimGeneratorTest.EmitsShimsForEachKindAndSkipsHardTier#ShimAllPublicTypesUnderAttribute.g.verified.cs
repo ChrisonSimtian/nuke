@@ -6,8 +6,8 @@ namespace Fallout.Migrate.Shims;
 /// <summary>
 /// Marks the consuming assembly as a transition-shim project. The
 /// TransitionShimGenerator walks referenced Fallout.* assemblies and emits
-/// shim types under <paramref name="toNamespacePrefix"/> mirroring the
-/// public types whose namespace begins with <paramref name="fromNamespacePrefix"/>.
+/// shim types under <c>toNamespacePrefix</c> mirroring the
+/// public types whose namespace begins with <c>fromNamespacePrefix</c>.
 /// </summary>
 [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple = true)]
 internal sealed class ShimAllPublicTypesUnderAttribute : System.Attribute

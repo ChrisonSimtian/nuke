@@ -129,8 +129,8 @@ internal sealed class XmlFolder(SlnxFile root, XmlSolution xmlSolution, XmlEleme
 
         // Projects
         List<(string ItemRef, SolutionProjectModel Item)> projectsInFolder = modelSolution.SolutionProjects.WhereToList(
-            (project, modelFolder) => ReferenceEquals(project.Parent, modelFolder),
-            (project, modelFolder) => (ItemRef: this.Root.ConvertToUserPath(project.ItemRef), Item: project),
+            (project, solutionFolderModel) => ReferenceEquals(project.Parent, solutionFolderModel),
+            (project, _) => (ItemRef: this.Root.ConvertToUserPath(project.ItemRef), Item: project),
             modelFolder);
         modified |= this.ApplyModelItemsToXml(
             modelItems: projectsInFolder,

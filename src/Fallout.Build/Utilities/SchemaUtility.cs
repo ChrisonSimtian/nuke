@@ -244,7 +244,7 @@ public static class SchemaUtility
             return new JsonObject { ["type"] = "string" };
 
         if (typeof(Enumeration).IsAssignableFrom(type))
-            return BuildEnumerationSchema(type, ctx);
+            return BuildEnumerationSchema(type);
 
         if (type.IsEnum)
             return StringEnumSchema(Enum.GetNames(type));
@@ -266,7 +266,7 @@ public static class SchemaUtility
         return BuildComplexTypeReference(type, ctx);
     }
 
-    private static JsonObject BuildEnumerationSchema(Type enumerationType, SchemaContext ctx)
+    private static JsonObject BuildEnumerationSchema(Type enumerationType)
     {
         var values = enumerationType
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)

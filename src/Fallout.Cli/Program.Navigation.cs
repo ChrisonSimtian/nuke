@@ -25,7 +25,7 @@ partial class Program
 
     private static AbsolutePath SessionFile => GlobalTemporaryDirectory / $"nuke-{SessionId}.dat";
 
-    private static int GetNextDirectory(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private static int GetNextDirectory()
     {
         var content = SessionFile.Existing()?.ReadAllLines();
         if (content == null || string.IsNullOrWhiteSpace(content[0]))
@@ -41,7 +41,7 @@ partial class Program
         return 0;
     }
 
-    private static int PopDirectory(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private static int PopDirectory()
     {
         var content = SessionFile.Existing()?.ReadAllLines().ToList();
         if (content == null || content.Count <= 1)
@@ -56,18 +56,18 @@ partial class Program
         return 0;
     }
 
-    private static int PushWithCurrentRootDirectory(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private static int PushWithCurrentRootDirectory(AbsolutePath rootDirectory)
     {
         return PushAndSetNext(() => rootDirectory.NotNull("No root directory"));
     }
 
-    private static int PushWithParentRootDirectory(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private static int PushWithParentRootDirectory(AbsolutePath rootDirectory)
     {
         return PushAndSetNext(() => TryGetRootDirectoryFrom(Path.GetDirectoryName(rootDirectory.NotNull("No root directory")))
             .NotNull("No parent root directory"));
     }
 
-    private static int PushWithChosenRootDirectory(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private static int PushWithChosenRootDirectory()
     {
         return PushAndSetNext(() =>
         {

@@ -96,9 +96,7 @@ partial class Program
 
         WriteBuildScripts(
             scriptDirectory: WorkingDirectory,
-            rootDirectory,
-            buildDirectory,
-            buildProjectName);
+            rootDirectory);
 
         WriteConfigurationFile(rootDirectory, solutionFile);
 
@@ -186,9 +184,7 @@ partial class Program
 
     private static void WriteBuildScripts(
         AbsolutePath scriptDirectory,
-        AbsolutePath rootDirectory,
-        AbsolutePath buildDirectory,
-        string buildProjectName)
+        AbsolutePath rootDirectory)
     {
         (scriptDirectory / "build.sh").WriteAllLines(
             FillTemplate(
