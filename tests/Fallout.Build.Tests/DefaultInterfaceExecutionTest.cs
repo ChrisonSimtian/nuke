@@ -137,7 +137,7 @@ public class DefaultInterfaceExecutionTest
     {
         [Parameter] string StringParameter => TryGetValue(() => StringParameter);
 
-        public Target HelloWorld => _ => _
+        Target HelloWorld => _ => _
             .Requires(() => StringParameter)
             .Executes(() =>
             {
@@ -185,28 +185,32 @@ public class DefaultInterfaceExecutionTest
 
     private interface ITestBuild
     {
-        public string Description => DefaultInterfaceExecutionTest.Description;
-        public Action Action => DefaultInterfaceExecutionTest.Action;
-        public Expression<Func<bool>> Requirement => DefaultInterfaceExecutionTest.Requirement;
-        public Func<bool> StaticCondition => DefaultInterfaceExecutionTest.StaticCondition;
-        public Func<bool> DynamicCondition => DefaultInterfaceExecutionTest.DynamicCondition;
+        string Description => DefaultInterfaceExecutionTest.Description;
 
-        public Target A => _ => _
+        Action Action => DefaultInterfaceExecutionTest.Action;
+
+        Expression<Func<bool>> Requirement => DefaultInterfaceExecutionTest.Requirement;
+
+        Func<bool> StaticCondition => DefaultInterfaceExecutionTest.StaticCondition;
+
+        Func<bool> DynamicCondition => DefaultInterfaceExecutionTest.DynamicCondition;
+
+        Target A => _ => _
             .Description(Description)
             .Requires(Requirement)
             .Executes(Action);
 
-        public Target B => _ => _
+        Target B => _ => _
             .WhenSkipped(DependencyBehavior.Execute)
             .OnlyWhenStatic(StaticCondition)
             .DependsOn(D)
             .DependentFor(C);
 
-        public Target C => _ => _
+        Target C => _ => _
             .Triggers(B)
             .TriggeredBy(D);
 
-        public Target D => _ => _
+        Target D => _ => _
             .WhenSkipped(DependencyBehavior.Skip)
             .OnlyWhenDynamic(DynamicCondition)
             .After(B)
@@ -215,13 +219,13 @@ public class DefaultInterfaceExecutionTest
 
     private interface IInheritedTestBuild : ITestBuild
     {
-        public Target F => _ => _
+        Target F => _ => _
             .Triggers<ITestBuild>(x => x.A);
     }
 
     private interface IDuplicatedTargetBuild
     {
-        public Target D => _ => _
+        Target D => _ => _
             .Executes(() => { });
     }
 

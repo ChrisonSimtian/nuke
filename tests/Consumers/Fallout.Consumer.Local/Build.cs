@@ -6,13 +6,14 @@ using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Solutions;  // was Fallout.Common.ProjectModel; — renamed in #254 (persistence layering + namespace cleanup)
 
-class Build : FalloutBuild
+internal class Build : FalloutBuild
 {
     public static int Main() => Execute<Build>(x => x.Default);
 
-    [Solution] readonly Solution Solution;
+    [Solution]
+    private readonly Solution Solution;
 
-    Target Default => _ => _
+    private Target Default => _ => _
         .Executes(() =>
         {
             Serilog.Log.Information("hello from fallout consumer (local source)");

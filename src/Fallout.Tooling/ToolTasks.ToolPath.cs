@@ -120,9 +120,9 @@ public class NuGetToolAttribute : ToolAttribute
 public interface IToolOptionsWithFramework
 {
 #if NET6_0_OR_GREATER
-    public string Framework => ((IOptions)this).Get<string>(() => Framework);
+    string Framework => ((IOptions)this).Get<string>(() => Framework);
 #else
-    public string Framework { get; }
+    string Framework { get; }
 #endif
 }
 

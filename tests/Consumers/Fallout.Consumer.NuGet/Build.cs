@@ -7,13 +7,14 @@ using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.ProjectModel;
 
-class Build : FalloutBuild
+internal class Build : FalloutBuild
 {
     public static int Main() => Execute<Build>(x => x.Default);
 
-    [Solution] readonly Solution Solution;
+    [Solution]
+    private readonly Solution Solution;
 
-    Target Default => _ => _
+    private Target Default => _ => _
         .Executes(() =>
         {
             Serilog.Log.Information("hello from fallout consumer (pinned nuget 11.0.8)");

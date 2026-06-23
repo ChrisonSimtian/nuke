@@ -16,13 +16,14 @@ using Nuke.Components;
 // Including it here keeps the rest of the file NUKE-shape.
 using Target = Fallout.Common.Target;
 
-class Build : NukeBuild
+internal class Build : NukeBuild
 {
     public static int Main() => Execute<Build>(x => x.Default);
 
-    [Solution] readonly Solution Solution;
+    [Solution]
+    private readonly Solution Solution;
 
-    Target Default => _ => _
+    private Target Default => _ => _
         .Executes(() =>
         {
             Serilog.Log.Information("hello from nuke consumer (via shim)");

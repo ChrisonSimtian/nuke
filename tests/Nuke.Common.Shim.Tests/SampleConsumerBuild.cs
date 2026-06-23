@@ -25,19 +25,25 @@ namespace Nuke.Common.Shim.Tests;
 [GlobbingOptions(Fallout.Common.IO.GlobbingCaseSensitivity.CaseInsensitive)]
 public abstract class SampleConsumerBuild : NukeBuild, INukeBuild
 {
-    [Parameter("Configuration to build")] readonly string Configuration;
-    [Parameter] readonly bool RunTests;
-    [Secret] readonly string NuGetApiKey;
-    [Solution] readonly Fallout.Solutions.Solution Solution;
-    [Solution("path/to/explicit.slnx")] readonly Fallout.Solutions.Solution ExplicitSolution;
-    [GitRepository] readonly Fallout.Common.Git.GitRepository GitRepository;
+    [Parameter("Configuration to build")]
+    private readonly string Configuration;
+    [Parameter]
+    private readonly bool RunTests;
+    [Secret]
+    private readonly string NuGetApiKey;
+    [Solution]
+    private readonly Fallout.Solutions.Solution Solution;
+    [Solution("path/to/explicit.slnx")]
+    private readonly Fallout.Solutions.Solution ExplicitSolution;
+    [GitRepository]
+    private readonly Fallout.Common.Git.GitRepository GitRepository;
 
     // CI-host shims expose only the static `Instance` accessor. Consumers can
     // still chain into instance members because the returned type is canonical.
     // Field-injection patterns like `[CI] readonly GitHubActions GitHubActions`
     // are intentionally NOT supported — those need `fallout-migrate` to flip
     // the type reference to canonical.
-    void TouchCiHostShims()
+    private void TouchCiHostShims()
     {
         _ = GitHubActions.Instance?.Workflow;
         _ = AzurePipelines.Instance?.AgentName;
@@ -49,7 +55,7 @@ public abstract class SampleConsumerBuild : NukeBuild, INukeBuild
     // DelegateDisposable shim re-exposes the static factories. Consumer
     // usage stays canonical-typed at runtime (the factories return
     // canonical IDisposable instances).
-    void TouchDelegateDisposableShim()
+    private void TouchDelegateDisposableShim()
     {
         using var bracket = DelegateDisposable.CreateBracket(
             setup: () => { },

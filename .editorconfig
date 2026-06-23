@@ -149,3 +149,15 @@ resharper_redundant_if_else_block_highlighting = none
 
 # If we use explicit property names in anonymous types, we do that on purpose.
 resharper_redundant_anonymous_type_property_name_highlighting = none
+
+####################################################################
+## Dogfood build scripts (build/)
+####################################################################
+
+# The build project is our own dogfood console app, not shipped API. Favour
+# convenience over ceremony there: explicit accessibility modifiers are optional,
+# so build targets/properties/fields can stay terse. Relax the rule that the
+# global [*.cs] section enforces as an error — both Roslyn (IDE0040) and ReSharper
+# read this key, so a silent severity stops either from flagging build scripts.
+[build/**.cs]
+dotnet_style_require_accessibility_modifiers = omit_if_default:silent

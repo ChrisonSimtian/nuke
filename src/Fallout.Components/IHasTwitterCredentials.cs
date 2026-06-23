@@ -7,7 +7,7 @@ namespace Fallout.Components;
 [ParameterPrefix(Twitter)]
 public interface IHasTwitterCredentials : IFalloutBuild
 {
-    public const string Twitter = nameof(Twitter);
+    const string Twitter = nameof(Twitter);
 
     [Parameter] [Secret] string ConsumerKey => TryGetValue(() => ConsumerKey);
     [Parameter] [Secret] string ConsumerSecret => TryGetValue(() => ConsumerSecret);
