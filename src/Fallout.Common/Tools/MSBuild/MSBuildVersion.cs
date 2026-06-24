@@ -9,6 +9,7 @@ namespace Fallout.Common.Tools.MSBuild;
 /// </summary>
 public enum MSBuildVersion
 {
+    VS2026,
     VS2022,
     VS2019,
     VS2017,
