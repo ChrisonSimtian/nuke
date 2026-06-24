@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Fallout.NuGet.Analysis\Fallout.NuGet.Analysis.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageDownload Include="xunit.runner.console" Version="[2.6.1]" />
+  </ItemGroup>
+
+</Project>

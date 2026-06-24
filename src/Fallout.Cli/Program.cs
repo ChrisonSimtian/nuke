@@ -58,6 +58,7 @@ internal partial class Program
         services.AddSingleton<IFalloutCommand, TriggerCommand>();
         services.AddSingleton<IFalloutCommand, CompleteCommand>();
         services.AddSingleton<IFalloutCommand, GetConfigurationCommand>();
+        services.AddSingleton<IFalloutCommand, AnalyzeCommand>();
         services.AddSingleton<IFalloutCommand, AddPackageCommand>();
         services.AddSingleton<IFalloutCommand, UpdateCommand>();
         services.AddSingleton<IFalloutCommand, SecretsCommand>();

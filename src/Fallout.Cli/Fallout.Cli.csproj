@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Fallout.Build\Fallout.Build.csproj" />
     <ProjectReference Include="..\Fallout.Common\Fallout.Common.csproj" />
+    <ProjectReference Include="..\Fallout.NuGet.Analysis\Fallout.NuGet.Analysis.csproj" />
   </ItemGroup>
 
   <ItemGroup>
