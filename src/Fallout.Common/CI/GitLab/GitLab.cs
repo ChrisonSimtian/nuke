@@ -20,7 +20,7 @@ public partial class GitLab : Host, IBuildServer
 
     protected override string LogoYellow => "[93m";
 
-    protected override string LogoDark => "[90m";
+    protected override string LogoDimmed => "[90m";
 
     private readonly Action<string> _messageSink;
 

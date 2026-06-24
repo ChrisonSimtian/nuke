@@ -33,7 +33,7 @@ public partial class Host
 
     protected virtual string LogoYellow { get => "[38;2;245;200;0m"; }
 
-    protected virtual string LogoDark { get => "[2m"; }
+    protected virtual string LogoDimmed { get => "[2m"; }
 
     protected virtual string LogoReset { get => "[0m"; }
 
@@ -50,8 +50,8 @@ public partial class Host
             $"{LogoYellow}██║     ██║  ██║███████╗███████╗╚██████╔╝╚██████╔╝   ██║   {LogoReset}",
             $"{LogoYellow}╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝  ╚═════╝    ╚═╝   {LogoReset}",
             string.Empty,
-            $"                       {LogoDark}.NET build system{LogoReset}",
-            $"                     {LogoYellow}☢{LogoReset} {LogoDark}survived the NUKE{LogoReset}"
+            $"                       {LogoDimmed}.NET build system{LogoReset}",
+            $"                     {LogoYellow}☢{LogoReset} {LogoDimmed}survived the NUKE{LogoReset}"
         }.ForEach(x => Debug(x.Replace(" ", " ")));
 
         Debug();
