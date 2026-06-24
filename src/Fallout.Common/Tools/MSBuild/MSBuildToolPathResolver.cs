@@ -64,7 +64,6 @@ public static class MSBuildToolPathResolver
         VisualStudioEdition edition,
         SpecialFolders specialFolder)
     {
-        var versionDirectoryName = version.ToString().TrimStart("VS");
         var basePath = Path.Combine(
             EnvironmentInfo.SpecialFolder(specialFolder).NotNull(),
             $@"Microsoft Visual Studio\{GetVisualStudioFolder(version)}\{edition}\MSBuild\{GetVersionFolder(version)}\Bin");
