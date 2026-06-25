@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.NuGet.Analysis;
+using Fallout.Solutions;
+using Spectre.Console;
 
 namespace Fallout.Cli.Commands;
 
@@ -26,11 +28,11 @@ internal sealed class AnalyzeCommand : IFalloutCommand
         var subCommand = args.ElementAtOrDefault(0);
         if (!string.Equals(subCommand, "packages", StringComparison.OrdinalIgnoreCase))
         {
-            Host.Error("Usage: fallout :analyze packages [<path>] [--tfm <moniker>] [--severity none|trace|normal|warning|error] [--exclude <id>[,<id>...]]");
+            Host.Error("Usage: fallout :analyze packages [<path>] [--tfm <moniker>] [--severity none|trace|normal|warning|error] [--format table|flat] [--exclude <id>[,<id>...]]");
             return 1;
         }
 
-        if (!TryParseAnalyzeArguments(args.Skip(1).ToArray(), out var path, out var tfm, out var severity, out var excludes))
+        if (!TryParseAnalyzeArguments(args.Skip(1).ToArray(), out var path, out var tfm, out var severity, out var format, out var excludes))
             return 1;
 
         var projectFiles = ResolveProjectFiles(path);
@@ -73,10 +75,19 @@ internal sealed class AnalyzeCommand : IFalloutCommand
 
         var findings = new PackageAnalyzer().Analyze(analyzed, options);
 
-        Report(findings, severity, analyzed.Count, restoreMissing);
+        if (format == OutputFormat.Table)
+            RenderTables(findings, analyzed.Count, restoreMissing);
+        else
+            RenderFlat(findings, severity, analyzed.Count, restoreMissing);
 
         var failing = severity == LogLevel.Error && findings.Count > 0;
         return failing ? 1 : 0;
+    }
+
+    private enum OutputFormat
+    {
+        Table,
+        Flat,
     }
 
     private static bool TryParseAnalyzeArguments(
@@ -84,11 +95,13 @@ internal sealed class AnalyzeCommand : IFalloutCommand
         out string path,
         out string tfm,
         out LogLevel severity,
+        out OutputFormat format,
         out HashSet<string> excludes)
     {
         path = null;
         tfm = null;
         severity = LogLevel.Warning;
+        format = OutputFormat.Table;
         excludes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         for (var i = 0; i < args.Length; i++)
@@ -103,6 +116,10 @@ internal sealed class AnalyzeCommand : IFalloutCommand
                 case "--severity":
                     if (++i >= args.Length) { Host.Error("--severity requires a value."); return false; }
                     if (!TryParseSeverity(args[i], out severity)) { Host.Error($"Unknown severity '{args[i]}'."); return false; }
+                    break;
+                case "--format":
+                    if (++i >= args.Length) { Host.Error("--format requires a value."); return false; }
+                    if (!TryParseFormat(args[i], out format)) { Host.Error($"Unknown format '{args[i]}' (use table|flat)."); return false; }
                     break;
                 case "--exclude":
                     if (++i >= args.Length) { Host.Error("--exclude requires a value."); return false; }
@@ -137,6 +154,16 @@ internal sealed class AnalyzeCommand : IFalloutCommand
         }
     }
 
+    private static bool TryParseFormat(string value, out OutputFormat format)
+    {
+        switch (value.ToLowerInvariant())
+        {
+            case "table": format = OutputFormat.Table; return true;
+            case "flat": case "lines": format = OutputFormat.Flat; return true;
+            default: format = OutputFormat.Table; return false;
+        }
+    }
+
     private static List<string> ResolveProjectFiles(string path)
     {
         if (string.IsNullOrEmpty(path))
@@ -144,18 +171,35 @@ internal sealed class AnalyzeCommand : IFalloutCommand
 
         var full = Path.GetFullPath(path);
 
-        if (File.Exists(full) && full.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
-            return new List<string> { full };
+        if (File.Exists(full))
+        {
+            if (full.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
+                return new List<string> { full };
+
+            if (full.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) ||
+                full.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
+                return ReadSolutionProjects(full);
+
+            // Some other file — fall back to globbing its directory.
+            return GlobProjects(Path.GetDirectoryName(full));
+        }
 
         if (Directory.Exists(full))
             return GlobProjects(full);
 
-        // .sln / .slnx (or any file): analyze the projects under its directory.
-        if (File.Exists(full))
-            return GlobProjects(Path.GetDirectoryName(full));
-
         Host.Error($"Path not found: {path}");
         return null;
+    }
+
+    private static List<string> ReadSolutionProjects(string solutionFile)
+    {
+        var solution = ((AbsolutePath)solutionFile).ReadSolution();
+        return solution.AllProjects
+            .Select(x => (string)x.Path)
+            .Where(x => x.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
+            .Where(File.Exists)
+            .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+            .ToList();
     }
 
     private static List<string> GlobProjects(string directory)
@@ -172,7 +216,74 @@ internal sealed class AnalyzeCommand : IFalloutCommand
                filePath.Contains($"{Path.AltDirectorySeparatorChar}{segment}{Path.AltDirectorySeparatorChar}");
     }
 
-    private static void Report(IReadOnlyList<Finding> findings, LogLevel severity, int projectCount, int restoreMissing)
+    private static void RenderTables(IReadOnlyList<Finding> findings, int projectCount, int restoreMissing)
+    {
+        var redundant = findings.Where(x => x.Kind != FindingKind.VersionConflict)
+            .OrderBy(x => x.Project).ThenBy(x => x.PackageId).ToList();
+        var conflicts = findings.Where(x => x.Kind == FindingKind.VersionConflict)
+            .OrderBy(x => x.PackageId).ToList();
+
+        if (findings.Count == 0)
+        {
+            AnsiConsole.MarkupLine($"[green]✓ No redundant or conflicting package references across {projectCount} target(s).[/]");
+            if (restoreMissing > 0)
+                AnsiConsole.MarkupLine($"[grey]{restoreMissing} project(s) skipped — not restored.[/]");
+            return;
+        }
+
+        if (redundant.Count > 0)
+        {
+            var table = new Table { Border = TableBorder.Rounded, Title = new TableTitle("[bold]Redundant package references[/]") };
+            table.AddColumn("Project");
+            table.AddColumn("TFM");
+            table.AddColumn("Package");
+            table.AddColumn("Version");
+            table.AddColumn("Action");
+            table.AddColumn("Provided by");
+
+            foreach (var finding in redundant)
+            {
+                var action = finding.SafeToRemove ? "[green]remove[/]" : "[yellow]review[/]";
+                var via = finding.Kind == FindingKind.RedundantViaProject ? "[blue]proj[/]" : "[grey]pkg[/]";
+                table.AddRow(
+                    Markup.Escape(finding.Project ?? string.Empty),
+                    Markup.Escape(finding.TargetFramework ?? string.Empty),
+                    Markup.Escape(finding.PackageId ?? string.Empty),
+                    Markup.Escape(finding.ResolvedVersion ?? string.Empty),
+                    action,
+                    $"{via} {Markup.Escape(string.Join(", ", finding.Providers))}");
+            }
+
+            AnsiConsole.Write(table);
+        }
+
+        if (conflicts.Count > 0)
+        {
+            var table = new Table { Border = TableBorder.Rounded, Title = new TableTitle("[bold]Version conflicts[/]") };
+            table.AddColumn("Package");
+            table.AddColumn("Resolved versions (projects)");
+
+            foreach (var finding in conflicts)
+                table.AddRow(Markup.Escape(finding.PackageId ?? string.Empty), Markup.Escape(ConflictBreakdown(finding)));
+
+            AnsiConsole.Write(table);
+        }
+
+        AnsiConsole.MarkupLine(
+            $"[bold]Summary:[/] [yellow]{redundant.Count}[/] redundant, [yellow]{conflicts.Count}[/] conflict(s) across {projectCount} target(s)." +
+            (restoreMissing > 0 ? $" [grey]({restoreMissing} skipped — not restored)[/]" : string.Empty));
+    }
+
+    private static string ConflictBreakdown(Finding finding)
+    {
+        // Finding.Detail looks like "<id> resolves to multiple versions: 3.0.0 (A, B); 4.0.0 (C)."
+        var detail = finding.Detail ?? string.Empty;
+        var marker = detail.IndexOf(": ", StringComparison.Ordinal);
+        var body = marker >= 0 ? detail.Substring(marker + 2).TrimEnd('.') : detail;
+        return string.Join("\n", body.Split("; "));
+    }
+
+    private static void RenderFlat(IReadOnlyList<Finding> findings, LogLevel severity, int projectCount, int restoreMissing)
     {
         void Emit(string text)
         {
