@@ -21,7 +21,6 @@ using static Fallout.Common.Tools.DotNet.DotNetTasks;
 [ShutdownDotNetAfterServerBuild]
 partial class Build
     : FalloutBuild,
-        IHasChangelog,
         IHasGitRepository,
         IHasSolution,
         IRestore,

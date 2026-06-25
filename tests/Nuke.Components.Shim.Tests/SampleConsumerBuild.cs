@@ -18,7 +18,6 @@ namespace Nuke.Components.Shim.Tests;
 public abstract class SampleConsumerBuildWithIHazAliases
     : NukeBuild,
       IHazArtifacts,
-      IHazChangelog,
       IHazConfiguration,
       IHazGitRepository,
       IHazGitVersion,

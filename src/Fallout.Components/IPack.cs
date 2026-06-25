@@ -37,9 +37,7 @@ public interface IPack : ICompile, IHasArtifacts
         .WhenNotNull(this as IHasGitVersion, (_, o) => _
             .SetVersion(o.Versioning.NuGetVersionV2))
         .WhenNotNull(this as IHasNerdbankGitVersioning, (_, o) => _
-            .SetVersion(o.Versioning.NuGetPackageVersion))
-        .WhenNotNull(this as IHasChangelog, (_, o) => _
-            .SetPackageReleaseNotes(o.NuGetReleaseNotes));
+            .SetVersion(o.Versioning.NuGetPackageVersion));
 
     Configure<DotNetPackSettings> PackSettings => _ => _;
 }

@@ -14,7 +14,7 @@ using Octokit;
 namespace Fallout.Components;
 
 [ParameterPrefix(GitHubRelease)]
-public interface ICreateGitHubRelease : IHasGitRepository, IHasChangelog
+public interface ICreateGitHubRelease : IHasGitRepository
 {
     const string GitHubRelease = nameof(GitHubRelease);
 
@@ -42,7 +42,7 @@ public interface ICreateGitHubRelease : IHasGitRepository, IHasChangelog
                             Name = Name,
                             Prerelease = Prerelease,
                             Draft = Draft,
-                            Body = ChangelogTasks.ExtractChangelogSectionNotes(ChangelogFile).JoinNewLine()
+                            Body = ""
                         });
 
                 }
