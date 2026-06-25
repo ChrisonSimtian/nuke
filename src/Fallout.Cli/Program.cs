@@ -39,7 +39,7 @@ public partial class Program
 
     private static void PrintInfo()
     {
-        Host.Information($"NUKE Global Tool 🌐 {typeof(Program).Assembly.GetInformationalText()}");
+        Host.Information($"Fallout Global Tool 🌐 {typeof(Program).Assembly.GetInformationalText()}");
     }
 
     private static AbsolutePath TryGetRootDirectory()
