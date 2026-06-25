@@ -28,6 +28,8 @@ internal class Solution(SolutionModel model, AbsolutePath path) : Fallout.Soluti
     public Fallout.Solutions.Project Fallout_Migrate_Analyzers_Specs => this.GetProject("Fallout.Migrate.Analyzers.Specs");
     public Fallout.Solutions.Project Fallout_Migrate_Specs => this.GetProject("Fallout.Migrate.Specs");
     public Fallout.Solutions.Project Fallout_MSBuildTasks => this.GetProject("Fallout.MSBuildTasks");
+    public Fallout.Solutions.Project Fallout_NuGet_Analysis => this.GetProject("Fallout.NuGet.Analysis");
+    public Fallout.Solutions.Project Fallout_NuGet_Analysis_Specs => this.GetProject("Fallout.NuGet.Analysis.Specs");
     public Fallout.Solutions.Project Fallout_Persistence_Solution => this.GetProject("Fallout.Persistence.Solution");
     public Fallout.Solutions.Project Fallout_Persistence_Solution_Benchmarks => this.GetProject("Fallout.Persistence.Solution.Benchmarks");
     public Fallout.Solutions.Project Fallout_ProjectModel => this.GetProject("Fallout.ProjectModel");
