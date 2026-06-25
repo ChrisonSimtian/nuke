@@ -24,12 +24,14 @@ public class GitHubActionsCheckoutStep : GitHubActionsStep
     /// </summary>
     public string Ref { get; set; }
 
+    public string[] CheckoutWith { get; set; } = new string[0];
+
     public override void Write(CustomFileWriter writer)
     {
         writer.WriteLine("- uses: actions/checkout@v6");
 
         if (Submodules.HasValue || Lfs.HasValue || FetchDepth.HasValue || Progress.HasValue ||
-            !Filter.IsNullOrWhiteSpace() || !Ref.IsNullOrWhiteSpace())
+            !Filter.IsNullOrWhiteSpace() || !Ref.IsNullOrWhiteSpace() || CheckoutWith.Length > 0)
         {
             using (writer.Indent())
             {
@@ -57,6 +59,9 @@ public class GitHubActionsCheckoutStep : GitHubActionsStep
                         writer.WriteLine("repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}");
                         writer.WriteLine($"ref: {Ref}");
                     }
+
+                    foreach (var line in CheckoutWith)
+                        writer.WriteLine(line);
                 }
             }
         }

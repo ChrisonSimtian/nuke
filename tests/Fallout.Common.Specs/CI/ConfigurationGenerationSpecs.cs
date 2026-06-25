@@ -212,6 +212,55 @@ public class ConfigurationGenerationSpecs
                 }
             );
 
+            // Ordering guard: extra CheckoutWith inputs emit verbatim inside the with: block, after
+            // every typed key (here fetch-depth) and in the order supplied.
+            yield return
+            (
+                "checkout-with",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push },
+                    InvokedTargets = new[] { nameof(Test) },
+                    FetchDepth = 0,
+                    CheckoutWith = new[]
+                                   {
+                                       "token: ${{ secrets.CI_PAT }}",
+                                       "path: src",
+                                       "persist-credentials: false"
+                                   }
+                }
+            );
+
+            // Guard: CheckoutWith with no typed checkout key must still open the with: block.
+            yield return
+            (
+                "checkout-with-only",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push },
+                    InvokedTargets = new[] { nameof(Test) },
+                    CheckoutWith = new[] { "path: src" }
+                }
+            );
+
+            // Multi-line block scalar: the case a 'KEY: value' validator would reject. Proves raw
+            // verbatim emission preserves the caller-supplied continuation lines and indentation.
+            yield return
+            (
+                "checkout-with-sparse",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push },
+                    InvokedTargets = new[] { nameof(Test) },
+                    CheckoutWith = new[]
+                                   {
+                                       "sparse-checkout: |",
+                                       "  src",
+                                       "  build"
+                                   }
+                }
+            );
+
             yield return
             (
                 "runs-on-labels",
