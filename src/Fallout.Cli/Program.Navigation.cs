@@ -10,10 +10,10 @@ namespace Fallout.Cli;
 
 partial class Program
 {
-    // function nuke- { nuke :PopDirectory; cd $(nuke :GetNextDirectory) }
-    // function nuke/ { nuke :PushWithChosenRootDirectory; cd $(nuke :GetNextDirectory) }
-    // function nuke. { nuke :PushWithCurrentRootDirectory; cd $(nuke :GetNextDirectory) }
-    // function nuke.. { nuke :PushWithParentRootDirectory; cd $(nuke :GetNextDirectory) }
+    // function fallout- { fallout :PopDirectory; cd $(fallout :GetNextDirectory) }
+    // function fallout/ { fallout :PushWithChosenRootDirectory; cd $(fallout :GetNextDirectory) }
+    // function fallout. { fallout :PushWithCurrentRootDirectory; cd $(fallout :GetNextDirectory) }
+    // function fallout.. { fallout :PushWithParentRootDirectory; cd $(fallout :GetNextDirectory) }
 
     private static string SessionId
         => EnvironmentInfo.Platform switch

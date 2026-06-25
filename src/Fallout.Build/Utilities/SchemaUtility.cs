@@ -201,7 +201,7 @@ public static class SchemaUtility
         }
 
         if (member.HasCustomAttribute<SecretAttribute>())
-            schema["default"] = "Secrets must be entered via 'nuke :secrets [profile]'";
+            schema["default"] = "Secrets must be entered via 'fallout :secrets [profile]'";
 
         // Override-with-enumeration: parameters with a value set become string enums (or array-of-string-enums).
         var valueSet = ParameterService.GetParameterValueSet(member, build)?.Select(x => x.Text).ToList();
