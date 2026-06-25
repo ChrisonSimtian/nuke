@@ -91,6 +91,15 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     public string JobConcurrencyGroup { get; set; }
     public bool JobConcurrencyCancelInProgress { get; set; }
 
+    /// <summary>
+    /// Pins the shell for every <c>run:</c> step via a workflow-level <c>defaults.run.shell</c> block,
+    /// so cross-platform matrix jobs use one consistent shell instead of the per-OS default (<c>bash</c>
+    /// on Linux/macOS, <c>pwsh</c> on Windows). Accepts any value GitHub allows — a built-in (<c>bash</c>,
+    /// <c>pwsh</c>, <c>sh</c>, <c>cmd</c>, <c>powershell</c>, <c>python</c>) or a custom <c>command {0}</c>
+    /// template. Unset or whitespace-only emits no <c>defaults:</c> block.
+    /// </summary>
+    public string DefaultShell { get; set; }
+
     public string[] InvokedTargets { get; set; } = new string[0];
 
     /// <summary>
@@ -179,6 +188,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                                     .Concat(ReadPermissions.Select(x => (x, "read"))).ToArray(),
                                 ConcurrencyGroup = ConcurrencyGroup,
                                 ConcurrencyCancelInProgress = ConcurrencyCancelInProgress,
+                                DefaultShell = DefaultShell,
                                 Jobs = _images.Select(x => GetJobs(x, relevantTargets)).ToArray()
                             };
 

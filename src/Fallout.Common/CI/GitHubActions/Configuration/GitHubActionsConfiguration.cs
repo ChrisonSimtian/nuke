@@ -15,6 +15,7 @@ public class GitHubActionsConfiguration : ConfigurationEntity
     public (GitHubActionsPermissions Type, string Permission)[] Permissions { get; set; }
     public string ConcurrencyGroup { get; set; }
     public bool ConcurrencyCancelInProgress { get; set; }
+    public string DefaultShell { get; set; }
     public GitHubActionsJob[] Jobs { get; set; }
 
     public override void Write(CustomFileWriter writer)
@@ -71,6 +72,21 @@ public class GitHubActionsConfiguration : ConfigurationEntity
                 if (ConcurrencyCancelInProgress)
                 {
                     writer.WriteLine("cancel-in-progress: true");
+                }
+            }
+        }
+
+        if (!DefaultShell.IsNullOrWhiteSpace())
+        {
+            writer.WriteLine();
+            // defaults.run currently carries only shell; further run defaults (e.g. working-directory) slot in here
+            writer.WriteLine("defaults:");
+            using (writer.Indent())
+            {
+                writer.WriteLine("run:");
+                using (writer.Indent())
+                {
+                    writer.WriteLine($"shell: {DefaultShell}");
                 }
             }
         }

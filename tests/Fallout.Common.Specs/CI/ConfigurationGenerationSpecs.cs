@@ -225,6 +225,33 @@ public class ConfigurationGenerationSpecs
 
             yield return
             (
+                "default-shell",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push },
+                    InvokedTargets = new[] { nameof(Test) },
+                    DefaultShell = "pwsh"
+                }
+            );
+
+            // Ordering guard: with DefaultShell, permissions, and concurrency all set, the defaults:
+            // block must be emitted after concurrency: and before jobs:, with correct blank lines.
+            yield return
+            (
+                "default-shell-with-permissions",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push },
+                    InvokedTargets = new[] { nameof(Test) },
+                    DefaultShell = "pwsh",
+                    WritePermissions = new[] { GitHubActionsPermissions.Contents },
+                    ReadPermissions = new[] { GitHubActionsPermissions.Actions },
+                    ConcurrencyCancelInProgress = true
+                }
+            );
+
+            yield return
+            (
                 null,
                 new TestSpaceAutomationAttribute("Name", "mcr.microsoft.com/dotnet/sdk:5.0")
                 {
