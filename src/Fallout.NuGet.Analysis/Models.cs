@@ -158,6 +158,23 @@ public sealed class Finding
     /// <summary>The projects/packages that already provide this package.</summary>
     public IReadOnlyList<string> Providers { get; set; } = new List<string>();
 
+    /// <summary>For <see cref="FindingKind.VersionConflict"/>: each resolved version and the projects on it.</summary>
+    public IReadOnlyList<ConflictVersion> ConflictVersions { get; set; } = new List<ConflictVersion>();
+
     /// <summary>A human-readable explanation.</summary>
     public string Detail { get; set; }
+}
+
+/// <summary>One resolved version of a package and the projects that landed on it.</summary>
+public sealed class ConflictVersion
+{
+    public ConflictVersion(string version, IReadOnlyList<string> projects)
+    {
+        Version = version;
+        Projects = projects;
+    }
+
+    public string Version { get; }
+
+    public IReadOnlyList<string> Projects { get; }
 }

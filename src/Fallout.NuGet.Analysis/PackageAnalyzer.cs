@@ -109,51 +109,82 @@ public sealed class PackageAnalyzer
         return findings;
     }
 
-    /// <summary>Same package resolved at different versions across the analyzed projects.</summary>
+    /// <summary>
+    /// Same package resolved at different versions across the analyzed projects.
+    /// Detection is done <em>per target framework</em>, so a multi-targeted project that legitimately
+    /// pins different versions across its own frameworks is not reported as a conflict.
+    /// </summary>
     public IReadOnlyList<Finding> FindVersionConflicts(IReadOnlyList<AnalyzedProject> projects, AnalyzerOptions options = null)
     {
         options ??= new AnalyzerOptions();
-        var findings = new List<Finding>();
 
-        // package id -> (project, version) occurrences across all graphs.
-        var occurrences = new Dictionary<string, List<(string Project, string Version)>>(StringComparer.OrdinalIgnoreCase);
-        foreach (var project in projects)
+        // package -> version -> projects, accumulated only from frameworks where the package actually conflicts.
+        var conflicting = new Dictionary<string, Dictionary<string, SortedSet<string>>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var tfmGroup in projects.GroupBy(x => x.TargetFramework, StringComparer.OrdinalIgnoreCase))
         {
-            foreach (var node in project.Graph.Values)
+            var perPackage = new Dictionary<string, Dictionary<string, SortedSet<string>>>(StringComparer.OrdinalIgnoreCase);
+            foreach (var project in tfmGroup)
             {
-                if (node.IsProject || string.IsNullOrEmpty(node.Version))
-                    continue;
-                if (options.ExcludedPackageIds.Contains(node.Name))
-                    continue;
+                foreach (var node in project.Graph.Values)
+                {
+                    if (node.IsProject || string.IsNullOrEmpty(node.Version))
+                        continue;
+                    if (options.ExcludedPackageIds.Contains(node.Name))
+                        continue;
 
-                if (!occurrences.TryGetValue(node.Name, out var list))
-                    occurrences[node.Name] = list = new List<(string, string)>();
-                list.Add((project.ProjectName, node.Version));
+                    if (!perPackage.TryGetValue(node.Name, out var byVersion))
+                        perPackage[node.Name] = byVersion = new Dictionary<string, SortedSet<string>>(StringComparer.OrdinalIgnoreCase);
+                    if (!byVersion.TryGetValue(node.Version, out var projectsOnVersion))
+                        byVersion[node.Version] = projectsOnVersion = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+                    projectsOnVersion.Add(project.ProjectName);
+                }
+            }
+
+            foreach (var pair in perPackage)
+            {
+                if (pair.Value.Count < 2)
+                    continue; // one resolved version within this framework — not a conflict
+
+                if (!conflicting.TryGetValue(pair.Key, out var merged))
+                    conflicting[pair.Key] = merged = new Dictionary<string, SortedSet<string>>(StringComparer.OrdinalIgnoreCase);
+
+                foreach (var version in pair.Value)
+                {
+                    if (!merged.TryGetValue(version.Key, out var projectsOnVersion))
+                        merged[version.Key] = projectsOnVersion = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var project in version.Value)
+                        projectsOnVersion.Add(project);
+                }
             }
         }
 
-        foreach (var pair in occurrences)
+        var findings = new List<Finding>();
+        foreach (var pair in conflicting)
         {
-            var distinctVersions = pair.Value.Select(x => x.Version).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-            if (distinctVersions.Count < 2)
-                continue;
-
-            var breakdown = pair.Value
-                .GroupBy(x => x.Version, StringComparer.OrdinalIgnoreCase)
-                .OrderByDescending(g => g.Key)
-                .Select(g => $"{g.Key} ({string.Join(", ", g.Select(x => x.Project).Distinct())})");
+            var versions = pair.Value
+                .OrderByDescending(x => ParseVersionOrZero(x.Key))
+                .Select(x => new ConflictVersion(x.Key, x.Value.ToList()))
+                .ToList();
 
             findings.Add(new Finding
             {
                 Kind = FindingKind.VersionConflict,
                 PackageId = pair.Key,
-                ResolvedVersion = distinctVersions.OrderByDescending(x => x).First(),
-                Providers = distinctVersions,
-                Detail = $"{pair.Key} resolves to multiple versions: {string.Join("; ", breakdown)}.",
+                ResolvedVersion = versions.First().Version,
+                Providers = versions.Select(x => x.Version).ToList(),
+                ConflictVersions = versions,
+                Detail = $"{pair.Key} resolves to multiple versions: " +
+                         string.Join("; ", versions.Select(v => $"{v.Version} ({string.Join(", ", v.Projects)})")) + ".",
             });
         }
 
         return findings;
+    }
+
+    private static NuGetVersion ParseVersionOrZero(string version)
+    {
+        return NuGetVersion.TryParse(version, out var parsed) ? parsed : new NuGetVersion(0, 0, 0);
     }
 
     private static bool IsSafeToRemove(

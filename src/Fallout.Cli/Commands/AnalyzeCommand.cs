@@ -28,11 +28,11 @@ internal sealed class AnalyzeCommand : IFalloutCommand
         var subCommand = args.ElementAtOrDefault(0);
         if (!string.Equals(subCommand, "packages", StringComparison.OrdinalIgnoreCase))
         {
-            Host.Error("Usage: fallout :analyze packages [<path>] [--tfm <moniker>] [--severity none|trace|normal|warning|error] [--format table|flat] [--exclude <id>[,<id>...]]");
+            Host.Error("Usage: fallout :analyze packages [<path>] [--tfm <moniker>] [--severity none|trace|normal|warning|error] [--format table|flat] [--conflicts] [--verbose] [--exclude <id>[,<id>...]]");
             return 1;
         }
 
-        if (!TryParseAnalyzeArguments(args.Skip(1).ToArray(), out var path, out var tfm, out var severity, out var format, out var excludes))
+        if (!TryParseAnalyzeArguments(args.Skip(1).ToArray(), out var path, out var tfm, out var severity, out var format, out var showConflicts, out var verbose, out var excludes))
             return 1;
 
         var projectFiles = ResolveProjectFiles(path);
@@ -76,9 +76,9 @@ internal sealed class AnalyzeCommand : IFalloutCommand
         var findings = new PackageAnalyzer().Analyze(analyzed, options);
 
         if (format == OutputFormat.Table)
-            RenderTables(findings, analyzed.Count, restoreMissing);
+            RenderTables(findings, analyzed.Count, restoreMissing, showConflicts, verbose);
         else
-            RenderFlat(findings, severity, analyzed.Count, restoreMissing);
+            RenderFlat(findings, severity, analyzed.Count, restoreMissing, showConflicts);
 
         var failing = severity == LogLevel.Error && findings.Count > 0;
         return failing ? 1 : 0;
@@ -96,12 +96,16 @@ internal sealed class AnalyzeCommand : IFalloutCommand
         out string tfm,
         out LogLevel severity,
         out OutputFormat format,
+        out bool showConflicts,
+        out bool verbose,
         out HashSet<string> excludes)
     {
         path = null;
         tfm = null;
         severity = LogLevel.Warning;
         format = OutputFormat.Table;
+        showConflicts = false;
+        verbose = false;
         excludes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         for (var i = 0; i < args.Length; i++)
@@ -120,6 +124,13 @@ internal sealed class AnalyzeCommand : IFalloutCommand
                 case "--format":
                     if (++i >= args.Length) { Host.Error("--format requires a value."); return false; }
                     if (!TryParseFormat(args[i], out format)) { Host.Error($"Unknown format '{args[i]}' (use table|flat)."); return false; }
+                    break;
+                case "--conflicts":
+                    showConflicts = true;
+                    break;
+                case "--verbose":
+                case "-v":
+                    verbose = true;
                     break;
                 case "--exclude":
                     if (++i >= args.Length) { Host.Error("--exclude requires a value."); return false; }
@@ -216,12 +227,11 @@ internal sealed class AnalyzeCommand : IFalloutCommand
                filePath.Contains($"{Path.AltDirectorySeparatorChar}{segment}{Path.AltDirectorySeparatorChar}");
     }
 
-    private static void RenderTables(IReadOnlyList<Finding> findings, int projectCount, int restoreMissing)
+    private static void RenderTables(IReadOnlyList<Finding> findings, int projectCount, int restoreMissing, bool showConflicts, bool verbose)
     {
-        var redundant = findings.Where(x => x.Kind != FindingKind.VersionConflict)
-            .OrderBy(x => x.Project).ThenBy(x => x.PackageId).ToList();
+        var redundant = findings.Where(x => x.Kind != FindingKind.VersionConflict).ToList();
         var conflicts = findings.Where(x => x.Kind == FindingKind.VersionConflict)
-            .OrderBy(x => x.PackageId).ToList();
+            .OrderBy(x => x.PackageId, StringComparer.OrdinalIgnoreCase).ToList();
 
         if (findings.Count == 0)
         {
@@ -232,58 +242,67 @@ internal sealed class AnalyzeCommand : IFalloutCommand
         }
 
         if (redundant.Count > 0)
-        {
-            var table = new Table { Border = TableBorder.Rounded, Title = new TableTitle("[bold]Redundant package references[/]") };
-            table.AddColumn("Project");
-            table.AddColumn("TFM");
-            table.AddColumn("Package");
-            table.AddColumn("Version");
-            table.AddColumn("Action");
-            table.AddColumn("Provided by");
+            RenderRedundantTree(redundant);
 
-            foreach (var finding in redundant)
-            {
-                var action = finding.SafeToRemove ? "[green]remove[/]" : "[yellow]review[/]";
-                var via = finding.Kind == FindingKind.RedundantViaProject ? "[blue]proj[/]" : "[grey]pkg[/]";
-                table.AddRow(
-                    Markup.Escape(finding.Project ?? string.Empty),
-                    Markup.Escape(finding.TargetFramework ?? string.Empty),
-                    Markup.Escape(finding.PackageId ?? string.Empty),
-                    Markup.Escape(finding.ResolvedVersion ?? string.Empty),
-                    action,
-                    $"{via} {Markup.Escape(string.Join(", ", finding.Providers))}");
-            }
+        if (showConflicts && conflicts.Count > 0)
+            RenderConflictsTable(conflicts, verbose);
 
-            AnsiConsole.Write(table);
-        }
-
-        if (conflicts.Count > 0)
-        {
-            var table = new Table { Border = TableBorder.Rounded, Title = new TableTitle("[bold]Version conflicts[/]") };
-            table.AddColumn("Package");
-            table.AddColumn("Resolved versions (projects)");
-
-            foreach (var finding in conflicts)
-                table.AddRow(Markup.Escape(finding.PackageId ?? string.Empty), Markup.Escape(ConflictBreakdown(finding)));
-
-            AnsiConsole.Write(table);
-        }
-
+        var conflictHint = !showConflicts && conflicts.Count > 0
+            ? " [grey](run with --conflicts to list them)[/]"
+            : string.Empty;
         AnsiConsole.MarkupLine(
-            $"[bold]Summary:[/] [yellow]{redundant.Count}[/] redundant, [yellow]{conflicts.Count}[/] conflict(s) across {projectCount} target(s)." +
+            $"[bold]Summary:[/] [yellow]{redundant.Count}[/] redundant reference(s), [yellow]{conflicts.Count}[/] version conflict(s) across {projectCount} target(s)." +
+            conflictHint +
             (restoreMissing > 0 ? $" [grey]({restoreMissing} skipped — not restored)[/]" : string.Empty));
     }
 
-    private static string ConflictBreakdown(Finding finding)
+    private static void RenderRedundantTree(IReadOnlyList<Finding> redundant)
     {
-        // Finding.Detail looks like "<id> resolves to multiple versions: 3.0.0 (A, B); 4.0.0 (C)."
-        var detail = finding.Detail ?? string.Empty;
-        var marker = detail.IndexOf(": ", StringComparison.Ordinal);
-        var body = marker >= 0 ? detail.Substring(marker + 2).TrimEnd('.') : detail;
-        return string.Join("\n", body.Split("; "));
+        var tree = new Tree("[bold]Redundant package references[/]");
+
+        var groups = redundant
+            .GroupBy(x => (Project: x.Project ?? string.Empty, Tfm: x.TargetFramework ?? string.Empty))
+            .OrderBy(x => x.Key.Project, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(x => x.Key.Tfm, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var group in groups)
+        {
+            var node = tree.AddNode($"[bold]{Markup.Escape(group.Key.Project)}[/] [grey]({Markup.Escape(group.Key.Tfm)})[/]");
+
+            var width = group.Max(x => (x.PackageId ?? string.Empty).Length);
+            foreach (var finding in group.OrderBy(x => x.PackageId, StringComparer.OrdinalIgnoreCase))
+            {
+                var action = finding.SafeToRemove ? "[green]remove[/]" : "[yellow]review[/]";
+                var via = finding.Kind == FindingKind.RedundantViaProject ? "[blue]proj[/]" : "[grey]pkg [/]";
+                var package = Markup.Escape((finding.PackageId ?? string.Empty).PadRight(width));
+                var version = Markup.Escape(finding.ResolvedVersion ?? string.Empty);
+                var providers = Markup.Escape(string.Join(", ", finding.Providers));
+                node.AddNode($"{action}  {package}  [grey]{version}[/]  [grey]←[/] {via} {providers}");
+            }
+        }
+
+        AnsiConsole.Write(tree);
     }
 
-    private static void RenderFlat(IReadOnlyList<Finding> findings, LogLevel severity, int projectCount, int restoreMissing)
+    private static void RenderConflictsTable(IReadOnlyList<Finding> conflicts, bool verbose)
+    {
+        var table = new Table { Border = TableBorder.Rounded, Title = new TableTitle("[bold]Version conflicts[/]") };
+        table.AddColumn("Package");
+        table.AddColumn(verbose ? "Resolved versions (projects)" : "Resolved versions");
+
+        foreach (var finding in conflicts)
+        {
+            var cell = verbose
+                ? string.Join("\n", finding.ConflictVersions.Select(v => $"{v.Version} ({string.Join(", ", v.Projects)})"))
+                : string.Join("  ·  ", finding.ConflictVersions.Select(v => $"{v.Version} ×{v.Projects.Count}"));
+
+            table.AddRow(Markup.Escape(finding.PackageId ?? string.Empty), Markup.Escape(cell));
+        }
+
+        AnsiConsole.Write(table);
+    }
+
+    private static void RenderFlat(IReadOnlyList<Finding> findings, LogLevel severity, int projectCount, int restoreMissing, bool showConflicts)
     {
         void Emit(string text)
         {
@@ -314,11 +333,15 @@ internal sealed class AnalyzeCommand : IFalloutCommand
             Emit($"[{finding.Project} ({finding.TargetFramework})] {finding.PackageId} {finding.ResolvedVersion} — {marker}. {finding.Detail}");
         }
 
-        foreach (var finding in conflicts.OrderBy(x => x.PackageId))
-            Emit($"[version conflict] {finding.Detail}");
+        if (showConflicts)
+        {
+            foreach (var finding in conflicts.OrderBy(x => x.PackageId))
+                Emit($"[version conflict] {finding.Detail}");
+        }
 
         Host.Information(
-            $"Summary: {redundant.Count} redundant reference(s), {conflicts.Count} version conflict(s) across {projectCount} target(s).");
+            $"Summary: {redundant.Count} redundant reference(s), {conflicts.Count} version conflict(s) across {projectCount} target(s)." +
+            (!showConflicts && conflicts.Count > 0 ? " (run with --conflicts to list them)" : string.Empty));
         if (restoreMissing > 0)
             Host.Information($"({restoreMissing} project(s) skipped — not restored.)");
     }
