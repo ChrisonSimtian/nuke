@@ -7,7 +7,7 @@ body:
       value: |
         _Keep it terse and scannable — Problem, Outcome, and how we'll know it's done._
 
-        _Before you continue, please check the [contribution guidelines](https://github.com/ChrisonSimtian/Fallout/blob/main/CONTRIBUTING.md)._
+        _Before you continue, please check the [contribution guidelines](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md)._
 
   - type: textarea
     id: problem
@@ -53,7 +53,7 @@ body:
     id: pull-request
     attributes:
       label: Could you help with a pull-request?
-      description: See the [contribution guidelines](https://github.com/ChrisonSimtian/Fallout/blob/main/CONTRIBUTING.md).
+      description: See the [contribution guidelines](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md).
       options:
         - "No"
         - "Yes"
