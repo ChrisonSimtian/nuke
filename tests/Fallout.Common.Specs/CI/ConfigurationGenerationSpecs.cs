@@ -146,8 +146,10 @@ public class ConfigurationGenerationSpecs
                     OnPullRequestTags = new[] { "pull_request_tag" },
                     OnPullRequestIncludePaths = new[] { "pull_request_include_path" },
                     OnPullRequestExcludePaths = new[] { "pull_request_exclude_path/**" },
+#pragma warning disable CS0618 // regression guard: the obsolete legacy path must still emit correctly
                     OnWorkflowDispatchOptionalInputs = new[] { "OptionalInput" },
                     OnWorkflowDispatchRequiredInputs = new[] { "RequiredInput" },
+#pragma warning restore CS0618
                     PublishCondition = "success() || failure()",
                     Submodules = GitHubActionsSubmodules.Recursive,
                     Lfs = true,
@@ -258,6 +260,62 @@ public class ConfigurationGenerationSpecs
                                        "  src",
                                        "  build"
                                    }
+                }
+            );
+
+            // Guard: every typed input kind emits its type:/default:/options: correctly; a string input
+            // omits type: so untyped output stays byte-identical. The typed inputs alone drive the
+            // detailed workflow_dispatch trigger (no shorthand On).
+            yield return
+            (
+                "dispatch-typed-inputs",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    InvokedTargets = new[] { nameof(Test) },
+                    Inputs = new[]
+                             {
+                                 new GitHubActionsInputAttribute("Plain"),
+                                 new GitHubActionsInputAttribute("Verbose") { Type = GitHubActionsInputType.Boolean, Default = "false" },
+                                 new GitHubActionsInputAttribute("Retries") { Type = GitHubActionsInputType.Number, Default = "3" },
+                                 new GitHubActionsInputAttribute("Channel") { Type = GitHubActionsInputType.Choice, Options = new[] { "alpha", "beta", "stable" }, Default = "beta" },
+                                 new GitHubActionsInputAttribute("Target") { Type = GitHubActionsInputType.Environment }
+                             }
+                }
+            );
+
+            // Ordering guard: a Workflows-scoped input appears only in the named workflow; one scoped to
+            // a different workflow is filtered out for this one.
+            yield return
+            (
+                "dispatch-input-scoping",
+                new TestGitHubActionsAttribute("publish", GitHubActionsImage.UbuntuLatest)
+                {
+                    InvokedTargets = new[] { nameof(Test) },
+                    WorkflowNames = new[] { "publish", "build" },
+                    Inputs = new[]
+                             {
+                                 new GitHubActionsInputAttribute("ForPublishOnly") { Workflows = new[] { "publish" } },
+                                 new GitHubActionsInputAttribute("ForOtherWorkflow") { Workflows = new[] { "build" } }
+                             }
+                }
+            );
+
+            // Regression guard: legacy arrays and typed inputs coexist; legacy emit first and untyped,
+            // typed follow.
+            yield return
+            (
+                "dispatch-legacy-plus-typed",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    InvokedTargets = new[] { nameof(Test) },
+#pragma warning disable CS0618 // regression guard: the obsolete legacy path must still emit correctly
+                    OnWorkflowDispatchOptionalInputs = new[] { "LegacyOptional" },
+                    OnWorkflowDispatchRequiredInputs = new[] { "LegacyRequired" },
+#pragma warning restore CS0618
+                    Inputs = new[]
+                             {
+                                 new GitHubActionsInputAttribute("TypedFlag") { Type = GitHubActionsInputType.Boolean, Default = "true" }
+                             }
                 }
             );
 
