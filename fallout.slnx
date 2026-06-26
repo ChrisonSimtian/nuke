@@ -9,6 +9,7 @@
   <Project Path="build\_build.csproj">
     <Configuration Solution="Debug|Any CPU" Project="Debug|Any CPU|NoBuild" />
     <Configuration Solution="Release|Any CPU" Project="Debug|Any CPU|NoBuild" />
+    <Build Project="false" />
   </Project>
   <Project Path="src\Fallout.Build.Shared\Fallout.Build.Shared.csproj" />
   <Project Path="src\Fallout.Build\Fallout.Build.csproj" />
