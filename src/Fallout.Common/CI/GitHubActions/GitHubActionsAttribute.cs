@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Fallout.Common.CI.GitHubActions.Configuration;
 using Fallout.Common.Execution;
 using Fallout.Common.IO;
@@ -54,7 +56,9 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     public string[] OnPullRequestTags { get; set; } = new string[0];
     public string[] OnPullRequestIncludePaths { get; set; } = new string[0];
     public string[] OnPullRequestExcludePaths { get; set; } = new string[0];
+    [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.")]
     public string[] OnWorkflowDispatchOptionalInputs { get; set; } = new string[0];
+    [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.")]
     public string[] OnWorkflowDispatchRequiredInputs { get; set; } = new string[0];
     public string OnCronSchedule { get; set; }
 
@@ -191,6 +195,8 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                 $"'{nameof(Env)}' entry '{variable}' must have a space after the key's colon; expected 'KEY: value'");
         }
 
+        ValidateWorkflowDispatchInputs();
+
         var configuration = new GitHubActionsConfiguration
                             {
                                 Name = _name,
@@ -285,8 +291,8 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
 
     protected virtual IEnumerable<(string Key, string Value)> GetImports()
     {
-        foreach (var input in OnWorkflowDispatchOptionalInputs.Concat(OnWorkflowDispatchRequiredInputs))
-            yield return (input, $"${{{{ github.event.inputs.{input} }}}}");
+        foreach (var input in GetWorkflowDispatchInputs())
+            yield return (input.Name, $"${{{{ github.event.inputs.{input.Name} }}}}");
 
         static string GetSecretValue(string secret)
             => $"${{{{ secrets.{secret.SplitCamelHumpsWithKnownWords().JoinUnderscore().ToUpperInvariant()} }}}}";
@@ -340,17 +346,84 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                          };
         }
 
-        if (OnWorkflowDispatchOptionalInputs.Length > 0 ||
-            OnWorkflowDispatchRequiredInputs.Length > 0)
-        {
-            yield return new GitHubActionsWorkflowDispatchTrigger
-                         {
-                             OptionalInputs = OnWorkflowDispatchOptionalInputs,
-                             RequiredInputs = OnWorkflowDispatchRequiredInputs
-                         };
-        }
+        var dispatchInputs = GetWorkflowDispatchInputs().ToArray();
+        if (dispatchInputs.Length > 0)
+            yield return new GitHubActionsWorkflowDispatchTrigger { Inputs = dispatchInputs };
 
         if (OnCronSchedule != null)
             yield return new GitHubActionsScheduledTrigger { Cron = OnCronSchedule };
+    }
+
+    // The typed [GitHubActionsInput] attributes declared on the build class. Overridable so tests can
+    // inject inputs without static class-level attributes (mirrors the GetJobs/GetImports/GetTriggers seams).
+    protected virtual IEnumerable<GitHubActionsInputAttribute> DeclaredInputs
+        => Build.GetType().GetCustomAttributes<GitHubActionsInputAttribute>();
+
+    // The names of every [GitHubActions] workflow declared on the build class — the valid targets for an
+    // input's Workflows scope. The current workflow is always among them in production.
+    protected virtual ISet<string> DeclaredWorkflowNames
+        => Build.GetType().GetCustomAttributes<GitHubActionsAttribute>().Select(x => x.IdPostfix).ToHashSet();
+
+    private IEnumerable<GitHubActionsWorkflowDispatchInput> GetWorkflowDispatchInputs()
+    {
+        // legacy arrays first → untyped string inputs, preserving the existing ordering and output
+#pragma warning disable CS0618 // deliberate bridge for the obsolete legacy arrays
+        foreach (var input in OnWorkflowDispatchOptionalInputs)
+            yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = false };
+        foreach (var input in OnWorkflowDispatchRequiredInputs)
+            yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = true };
+#pragma warning restore CS0618
+
+        foreach (var input in DeclaredInputs.Where(x => x.Workflows.Length == 0 || x.Workflows.Contains(_name)))
+            yield return new GitHubActionsWorkflowDispatchInput
+                         {
+                             Name = input.Name,
+                             Type = input.Type,
+                             Required = input.Required,
+                             Default = input.Default,
+                             Options = input.Options,
+                             Description = input.Description
+                         };
+    }
+
+    private void ValidateWorkflowDispatchInputs()
+    {
+        var declaredWorkflows = DeclaredWorkflowNames;
+
+        foreach (var input in DeclaredInputs)
+        {
+            if (input.Type == GitHubActionsInputType.Choice)
+                Assert.True(input.Options.Length > 0,
+                    $"'{input.Name}' is a choice input and requires non-empty '{nameof(GitHubActionsInputAttribute.Options)}'");
+            else
+                Assert.True(input.Options.Length == 0,
+                    $"'{input.Name}' sets '{nameof(GitHubActionsInputAttribute.Options)}' but its type is not '{nameof(GitHubActionsInputType.Choice)}'");
+
+            if (input.Default != null)
+            {
+                if (input.Type == GitHubActionsInputType.Choice)
+                    Assert.True(input.Options.Contains(input.Default),
+                        $"'{input.Name}' default '{input.Default}' is not one of its options");
+                if (input.Type == GitHubActionsInputType.Number)
+                    Assert.True(double.TryParse(input.Default, NumberStyles.Any, CultureInfo.InvariantCulture, out _),
+                        $"'{input.Name}' default '{input.Default}' is not a valid number");
+                if (input.Type == GitHubActionsInputType.Boolean)
+                    Assert.True(input.Default is "true" or "false",
+                        $"'{input.Name}' default '{input.Default}' must be 'true' or 'false'");
+            }
+
+            foreach (var workflow in input.Workflows)
+                Assert.True(declaredWorkflows.Contains(workflow),
+                    $"'{input.Name}' targets unknown workflow '{workflow}'");
+        }
+
+        var inputs = GetWorkflowDispatchInputs().ToList();
+        foreach (var input in inputs)
+            Assert.True(!input.Name.IsNullOrWhiteSpace(),
+                $"workflow_dispatch input names must be non-empty in workflow '{_name}'");
+
+        var names = inputs.Select(x => x.Name).ToList();
+        Assert.True(names.Count == names.Distinct().Count(),
+            $"Duplicate workflow_dispatch input names in workflow '{_name}'");
     }
 }
