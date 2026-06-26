@@ -12,6 +12,11 @@ using Serilog;
 // ReSharper disable ArgumentsStyleLiteral
 namespace Fallout.Common.ChangeLog;
 
+/// <summary>
+/// Provides a set of tasks and utility methods for working with changelogs in a software repository.
+/// This class includes methods for reading, extracting, and finalizing changelog entries, as well as
+/// preparing release notes for publishing on platforms such as NuGet.
+/// </summary>
 public static class ChangelogTasks
 {
     public static string GetNuGetReleaseNotes(string changelogFile, GitRepository repository = null)
@@ -150,18 +155,47 @@ public static class ChangelogTasks
     }
 
     /// <summary>
-    /// Extracts the notes of the specified changelog section.
+    /// Extracts the notes from a specific section of the given changelog file, optionally filtered by a section tag.
     /// </summary>
     /// <param name="changelogFile">The path to the changelog file.</param>
-    /// <param name="tag">The tag which release notes should get extracted.</param>
-    /// <returns>A collection of the release notes.</returns>
+    /// <param name="tag">The optional tag to identify the specific section to extract notes from. If null, the first valid section is used.</param>
+    /// <returns>An enumerable collection of strings representing the notes in the specified section. If the file does not exist or the section is not found, an empty collection is returned.</returns>
     public static IEnumerable<string> ExtractChangelogSectionNotes(AbsolutePath changelogFile, string tag = null)
     {
-        var content = changelogFile.ReadAllLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-        var sections = GetReleaseSections(content);
-        var section = tag == null
-            ? sections.First(x => x.StartIndex < x.EndIndex)
-            : sections.FirstOrDefault(x => x.Caption.EqualsOrdinalIgnoreCase(tag)).NotNull($"Could not find release section for '{tag}'.");
+        if (!changelogFile.FileExists())
+        {
+            // We treat a non-existing changelog file as empty.
+            Log.Information("Changelog file {File} does not exist, so skipping section extraction", changelogFile);
+            return Array.Empty<string>();
+        }
+
+        List<string> content = changelogFile.ReadAllLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+        List<ReleaseSection> sections = GetReleaseSections(content).ToList();
+        if (!sections.Any())
+        {
+            // We treat an empty changelog as if the section does not exist.
+            Log.Information("Changelog file {File} doesn't contain any sections, so skipping section extraction", changelogFile);
+
+            return Array.Empty<string>();
+        }
+
+        ReleaseSection section;
+        if (tag == null)
+        {
+            section = sections.FirstOrDefault(x => x.StartIndex < x.EndIndex);
+            if (section == null)
+            {
+                return Array.Empty<string>();
+            }
+        }
+        else
+        {
+            section = sections.FirstOrDefault(x => x.Caption.EqualsOrdinalIgnoreCase(tag));
+            if (section == null)
+            {
+                throw new Exception($"Could not find release section for '{tag}'.");
+            }
+        }
 
         return content
             .Skip(section.StartIndex + 1)

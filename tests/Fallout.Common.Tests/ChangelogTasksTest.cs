@@ -29,6 +29,16 @@ public class ChangelogTasksTest
     }
 
     [Fact]
+    public void Extracting_a_changelog_from_a_non_existing_file_returns_an_empty_collection()
+    {
+        // Arrange
+        var file = RootDirectory / "does-not-exist.md";
+
+        // Act / Assert
+        ChangelogTasks.ExtractChangelogSectionNotes(file).Should().BeEmpty();
+    }
+
+    [Fact]
     public void GetReleaseSections_ChangelogReferenceFileWithoutReleaseHead_ReturnsEmpty()
     {
         var file = PathToChangelogReferenceFiles / "changelog_reference_invalid_variant_1.md";
