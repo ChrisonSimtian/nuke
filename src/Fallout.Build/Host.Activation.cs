@@ -29,9 +29,15 @@ public partial class Host
     private static bool IsRunning(Type hostType)
     {
         var propertyName = $"IsRunning{hostType.Name}";
-        var member = hostType.GetProperty(propertyName, ReflectionUtility.Static)
-            .NotNull($"Host type '{hostType.Name}' defines no property '{propertyName}'");
-        return member.GetValue<bool>();
+        var member = hostType.GetProperty(propertyName, ReflectionUtility.Static);
+
+        // A public Host subclass that doesn't follow the `IsRunning{Name}` convention is
+        // not a runnable host — treat it as not-running rather than throwing. Host
+        // auto-detection runs in FalloutBuild's static ctor, so an exception here crashes
+        // every build that merely references such an assembly. The Nuke.* transition shim
+        // emits exactly such a subclass (`Nuke.Common.Host`), which made any shim-referencing
+        // build abort on startup. See Fallout.Canary#3.
+        return member is not null && member.GetValue<bool>();
     }
 
     private static Host CreateHost(Type hostType)
