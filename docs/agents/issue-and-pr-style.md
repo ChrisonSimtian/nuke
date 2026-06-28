@@ -75,6 +75,7 @@ Closes #<issue>
   in a series). Summarize the need in a line — don't recite the issue's
   Problem/Outcome/criteria back; the reader can click through. The PR explains
   *the change*; the issue holds *the requirement*.
+- **Create PRs as draft by default.** Use `gh pr create --draft` unless the user explicitly asks for a ready-for-review PR. Convert to ready only when the user explicitly requests it. This keeps incomplete work from accidentally entering review and ensures work stays flexible during early development.
 - Add the `⚠️ Breaking change` callout **only** when the change is breaking —
   see the [PR-creation flow](release-and-versioning.md#pr-creation-flow) for
   what that requires.
