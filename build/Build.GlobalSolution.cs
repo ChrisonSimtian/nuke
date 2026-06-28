@@ -16,7 +16,7 @@ partial class Build
 {
     [Parameter] readonly bool UseHttps;
 
-    AbsolutePath GlobalSolution => RootDirectory / "nuke-global.sln";
+    AbsolutePath GlobalSolution => RootDirectory / "fallout-global.sln";
     AbsolutePath ExternalRepositoriesDirectory => RootDirectory / "external";
     AbsolutePath ExternalRepositoriesFile => ExternalRepositoriesDirectory / "repositories.yml";
 
