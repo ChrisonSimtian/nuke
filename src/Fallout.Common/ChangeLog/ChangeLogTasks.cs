@@ -21,10 +21,12 @@ public static class ChangelogTasks
 {
     public static string GetNuGetReleaseNotes(string changelogFile, GitRepository repository = null)
     {
+        AbsolutePath changelogPath = changelogFile;
+
         // URL-encode characters MSBuild treats as command-line/property metacharacters.
         // Without this, MSBuild's property parser splits on ; (turning a long release note
         // into multiple bogus arguments) and chokes on stray " in the value.
-        var changelogSectionNotes = ExtractChangelogSectionNotes(changelogFile)
+        var changelogSectionNotes = ExtractChangelogSectionNotes(changelogPath)
             .Select(x => x.Replace("- ", "\u2022 ")
                 .Replace("* ", "\u2022 ")
                 .Replace("+ ", "\u2022 ")
@@ -32,10 +34,10 @@ public static class ChangelogTasks
                 .Replace(",", "%2C")
                 .Replace(";", "%3B")).ToList();
 
-        if (repository.IsGitHubRepository())
+        if (repository.IsGitHubRepository() && changelogPath.FileExists())
         {
             changelogSectionNotes.Add(string.Empty);
-            changelogSectionNotes.Add($"Full changelog at {repository.GetGitHubBrowseUrl(changelogFile)}");
+            changelogSectionNotes.Add($"Full changelog at {repository.GetGitHubBrowseUrl(changelogPath, itemType: GitHubItemType.File)}");
         }
 
         return changelogSectionNotes.JoinNewLine();

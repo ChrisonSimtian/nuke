@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Fallout.Common.ChangeLog;
+using Fallout.Common.Git;
 using Fallout.Common.IO;
+using Fallout.Common.Tools.GitHub;
 using VerifyXunit;
 using Xunit;
 
@@ -36,6 +38,20 @@ public class ChangelogTasksTest
 
         // Act / Assert
         ChangelogTasks.ExtractChangelogSectionNotes(file).Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Missing_changelog_does_not_add_a_full_changelog_link_to_release_notes()
+    {
+        // Arrange
+        var changelogFile = RootDirectory / "does-not-exist.md";
+        var repository = GitRepository.FromLocalDirectory(RootDirectory);
+
+        // Act
+        string releaseNotes = ChangelogTasks.GetNuGetReleaseNotes(changelogFile, repository);
+
+        // Assert
+        releaseNotes.Should().BeEmpty();
     }
 
     [Fact]

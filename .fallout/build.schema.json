@@ -148,6 +148,16 @@
           "type": "string",
           "default": "Secrets must be entered via 'fallout :secrets [profile]'"
         },
+        "NuGetSource": {
+          "type": "string"
+        },
+        "PublishTo": {
+          "type": "array",
+          "description": "Publish only to these named targets (default: all configured PublishTargets)",
+          "items": {
+            "type": "string"
+          }
+        },
         "Solution": {
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
