@@ -33,7 +33,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         GitHubActionsImage image,
         params GitHubActionsImage[] images)
     {
-        _name = name.Replace(oldChar: ' ', newChar: '_');
+        _name = NormalizeWorkflowName(name);
         _images = new[] { image }.Concat(images).ToArray();
     }
 
@@ -354,6 +354,10 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
             yield return new GitHubActionsScheduledTrigger { Cron = OnCronSchedule };
     }
 
+    // Workflow names are spaces-to-underscores normalized (see the ctor), so an input's Workflows scope
+    // must be normalized the same way to match the workflow it names.
+    private static string NormalizeWorkflowName(string name) => name.Replace(oldChar: ' ', newChar: '_');
+
     // The typed [GitHubActionsInput] attributes declared on the build class. Overridable so tests can
     // inject inputs without static class-level attributes (mirrors the GetJobs/GetImports/GetTriggers seams).
     protected virtual IEnumerable<GitHubActionsInputAttribute> DeclaredInputs
@@ -374,7 +378,8 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
             yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = true };
 #pragma warning restore CS0618
 
-        foreach (var input in DeclaredInputs.Where(x => x.Workflows.Length == 0 || x.Workflows.Contains(_name)))
+        foreach (var input in DeclaredInputs.Where(x => x.Workflows.Length == 0 ||
+                     x.Workflows.Select(NormalizeWorkflowName).Contains(_name)))
             yield return new GitHubActionsWorkflowDispatchInput
                          {
                              Name = input.Name,
@@ -388,7 +393,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
 
     private void ValidateWorkflowDispatchInputs()
     {
-        var declaredWorkflows = DeclaredWorkflowNames;
+        var declaredWorkflows = DeclaredWorkflowNames.Select(NormalizeWorkflowName).ToHashSet();
 
         foreach (var input in DeclaredInputs)
         {
@@ -413,7 +418,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
             }
 
             foreach (var workflow in input.Workflows)
-                Assert.True(declaredWorkflows.Contains(workflow),
+                Assert.True(declaredWorkflows.Contains(NormalizeWorkflowName(workflow)),
                     $"'{input.Name}' targets unknown workflow '{workflow}'");
         }
 
