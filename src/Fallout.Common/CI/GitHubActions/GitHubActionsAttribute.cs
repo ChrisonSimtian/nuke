@@ -358,13 +358,11 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     // must be normalized the same way to match the workflow it names.
     private static string NormalizeWorkflowName(string name) => name.Replace(oldChar: ' ', newChar: '_');
 
-    // The typed [GitHubActionsInput] attributes declared on the build class. Overridable so tests can
-    // inject inputs without static class-level attributes (mirrors the GetJobs/GetImports/GetTriggers seams).
+    // Overridable so tests can inject inputs without declaring static class-level attributes.
     protected virtual IEnumerable<GitHubActionsInputAttribute> DeclaredInputs
         => Build.GetType().GetCustomAttributes<GitHubActionsInputAttribute>();
 
-    // The names of every [GitHubActions] workflow declared on the build class — the valid targets for an
-    // input's Workflows scope. The current workflow is always among them in production.
+    // The valid targets for an input's Workflows scope; overridable for tests.
     protected virtual ISet<string> DeclaredWorkflowNames
         => Build.GetType().GetCustomAttributes<GitHubActionsAttribute>().Select(x => x.IdPostfix).ToHashSet();
 

@@ -8,9 +8,8 @@ using Xunit;
 
 namespace Fallout.Common.Specs.CI;
 
-// Exercises the trigger's public API directly — the obsolete OptionalInputs/RequiredInputs arrays that
-// a consumer overriding GetTriggers() can still set, which the attribute path never populates. Guards
-// the backward-compatible legacy fold in GitHubActionsWorkflowDispatchTrigger.GetInputs().
+// Guards the trigger's obsolete OptionalInputs/RequiredInputs arrays directly: the attribute path only
+// sets Inputs, so the legacy fold is otherwise untested but still reachable via a GetTriggers() override.
 public class GitHubActionsWorkflowDispatchTriggerSpecs
 {
     private static string Render(GitHubActionsWorkflowDispatchTrigger trigger)

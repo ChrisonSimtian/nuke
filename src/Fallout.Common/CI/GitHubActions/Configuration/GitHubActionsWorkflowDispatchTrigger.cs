@@ -50,8 +50,8 @@ public class GitHubActionsWorkflowDispatchTrigger : GitHubActionsDetailedTrigger
         }
     }
 
-    // Legacy OptionalInputs/RequiredInputs emit first as untyped string inputs, preserving existing
-    // output; typed Inputs follow. Direct consumers of the obsolete arrays keep working.
+    // The obsolete arrays stay functional for direct consumers: legacy entries emit first (untyped,
+    // preserving prior output), then typed Inputs.
     private IEnumerable<GitHubActionsWorkflowDispatchInput> GetInputs()
     {
 #pragma warning disable CS0618 // deliberate bridge for the obsolete legacy arrays
