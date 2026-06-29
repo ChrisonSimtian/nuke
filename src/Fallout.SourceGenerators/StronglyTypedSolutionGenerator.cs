@@ -27,6 +27,12 @@ public class StronglyTypedSolutionGenerator : ISourceGenerator
     {
         try
         {
+            // Toggle: when the net10 pre-build console owns solution codegen, this fallback no-ops
+            // (so only one path emits Solution.g.cs). Default/unset keeps the generator running.
+            context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.FalloutSolutionCodegenMode", out var codegenMode);
+            if (string.Equals(codegenMode, "Build", StringComparison.OrdinalIgnoreCase))
+                return;
+
             var allTypes = context.Compilation.Assembly.GlobalNamespace.GetAllTypes();
             var members = allTypes.SelectMany(x => x.GetMembers())
                 .Where(x => x is IPropertySymbol or IFieldSymbol)
