@@ -22,7 +22,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Specs'))">
     <IsPackable>False</IsPackable>
   </PropertyGroup>
 
@@ -53,7 +53,7 @@
     <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Specs'))">
     <PackageReference Include="coverlet.msbuild"  />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="GitHubActionsTestLogger" />

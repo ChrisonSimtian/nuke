@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="Fallout.Migrate.Tests" />
+    <InternalsVisibleTo Include="Fallout.Migrate.Specs" />
   </ItemGroup>
 
 </Project>

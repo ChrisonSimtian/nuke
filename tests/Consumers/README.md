@@ -46,8 +46,8 @@ The `Nuke.Consumer` doesn't pin anything (it references the in-repo shim assembl
 ## What's NOT tested
 
 - Actual build *execution* (see above — runtime activation is fragile)
-- CI-host integration (GitHubActions, AzurePipelines, etc.) — covered by `tests/Fallout.Common.Tests/CI/`
+- CI-host integration (GitHubActions, AzurePipelines, etc.) — covered by `tests/Fallout.Common.Specs/CI/`
 - Tool wrappers — covered by their own generated tests
-- Source generator behaviour — covered by `tests/Fallout.SourceGenerators.Tests/`
+- Source generator behaviour — covered by `tests/Fallout.SourceGenerators.Specs/`
 
 These consumer projects are a **sentinel for shape changes**, not a place to demo features. Don't add consumer projects covering specific subsystems — those go in their own focused tests.

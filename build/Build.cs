@@ -98,7 +98,7 @@ partial class Build
         from framework in project.GetTargetFrameworks()
         select (project, framework);
 
-    IEnumerable<Fallout.Solutions.Project> ITest.TestProjects => Partition.GetCurrent(Solution.GetAllProjects("*.Tests"));
+    IEnumerable<Fallout.Solutions.Project> ITest.TestProjects => Partition.GetCurrent(Solution.GetAllProjects("*.Specs"));
 
     [Parameter]
     public int TestDegreeOfParallelism { get; } = 1;

@@ -1,0 +1,5 @@
+{
+  "$schema": "./SchemaUtilitySpecs.TestTargetBuild.verified.json",
+  "Verbosity": "Minimal",
+  "Target": ["ExplicitTarget", "InheritedTarget"]
+}
