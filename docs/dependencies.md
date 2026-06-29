@@ -90,12 +90,16 @@ Still on Matt's personal NuGet account; supply-chain SPOF, high-priority to repl
 |---|---|
 | `xunit` (+ `runner.visualstudio`) | Test framework |
 | `Microsoft.NET.Test.Sdk` | Test host wiring |
-| `FluentAssertions` | Readable assertion DSL |
+| `FluentAssertions` | Readable assertion DSL — see [licensing note](#fluentassertions-licensing) below |
 | `Verify.Xunit` (+ `.DiffPlex`, `.SourceGenerators`) | Snapshot-based testing (the `*.verified.txt` / `*.received.txt` pattern) |
 | `coverlet.msbuild` | Code coverage |
 | `GitHubActionsTestLogger` | Format test output for GitHub Actions annotations |
 | `Basic.Reference.Assemblies.NetStandard20` | Reference assemblies for source-generator compile tests |
 | `NetArchTest.Rules` | Architecture-fitness tests (e.g. `Fallout.Core` purity); broader suite tracked in #95 |
+
+### FluentAssertions licensing
+
+As of **v8.0** (Jan 2025) FluentAssertions dropped Apache 2.0 for the proprietary **Xceed Community License**: free for open-source / non-commercial use, paid (per-seat) for commercial use. v7.x remains Apache 2.0. We pin **8.x** (`Directory.Packages.props`) and stay current — this is fine for Fallout because it's (a) an OSS project covered by the free community license, and (b) a **test-only / dev-time** dependency that is never redistributed to consumers of the framework. The standard assertion convention (xUnit + FluentAssertions + Verify) is unchanged — see [conventions.md](agents/conventions.md).
 
 ## Build-time CLI tools (`PackageDownload`)
 

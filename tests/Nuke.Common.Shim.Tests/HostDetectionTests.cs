@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Reflection;
+using FluentAssertions;
 using Xunit;
 
 namespace Nuke.Common.Shim.Tests;
@@ -24,11 +25,11 @@ public class HostDetectionTests
             .Where(t => t.IsPublic && t.IsSubclassOf(typeof(global::Fallout.Common.Host)))
             .Where(t => t.GetProperty($"IsRunning{t.Name}", BindingFlags.Public | BindingFlags.Static) is null)
             .ToList();
-        Assert.NotEmpty(offenders);
+        offenders.Should().NotBeEmpty();
 
         // Touching FalloutBuild runs its static ctor -> Host.Default, scanning every public
         // Host subclass. Resolving the property (not throwing) is the assertion.
         var host = global::Fallout.Common.FalloutBuild.Host;
-        Assert.NotNull(host);
+        host.Should().NotBeNull();
     }
 }
