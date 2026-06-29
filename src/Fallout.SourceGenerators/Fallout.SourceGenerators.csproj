@@ -12,6 +12,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Shared with Fallout.Solution.Codegen (net10 console) so both emit byte-identical Solution.g.cs. -->
+    <Compile Include="..\shared\SolutionEmitter.cs" Link="SolutionEmitter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Fallout.Build.Shared\Fallout.Build.Shared.csproj" />
     <ProjectReference Include="..\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
     <ProjectReference Include="..\Fallout.Utilities\Fallout.Utilities.csproj" />

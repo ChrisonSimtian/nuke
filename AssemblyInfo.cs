@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Fallout.Cli.Specs")]
 [assembly: InternalsVisibleTo("Fallout.ProjectModel.Specs")]
 [assembly: InternalsVisibleTo("Fallout.SourceGenerators")]
+[assembly: InternalsVisibleTo("Fallout.Solution.Codegen")]
 [assembly: InternalsVisibleTo("Fallout.Solution")]
 [assembly: InternalsVisibleTo("Fallout.Solution.Specs")]
 [assembly: InternalsVisibleTo("Fallout.Persistence.Solution")]
