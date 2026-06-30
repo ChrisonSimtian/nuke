@@ -39,6 +39,24 @@ public class SolutionEmitterSpecs : IDisposable
         emitted.Should().Contain("_00_Build => this.GetProject(\"00-Build\")");
     }
 
+    [Fact]
+    public void Emits_nested_declarations_for_solution_folders()
+    {
+        var slnx = _root / "app.slnx";
+        File.WriteAllText(slnx,
+            "<Solution>" + Environment.NewLine +
+            "  <Folder Name=\"/group/\">" + Environment.NewLine +
+            "    <Project Path=\"src/Inner/Inner.csproj\" />" + Environment.NewLine +
+            "  </Folder>" + Environment.NewLine +
+            "</Solution>");
+
+        var emitted = SolutionEmitter.Emit(slnx.ReadSolution(), "Sln", fancyNaming: false);
+
+        emitted.Should().Contain("Unsafe.As<").And.Contain("this.GetSolutionFolder(");
+        emitted.Should().Contain(": Fallout.Solutions.SolutionFolder(");
+        emitted.Should().Contain("GetProject(\"Inner\")");
+    }
+
     private Fallout.Solutions.Solution WriteAndReadSolution(string projectPath)
     {
         var slnx = _root / "app.slnx";
