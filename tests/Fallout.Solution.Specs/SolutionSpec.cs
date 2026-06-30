@@ -19,7 +19,7 @@ public class SolutionModelSpecs
     {
         var solution = SolutionFile.ReadSolution();
 
-        solution.SolutionFolders.Select(x => x.Name).Should().BeEquivalentTo("misc");
+        solution.SolutionFolders.Select(x => x.Name).Should().BeEquivalentTo("misc", "01-test");
 
         var buildProject = solution.AllProjects.SingleOrDefault(x => x.Name == "_build");
         buildProject.Should().NotBeNull();

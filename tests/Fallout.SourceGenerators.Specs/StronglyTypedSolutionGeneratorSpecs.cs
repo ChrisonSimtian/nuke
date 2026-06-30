@@ -14,17 +14,17 @@ namespace Fallout.SourceGenerators.Specs;
 public class StronglyTypedSolutionGeneratorSpecs
 {
     [Fact]
-    public Task Test()
+    public Task Enabled_code_generation()
     {
         var inputCompilation = CreateCompilation("""
-                using Fallout.Common;
-                using Fallout.Solutions;
-                partial class Build : FalloutBuild
-                {
-                    [Solution(GenerateProjects = true)]
-                    readonly Solution Solution;
-                }
-                """);
+                                                 using Fallout.Common;
+                                                 using Fallout.Solutions;
+                                                 partial class Build : FalloutBuild
+                                                 {
+                                                     [Solution(GenerateProjects = true)]
+                                                     readonly Solution Solution;
+                                                 }
+                                                 """);
 
         var generator = new StronglyTypedSolutionGenerator();
         var driver = CSharpGeneratorDriver.Create(generator);
@@ -33,19 +33,38 @@ public class StronglyTypedSolutionGeneratorSpecs
     }
 
     [Fact]
-    public void TestDisabled()
+    public Task Enabled_code_generation_with_fancy_naming()
+    {
+        var inputCompilation = CreateCompilation("""
+                                                 using Fallout.Common;
+                                                 using Fallout.Solutions;
+                                                 partial class Build : FalloutBuild
+                                                 {
+                                                     [Solution(GenerateProjects = true, FancyNames = true)]
+                                                     readonly Solution Solution;
+                                                 }
+                                                 """);
+
+        var generator = new StronglyTypedSolutionGenerator();
+        var driver = CSharpGeneratorDriver.Create(generator);
+        var result = driver.RunGenerators(inputCompilation);
+        return Verifier.Verify(result);
+    }
+
+    [Fact]
+    public void Disable_code_generation()
     {
         var inputCompilation = CreateCompilation("""
 
-                using Fallout.Common;
-                using Fallout.Solutions;
+                                                 using Fallout.Common;
+                                                 using Fallout.Solutions;
 
-                partial class Build : FalloutBuild
-                {
-                    [Solution(GenerateProjects = false)]
-                    readonly Solution Solution;
-                }
-                """);
+                                                 partial class Build : FalloutBuild
+                                                 {
+                                                     [Solution(GenerateProjects = false)]
+                                                     readonly Solution Solution;
+                                                 }
+                                                 """);
 
         var generator = new StronglyTypedSolutionGenerator();
         var driver = CSharpGeneratorDriver.Create(generator);
@@ -53,23 +72,24 @@ public class StronglyTypedSolutionGeneratorSpecs
 
         if (!result.Diagnostics.IsEmpty)
             throw new Exception(string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.GetMessage())));
+
         result.GeneratedTrees.Should().BeEmpty();
     }
 
     [Fact]
-    public void TestUnspecified()
+    public void Disable_code_generation_with_enabled_fancy_naming()
     {
         var inputCompilation = CreateCompilation("""
 
-                using Fallout.Common;
-                using Fallout.Solutions;
+                                                 using Fallout.Common;
+                                                 using Fallout.Solutions;
 
-                partial class Build : FalloutBuild
-                {
-                    [Solution]
-                    readonly Solution Solution;
-                }
-                """);
+                                                 partial class Build : FalloutBuild
+                                                 {
+                                                     [Solution(GenerateProjects = false, FancyNames = true)]
+                                                     readonly Solution Solution;
+                                                 }
+                                                 """);
 
         var generator = new StronglyTypedSolutionGenerator();
         var driver = CSharpGeneratorDriver.Create(generator);
@@ -77,15 +97,73 @@ public class StronglyTypedSolutionGeneratorSpecs
 
         if (!result.Diagnostics.IsEmpty)
             throw new Exception(string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.GetMessage())));
+
+        result.GeneratedTrees.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Unspecified_code_generation()
+    {
+        var inputCompilation = CreateCompilation("""
+
+                                                 using Fallout.Common;
+                                                 using Fallout.Solutions;
+
+                                                 partial class Build : FalloutBuild
+                                                 {
+                                                     [Solution]
+                                                     readonly Solution Solution;
+                                                 }
+                                                 """);
+
+        var generator = new StronglyTypedSolutionGenerator();
+        var driver = CSharpGeneratorDriver.Create(generator);
+        var result = driver.RunGenerators(inputCompilation).GetRunResult();
+
+        if (!result.Diagnostics.IsEmpty)
+            throw new Exception(string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.GetMessage())));
+
+        result.GeneratedTrees.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Unspecified_code_generation_with_enabled_fancy_naming()
+    {
+        var inputCompilation = CreateCompilation("""
+
+                                                 using Fallout.Common;
+                                                 using Fallout.Solutions;
+
+                                                 partial class Build : FalloutBuild
+                                                 {
+                                                     [Solution(FancyNames = true)]
+                                                     readonly Solution Solution;
+                                                 }
+                                                 """);
+
+        var generator = new StronglyTypedSolutionGenerator();
+        var driver = CSharpGeneratorDriver.Create(generator);
+        var result = driver.RunGenerators(inputCompilation).GetRunResult();
+
+        if (!result.Diagnostics.IsEmpty)
+            throw new Exception(string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.GetMessage())));
+
         result.GeneratedTrees.Should().BeEmpty();
     }
 
     private static Compilation CreateCompilation(string source)
     {
         return CSharpCompilation.Create("compilation",
-            new[] { CSharpSyntaxTree.ParseText(source) },
+            new[]
+            {
+                CSharpSyntaxTree.ParseText(source)
+            },
             Basic.Reference.Assemblies.NetStandard20.References.All
-                .Concat(new[] { typeof(FalloutBuild), typeof(SolutionAttribute) }
+                .Concat(new[]
+                    {
+                        typeof(FalloutBuild),
+                        typeof(SolutionAttribute)
+                    }
                     .Select(x => MetadataReference.CreateFromFile(x.Assembly.Location))),
             new CSharpCompilationOptions(OutputKind.ConsoleApplication));
     }

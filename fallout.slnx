@@ -1,4 +1,5 @@
 <Solution>
+  <Folder Name="/01-test/" />
   <Folder Name="/misc/">
     <File Path="CHANGELOG.md" />
     <File Path="LICENSE" />

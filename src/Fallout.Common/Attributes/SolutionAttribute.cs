@@ -4,7 +4,6 @@ using System.Reflection;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using Serilog;
-
 using Fallout.Common;
 
 namespace Fallout.Solutions;
@@ -38,15 +37,20 @@ public class SolutionAttribute(string relativePath)
     }
 
     public override bool List { get; set; }
+
     public bool GenerateProjects { get; set; }
+
+    public bool FancyNames { get; set; }
 
     public override object GetValue(MemberInfo member, object instance)
     {
-        var solutionFile = TryGetSolutionFileFromNukeFile() ??
+        var solutionFile = TryGetSolutionFileFromFalloutFile() ??
                            GetSolutionFileFromParametersFile(member);
+
         var deserializer = typeof(SolutionModelExtensions).GetMethods()
             .Single(x => x.Name == nameof(SolutionModelExtensions.ReadSolution) && x.ContainsGenericParameters)
             .MakeGenericMethod(member.GetMemberType());
+
         return ((Solution)deserializer.Invoke(obj: null, [solutionFile])).NotNull();
     }
 
@@ -59,18 +63,19 @@ public class SolutionAttribute(string relativePath)
             : ParameterService.GetParameter<AbsolutePath>(member).NotNull($"No solution file defined for '{member.Name}'.");
     }
 
-    private AbsolutePath TryGetSolutionFileFromNukeFile()
+    private AbsolutePath TryGetSolutionFileFromFalloutFile()
     {
-        var nukeFile = Build.RootDirectory / Constants.FalloutFileName;
-        if (!nukeFile.Exists())
+        var falloutFile = Build.RootDirectory / Constants.FalloutFileName;
+        if (!falloutFile.Exists())
             return null;
 
-        var solutionFileRelative = nukeFile.ReadAllLines().ElementAtOrDefault(0);
+        var solutionFileRelative = falloutFile.ReadAllLines().ElementAtOrDefault(0);
         Assert.True(solutionFileRelative != null && !solutionFileRelative.Contains(value: '\\'),
             $"First line of {Constants.FalloutFileName} must provide solution path using UNIX separators");
 
         var solutionFile = Build.RootDirectory / solutionFileRelative;
-        Assert.FileExists(solutionFile, $"Solution file '{solutionFile}' provided via {Constants.FalloutFileName} does not exist");
+        Assert.FileExists(solutionFile,
+            $"Solution file '{solutionFile}' provided via {Constants.FalloutFileName} does not exist");
 
         return solutionFile;
     }
