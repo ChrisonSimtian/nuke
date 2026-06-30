@@ -61,6 +61,38 @@ public class SolutionCodegenRunnerSpecs : IDisposable
         Directory.EnumerateFiles(_outDir, "*.g.cs").Should().BeEmpty();
     }
 
+    [Fact]
+    public void Resolves_solution_from_parameters_file_when_no_path_given()
+    {
+        // No path on the attribute -> the solution is looked up in .fallout/parameters.json by member name.
+        Directory.CreateDirectory(_root / ".fallout");
+        File.WriteAllText(_root / ".fallout" / "parameters.json", """{ "Solution": "app.slnx" }""");
+        WriteSolution("app.slnx", "src/Alpha/Alpha.csproj");
+        WriteBuild("[Solution(GenerateProjects = true)] readonly Solution Solution;");
+
+        var generated = SolutionCodegenRunner.Run(_root, _outDir, new[] { (_root / "Build.cs").ToString() });
+
+        generated.Select(x => x.FileName).Should().Equal("Solution.g.cs");
+        File.ReadAllText(Path.Combine(_outDir, "Solution.g.cs")).Should().Contain("GetProject(\"Alpha\")");
+    }
+
+    [Fact]
+    public void Emits_one_file_per_member_for_multiple_solutions()
+    {
+        WriteBuild("""
+                   [Solution("a.slnx", GenerateProjects = true)] readonly Solution First;
+                       [Solution("b.slnx", GenerateProjects = true)] readonly Solution Second;
+                   """);
+        WriteSolution("a.slnx", "src/Alpha/Alpha.csproj");
+        WriteSolution("b.slnx", "src/Beta/Beta.csproj");
+
+        var generated = SolutionCodegenRunner.Run(_root, _outDir, new[] { (_root / "Build.cs").ToString() });
+
+        generated.Select(x => x.FileName).Should().BeEquivalentTo("First.g.cs", "Second.g.cs");
+        File.ReadAllText(Path.Combine(_outDir, "First.g.cs")).Should().Contain("GetProject(\"Alpha\")");
+        File.ReadAllText(Path.Combine(_outDir, "Second.g.cs")).Should().Contain("GetProject(\"Beta\")");
+    }
+
     private void WriteBuild(string memberLine) =>
         File.WriteAllText(_root / "Build.cs",
             $$"""

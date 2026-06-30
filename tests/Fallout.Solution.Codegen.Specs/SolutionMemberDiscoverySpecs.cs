@@ -74,6 +74,23 @@ public class SolutionMemberDiscoverySpecs
             .Single().MemberName.Should().Be("MySolution");
     }
 
+    [Fact]
+    public void Discovers_every_annotated_member_in_a_file()
+    {
+        var source =
+            """
+            partial class Build
+            {
+                [Solution("a.slnx", GenerateProjects = true)] readonly Solution First;
+                [Solution(GenerateProjects = false)] readonly Solution Ignored;
+                [Solution("b.slnx", GenerateProjects = true)] readonly Solution Second;
+            }
+            """;
+
+        SolutionMemberDiscovery.DiscoverInText(source).Select(x => x.MemberName)
+            .Should().Equal("First", "Second");
+    }
+
     private static IReadOnlyList<SolutionMember> Discover(string attribute, string memberDeclaration)
     {
         var source =
