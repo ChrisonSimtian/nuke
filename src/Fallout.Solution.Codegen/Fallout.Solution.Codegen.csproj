@@ -4,22 +4,19 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <Description>Pre-build codegen for the strongly-typed [Solution] accessor (Solution.g.cs). The net10 default that frees the Roslyn generator from the solution-parser dependency cone; reuses the real Fallout.Persistence.Solution parser and the shared SolutionEmitter.</Description>
+    <Description>Pre-build codegen for the strongly-typed [Solution] accessor (Solution.g.cs). The net10 default that frees the Roslyn generator from the solution-parser dependency cone; reuses the real Fallout.Persistence.Solution parser and the shared Fallout.Solution.Codegen.Emit emitter.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Shared with the in-compiler StronglyTypedSolutionGenerator fallback -> identical output. -->
-    <Compile Include="..\shared\SolutionEmitter.cs" Link="SolutionEmitter.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <!-- Shared emitter, also referenced by the in-compiler StronglyTypedSolutionGenerator -> identical output. -->
+    <ProjectReference Include="..\Fallout.Solution.Codegen.Emit\Fallout.Solution.Codegen.Emit.csproj" />
     <ProjectReference Include="..\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
     <ProjectReference Include="..\Fallout.Build.Shared\Fallout.Build.Shared.csproj" />
     <ProjectReference Include="..\Fallout.Utilities\Fallout.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scriban" />
+    <!-- Scriban arrives transitively via Fallout.Solution.Codegen.Emit. -->
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
   </ItemGroup>
 

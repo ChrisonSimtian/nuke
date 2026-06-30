@@ -12,11 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Shared with Fallout.Solution.Codegen (net10 console) so both emit byte-identical Solution.g.cs. -->
-    <Compile Include="..\shared\SolutionEmitter.cs" Link="SolutionEmitter.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <!-- Shared emitter, also referenced by the Fallout.Solution.Codegen console -> byte-identical output.
+         Its DLL is bundled into the analyzer below (GetDependencyTargetPaths). -->
+    <ProjectReference Include="..\Fallout.Solution.Codegen.Emit\Fallout.Solution.Codegen.Emit.csproj" />
     <ProjectReference Include="..\Fallout.Build.Shared\Fallout.Build.Shared.csproj" />
     <ProjectReference Include="..\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
     <ProjectReference Include="..\Fallout.Utilities\Fallout.Utilities.csproj" />
@@ -44,6 +42,7 @@
   <!-- TODO: check for easier method https://github.com/dotnet/roslyn/issues/52017#issuecomment-809113013 -->
   <Target Name="GetDependencyTargetPaths">
     <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\Fallout.Solution.Codegen.Emit.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\Fallout.Build.Shared.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\Fallout.Solution.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\Fallout.Utilities.dll" IncludeRuntimeDependency="false" />

@@ -9,11 +9,11 @@ namespace Fallout.Solutions;
 
 /// <summary>
 /// Shared emit logic for the strongly-typed <c>[Solution]</c> accessor (<c>Solution.g.cs</c>).
-/// Compiled (via linked source) into both the in-compiler <c>StronglyTypedSolutionGenerator</c>
-/// (the toggle fallback) and the net10 pre-build <c>Fallout.Solution.Codegen</c> console (the
-/// default), so the two paths produce byte-identical output.
+/// Referenced by both the in-compiler <c>StronglyTypedSolutionGenerator</c> (the ns2.0 toggle
+/// fallback) and the net10 pre-build <c>Fallout.Solution.Codegen</c> console (the default), so the
+/// two paths produce byte-identical output.
 /// </summary>
-internal static class SolutionEmitter
+public static class SolutionEmitter
 {
     public static string Emit(Solution solution, string memberName, bool fancyNaming)
     {
