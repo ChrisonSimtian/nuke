@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyModel;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using Fallout.Common.ValueInjection;
 using Serilog;
 #pragma warning disable CA2255
 
@@ -38,10 +39,16 @@ internal static class BuildManager
     {
         Console.OutputEncoding = Encoding.UTF8;
         Console.InputEncoding = Encoding.UTF8;
-        Console.CancelKeyPress += (_, _) => s_cancellationHandlers.ForEach(x => x());
-        ToolOptions.Created += (options, _) => VerbosityMapping.Apply((ToolOptions)options);
 
         var build = new T();
+
+        // Hold the per-run global subscriptions in locals so the finally can undo exactly them —
+        // otherwise each Execute in the same process (tests, hosted scenarios) accumulates handlers.
+        // FT-1 / #306.
+        ConsoleCancelEventHandler onCancelKeyPress = (_, _) => s_cancellationHandlers.ForEach(x => x());
+        EventHandler onToolOptionsCreated = (options, _) => VerbosityMapping.Apply((ToolOptions)options);
+        Console.CancelKeyPress += onCancelKeyPress;
+        ToolOptions.Created += onToolOptionsCreated;
 
         try
         {
@@ -88,6 +95,16 @@ internal static class BuildManager
         {
             Finish();
             Log.CloseAndFlush();
+
+            // FT-1 (#306): undo this run's process-global state so a subsequent Execute in the same
+            // process starts clean — no accumulated handlers, no carried-over log events / caches / config.
+            CancellationHandler -= Finish;
+            Console.CancelKeyPress -= onCancelKeyPress;
+            ToolOptions.Created -= onToolOptionsCreated;
+            Logging.InMemorySink.Instance.Clear();
+            ValueInjectionUtility.ClearCache();
+            NuGetToolPathResolver.Reset();
+            NpmToolPathResolver.Reset();
         }
 
         void Finish()

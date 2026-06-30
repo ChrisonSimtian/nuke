@@ -228,9 +228,15 @@ public static class Logging
             _logEvents.Add(logEvent);
         }
 
-        public void Dispose()
+        /// <summary>Drops accumulated events so a subsequent build in the same process starts clean. FT-1 / #306.</summary>
+        public void Clear()
         {
             _logEvents.Clear();
+        }
+
+        public void Dispose()
+        {
+            Clear();
         }
     }
 

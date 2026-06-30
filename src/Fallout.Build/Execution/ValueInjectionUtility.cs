@@ -12,6 +12,9 @@ internal static class ValueInjectionUtility
 {
     private static readonly Dictionary<MemberInfo, object> s_valueCache = new();
 
+    /// <summary>Clears the per-run injected-value cache so a subsequent build in the same process re-injects. FT-1 / #306.</summary>
+    internal static void ClearCache() => s_valueCache.Clear();
+
     public static T TryGetValue<T>(Expression<Func<T>> parameterExpression)
         where T : class
     {

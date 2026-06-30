@@ -16,6 +16,15 @@ public static class NuGetToolPathResolver
     public static string NuGetAssetsConfigFile;
     public static string PaketPackagesConfigFile;
 
+    /// <summary>Resets the per-run package-location config so a subsequent build in the same process starts from defaults. FT-1 / #306.</summary>
+    public static void Reset()
+    {
+        EmbeddedPackagesDirectory = null;
+        NuGetPackagesConfigFile = null;
+        NuGetAssetsConfigFile = null;
+        PaketPackagesConfigFile = null;
+    }
+
     public static string GetPackageExecutable(string packageId, string packageExecutable, string version = null, string framework = null)
     {
         Assert.True(packageId != null && packageExecutable != null);
