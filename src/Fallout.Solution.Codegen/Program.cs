@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
+using Fallout.SolutionCodegen;
 using Fallout.Solutions;
 
 // Pre-build codegen for the strongly-typed [Solution] accessor.
@@ -23,12 +22,17 @@ var root = GetOption("--root") ?? Directory.GetCurrentDirectory();
 var outDir = GetOption("--out") ?? Path.Combine(root, "obj");
 var sources = GetOptions("--source").Where(File.Exists).ToList();
 if (sources.Count == 0)
-    sources = Directory.EnumerateFiles(root, "*.cs", SearchOption.AllDirectories).ToList();
+    sources = SolutionMemberDiscovery.EnumerateProjectSources(root).ToList();
 
 var rootDirectory = (AbsolutePath)root;
 Directory.CreateDirectory(outDir);
 
-foreach (var (memberName, relativePath, fancyNames) in DiscoverSolutionMembers(sources))
+// Regenerate from a clean slate: drop any *.g.cs from a previous run so a removed or renamed
+// [Solution] member can't leave an orphan that the build still compiles.
+foreach (var stale in Directory.EnumerateFiles(outDir, "*.g.cs"))
+    File.Delete(stale);
+
+foreach (var (memberName, relativePath, fancyNames) in SolutionMemberDiscovery.Discover(sources))
 {
     var solutionFile = !string.IsNullOrEmpty(relativePath)
         ? rootDirectory / relativePath
@@ -52,51 +56,6 @@ IEnumerable<string> GetOptions(string name)
     for (var i = 0; i < args.Length - 1; i++)
         if (args[i] == name)
             yield return args[i + 1];
-}
-
-static IEnumerable<(string MemberName, string RelativePath, bool FancyNames)> DiscoverSolutionMembers(IEnumerable<string> files)
-{
-    foreach (var file in files)
-    {
-        var root = CSharpSyntaxTree.ParseText(File.ReadAllText(file)).GetRoot();
-        foreach (var member in root.DescendantNodes().OfType<MemberDeclarationSyntax>())
-        {
-            if (member is not (FieldDeclarationSyntax or PropertyDeclarationSyntax))
-                continue;
-
-            foreach (var attribute in member.AttributeLists.SelectMany(x => x.Attributes))
-            {
-                if (attribute.Name.ToString() is not ("Solution" or "SolutionAttribute"))
-                    continue;
-
-                var arguments = attribute.ArgumentList?.Arguments ?? default;
-                var generateProjects = arguments.Any(x =>
-                    x.NameEquals?.Name.Identifier.Text == "GenerateProjects" &&
-                    x.Expression is LiteralExpressionSyntax { Token.Value: true });
-                if (!generateProjects)
-                    continue;
-
-                var fancyNames = arguments.Any(x =>
-                    x.NameEquals?.Name.Identifier.Text == "FancyNames" &&
-                    x.Expression is LiteralExpressionSyntax { Token.Value: true });
-
-                var relativePath = arguments
-                    .Where(x => x.NameEquals == null && x.NameColon == null)
-                    .Select(x => (x.Expression as LiteralExpressionSyntax)?.Token.Value as string)
-                    .FirstOrDefault(x => !string.IsNullOrEmpty(x));
-
-                var memberName = member switch
-                {
-                    FieldDeclarationSyntax field => field.Declaration.Variables.First().Identifier.Text,
-                    PropertyDeclarationSyntax property => property.Identifier.Text,
-                    _ => null,
-                };
-
-                if (memberName != null)
-                    yield return (memberName, relativePath, fancyNames);
-            }
-        }
-    }
 }
 
 static AbsolutePath GetSolutionFileFromParametersFile(AbsolutePath rootDirectory, string memberName)
