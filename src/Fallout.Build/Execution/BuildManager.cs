@@ -18,12 +18,12 @@ internal static class BuildManager
 {
     private const int ErrorExitCode = -1;
 
-    private static readonly LinkedList<Action> s_cancellationHandlers = new();
+    private static readonly LinkedList<Action> cancellationHandlers = new();
 
     public static event Action CancellationHandler
     {
-        add => s_cancellationHandlers.AddFirst(value);
-        remove => s_cancellationHandlers.Remove(value);
+        add => cancellationHandlers.AddFirst(value);
+        remove => cancellationHandlers.Remove(value);
     }
 
     [ModuleInitializer]
@@ -45,7 +45,7 @@ internal static class BuildManager
         // Hold the per-run global subscriptions in locals so the finally can undo exactly them —
         // otherwise each Execute in the same process (tests, hosted scenarios) accumulates handlers.
         // FT-1 / #306.
-        ConsoleCancelEventHandler onCancelKeyPress = (_, _) => s_cancellationHandlers.ForEach(x => x());
+        ConsoleCancelEventHandler onCancelKeyPress = (_, _) => cancellationHandlers.ForEach(x => x());
         EventHandler onToolOptionsCreated = (options, _) => VerbosityMapping.Apply((ToolOptions)options);
         Console.CancelKeyPress += onCancelKeyPress;
         ToolOptions.Created += onToolOptionsCreated;
