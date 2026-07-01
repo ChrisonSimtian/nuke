@@ -70,6 +70,20 @@ dotnet_naming_symbols.constant_fields.required_modifiers = const
 
 dotnet_naming_style.pascal_case_style.capitalization = pascal_case
 
+# name private fields (instance and static) using camelCase, with no _ / m_ / g_ / s_ prefix
+# CSharpGuidelines AV1702 (camelCase private fields) + AV1705 (no field prefixes).
+# Ordered after constant_fields so private const still resolves to PascalCase above.
+# Severity is suggestion for now: the repo still carries ~100 s_-prefixed fields, so a
+# warning/error flip is gated on the one-time migration sweep (see PR description).
+dotnet_naming_rule.private_fields_should_be_camel_case.severity = suggestion
+dotnet_naming_rule.private_fields_should_be_camel_case.symbols  = private_fields
+dotnet_naming_rule.private_fields_should_be_camel_case.style    = camel_case_style
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.camel_case_style.capitalization = camel_case
+
 # Code style defaults
 csharp_using_directive_placement = outside_namespace:warning
 dotnet_sort_system_directives_first = true
