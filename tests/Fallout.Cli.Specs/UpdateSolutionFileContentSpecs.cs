@@ -1,6 +1,9 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using Fallout.Common.Utilities;
 using VerifyXunit;
 using Xunit;
@@ -68,6 +71,29 @@ public class UpdateSolutionFileContentSpecs
         Program.UpdateSolutionFileContent(content, "RELATIVE", "GUID", "NAME");
 
         return Verifier.Verify(string.Join(Environment.NewLine, content))
+            .UseParameters(number);
+    }
+
+    [Theory]
+    [InlineData(
+        1,
+        """
+        <Solution>
+          <Project Path="TestProject1/TestProject1.csproj" />
+        </Solution>
+        """)]
+    public Task TestXml(int number, string input)
+    {
+        var content = XDocument.Load(new StringReader(input));
+        Program.UpdateSolutionXmlFileContent(content, "RELATIVE");
+
+        var settings = new XmlWriterSettings { OmitXmlDeclaration = true, Indent = true };
+        var stringStream = new StringWriter();
+        using var writer = XmlWriter.Create(stringStream, settings);
+        content.Save(writer);
+        writer.Flush();
+
+        return Verifier.Verify(stringStream.ToString())
             .UseParameters(number);
     }
 }
