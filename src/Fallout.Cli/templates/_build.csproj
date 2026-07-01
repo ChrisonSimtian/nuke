@@ -9,10 +9,12 @@
     <FalloutScriptDirectory>_SCRIPT_DIRECTORY_</FalloutScriptDirectory>
     <FalloutTelemetryVersion>_TELEMETRY_VERSION_</FalloutTelemetryVersion>
     <IsPackable>false</IsPackable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <UseArtifactsOutput>false</UseArtifactsOutput>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fallout.Common" Version="_NUKE_VERSION_" />
+    <PackageReference Include="Fallout.Common" Version="_FALLOUT_VERSION_" />
     <PackageDownload Include="GitVersion.Tool" Version="[5.8.0]" />    // GITVERSION
   </ItemGroup>
 

@@ -23,7 +23,7 @@ partial class Program
             _ => throw new NotSupportedException($"{EnvironmentInfo.Platform} has no session id selector.")
         };
 
-    private static AbsolutePath SessionFile => GlobalTemporaryDirectory / $"nuke-{SessionId}.dat";
+    private static AbsolutePath SessionFile => GlobalTemporaryDirectory / $"fallout-{SessionId}.dat";
 
     private static int GetNextDirectory()
     {

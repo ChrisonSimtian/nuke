@@ -22,7 +22,7 @@ partial class Program
 {
     // ReSharper disable InconsistentNaming
 
-    private const string TARGET_FRAMEWORK = "net8.0";
+    private const string TARGET_FRAMEWORK = "net10.0";
     private const string PROJECT_KIND = "9A19103F-16F7-4668-BE54-9A1E7A4F7556";
 
     // ReSharper disable once CognitiveComplexity
@@ -38,9 +38,9 @@ partial class Program
 
         #region Basic
 
-        var nukeLatestReleaseVersion = NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: false);
-        var nukeLatestPrereleaseVersion = NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: true);
-        var nukeLatestLocalVersion = NuGetPackageResolver.GetGlobalInstalledPackage(FalloutCommonPackageId, version: null, packagesConfigFile: null)
+        var falloutLatestReleaseVersion = NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: false);
+        var falloutLatestPrereleaseVersion = NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: true);
+        var falloutLatestLocalVersion = NuGetPackageResolver.GetGlobalInstalledPackage(FalloutCommonPackageId, version: null, packagesConfigFile: null)
             ?.Version.ToString();
 
         if (rootDirectory == null)
@@ -61,18 +61,18 @@ partial class Program
         ClearPreviousLine();
         ShowInput("round_pushpin", "Build project location", buildProjectRelativeDirectory);
 
-        var nukeVersion = PromptForChoice("Which Fallout.Common version should be used?",
+        var falloutVersion = PromptForChoice("Which Fallout.Common version should be used?",
             new[]
                 {
-                    ("latest release", nukeLatestReleaseVersion.GetAwaiter().GetResult()),
-                    ("latest prerelease", nukeLatestPrereleaseVersion.GetAwaiter().GetResult()),
-                    ("latest local", nukeLatestLocalVersion),
+                    ("latest release", falloutLatestReleaseVersion.GetAwaiter().GetResult()),
+                    ("latest prerelease", falloutLatestPrereleaseVersion.GetAwaiter().GetResult()),
+                    ("latest local", falloutLatestLocalVersion),
                     ("same as global tool", typeof(Program).GetTypeInfo().Assembly.GetVersionText())
                 }
                 .Where(x => x.Item2 != null)
                 .Distinct(x => x.Item2)
                 .Select(x => (x.Item2, $"{x.Item2} ({x.Item1})")).ToArray());
-        ShowInput("gem_stone", "Fallout.Common version", nukeVersion);
+        ShowInput("gem_stone", "Fallout.Common version", falloutVersion);
 
         var solutionFile = (AbsolutePath) PromptForChoice(
             "Which solution should be the default?",
@@ -118,7 +118,7 @@ partial class Program
                         ScriptDirectory = buildDirectory.GetWinRelativePathTo(WorkingDirectory),
                         TargetFramework = TARGET_FRAMEWORK,
                         TelemetryVersion = Telemetry.CurrentVersion,
-                        NukeVersion = nukeVersion,
+                        FalloutVersion = falloutVersion,
                     })));
 
         (buildDirectory / "Directory.Build.props").WriteAllLines(GetTemplate("Directory.Build.props"));
