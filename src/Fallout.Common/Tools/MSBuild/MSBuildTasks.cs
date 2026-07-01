@@ -42,7 +42,7 @@ partial class MSBuildTasks
 
 partial class MSBuildSettings
 {
-    private string FormatPlatform(MSBuildTargetPlatform value, PropertyInfo property)
+    private string FormatPlatform(MSBuildTargetPlatform value)
     {
         if (value == null)
             return null;

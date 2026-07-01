@@ -185,11 +185,11 @@ public class DefaultInterfaceExecutionSpecs
 
     private interface ITestBuild
     {
-        public string Description => DefaultInterfaceExecutionSpecs.Description;
-        public Action Action => DefaultInterfaceExecutionSpecs.Action;
-        public Expression<Func<bool>> Requirement => DefaultInterfaceExecutionSpecs.Requirement;
-        public Func<bool> StaticCondition => DefaultInterfaceExecutionSpecs.StaticCondition;
-        public Func<bool> DynamicCondition => DefaultInterfaceExecutionSpecs.DynamicCondition;
+        string Description => DefaultInterfaceExecutionSpecs.Description;
+        Action Action => DefaultInterfaceExecutionSpecs.Action;
+        Expression<Func<bool>> Requirement => DefaultInterfaceExecutionSpecs.Requirement;
+        Func<bool> StaticCondition => DefaultInterfaceExecutionSpecs.StaticCondition;
+        Func<bool> DynamicCondition => DefaultInterfaceExecutionSpecs.DynamicCondition;
 
         Target A => _ => _
             .Description(Description)

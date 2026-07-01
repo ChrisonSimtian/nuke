@@ -65,7 +65,7 @@ public static class PublishPackageRouter
     public static bool GlobMatches(string pattern, string value)
         => Regex.IsMatch(value, GlobToRegex(pattern), RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
-    static string GlobToRegex(string pattern)
+    private static string GlobToRegex(string pattern)
     {
         var builder = new StringBuilder("^");
         foreach (var c in pattern)
