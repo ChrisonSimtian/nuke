@@ -17,8 +17,8 @@ public class DotNetVerbosityMappingAttribute : VerbosityMappingAttribute
     }
 }
 
-[LogLevelPattern(LogEventLevel.Warning, @": warning \w{2,5}\d{1,5}:")]
-[LogLevelPattern(LogEventLevel.Error, @": error \w{2,5}\d{1,5}:")]
+[LogLevelPattern(LogEventLevel.Warning, @": warning \w{2,}\d+:")]
+[LogLevelPattern(LogEventLevel.Error, @": error \w{2,}\d+:")]
 partial class DotNetTasks;
 
 public partial class DotNetTasks
