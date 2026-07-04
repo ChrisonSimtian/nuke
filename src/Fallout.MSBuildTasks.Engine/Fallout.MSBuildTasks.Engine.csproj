@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <!--
+    The MSBuild-free home for the build-task logic (codegen, package embedding, tool packing).
+    net10-only on purpose: it carries the real work so the net472 ContextAwareTask host shim can
+    be replaced by a thin out-of-process bridge, freeing Fallout.Tooling from the ns2.0 floor.
+    See docs/adr/0009-lift-ns20-floor-via-msbuild-bridge.md.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Fallout.Tooling\Fallout.Tooling.csproj" />
+    <ProjectReference Include="..\Fallout.Tooling.Generator\Fallout.Tooling.Generator.csproj" />
+  </ItemGroup>
+
+</Project>

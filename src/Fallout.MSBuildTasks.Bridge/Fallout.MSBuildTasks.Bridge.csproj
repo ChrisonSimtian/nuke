@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <!-- Task type names must be Fallout.MSBuildTasks.<Name> to match the .targets UsingTask. -->
+    <RootNamespace>Fallout.MSBuildTasks</RootNamespace>
+    <AssemblyName>Fallout.MSBuildTasks.Bridge</AssemblyName>
+  </PropertyGroup>
+
+  <!--
+    The full-framework (VS2019/2022, msbuild.exe) adapter for the MSBuild tasks. Pure ToolTask
+    shims that shell out to the net10 worker — ZERO Fallout dependencies beyond the dependency-free
+    Protocol, so Fallout.Tooling no longer needs a net472 flavour. Time-boxed; delete when VS2026's
+    .NET MSBuild can load the net10 tasks in-process. See docs/adr/0009-lift-ns20-floor-via-msbuild-bridge.md.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Fallout.MSBuildTasks.Protocol\Fallout.MSBuildTasks.Protocol.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" CopyLocal="false" Publish="false" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" CopyLocal="false" Publish="false" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+</Project>

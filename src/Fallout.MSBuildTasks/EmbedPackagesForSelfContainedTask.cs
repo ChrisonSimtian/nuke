@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using Fallout.Common.Tooling;
-using Fallout.Common.Utilities;
+using Fallout.MSBuildTasks.Engine;
 
 namespace Fallout.MSBuildTasks;
 
@@ -21,11 +18,8 @@ public class EmbedPackagesForSelfContainedTask : ContextAwareTask
 
     protected override bool ExecuteInner()
     {
-        var packages = NuGetPackageResolver.GetLocalInstalledPackages(ProjectAssetsFile);
-        TargetOutputs = packages
-            .Where(x => !x.Id.StartsWithOrdinalIgnoreCase("microsoft.netcore.app.runtime"))
-            .Where(x => Directory.GetDirectories(x.Directory, "tools").Any())
-            .Select(x => new TaskItem(x.File)).ToArray<ITaskItem>();
+        TargetOutputs = PackageToolingEngine.GetEmbeddablePackageFiles(ProjectAssetsFile)
+            .Select(x => (ITaskItem)new TaskItem(x)).ToArray();
         return true;
     }
 }

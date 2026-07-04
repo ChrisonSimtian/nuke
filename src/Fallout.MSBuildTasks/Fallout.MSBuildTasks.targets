@@ -12,6 +12,12 @@
   -->
   <PropertyGroup>
     <FalloutTasksAssembly Condition="'$(FalloutTasksAssembly)' == '' AND '$(NukeTasksAssembly)' != ''">$(NukeTasksAssembly)</FalloutTasksAssembly>
+    <!--
+      Full-framework MSBuild (VS2019/2022, msbuild.exe) can't load the net10 in-proc task, so it
+      loads the net472 bridge, which shells out to the net10 worker. Core MSBuild (dotnet/SDK) loads
+      the in-proc task directly. See docs/adr/0009-lift-ns20-floor-via-msbuild-bridge.md.
+    -->
+    <FalloutTasksAssembly Condition="'$(FalloutTasksAssembly)' == '' AND '$(MSBuildRuntimeType)' == 'Full'">$(MSBuildThisFileDirectory)\Fallout.MSBuildTasks.Bridge.dll</FalloutTasksAssembly>
     <FalloutTasksAssembly Condition="'$(FalloutTasksAssembly)' == ''">$(MSBuildThisFileDirectory)\$(MSBuildThisFileName).dll</FalloutTasksAssembly>
 
     <FalloutContinueOnError Condition="'$(FalloutContinueOnError)' == '' AND '$(NukeContinueOnError)' != ''">$(NukeContinueOnError)</FalloutContinueOnError>

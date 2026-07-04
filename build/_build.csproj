@@ -17,7 +17,7 @@
   <!-- Test properties for MSBuild integration -->
   <PropertyGroup>
     <FalloutTasksEnabled Condition="'$(FalloutTasksEnabled)' == ''">False</FalloutTasksEnabled>
-    <FalloutTasksDirectory>$(MSBuildThisFileDirectory)\..\src\Fallout.MSBuildTasks\bin\Debug\net8.0\publish</FalloutTasksDirectory>
+    <FalloutTasksDirectory>$(MSBuildThisFileDirectory)\..\src\Fallout.MSBuildTasks\bin\Debug\net10.0\publish</FalloutTasksDirectory>
 
 <!--    <PackAsTool>True</PackAsTool>-->
 <!--    <ToolCommandName>build</ToolCommandName>-->

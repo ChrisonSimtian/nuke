@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <!--
+    The out-of-process net10 worker the net472 bridge shells out to (full-framework MSBuild can't
+    load net10 tasks in-proc). Single-purpose and standalone — deliberately NOT a verb on the
+    `fallout` CLI, since the bridge is a time-boxed VS2019/2022 workaround.
+    See docs/adr/0009-lift-ns20-floor-via-msbuild-bridge.md.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Fallout.MSBuildTasks.Engine\Fallout.MSBuildTasks.Engine.csproj" />
+    <ProjectReference Include="..\Fallout.MSBuildTasks.Protocol\Fallout.MSBuildTasks.Protocol.csproj" />
+  </ItemGroup>
+
+</Project>

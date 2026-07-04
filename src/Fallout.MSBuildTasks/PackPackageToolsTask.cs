@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using Fallout.Common.Tooling;
-using static Fallout.Common.IO.PathConstruction;
+using Fallout.MSBuildTasks.Engine;
 
 namespace Fallout.MSBuildTasks;
 
@@ -25,29 +21,15 @@ public class PackPackageToolsTask : ContextAwareTask
 
     protected override bool ExecuteInner()
     {
-        var packages = NuGetPackageResolver.GetLocalInstalledPackages(ProjectAssetsFile);
-        TargetOutputs = packages.SelectMany(x => GetFiles(x.Id, x.Version.ToString())).ToArray();
+        TargetOutputs = PackageToolingEngine
+            .GetPackageToolFiles(ProjectAssetsFile, NuGetPackageRoot, TargetFramework)
+            .Select(x =>
+            {
+                var item = new TaskItem(x.File);
+                item.SetMetadata("BuildAction", x.BuildAction);
+                item.SetMetadata("PackagePath", x.PackagePath);
+                return (ITaskItem)item;
+            }).ToArray();
         return true;
-    }
-
-    private IEnumerable<ITaskItem> GetFiles(string packageId, string packageVersion)
-    {
-        var packageToolsDirectory =  Path.Combine(NuGetPackageRoot, packageId.ToLowerInvariant(), packageVersion.ToLowerInvariant(), "tools");
-        if (!Directory.Exists(packageToolsDirectory))
-            yield break;
-
-        foreach (var file in Directory.GetFiles(packageToolsDirectory, "*", SearchOption.AllDirectories))
-        {
-            var taskItem = new TaskItem(file);
-            taskItem.SetMetadata("BuildAction", "None");
-            taskItem.SetMetadata("PackagePath",
-                Path.Combine(
-                    "tools",
-                    TargetFramework,
-                    "any",
-                    packageId,
-                    GetRelativePath(packageToolsDirectory, file)));
-            yield return taskItem;
-        }
     }
 }

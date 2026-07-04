@@ -1,7 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net10.0;netstandard2.0</TargetFrameworks>
+    <!--
+      Dropped the netstandard2.0 floor (it only existed to feed Fallout.MSBuildTasks's net472 target,
+      now the dependency-free bridge). Keeps a net8 down-level flavour so Fallout.ProjectModel
+      (net8;net9;net10) still has something to reference. net8 consumes ns2.1, so this still frees
+      Core to absorb the tool contracts / Configure<T> / AbsolutePath — ns2.0 was the only blocker.
+      See docs/adr/0009-lift-ns20-floor-via-msbuild-bridge.md.
+    -->
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

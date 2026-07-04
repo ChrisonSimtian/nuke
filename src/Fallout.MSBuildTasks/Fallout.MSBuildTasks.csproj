@@ -2,16 +2,16 @@
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <TargetFrameworks>net10.0;net472</TargetFrameworks>
+    <!--
+      net10-only: the full-framework (VS2019/2022) path now lives in Fallout.MSBuildTasks.Bridge,
+      which shells out to the net10 worker. These in-proc tasks load only under Core MSBuild.
+      See docs/adr/0009-lift-ns20-floor-via-msbuild-bridge.md.
+    -->
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fallout.Tooling\Fallout.Tooling.csproj" />
-    <ProjectReference Include="..\Fallout.Tooling.Generator\Fallout.Tooling.Generator.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NuGet.Packaging" />
+    <ProjectReference Include="..\Fallout.MSBuildTasks.Engine\Fallout.MSBuildTasks.Engine.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,10 +1,6 @@
-using System;
 using System.Linq;
 using Microsoft.Build.Framework;
-using Fallout.CodeGeneration;
-using Fallout.CodeGeneration.Model;
-using Fallout.Common.IO;
-using Fallout.Common.Utilities.Collections;
+using Fallout.MSBuildTasks.Engine;
 
 namespace Fallout.MSBuildTasks;
 
@@ -24,27 +20,13 @@ public class CodeGenerationTask : ContextAwareTask
 
     protected override bool ExecuteInner()
     {
-        var specificationFiles = SpecificationFiles.Select(x => x.GetMetadata("Fullpath")).ToList();
-
-        string GetFilePath(Tool tool)
-            => (AbsolutePath) BaseDirectory
-               / (UseNestedNamespaces ? tool.Name : ".")
-               / tool.DefaultOutputFileName;
-
-        string GetNamespace(Tool tool)
-            => !UseNestedNamespaces
-                ? BaseNamespace
-                : string.IsNullOrEmpty(BaseNamespace)
-                    ? tool.Name
-                    : $"{BaseNamespace}.{tool.Name}";
-
-        specificationFiles
-            .ForEachLazy(x => LogMessage(message: $"Handling {x} ..."))
-            .ForEach(x => CodeGenerator.GenerateCode(x, GetFilePath, GetNamespace));
-
-        if (UpdateReferences)
-            ReferenceUpdater.UpdateReferences(specificationFiles);
-
+        CodeGenerationEngine.Generate(
+            SpecificationFiles.Select(x => x.GetMetadata("FullPath")).ToList(),
+            BaseDirectory,
+            UseNestedNamespaces,
+            BaseNamespace,
+            UpdateReferences,
+            message => LogMessage(message: message));
         return true;
     }
 }

@@ -1,7 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <!--
+      net10-only. This is a build-time codegen library (not a Roslyn analyzer), invoked by the
+      build and the net10 in-proc MSBuild task; the net472 path no longer references it. Freed from
+      the ns2.0 floor alongside Fallout.Tooling. See docs/adr/0009-lift-ns20-floor-via-msbuild-bridge.md.
+    -->
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>Fallout.CodeGeneration</RootNamespace>
   </PropertyGroup>
 

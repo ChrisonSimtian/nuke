@@ -40,3 +40,4 @@ If you change a decision, do NOT silently rewrite the old ADR — add a new one 
 | [0004](0004-calendar-versioning-and-dual-pace-channels.md) | Calendar versioning + dual-pace channels (edge/stable) + experimental APIs | Accepted (§3 amended by 0007; channel ladder §2 superseded by 0008) |
 | [0007](0007-cut-release-branch-on-demand.md) | Cut `release/YYYY` on demand, not preemptively | Accepted |
 | [0008](0008-collapse-experimental-into-main.md) | Collapse `experimental` into `main`; `main` is the sole prerelease lane | Accepted |
+| [0009](0009-lift-ns20-floor-via-msbuild-bridge.md) | Lift the `netstandard2.0` floor off the tooling stack via an out-of-process MSBuild bridge | Proposed |

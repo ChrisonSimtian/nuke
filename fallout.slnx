@@ -23,6 +23,10 @@
   <Project Path="src\Shims\Nuke.Common\Nuke.Common.csproj" />
   <Project Path="src\Shims\Nuke.Components\Nuke.Components.csproj" />
   <Project Path="src\Fallout.MSBuildTasks\Fallout.MSBuildTasks.csproj" />
+  <Project Path="src\Fallout.MSBuildTasks.Engine\Fallout.MSBuildTasks.Engine.csproj" />
+  <Project Path="src\Fallout.MSBuildTasks.Protocol\Fallout.MSBuildTasks.Protocol.csproj" />
+  <Project Path="src\Fallout.MSBuildTasks.Worker\Fallout.MSBuildTasks.Worker.csproj" />
+  <Project Path="src\Fallout.MSBuildTasks.Bridge\Fallout.MSBuildTasks.Bridge.csproj" />
   <Project Path="src\Fallout.ProjectModel\Fallout.ProjectModel.csproj" />
   <Project Path="src\Persistence\Fallout.Persistence.Solution\Fallout.Persistence.Solution.csproj" />
   <Project Path="src\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
@@ -42,6 +46,7 @@
   <Project Path="tests\Fallout.Cli.Specs\Fallout.Cli.Specs.csproj" />
   <Project Path="tests\Fallout.Migrate.Specs\Fallout.Migrate.Specs.csproj" />
   <Project Path="tests\Fallout.Migrate.Analyzers.Specs\Fallout.Migrate.Analyzers.Specs.csproj" />
+  <Project Path="tests\Fallout.MSBuildTasks.Protocol.Specs\Fallout.MSBuildTasks.Protocol.Specs.csproj" />
   <Project Path="tests\Nuke.Common.Shim.Specs\Nuke.Common.Shim.Specs.csproj" />
   <Project Path="tests\Nuke.Components.Shim.Specs\Nuke.Components.Shim.Specs.csproj" />
   <Project Path="tests\Fallout.ProjectModel.Specs\Fallout.ProjectModel.Specs.csproj" />
