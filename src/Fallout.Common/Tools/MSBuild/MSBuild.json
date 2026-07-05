@@ -59,119 +59,147 @@
                         "delegates": [
                             {
                                 "name": "OutDir",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the output directory for the project."
                             },
                             {
                                 "name": "RunCodeAnalysis",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Enables or disables code analysis."
                             },
                             {
                                 "name": "NoWarn",
                                 "type": "List<int>",
-                                "separator": ";"
+                                "separator": ";",
+                                "help": "Suppresses the specified warnings."
                             },
                             {
                                 "name": "WarningsAsErrors",
                                 "type": "List<int>",
-                                "separator": ";"
+                                "separator": ";",
+                                "help": "Treats the specified warnings as errors."
                             },
                             {
                                 "name": "WarningLevel",
-                                "type": "int"
+                                "type": "int",
+                                "help": "Specifies the warning level (0-4)."
                             },
                             {
                                 "name": "Configuration",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the build configuration (e.g., Debug or Release)."
                             },
                             {
                                 "name": "TreatWarningsAsErrors",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Treats all warnings as errors."
                             },
                             {
                                 "name": "AssemblyVersion",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the version of the assembly."
                             },
                             {
                                 "name": "FileVersion",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the version of the file."
                             },
                             {
                                 "name": "InformationalVersion",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the informational version of the assembly."
                             },
                             {
                                 "name": "PackageOutputPath",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the output path for the NuGet package."
                             },
                             {
                                 "name": "IncludeSymbols",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether to include symbols in the package."
                             },
                             {
                                 "name": "PackageId",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the ID of the NuGet package."
                             },
                             {
                                 "name": "PackageVersion",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the version of the NuGet package."
                             },
                             {
                                 "name": "PackageVersionPrefix",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the prefix for the NuGet package version."
                             },
                             {
                                 "name": "PackageVersionSuffix",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the suffix for the NuGet package version."
                             },
                             {
                                 "name": "Authors",
                                 "type": "List<string>",
-                                "separator": ","
+                                "separator": ",",
+                                "help": "Specifies the authors of the NuGet package."
                             },
                             {
                                 "name": "Title",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the title of the NuGet package."
                             },
                             {
                                 "name": "Description",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the description of the NuGet package."
                             },
                             {
                                 "name": "Copyright",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the copyright notice for the NuGet package."
                             },
                             {
                                 "name": "PackageRequireLicenseAcceptance",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether the package requires license acceptance."
                             },
                             {
                                 "name": "PackageLicenseUrl",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the URL for the package's license."
                             },
                             {
                                 "name": "PackageProjectUrl",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the URL for the package's project page."
                             },
                             {
                                 "name": "PackageIconUrl",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the URL for the package's icon."
                             },
                             {
                                 "name": "PackageTags",
                                 "type": "List<string>",
-                                "separator": " "
+                                "separator": " ",
+                                "help": "Specifies the tags for the NuGet package."
                             },
                             {
                                 "name": "PackageReleaseNotes",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the release notes for the NuGet package."
                             },
                             {
                                 "name": "RepositoryUrl",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the URL for the package's repository."
                             },
                             {
                                 "name": "RepositoryType",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the type of the package's repository."
                             },
                             {
                                 "name": "RestoreSources",
@@ -248,7 +276,7 @@
                             {
                                 "name": "BootstrapperEnabled",
                                 "type": "bool",
-                                "help": "<p>Determines whether to generate the setup.exe bootstrapper.<a href=\"https://learn.microsoft.com/en-us/visualstudio/deployment/building-clickonce-applications-from-the-command-line?view=vs-2022\">Build ClickOnce applications from the command line</a></p>"
+                                "help": "<p>Determines whether to generate the setup.exe bootstrapper. <a href=\"https://learn.microsoft.com/en-us/visualstudio/deployment/building-clickonce-applications-from-the-command-line?view=vs-2022\">Build ClickOnce applications from the command line</a></p>"
                             },
                             {
                                 "name": "GenerateManifests",
@@ -267,15 +295,18 @@
                             },
                             {
                                 "name": "ApplicationVersion",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the application version for ClickOnce deployment."
                             },
                             {
                                 "name": "ApplicationRevision",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the application revision for ClickOnce deployment."
                             },
                             {
                                 "name": "CreateWebPageOnPublish",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether to create a web page when publishing."
                             },
                             {
                                 "name": "Install",
@@ -304,39 +335,48 @@
                             },
                             {
                                 "name": "PublishReadyToRun",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Compiles application assemblies as ReadyToRun (R2R) format. R2R is a form of ahead-of-time (AOT) compilation."
                             },
                             {
                                 "name": "PublishSingleFile",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Packages the app into a platform-specific single-file executable."
                             },
                             {
                                 "name": "SelfContained",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether to publish the .NET runtime with your application so the runtime doesn't need to be installed on the target machine."
                             },
                             {
                                 "name": "SignManifests",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether to sign the ClickOnce manifests."
                             },
                             {
                                 "name": "SkipPublishVerification",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether to skip verification after publishing."
                             },
                             {
                                 "name": "UpdateEnabled",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether ClickOnce updates are enabled."
                             },
                             {
                                 "name": "ManifestKeyFile",
-                                "type": "string"
+                                "type": "string",
+                                "help": "Specifies the key file for signing the manifests."
                             },
                             {
                                 "name": "CreateDesktopShortcut",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether to create a desktop shortcut for the ClickOnce application."
                             },
                             {
                                 "name": "UpdateRequired",
-                                "type": "bool"
+                                "type": "bool",
+                                "help": "Specifies whether a ClickOnce update is required."
                             }
                         ]
                     },
@@ -363,7 +403,7 @@
                         "name": "MSBuildVersion",
                         "type": "MSBuildVersion?",
                         "noArgument": true,
-                        "help": "Specifies the version of MSBuild for building."
+                        "help": "Specifies the version of MSBuild to use."
                     },
                     {
                         "name": "Verbosity",
@@ -375,7 +415,7 @@
                         "name": "MSBuildPlatform",
                         "type": "MSBuildPlatform?",
                         "noArgument": true,
-                        "help": "Specifies the platform to use when building."
+                        "help": "Specifies the MSBuild platform (e.g. x86, x64)."
                     },
                     {
                         "name": "Loggers",
@@ -496,6 +536,7 @@
                 "NETSTANDARD1_1",
                 "NETSTANDARD1_0",
                 "NET",
+                "NET10_0",
                 "NET9_0",
                 "NET8_0",
                 "NET7_0",
