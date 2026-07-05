@@ -56,4 +56,4 @@ Maintainer framing (Chris): *"release/2026 should not really be there unless we 
 ## References
 - [ADR-0001](0001-release-branch-model.md) — branching section amended here.
 - [ADR-0004](0004-calendar-versioning-and-dual-pace-channels.md) §3 — amended here.
-- [docs/branching-and-release.md](../branching-and-release.md), [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md), [AGENTS.md](../../AGENTS.md) — updated for the on-demand lifecycle.
+- [docs/branching-and-release.md](../branching-and-release.md), [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md), [AGENTS.md](https://github.com/Fallout-build/Fallout/blob/main/AGENTS.md) — updated for the on-demand lifecycle.
