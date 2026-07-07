@@ -138,16 +138,7 @@ public class StronglyTypedSolutionGenerator : ISourceGenerator
         }
         catch (Exception exception)
         {
-            var diagnosticLegacy = Diagnostic.Create(
-                "NUKE001",
-                nameof(StronglyTypedSolutionGenerator),
-                exception.Message,
-                DiagnosticSeverity.Error,
-                DiagnosticSeverity.Error,
-                isEnabledByDefault: true,
-                warningLevel: 0);
-
-            var diagnosticNew = Diagnostic.Create(
+            var diagnostic = Diagnostic.Create(
                 "FALLOUT001",
                 nameof(StronglyTypedSolutionGenerator),
                 exception.Message,
@@ -155,8 +146,7 @@ public class StronglyTypedSolutionGenerator : ISourceGenerator
                 DiagnosticSeverity.Error,
                 isEnabledByDefault: true,
                 warningLevel: 0);
-            context.ReportDiagnostic(diagnosticLegacy);
-            context.ReportDiagnostic(diagnosticNew);
+            context.ReportDiagnostic(diagnostic);
         }
 
         return;
