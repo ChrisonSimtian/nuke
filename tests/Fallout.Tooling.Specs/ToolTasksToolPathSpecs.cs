@@ -7,6 +7,7 @@ using Xunit;
 
 namespace Fallout.Common.Specs;
 
+[Collection(ToolPathResolverStateCollection.Name)]
 public class ToolTasksToolPathSpecs
 {
     public ToolTasksToolPathSpecs()
