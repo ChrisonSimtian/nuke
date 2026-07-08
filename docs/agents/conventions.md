@@ -13,6 +13,7 @@ Three groups: conventions to respect, things never to do, and the tool-wrapper r
 - **Telemetry opt-out is set in test runs** (`FALLOUT_TELEMETRY_OPTOUT=true`). Keep it that way.
 - **No per-file license headers.** The MIT notice lives in [`LICENSE`](https://github.com/Fallout-build/Fallout/blob/main/LICENSE) at the repo root, and NuGet packages declare MIT via `PackageLicenseExpression`. Per-file headers were stripped in v11 (one source of truth + the header URL would have rotted on the repo-org transfer). Vendored third-party code keeps its own copyright headers — don't touch those (e.g. files under `src/Persistence/Fallout.Persistence.Solution/` retain Microsoft's MIT notice).
 - **`[Experimental]` for opt-in unstable public APIs.** Not-yet-stable public surface is marked with `[Experimental("FALLOUT0xx")]` rather than held back or shipped silently. See [the `[Experimental]` convention](#experimental-for-opt-in-unstable-apis) below and the [diagnostic-ID registry](../experimental-apis.md).
+- **`[Obsolete]` with a `DiagnosticId` for deprecations.** Deprecated public surface carries `[Obsolete(..., DiagnosticId = "FALLOUTOBS0xx")]` so `TreatWarningsAsErrors` consumers can suppress a single deprecation. See [the `[Obsolete]` convention](#obsolete-for-deprecating-public-apis) below and the [diagnostic-ID registry](../obsolete_apis.md).
 
 ## Writing style for issues, PRs, and commits
 
@@ -47,6 +48,27 @@ public sealed class NewPluginHost
 - **Promoting to stable = removing the attribute.** Because the feature already rode the `main` test lane, deleting the `[Experimental]` line is the whole promotion — no special cross-branch dance. This is what lets stabilised work feed into the production line without a divergent fork. Adding *or* removing `[Experimental]` is **not** a breaking change.
 - **Channel discipline differs.** On the `main` (preview) test lane, churn is expected and the attribute is a courtesy. On a `release/YYYY` **production line**, any risky-but-shipped public surface **must** wear `[Experimental]` — that contract is what keeps the stable line trustworthy while still carrying new work. With the `experimental` branch retired ([ADR-0008](../adr/0008-collapse-experimental-into-main.md)), `[Experimental]` is now the primary mechanism for isolating unstable surface on `main` — including breaking changes batched toward the yearly major.
 - **Don't apply it speculatively.** Because the diagnostic is error-by-default, marking an API that's already used internally breaks the build everywhere it's referenced. Only add `[Experimental]` to a genuinely not-yet-stable API, and suppress every internal usage in the same change so the build stays green.
+
+## `[Obsolete]` for deprecating public APIs
+
+When a public API is on its way out, mark it with [`System.ObsoleteAttribute`](https://learn.microsoft.com/dotnet/api/system.obsoleteattribute) and give it a `DiagnosticId`. This is the sanctioned deprecation path under [AGENTS.md rule #2](../../AGENTS.md) — keep the old surface working (usually bridging to the replacement) while steering consumers to the new one. `DiagnosticId`/`UrlFormat` ship in the .NET 5+ BCL — **no package reference needed** (the repo targets .NET 10).
+
+```csharp
+using System;
+
+[Obsolete(
+    "Use [GitHubActionsInputAttribute] instead. Removed in 2027.x.x.",
+    DiagnosticId = "FALLOUTOBS001",
+    UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
+public string[] OnWorkflowDispatchOptionalInputs { get; set; } = new string[0];
+```
+
+**Rules:**
+
+- **Adding `[Obsolete]` is not a breaking change.** It's warning-level by default, so existing code keeps compiling — this is why it's preferred over a hard break. The *removal* is the break, and it's batched to the next yearly major. State the removal target in the message (e.g. `Removed in 2027.x.x.`).
+- **Always set a `DiagnosticId`.** Without one the compiler reports the generic `CS0618`, so a `TreatWarningsAsErrors` consumer can only fix every usage at once or blanket-`NoWarn` all deprecations. A per-deprecation `FALLOUTOBS0xx` ID lets them suppress just this one while they migrate.
+- **Diagnostic-ID scheme: `FALLOUTOBS0xx`.** Allocated **sequentially and never reused**, from a sequence **separate** from the `FALLOUT0xx` used by `[Experimental]`. Register every allocation in the [diagnostic-ID registry](../obsolete_apis.md) in the same PR that introduces the attribute.
+- **Keep the deprecated surface functional.** Prefer bridging the old member to the new one (e.g. fold legacy arrays into the typed replacement) over leaving it inert, and suppress the internal bridge usage with `#pragma warning disable` scoped to the exact ID.
 
 ## CI pipeline & triggers
 
