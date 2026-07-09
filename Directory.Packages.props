@@ -7,7 +7,7 @@
     <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="Azure.Security.KeyVault.Certificates" Version="4.9.0" />
     <PackageVersion Include="Azure.Security.KeyVault.Keys" Version="4.10.0" />
-    <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
+    <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.11.0" />
     <PackageVersion Include="Basic.Reference.Assemblies.NetStandard20" Version="1.7.9" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
     <PackageVersion Include="Glob" Version="1.1.9" />
