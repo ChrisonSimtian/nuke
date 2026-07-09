@@ -126,9 +126,8 @@ public class CISpecs
 
         public CITheoryAttribute(Type type)
         {
+            Skip = !IsRunning(_type) ? $"Only applies to {_type.Name}." : null;
             _type = type;
         }
-
-        public override string Skip => !IsRunning(_type) ? $"Only applies to {_type.Name}." : null;
     }
 }

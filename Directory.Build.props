@@ -53,15 +53,14 @@
     <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Specs'))">
+  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Specs'))">
     <PackageReference Include="coverlet.msbuild"  />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="GitHubActionsTestLogger" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-<!--    <PackageReference Include="TeamCity.VSTest.TestAdapter" />-->
-    <PackageReference Include="Verify.Xunit"  />
+    <PackageReference Include="Verify.XunitV3"  />
     <PackageReference Include="Verify.DiffPlex"  />
-    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.v3.mtp-v2" />
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 

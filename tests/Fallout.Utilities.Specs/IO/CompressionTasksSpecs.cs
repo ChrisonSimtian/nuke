@@ -4,7 +4,6 @@ using System.Linq;
 using FluentAssertions;
 using Fallout.Common.IO;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Fallout.Common.Specs;
 

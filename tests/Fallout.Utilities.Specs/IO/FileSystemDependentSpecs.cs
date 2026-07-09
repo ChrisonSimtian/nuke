@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection;
 using Fallout.Common;
 using Fallout.Common.IO;
-using Xunit.Abstractions;
+using Xunit;
+using Xunit.Sdk;
 
 namespace Fallout.Common.Specs;
 
@@ -21,9 +22,7 @@ public abstract class FileSystemDependentSpecs
     {
         TestOutputHelper = testOutputHelper;
 
-        TestName = ((ITest) testOutputHelper.GetType()
-            .GetField("test", BindingFlags.NonPublic | BindingFlags.Instance).NotNull()
-            .GetValue(testOutputHelper).NotNull()).TestCase.TestMethod.Method.Name;
+        TestName = TestContext.Current.Test?.TestDisplayName;
 
         ExecutionDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).NotNull();
         RootDirectory = Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory);

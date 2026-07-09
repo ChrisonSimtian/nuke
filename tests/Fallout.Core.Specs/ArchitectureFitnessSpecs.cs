@@ -1,9 +1,9 @@
-using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Fallout.Core.Planning;
 using NetArchTest.Rules;
 using Xunit;
+using TestResult = NetArchTest.Rules.TestResult;
 
 namespace Fallout.Core.Specs;
 
