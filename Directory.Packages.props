@@ -4,7 +4,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Azure.Identity" Version="1.17.1" />
+    <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="Azure.Security.KeyVault.Certificates" Version="4.8.0" />
     <PackageVersion Include="Azure.Security.KeyVault.Keys" Version="4.8.0" />
     <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
