@@ -1,10 +1,9 @@
-using System;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Fallout.CodeGeneration;
 using Fallout.CodeGeneration.Model;
-using Fallout.Common.IO;
 using Fallout.Common.Utilities.Collections;
+using AbsolutePath = Fallout.Common.IO.AbsolutePath;
 
 namespace Fallout.MSBuildTasks;
 
