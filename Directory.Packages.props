@@ -12,7 +12,7 @@
     <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
     <PackageVersion Include="Glob" Version="1.1.9" />
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />
-    <PackageVersion Include="Humanizer" Version="3.0.1" />
+    <PackageVersion Include="Humanizer" Version="3.0.10" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="10.0.0" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.7.115" />
