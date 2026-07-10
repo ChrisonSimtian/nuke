@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Fallout.Common.Specs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Fallout.Build\Fallout.Build.csproj" />
     <ProjectReference Include="..\Fallout.Build.Shared\Fallout.Build.Shared.csproj" />
     <ProjectReference Include="..\Fallout.ProjectModel\Fallout.ProjectModel.csproj" />
