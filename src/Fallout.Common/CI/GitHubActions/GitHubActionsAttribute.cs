@@ -235,7 +235,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                    RunsOnLabels = RunsOnLabels,
                    EnvironmentName = EnvironmentName,
                    EnvironmentUrl = EnvironmentUrl,
-                   Steps = GetSteps(relevantTargets).ToArray(),
+                   Steps = GetSteps(relevantTargets, image),
                    Image = image,
                    TimeoutMinutes = TimeoutMinutes,
                    ConcurrencyGroup = JobConcurrencyGroup,
@@ -243,53 +243,90 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                };
     }
 
-    private IEnumerable<GitHubActionsStep> GetSteps(IReadOnlyCollection<ExecutableTarget> relevantTargets)
+    private GitHubActionsStep[] GetSteps(IReadOnlyCollection<ExecutableTarget> relevantTargets, GitHubActionsImage image)
     {
-        yield return new GitHubActionsCheckoutStep
-                     {
-                         Submodules = _submodules,
-                         Lfs = _lfs,
-                         FetchDepth = _fetchDepth,
-                         Progress = _progress,
-                         Filter = _filter,
-                         Ref = _ref,
-                         CheckoutWith = CheckoutWith
-                     };
+        var checkout = new GitHubActionsCheckoutStep
+                       {
+                           Submodules = _submodules,
+                           Lfs = _lfs,
+                           FetchDepth = _fetchDepth,
+                           Progress = _progress,
+                           Filter = _filter,
+                           Ref = _ref,
+                           CheckoutWith = CheckoutWith
+                       };
 
-        if (CacheKeyFiles.Any())
-        {
-            yield return new GitHubActionsCacheStep
-                         {
-                             IncludePatterns = CacheIncludePatterns,
-                             ExcludePatterns = CacheExcludePatterns,
-                             KeyFiles = CacheKeyFiles
-                         };
-        }
+        var cache = CacheKeyFiles.Any()
+            ? new GitHubActionsCacheStep
+              {
+                  IncludePatterns = CacheIncludePatterns,
+                  ExcludePatterns = CacheExcludePatterns,
+                  KeyFiles = CacheKeyFiles
+              }
+            : null;
 
-        yield return new GitHubActionsRunStep
-                     {
-                         InvokedTargets = InvokedTargets,
-                         Imports = GetImports().ToDictionary(x => x.Key, x => x.Value)
-                     };
+        var run = new GitHubActionsRunStep
+                  {
+                      InvokedTargets = InvokedTargets,
+                      Imports = GetImports().ToDictionary(x => x.Key, x => x.Value)
+                  };
 
+        var artifacts = new List<GitHubActionsStep>();
         if (PublishArtifacts)
         {
-            var artifacts = relevantTargets
+            var artifactPaths = relevantTargets
                 .SelectMany(x => x.ArtifactProducts)
                 .Select(x => (AbsolutePath)x)
                 // TODO: https://github.com/actions/upload-artifact/issues/11
                 .Select(x => x.DescendantsAndSelf(y => y.Parent).FirstOrDefault(y => !y.ToString().ContainsOrdinalIgnoreCase("*")))
                 .Distinct().ToList();
 
-            foreach (var artifact in artifacts)
-            {
-                yield return new GitHubActionsArtifactStep
-                             {
-                                 Name = artifact.ToString().TrimStart(artifact.Parent.ToString()).TrimStart('/', '\\'),
-                                 Path = Build.RootDirectory.GetUnixRelativePathTo(artifact),
-                                 Condition = PublishCondition
-                             };
-            }
+            foreach (var artifact in artifactPaths)
+                artifacts.Add(new GitHubActionsArtifactStep
+                              {
+                                  Name = artifact.ToString().TrimStart(artifact.Parent.ToString()).TrimStart('/', '\\'),
+                                  Path = Build.RootDirectory.GetUnixRelativePathTo(artifact),
+                                  Condition = PublishCondition
+                              });
+        }
+
+        var builtInSteps = new List<GitHubActionsStep> { checkout };
+        if (cache != null)
+            builtInSteps.Add(cache);
+        builtInSteps.Add(run);
+        builtInSteps.AddRange(artifacts);
+
+        var pipeline = new GitHubActionsStepPipeline(_name, image, builtInSteps.AsReadOnly());
+        if (Build is IConfigureGitHubActions configure)
+            configure.ConfigureSteps(pipeline);
+        ValidateCustomSteps(pipeline);
+
+        var steps = new List<GitHubActionsStep> { checkout };
+        steps.AddRange(pipeline.GetInserts(GitHubActionsStepPosition.PostCheckout));
+        if (cache != null)
+            steps.Add(cache);
+        steps.AddRange(pipeline.GetInserts(GitHubActionsStepPosition.PreRun));
+        steps.Add(run);
+        steps.AddRange(pipeline.GetInserts(GitHubActionsStepPosition.PostRun));
+        steps.AddRange(artifacts);
+        steps.AddRange(pipeline.GetInserts(GitHubActionsStepPosition.JobEnd));
+        return steps.ToArray();
+    }
+
+    private void ValidateCustomSteps(GitHubActionsStepPipeline pipeline)
+    {
+        foreach (var step in pipeline.AllInserts)
+        {
+            var id = step.Name ?? step.Uses ?? "(run step)";
+            var hasUses = !step.Uses.IsNullOrWhiteSpace();
+            var hasRun = step.Run.Any(x => !x.IsNullOrWhiteSpace());
+
+            Assert.True(hasUses ^ hasRun,
+                $"Custom step '{id}' in workflow '{_name}' must set exactly one of '{nameof(GitHubActionsCustomStep.Uses)}' or '{nameof(GitHubActionsCustomStep.Run)}'");
+            Assert.True(step.With.Count == 0 || hasUses,
+                $"Custom step '{id}' in workflow '{_name}' sets '{nameof(GitHubActionsCustomStep.With)}' but no '{nameof(GitHubActionsCustomStep.Uses)}'; 'with:' is only valid on a 'uses:' step");
+            Assert.True(step.Shell.IsNullOrWhiteSpace() || !hasUses,
+                $"Custom step '{id}' in workflow '{_name}' sets '{nameof(GitHubActionsCustomStep.Shell)}' on a 'uses:' step; shell applies only to run steps");
         }
     }
 
