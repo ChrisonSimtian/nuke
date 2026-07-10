@@ -4,7 +4,7 @@
     Unreleased: true,
     Notes: [
       - Changed something,
-      
+
     ],
     StartIndex: 6,
     EndIndex: 8
@@ -15,12 +15,12 @@
     Version: 1.0.0,
     Notes: [
       - Some text that spans,
-        multiple lines,
+      multiple lines,
       - A text on a single line,
       ,
       - Added something,
       - Fixed something,
-      
+
     ],
     StartIndex: 9,
     EndIndex: 16

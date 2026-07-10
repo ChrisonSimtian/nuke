@@ -3,7 +3,7 @@
     IsEmpty: true,
     Unreleased: true,
     Notes: [
-      
+
     ],
     StartIndex: 6,
     EndIndex: 7
@@ -15,7 +15,7 @@
     Notes: [
       - Added something,
       - Fixed something,
-      
+
     ],
     StartIndex: 8,
     EndIndex: 11
@@ -26,7 +26,7 @@
     Version: 1.2.2,
     Notes: [
       - Fixed something,
-      
+
     ],
     StartIndex: 12,
     EndIndex: 14
@@ -37,7 +37,7 @@
     Version: 0.2.0,
     Notes: [
       - Added something,
-      
+
     ],
     StartIndex: 15,
     EndIndex: 17
