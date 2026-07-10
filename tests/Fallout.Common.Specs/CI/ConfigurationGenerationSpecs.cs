@@ -146,10 +146,10 @@ public class ConfigurationGenerationSpecs
                     OnPullRequestTags = new[] { "pull_request_tag" },
                     OnPullRequestIncludePaths = new[] { "pull_request_include_path" },
                     OnPullRequestExcludePaths = new[] { "pull_request_exclude_path/**" },
-#pragma warning disable CS0618 // regression guard: the obsolete legacy path must still emit correctly
+#pragma warning disable FALLOUTOBS001 // regression guard: the obsolete legacy path must still emit correctly
                     OnWorkflowDispatchOptionalInputs = new[] { "OptionalInput" },
                     OnWorkflowDispatchRequiredInputs = new[] { "RequiredInput" },
-#pragma warning restore CS0618
+#pragma warning restore FALLOUTOBS001
                     PublishCondition = "success() || failure()",
                     Submodules = GitHubActionsSubmodules.Recursive,
                     Lfs = true,
@@ -308,10 +308,10 @@ public class ConfigurationGenerationSpecs
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
                     InvokedTargets = new[] { nameof(Test) },
-#pragma warning disable CS0618 // regression guard: the obsolete legacy path must still emit correctly
+#pragma warning disable FALLOUTOBS001 // regression guard: the obsolete legacy path must still emit correctly
                     OnWorkflowDispatchOptionalInputs = new[] { "LegacyOptional" },
                     OnWorkflowDispatchRequiredInputs = new[] { "LegacyRequired" },
-#pragma warning restore CS0618
+#pragma warning restore FALLOUTOBS001
                     Inputs = new[]
                              {
                                  new GitHubActionsInputAttribute("TypedFlag") { Type = GitHubActionsInputType.Boolean, Default = "true" }

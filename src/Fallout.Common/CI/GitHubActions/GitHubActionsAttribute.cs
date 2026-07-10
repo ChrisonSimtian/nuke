@@ -56,9 +56,13 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     public string[] OnPullRequestTags { get; set; } = new string[0];
     public string[] OnPullRequestIncludePaths { get; set; } = new string[0];
     public string[] OnPullRequestExcludePaths { get; set; } = new string[0];
-    [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.")]
+    [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.",
+        DiagnosticId = "FALLOUTOBS001",
+        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
     public string[] OnWorkflowDispatchOptionalInputs { get; set; } = new string[0];
-    [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.")]
+    [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.",
+        DiagnosticId = "FALLOUTOBS001",
+        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
     public string[] OnWorkflowDispatchRequiredInputs { get; set; } = new string[0];
     public string OnCronSchedule { get; set; }
 
@@ -369,12 +373,12 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     private IEnumerable<GitHubActionsWorkflowDispatchInput> GetWorkflowDispatchInputs()
     {
         // legacy arrays first → untyped string inputs, preserving the existing ordering and output
-#pragma warning disable CS0618 // deliberate bridge for the obsolete legacy arrays
+#pragma warning disable FALLOUTOBS001 // deliberate bridge for the obsolete legacy arrays
         foreach (var input in OnWorkflowDispatchOptionalInputs)
             yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = false };
         foreach (var input in OnWorkflowDispatchRequiredInputs)
             yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = true };
-#pragma warning restore CS0618
+#pragma warning restore FALLOUTOBS001
 
         foreach (var input in DeclaredInputs.Where(x => x.Workflows.Length == 0 ||
                      x.Workflows.Select(NormalizeWorkflowName).Contains(_name)))

@@ -8,10 +8,14 @@ namespace Fallout.Common.CI.GitHubActions.Configuration;
 
 public class GitHubActionsWorkflowDispatchTrigger : GitHubActionsDetailedTrigger
 {
-    [Obsolete($"Set {nameof(Inputs)} instead. Removed in 2027.x.x.")]
+    [Obsolete($"Set {nameof(Inputs)} instead. Removed in 2027.x.x.",
+        DiagnosticId = "FALLOUTOBS001",
+        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
     public string[] OptionalInputs { get; set; } = new string[0];
 
-    [Obsolete($"Set {nameof(Inputs)} instead. Removed in 2027.x.x.")]
+    [Obsolete($"Set {nameof(Inputs)} instead. Removed in 2027.x.x.",
+        DiagnosticId = "FALLOUTOBS001",
+        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
     public string[] RequiredInputs { get; set; } = new string[0];
 
     public GitHubActionsWorkflowDispatchInput[] Inputs { get; set; } = new GitHubActionsWorkflowDispatchInput[0];
@@ -54,12 +58,12 @@ public class GitHubActionsWorkflowDispatchTrigger : GitHubActionsDetailedTrigger
     // preserving prior output), then typed Inputs.
     private IEnumerable<GitHubActionsWorkflowDispatchInput> GetInputs()
     {
-#pragma warning disable CS0618 // deliberate bridge for the obsolete legacy arrays
+#pragma warning disable FALLOUTOBS001 // deliberate bridge for the obsolete legacy arrays
         foreach (var input in OptionalInputs)
             yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = false };
         foreach (var input in RequiredInputs)
             yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = true };
-#pragma warning restore CS0618
+#pragma warning restore FALLOUTOBS001
 
         foreach (var input in Inputs)
             yield return input;

@@ -27,13 +27,13 @@ public class GitHubActionsWorkflowDispatchTriggerSpecs
     [Fact]
     public void Legacy_arrays_emit_untyped_inputs()
     {
-#pragma warning disable CS0618 // exercising the restored obsolete trigger API on purpose
+#pragma warning disable FALLOUTOBS001 // exercising the restored obsolete trigger API on purpose
         var yaml = Render(new GitHubActionsWorkflowDispatchTrigger
                           {
                               OptionalInputs = new[] { "Opt" },
                               RequiredInputs = new[] { "Req" }
                           });
-#pragma warning restore CS0618
+#pragma warning restore FALLOUTOBS001
 
         yaml.Should().Contain("Opt:").And.Contain("required: false");
         yaml.Should().Contain("Req:").And.Contain("required: true");
@@ -44,7 +44,7 @@ public class GitHubActionsWorkflowDispatchTriggerSpecs
     [Fact]
     public void Legacy_arrays_emit_before_typed_inputs()
     {
-#pragma warning disable CS0618
+#pragma warning disable FALLOUTOBS001
         var yaml = Render(new GitHubActionsWorkflowDispatchTrigger
                           {
                               OptionalInputs = new[] { "Legacy" },
@@ -54,7 +54,7 @@ public class GitHubActionsWorkflowDispatchTriggerSpecs
                                            { Name = "Typed", Type = GitHubActionsInputType.Boolean, Default = "true" }
                                        }
                           });
-#pragma warning restore CS0618
+#pragma warning restore FALLOUTOBS001
 
         yaml.IndexOf("Legacy:", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("Typed:", StringComparison.Ordinal));
@@ -65,13 +65,13 @@ public class GitHubActionsWorkflowDispatchTriggerSpecs
     [Fact]
     public void Legacy_arrays_and_typed_inputs_emit_identical_yaml()
     {
-#pragma warning disable CS0618
+#pragma warning disable FALLOUTOBS001
         var legacy = Render(new GitHubActionsWorkflowDispatchTrigger
                             {
                                 OptionalInputs = new[] { "Opt" },
                                 RequiredInputs = new[] { "Req" }
                             });
-#pragma warning restore CS0618
+#pragma warning restore FALLOUTOBS001
 
         var typed = Render(new GitHubActionsWorkflowDispatchTrigger
                            {

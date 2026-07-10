@@ -30,14 +30,14 @@ public class GitHubActionsDispatchInputSpecs
     [Fact]
     public void Legacy_arrays_and_typed_string_inputs_emit_identical_yaml()
     {
-#pragma warning disable CS0618 // comparing the obsolete API against its typed replacement on purpose
+#pragma warning disable FALLOUTOBS001 // comparing the obsolete API against its typed replacement on purpose
         var legacy = Render(new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                             {
                                 InvokedTargets = new[] { nameof(ConfigurationGenerationSpecs.TestBuild.Test) },
                                 OnWorkflowDispatchOptionalInputs = new[] { "Opt" },
                                 OnWorkflowDispatchRequiredInputs = new[] { "Req" }
                             });
-#pragma warning restore CS0618
+#pragma warning restore FALLOUTOBS001
 
         var typed = Render(new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                            {

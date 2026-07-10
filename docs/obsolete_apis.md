@@ -45,10 +45,10 @@ Status values: **Deprecated** (live, warns on use), **Removed** (API deleted —
 
 | ID | Surface | Deprecated | Status | Notes |
 |----|---------|------------|--------|-------|
-| _none yet_ | | | | |
+| `FALLOUTOBS001` | `GitHubActionsAttribute.OnWorkflowDispatch{Optional,Required}Inputs`, `GitHubActionsWorkflowDispatchTrigger.{Optional,Required}Inputs` | 2026.x | Deprecated | Untyped `workflow_dispatch` input arrays. Use `[GitHubActionsInputAttribute]` / `GitHubActionsWorkflowDispatchTrigger.Inputs` instead. Removal target: 2027.0.0. |
 
 <!--
 Allocation example (do not uncomment unless a real API is deprecated):
 
-| `FALLOUTOBS001` | `GitHubActionsAttribute.OnWorkflowDispatch{Optional,Required}Inputs`, `GitHubActionsWorkflowDispatchTrigger.{Optional,Required}Inputs` | 2026.x | Deprecated | Untyped `workflow_dispatch` input arrays. Use `[GitHubActionsInputAttribute]` / `GitHubActionsWorkflowDispatchTrigger.Inputs` instead. Removal target: 2027.0.0. |
+| `FALLOUTOBS002` | `Fallout.Namespace.SomeType.OldMember` | 2026.x | Deprecated | Use `NewMember` instead. Removal target: 2027.0.0. |
 -->
