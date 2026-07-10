@@ -26,21 +26,8 @@ public class GitHubActionsCustomStep : GitHubActionsStep
 
     public override void Write(CustomFileWriter writer)
     {
+        // The first emitted key carries the '- ' list marker; every later key is a '  ' continuation.
         var written = false;
-
-        void Scalar(string key, string value)
-        {
-            writer.WriteLine((written ? "  " : "- ") + $"{key}: {value}");
-            written = true;
-        }
-
-        void MapBlock(string key, Dictionary<string, string> map)
-        {
-            writer.WriteLine((written ? "  " : "- ") + $"{key}:");
-            written = true;
-            using (writer.Indent())
-                map.ForEach(x => writer.WriteLine($"  {x.Key}: {x.Value}"));
-        }
 
         if (!Name.IsNullOrWhiteSpace())
             Scalar("name", Name);
@@ -73,5 +60,21 @@ public class GitHubActionsCustomStep : GitHubActionsStep
             Scalar("continue-on-error", ContinueOnError.Value ? "true" : "false");
         if (TimeoutMinutes.HasValue)
             Scalar("timeout-minutes", TimeoutMinutes.Value.ToString(CultureInfo.InvariantCulture));
+
+        return;
+
+        void Scalar(string key, string value)
+        {
+            writer.WriteLine((written ? "  " : "- ") + $"{key}: {value}");
+            written = true;
+        }
+
+        void MapBlock(string key, Dictionary<string, string> map)
+        {
+            writer.WriteLine((written ? "  " : "- ") + $"{key}:");
+            written = true;
+            using (writer.Indent())
+                map.ForEach(x => writer.WriteLine($"  {x.Key}: {x.Value}"));
+        }
     }
 }
