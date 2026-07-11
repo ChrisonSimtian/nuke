@@ -1,26 +1,27 @@
+using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Fallout.Migrate.Common;
 
 namespace Fallout.Migrate.Steps;
 
 /// <summary>
-/// Rewrites every <c>*.csproj</c> file under the repository root: <c>Nuke.*</c> package/project
-/// references become <c>Fallout.*</c> (pinning the current Fallout version where an inline
-/// <c>Version</c> attribute was present), <c>Nuke*</c> MSBuild properties are renamed to
-/// <c>Fallout*</c>, and stale explicit <c>System.Security.Cryptography.Xml</c> pins are stripped.
+/// Rewrites <c>.csproj</c> files: <c>Nuke.*</c> package/project references become <c>Fallout.*</c>
+/// (pinning the current Fallout version where an inline <c>Version</c> attribute was present),
+/// <c>Nuke*</c> MSBuild properties are renamed to <c>Fallout*</c>, and stale explicit
+/// <c>System.Security.Cryptography.Xml</c> pins are stripped. Driven by <see cref="RewriteCsprojsStep"/>.
 /// </summary>
-internal sealed class RewriteCsprojsStep : IMigrationStep
+internal static class CsprojRewriter
 {
-    // Combined rewrite: Nuke.X PackageReference WITH an inline Version attribute → Fallout.X
+    // Combined rewrite: Nuke.X PackageReference WITH an inline literal Version attribute → Fallout.X
     // at the current Fallout version. NUKE-era pins (e.g. `Version="10.1.0"`) don't exist as
     // Fallout.* packages and produce NU1603 ("not found, falling back to next-higher") which
     // `WarningsAsErrors` in the migrated project escalates. Bumping in the same pass avoids
     // a broken post-migrate build (#217). Tolerates extra attributes between Include and Version
     // (e.g. `PrivateAssets="all"`).
-    // We don't mach MSBuild variables (`$(...)`) here, because they are handled below
+    // We avoid matching MSBuild variables `$(...)` to preserve user structure; they are handled
+    // by Pass 2 (renaming) and Pass 4 (value bump).
     private static readonly Regex nukePackageWithInlineVersionPattern = new(
-        @"(?<prefix><PackageReference\s+Include="")Nuke\.(?<name>[A-Z][A-Za-z0-9.]+)(?<between>""[^>]*?\s+Version="")[^""]+",
+        @"(?<prefix><PackageReference\s+Include="")Nuke\.(?<name>[A-Z][A-Za-z0-9.]+)(?<between>""[^>]*?\s+Version="")(?!\$\()[^""]+",
         RegexOptions.Compiled);
 
     // PackageReference / ProjectReference `Include="Nuke.X"` → `Include="Fallout.X"` — namespace
@@ -29,25 +30,23 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     private static readonly Regex packageReferencePattern =
         new(@"(?<=\b(?:Include|Update|Remove)="")Nuke\.(?=[A-Z])", RegexOptions.Compiled);
 
+    // Detects MSBuild variables used in PackageReference Version attributes: Version="$(MyVar)"
+    private static readonly Regex packageReferenceVariablePattern = new(
+        @"<PackageReference\s+[^>]*?Version=""\$\((?<variable>[^)]+)\)""",
+        RegexOptions.Compiled);
+
     // MSBuild element/property names that begin with `Nuke` followed by an uppercase
     // letter (e.g. <NukeRootDirectory>...). Limited to known consumer-facing names from
     // P3.5b so we don't rewrite unrelated user-defined identifiers that happen to start
     // with the literal "Nuke".
     private static readonly Regex msBuildPropertyPattern = new(
         @"\bNuke(?=" +
-        "(?:RootDirectory|ScriptDirectory|BaseDirectory|BaseNamespace|" +
+        "(?:Version|RootDirectory|ScriptDirectory|TelemetryVersion|BaseDirectory|BaseNamespace|" +
         "UseNestedNamespaces|RepositoryUrl|UpdateReferences|ContinueOnError|TaskTimeout|" +
         "Timeout|TasksEnabled|DefaultExcludes|ExcludeBoot|ExcludeConfig|ExcludeLogs|" +
         "ExcludeDirectoryBuild|ExcludeCi|SpecificationFiles|ExternalFiles|TasksAssembly|" +
         "TasksDirectory)\\b)",
         RegexOptions.Compiled);
-
-    // Strip the telemetry-version property entirely — telemetry was removed from Fallout
-    // (ADR-0010), so a migrated project must not carry a dead <FalloutTelemetryVersion>.
-    // Matches the whole element line (either legacy Nuke* or already-Fallout* spelling).
-    private static readonly Regex telemetryVersionPropertyPattern = new(
-        @"^[ \t]*<(?<tag>(?:Nuke|Fallout)TelemetryVersion)>.*?</\k<tag>>[ \t]*\r?\n?",
-        RegexOptions.Compiled | RegexOptions.Multiline);
 
     // Strip explicit `System.Security.Cryptography.Xml` PackageReferences. NUKE-era projects
     // often pinned this directly at an older major (e.g. 9.x). Fallout.Common 10.2.12+ transitively
@@ -56,23 +55,8 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     // migrated project wants (#217). Matches a self-closing element with optional surrounding
     // indentation + trailing newline.
     private static readonly Regex cryptographyXmlPackageRefPattern = new(
-        @"^[ \t]*<PackageReference\s+Include=""System\.Security\.Cryptography\.Xml""[^/]*/>[ \t]*\r?\n?",
+        @"^[ \t]*<PackageReference\s+Include=""System\.Security\.Cryptography\.Xml""[^/]*/>\s*\r?\n?",
         RegexOptions.Compiled | RegexOptions.Multiline);
-
-    /// <inheritdoc />
-    public Task ExecuteAsync(MigrationContext context, Summary summary)
-    {
-        foreach (var path in MigrationFileOperations.EnumerateFiles(context.RootDirectory, "*.csproj"))
-        {
-            MigrationFileOperations.ApplyRewrite(
-                context,
-                path,
-                content => Rewrite(content, context.FalloutVersion),
-                summary);
-        }
-
-        return Task.CompletedTask;
-    }
 
     /// <summary>
     /// Rewrites <paramref name="original"/> content, replacing <c>Nuke.*</c> references and MSBuild
@@ -81,7 +65,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     /// <param name="original">The original <c>.csproj</c> file content.</param>
     /// <param name="falloutVersion">The Fallout version to pin into rewritten inline-versioned references.</param>
     /// <returns>The rewritten content and the number of edits made.</returns>
-    private static RewriteResult Rewrite(string original, string falloutVersion)
+    public static RewriteResult Rewrite(string original, string falloutVersion)
     {
         var edits = 0;
         var content = original;
@@ -110,19 +94,37 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
             return "Fallout";
         });
 
-        // Pass 3 — strip the telemetry-version property (feature removed in ADR-0010).
-        content = telemetryVersionPropertyPattern.Replace(content, _ =>
-        {
-            edits++;
-            return string.Empty;
-        });
-
-        // Pass 4 — strip the stale System.Security.Cryptography.Xml direct pin.
+        // Pass 3 — strip the stale System.Security.Cryptography.Xml direct pin.
         content = cryptographyXmlPackageRefPattern.Replace(content, _ =>
         {
             edits++;
             return string.Empty;
         });
+
+        // Pass 4 — extract variables used in PackageReferences and bump their properties.
+        var variablesToBump = packageReferenceVariablePattern.Matches(content)
+            .Select(m => m.Groups["variable"].Value)
+            .ToHashSet();
+
+        // Always include FalloutVersion as they are canonical.
+        variablesToBump.Add("FalloutVersion");
+
+        foreach (var variable in variablesToBump)
+        {
+            var pattern = $"(?<=<{variable}>)[^<]+(?=</{variable}>)";
+            content = Regex.Replace(content,
+                pattern,
+                m =>
+                {
+                    if (m.Value != falloutVersion)
+                    {
+                        edits++;
+                        return falloutVersion;
+                    }
+
+                    return m.Value;
+                });
+        }
 
         return new RewriteResult(content, edits);
     }

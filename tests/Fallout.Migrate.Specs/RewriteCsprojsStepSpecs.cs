@@ -295,4 +295,74 @@ public class RewriteCsprojsStepSpecs : IDisposable
                                 </Project>
                                 """);
     }
+
+    [Fact]
+    public void Recognizes_a_version_variable_prefixed_with_Nuke()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <NukeVersion>10.1.0</NukeVersion>
+                               </PropertyGroup>
+                               <ItemGroup>
+                                 <PackageReference Include="System.Text.Json" Version="9.0.0" />
+                                 <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+                                 <PackageReference Include="Nuke.Common" Version="$(NukeVersion)" />
+                                 <PackageReference Include="Nuke.Components" Version="$(NukeVersion)" />
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+
+        result.Content.Should().NotContain("NukeVersion")
+            .And.Contain("$(FalloutVersion)", Exactly.Twice())
+            .And.Contain("<FalloutVersion>11.0.0</FalloutVersion>");
+    }
+
+    [Fact]
+    public void Leaves_an_arbitrary_version_variable_alone_but_updates_the_version()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <CiProjectVersion>10.3.49</CiProjectVersion>
+                               </PropertyGroup>
+                               <ItemGroup>
+                                 <PackageReference Include="System.Text.Json" Version="9.0.0" />
+                                 <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+                                 <PackageReference Include="Nuke.Common" Version="$(CiProjectVersion)" />
+                                 <PackageReference Include="Nuke.Components" Version="$(CiProjectVersion)" />
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+
+        result.Content.Should().NotContain("FalloutVersion")
+            .And.Contain("$(CiProjectVersion)", Exactly.Twice())
+            .And.Contain("<CiProjectVersion>11.0.0</CiProjectVersion>");
+    }
+
+    [Fact]
+    public void Leaves_an_unreferenced_arbitrary_variable_alone()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <UnreferencedVersion>10.3.49</UnreferencedVersion>
+                                 <CiProjectVersion>10.3.49</CiProjectVersion>
+                               </PropertyGroup>
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" Version="$(CiProjectVersion)" />
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+
+        result.Content.Should().Contain("<UnreferencedVersion>10.3.49</UnreferencedVersion>")
+          .And.Contain("<CiProjectVersion>11.0.0</CiProjectVersion>")
+          .And.Contain("$(CiProjectVersion)", Exactly.Once());
+    }
 }
