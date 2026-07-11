@@ -11,7 +11,7 @@ namespace Fallout.Cli.Commands;
 /// <summary>
 /// <c>fallout :trigger</c>: pushes an empty commit with the given message to trigger a remote build.
 /// </summary>
-public sealed class TriggerCommand : IFalloutCommand
+internal sealed class TriggerCommand : IFalloutCommand
 {
     public string Name => "trigger";
 

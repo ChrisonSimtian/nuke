@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
-using System.Text.Json.Nodes;
+using Fallout.Cli.Prompts;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
@@ -9,20 +9,34 @@ using Fallout.Common.Utilities.Collections;
 using static Fallout.Common.Constants;
 using static Fallout.Common.Utilities.EncryptionUtility;
 
-namespace Fallout.Cli;
+namespace Fallout.Cli.Commands;
 
 // TODO: unlock prompt
 // TODO: environment variable name
 // TODO: profile vs. environment
 // TODO: fallout :profile <name>
-partial class Program
+
+/// <summary>
+/// <c>fallout :secrets</c>: interactively encrypts secret parameters into the (optionally profile-scoped)
+/// parameters file, managing the keychain password.
+/// </summary>
+internal sealed class SecretsCommand : IFalloutCommand
 {
     private const string SaveAndExit = "<Save & Exit>";
     private const string DiscardAndExit = "<Discard & Exit>";
     private const string DeletePasswordAndExit = "<Delete Password & Exit>";
 
+    private readonly IConsolePrompts _prompts;
+
+    public SecretsCommand(IConsolePrompts prompts) => _prompts = prompts;
+
+    public string Name => "secrets";
+
     // ReSharper disable once CognitiveComplexity
-    public static int Secrets(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+
+    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
     {
         var secretParameters = CompletionUtility.GetItemsFromSchema(
                 GetBuildSchemaFile(rootDirectory.NotNull("No root directory")),
@@ -62,7 +76,7 @@ partial class Program
 
         if (EnvironmentInfo.IsOsx && existingSecrets.Count == 0 && !fromCredentialStore)
         {
-            if (generatedPassword || PromptForConfirmation($"Save password to keychain? (associated with '{rootDirectory}')"))
+            if (generatedPassword || _prompts.PromptForConfirmation($"Save password to keychain? (associated with '{rootDirectory}')"))
                 CredentialStore.SavePassword(credentialStoreName, password);
         }
         else if (fromLegacyCredentialStore)
@@ -78,13 +92,13 @@ partial class Program
         var addedSecrets = new Dictionary<string, string>();
         while (true)
         {
-            var choice = PromptForChoice(
+            var choice = _prompts.PromptForChoice(
                 "Choose secret parameter to enter value:",
                 options.Select(x => (x, addedSecrets.ContainsKey(x) || existingSecrets.ContainsKey(x) ? $"* {x}" : x)).ToArray());
 
             if (!choice.EqualsAnyOrdinalIgnoreCase(SaveAndExit, DiscardAndExit, DeletePasswordAndExit))
             {
-                addedSecrets[choice] = PromptForSecret(choice);
+                addedSecrets[choice] = _prompts.PromptForSecret(choice);
             }
             else
             {
