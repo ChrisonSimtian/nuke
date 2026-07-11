@@ -15,6 +15,9 @@ public class NuGetPackageResolverSpecs
 
     private const string XunitConsolePackageVersion = "2.6.1";
 
+    // This is the latest package version of xunit.runner.console (v2 is deprecated)
+    private const string LastXunitConsolePackageVersion = "2.9.3";
+
     [Theory]
     [InlineData("SpecK", true, true, "1.0.1-ci00055")]
     [InlineData("SpecK", false, true, "1.0.0")]
@@ -34,7 +37,7 @@ public class NuGetPackageResolverSpecs
         result.Should().NotBeNull();
         result.Id.Should().Be("xunit.runner.console");
         result.File.Name.Should().EndWith("nupkg");
-        result.Version.OriginalVersion.Should().Be(XunitConsolePackageVersion);
+        result.Version.OriginalVersion.Should().BeOneOf(XunitConsolePackageVersion, LastXunitConsolePackageVersion);
     }
 
     [Fact]
