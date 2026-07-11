@@ -18,7 +18,7 @@ public class CakeConversionSpecs
     [MemberData(nameof(CakeFileNames))]
     public Task Test(AbsolutePath file)
     {
-        var converted = Program.GetCakeConvertedContent(file.ReadAllText());
+        var converted = CakeConverter.GetConvertedContent(file.ReadAllText());
         return Verifier.Verify(converted, extension: "cs")
             .UseDirectory(CakeScriptsDirectory)
             .UseFileName(file.NameWithoutExtension);
@@ -29,9 +29,9 @@ public class CakeConversionSpecs
     {
         var content = (CakeScriptsDirectory / "references.cake").ReadAllText();
 
-        var packages = Program.GetCakePackages(content).ToList();
-        packages.Should().Contain((Program.PACKAGE_TYPE_DOWNLOAD, "GitVersion.CommandLine", "4.0.0"));
-        packages.Should().Contain((Program.PACKAGE_TYPE_REFERENCE, "SharpZipLib", "1.2.0"));
+        var packages = CakeConverter.GetPackages(content).ToList();
+        packages.Should().Contain((PackageManager.DownloadType, "GitVersion.CommandLine", "4.0.0"));
+        packages.Should().Contain((PackageManager.ReferenceType, "SharpZipLib", "1.2.0"));
         packages.Should().Contain(x => x.Id == "TeamCity.Dotnet.Integration" &&
                                        NuGetVersion.Parse(x.Version) > NuGetVersion.Parse("1.0.10"));
         packages.Should().NotContain(x => x.Id.Contains("Cake"));
@@ -40,5 +40,5 @@ public class CakeConversionSpecs
     private static AbsolutePath CakeScriptsDirectory => RootDirectory / "tests" / "Fallout.Cli.Specs" / "cake-scripts";
 
     public static IEnumerable<object[]> CakeFileNames
-        => CakeScriptsDirectory.GlobFiles(Program.CAKE_FILE_PATTERN).Select(x => new object[] { x });
+        => CakeScriptsDirectory.GlobFiles(CakeConverter.FilePattern).Select(x => new object[] { x });
 }

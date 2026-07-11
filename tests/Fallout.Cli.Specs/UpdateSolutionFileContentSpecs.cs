@@ -68,7 +68,7 @@ public class UpdateSolutionFileContentSpecs
     public Task Test(int number, string input)
     {
         var content = input.SplitLineBreaks().ToList();
-        Program.UpdateSolutionFileContent(content, "RELATIVE", "GUID", "NAME");
+        new BuildScaffolder().UpdateSolutionFileContent(content, "RELATIVE", "GUID", "NAME");
 
         return Verifier.Verify(string.Join(Environment.NewLine, content))
             .UseParameters(number);
@@ -85,7 +85,7 @@ public class UpdateSolutionFileContentSpecs
     public Task TestXml(int number, string input)
     {
         var content = XDocument.Load(new StringReader(input));
-        Program.UpdateSolutionXmlFileContent(content, "RELATIVE");
+        new BuildScaffolder().UpdateSolutionXmlFileContent(content, "RELATIVE");
 
         var settings = new XmlWriterSettings { OmitXmlDeclaration = true, Indent = true };
         var stringStream = new StringWriter();
