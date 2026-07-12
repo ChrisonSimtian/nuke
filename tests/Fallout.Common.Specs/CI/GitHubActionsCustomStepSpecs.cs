@@ -66,6 +66,17 @@ public class GitHubActionsCustomStepSpecs
               run: echo hi
             """);
 
+    // An embedded apostrophe must be YAML-escaped by doubling ('' ), not the backslash the shared
+    // SingleQuote() helper would produce (which is invalid inside a YAML single-quoted scalar).
+    [Fact]
+    public void Name_with_an_apostrophe_is_yaml_escaped()
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep { Name = "Bob's step", Run = new[] { "echo hi" } }),
+            """
+            - name: 'Bob''s step'
+              run: echo hi
+            """);
+
     // Multi-entry with:/env: must render in a deterministic (ordinal) order regardless of insertion order.
     [Fact]
     public void Multi_entry_with_renders_in_ordinal_order()

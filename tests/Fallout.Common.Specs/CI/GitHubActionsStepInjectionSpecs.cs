@@ -133,6 +133,8 @@ public class GitHubActionsStepInjectionSpecs
             p.Insert(GitHubActionsStepPosition.PostRun, Marker("second"));
         });
 
+        // Guard: both must be present, else the IndexOf ordering below could pass vacuously on a -1.
+        yaml.Should().Contain("name: 'first'").And.Contain("name: 'second'");
         yaml.IndexOf("name: 'first'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("name: 'second'", StringComparison.Ordinal));
     }
