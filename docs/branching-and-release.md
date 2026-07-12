@@ -36,7 +36,7 @@ Releases fire to multiple channels, each with its own GitHub Environment:
 | `github-releases` env (bundled) | `release/*`, `support/*` tags | Same tag as the package publish | None | Same as the tag |
 | Docker local NuGet server | Per-PR / per-commit | None (local) | PR-derived | Available via `tests/integration/docker-compose.yml` |
 
-**Defaults:** `main` (preview) publishes to GitHub Packages only — **never nuget.org, never a GH Release**. `preview.yml` (main → `-preview`) is the only continuous publisher; the former `experimental.yml` workflow has been deleted ([ADR-0008](adr/0008-collapse-experimental-into-main.md)). Production tag pushes (`release/YYYY`, `support/*`) publish to GitHub Packages + GitHub Releases. nuget.org is **always opt-in** via the `workflow_dispatch` `publish-to-nugetorg` flag — used when a `release/YYYY` is stabilised enough for the broader consumer audience, or for a `support/v10` security patch. See [`project_release_channels` in agent memory](https://github.com/Fallout-build/Fallout/issues/267#issuecomment-4570408325) and [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md).
+**Defaults:** `main` (preview) publishes to GitHub Packages only — **never nuget.org, never a GH Release**. `publish-packages-preview.yml` (main → `-preview`) is the only continuous publisher; the former `experimental.yml` workflow has been deleted ([ADR-0008](adr/0008-collapse-experimental-into-main.md)). Production tag pushes (`release/YYYY`, `support/*`) publish to GitHub Packages + GitHub Releases. nuget.org is **always opt-in** via the `workflow_dispatch` `publish-to-nugetorg` flag — used when a `release/YYYY` is stabilised enough for the broader consumer audience, or for a `support/v10` security patch. See [`project_release_channels` in agent memory](https://github.com/Fallout-build/Fallout/issues/267#issuecomment-4570408325) and [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md).
 
 ## Cutting a release
 
@@ -60,7 +60,7 @@ gh release create v2026.1.X \
     --generate-notes
 ```
 
-That tag push triggers `.github/workflows/release.yml`:
+That tag push triggers `.github/workflows/publish-packages-release.yml`:
 
 1. **`validate-ref`** confirms the tag points at a commit reachable from a production branch (`release/YYYY` or `support/*`).
 2. **`test-and-pack`** runs `dotnet fallout Test Pack`, uploads `output/packages/*.nupkg` as an artifact.
@@ -75,11 +75,11 @@ When a `release/2026` release is stabilised enough for nuget.org, or for cutting
 
 ```bash
 # Option A: via gh CLI
-gh workflow run release.yml \
+gh workflow run publish-packages-release.yml \
     -f tag=v2026.1.X \
     -f publish-to-nugetorg=true
 
-# Option B: via Actions UI → release → "Run workflow" → set publish-to-nugetorg to true
+# Option B: via Actions UI → publish-packages-release → "Run workflow" → set publish-to-nugetorg to true
 ```
 
 The workflow:
@@ -98,10 +98,10 @@ Each `dotnet nuget push` uses `--skip-duplicate`. Re-running a publish job is id
 
 ```bash
 # Routine re-run — leave publish-to-nugetorg false
-gh workflow run release.yml -f tag=v2026.1.X
+gh workflow run publish-packages-release.yml -f tag=v2026.1.X
 
 # Stabilised re-run — include the flag if you want to retry the nuget.org push
-gh workflow run release.yml -f tag=v2026.1.X -f publish-to-nugetorg=true
+gh workflow run publish-packages-release.yml -f tag=v2026.1.X -f publish-to-nugetorg=true
 ```
 
 ## Promotion and hotfixing

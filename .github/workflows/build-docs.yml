@@ -1,0 +1,40 @@
+# Hand-written (not auto-generated). Companion to build.yml.
+#
+# Why this exists:
+#   - main branch protection requires the `ubuntu-latest` status check (the job
+#     name emitted by build.yml — branch protection keys on the job, not the
+#     workflow file/name).
+#   - build.yml has `paths-ignore: docs/**, .assets/**, **/*.md` so it doesn't
+#     fire on docs-only PRs.
+#   - Without a substitute, docs-only PRs sit BLOCKED waiting for a check that
+#     never reports.
+#
+# This workflow fires on the inverse path set (docs-only changes), runs nothing
+# of substance, and reports success under the same `ubuntu-latest` status-check
+# context — satisfying the protection rule without spending CI minutes on a real
+# build.
+#
+# Keep the job name `ubuntu-latest` aligned with build.yml so both files produce
+# a status check named `ubuntu-latest`; the workflow `name:` mirrors build.yml's
+# `build` so docs-only runs appear under the same workflow in the Actions tab.
+
+name: build
+
+on:
+  pull_request:
+    branches:
+      - main
+      - 'release/*'
+      - 'support/*'
+    paths:
+      - 'docs/**'
+      - '.assets/**'
+      - '**/*.md'
+
+jobs:
+  ubuntu-latest:
+    name: ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Skip: docs-only PR, no build needed'
+        run: echo "Docs-only change — ubuntu-latest validation skipped via .github/workflows/build-docs.yml."

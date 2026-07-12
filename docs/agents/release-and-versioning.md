@@ -35,7 +35,7 @@ CI providers in use: **GitHub Actions only** (others were dropped — see [#8](h
 
 Apply by mirroring `main`'s protection JSON to the new branch via the GitHub API (or via repo Settings → Branches). Tag protection for `v*` tags (restricting who can fire a release tag) is tracked separately under milestone #13.
 
-**Validation workflows.** `ubuntu-latest` runs on every PR targeting `main`, `release/*`, or `support/*` (with `paths-ignore` for `docs/**`, `.assets/**`, `**/*.md`). `windows-latest` and `macos-latest` run on push to those branches — they're post-merge / release validation, not PR gates. This is a deliberate cost trade-off. (These three workflows are **generated** from `build/Build.CI.GitHubActions.cs` — change the branch lists in the `MainBranch`/`*BranchPattern` constants there and regenerate, don't hand-edit the `.yml`.)
+**Validation workflows.** `build.yml` runs Test+Pack on Linux on every PR targeting `main`, `release/*`, or `support/*` (with `paths-ignore` for `docs/**`, `.assets/**`, `**/*.md`); its job `ubuntu-latest` is the only required status check. `build-cross-platform.yml` runs Test+Pack on Windows and macOS (one job each) only on PRs targeting `release/*` / `support/*` and on `v*` tag pushes — cross-platform is gated to release intent, not routine `main` work. This is a deliberate cost trade-off. (Both workflows are **generated** from `build/Build.CI.GitHubActions.cs` — change the branch lists in the `MainBranch`/`*BranchPattern` constants there and regenerate, don't hand-edit the `.yml`. The `build-docs.yml` no-op shim reports the `ubuntu-latest` check on docs-only PRs.)
 
 **Merging.** Rebase merge only — squash and plain merge commits are both disabled by repo setting (linear history). Every reviewed commit lands on `main` verbatim, so curate commits into a clean sequence before final approval. See [CONTRIBUTING.md → Merging](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md#merging) for the convention.
 
@@ -88,7 +88,7 @@ If you only discover the breaking nature mid-review, apply all relevant steps be
 
 ## Release pipeline
 
-`.github/workflows/release.yml` is **tag-triggered**: pushing a `v*` tag on a production branch (`release/YYYY` or `support/*`) fires the pipeline. The workflow validates the tag is reachable from such a branch, then fans out a Test+Pack job to three parallel publish jobs:
+`.github/workflows/publish-packages-release.yml` is **tag-triggered**: pushing a `v*` tag on a production branch (`release/YYYY` or `support/*`) fires the pipeline. The workflow validates the tag is reachable from such a branch, then fans out a Test+Pack job to three parallel publish jobs:
 
 | Job | Environment | Fires on tag push? | What ships | Gating |
 |---|---|---|---|---|
@@ -98,7 +98,7 @@ If you only discover the breaking nature mid-review, apply all relevant steps be
 
 ### Preview lane (from `main`)
 
-Pushes to `main` publish **preview prereleases** (`YYYY.MINOR.PATCH-preview.<height>.g<commit>`) to **GitHub Packages only** — never nuget.org, never a GitHub Release. `main` is the sole continuous prerelease lane (per [ADR-0008](../adr/0008-collapse-experimental-into-main.md), which collapsed the former `experimental`/`-alpha` lane into `main`). It does not cause nuget.org Dependabot fan-out into consumer repos (GitHub Packages is opt-in for consumers — the reason this lane is non-publishing to nuget.org per ADR-0001/0002). Implemented in `.github/workflows/preview.yml` (the former `experimental.yml` is deleted).
+Pushes to `main` publish **preview prereleases** (`YYYY.MINOR.PATCH-preview.<height>.g<commit>`) to **GitHub Packages only** — never nuget.org, never a GitHub Release. `main` is the sole continuous prerelease lane (per [ADR-0008](../adr/0008-collapse-experimental-into-main.md), which collapsed the former `experimental`/`-alpha` lane into `main`). It does not cause nuget.org Dependabot fan-out into consumer repos (GitHub Packages is opt-in for consumers — the reason this lane is non-publishing to nuget.org per ADR-0001/0002). Implemented in `.github/workflows/publish-packages-preview.yml` (the former `experimental.yml` is deleted).
 
 ### Why nuget.org stays opt-in
 

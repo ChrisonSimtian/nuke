@@ -3,7 +3,7 @@
 # NuGetApiKey parameter, which would otherwise have to share a name).
 #
 # This is the DELIBERATE (production) release path. The fast test lane —
-# main (-preview), push → GitHub Packages — lives in preview.yml. See ADR-0004
+# main (-preview), push → GitHub Packages — lives in publish-packages-preview.yml. See ADR-0004
 # (amended 2026-05-30), as further amended by ADR-0008 (which collapsed the
 # former experimental/-alpha lane into main).
 #
@@ -33,7 +33,12 @@
 #
 # See docs/branching-and-release.md for the full runbook.
 
-name: release
+# The workflow `name:` below is load-bearing: Build.cs gates
+# ICreateGitHubRelease.CreateGitHubRelease on `github.workflow ==
+# ReleaseWorkflow` (the const in build/Build.CI.GitHubActions.cs). Keep the two
+# in sync — rename here and you must rename the const, or GitHub Releases stop
+# being cut.
+name: publish-packages-release
 
 on:
   push:

@@ -14,11 +14,13 @@
 #
 # `main` is the sole continuous prerelease lane (ADR-0008 collapsed the former
 # `experimental` `-alpha` lane into `main`). Stable + legacy releases are
-# deliberate and tag-triggered — see release.yml.
-# Cross-platform validation on `main` pushes is covered by macos-latest.yml /
-# windows-latest.yml; this workflow's job is publishing, not gating.
+# deliberate and tag-triggered — see publish-packages-release.yml.
+# Cross-platform validation (macOS/Windows) is gated to release intent
+# (build-cross-platform.yml) and does NOT run on `main` pushes; on `main` the
+# ubuntu-latest gate (build.yml) is the edge. This workflow's job is publishing,
+# not gating.
 
-name: preview
+name: publish-packages-preview
 
 on:
   push:
@@ -29,7 +31,7 @@ on:
       - '.assets/**'
       - '**/*.md'
 
-# Cancel a superseded preview build when a newer commit lands (#322). Never on release.yml.
+# Cancel a superseded preview build when a newer commit lands (#322). Never on publish-packages-release.yml.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

@@ -9,17 +9,19 @@
 #
 #     - To trigger manual generation invoke:
 #
-#         fallout --generate-configuration GitHubActions_ubuntu-latest --host GitHubActions
+#         fallout --generate-configuration GitHubActions_build-cross-platform --host GitHubActions
 #
 # </auto-generated>
 # ------------------------------------------------------------------------------
 
-name: ubuntu-latest
+name: build-cross-platform
 
 on:
+  push:
+    tags:
+      - 'v*'
   pull_request:
     branches:
-      - main
       - 'release/*'
       - 'support/*'
     paths-ignore:
@@ -32,15 +34,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ubuntu-latest:
-    name: ubuntu-latest
-    runs-on: ubuntu-latest
+  macos-latest:
+    name: macos-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          ref: ${{ github.head_ref }}
+      - name: 'Cache: .fallout/temp, ~/.nuget/packages'
+        uses: actions/cache@v4
+        with:
+          path: |
+            .fallout/temp
+            ~/.nuget/packages
+          key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
+      - name: 'Setup: .NET SDK'
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: 'Restore: dotnet tools'
+        run: dotnet tool restore
+      - name: 'Run: Test, Pack'
+        run: dotnet fallout Test Pack
+  windows-latest:
+    name: windows-latest
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: 'Cache: .fallout/temp, ~/.nuget/packages'
         uses: actions/cache@v4
         with:

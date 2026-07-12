@@ -81,12 +81,13 @@ This file covers *layout*. For how the build orchestrator works inside — the s
 
 | Workflow | When it runs | What it does |
 |---|---|---|
-| `ubuntu-latest.yml` | Every PR targeting `main` (with `paths-ignore` for docs/.assets/markdown) | Test + Pack. Fast Linux feedback loop. |
-| `windows-latest.yml` | Push to `main` only | Test + Pack on Windows after merge. |
-| `macos-latest.yml` | Push to `main` only | Test + Pack on macOS after merge. |
-| `release.yml` | Push to `main` | Test + Pack + Publish to GitHub Packages. |
+| `build.yml` (generated) | Every PR targeting `main`, `release/*`, or `support/*` (with `paths-ignore` for docs/.assets/markdown) | Test + Pack on Linux. Fast feedback loop; the job `ubuntu-latest` is the only required status check. |
+| `build-docs.yml` | Docs-only PRs to the same branches | No-op that reports the `ubuntu-latest` check so docs-only PRs aren't blocked. |
+| `build-cross-platform.yml` (generated) | PRs targeting `release/*` / `support/*`, and `v*` tag pushes | Test + Pack on macOS **and** Windows (one job each). Gated to release intent. |
+| `publish-packages-preview.yml` | Push to `main` | Test + Pack + publish `-preview` to GitHub Packages only. |
+| `publish-packages-release.yml` | `v*` tag push on a production branch (or `workflow_dispatch`) | Test + Pack + publish to GitHub Packages + GitHub Releases (nuget.org opt-in). |
 
-Linux runs on PRs because it's cheap and fast; Windows and macOS are reserved for post-merge validation. If either breaks post-merge, it surfaces as a red commit on `main` and we fix forward.
+Linux runs on every PR because it's cheap and fast; macOS and Windows are gated to release intent (release/support PRs and release tags) to save CI minutes. On `main` the Linux gate plus the preview pipeline are the edge; if cross-platform breaks it surfaces on a release PR or tag and we fix before shipping.
 
 ## What this doc deliberately does NOT cover
 
