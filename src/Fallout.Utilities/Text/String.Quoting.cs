@@ -72,6 +72,16 @@ public static partial class StringExtensions
     }
 
     /// <summary>
+    /// Single-quotes a given string as a YAML flow scalar, escaping an embedded single quote by doubling it
+    /// (<c>''</c>) per the YAML spec. Prefer this over <see cref="SingleQuote"/> when emitting YAML: the latter
+    /// backslash-escapes, which is fine for shell/log output but invalid inside a YAML single-quoted scalar.
+    /// </summary>
+    public static string SingleQuoteYaml(this string str)
+    {
+        return $"'{str?.Replace("'", "''")}'";
+    }
+
+    /// <summary>
     /// Indicates whether a given string is double-quoted.
     /// </summary>
     public static bool IsDoubleQuoted(this string str)

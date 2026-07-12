@@ -17,6 +17,16 @@ public class StringExtensionsSpecs
     }
 
     [Theory]
+    [InlineData("plain", "'plain'")]
+    [InlineData("with: colon", "'with: colon'")]
+    [InlineData("Bob's step", "'Bob''s step'")]           // YAML escapes an embedded quote by doubling it
+    [InlineData("two ' ' quotes", "'two '' '' quotes'")]
+    public void TestSingleQuoteYaml(string input, string output)
+    {
+        input.SingleQuoteYaml().Should().Be(output);
+    }
+
+    [Theory]
     [InlineData("a\nb\nc")]
     [InlineData("a\r\nb\r\nc")]
     public void TestSplitLineBreaks(string input)

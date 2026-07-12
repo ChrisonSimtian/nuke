@@ -32,7 +32,7 @@ public class GitHubActionsCustomStep : GitHubActionsStep
         var written = false;
 
         if (!Name.IsNullOrWhiteSpace())
-            Scalar("name", YamlSingleQuote(Name));   // single-quoted so a ':' or apostrophe in the name stays valid YAML
+            Scalar("name", Name.SingleQuoteYaml());   // single-quoted so a ':' or apostrophe in the name stays valid YAML
         if (!Id.IsNullOrWhiteSpace())
             Scalar("id", Id);
         if (!Uses.IsNullOrWhiteSpace())
@@ -81,8 +81,4 @@ public class GitHubActionsCustomStep : GitHubActionsStep
                 map.OrderBy(x => x.Key, StringComparer.Ordinal).ForEach(x => writer.WriteLine($"  {x.Key}: {x.Value}"));
         }
     }
-
-    // YAML single-quoted scalar: an embedded quote is escaped by doubling it (''), not the backslash
-    // form the shared SingleQuote() helper uses — that form is fine for shell/log output but invalid YAML.
-    private static string YamlSingleQuote(string value) => $"'{value.Replace("'", "''")}'";
 }
