@@ -13,10 +13,9 @@ public class NuGetPackageResolverSpecs
     private static AbsolutePath ProjectFile => RootDirectory / "tests" / "Fallout.Tooling.Specs" / "Fallout.Tooling.Specs.csproj";
     private static AbsolutePath AssetsFile => ProjectFile.Parent / "obj" / "project.assets.json";
 
-    private const string XunitConsolePackageVersion = "2.6.1";
-
-    // This is the latest package version of xunit.runner.console (v2 is deprecated)
-    private const string LastXunitConsolePackageVersion = "2.9.3";
+    // This version have to match with
+    // - Fallout.Tooling.Specs.csproj -> PackageDownload
+    private const string XunitConsolePackageVersion = "2.9.3";
 
     [Theory]
     [InlineData("SpecK", true, true, "1.0.1-ci00055")]
@@ -37,7 +36,7 @@ public class NuGetPackageResolverSpecs
         result.Should().NotBeNull();
         result.Id.Should().Be("xunit.runner.console");
         result.File.Name.Should().EndWith("nupkg");
-        result.Version.OriginalVersion.Should().BeOneOf(XunitConsolePackageVersion, LastXunitConsolePackageVersion);
+        result.Version.OriginalVersion.Should().Be(XunitConsolePackageVersion);
     }
 
     [Fact]
