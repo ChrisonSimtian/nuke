@@ -56,8 +56,8 @@ public class GitHubActionsStepInjectionSpecs
         var yaml = Render(p => p.Insert(GitHubActionsStepPosition.PostCheckout, Marker("mark")));
 
         yaml.IndexOf("uses: actions/checkout", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: mark", StringComparison.Ordinal));
-        yaml.IndexOf("name: mark", StringComparison.Ordinal)
+            .Should().BeLessThan(yaml.IndexOf("name: 'mark'", StringComparison.Ordinal));
+        yaml.IndexOf("name: 'mark'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("uses: actions/cache", StringComparison.Ordinal));
     }
 
@@ -67,8 +67,8 @@ public class GitHubActionsStepInjectionSpecs
         var yaml = Render(p => p.Insert(GitHubActionsStepPosition.PreRun, Marker("mark")));
 
         yaml.IndexOf("uses: actions/cache", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: mark", StringComparison.Ordinal));
-        yaml.IndexOf("name: mark", StringComparison.Ordinal)
+            .Should().BeLessThan(yaml.IndexOf("name: 'mark'", StringComparison.Ordinal));
+        yaml.IndexOf("name: 'mark'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("Setup: .NET SDK", StringComparison.Ordinal));
     }
 
@@ -78,8 +78,8 @@ public class GitHubActionsStepInjectionSpecs
         var yaml = Render(p => p.Insert(GitHubActionsStepPosition.PostRun, Marker("mark")));
 
         yaml.IndexOf("run: dotnet fallout", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: mark", StringComparison.Ordinal));
-        yaml.IndexOf("name: mark", StringComparison.Ordinal)
+            .Should().BeLessThan(yaml.IndexOf("name: 'mark'", StringComparison.Ordinal));
+        yaml.IndexOf("name: 'mark'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("Publish:", StringComparison.Ordinal));
     }
 
@@ -89,7 +89,7 @@ public class GitHubActionsStepInjectionSpecs
         var yaml = Render(p => p.Insert(GitHubActionsStepPosition.JobEnd, Marker("mark")));
 
         yaml.IndexOf("Publish:", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: mark", StringComparison.Ordinal));
+            .Should().BeLessThan(yaml.IndexOf("name: 'mark'", StringComparison.Ordinal));
     }
 
     [Fact]
@@ -113,15 +113,15 @@ public class GitHubActionsStepInjectionSpecs
         yaml.Should().NotContain("Publish:");
         // All four land, in order, anchored to checkout + run block.
         yaml.IndexOf("uses: actions/checkout", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: post-checkout", StringComparison.Ordinal));
-        yaml.IndexOf("name: post-checkout", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: pre-run", StringComparison.Ordinal));
-        yaml.IndexOf("name: pre-run", StringComparison.Ordinal)
+            .Should().BeLessThan(yaml.IndexOf("name: 'post-checkout'", StringComparison.Ordinal));
+        yaml.IndexOf("name: 'post-checkout'", StringComparison.Ordinal)
+            .Should().BeLessThan(yaml.IndexOf("name: 'pre-run'", StringComparison.Ordinal));
+        yaml.IndexOf("name: 'pre-run'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("Setup: .NET SDK", StringComparison.Ordinal));
         yaml.IndexOf("run: dotnet fallout", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: post-run", StringComparison.Ordinal));
-        yaml.IndexOf("name: post-run", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: job-end", StringComparison.Ordinal));
+            .Should().BeLessThan(yaml.IndexOf("name: 'post-run'", StringComparison.Ordinal));
+        yaml.IndexOf("name: 'post-run'", StringComparison.Ordinal)
+            .Should().BeLessThan(yaml.IndexOf("name: 'job-end'", StringComparison.Ordinal));
     }
 
     [Fact]
@@ -133,8 +133,8 @@ public class GitHubActionsStepInjectionSpecs
             p.Insert(GitHubActionsStepPosition.PostRun, Marker("second"));
         });
 
-        yaml.IndexOf("name: first", StringComparison.Ordinal)
-            .Should().BeLessThan(yaml.IndexOf("name: second", StringComparison.Ordinal));
+        yaml.IndexOf("name: 'first'", StringComparison.Ordinal)
+            .Should().BeLessThan(yaml.IndexOf("name: 'second'", StringComparison.Ordinal));
     }
 
     [Fact]
@@ -147,7 +147,7 @@ public class GitHubActionsStepInjectionSpecs
                 p.Insert(GitHubActionsStepPosition.PostRun, Marker("scoped"));
         });
 
-        yaml.Should().NotContain("name: scoped");
+        yaml.Should().NotContain("name: 'scoped'");
     }
 
     [Fact]
@@ -159,7 +159,7 @@ public class GitHubActionsStepInjectionSpecs
 
         // Workflow-level defaults.run.shell is emitted, but the injected run step carries no shell: of its own.
         yaml.Should().Contain("shell: pwsh");            // the workflow-level defaults block
-        yaml.Should().Contain("name: noshell");
+        yaml.Should().Contain("name: 'noshell'");
         yaml.Should().Contain("run: echo hi");
         // The only "shell:" occurrence is the workflow-level default (one match).
         System.Text.RegularExpressions.Regex.Matches(yaml, "shell:").Count.Should().Be(1);

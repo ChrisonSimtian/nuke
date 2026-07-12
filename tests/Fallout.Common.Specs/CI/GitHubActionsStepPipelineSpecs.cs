@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.CI.GitHubActions.Configuration;
@@ -53,5 +54,15 @@ public class GitHubActionsStepPipelineSpecs
         var pipeline = NewPipeline();
 
         pipeline.GetInserts(GitHubActionsStepPosition.JobEnd).Should().BeEmpty();
+    }
+
+    // A null step should fail fast with the clean ArgumentException the design promises, not surface later as an NRE.
+    [Fact]
+    public void Inserting_a_null_step_throws()
+    {
+        var pipeline = NewPipeline();
+        var act = () => pipeline.Insert(GitHubActionsStepPosition.PostRun, (GitHubActionsCustomStep)null);
+
+        act.Should().Throw<ArgumentException>();
     }
 }

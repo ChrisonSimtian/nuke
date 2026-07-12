@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Fallout.Common.Utilities;
 
 namespace Fallout.Common.CI.GitHubActions.Configuration;
 
@@ -32,6 +33,7 @@ public class GitHubActionsStepPipeline
     /// <summary>Insert one custom step at <paramref name="position"/>. Multiple inserts at one position render in call order.</summary>
     public void Insert(GitHubActionsStepPosition position, GitHubActionsCustomStep step)
     {
+        Assert.NotNull(step);
         if (!_inserts.TryGetValue(position, out var list))
             _inserts[position] = list = new List<GitHubActionsCustomStep>();
         list.Add(step);
@@ -40,6 +42,7 @@ public class GitHubActionsStepPipeline
     /// <summary>Insert several custom steps at <paramref name="position"/>, in enumeration order.</summary>
     public void Insert(GitHubActionsStepPosition position, IEnumerable<GitHubActionsCustomStep> steps)
     {
+        Assert.NotNull(steps);
         foreach (var step in steps)
             Insert(position, step);
     }

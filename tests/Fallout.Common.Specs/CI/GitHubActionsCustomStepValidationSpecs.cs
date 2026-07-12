@@ -82,4 +82,10 @@ public class GitHubActionsCustomStepValidationSpecs
     public void Well_formed_run_step_does_not_throw()
         => Generate(new GitHubActionsCustomStep { Run = new[] { "echo hi" }, Shell = "pwsh" })
             .Should().NotThrow();
+
+    // Collections are publicly settable, so a caller can null them. That must be treated as empty, not crash.
+    [Fact]
+    public void Null_collections_on_a_uses_step_do_not_throw()
+        => Generate(new GitHubActionsCustomStep { Uses = "a/b@v1", With = null, Env = null, Run = null })
+            .Should().NotThrow();
 }

@@ -35,7 +35,7 @@ public class GitHubActionsCustomStepSpecs
                        With = new() { ["node-version"] = "20" }
                    }),
             """
-            - name: Setup Node
+            - name: 'Setup Node'
               uses: actions/setup-node@v4
               with:
                 node-version: 20
@@ -52,8 +52,34 @@ public class GitHubActionsCustomStepSpecs
         => ShouldRenderAs(
             Render(new GitHubActionsCustomStep { Name = "Echo", Run = new[] { "echo hi" } }),
             """
-            - name: Echo
+            - name: 'Echo'
               run: echo hi
+            """);
+
+    // A name with a colon-space would be invalid YAML unquoted; it must be single-quoted like the built-in steps.
+    [Fact]
+    public void Name_with_a_colon_is_quoted()
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep { Name = "Deploy: prod", Run = new[] { "echo hi" } }),
+            """
+            - name: 'Deploy: prod'
+              run: echo hi
+            """);
+
+    // Multi-entry with:/env: must render in a deterministic (ordinal) order regardless of insertion order.
+    [Fact]
+    public void Multi_entry_with_renders_in_ordinal_order()
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep
+                   {
+                       Uses = "some/action@v1",
+                       With = new() { ["beta"] = "2", ["alpha"] = "1" }
+                   }),
+            """
+            - uses: some/action@v1
+              with:
+                alpha: 1
+                beta: 2
             """);
 
     [Fact]
@@ -81,7 +107,7 @@ public class GitHubActionsCustomStepSpecs
                        TimeoutMinutes = 5
                    }),
             """
-            - name: Full
+            - name: 'Full'
               id: full
               uses: some/action@v1
               with:

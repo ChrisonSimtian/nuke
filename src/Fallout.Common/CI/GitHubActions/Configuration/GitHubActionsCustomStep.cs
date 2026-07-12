@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 
@@ -30,21 +32,22 @@ public class GitHubActionsCustomStep : GitHubActionsStep
         var written = false;
 
         if (!Name.IsNullOrWhiteSpace())
-            Scalar("name", Name);
+            Scalar("name", Name.SingleQuote());   // quoted like the built-in steps, so a ':' in the name stays valid YAML
         if (!Id.IsNullOrWhiteSpace())
             Scalar("id", Id);
         if (!Uses.IsNullOrWhiteSpace())
             Scalar("uses", Uses);
-        if (With.Count > 0)
+        if ((With?.Count ?? 0) > 0)
             MapBlock("with", With);
-        if (Env.Count > 0)
+        if ((Env?.Count ?? 0) > 0)
             MapBlock("env", Env);
 
-        if (Run.Length == 1)
+        var runCount = Run?.Length ?? 0;
+        if (runCount == 1)
         {
             Scalar("run", Run[0]);
         }
-        else if (Run.Length > 1)
+        else if (runCount > 1)
         {
             writer.WriteLine((written ? "  " : "- ") + "run: |");
             written = true;
@@ -73,8 +76,9 @@ public class GitHubActionsCustomStep : GitHubActionsStep
         {
             writer.WriteLine((written ? "  " : "- ") + $"{key}:");
             written = true;
+            // Ordinal sort so multi-entry blocks render deterministically (Dictionary order isn't guaranteed).
             using (writer.Indent())
-                map.ForEach(x => writer.WriteLine($"  {x.Key}: {x.Value}"));
+                map.OrderBy(x => x.Key, StringComparer.Ordinal).ForEach(x => writer.WriteLine($"  {x.Key}: {x.Value}"));
         }
     }
 }

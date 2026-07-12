@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Setup Node
+      - name: 'Setup Node'
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -43,7 +43,7 @@ jobs:
         run: dotnet tool restore
       - name: 'Run: Test'
         run: dotnet fallout Test
-      - name: Perform CodeQL Analysis
+      - name: 'Perform CodeQL Analysis'
         uses: github/codeql-action/analyze@v3
         if: github.ref == 'refs/heads/main'
       - name: 'Publish: src'

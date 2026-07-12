@@ -319,11 +319,11 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         {
             var id = step.Name ?? step.Uses ?? "(run step)";
             var hasUses = !step.Uses.IsNullOrWhiteSpace();
-            var hasRun = step.Run.Any(x => !x.IsNullOrWhiteSpace());
+            var hasRun = step.Run is { } run && run.Any(x => !x.IsNullOrWhiteSpace());
 
             Assert.True(hasUses ^ hasRun,
                 $"Custom step '{id}' in workflow '{_name}' must set exactly one of '{nameof(GitHubActionsCustomStep.Uses)}' or '{nameof(GitHubActionsCustomStep.Run)}'");
-            Assert.True(step.With.Count == 0 || hasUses,
+            Assert.True((step.With?.Count ?? 0) == 0 || hasUses,
                 $"Custom step '{id}' in workflow '{_name}' sets '{nameof(GitHubActionsCustomStep.With)}' but no '{nameof(GitHubActionsCustomStep.Uses)}'; 'with:' is only valid on a 'uses:' step");
             Assert.True(step.Shell.IsNullOrWhiteSpace() || !hasUses,
                 $"Custom step '{id}' in workflow '{_name}' sets '{nameof(GitHubActionsCustomStep.Shell)}' on a 'uses:' step; shell applies only to run steps");
