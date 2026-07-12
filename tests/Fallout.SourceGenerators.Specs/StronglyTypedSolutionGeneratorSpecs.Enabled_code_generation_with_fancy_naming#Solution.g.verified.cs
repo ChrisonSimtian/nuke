@@ -32,6 +32,9 @@ internal class Solution(SolutionModel model, AbsolutePath path) : Fallout.Soluti
     public Fallout.Solutions.Project FalloutꞏProjectModel => this.GetProject("Fallout.ProjectModel");
     public Fallout.Solutions.Project FalloutꞏProjectModelꞏSpecs => this.GetProject("Fallout.ProjectModel.Specs");
     public Fallout.Solutions.Project FalloutꞏSolution => this.GetProject("Fallout.Solution");
+    public Fallout.Solutions.Project FalloutꞏSolutionꞏCodegen => this.GetProject("Fallout.Solution.Codegen");
+    public Fallout.Solutions.Project FalloutꞏSolutionꞏCodegenꞏEmit => this.GetProject("Fallout.Solution.Codegen.Emit");
+    public Fallout.Solutions.Project FalloutꞏSolutionꞏCodegenꞏSpecs => this.GetProject("Fallout.Solution.Codegen.Specs");
     public Fallout.Solutions.Project FalloutꞏSolutionꞏSpecs => this.GetProject("Fallout.Solution.Specs");
     public Fallout.Solutions.Project FalloutꞏSourceGenerators => this.GetProject("Fallout.SourceGenerators");
     public Fallout.Solutions.Project FalloutꞏSourceGeneratorsꞏSpecs => this.GetProject("Fallout.SourceGenerators.Specs");
