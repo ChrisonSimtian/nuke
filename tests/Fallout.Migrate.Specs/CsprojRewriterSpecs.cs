@@ -11,13 +11,13 @@ public class CsprojRewriterSpecs
     public void RewritesPackageReferenceNamespace()
     {
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <ItemGroup>
-                <PackageReference Include="Nuke.Common" Version="9.0.0" />
-                <PackageReference Include="Nuke.Components" />
-              </ItemGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" Version="9.0.0" />
+                                 <PackageReference Include="Nuke.Components" />
+                               </ItemGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 
@@ -31,17 +31,17 @@ public class CsprojRewriterSpecs
     public void RewritesNukeRootDirectoryProperty()
     {
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <PropertyGroup>
-                <NukeRootDirectory>.\..</NukeRootDirectory>
-                <NukeTelemetryVersion>1</NukeTelemetryVersion>
-              </PropertyGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <NukeRootDirectory>.\..</NukeRootDirectory>
+                                 <NukeTelemetryVersion>1</NukeTelemetryVersion>
+                               </PropertyGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 
-        result.EditCount.Should().Be(4);  // 2 opening + 2 closing tags
+        result.EditCount.Should().Be(4); // 2 opening + 2 closing tags
         result.Content.Should().Contain("<FalloutRootDirectory>");
         result.Content.Should().Contain("</FalloutRootDirectory>");
         result.Content.Should().Contain("<FalloutTelemetryVersion>");
@@ -52,12 +52,12 @@ public class CsprojRewriterSpecs
     public void LeavesUnrelatedNukePrefixedIdentifiersAlone()
     {
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <PropertyGroup>
-                <NukeSomeRandomConsumerProp>x</NukeSomeRandomConsumerProp>
-              </PropertyGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <NukeSomeRandomConsumerProp>x</NukeSomeRandomConsumerProp>
+                               </PropertyGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 
@@ -69,12 +69,12 @@ public class CsprojRewriterSpecs
     public void ReturnsZeroEditsForUnchangedContent()
     {
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <PropertyGroup>
-                <TargetFramework>net10.0</TargetFramework>
-              </PropertyGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <TargetFramework>net10.0</TargetFramework>
+                               </PropertyGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 
@@ -88,13 +88,13 @@ public class CsprojRewriterSpecs
         // Regression guard for #217: NUKE-era pins like 10.1.0 never existed as Fallout.X
         // and would trip NU1603 on the migrated project. Migrate must bump in the same pass.
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <ItemGroup>
-                <PackageReference Include="Nuke.Common" Version="10.1.0" />
-                <PackageReference Include="Nuke.Components" Version="10.1.0" />
-              </ItemGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" Version="10.1.0" />
+                                 <PackageReference Include="Nuke.Components" Version="10.1.0" />
+                               </ItemGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 
@@ -109,12 +109,12 @@ public class CsprojRewriterSpecs
         // PrivateAssets / IncludeAssets are common NUKE-era attributes that sit between
         // Include and Version. The combined-rewrite pattern needs to tolerate them.
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <ItemGroup>
-                <PackageReference Include="Nuke.Common" PrivateAssets="all" Version="10.1.0" />
-              </ItemGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" PrivateAssets="all" Version="10.1.0" />
+                               </ItemGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 
@@ -128,12 +128,12 @@ public class CsprojRewriterSpecs
         // Directory.Packages.props. The namespace-only pass still renames Nuke. → Fallout.
         // but we must NOT inject a Version where there wasn't one.
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <ItemGroup>
-                <PackageReference Include="Nuke.Common" />
-              </ItemGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" />
+                               </ItemGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 
@@ -148,13 +148,13 @@ public class CsprojRewriterSpecs
         // that conflicts with Fallout.Common's transitive >= 10.0.6 requirement (NU1605 downgrade).
         // Removing the explicit pin lets the transitive version win.
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <ItemGroup>
-                <PackageReference Include="Nuke.Common" Version="10.1.0" />
-                <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.15" />
-              </ItemGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" Version="10.1.0" />
+                                 <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.15" />
+                               </ItemGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 
@@ -169,13 +169,13 @@ public class CsprojRewriterSpecs
         // (System.Text.Json etc.) stay as the user pinned them — they're not in any known
         // conflict path.
         const string input = """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <ItemGroup>
-                <PackageReference Include="System.Text.Json" Version="9.0.0" />
-                <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-              </ItemGroup>
-            </Project>
-            """;
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <ItemGroup>
+                                 <PackageReference Include="System.Text.Json" Version="9.0.0" />
+                                 <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+                               </ItemGroup>
+                             </Project>
+                             """;
 
         var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
 

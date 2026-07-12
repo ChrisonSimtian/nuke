@@ -14,4 +14,13 @@
     <InternalsVisibleTo Include="Fallout.Migrate.Specs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" />
+    <PackageReference Include="Spectre.Console.Cli" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fallout.Utilities\Fallout.Utilities.csproj" />
+  </ItemGroup>
+
 </Project>

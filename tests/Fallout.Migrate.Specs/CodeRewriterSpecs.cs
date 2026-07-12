@@ -9,10 +9,10 @@ public class CodeRewriterSpecs
     public void RewritesUsingDirective()
     {
         const string input = """
-            using Nuke.Common;
-            using Nuke.Common.IO;
-            using Fallout.Common;
-            """;
+                             using Nuke.Common;
+                             using Nuke.Common.IO;
+                             using Fallout.Common;
+                             """;
 
         var result = CodeRewriter.Rewrite(input);
 

@@ -4,7 +4,7 @@ namespace Fallout.Migrate;
 
 internal static class ScriptRewriter
 {
-    private static readonly (Regex Pattern, string Replacement)[] Patterns =
+    private static readonly (Regex Pattern, string Replacement)[] patterns =
     {
         // `dotnet nuke` invocations
         (new Regex(@"\bdotnet\s+nuke\b", RegexOptions.Compiled), "dotnet fallout"),
@@ -21,10 +21,15 @@ internal static class ScriptRewriter
     {
         var edits = 0;
         var content = original;
-        foreach (var (pattern, replacement) in Patterns)
+        foreach (var (pattern, replacement) in patterns)
         {
-            content = pattern.Replace(content, _ => { edits++; return replacement; });
+            content = pattern.Replace(content, _ =>
+            {
+                edits++;
+                return replacement;
+            });
         }
+
         return new RewriteResult(content, edits);
     }
 }

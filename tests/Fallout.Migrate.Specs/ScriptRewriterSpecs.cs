@@ -26,9 +26,10 @@ public class ScriptRewriterSpecs
     public void RewritesLegacyEnvVars()
     {
         const string input = """
-            export NUKE_TELEMETRY_OPTOUT=1
-            $env:NUKE_GLOBAL_TOOL_VERSION = "10.0"
-            """;
+                             export NUKE_TELEMETRY_OPTOUT=1
+                             $env:NUKE_GLOBAL_TOOL_VERSION = "10.0"
+                             """;
+
         var result = ScriptRewriter.Rewrite(input);
         result.EditCount.Should().Be(2);
         result.Content.Should().Contain("FALLOUT_TELEMETRY_OPTOUT");

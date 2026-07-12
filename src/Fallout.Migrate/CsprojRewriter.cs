@@ -10,21 +10,21 @@ internal static class CsprojRewriter
     // `WarningsAsErrors` in the migrated project escalates. Bumping in the same pass avoids
     // a broken post-migrate build (#217). Tolerates extra attributes between Include and Version
     // (e.g. `PrivateAssets="all"`).
-    private static readonly Regex NukePackageWithInlineVersionPattern = new(
+    private static readonly Regex nukePackageWithInlineVersionPattern = new(
         @"(?<prefix><PackageReference\s+Include="")Nuke\.(?<name>[A-Z][A-Za-z0-9.]+)(?<between>""[^>]*?\s+Version="")[^""]+",
         RegexOptions.Compiled);
 
     // PackageReference / ProjectReference `Include="Nuke.X"` → `Include="Fallout.X"` — namespace
     // only. Catches references that DON'T have an inline Version (central package management).
     // Must run AFTER NukePackageWithInlineVersionPattern so it only touches what's left.
-    private static readonly Regex PackageReferencePattern =
+    private static readonly Regex packageReferencePattern =
         new(@"(?<=\b(?:Include|Update|Remove)="")Nuke\.(?=[A-Z])", RegexOptions.Compiled);
 
     // MSBuild element/property names that begin with `Nuke` followed by an uppercase
     // letter (e.g. <NukeRootDirectory>...). Limited to known consumer-facing names from
     // P3.5b so we don't rewrite unrelated user-defined identifiers that happen to start
     // with the literal "Nuke".
-    private static readonly Regex MSBuildPropertyPattern = new(
+    private static readonly Regex msBuildPropertyPattern = new(
         @"\bNuke(?=" +
         "(?:RootDirectory|ScriptDirectory|TelemetryVersion|BaseDirectory|BaseNamespace|" +
         "UseNestedNamespaces|RepositoryUrl|UpdateReferences|ContinueOnError|TaskTimeout|" +
@@ -39,7 +39,7 @@ internal static class CsprojRewriter
     // downgrade"). Removing the explicit pin lets the transitive version win, which is what the
     // migrated project wants (#217). Matches a self-closing element with optional surrounding
     // indentation + trailing newline.
-    private static readonly Regex CryptographyXmlPackageRefPattern = new(
+    private static readonly Regex cryptographyXmlPackageRefPattern = new(
         @"^[ \t]*<PackageReference\s+Include=""System\.Security\.Cryptography\.Xml""[^/]*/>\s*\r?\n?",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
@@ -49,7 +49,7 @@ internal static class CsprojRewriter
         var content = original;
 
         // Pass 1 — combined Include + Version rewrite for Nuke.X PackageReferences with inline Version.
-        content = NukePackageWithInlineVersionPattern.Replace(content, m =>
+        content = nukePackageWithInlineVersionPattern.Replace(content, m =>
         {
             edits++;
             return m.Groups["prefix"].Value
@@ -60,11 +60,24 @@ internal static class CsprojRewriter
 
         // Pass 2 — namespace-only rewrites for anything Pass 1 didn't consume (CPM-managed
         // PackageReferences without inline Version, ProjectReferences, MSBuild properties).
-        content = PackageReferencePattern.Replace(content, _ => { edits++; return "Fallout."; });
-        content = MSBuildPropertyPattern.Replace(content, _ => { edits++; return "Fallout"; });
+        content = packageReferencePattern.Replace(content, _ =>
+        {
+            edits++;
+            return "Fallout.";
+        });
+
+        content = msBuildPropertyPattern.Replace(content, _ =>
+        {
+            edits++;
+            return "Fallout";
+        });
 
         // Pass 3 — strip the stale System.Security.Cryptography.Xml direct pin.
-        content = CryptographyXmlPackageRefPattern.Replace(content, _ => { edits++; return string.Empty; });
+        content = cryptographyXmlPackageRefPattern.Replace(content, _ =>
+        {
+            edits++;
+            return string.Empty;
+        });
 
         return new RewriteResult(content, edits);
     }

@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using FluentAssertions;
 using Xunit;
@@ -67,7 +66,7 @@ public class MigrationIntegrationSpecs
 
             File.ReadAllText(Path.Combine(temp, "build", "_build.csproj")).Should().Be(beforeCsproj);
             Directory.Exists(Path.Combine(temp, ".nuke")).Should().Be(beforeNukeDir);
-            summary.FilesChanged.Should().BeGreaterThan(0);  // counts intended edits
+            summary.FilesChanged.Should().BeGreaterThan(0); // counts intended edits
         }
         finally
         {
@@ -103,37 +102,37 @@ public class MigrationIntegrationSpecs
         Directory.CreateDirectory(Path.Combine(dir, ".nuke"));
 
         File.WriteAllText(Path.Combine(dir, "build", "_build.csproj"), """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <PropertyGroup>
-                <OutputType>Exe</OutputType>
-                <TargetFramework>net8.0</TargetFramework>
-                <NukeRootDirectory>.\..</NukeRootDirectory>
-                <NukeTelemetryVersion>1</NukeTelemetryVersion>
-              </PropertyGroup>
-              <ItemGroup>
-                <PackageReference Include="Nuke.Common" Version="9.0.0" />
-              </ItemGroup>
-            </Project>
-            """);
+                                                                       <Project Sdk="Microsoft.NET.Sdk">
+                                                                         <PropertyGroup>
+                                                                           <OutputType>Exe</OutputType>
+                                                                           <TargetFramework>net8.0</TargetFramework>
+                                                                           <NukeRootDirectory>.\..</NukeRootDirectory>
+                                                                           <NukeTelemetryVersion>1</NukeTelemetryVersion>
+                                                                         </PropertyGroup>
+                                                                         <ItemGroup>
+                                                                           <PackageReference Include="Nuke.Common" Version="9.0.0" />
+                                                                         </ItemGroup>
+                                                                       </Project>
+                                                                       """);
 
         File.WriteAllText(Path.Combine(dir, "build", "Build.cs"), """
-            using Nuke.Common;
-            using Nuke.Common.Tools.DotNet;
+                                                                  using Nuke.Common;
+                                                                  using Nuke.Common.Tools.DotNet;
 
-            class Build : NukeBuild
-            {
-                public static int Main () => Execute<Build>(x => x.Compile);
+                                                                  class Build : NukeBuild
+                                                                  {
+                                                                      public static int Main () => Execute<Build>(x => x.Compile);
 
-                Target Compile => _ => _.Executes(() => { });
-            }
-            """);
+                                                                      Target Compile => _ => _.Executes(() => { });
+                                                                  }
+                                                                  """);
 
         File.WriteAllText(Path.Combine(dir, "build.sh"), """
-            #!/usr/bin/env bash
-            export NUKE_TELEMETRY_OPTOUT=1
-            TEMP_DIRECTORY="$SCRIPT_DIR/.nuke/temp"
-            dotnet nuke "$@"
-            """, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+                                                         #!/usr/bin/env bash
+                                                         export NUKE_TELEMETRY_OPTOUT=1
+                                                         TEMP_DIRECTORY="$SCRIPT_DIR/.nuke/temp"
+                                                         dotnet nuke "$@"
+                                                         """, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
 
         File.WriteAllText(Path.Combine(dir, ".nuke", "parameters.json"), "{}");
 
