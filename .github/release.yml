@@ -1,27 +1,52 @@
+# Source of truth for the PR label taxonomy.
+#
+# GitHub reads this to auto-generate release notes, grouping merged PRs into the
+# sections below by label. It is ALSO the canonical list of changelog labels that
+# tooling and AI apply at PR-creation time — see docs/agents/issue-and-pr-style.md
+# and the PR-creation flow in docs/agents/release-and-versioning.md.
+#
+# When raising a PR: apply the one category label that matches the change (the
+# blurbs below say which is which), in the same `gh pr create` call, alongside the
+# `target/YYYY` process label. A PR with no category label falls through to
+# "Other Changes" — prefer a real category. (The `target/YYYY` and breaking-change
+# process mechanics live in the PR-creation flow, not here.)
 changelog:
   exclude:
     labels:
+      # skip-changelog: housekeeping with no consumer-facing note (CI, tooling,
+      # internal refactors). Keeps the notes signal-heavy.
       - skip-changelog
+      # dependencies: dependency bumps — folded out of the notes as noise. Also a
+      # category below, so the label is documented once; the exclude wins.
       - dependencies
     authors:
       - dependabot
   categories:
+    # breaking-change: removes/renames public API, package IDs, CLI flags, on-disk
+    # formats, or CI/CD shape. Also needs the ⚠️ callout + CHANGELOG entry and rides
+    # the next yearly major — see the PR-creation flow.
     - title: "⚠️ Breaking Changes"
       labels:
         - breaking-change
+    # enhancement: a new feature or user-facing capability.
     - title: "✨ New Features"
       labels:
         - enhancement
+    # bug: fixes incorrect behavior.
     - title: "🐛 Bug Fixes"
       labels:
         - bug
+    # security: fixes a vulnerability or hardens a security-sensitive surface.
     - title: "🔒 Security"
       labels:
         - security
+    # dependencies: dependency version bumps (excluded above — kept for completeness).
     - title: "📦 Dependencies"
       labels:
         - dependencies
+    # documentation: docs, comments, ADRs, and agent-instruction changes only.
     - title: "📖 Documentation"
       labels:
         - documentation
+    # Fallback for PRs carrying none of the labels above — don't rely on it.
     - title: "Other Changes"

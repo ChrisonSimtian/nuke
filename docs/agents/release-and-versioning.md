@@ -76,13 +76,14 @@ Write the PR description terse and to the canonical shape — see
 not as a follow-up — every PR gets:
 
 1. **A `target/YYYY` label** matching where it will release. Default to `target/<current-year>` (`target/2026`). If the PR carries a breaking change, it's held for the next yearly major — use `target/<next-year>`. Legacy v10 maintenance work uses `target/v10`. Pass via `--label target/2026` to `gh pr create`.
+2. **A changelog-category label** describing the change, from [`.github/release.yml`](../../.github/release.yml) — that file is the source of truth for the taxonomy and carries a one-line blurb on each label. Apply the one category the PR belongs under (`enhancement`, `bug`, `security`, `documentation`; `breaking-change` when it applies — see below), or `skip-changelog` for housekeeping with no release note. Pass it in the same `gh pr create --label …` call. Don't leave a PR uncategorized — it falls through to "Other Changes". This is the labelling AI applies on the user's behalf whenever it raises a PR.
 
 If the PR includes a **breaking change** (any commit uses `!`, has a `BREAKING CHANGE:` footer, or otherwise meets the breaking-change definition above), additionally:
 
-2. **Add the `breaking-change` label.** `gh pr create --label target/<next-year> --label breaking-change …`.
-3. **Open the PR body with a `⚠️ Breaking change` callout** that names the affected surface (public API, package ID, CLI flag, on-disk format, CI/CD shape, etc.) and the consumer-side impact in one sentence. This is what reviewers and downstream consumers read first.
-4. **Confirm the PR targets `main`, not a `release/YYYY` production train, and that the breaking surface is gated behind `[Experimental("FALLOUT0xx")]`** (or, when it can't be gated, lives on a short-lived topic branch off `main` held until the year cut). Breaking changes accumulate on `main` for the next yearly major; they may not land on a production train. (Do **not** bump `version.json`'s major in the PR — the major is set once, at the yearly cut.)
-5. **Add a `CHANGELOG.md` entry** under the next-major `[Unreleased]` heading, in the same PR, describing the breaking change and the migration path (one paragraph minimum).
+3. **Add the `breaking-change` label** (this is its changelog category — use it instead of `enhancement`/`bug`). `gh pr create --label target/<next-year> --label breaking-change …`.
+4. **Open the PR body with a `⚠️ Breaking change` callout** that names the affected surface (public API, package ID, CLI flag, on-disk format, CI/CD shape, etc.) and the consumer-side impact in one sentence. This is what reviewers and downstream consumers read first.
+5. **Confirm the PR targets `main`, not a `release/YYYY` production train, and that the breaking surface is gated behind `[Experimental("FALLOUT0xx")]`** (or, when it can't be gated, lives on a short-lived topic branch off `main` held until the year cut). Breaking changes accumulate on `main` for the next yearly major; they may not land on a production train. (Do **not** bump `version.json`'s major in the PR — the major is set once, at the yearly cut.)
+6. **Add a `CHANGELOG.md` entry** under the next-major `[Unreleased]` heading, in the same PR, describing the breaking change and the migration path (one paragraph minimum).
 
 If you only discover the breaking nature mid-review, apply all relevant steps before requesting re-review.
 
