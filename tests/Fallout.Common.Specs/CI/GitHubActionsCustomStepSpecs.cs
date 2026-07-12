@@ -21,10 +21,8 @@ public class GitHubActionsCustomStepSpecs
         return new StreamReader(stream).ReadToEnd();
     }
 
-    // The renderer terminates every line with the writer's newline (Environment.NewLine → CRLF on
-    // Windows), and a raw string literal carries the source file's line endings with no trailing newline.
-    // Normalize both sides to '\n' and add the terminal newline, so the assertion is exact yet
-    // platform-independent (the PR gate is ubuntu-only; the cross-platform jobs run post-merge).
+    // Normalize to '\n': the renderer emits Environment.NewLine, so this would otherwise fail on the
+    // Windows post-merge job. The trailing '\n' is the terminal newline a raw literal omits.
     private static void ShouldRenderAs(string actual, string expected)
         => actual.ReplaceLineEndings("\n").Should().Be(expected.ReplaceLineEndings("\n") + "\n");
 
