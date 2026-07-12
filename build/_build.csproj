@@ -62,7 +62,7 @@
     <PackageDownload Include="ReportGenerator" Version="[5.2.0]" />
     <!-- Used by Fallout.Tooling.Tests' ToolTasksToolPathTest as a sample package
          for tool-path resolution smoke tests. Not used for running our own tests. -->
-    <PackageDownload Include="xunit.runner.console" Version="[2.6.1]" />
+    <PackageDownload Include="xunit.runner.console" Version="[2.9.3]" />
   </ItemGroup>
 
   <ItemGroup>

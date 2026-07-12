@@ -13,7 +13,9 @@ public class NuGetPackageResolverSpecs
     private static AbsolutePath ProjectFile => RootDirectory / "tests" / "Fallout.Tooling.Specs" / "Fallout.Tooling.Specs.csproj";
     private static AbsolutePath AssetsFile => ProjectFile.Parent / "obj" / "project.assets.json";
 
-    private const string XunitConsolePackageVersion = "2.6.1";
+    // This version have to match with
+    // - Fallout.Tooling.Specs.csproj -> PackageDownload
+    private const string XunitConsolePackageVersion = "2.9.3";
 
     [Theory]
     [InlineData("SpecK", true, true, "1.0.1-ci00055")]
