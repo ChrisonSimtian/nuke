@@ -21,87 +21,87 @@ public class GitHubActionsCustomStepSpecs
         return new StreamReader(stream).ReadToEnd();
     }
 
+    // The renderer terminates every line with the writer's newline (Environment.NewLine → CRLF on
+    // Windows), and a raw string literal carries the source file's line endings with no trailing newline.
+    // Normalize both sides to '\n' and add the terminal newline, so the assertion is exact yet
+    // platform-independent (the PR gate is ubuntu-only; the cross-platform jobs run post-merge).
+    private static void ShouldRenderAs(string actual, string expected)
+        => actual.ReplaceLineEndings("\n").Should().Be(expected.ReplaceLineEndings("\n") + "\n");
+
     [Fact]
     public void Uses_step_with_with_block_renders_name_uses_with()
-    {
-        var yaml = Render(new GitHubActionsCustomStep
-                          {
-                              Name = "Setup Node",
-                              Uses = "actions/setup-node@v4",
-                              With = new() { ["node-version"] = "20" }
-                          });
-
-        yaml.Should().Be(
-            "- name: Setup Node\n" +
-            "  uses: actions/setup-node@v4\n" +
-            "  with:\n" +
-            "    node-version: 20\n");
-    }
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep
+                   {
+                       Name = "Setup Node",
+                       Uses = "actions/setup-node@v4",
+                       With = new() { ["node-version"] = "20" }
+                   }),
+            """
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+            """);
 
     [Fact]
     public void Uses_step_without_name_starts_with_uses()
-    {
-        var yaml = Render(new GitHubActionsCustomStep { Uses = "actions/checkout@v4" });
-
-        yaml.Should().Be("- uses: actions/checkout@v4\n");
-    }
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep { Uses = "actions/checkout@v4" }),
+            "- uses: actions/checkout@v4");
 
     [Fact]
     public void Single_line_run_renders_inline()
-    {
-        var yaml = Render(new GitHubActionsCustomStep { Name = "Echo", Run = new[] { "echo hi" } });
-
-        yaml.Should().Be(
-            "- name: Echo\n" +
-            "  run: echo hi\n");
-    }
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep { Name = "Echo", Run = new[] { "echo hi" } }),
+            """
+            - name: Echo
+              run: echo hi
+            """);
 
     [Fact]
     public void Multi_line_run_renders_block_scalar()
-    {
-        var yaml = Render(new GitHubActionsCustomStep { Run = new[] { "echo one", "echo two" } });
-
-        yaml.Should().Be(
-            "- run: |\n" +
-            "    echo one\n" +
-            "    echo two\n");
-    }
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep { Run = new[] { "echo one", "echo two" } }),
+            """
+            - run: |
+                echo one
+                echo two
+            """);
 
     [Fact]
     public void All_optional_fields_render_in_fixed_order()
-    {
-        var yaml = Render(new GitHubActionsCustomStep
-                          {
-                              Name = "Full",
-                              Id = "full",
-                              Uses = "some/action@v1",
-                              With = new() { ["k"] = "v" },
-                              Env = new() { ["E"] = "1" },
-                              If = "success()",
-                              ContinueOnError = true,
-                              TimeoutMinutes = 5
-                          });
-
-        yaml.Should().Be(
-            "- name: Full\n" +
-            "  id: full\n" +
-            "  uses: some/action@v1\n" +
-            "  with:\n" +
-            "    k: v\n" +
-            "  env:\n" +
-            "    E: 1\n" +
-            "  if: success()\n" +
-            "  continue-on-error: true\n" +
-            "  timeout-minutes: 5\n");
-    }
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep
+                   {
+                       Name = "Full",
+                       Id = "full",
+                       Uses = "some/action@v1",
+                       With = new() { ["k"] = "v" },
+                       Env = new() { ["E"] = "1" },
+                       If = "success()",
+                       ContinueOnError = true,
+                       TimeoutMinutes = 5
+                   }),
+            """
+            - name: Full
+              id: full
+              uses: some/action@v1
+              with:
+                k: v
+              env:
+                E: 1
+              if: success()
+              continue-on-error: true
+              timeout-minutes: 5
+            """);
 
     [Fact]
     public void Run_step_renders_shell_when_set()
-    {
-        var yaml = Render(new GitHubActionsCustomStep { Run = new[] { "gci" }, Shell = "pwsh" });
-
-        yaml.Should().Be(
-            "- run: gci\n" +
-            "  shell: pwsh\n");
-    }
+        => ShouldRenderAs(
+            Render(new GitHubActionsCustomStep { Run = new[] { "gci" }, Shell = "pwsh" }),
+            """
+            - run: gci
+              shell: pwsh
+            """);
 }
