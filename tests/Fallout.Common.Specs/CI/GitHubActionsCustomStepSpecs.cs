@@ -6,8 +6,7 @@ using Xunit;
 
 namespace Fallout.Common.Specs.CI;
 
-// Unit-renders a single custom step in isolation (base indent 0), mirroring the Render helper
-// in GitHubActionsWorkflowDispatchTriggerSpecs.
+// Renders a single custom step in isolation, like GitHubActionsWorkflowDispatchTriggerSpecs.
 public class GitHubActionsCustomStepSpecs
 {
     private static string Render(GitHubActionsCustomStep step)
