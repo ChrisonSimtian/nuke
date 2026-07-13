@@ -52,6 +52,7 @@ namespace Fallout.Common;
 // [SaveBuildProfile(Priority = 30)]
 // [LoadBuildProfiles(Priority = 25)]
 // After logo
+[SerializeBuildGraph(Priority = 20)]
 [HandlePlanRequests(Priority = 10)]
 [HandleHelpRequests(Priority = 5)]
 [Telemetry]

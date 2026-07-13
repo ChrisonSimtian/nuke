@@ -28,7 +28,7 @@ public static class XmlTasks
 
     public static IEnumerable<XElement> XmlPeekElementsFromString(string content, string xpath, params (string prefix, string uri)[] namespaces)
     {
-        return XmlPeekElements(XDocument.Load(content), xpath, namespaces);
+        return XmlPeekElements(XDocument.Parse(content), xpath, namespaces);
     }
 
     public static string XmlPeekSingle(string path, string xpath, params (string prefix, string uri)[] namespaces)
