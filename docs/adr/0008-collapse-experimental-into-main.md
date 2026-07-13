@@ -4,6 +4,8 @@
 
 Accepted (2026-06-18). **Supersedes the channel-ladder section (§2) of [ADR-0004](0004-calendar-versioning-and-dual-pace-channels.md)** — specifically its 2026-05-30 amendment, which had added a dedicated `experimental` fast lane below `main`. The calendar-versioning scheme (§1), the production line + `[Experimental]` opt-in + review-tier decisions (§3–§6) of ADR-0004, the on-demand release-branch cut from [ADR-0007](0007-cut-release-branch-on-demand.md), and the nuget.org-opt-in policy from [ADR-0002](0002-v11-off-nuget-by-default.md) all remain in force.
 
+**Amendment (2026-07-13):** the marketing site moved out of this repo into its own repo (`Fallout-build/fallout.build`, served via GitHub Pages from `main`). The `gh-pages` branch this ADR listed as a steady-state branch no longer exists here; steady state is now just `main` + `support/*`. See §Decision below.
+
 ## Context
 
 ADR-0004's 2026-05-30 amendment introduced a three-tier channel ladder — `experimental` (`-alpha`) → `main` (`-preview`) → `release/YYYY` (production) — adding a standing `experimental` branch as the fast/AI-assisted lane. It did so to keep `main` stable-by-default (principle of least surprise, per [@dennisdoomen on #302](https://github.com/Fallout-build/Fallout/discussions/302)), explicitly accepting a *bounded* amount of `experimental → main` divergence as the cost, and leaning on forward-only promotion + `[Experimental("FALLOUT0xx")]` to keep that divergence small.
@@ -18,7 +20,7 @@ The maintainer's call: remove the lane and lean entirely on the tools that were 
 
 ## Decision
 
-**Collapse `experimental` into `main`.** Steady-state long-lived branches become **`main` + `support/*`** (plus `gh-pages` for the site). Everything else is a tag or a short-lived topic branch.
+**Collapse `experimental` into `main`.** Steady-state long-lived branches become **`main` + `support/*`**. Everything else is a tag or a short-lived topic branch. (The marketing site formerly lived on a `gh-pages` branch here; as of 2026-07-13 it has its own repo, `Fallout-build/fallout.build` — this repo has no site branch.)
 
 1. **`main` is the integration trunk *and* the sole prerelease lane.** Per-commit `-preview` prereleases to **GitHub Packages only — never nuget.org** (unchanged from ADR-0004 §2). Both deliberate improvements and faster/AI-assisted work land here. It remains the default branch.
 2. **The `experimental` branch and its `-alpha` channel are retired.** `experimental.yml` is deleted; `preview.yml` (`main` → `-preview`) is the only continuous publisher.

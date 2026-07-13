@@ -30,5 +30,5 @@ Rules:
 
 Show me the drafted title and body first. **Do not file it until I confirm.**
 On confirmation, run `gh issue create --title "…" --body "…" --label enhancement`
-plus the correct `target/YYYY` label (see the PR-creation flow), and report only
+plus the correct `target/vCurrent`/`target/vNext` label (see the PR-creation flow), and report only
 the resulting issue URL.

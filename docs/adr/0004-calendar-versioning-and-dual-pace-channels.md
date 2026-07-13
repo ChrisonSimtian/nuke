@@ -142,7 +142,7 @@ Version ladder (SemVer prerelease ordering): `…-alpha.N` < `…-preview.N` < `
 ### Neutral
 
 - **ADR-0001's branch/channel/CD model and ADR-0002's nuget.org-opt-in policy are unchanged.** This ADR changes the *versioning scheme*, adds the *test lanes* (`experimental` alpha + `main` preview, both GitHub Packages only), and adds the *`[Experimental]` + review-tier* conventions. The three-environment fan-out, tag-triggered trigger, and cherry-pick hotfix flow all carry over.
-- **`target/vN` labels become `target/YYYY`** (`target/2026`, …). Legacy work keeps `target/v10`. Milestones remain theme-based.
+- ~~**`target/vN` labels become `target/YYYY`** (`target/2026`, …).~~ Legacy work keeps `target/v10`. Milestones remain theme-based. **(Superseded 2026-07-13:** the year-based label migration was never carried out; the repo standardised on **evergreen `target/vCurrent` / `target/vNext`** labels instead — see AGENTS.md rule #1 and [release-and-versioning.md](../agents/release-and-versioning.md#milestones-and-version-targeting).)
 
 ## Alternatives considered
 

@@ -7,9 +7,9 @@
 #
 # When raising a PR: apply the one category label that matches the change (the
 # blurbs below say which is which), in the same `gh pr create` call, alongside the
-# `target/YYYY` process label. A PR with no category label falls through to
-# "Other Changes" — prefer a real category. (The `target/YYYY` and breaking-change
-# process mechanics live in the PR-creation flow, not here.)
+# `target/vCurrent` (or `target/vNext`) process label. A PR with no category label
+# falls through to "Other Changes" — prefer a real category. (The target and
+# breaking-change process mechanics live in the PR-creation flow, not here.)
 changelog:
   exclude:
     labels:

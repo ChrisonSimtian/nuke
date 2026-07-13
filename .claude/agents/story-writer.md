@@ -26,5 +26,5 @@ if unknown.
 
 If asked to file it, run `gh issue create` with `--title` and a `--body` that
 matches the shape. Apply `--label enhancement` for stories unless told
-otherwise, and the appropriate `target/YYYY` label per the PR-creation flow.
+otherwise, and the appropriate `target/vCurrent`/`target/vNext` label per the PR-creation flow.
 Report the created issue URL and nothing else.
