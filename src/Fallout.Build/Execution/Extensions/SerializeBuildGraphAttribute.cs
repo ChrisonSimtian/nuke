@@ -46,7 +46,7 @@ internal class SerializeBuildGraphAttribute : BuildExtensionAttributeBase, IOnBu
                     .Select(ToModel)
                     .ToList());
 
-            GraphFile.WriteJson(model, s_options);
+            GraphFile.WriteJson(model, serializerOptions );
         }
         catch (Exception exception)
         {
