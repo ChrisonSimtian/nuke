@@ -1,0 +1,4 @@
+﻿- uses: some/action@v1
+  with:
+    alpha: 1
+    beta: 2

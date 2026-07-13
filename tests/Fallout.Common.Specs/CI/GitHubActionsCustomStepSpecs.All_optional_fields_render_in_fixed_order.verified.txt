@@ -1,0 +1,10 @@
+﻿- name: 'Full'
+  id: full
+  uses: some/action@v1
+  with:
+    k: v
+  env:
+    E: 1
+  if: success()
+  continue-on-error: true
+  timeout-minutes: 5

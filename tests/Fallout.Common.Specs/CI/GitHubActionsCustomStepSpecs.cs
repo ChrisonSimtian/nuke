@@ -1,15 +1,17 @@
 using System.IO;
+using System.Threading.Tasks;
 using Fallout.Common.CI.GitHubActions.Configuration;
 using Fallout.Common.Utilities;
-using FluentAssertions;
+using VerifyXunit;
 using Xunit;
 
 namespace Fallout.Common.Specs.CI;
 
-// Renders a single custom step in isolation, like GitHubActionsWorkflowDispatchTriggerSpecs.
+// Renders a single custom step in isolation, like GitHubActionsWorkflowDispatchTriggerSpecs. Output is
+// snapshotted with Verify (line endings normalized), matching the generator testing strategy elsewhere.
 public class GitHubActionsCustomStepSpecs
 {
-    private static string Render(GitHubActionsCustomStep step)
+    private static Task Verify(GitHubActionsCustomStep step)
     {
         var stream = new MemoryStream();
         var writer = new StreamWriter(stream, leaveOpen: true);
@@ -17,125 +19,65 @@ public class GitHubActionsCustomStepSpecs
         writer.Flush();
 
         stream.Seek(offset: 0, SeekOrigin.Begin);
-        return new StreamReader(stream).ReadToEnd();
+        return Verifier.Verify(new StreamReader(stream).ReadToEnd());
     }
 
-    // Normalize to '\n': the renderer emits Environment.NewLine, so this would otherwise fail on the
-    // Windows post-merge job. The trailing '\n' is the terminal newline a raw literal omits.
-    private static void ShouldRenderAs(string actual, string expected)
-        => actual.ReplaceLineEndings("\n").Should().Be(expected.ReplaceLineEndings("\n") + "\n");
+    [Fact]
+    public Task Uses_step_with_with_block()
+        => Verify(new GitHubActionsCustomStep
+                  {
+                      Name = "Setup Node",
+                      Uses = "actions/setup-node@v4",
+                      With = new() { ["node-version"] = "20" }
+                  });
 
     [Fact]
-    public void Uses_step_with_with_block_renders_name_uses_with()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep
-                   {
-                       Name = "Setup Node",
-                       Uses = "actions/setup-node@v4",
-                       With = new() { ["node-version"] = "20" }
-                   }),
-            """
-            - name: 'Setup Node'
-              uses: actions/setup-node@v4
-              with:
-                node-version: 20
-            """);
+    public Task Uses_step_without_name_starts_with_uses()
+        => Verify(new GitHubActionsCustomStep { Uses = "actions/checkout@v4" });
 
     [Fact]
-    public void Uses_step_without_name_starts_with_uses()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep { Uses = "actions/checkout@v4" }),
-            "- uses: actions/checkout@v4");
-
-    [Fact]
-    public void Single_line_run_renders_inline()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep { Name = "Echo", Run = new[] { "echo hi" } }),
-            """
-            - name: 'Echo'
-              run: echo hi
-            """);
+    public Task Single_line_run_renders_inline()
+        => Verify(new GitHubActionsCustomStep { Name = "Echo", Run = new[] { "echo hi" } });
 
     // A name with a colon-space would be invalid YAML unquoted; it must be single-quoted like the built-in steps.
     [Fact]
-    public void Name_with_a_colon_is_quoted()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep { Name = "Deploy: prod", Run = new[] { "echo hi" } }),
-            """
-            - name: 'Deploy: prod'
-              run: echo hi
-            """);
+    public Task Name_with_a_colon_is_quoted()
+        => Verify(new GitHubActionsCustomStep { Name = "Deploy: prod", Run = new[] { "echo hi" } });
 
-    // An embedded apostrophe must be YAML-escaped by doubling ('' ), not the backslash the shared
+    // An embedded apostrophe must be YAML-escaped by doubling (''), not the backslash the shared
     // SingleQuote() helper would produce (which is invalid inside a YAML single-quoted scalar).
     [Fact]
-    public void Name_with_an_apostrophe_is_yaml_escaped()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep { Name = "Bob's step", Run = new[] { "echo hi" } }),
-            """
-            - name: 'Bob''s step'
-              run: echo hi
-            """);
+    public Task Name_with_an_apostrophe_is_yaml_escaped()
+        => Verify(new GitHubActionsCustomStep { Name = "Bob's step", Run = new[] { "echo hi" } });
 
     // Multi-entry with:/env: must render in a deterministic (ordinal) order regardless of insertion order.
     [Fact]
-    public void Multi_entry_with_renders_in_ordinal_order()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep
-                   {
-                       Uses = "some/action@v1",
-                       With = new() { ["beta"] = "2", ["alpha"] = "1" }
-                   }),
-            """
-            - uses: some/action@v1
-              with:
-                alpha: 1
-                beta: 2
-            """);
+    public Task Multi_entry_with_renders_in_ordinal_order()
+        => Verify(new GitHubActionsCustomStep
+                  {
+                      Uses = "some/action@v1",
+                      With = new() { ["beta"] = "2", ["alpha"] = "1" }
+                  });
 
     [Fact]
-    public void Multi_line_run_renders_block_scalar()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep { Run = new[] { "echo one", "echo two" } }),
-            """
-            - run: |
-                echo one
-                echo two
-            """);
+    public Task Multi_line_run_renders_block_scalar()
+        => Verify(new GitHubActionsCustomStep { Run = new[] { "echo one", "echo two" } });
 
     [Fact]
-    public void All_optional_fields_render_in_fixed_order()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep
-                   {
-                       Name = "Full",
-                       Id = "full",
-                       Uses = "some/action@v1",
-                       With = new() { ["k"] = "v" },
-                       Env = new() { ["E"] = "1" },
-                       If = "success()",
-                       ContinueOnError = true,
-                       TimeoutMinutes = 5
-                   }),
-            """
-            - name: 'Full'
-              id: full
-              uses: some/action@v1
-              with:
-                k: v
-              env:
-                E: 1
-              if: success()
-              continue-on-error: true
-              timeout-minutes: 5
-            """);
+    public Task All_optional_fields_render_in_fixed_order()
+        => Verify(new GitHubActionsCustomStep
+                  {
+                      Name = "Full",
+                      Id = "full",
+                      Uses = "some/action@v1",
+                      With = new() { ["k"] = "v" },
+                      Env = new() { ["E"] = "1" },
+                      If = "success()",
+                      ContinueOnError = true,
+                      TimeoutMinutes = 5
+                  });
 
     [Fact]
-    public void Run_step_renders_shell_when_set()
-        => ShouldRenderAs(
-            Render(new GitHubActionsCustomStep { Run = new[] { "gci" }, Shell = "pwsh" }),
-            """
-            - run: gci
-              shell: pwsh
-            """);
+    public Task Run_step_renders_shell_when_set()
+        => Verify(new GitHubActionsCustomStep { Run = new[] { "gci" }, Shell = "pwsh" });
 }

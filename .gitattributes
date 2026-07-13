@@ -6,6 +6,9 @@
 *.DotSettings text eol=lf
 *.sh text eol=lf
 
+# Verify snapshots are compared with normalized (LF) line endings; keep them LF in the repo.
+*.verified.* text eol=lf
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
