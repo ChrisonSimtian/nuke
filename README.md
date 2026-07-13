@@ -13,7 +13,7 @@
 > Build automation for C#/.NET — the hard-fork successor to NUKE.
 
 [![Docs](https://img.shields.io/badge/docs-docs.fallout.build-blue?logo=readthedocs&logoColor=white)](https://docs.fallout.build/)
-[![CI](https://github.com/Fallout-build/Fallout/actions/workflows/build.yml/badge.svg)](https://github.com/Fallout-build/Fallout/actions/workflows/build.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-preview.yml?branch=main&label=CI&logo=githubactions&logoColor=white)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-preview.yml)
 [![NuGet](https://img.shields.io/nuget/v/Fallout.Common?label=Fallout.Common)](https://www.nuget.org/packages/Fallout.Common)
 [![NuGet downloads](https://img.shields.io/nuget/dt/Fallout.Common?label=downloads)](https://www.nuget.org/packages/Fallout.Common)
 [![Latest release](https://img.shields.io/github/v/release/Fallout-build/Fallout?label=release)](https://github.com/Fallout-build/Fallout/releases/latest)
@@ -88,10 +88,10 @@ CI runs on every PR targeting `main`, `release/*`, or `support/*` on `build.yml`
 
 | Workflow | Status | Trigger |
 |---|---|---|
-| [`build`](.github/workflows/build.yml) | [![build](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/build.yml?branch=main&label=&logo=ubuntu&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/build.yml) | PR to `main` / `release/*` / `support/*` (code paths) — job `ubuntu-latest` is the **required check** |
-| [`build-cross-platform`](.github/workflows/build-cross-platform.yml) | [![build-cross-platform](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/build-cross-platform.yml?label=&logo=github&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/build-cross-platform.yml) | PR to `release/*` / `support/*` or `v*` tag push — Windows + macOS (release intent) |
+| [`build`](.github/workflows/build.yml) | [![build](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/build.yml?event=pull_request&label=&logo=ubuntu&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/build.yml) | PR to `main` / `release/*` / `support/*` (code paths) — job `ubuntu-latest` is the **required check** |
+| [`build-cross-platform`](.github/workflows/build-cross-platform.yml) | [![build-cross-platform](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/build-cross-platform.yml?event=pull_request&label=&logo=github&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/build-cross-platform.yml) | PR to `release/*` / `support/*` or `v*` tag push — Windows + macOS (release intent) |
 | [`publish-packages-preview`](.github/workflows/publish-packages-preview.yml) | [![publish-packages-preview](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-preview.yml?branch=main&label=&logo=githubactions&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-preview.yml) | push to `main` → `…-preview` prerelease to GitHub Packages |
-| [`publish-packages-release`](.github/workflows/publish-packages-release.yml) | [![publish-packages-release](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-release.yml?branch=main&label=&logo=nuget&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-release.yml) | tag push on `release/YYYY` (stable) or `support/*` (legacy/retired) — nuget.org opt-in |
+| [`publish-packages-release`](.github/workflows/publish-packages-release.yml) | [![publish-packages-release](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-release.yml?event=push&label=&logo=nuget&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-release.yml) | tag push on `release/YYYY` (stable) or `support/*` (legacy/retired) — nuget.org opt-in |
 
 Multi-provider CI support (Azure Pipelines, GitLab, TeamCity, AppVeyor) was removed during the takeover and is being revived demand-driven — see [#8](https://github.com/Fallout-build/Fallout/issues/8).
 
