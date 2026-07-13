@@ -23,7 +23,7 @@ internal class SerializeBuildGraphAttribute : BuildExtensionAttributeBase, IOnBu
     /// <summary>Schema version consumers gate on; bump only on a breaking shape change.</summary>
     private const int SchemaVersion = 1;
 
-    private static readonly JsonSerializerOptions s_options =
+    private static readonly JsonSerializerOptions serializerOptions =
         new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
