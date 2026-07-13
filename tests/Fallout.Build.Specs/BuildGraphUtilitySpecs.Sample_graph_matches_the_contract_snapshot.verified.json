@@ -1,0 +1,60 @@
+﻿{
+  "version": 1,
+  "falloutVersion": "2026.1.0-preview.42",
+  "targets": [
+    {
+      "name": "Compile",
+      "description": "Builds all projects",
+      "declaredIn": "SampleBuild",
+      "default": false,
+      "listed": true,
+      "dependsOn": [
+        "Restore"
+      ],
+      "after": [],
+      "triggeredBy": [],
+      "triggers": [
+        "Publish"
+      ]
+    },
+    {
+      "name": "Publish",
+      "description": null,
+      "declaredIn": null,
+      "default": false,
+      "listed": false,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Test"
+      ],
+      "triggers": []
+    },
+    {
+      "name": "Restore",
+      "description": null,
+      "declaredIn": null,
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [],
+      "triggers": []
+    },
+    {
+      "name": "Test",
+      "description": null,
+      "declaredIn": null,
+      "default": true,
+      "listed": true,
+      "dependsOn": [
+        "Compile"
+      ],
+      "after": [
+        "Restore"
+      ],
+      "triggeredBy": [],
+      "triggers": []
+    }
+  ]
+}
