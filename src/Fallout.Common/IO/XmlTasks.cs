@@ -76,7 +76,7 @@ public static class XmlTasks
     public static void XmlAdd(string path, string xpath, object content, Encoding encoding,
         params (string prefix, string uri)[] namespaces)
     {
-        var document = XDocument.Load(path, LoadOptions.PreserveWhitespace);
+        var document = XDocument.Load(path, LoadOptions.None);
         var (elements, attributes) = GetObjects(document, xpath, namespaces);
 
         var suffix = "(the element which should be parent of the newly added one)";
@@ -89,22 +89,7 @@ public static class XmlTasks
         var element = elements.Single();
 
         var newContent = ContentToObject(content);
-        var lastChild = element.Nodes().LastOrDefault();
-
-        if (lastChild is XText lastText && lastText.Value.Contains('\n') && newContent is XElement)
-        {
-            var text = lastText.Value;
-            var lastNewLine = text.LastIndexOf('\n');
-            var indentation = text[(lastNewLine + 1)..];
-
-            lastText.Value = text[..(lastNewLine + 1)] + indentation + indentation;
-            element.Add(newContent);
-            element.Add(new XText("\n" + indentation));
-        }
-        else
-        {
-            element.Add(newContent);
-        }
+        element.Add(newContent);
 
         Save(document, path, encoding);
         return;
@@ -126,7 +111,8 @@ public static class XmlTasks
         var writerSettings = new XmlWriterSettings
         {
             OmitXmlDeclaration = document.Declaration == null,
-            Encoding = encoding
+            Encoding = encoding,
+            Indent = true
         };
 
         using var xmlWriter = XmlWriter.Create(path, writerSettings);

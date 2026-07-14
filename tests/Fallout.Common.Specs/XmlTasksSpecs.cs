@@ -50,38 +50,36 @@ public class XmlTasksSpecs : IDisposable
     }
 
     [Fact]
-    public void Adding_element_via_builder_updates_xml_file()
+    public async Task Adding_element_via_builder_updates_xml_file()
     {
-        File.WriteAllText(_tempFile, @"<root><child>value</child></root>");
+        await File.WriteAllTextAsync(_tempFile, @"<root><child>value</child></root>");
 
         XmlTasks.XmlAdd(_tempFile, "/root", new XmlElementBuilder("new").SetValue("element"));
 
-        var content = File.ReadAllText(_tempFile);
-        content.Should().Be(@"<root><child>value</child><new>element</new></root>");
+        var content = await File.ReadAllTextAsync(_tempFile);
+        await Verifier.Verify(content, "xml");
     }
 
     [Fact]
-    public void Adding_element_via_xml_string_updates_xml_file()
+    public async Task Adding_element_via_xml_string_updates_xml_file()
     {
-        File.WriteAllText(_tempFile, @"<root><child>value</child></root>");
+        await File.WriteAllTextAsync(_tempFile, @"<root><child>value</child></root>");
 
         XmlTasks.XmlAdd(_tempFile, "/root", "<new>element</new>");
 
-        var content = File.ReadAllText(_tempFile);
-        content.Should().Be(@"<root><child>value</child><new>element</new></root>");
+        var content = await File.ReadAllTextAsync(_tempFile);
+        await Verifier.Verify(content, "xml");
     }
 
     [Fact]
-    public void Fluent_api_builds_expected_xml_structure()
+    public async Task Fluent_api_builds_expected_xml_structure()
     {
         var builder = new XmlElementBuilder("root")
             .SetAttribute("attr", "val")
             .AddChild("child", c => c.SetValue("inner"));
 
         var element = builder.Build();
-        element.Name.LocalName.Should().Be("root");
-        element.Attribute("attr")?.Value.Should().Be("val");
-        element.Element("child")?.Value.Should().Be("inner");
+        await Verifier.Verify(element);
     }
 
     [Fact]
@@ -120,7 +118,7 @@ public class XmlTasksSpecs : IDisposable
             .SetAttribute("allowInsecureConnections", "true"));
 
         var content = await File.ReadAllTextAsync(_tempFile);
-        await Verifier.Verify(content);
+        await Verifier.Verify(content, "xml");
     }
 
     private static string NugetConfig =>
