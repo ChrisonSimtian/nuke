@@ -94,15 +94,15 @@ public interface ITest : ICompile, IHasArtifacts
 
     sealed Configure<DotNetTestSettings, Project> TestProjectSettingsBase => (_, v) => _
         .SetProjectFile(v)
-        // https://github.com/Tyrrrz/GitHubActionsTestLogger
-        .When(GitHubActions.Instance is not null && v.HasPackageReference("GitHubActionsTestLogger"), _ => _
-            .AddLoggers("GitHubActions;report-warnings=false"))
-        // https://github.com/JetBrains/TeamCity.VSTest.TestAdapter
-        .When(TeamCity.Instance is not null && v.HasPackageReference("TeamCity.VSTest.TestAdapter"), _ => _
-            .AddLoggers("TeamCity")
-            // https://github.com/xunit/visualstudio.xunit/pull/108
-            .AddRunSetting("RunConfiguration.NoAutoReporters", bool.TrueString))
-        .AddLoggers($"trx;LogFileName={v.Name}.trx")
+        // // https://github.com/Tyrrrz/GitHubActionsTestLogger
+        // .When(GitHubActions.Instance is not null && v.HasPackageReference("GitHubActionsTestLogger"), _ => _
+        //     .AddLoggers("GitHubActions;report-warnings=false"))
+        // // https://github.com/JetBrains/TeamCity.VSTest.TestAdapter
+        // .When(TeamCity.Instance is not null && v.HasPackageReference("TeamCity.VSTest.TestAdapter"), _ => _
+        //     .AddLoggers("TeamCity")
+        //     // https://github.com/xunit/visualstudio.xunit/pull/108
+        //     .AddRunSetting("RunConfiguration.NoAutoReporters", bool.TrueString))
+        // .AddLoggers($"trx;LogFileName={v.Name}.trx")
         .When(InvokedTargets.Contains((this as IReportCoverage)?.ReportCoverage) || IsServerBuild, _ => _
             .SetCoverletOutput(TestResultDirectory / $"{v.Name}.xml"));
 

@@ -27,8 +27,6 @@ internal static partial class Telemetry
     private const string VersionPropertyName = "FalloutTelemetryVersion";
     private const string LegacyVersionPropertyName = "NukeTelemetryVersion";
 
-    private static readonly int? s_confirmedVersion;
-
     static Telemetry()
     {
         var optoutParameter = ParameterService.GetParameter<string>(OptOutEnvironmentKey)

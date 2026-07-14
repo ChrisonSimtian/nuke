@@ -2,9 +2,11 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Fallout.Common;
 using Fallout.Common.IO;
-using Xunit.Abstractions;
+using Xunit;
+using Xunit.Sdk;
 
 namespace Fallout.Common.Specs;
 
@@ -21,9 +23,11 @@ public abstract class FileSystemDependentSpecs
     {
         TestOutputHelper = testOutputHelper;
 
-        TestName = ((ITest) testOutputHelper.GetType()
-            .GetField("test", BindingFlags.NonPublic | BindingFlags.Instance).NotNull()
-            .GetValue(testOutputHelper).NotNull()).TestCase.TestMethod.Method.Name;
+        TestName = TestContext.Current.Test?.TestDisplayName ?? "";
+        TestName = Regex.Replace(TestName, @"[<>:""/\\|?*\x00-\x1F]", "_").Trim().TrimEnd('.', ' ');
+        TestName =  Regex.IsMatch(TestName, "^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$", RegexOptions.IgnoreCase)
+            ? $"_{TestName}"
+            : TestName;
 
         ExecutionDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).NotNull();
         RootDirectory = Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory);

@@ -116,8 +116,8 @@ public class CISpecs
 
     private static bool IsRunning(Type type)
     {
-        var property = type.GetProperty($"IsRunning{type.Name}", BindingFlags.NonPublic | BindingFlags.Static).NotNull();
-        return (bool) property.GetValue(obj: null);
+        var property = type?.GetProperty($"IsRunning{type.Name}", BindingFlags.NonPublic | BindingFlags.Static).NotNull();
+        return (bool?)property?.GetValue(obj: null) ?? false;
     }
 
     private class CITheoryAttribute : TheoryAttribute
@@ -127,8 +127,7 @@ public class CISpecs
         public CITheoryAttribute(Type type)
         {
             _type = type;
+            Skip = !IsRunning(_type) ? $"Only applies to {_type.Name}." : null;
         }
-
-        public override string Skip => !IsRunning(_type) ? $"Only applies to {_type.Name}." : null;
     }
 }

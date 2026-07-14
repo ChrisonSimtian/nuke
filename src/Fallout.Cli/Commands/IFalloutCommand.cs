@@ -19,6 +19,7 @@ internal interface IFalloutCommand
     /// The command name as typed after the <c>:</c> prefix (prefer dash form, e.g. <c>"add-package"</c>).\
     /// Matched case-insensitively and with dashes ignored (so <c>:addpackage</c> also matches).\
     /// Legacy commands may still use PascalCase names (e.g. <c>"GetNextDirectory"</c>).
+    /// </summary>
     string Name { get; }
 
     /// <summary>

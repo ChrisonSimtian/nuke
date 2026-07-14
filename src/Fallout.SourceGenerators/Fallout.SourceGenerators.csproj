@@ -25,11 +25,13 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="4.7.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
     <PackageReference Include="Scriban" PrivateAssets="all" GeneratePathProperty="true" />
+    <PackageReference Include="Glob" PrivateAssets="all" GeneratePathProperty="true" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="$(MSBuildProjectDirectory)\..\Persistence\Fallout.Persistence.Solution\bin\$(Configuration)\netstandard2.0\Fallout.Persistence.Solution.dll" CopyToOutputDirectory="PreserveNewest" Visible="false" />
     <None Include="$(PkgScriban)\lib\netstandard2.0\*.*" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(PkgGlob)\lib\netstandard2.0\*.*" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -39,13 +41,14 @@
   <!-- TODO: check for easier method https://github.com/dotnet/roslyn/issues/52017#issuecomment-809113013 -->
   <Target Name="GetDependencyTargetPaths">
     <ItemGroup>
-      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\Fallout.Build.Shared.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\Fallout.Solution.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\Fallout.Utilities.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\Fallout.Utilities.IO.Globbing.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\netstandard2.0\Fallout.Build.Shared.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\netstandard2.0\Fallout.Solution.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\netstandard2.0\Fallout.Utilities.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\netstandard2.0\Fallout.Utilities.IO.Globbing.dll" IncludeRuntimeDependency="false" />
 
       <TargetPathWithTargetPlatformMoniker Include="$(MSBuildProjectDirectory)\..\Persistence\Fallout.Persistence.Solution\bin\$(Configuration)\netstandard2.0\Fallout.Persistence.Solution.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)\lib\$(TargetFramework)\*.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)\lib\netstandard2.0\*.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgGlob)\lib\netstandard2.0\*.dll" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
 

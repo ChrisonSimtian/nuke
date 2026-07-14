@@ -21,7 +21,7 @@ public static class Extensions
         return str.Contains(c.ToString());
     }
 
-    public static bool TryGetValue<T>(this HashSet<T> set, T equalValue, out T actualValue)
+    public static bool TryGetValue<T>(this HashSet<T> set, T equalValue, out T? actualValue)
     {
         foreach (var item in set)
         {

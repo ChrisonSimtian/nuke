@@ -25,7 +25,7 @@ public class ProjectModelSpecs
         project.GetTargetFrameworks().Should().Equal("net8.0", "net9.0", "net10.0");
         project.HasPackageReference("Microsoft.Build.Locator").Should().BeTrue();
         project.GetPackageReferenceVersion("Microsoft.Build.Locator").Should().Be("1.7.8");
-        project.GetPackageReferenceVersion("Microsoft.Build").Should().Be("18.0.2");
+        project.GetPackageReferenceVersion("Microsoft.Build").Should().Be("18.7.1");
     }
 
     [Fact]
