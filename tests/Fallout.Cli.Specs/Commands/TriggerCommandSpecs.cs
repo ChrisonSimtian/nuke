@@ -11,11 +11,11 @@ namespace Fallout.Cli.Specs.Commands;
 public class TriggerCommandSpecs
 {
     [Fact]
-    public void Name_IsTrigger()
+    public void Command_is_named_trigger()
         => new TriggerCommand().Name.Should().Be("trigger");
 
     [Fact]
-    public async Task Execute_OutsideGitRepository_Throws()
+    public async Task Running_outside_a_git_repository_throws()
     {
         var dir = (AbsolutePath)Path.Combine(Path.GetTempPath(), "fallout-trigger-" + Guid.NewGuid().ToString("N"));
         dir.CreateDirectory();

@@ -11,11 +11,11 @@ namespace Fallout.Cli.Specs.Commands;
 public class UpdateCommandSpecs
 {
     [Fact]
-    public void Name_IsUpdate()
+    public void Command_is_named_update()
         => new UpdateCommand(new FakeConsolePrompts(), new ConfigurationReader(), new BuildScaffolder()).Name.Should().Be("update");
 
     [Fact]
-    public async Task Execute_NoBuildScript_DeclineAll_ReturnsZeroAndReportsCompletion()
+    public async Task Declining_all_updates_without_a_build_script_completes_and_returns_zero()
     {
         var dir = (AbsolutePath)Path.Combine(Path.GetTempPath(), "fallout-update-" + Guid.NewGuid().ToString("N"));
         dir.CreateDirectory();
