@@ -35,10 +35,7 @@ internal sealed class CakeConvertCommand : IFalloutCommand
 
     public string Name => "cake-convert";
 
-    public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
-
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    public async Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
     {
         ToolBanner.Print();
         Logging.Configure();
@@ -67,7 +64,7 @@ internal sealed class CakeConvertCommand : IFalloutCommand
         if (buildScript == null &&
             _prompts.PromptForConfirmation("Should a NUKE project be created for better results?"))
         {
-            _setup.ExecuteAsync(args, rootDirectory: null, buildScript: null).GetAwaiter().GetResult();
+            await _setup.ExecuteAsync(args, rootDirectory: null, buildScript: null);
         }
 
         var buildScriptFile = WorkingDirectory / CliConventions.CurrentBuildScriptName;

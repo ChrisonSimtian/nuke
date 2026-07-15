@@ -25,10 +25,7 @@ internal sealed class AddPackageCommand : IFalloutCommand
 
     public string Name => "add-package";
 
-    public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
-
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    public async Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
     {
         ToolBanner.Print();
         Logging.Configure();
@@ -39,7 +36,7 @@ internal sealed class AddPackageCommand : IFalloutCommand
         var packageVersion =
             (EnvironmentInfo.GetNamedArgument<string>("version") ??
              args.ElementAtOrDefault(1) ??
-             NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: false).GetAwaiter().GetResult() ??
+             await NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: false) ??
              NuGetPackageResolver.GetGlobalInstalledPackage(packageId, version: null, packagesConfigFile: null)?.Version.ToString())
             .NotNull("packageVersion != null");
 

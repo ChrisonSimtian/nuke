@@ -38,10 +38,7 @@ internal sealed class SetupCommand : IFalloutCommand
 
     public string Name => "setup";
 
-    public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
-
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    public async Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
     {
         ToolBanner.Print();
         Logging.Configure();
@@ -79,8 +76,8 @@ internal sealed class SetupCommand : IFalloutCommand
         var falloutVersion = _prompts.PromptForChoice("Which Fallout.Common version should be used?",
             new[]
                 {
-                    ("latest release", falloutLatestReleaseVersion.GetAwaiter().GetResult()),
-                    ("latest prerelease", falloutLatestPrereleaseVersion.GetAwaiter().GetResult()),
+                    ("latest release", await falloutLatestReleaseVersion),
+                    ("latest prerelease", await falloutLatestPrereleaseVersion),
                     ("latest local", falloutLatestLocalVersion),
                     ("same as global tool", typeof(SetupCommand).GetTypeInfo().Assembly.GetVersionText())
                 }
