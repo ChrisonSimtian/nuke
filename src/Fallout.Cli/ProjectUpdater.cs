@@ -9,7 +9,7 @@ using Fallout.Common.Utilities;
 
 namespace Fallout.Cli;
 
-public static class ProjectUpdater
+internal static class ProjectUpdater
 {
     public static async Task UpdateAsync(string projectFile)
     {

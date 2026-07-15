@@ -15,7 +15,7 @@ namespace Fallout.Cli.Commands;
 /// <c>fallout :run</c> (and the default, command-less invocation): builds the build project and
 /// runs it, forwarding any remaining arguments to the build.
 /// </summary>
-public sealed class RunCommand : IFalloutCommand
+internal sealed class RunCommand : IFalloutCommand
 {
     public string Name => "run";
 

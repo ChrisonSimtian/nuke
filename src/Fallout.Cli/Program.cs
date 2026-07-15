@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Fallout.Cli;
 
-public partial class Program
+internal partial class Program
 {
     private static async Task<int> Main(string[] args)
     {
