@@ -181,6 +181,7 @@ public class CommandDispatcherSpecs
         public string PromptForSecret(string title, int? minLength = null) => string.Empty;
         public T PromptForChoice<T>(string question, params (T Value, string Description)[] choices) => default;
         public void ConfirmExecution(string title, Action action) => action();
+        public Task ConfirmExecutionAsync(string title, Func<Task> action) => action();
     }
 
     private sealed class TempRoot : IDisposable

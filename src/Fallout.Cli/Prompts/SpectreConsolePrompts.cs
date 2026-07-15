@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Fallout.Common;
 using Fallout.Common.Utilities;
 using Spectre.Console;
@@ -77,6 +78,35 @@ internal sealed class SpectreConsolePrompts : IConsolePrompts
             try
             {
                 action.Invoke();
+            }
+            catch (Exception)
+            {
+                confirmation = false;
+                title = $"{title} (failed)";
+            }
+            finally
+            {
+                ClearPreviousLine();
+            }
+        }
+
+        var (emoji, color) = confirmation ? ("check_mark", "green") : ("multiply", "red");
+        AnsiConsole.MarkupLine($"[{color}]:{emoji}:[/]  {title}");
+    }
+
+    public async Task ConfirmExecutionAsync(string title, Func<Task> action)
+    {
+        Assert.False(title.EndsWith('?'));
+
+        var confirmation = PromptForConfirmation($"{title}?");
+        ClearPreviousLine();
+
+        if (confirmation)
+        {
+            AnsiConsole.MarkupLine($":hourglass_not_done:  {title} ...");
+            try
+            {
+                await action();
             }
             catch (Exception)
             {

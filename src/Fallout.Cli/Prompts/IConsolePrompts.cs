@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace Fallout.Cli.Prompts;
 
@@ -36,4 +37,10 @@ internal interface IConsolePrompts
     /// reporting success or failure without throwing.
     /// </summary>
     void ConfirmExecution(string title, Action action);
+
+    /// <summary>
+    /// Asynchronous counterpart of <see cref="ConfirmExecution(string, Action)"/>: awaits the confirmed
+    /// work instead of running it synchronously, so commands with genuinely async steps don't block.
+    /// </summary>
+    Task ConfirmExecutionAsync(string title, Func<Task> action);
 }

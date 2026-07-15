@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fallout.Cli.Prompts;
 
 namespace Fallout.Cli.Specs.Commands;
@@ -31,5 +32,11 @@ internal sealed class FakeConsolePrompts : IConsolePrompts
     {
         if (InvokeConfirmedActions)
             action();
+    }
+
+    public async Task ConfirmExecutionAsync(string title, Func<Task> action)
+    {
+        if (InvokeConfirmedActions)
+            await action();
     }
 }

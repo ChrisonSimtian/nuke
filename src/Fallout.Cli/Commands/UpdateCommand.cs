@@ -31,10 +31,7 @@ internal sealed class UpdateCommand : IFalloutCommand
 
     public string Name => "update";
 
-    public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
-
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    public async Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
     {
         ToolBanner.Print();
         Logging.Configure();
@@ -44,7 +41,7 @@ internal sealed class UpdateCommand : IFalloutCommand
         if (buildScript != null)
         {
             _prompts.ConfirmExecution("Update build scripts", () => UpdateBuildScripts(rootDirectory, buildScript));
-            _prompts.ConfirmExecution("Update build project", () => UpdateBuildProject(buildScript));
+            await _prompts.ConfirmExecutionAsync("Update build project", () => UpdateBuildProjectAsync(buildScript));
         }
 
         _prompts.ConfirmExecution("Update configuration file", () => UpdateConfigurationFile(rootDirectory));
@@ -62,12 +59,12 @@ internal sealed class UpdateCommand : IFalloutCommand
             rootDirectory);
     }
 
-    private void UpdateBuildProject(AbsolutePath buildScript)
+    private async Task UpdateBuildProjectAsync(AbsolutePath buildScript)
     {
         var configuration = _configuration.Read(buildScript, evaluate: true);
         var projectFile = configuration[ConfigurationReader.BuildProjectFileKey];
         ProjectModelTasks.Initialize();
-        ProjectUpdater.Update(projectFile);
+        await ProjectUpdater.UpdateAsync(projectFile);
     }
 
     private void UpdateConfigurationFile(AbsolutePath rootDirectory)
