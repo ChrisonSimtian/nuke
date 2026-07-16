@@ -18,7 +18,7 @@ description: Fallout is a C#-first build automation framework for .NET — the h
 
 ```powershell
 # terminal-command
-dotnet tool install Fallout.GlobalTools --global
+dotnet tool install Fallout.GlobalTool --global
 ```
 
 **2. Go to a repository of your choice and set up a build:**
