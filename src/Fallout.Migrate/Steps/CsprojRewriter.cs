@@ -1,7 +1,14 @@
 using System.Text.RegularExpressions;
+using Fallout.Migrate.Common;
 
-namespace Fallout.Migrate;
+namespace Fallout.Migrate.Steps;
 
+/// <summary>
+/// Rewrites <c>.csproj</c> files: <c>Nuke.*</c> package/project references become <c>Fallout.*</c>
+/// (pinning the current Fallout version where an inline <c>Version</c> attribute was present),
+/// <c>Nuke*</c> MSBuild properties are renamed to <c>Fallout*</c>, and stale explicit
+/// <c>System.Security.Cryptography.Xml</c> pins are stripped. Driven by <see cref="RewriteCsprojsStep"/>.
+/// </summary>
 internal static class CsprojRewriter
 {
     // Combined rewrite: Nuke.X PackageReference WITH an inline Version attribute → Fallout.X
@@ -43,6 +50,13 @@ internal static class CsprojRewriter
         @"^[ \t]*<PackageReference\s+Include=""System\.Security\.Cryptography\.Xml""[^/]*/>\s*\r?\n?",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
+    /// <summary>
+    /// Rewrites <paramref name="original"/> content, replacing <c>Nuke.*</c> references and MSBuild
+    /// properties with their <c>Fallout.*</c> equivalents and stripping stale pins.
+    /// </summary>
+    /// <param name="original">The original <c>.csproj</c> file content.</param>
+    /// <param name="falloutVersion">The Fallout version to pin into rewritten inline-versioned references.</param>
+    /// <returns>The rewritten content and the number of edits made.</returns>
     public static RewriteResult Rewrite(string original, string falloutVersion)
     {
         var edits = 0;

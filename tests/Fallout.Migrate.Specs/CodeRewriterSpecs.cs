@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Xunit;
+using Fallout.Migrate.Steps;
 
 namespace Fallout.Migrate.Specs;
 

@@ -1,13 +1,19 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
 using Fallout.Common;
 using Fallout.Common.IO;
+using Fallout.Migrate.Common;
 using JetBrains.Annotations;
 using Spectre.Console.Cli;
 
 namespace Fallout.Migrate;
 
+/// <summary>
+/// The <c>fallout-migrate</c> CLI command. See the <see cref="DescriptionAttribute"/> below for the
+/// user-facing summary of what the migration does.
+/// </summary>
 [Description("""
              Migrate a NUKE consumer repo to Fallout.
 
@@ -20,9 +26,15 @@ namespace Fallout.Migrate;
                - Prints a summary of files changed and warnings to address manually
              """)]
 [UsedImplicitly]
-internal sealed class MigrateCommand : Command<MigrateSettings>
+internal sealed class MigrateCommand : AsyncCommand<MigrateSettings>
 {
-    public override int Execute(CommandContext context, MigrateSettings settings)
+    /// <summary>
+    /// Resolves the repository root, runs the migration, and prints a summary.
+    /// </summary>
+    /// <param name="context">The Spectre.Console.Cli command context (unused).</param>
+    /// <param name="settings">The parsed <see cref="MigrateSettings"/> for this invocation.</param>
+    /// <returns>0 on success, 1 if the repository root could not be resolved.</returns>
+    public override async Task<int> ExecuteAsync(CommandContext context, MigrateSettings settings)
     {
         var rootDirectory = ResolveRootDirectory(settings.Path);
         if (rootDirectory is null)
@@ -37,12 +49,18 @@ internal sealed class MigrateCommand : Command<MigrateSettings>
         PrintBanner(rootDirectory, settings.DryRun);
 
         var migration = new Migration(rootDirectory, settings.DryRun, Console.Out);
-        var summary = migration.Run();
+        Summary summary = await migration.RunAsync();
 
         PrintSummary(summary, settings.DryRun);
         return 0;
     }
 
+    /// <summary>
+    /// Resolves the repository root to migrate: the explicit <paramref name="explicitArg"/> if given,
+    /// otherwise the nearest ancestor of the working directory that looks like a Fallout/NUKE build repo.
+    /// </summary>
+    /// <param name="explicitArg">The path argument passed on the command line, or <c>null</c>.</param>
+    /// <returns>The resolved repository root, or <c>null</c> if none could be found.</returns>
     private static AbsolutePath ResolveRootDirectory(string explicitArg)
     {
         if (explicitArg != null)
@@ -59,6 +77,11 @@ internal sealed class MigrateCommand : Command<MigrateSettings>
             (current / "build.sh").FileExists());
     }
 
+    /// <summary>
+    /// Prints the tool banner and, when applicable, the dry-run notice.
+    /// </summary>
+    /// <param name="rootDirectory">The repository root being migrated.</param>
+    /// <param name="dryRun">Whether the migration is running in dry-run mode.</param>
     private static void PrintBanner(AbsolutePath rootDirectory, bool dryRun)
     {
         Console.WriteLine($"fallout-migrate — migrating: {rootDirectory}");
@@ -70,12 +93,18 @@ internal sealed class MigrateCommand : Command<MigrateSettings>
         Console.WriteLine();
     }
 
-    private static void PrintSummary(Migration.Summary summary, bool dryRun)
+    /// <summary>
+    /// Prints the migration <see cref="Summary"/> (counts, warnings, and next-steps guidance) to the console.
+    /// </summary>
+    /// <param name="summary">The result of <see cref="Migration.RunAsync"/>.</param>
+    /// <param name="dryRun">Whether the migration ran in dry-run mode.</param>
+    private static void PrintSummary(Summary summary, bool dryRun)
     {
         Console.WriteLine();
         Console.WriteLine($"Files changed:   {summary.FilesChanged}");
         Console.WriteLine($"Edits made:      {summary.EditCount}");
         Console.WriteLine($"Directories:     {summary.DirectoriesRenamed} renamed");
+
         if (summary.Warnings.Count > 0)
         {
             Console.WriteLine();
@@ -89,7 +118,7 @@ internal sealed class MigrateCommand : Command<MigrateSettings>
         Console.WriteLine();
         Console.WriteLine(dryRun
             ? "Dry-run complete. Re-run without --dry-run to apply changes."
-            : "Migration complete. Verify the build:  ./build.ps1   (or ./build.sh on unix)");
+            : "Migration complete. Verify the build: ./build.ps1 (or ./build.sh on UNIX)");
 
         Console.WriteLine("Migration guide: https://fallout.build  (see #37 for the full guide)");
     }

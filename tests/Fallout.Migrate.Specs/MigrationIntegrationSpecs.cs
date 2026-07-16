@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
@@ -9,14 +10,14 @@ namespace Fallout.Migrate.Specs;
 public class MigrationIntegrationSpecs
 {
     [Fact]
-    public void MigratesVanillaConsumerRepo()
+    public async Task MigratesVanillaConsumerRepo()
     {
         var temp = CreateVanillaFixture();
 
         try
         {
             var migration = new Migration(temp, dryRun: false, TextWriter.Null);
-            var summary = migration.Run();
+            var summary = await migration.RunAsync();
 
             // Build file rewritten end to end.
             var buildCsproj = File.ReadAllText(Path.Combine(temp, "build", "_build.csproj"));
@@ -53,7 +54,7 @@ public class MigrationIntegrationSpecs
     }
 
     [Fact]
-    public void DryRunDoesNotWriteFiles()
+    public async Task DryRunDoesNotWriteFiles()
     {
         var temp = CreateVanillaFixture();
 
@@ -62,7 +63,7 @@ public class MigrationIntegrationSpecs
             var beforeCsproj = File.ReadAllText(Path.Combine(temp, "build", "_build.csproj"));
             var beforeNukeDir = Directory.Exists(Path.Combine(temp, ".nuke"));
 
-            var summary = new Migration(temp, dryRun: true, TextWriter.Null).Run();
+            var summary = await new Migration(temp, dryRun: true, TextWriter.Null).RunAsync();
 
             File.ReadAllText(Path.Combine(temp, "build", "_build.csproj")).Should().Be(beforeCsproj);
             Directory.Exists(Path.Combine(temp, ".nuke")).Should().Be(beforeNukeDir);
@@ -75,14 +76,14 @@ public class MigrationIntegrationSpecs
     }
 
     [Fact]
-    public void WarnsWhenBothNukeAndFalloutDirectoriesExist()
+    public async Task WarnsWhenBothNukeAndFalloutDirectoriesExist()
     {
         var temp = CreateVanillaFixture();
         Directory.CreateDirectory(Path.Combine(temp, ".fallout"));
 
         try
         {
-            var summary = new Migration(temp, dryRun: false, TextWriter.Null).Run();
+            var summary = await new Migration(temp, dryRun: false, TextWriter.Null).RunAsync();
 
             summary.Warnings.Should().Contain(w => w.Contains(".nuke/") && w.Contains(".fallout/"));
             summary.DirectoriesRenamed.Should().Be(0);

@@ -1,9 +1,16 @@
 using System.Text.RegularExpressions;
+using Fallout.Migrate.Common;
 
-namespace Fallout.Migrate;
+namespace Fallout.Migrate.Steps;
 
+/// <summary>
+/// Rewrites bootstrap scripts (<c>build.cmd</c>/<c>build.ps1</c>/<c>build.sh</c>): <c>dotnet nuke</c>
+/// invocations, <c>.nuke</c> path references, and legacy <c>NUKE_*</c> environment variables become
+/// their Fallout equivalents. Driven by <see cref="RewriteBootstrapScriptsStep"/>.
+/// </summary>
 internal static class ScriptRewriter
 {
+    /// <summary>The ordered find/replace patterns applied by <see cref="Rewrite"/>.</summary>
     private static readonly (Regex Pattern, string Replacement)[] patterns =
     {
         // `dotnet nuke` invocations
@@ -17,6 +24,12 @@ internal static class ScriptRewriter
         (new Regex(@"\bNUKE_INTERNAL_INTERCEPTOR\b", RegexOptions.Compiled), "FALLOUT_INTERNAL_INTERCEPTOR"),
     };
 
+    /// <summary>
+    /// Rewrites <paramref name="original"/> script content, applying every pattern in
+    /// <see cref="patterns"/> in order.
+    /// </summary>
+    /// <param name="original">The original script file content.</param>
+    /// <returns>The rewritten content and the number of edits made.</returns>
     public static RewriteResult Rewrite(string original)
     {
         var edits = 0;
