@@ -434,6 +434,12 @@
             "type": "string",
             "format": "--artifacts-path {value}",
             "help": "All build output files from the executed command will go in subfolders under the specified path, separated by project. For more information see <a href=\"https://learn.microsoft.com/en-us/dotnet/core/sdk/artifacts-output\">Artifacts Output Layout</a>. Available since .NET 8 SDK."
+          },
+          {
+            "name": "BinaryLog",
+            "type": "string",
+            "format": "-bl:{value}",
+            "help": "Generate MSBuild <a href=\"https://github.com/dotnet/msbuild/blob/main/documentation/wiki/Binary-Log.md\">binary log</a>."
           }
         ]
       }
@@ -531,7 +537,7 @@
             "name": "BinaryLog",
             "type": "string",
             "format": "-bl:{value}",
-            "help": "Generare MSBuild <a href=\"https://github.com/dotnet/msbuild/blob/main/documentation/wiki/Binary-Log.md\">binary log</a>."
+            "help": "Generate MSBuild <a href=\"https://github.com/dotnet/msbuild/blob/main/documentation/wiki/Binary-Log.md\">binary log</a>."
           },
           {
             "name": "ArtifactsPath",
