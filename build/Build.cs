@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NuGet.Packaging;
 using Fallout.Common;
 using Fallout.Common.CI;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.Execution;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.GitHub;
 using Fallout.Common.Utilities;
 using Fallout.Components;
+using Fallout.Solutions;
+using NuGet.Packaging;
 using static Fallout.Common.ControlFlow;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
@@ -72,7 +72,7 @@ partial class Build
         : ThisAssembly.AssemblyInformationalVersion.Split('+')[0];
     string MilestoneTitle => $"v{MajorMinorPatchVersion}";
 
-    private static int ParseMajor(string informationalVersion)
+    static int ParseMajor(string informationalVersion)
         => int.Parse(informationalVersion.Split('.')[0]);
 
     AbsolutePath IHasArtifacts.ArtifactsDirectory => RootDirectory / "output";
@@ -122,7 +122,7 @@ partial class Build
 
     string DefaultDeploymentVersion => "9999.0.0";
 
-    [Parameter] [Secret] readonly string NuGetApiKey;
+    [Parameter][Secret] readonly string NuGetApiKey;
 
     // Two publish channels (FALLOUT001 — see IPublish.PublishTargets). Routing replaces the
     // old single-feed push + the hand-rolled `dotnet nuget push` in the workflows (#333):
