@@ -82,7 +82,7 @@ This file covers *layout*. For how the build orchestrator works inside — the s
 | Workflow | When it runs | What it does |
 |---|---|---|
 | `build.yml` (generated) | Every PR targeting `main`, `release/*`, or `support/*` (with `paths-ignore` for docs/.assets/markdown) | Test + Pack on Linux. Fast feedback loop; the job `ubuntu-latest` is the only required status check. |
-| `build-docs.yml` | Docs-only PRs to the same branches | No-op that reports the `ubuntu-latest` check so docs-only PRs aren't blocked. |
+| `build-skip.yml` | Docs-only PRs to the same branches | No-op that reports the `ubuntu-latest` check so docs-only PRs aren't blocked. |
 | `build-cross-platform.yml` (generated) | PRs targeting `release/*` / `support/*`, and `v*` tag pushes | Test + Pack on macOS **and** Windows (one job each). Gated to release intent. |
 | `publish-packages-preview.yml` | Push to `main` | Test + Pack + publish `-preview` to GitHub Packages only. |
 | `publish-packages-release.yml` | `v*` tag push on a production branch (or `workflow_dispatch`) | Test + Pack + publish to GitHub Packages + GitHub Releases (nuget.org opt-in). |

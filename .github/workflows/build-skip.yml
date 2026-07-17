@@ -37,4 +37,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Skip: docs-only PR, no build needed'
-        run: echo "Docs-only change — ubuntu-latest validation skipped via .github/workflows/build-docs.yml."
+        run: echo "Docs-only change — ubuntu-latest validation skipped via .github/workflows/build-skip.yml."

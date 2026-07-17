@@ -75,7 +75,7 @@ Tool wrapper JSON lives under `src/Fallout.Common/Tools/<Tool>/<Tool>.json`. Whe
 
 ### After opening a PR
 
-- The PR gate is the `ubuntu-latest` job (from `build.yml`) only — fires on PRs against `main`, `release/*`, or `support/*`. Docs-only PRs hit a no-op shim workflow (`build-docs.yml`) that reports the same status check name. `build-cross-platform.yml` runs Windows + macOS validation on `release/*` / `support/*` PRs and `v*` tag pushes (gated to release intent), not on routine `main` work.
+- The PR gate is the `ubuntu-latest` job (from `build.yml`) only — fires on PRs against `main`, `release/*`, or `support/*`. Docs-only PRs hit a no-op shim workflow (`build-skip.yml`) that reports the same status check name. `build-cross-platform.yml` runs Windows + macOS validation on `release/*` / `support/*` PRs and `v*` tag pushes (gated to release intent), not on routine `main` work.
 - **Review rises with the ladder.** PRs to `main` (preview) get ordinary review — it's the integration trunk. Promotion to a `release/YYYY` production train (and the GA cut) gets rigorous, unhurried review — that's the project's quality gate. Match your expectations to where the PR is headed.
 - Address review feedback in additional commits rather than force-pushing — easier to review the changes.
 - If CI fails on something unrelated to your change, ping a maintainer.

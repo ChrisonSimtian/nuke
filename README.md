@@ -84,7 +84,7 @@ Fallout (NUKE's successor) brings your build automation to an even level with ev
 
 ## Build Status
 
-CI runs on every PR targeting `main`, `release/*`, or `support/*` on `build.yml` (Linux) — its `ubuntu-latest` job is the only required status check. Cross-platform Test+Pack (Windows + macOS) is gated to release intent — PRs into `release/*` / `support/*` and `v*` tag pushes — via `build-cross-platform.yml`; it does not run on routine `main` work. A `…-preview` prerelease is published to **GitHub Packages** under the reserved `Fallout.*` prefix on every push to `main`. **Stable** releases fire from `release/YYYY` tags via `.github/workflows/publish-packages-release.yml` (GitHub Packages + GitHub Releases by default; nuget.org opt-in per release). Docs-only PRs are served by a no-op companion workflow (`build-docs`) so branch protection is satisfied without spending CI minutes on a real build.
+CI runs on every PR targeting `main`, `release/*`, or `support/*` on `build.yml` (Linux) — its `ubuntu-latest` job is the only required status check. Cross-platform Test+Pack (Windows + macOS) is gated to release intent — PRs into `release/*` / `support/*` and `v*` tag pushes — via `build-cross-platform.yml`; it does not run on routine `main` work. A `…-preview` prerelease is published to **GitHub Packages** under the reserved `Fallout.*` prefix on every push to `main`. **Stable** releases fire from `release/YYYY` tags via `.github/workflows/publish-packages-release.yml` (GitHub Packages + GitHub Releases by default; nuget.org opt-in per release). Docs-only PRs are served by a no-op companion workflow (`build-skip`) so branch protection is satisfied without spending CI minutes on a real build.
 
 | Workflow | Status | Trigger |
 |---|---|---|
