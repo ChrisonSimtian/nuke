@@ -131,8 +131,8 @@ partial class Build
     //   - nuget.org: Fallout.* ONLY, never the Nuke.* shims. Keyed by NUGET_API_KEY.
     // Select per run from CI with `dotnet fallout Publish --publish-to <name>`. PublishTarget.SkipDuplicate
     // (default true) keeps re-runs idempotent if a version already exists on a feed.
-#pragma warning disable FALLOUT001 // opting our own build into the experimental multi-channel publish surface
-    IEnumerable<PublishTarget> IPublish.PublishTargets => new[]
+#pragma warning disable FALLOUT001, FALLOUT005 // opting our own build into the experimental multi-channel publish surface (ADR-0009)
+    IEnumerable<IPublishTarget> IPublish.PublishTargets => new IPublishTarget[]
     {
         new PublishTarget
         {
@@ -149,7 +149,7 @@ partial class Build
             ExcludePackages = new[] { "Nuke.*" },
         },
     };
-#pragma warning restore FALLOUT001
+#pragma warning restore FALLOUT001, FALLOUT005
 
     // The workflows now gate *which* channel publishes (via --publish-to); the on-branch
     // requirement is gone. We keep a CI guard, though: GitHubToken binds from the

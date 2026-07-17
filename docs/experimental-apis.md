@@ -48,7 +48,8 @@ Status values: **Experimental** (live, opt-in), **Promoted** (attribute removed,
 
 | ID | Surface | Introduced | Status | Notes |
 |----|---------|------------|--------|-------|
-| `FALLOUT001` | `Fallout.Components.IPublish.PublishTargets` / `.PublishTo` (multi-channel publishing) | 2026.1 | Experimental | Fan a single `Pack` output across multiple feeds with per-feed package-ID routing (`PublishTarget`). Shape may change while the CD model firms up (epic #332). Promote by deleting the attribute once `ReleaseChannel`/`DeploymentTarget` (#334) settle. |
+| `FALLOUT001` | `Fallout.Components.IPublish.PublishTargets` / `.PublishTo` (multi-channel publishing) | 2026.1 | Experimental | Fan a single `Pack` output across multiple feeds with per-feed package-ID routing (`PublishTarget`). Shape may change while the CD model firms up (epic #332). Promote by deleting the attribute once `ReleaseChannel`/`DeploymentTarget` (#334) settle. `PublishTargets` now returns `IEnumerable<IPublishTarget>` (see `FALLOUT005`). |
+| `FALLOUT005` | `Fallout.Components` CD model — `IPublishTarget`, `Artifact`/`ArtifactKind`, `Channel`, `DeploymentEnvironment`, `DeploymentContext`, `GitHubReleaseTarget` | 2026.1 | Experimental | The continuous-delivery domain model (releases → channels → environments → targets → deployments) from [ADR-0009](adr/0009-continuous-delivery-model.md); `IPublishTarget` is the `DeploymentTarget` of #334. Shape will change while the model and its provider implementations firm up. Promote alongside `FALLOUT001` once the model settles. |
 
 <!--
 Allocation example (do not uncomment unless a real API is marked):

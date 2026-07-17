@@ -1,9 +1,20 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Fallout.Common;
+using Fallout.Common.IO;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Common.Utilities;
+using Fallout.Common.Utilities.Collections;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
+
+#pragma warning disable FALLOUT005 // PublishTarget is the NuGet-feed IPublishTarget implementation (ADR-0009)
 
 namespace Fallout.Components;
 
@@ -17,7 +28,7 @@ namespace Fallout.Components;
 // A sealed class (not a record) so the transition-shim generator skips it: it can't
 // derive a Nuke.* shim from a sealed type (CS0509), and this is a new type with no
 // pre-rename consumers to bridge. We don't rely on record value-equality / `with`.
-public sealed class PublishTarget
+public sealed class PublishTarget : IPublishTarget
 {
     /// <summary>Logical name, used by the <c>--publish-to</c> selector (e.g. <c>github-packages</c>, <c>nuget.org</c>).</summary>
     public required string Name { get; init; }
@@ -27,6 +38,12 @@ public sealed class PublishTarget
 
     /// <summary>API key for the feed (required).</summary>
     public string? ApiKey { get; init; }
+
+    /// <summary>Extra push configuration applied to this target's <c>dotnet nuget push</c> invocation.</summary>
+    public Configure<DotNetNuGetPushSettings> PushSettings { get; init; } = _ => _;
+
+    /// <summary>Per-package push configuration applied (with <see cref="PushSettings"/>) to each pushed package.</summary>
+    public Configure<DotNetNuGetPushSettings> PackagePushSettings { get; init; } = _ => _;
 
     /// <summary>Package-name globs (<c>*</c>, <c>?</c>) this target accepts. Default: everything.</summary>
     public IReadOnlyList<string> IncludePackages { get; init; } = new[] { "*" };
@@ -45,6 +62,47 @@ public sealed class PublishTarget
     public bool Accepts(string packageName)
         => PublishPackageRouter.MatchesAny(IncludePackages, packageName)
            && !PublishPackageRouter.MatchesAny(ExcludePackages, packageName);
+
+    /// <summary>A NuGet feed accepts package artifacts; per-package include/exclude routing is applied in <see cref="DeployAsync"/>.</summary>
+    public bool Accepts(Artifact artifact) => artifact.Kind == ArtifactKind.Packages;
+
+    /// <summary>Fail fast on a missing API key before any push happens.</summary>
+    public void Validate()
+        => Assert.True(!ApiKey.IsNullOrWhiteSpace(), $"Publish target [{Name}] has no API key.");
+
+    /// <summary>
+    /// Push the package files from the given artifacts to this feed, applying this target's
+    /// include/exclude routing. Identical push behaviour to the legacy single-loop path — the
+    /// deploy logic now lives on the target (ADR-0009 D4).
+    /// </summary>
+    public Task DeployAsync(IReadOnlyList<Artifact> artifacts, DeploymentContext context)
+    {
+        var routed = artifacts
+            .Where(x => x.Kind == ArtifactKind.Packages)
+            .SelectMany(x => x.Files)
+            .Where(x => Accepts(x.NameWithoutExtension))
+            .ToList();
+
+        if (routed.Count == 0)
+        {
+            Serilog.Log.Warning("Publish target {Target}: no packaged files matched its routing rules — skipping.", Name);
+            return Task.CompletedTask;
+        }
+
+        Serilog.Log.Information("Publish target {Target}: pushing {Count} package(s) → {Source}.", Name, routed.Count, Source);
+        DotNetNuGetPush(_ => _
+                .SetSource(Source)
+                .SetApiKey(ApiKey!)
+                .When(SkipDuplicate, _ => _.EnableSkipDuplicate())
+                .Apply(PushSettings)
+                .CombineWith(routed, (_, v) => _
+                    .SetTargetPath(v))
+                .Apply(PackagePushSettings),
+            context.DegreeOfParallelism,
+            context.ContinueOnFailure);
+
+        return Task.CompletedTask;
+    }
 }
 
 /// <summary>

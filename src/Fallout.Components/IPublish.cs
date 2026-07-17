@@ -11,6 +11,8 @@ using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
+#pragma warning disable FALLOUT005 // IPublish drives the experimental CD model (IPublishTarget/Artifact/DeploymentContext — ADR-0009)
+
 namespace Fallout.Components;
 
 public interface IPublish : IPack, ITest
@@ -25,8 +27,8 @@ public interface IPublish : IPack, ITest
     /// the legacy single-feed push from <see cref="NuGetSource"/> / <see cref="NuGetApiKey"/>.
     /// </summary>
     [Experimental("FALLOUT001")]
-    IEnumerable<PublishTarget> PublishTargets =>
-        new[] { new PublishTarget { Name = "default", Source = NuGetSource, ApiKey = NuGetApiKey } };
+    IEnumerable<IPublishTarget> PublishTargets =>
+        new IPublishTarget[] { new PublishTarget { Name = "default", Source = NuGetSource, ApiKey = NuGetApiKey } };
 
     /// <summary>
     /// Names of the configured <see cref="PublishTargets"/> to push to this run (<c>FALLOUT001</c>).
@@ -59,7 +61,7 @@ public interface IPublish : IPack, ITest
 
     Target Publish => _ => _
         .DependsOn(Test, Pack)
-        .Executes(() =>
+        .Executes(async () =>
         {
 #pragma warning disable FALLOUT001 // configuring the experimental multi-channel surface is the point of this target
             var configured = PublishTargets.ToList();
@@ -79,32 +81,26 @@ public interface IPublish : IPack, ITest
             Assert.True(candidates.Count > 0,
                 "No packages found — nothing to publish. Ensure Pack produced *.nupkg files (override IPublish.PushPackageFiles if needed).");
 
-            // Validate every selected target's key up front: a missing key is a config error
-            // we can know before pushing anything, so fail fast rather than push some feeds and
-            // then break half-way. (Per-push failures stay independent — see PushCompleteOnFailure.)
-            var keyless = targets.Where(x => x.ApiKey.IsNullOrWhiteSpace()).Select(x => x.Name).ToList();
-            Assert.True(keyless.Count == 0, $"Publish target(s) [{keyless.JoinComma()}] have no API key.");
+            // Fail fast on configuration errors (e.g. a missing API key) before pushing anything,
+            // rather than pushing some targets and then breaking half-way (ADR-0009 D4).
+            foreach (var target in targets)
+                target.Validate();
+
+            // Build once, deploy many: one immutable artifact fanned out to each target that
+            // accepts it, the target owning its own deploy protocol (ADR-0009 D1/D4). The nupkgs
+            // carry their own versions, so the artifact's Version label is not needed here.
+            var artifact = new Artifact(ArtifactKind.Packages, Version: string.Empty, Files: candidates);
+            var context = new DeploymentContext
+            {
+                DegreeOfParallelism = PushDegreeOfParallelism,
+                ContinueOnFailure = PushCompleteOnFailure,
+            };
 
             foreach (var target in targets)
             {
-                var routed = candidates.Where(x => target.Accepts(x.NameWithoutExtension)).ToList();
-                if (routed.Count == 0)
-                {
-                    Serilog.Log.Warning("Publish target {Target}: no packaged files matched its routing rules — skipping.", target.Name);
+                if (!target.Accepts(artifact))
                     continue;
-                }
-
-                Serilog.Log.Information("Publish target {Target}: pushing {Count} package(s) → {Source}.", target.Name, routed.Count, target.Source);
-                DotNetNuGetPush(_ => _
-                        .SetSource(target.Source)
-                        .SetApiKey(target.ApiKey!)
-                        .When(target.SkipDuplicate, _ => _.EnableSkipDuplicate())
-                        .Apply(PushSettings)
-                        .CombineWith(routed, (_, v) => _
-                            .SetTargetPath(v))
-                        .Apply(PackagePushSettings),
-                    PushDegreeOfParallelism,
-                    PushCompleteOnFailure);
+                await target.DeployAsync(new[] { artifact }, context);
             }
         });
 }

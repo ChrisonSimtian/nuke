@@ -247,6 +247,13 @@ public sealed class TransitionShimGenerator : IIncrementalGenerator
             return;
         }
 
+        // Experimental types (System.Diagnostics.CodeAnalysis.ExperimentalAttribute) are new,
+        // opt-in surface with no pre-rename Nuke.* consumers to bridge — never shim them. A
+        // generated shim would also re-reference the experimental type and leak its error-by-
+        // default diagnostic into generated code. Skip silently (not an actionable skip).
+        if (HasExperimentalAttribute(type))
+            return;
+
         var skipReason = ClassifyForSkip(type);
         if (skipReason is not null)
         {
@@ -269,6 +276,18 @@ public sealed class TransitionShimGenerator : IIncrementalGenerator
 
     private static bool IsLanguageLimitKind(string skipReason)
         => skipReason is "enum" or "delegate" or "struct";
+
+    /// <summary>True if the type is marked <c>[Experimental]</c> — never bridged to a Nuke.* shim.</summary>
+    private static bool HasExperimentalAttribute(INamedTypeSymbol type)
+    {
+        foreach (var attribute in type.GetAttributes())
+        {
+            if (attribute.AttributeClass?.ToDisplayString() == "System.Diagnostics.CodeAnalysis.ExperimentalAttribute")
+                return true;
+        }
+
+        return false;
+    }
 
     /// <summary>
     /// Returns a one-word kind label if this type should be skipped, otherwise null.
