@@ -6,6 +6,7 @@ using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Migrate.Common;
 using JetBrains.Annotations;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Fallout.Migrate;
@@ -84,13 +85,13 @@ internal sealed class MigrateCommand : AsyncCommand<MigrateSettings>
     /// <param name="dryRun">Whether the migration is running in dry-run mode.</param>
     private static void PrintBanner(AbsolutePath rootDirectory, bool dryRun)
     {
-        Console.WriteLine($"fallout-migrate — migrating: {rootDirectory}");
+        AnsiConsole.MarkupLineInterpolated($"[bold]fallout-migrate[/] — migrating: [blue]{rootDirectory}[/]");
         if (dryRun)
         {
-            Console.WriteLine("(dry-run — no files will be modified)");
+            AnsiConsole.MarkupLine("[yellow](dry-run — no files will be modified)[/]");
         }
 
-        Console.WriteLine();
+        AnsiConsole.WriteLine();
     }
 
     /// <summary>
@@ -100,26 +101,26 @@ internal sealed class MigrateCommand : AsyncCommand<MigrateSettings>
     /// <param name="dryRun">Whether the migration ran in dry-run mode.</param>
     private static void PrintSummary(Summary summary, bool dryRun)
     {
-        Console.WriteLine();
-        Console.WriteLine($"Files changed:   {summary.FilesChanged}");
-        Console.WriteLine($"Edits made:      {summary.EditCount}");
-        Console.WriteLine($"Directories:     {summary.DirectoriesRenamed} renamed");
+        AnsiConsole.WriteLine();
+        AnsiConsole.MarkupLineInterpolated($"Files changed:   [bold]{summary.FilesChanged}[/]");
+        AnsiConsole.MarkupLineInterpolated($"Edits made:      [bold]{summary.EditCount}[/]");
+        AnsiConsole.MarkupLineInterpolated($"Directories:     [bold]{summary.DirectoriesRenamed}[/] renamed");
 
         if (summary.Warnings.Count > 0)
         {
-            Console.WriteLine();
-            Console.WriteLine("Warnings:");
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[yellow]Warnings:[/]");
             foreach (var w in summary.Warnings)
             {
-                Console.WriteLine($"  - {w}");
+                AnsiConsole.MarkupLineInterpolated($"[yellow]  - {w}[/]");
             }
         }
 
-        Console.WriteLine();
-        Console.WriteLine(dryRun
-            ? "Dry-run complete. Re-run without --dry-run to apply changes."
-            : "Migration complete. Verify the build: ./build.ps1 (or ./build.sh on UNIX)");
+        AnsiConsole.WriteLine();
+        AnsiConsole.MarkupLine(dryRun
+            ? "[green]Dry-run complete.[/] Re-run without --dry-run to apply changes."
+            : "[green]Migration complete.[/] Verify the build: ./build.ps1 (or ./build.sh on UNIX)");
 
-        Console.WriteLine("Migration guide: https://fallout.build  (see #37 for the full guide)");
+        AnsiConsole.MarkupLine("[grey]Migration guide: https://fallout.build  (see #37 for the full guide)[/]");
     }
 }
