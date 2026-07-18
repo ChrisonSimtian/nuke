@@ -80,7 +80,7 @@ internal sealed class UpdateCommand : IFalloutCommand
 
     private static void UpdateTargetFramework(Microsoft.Build.Evaluation.Project buildProject)
     {
-        buildProject.SetProperty("TargetFramework", "net8.0");
+        buildProject.SetProperty("TargetFramework", "net10.0");
     }
 
     private static async Task<FloatRange> UpdateFalloutCommonPackageAsync(Microsoft.Build.Evaluation.Project buildProject)
