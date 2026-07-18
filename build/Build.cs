@@ -30,7 +30,14 @@ partial class Build
         ITest,
         IReportCoverage,
         IPublish,
-        ICreateGitHubRelease
+        ICreateGitHubRelease,
+        // Build-local steps (build/Steps/) — each concern is its own component.
+        IGenerateTools,
+        IGeneratePublicApi,
+        IDownloadLicenses,
+        IHandleExternalRepositories,
+        IUpdateContributors,
+        IUpdateStargazers
 {
     public static int Main() => Execute<Build>(x => ((IPack)x).Pack);
 
