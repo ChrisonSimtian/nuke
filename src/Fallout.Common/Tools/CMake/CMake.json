@@ -1,119 +1,277 @@
 {
-    "$schema": "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
-    "references": [
-        "https://cmake.org/cmake/help/latest/manual/cmake.1.html"
-    ],
-    "name": "CMake",
-    "officialUrl": "https://cmake.org/cmake/help/latest/manual/cmake.1.html",
-    "help": "The cmake executable is the command-line interface of the cross-platform build system generator CMake.",
-    "pathExecutable": "cmake",
-    "tasks": [
-        {
-            "help": "Generates a build project using cmake.",
-            "postfix": "Generate",
-            "settingsClass": {
-                "properties": [
-                    {
-                        "name": "Generator",
-                        "type": "CMakeGenerator",
-                        "format": "-G {value}",
-                        "default": "CMakeGenerator.Visual_Studio_16_2019",
-                        "help": "Specify the build system to generate."
-                    },
-                    {
-                        "name": "Platform",
-                        "type": "CMakePlatform",
-                        "format": "-A {value}",
-                        "default": "CMakePlatform.x64",
-                        "help": "Specify the platform to build for."
-                    },
-                    {
-                        "name": "RootDirectory",
-                        "type": "string",
-                        "format": "-S {value}",
-                        "default": "\".\"",
-                        "help": "Specify the root directory of the 'CMakeLists.txt' file."
-                    },
-                    {
-                        "name": "OutputDirectory",
-                        "type": "string",
-                        "format": "-B {value}",
-                        "default": "\"./out\"",
-                        "help": "Specify the configuration to use when running the install script."
-                    },
-                    {
-                        "name": "ToolChain",
-                        "type": "string",
-                        "format": "-DCMAKE_TOOLCHAIN_FILE:FILEPATH={value}",
-                        "help": "Specify the path to a toolchain file to use."
-                    }
-                ]
-            }
-        },
-        {
-            "help": "Runs the `cmake --install` command on a project generated with cmake.",
-            "postfix": "Install",
-            "definiteArgument": "--install",
-            "settingsClass": {
-                "properties": [
-                    {
-                        "name": "RootDirectory",
-                        "type": "string",
-                        "format": "{value}",
-                        "default": "\".\"",
-                        "help": "Specify the root directory of the cmake install script."
-                    },
-                    {
-                        "name": "Configuration",
-                        "type": "CMakeConfiguration",
-                        "format": "--config {value}",
-                        "default": "CMakeConfiguration.Debug",
-                        "help": "Specify the root directory of the 'CMakeLists.txt' file."
-                    },
-                    {
-                        "name": "OutputDirectory",
-                        "type": "string",
-                        "format": "--prefix {value}",
-                        "help": "Specify the output directory of the install script."
-                    },
-                    {
-                        "name": "Component",
-                        "type": "string",
-                        "format": "--component {value}",
-                        "help": "Specify the component to install."
-                    }
-                ]
-            }
-        }
-    ],
-    "enumerations": [
-        {
-            "name": "CMakeGenerator",
-            "values": [
-                "Visual Studio 15 2017",
-                "Visual Studio 16 2019",
-                "Visual Studio 17 2022",
-                "Ninja",
-                "Xcode"
-            ]
-        },
-        {
-            "name": "CMakePlatform",
-            "values": [
-                "Win32",
-                "x64",
-                "ARM",
-                "ARM64"
-            ]
-        },
-        {
-            "name": "CMakeConfiguration",
-            "values": [
-                "Debug",
-                "RelWithDebInfo",
-                "Release",
-                "MinSizeRel"
-            ]
-        }
-    ]
+  "$schema": "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
+  "references": [
+    "https://cmake.org/cmake/help/latest/manual/cmake.1.html"
+  ],
+  "name": "CMake",
+  "officialUrl": "https://cmake.org/cmake/help/latest/manual/cmake.1.html",
+  "help": "The cmake executable is the command-line interface of the cross-platform build system generator CMake.",
+  "pathExecutable": "cmake",
+  "tasks": [
+    {
+      "help": "Generates a build project using cmake.",
+      "postfix": "Generate",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "Generator",
+            "type": "CMakeGenerator",
+            "format": "-G {value}",
+            "default": "CMakeGenerator.Visual_Studio_16_2019",
+            "help": "Specify the build system to generate."
+          },
+          {
+            "name": "Platform",
+            "type": "CMakePlatform",
+            "format": "-A {value}",
+            "default": "CMakePlatform.x64",
+            "help": "Specify the platform to build for."
+          },
+          {
+            "name": "RootDirectory",
+            "type": "string",
+            "format": "-S {value}",
+            "default": "\".\"",
+            "help": "Specify the root directory of the 'CMakeLists.txt' file."
+          },
+          {
+            "name": "OutputDirectory",
+            "type": "string",
+            "format": "-B {value}",
+            "default": "\"./out\"",
+            "help": "Specify the configuration to use when running the install script."
+          },
+          {
+            "name": "ToolChain",
+            "type": "string",
+            "format": "-DCMAKE_TOOLCHAIN_FILE:FILEPATH={value}",
+            "help": "Specify the path to a toolchain file to use."
+          },
+          {
+            "name": "ToolsetSpec",
+            "type": "string",
+            "format": "-T {value}",
+            "help": "Specify the toolset name if supported by the generator."
+          },
+          {
+            "name": "InstallPrefix",
+            "type": "string",
+            "format": "--install-prefix {value}",
+            "help": "Specify the installation prefix to be used in the generated project."
+          },
+          {
+            "name": "Define",
+            "type": "List<string>",
+            "format": "-D {value}",
+            "help": "Create or update a CMake cache entry, in the form <var>[:<type>]=<value>."
+          },
+          {
+            "name": "Undefine",
+            "type": "List<string>",
+            "format": "-U {value}",
+            "help": "Remove matching entries from the CMake cache, given a globbing expression."
+          },
+          {
+            "name": "Fresh",
+            "type": "bool",
+            "format": "--fresh",
+            "help": "Perform a fresh configuration, removing any existing cache file."
+          },
+          {
+            "name": "WarnDev",
+            "type": "bool",
+            "format": "-Wdev",
+            "help": "Enable developer warnings."
+          },
+          {
+            "name": "NoWarnDev",
+            "type": "bool",
+            "format": "-Wno-dev",
+            "help": "Suppress developer warnings."
+          },
+          {
+            "name": "WarnUninitialized",
+            "type": "bool",
+            "format": "--warn-uninitialized",
+            "help": "Warn about uninitialized values."
+          },
+          {
+            "name": "WarnUnusedVars",
+            "type": "bool",
+            "format": "--warn-unused-vars",
+            "help": "Warn about unused variables."
+          },
+          {
+            "name": "LogLevel",
+            "type": "CMakeLogLevel",
+            "format": "--log-level={value}",
+            "help": "Set the log level to one of: ERROR, WARNING, NOTICE, STATUS, VERBOSE, DEBUG, TRACE."
+          },
+          {
+            "name": "Debug",
+            "type": "bool",
+            "format": "--debug-output",
+            "help": "Put cmake in a debug mode."
+          },
+          {
+            "name": "Trace",
+            "type": "bool",
+            "format": "--trace",
+            "help": "Put cmake in trace mode."
+          },
+          {
+            "name": "TraceExpand",
+            "type": "bool",
+            "format": "--trace-expand",
+            "help": "Put cmake in trace mode, expanding variables."
+          }
+        ]
+      }
+    },
+    {
+      "help": "Runs the `cmake --build` command on a project generated with cmake.",
+      "postfix": "Build",
+      "definiteArgument": "--build",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "OutputDirectory",
+            "type": "string",
+            "format": "{value}",
+            "default": "\"./out\"",
+            "help": "Specify the project binary directory to build."
+          },
+          {
+            "name": "Configuration",
+            "type": "CMakeConfiguration",
+            "format": "--config {value}",
+            "default": "CMakeConfiguration.Debug",
+            "help": "Specify the build configuration for multi-config generators."
+          },
+          {
+            "name": "Target",
+            "type": "List<string>",
+            "format": "--target {value}",
+            "help": "Specify the targets to build instead of the default target."
+          },
+          {
+            "name": "Parallel",
+            "type": "int",
+            "format": "--parallel {value}",
+            "help": "Specify the maximum number of concurrent processes to use when building."
+          },
+          {
+            "name": "CleanFirst",
+            "type": "bool",
+            "format": "--clean-first",
+            "help": "Build target 'clean' first, then build."
+          },
+          {
+            "name": "Verbose",
+            "type": "bool",
+            "format": "--verbose",
+            "help": "Enable verbose output - if supported - including the build commands to be executed."
+          },
+          {
+            "name": "NativeToolOptions",
+            "type": "List<string>",
+            "format": "-- {value}",
+            "separator": " ",
+            "position": -1,
+            "help": "Pass remaining options to the native build tool, placed after '--'."
+          }
+        ]
+      }
+    },
+    {
+      "help": "Runs the `cmake --install` command on a project generated with cmake.",
+      "postfix": "Install",
+      "definiteArgument": "--install",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "RootDirectory",
+            "type": "string",
+            "format": "{value}",
+            "default": "\".\"",
+            "help": "Specify the root directory of the cmake install script."
+          },
+          {
+            "name": "Configuration",
+            "type": "CMakeConfiguration",
+            "format": "--config {value}",
+            "default": "CMakeConfiguration.Debug",
+            "help": "Specify the root directory of the 'CMakeLists.txt' file."
+          },
+          {
+            "name": "OutputDirectory",
+            "type": "string",
+            "format": "--prefix {value}",
+            "help": "Specify the output directory of the install script."
+          },
+          {
+            "name": "Component",
+            "type": "string",
+            "format": "--component {value}",
+            "help": "Specify the component to install."
+          },
+          {
+            "name": "Strip",
+            "type": "bool",
+            "format": "--strip",
+            "help": "Strip before installing."
+          },
+          {
+            "name": "Verbose",
+            "type": "bool",
+            "format": "--verbose",
+            "help": "Enable verbose output."
+          }
+        ]
+      }
+    }
+  ],
+  "enumerations": [
+    {
+      "name": "CMakeGenerator",
+      "values": [
+        "Visual Studio 15 2017",
+        "Visual Studio 16 2019",
+        "Visual Studio 17 2022",
+        "Visual Studio 18 2026",
+        "Ninja",
+        "Xcode"
+      ]
+    },
+    {
+      "name": "CMakePlatform",
+      "values": [
+        "Win32",
+        "x64",
+        "ARM",
+        "ARM64"
+      ]
+    },
+    {
+      "name": "CMakeConfiguration",
+      "values": [
+        "Debug",
+        "RelWithDebInfo",
+        "Release",
+        "MinSizeRel"
+      ]
+    },
+    {
+      "name": "CMakeLogLevel",
+      "values": [
+        "Error",
+        "Warning",
+        "Notice",
+        "Status",
+        "Verbose",
+        "Debug",
+        "Trace"
+      ]
+    }
+  ]
 }
