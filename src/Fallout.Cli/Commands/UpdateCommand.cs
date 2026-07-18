@@ -78,7 +78,7 @@ internal sealed class UpdateCommand : IFalloutCommand
         buildProject.Save();
     }
 
-    private static void UpdateTargetFramework(Microsoft.Build.Evaluation.Project buildProject)
+    internal static void UpdateTargetFramework(Microsoft.Build.Evaluation.Project buildProject)
     {
         buildProject.SetProperty("TargetFramework", "net10.0");
     }
