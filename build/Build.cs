@@ -77,7 +77,6 @@ partial class Build
     string MajorMinorPatchVersion => Major
         ? $"{ParseMajor(ThisAssembly.AssemblyInformationalVersion) + 1}.0.0"
         : ThisAssembly.AssemblyInformationalVersion.Split('+')[0];
-    string MilestoneTitle => $"v{MajorMinorPatchVersion}";
 
     static int ParseMajor(string informationalVersion)
         => int.Parse(informationalVersion.Split('.')[0]);
