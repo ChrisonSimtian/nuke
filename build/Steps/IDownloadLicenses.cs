@@ -1,13 +1,15 @@
-﻿using Fallout.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Components;
 using Serilog;
 using static Fallout.Common.IO.HttpTasks;
 
-partial class Build
+// Step: fetch the third-party licenses bundled into the packages. Hooks into Pack via
+// DependentFor<IPack> so it runs as part of the default pipeline, not just on demand.
+interface IDownloadLicenses : IFalloutBuild
 {
     AbsolutePath LicensesDirectory => TemporaryDirectory / "licenses";
 

@@ -1,11 +1,13 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Tools.GitHub;
 using Fallout.Common.Utilities;
+using Fallout.Components;
 
-partial class Build
+// Step: snapshot the repository's stargazers to a CSV in the temp directory.
+interface IUpdateStargazers : IFalloutBuild, IHasGitRepository
 {
     AbsolutePath StargazersFile => TemporaryDirectory / "stargazers.csv";
 

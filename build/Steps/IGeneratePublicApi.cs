@@ -7,7 +7,8 @@ using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 
-partial class Build
+// Step: dump the framework's public API surface to PUBLIC_API.md.
+interface IGeneratePublicApi : IFalloutBuild
 {
     AbsolutePath PublicApiFile => RootDirectory / "PUBLIC_API.md";
 

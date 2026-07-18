@@ -6,7 +6,9 @@ using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 using static Fallout.Common.Tools.Git.GitTasks;
 
-partial class Build
+// Step: append newly-seen authors from this repo (and the external companions) to
+// CONTRIBUTORS.md. Inherits IHandleExternalRepositories for ExternalRepositoriesDirectory.
+interface IUpdateContributors : IFalloutBuild, IHandleExternalRepositories
 {
     AbsolutePath ContributorsFile => RootDirectory / "CONTRIBUTORS.md";
     AbsolutePath ContributorsCacheFile => TemporaryDirectory / "contributors.dat";
@@ -14,7 +16,7 @@ partial class Build
     Target UpdateContributors => _ => _
         .Executes(() =>
         {
-            var previousContributors = ContributorsCacheFile.Existing()?.ReadAllLines() ?? new string[0];
+            var previousContributors = ContributorsCacheFile.Existing()?.ReadAllLines() ?? [];
 
             var repositoryDirectories = new[] { RootDirectory / ".git" }
                 .Concat(ExternalRepositoriesDirectory.GlobDirectories("*/.git"));
@@ -30,7 +32,7 @@ partial class Build
 
             foreach (var newContributor in newContributors)
             {
-                var content = (ContributorsFile.Existing()?.ReadAllLines() ?? new string[0])
+                var content = (ContributorsFile.Existing()?.ReadAllLines() ?? [])
                     .Concat($"- {newContributor.Name}").OrderBy(x => x);
                 ContributorsFile.WriteAllLines(content, Encoding.Default);
                 Git($"add {ContributorsFile}");

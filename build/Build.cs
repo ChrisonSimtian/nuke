@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NuGet.Packaging;
 using Fallout.Common;
 using Fallout.Common.CI;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.Execution;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.GitHub;
 using Fallout.Common.Utilities;
 using Fallout.Components;
+using Fallout.Solutions;
+using NuGet.Packaging;
 using static Fallout.Common.ControlFlow;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
@@ -30,7 +30,14 @@ partial class Build
         ITest,
         IReportCoverage,
         IPublish,
-        ICreateGitHubRelease
+        ICreateGitHubRelease,
+        // Build-local steps (build/Steps/) — each concern is its own component.
+        IGenerateTools,
+        IGeneratePublicApi,
+        IDownloadLicenses,
+        IHandleExternalRepositories,
+        IUpdateContributors,
+        IUpdateStargazers
 {
     public static int Main() => Execute<Build>(x => ((IPack)x).Pack);
 
@@ -70,9 +77,8 @@ partial class Build
     string MajorMinorPatchVersion => Major
         ? $"{ParseMajor(ThisAssembly.AssemblyInformationalVersion) + 1}.0.0"
         : ThisAssembly.AssemblyInformationalVersion.Split('+')[0];
-    string MilestoneTitle => $"v{MajorMinorPatchVersion}";
 
-    private static int ParseMajor(string informationalVersion)
+    static int ParseMajor(string informationalVersion)
         => int.Parse(informationalVersion.Split('.')[0]);
 
     AbsolutePath IHasArtifacts.ArtifactsDirectory => RootDirectory / "output";
@@ -122,7 +128,7 @@ partial class Build
 
     string DefaultDeploymentVersion => "9999.0.0";
 
-    [Parameter] [Secret] readonly string NuGetApiKey;
+    [Parameter][Secret] readonly string NuGetApiKey;
 
     // Two publish channels (FALLOUT001 — see IPublish.PublishTargets). Routing replaces the
     // old single-feed push + the hand-rolled `dotnet nuget push` in the workflows (#333):
@@ -131,8 +137,8 @@ partial class Build
     //   - nuget.org: Fallout.* ONLY, never the Nuke.* shims. Keyed by NUGET_API_KEY.
     // Select per run from CI with `dotnet fallout Publish --publish-to <name>`. PublishTarget.SkipDuplicate
     // (default true) keeps re-runs idempotent if a version already exists on a feed.
-#pragma warning disable FALLOUT001 // opting our own build into the experimental multi-channel publish surface
-    IEnumerable<PublishTarget> IPublish.PublishTargets => new[]
+#pragma warning disable FALLOUT001, FALLOUT005 // opting our own build into the experimental multi-channel publish surface (ADR-0009)
+    IEnumerable<IPublishTarget> IPublish.PublishTargets => new IPublishTarget[]
     {
         new PublishTarget
         {
@@ -149,7 +155,7 @@ partial class Build
             ExcludePackages = new[] { "Nuke.*" },
         },
     };
-#pragma warning restore FALLOUT001
+#pragma warning restore FALLOUT001, FALLOUT005
 
     // The workflows now gate *which* channel publishes (via --publish-to); the on-branch
     // requirement is gone. We keep a CI guard, though: GitHubToken binds from the
