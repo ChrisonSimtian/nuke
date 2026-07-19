@@ -102,5 +102,5 @@ When asked to add or extend a tool wrapper:
 
 1. Find the closest existing tool under `src/Fallout.Common/Tools/<Tool>/<Tool>.json`.
 2. Copy its shape; cover a full command with all arguments.
-3. Run `./build.ps1 GenerateTools` to verify it generates cleanly.
-4. Do **not** commit the generated `.cs` output.
+3. Run `./build.ps1 GenerateTools` to regenerate the `.cs` output.
+4. Commit the regenerated `.cs` output alongside the `.json` spec — `VerifyGeneratedTools` fails CI if they drift.

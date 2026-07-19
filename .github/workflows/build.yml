@@ -54,5 +54,5 @@ jobs:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
         run: dotnet tool restore
-      - name: 'Run: Test, Pack'
-        run: dotnet fallout Test Pack
+      - name: 'Run: VerifyGeneratedTools, Test, Pack'
+        run: dotnet fallout VerifyGeneratedTools Test Pack

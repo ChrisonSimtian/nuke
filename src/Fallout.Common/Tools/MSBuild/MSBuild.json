@@ -1,564 +1,564 @@
 {
-    "$schema": "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
-    "references": [
-        "https://raw.githubusercontent.com/MicrosoftDocs/visualstudio-docs/master/docs/msbuild/msbuild-command-line-reference.md"
-    ],
-    "name": "MSBuild",
-    "officialUrl": "https://msdn.microsoft.com/en-us/library/ms164311.aspx",
-    "help": "The Microsoft Build Engine is a platform for building applications. This engine, which is also known as MSBuild, provides an XML schema for a project file that controls how the build platform processes and builds software. Visual Studio uses MSBuild, but it doesn't depend on Visual Studio. By invoking msbuild.exe on your project or solution file, you can orchestrate and build products in environments where Visual Studio isn't installed. Visual Studio uses MSBuild to load and build managed projects. The project files in Visual Studio (.csproj,.vbproj, vcxproj, and others) contain MSBuild XML code that executes when you build a project by using the IDE. Visual Studio projects import all the necessary settings and build processes to do typical development work, but you can extend or modify them from within Visual Studio or by using an XML editor.",
-    "customExecutable": true,
-    "tasks": [
-        {
-            "settingsClass": {
-                "properties": [
-                    {
-                        "name": "TargetPath",
-                        "type": "string",
-                        "format": "{value}",
-                        "position": 1,
-                        "createOverload": true,
-                        "help": "The solution or project file on which MSBuild is executed."
-                    },
-                    {
-                        "name": "DetailedSummary",
-                        "type": "bool",
-                        "format": "/detailedsummary",
-                        "help": "Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes."
-                    },
-                    {
-                        "name": "MaxCpuCount",
-                        "type": "int",
-                        "format": "/maxcpucount:{value}",
-                        "help": "<p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/bb651793.aspx\">Building Multiple Projects in Parallel</a>.</p><p>The following example instructs MSBuild to build using three MSBuild processes, which allows three projects to build at the same time:</p><p><c>msbuild myproject.proj /maxcpucount:3</c></p>"
-                    },
-                    {
-                        "name": "NodeReuse",
-                        "type": "bool",
-                        "format": "/nodeReuse:{value}",
-                        "help": "<p>Enable or disable the re-use of MSBuild nodes. You can specify the following values: <ul><li><c>true</c>: Nodes remain after the build finishes so that subsequent builds can use them (default).</li><li><c>false</c>. Nodes don't remain after the build completes.</li></ul></p><p>A node corresponds to a project that's executing. If you include the <c>/maxcpucount</c> switch, multiple nodes can execute concurrently.</p>"
-                    },
-                    {
-                        "name": "NoLogo",
-                        "type": "bool",
-                        "format": "/nologo",
-                        "help": "Don't display the startup banner or the copyright message."
-                    },
-                    {
-                        "name": "TargetPlatform",
-                        "type": "MSBuildTargetPlatform",
-                        "format": "/p:Platform={value}",
-                        "formatter": "FormatPlatform",
-                        "help": "The target platform for which the project is built to run on."
-                    },
-                    {
-                        "name": "Properties",
-                        "type": "Dictionary<string, object>",
-                        "format": "/p:{key}={value}",
-                        "disallowedCharacter": ";",
-                        "help": "<p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\\Debug</c></p>",
-                        "delegates": [
-                            {
-                                "name": "OutDir",
-                                "type": "string",
-                                "help": "Specifies the output directory for the project."
-                            },
-                            {
-                                "name": "RunCodeAnalysis",
-                                "type": "bool",
-                                "help": "Enables or disables code analysis."
-                            },
-                            {
-                                "name": "NoWarn",
-                                "type": "List<int>",
-                                "separator": ";",
-                                "help": "Suppresses the specified warnings."
-                            },
-                            {
-                                "name": "WarningsAsErrors",
-                                "type": "List<int>",
-                                "separator": ";",
-                                "help": "Treats the specified warnings as errors."
-                            },
-                            {
-                                "name": "WarningLevel",
-                                "type": "int",
-                                "help": "Specifies the warning level (0-4)."
-                            },
-                            {
-                                "name": "Configuration",
-                                "type": "string",
-                                "help": "Specifies the build configuration (e.g., Debug or Release)."
-                            },
-                            {
-                                "name": "TreatWarningsAsErrors",
-                                "type": "bool",
-                                "help": "Treats all warnings as errors."
-                            },
-                            {
-                                "name": "AssemblyVersion",
-                                "type": "string",
-                                "help": "Specifies the version of the assembly."
-                            },
-                            {
-                                "name": "FileVersion",
-                                "type": "string",
-                                "help": "Specifies the version of the file."
-                            },
-                            {
-                                "name": "InformationalVersion",
-                                "type": "string",
-                                "help": "Specifies the informational version of the assembly."
-                            },
-                            {
-                                "name": "PackageOutputPath",
-                                "type": "string",
-                                "help": "Specifies the output path for the NuGet package."
-                            },
-                            {
-                                "name": "IncludeSymbols",
-                                "type": "bool",
-                                "help": "Specifies whether to include symbols in the package."
-                            },
-                            {
-                                "name": "PackageId",
-                                "type": "string",
-                                "help": "Specifies the ID of the NuGet package."
-                            },
-                            {
-                                "name": "PackageVersion",
-                                "type": "string",
-                                "help": "Specifies the version of the NuGet package."
-                            },
-                            {
-                                "name": "PackageVersionPrefix",
-                                "type": "string",
-                                "help": "Specifies the prefix for the NuGet package version."
-                            },
-                            {
-                                "name": "PackageVersionSuffix",
-                                "type": "string",
-                                "help": "Specifies the suffix for the NuGet package version."
-                            },
-                            {
-                                "name": "Authors",
-                                "type": "List<string>",
-                                "separator": ",",
-                                "help": "Specifies the authors of the NuGet package."
-                            },
-                            {
-                                "name": "Title",
-                                "type": "string",
-                                "help": "Specifies the title of the NuGet package."
-                            },
-                            {
-                                "name": "Description",
-                                "type": "string",
-                                "help": "Specifies the description of the NuGet package."
-                            },
-                            {
-                                "name": "Copyright",
-                                "type": "string",
-                                "help": "Specifies the copyright notice for the NuGet package."
-                            },
-                            {
-                                "name": "PackageRequireLicenseAcceptance",
-                                "type": "bool",
-                                "help": "Specifies whether the package requires license acceptance."
-                            },
-                            {
-                                "name": "PackageLicenseUrl",
-                                "type": "string",
-                                "help": "Specifies the URL for the package's license."
-                            },
-                            {
-                                "name": "PackageProjectUrl",
-                                "type": "string",
-                                "help": "Specifies the URL for the package's project page."
-                            },
-                            {
-                                "name": "PackageIconUrl",
-                                "type": "string",
-                                "help": "Specifies the URL for the package's icon."
-                            },
-                            {
-                                "name": "PackageTags",
-                                "type": "List<string>",
-                                "separator": " ",
-                                "help": "Specifies the tags for the NuGet package."
-                            },
-                            {
-                                "name": "PackageReleaseNotes",
-                                "type": "string",
-                                "help": "Specifies the release notes for the NuGet package."
-                            },
-                            {
-                                "name": "RepositoryUrl",
-                                "type": "string",
-                                "help": "Specifies the URL for the package's repository."
-                            },
-                            {
-                                "name": "RepositoryType",
-                                "type": "string",
-                                "help": "Specifies the type of the package's repository."
-                            },
-                            {
-                                "name": "RestoreSources",
-                                "type": "List<string>",
-                                "separator": ";",
-                                "help": "List of package sources."
-                            },
-                            {
-                                "name": "RestorePackagesPath",
-                                "type": "string",
-                                "help": "User packages folder path."
-                            },
-                            {
-                                "name": "RestoreDisableParallel",
-                                "type": "bool",
-                                "help": "Limit downloads to one at a time."
-                            },
-                            {
-                                "name": "RestoreConfigFile",
-                                "type": "string",
-                                "help": "Path to a Nuget.Config file to apply."
-                            },
-                            {
-                                "name": "RestoreNoCache",
-                                "type": "bool",
-                                "help": "If true, avoids using the web cache."
-                            },
-                            {
-                                "name": "RestoreIgnoreFailedSources",
-                                "type": "bool",
-                                "help": "If true, ignores failing or missing package sources."
-                            },
-                            {
-                                "name": "RestoreTaskAssemblyFile",
-                                "type": "string",
-                                "help": "Path to <c>NuGet.Build.Tasks.dll</c>."
-                            },
-                            {
-                                "name": "RestoreGraphProjectInput",
-                                "type": "List<string>",
-                                "separator": ";",
-                                "help": "Semicolon-delimited list of projects to restore, which should contain absolute paths."
-                            },
-                            {
-                                "name": "RestoreOutputPath",
-                                "type": "string",
-                                "help": "Output folder, defaulting to the obj folder."
-                            },
-                            {
-                                "name": "SymbolPackageFormat",
-                                "type": "MSBuildSymbolPackageFormat",
-                                "help": "Format for packaging symbols."
-                            },
-                            {
-                                "name": "PublishProfile",
-                                "type": "string",
-                                "help": "Name of ClickOnce publication .pubxml file found in project properties folder."
-                            },
-                            {
-                                "name": "PublishDir",
-                                "type": "string",
-                                "help": "Path of publication directory."
-                            },
-                            {
-                                "name": "RuntimeIdentifiers",
-                                "type": "RuntimeIdentifiers",
-                                "help": "<p>RuntimeIdentifiers of RFID see <a href=\"https://learn.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids\">.NET RID Catalog</a></p>"
-                            },
-                            {
-                                "name": "UpdateUrl",
-                                "type": "string",
-                                "help": "Optional. Set its value if different from InstallURL."
-                            },
-                            {
-                                "name": "BootstrapperEnabled",
-                                "type": "bool",
-                                "help": "<p>Determines whether to generate the setup.exe bootstrapper. <a href=\"https://learn.microsoft.com/en-us/visualstudio/deployment/building-clickonce-applications-from-the-command-line?view=vs-2022\">Build ClickOnce applications from the command line</a></p>"
-                            },
-                            {
-                                "name": "GenerateManifests",
-                                "type": "bool",
-                                "help": "GenerateManifests and SignManifests must be true to work."
-                            },
-                            {
-                                "name": "Platform",
-                                "type": "Platform",
-                                "help": "<p>Output assembly platform <a href=\"https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/output\">C# Compiler Options that control compiler output</a></p>"
-                            },
-                            {
-                                "name": "TargetFramework",
-                                "type": "TargetFramework",
-                                "help": "<p>Set TargetFramework of output assembly. <a href=\"https://learn.microsoft.com/en-us/dotnet/standard/frameworks\">Target frameworks in SDK-style projects</a></p>"
-                            },
-                            {
-                                "name": "ApplicationVersion",
-                                "type": "string",
-                                "help": "Specifies the application version for ClickOnce deployment."
-                            },
-                            {
-                                "name": "ApplicationRevision",
-                                "type": "string",
-                                "help": "Specifies the application revision for ClickOnce deployment."
-                            },
-                            {
-                                "name": "CreateWebPageOnPublish",
-                                "type": "bool",
-                                "help": "Specifies whether to create a web page when publishing."
-                            },
-                            {
-                                "name": "Install",
-                                "type": "bool",
-                                "help": "<p>Determines whether the application is an installed application or a run-from-Web application <a href=\"https://learn.microsoft.com/en-us/visualstudio/deployment/building-dotnet-clickonce-applications-from-the-command-line?view=vs-2022\">Build .NET ClickOnce applications from the command line</a></p>"
-                            },
-                            {
-                                "name": "InstallFrom",
-                                "type": "InstallFrom",
-                                "help": "<p>Possible installation source <a href=\"https://learn.microsoft.com/en-us/dotnet/api/microsoft.visualstudio.managedinterfaces.publish.installfrom?view=visualstudiosdk-2022\">InstallFrom Enum</a></p>"
-                            },
-                            {
-                                "name": "MapFileExtensions",
-                                "type": "bool",
-                                "help": "<p>Optional. Defaults to false. If true, all files in the deployment must have a \".deploy\" extension. <a href=\"https://learn.microsoft.com/en-us/dotnet/api/microsoft.build.tasks.deployment.manifestutilities.deploymanifest.mapfileextensions?view=msbuild-17-netcore\">DeployManifest.MapFileExtensions Property</a> </p>"
-                            },
-                            {
-                                "name": "OpenBrowserOnPublish",
-                                "type": "bool",
-                                "help": "<p> <a href=\"https://learn.microsoft.com/es-es/dotnet/api/microsoft.visualstudio.managedinterfaces.publish.ipublishproperties3.openbrowseronpublish?view=visualstudiosdk-2022#microsoft-visualstudio-managedinterfaces-publish-ipublishproperties3-openbrowseronpublish\" >OpenBrowserOnPublish</a></p>"
-                            },
-                            {
-                                "name": "PublishProtocol",
-                                "type": "string",
-                                "help": "Default is \"ClickOnce\""
-                            },
-                            {
-                                "name": "PublishReadyToRun",
-                                "type": "bool",
-                                "help": "Compiles application assemblies as ReadyToRun (R2R) format. R2R is a form of ahead-of-time (AOT) compilation."
-                            },
-                            {
-                                "name": "PublishSingleFile",
-                                "type": "bool",
-                                "help": "Packages the app into a platform-specific single-file executable."
-                            },
-                            {
-                                "name": "SelfContained",
-                                "type": "bool",
-                                "help": "Specifies whether to publish the .NET runtime with your application so the runtime doesn't need to be installed on the target machine."
-                            },
-                            {
-                                "name": "SignManifests",
-                                "type": "bool",
-                                "help": "Specifies whether to sign the ClickOnce manifests."
-                            },
-                            {
-                                "name": "SkipPublishVerification",
-                                "type": "bool",
-                                "help": "Specifies whether to skip verification after publishing."
-                            },
-                            {
-                                "name": "UpdateEnabled",
-                                "type": "bool",
-                                "help": "Specifies whether ClickOnce updates are enabled."
-                            },
-                            {
-                                "name": "ManifestKeyFile",
-                                "type": "string",
-                                "help": "Specifies the key file for signing the manifests."
-                            },
-                            {
-                                "name": "CreateDesktopShortcut",
-                                "type": "bool",
-                                "help": "Specifies whether to create a desktop shortcut for the ClickOnce application."
-                            },
-                            {
-                                "name": "UpdateRequired",
-                                "type": "bool",
-                                "help": "Specifies whether a ClickOnce update is required."
-                            }
-                        ]
-                    },
-                    {
-                        "name": "Restore",
-                        "type": "bool",
-                        "format": "/restore",
-                        "help": "Runs the <c>Restore</c> target prior to building the actual targets."
-                    },
-                    {
-                        "name": "Targets",
-                        "type": "List<string>",
-                        "format": "/target:{value}",
-                        "separator": ";",
-                        "help": "<p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows:<br/><c>/target:Resources;Compile</c></p><p>If you specify any targets by using this switch, they are run instead of any targets in the DefaultTargets attribute in the project file. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/ee216359.aspx\">Target Build Order</a> and <a href=\"https://msdn.microsoft.com/en-us/library/ms171463.aspx\">How to: Specify Which Target to Build First</a>.</p><p>A target is a group of tasks. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/ms171462.aspx\">Targets</a>.</p>"
-                    },
-                    {
-                        "name": "ToolsVersion",
-                        "type": "MSBuildToolsVersion",
-                        "format": "/toolsversion:{value}",
-                        "help": "<p>Specifies the version of the Toolset to use to build the project, as the following example shows: <c>/toolsversion:3.5</c></p><p>By using this switch, you can build a project and specify a version that differs from the version that's specified in the <a href=\"https://msdn.microsoft.com/en-us/library/bcxfsh87.aspx\">Project Element (MSBuild)</a>. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/bb383985.aspx\">Overriding ToolsVersion Settings</a>.</p><p>For MSBuild 4.5, you can specify the following values for version: 2.0, 3.5, and 4.0. If you specify 4.0, the VisualStudioVersion build property specifies which sub-toolset to use. For more information, see the Sub-toolsets section of <a href=\"https://msdn.microsoft.com/en-us/library/bb383796.aspx\">Toolset (ToolsVersion)</a>.</p><p>A Toolset consists of tasks, targets, and tools that are used to build an application. The tools include compilers such as csc.exe and vbc.exe. For more information about Toolsets, see <a href=\"https://msdn.microsoft.com/en-us/library/bb383796.aspx\">Toolset (ToolsVersion)</a>, <a href=\"https://msdn.microsoft.com/en-us/library/bb397428.aspx\">Standard and Custom Toolset Configurations</a>, and <a href=\"https://msdn.microsoft.com/en-us/library/hh264223.aspx\">Multitargeting</a>. Note: The toolset version isn't the same as the target framework, which is the version of the .NET Framework on which a project is built to run. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/hh264221.aspx\">Target Framework and Target Platform</a>.</p>"
-                    },
-                    {
-                        "name": "MSBuildVersion",
-                        "type": "MSBuildVersion?",
-                        "noArgument": true,
-                        "help": "Specifies the version of MSBuild to use."
-                    },
-                    {
-                        "name": "Verbosity",
-                        "type": "MSBuildVerbosity",
-                        "format": "/verbosity:{value}",
-                        "help": "<p>Specifies the amount of information to display in the build log. Each logger displays events based on the verbosity level that you set for that logger.</p><p>You can specify the following verbosity levels: <c>q[uiet]</c>, <c>m[inimal]</c>, <c>n[ormal]</c>, <c>d[etailed]</c>, and <c>diag[nostic]</c>.</p><p>The following setting is an example: <c>/verbosity:quiet</c></p>"
-                    },
-                    {
-                        "name": "MSBuildPlatform",
-                        "type": "MSBuildPlatform?",
-                        "noArgument": true,
-                        "help": "Specifies the MSBuild platform (e.g. x86, x64)."
-                    },
-                    {
-                        "name": "Loggers",
-                        "type": "List<string>",
-                        "format": "/logger:{value}",
-                        "help": "Specifies the loggers to use to log events from MSBuild."
-                    },
-                    {
-                        "name": "NoConsoleLogger",
-                        "type": "bool",
-                        "format": "/noconsolelogger",
-                        "help": "Disable the default console logger, and don't log events to the console."
-                    }
-                ]
-            }
-        }
-    ],
-    "enumerations": [
-        {
-            "name": "MSBuildToolsVersion",
-            "values": [
-                "2.0",
-                "3.5",
-                "4.0",
-                "12.0",
-                "14.0",
-                "15.0"
+  "$schema": "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
+  "references": [
+    "https://raw.githubusercontent.com/MicrosoftDocs/visualstudio-docs/master/docs/msbuild/msbuild-command-line-reference.md"
+  ],
+  "name": "MSBuild",
+  "officialUrl": "https://msdn.microsoft.com/en-us/library/ms164311.aspx",
+  "help": "The Microsoft Build Engine is a platform for building applications. This engine, which is also known as MSBuild, provides an XML schema for a project file that controls how the build platform processes and builds software. Visual Studio uses MSBuild, but it doesn't depend on Visual Studio. By invoking msbuild.exe on your project or solution file, you can orchestrate and build products in environments where Visual Studio isn't installed. Visual Studio uses MSBuild to load and build managed projects. The project files in Visual Studio (.csproj,.vbproj, vcxproj, and others) contain MSBuild XML code that executes when you build a project by using the IDE. Visual Studio projects import all the necessary settings and build processes to do typical development work, but you can extend or modify them from within Visual Studio or by using an XML editor.",
+  "customExecutable": true,
+  "tasks": [
+    {
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "TargetPath",
+            "type": "string",
+            "format": "{value}",
+            "position": 1,
+            "createOverload": true,
+            "help": "The solution or project file on which MSBuild is executed."
+          },
+          {
+            "name": "DetailedSummary",
+            "type": "bool",
+            "format": "/detailedsummary",
+            "help": "Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes."
+          },
+          {
+            "name": "MaxCpuCount",
+            "type": "int",
+            "format": "/maxcpucount:{value}",
+            "help": "<p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/bb651793.aspx\">Building Multiple Projects in Parallel</a>.</p><p>The following example instructs MSBuild to build using three MSBuild processes, which allows three projects to build at the same time:</p><p><c>msbuild myproject.proj /maxcpucount:3</c></p>"
+          },
+          {
+            "name": "NodeReuse",
+            "type": "bool",
+            "format": "/nodeReuse:{value}",
+            "help": "<p>Enable or disable the re-use of MSBuild nodes. You can specify the following values: <ul><li><c>true</c>: Nodes remain after the build finishes so that subsequent builds can use them (default).</li><li><c>false</c>. Nodes don't remain after the build completes.</li></ul></p><p>A node corresponds to a project that's executing. If you include the <c>/maxcpucount</c> switch, multiple nodes can execute concurrently.</p>"
+          },
+          {
+            "name": "NoLogo",
+            "type": "bool",
+            "format": "/nologo",
+            "help": "Don't display the startup banner or the copyright message."
+          },
+          {
+            "name": "TargetPlatform",
+            "type": "MSBuildTargetPlatform",
+            "format": "/p:Platform={value}",
+            "formatter": "FormatPlatform",
+            "help": "The target platform for which the project is built to run on."
+          },
+          {
+            "name": "Properties",
+            "type": "Dictionary<string, object>",
+            "format": "/p:{key}={value}",
+            "disallowedCharacter": ";",
+            "help": "<p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\\Debug</c></p>",
+            "delegates": [
+              {
+                "name": "OutDir",
+                "type": "string",
+                "help": "Specifies the output directory for the project."
+              },
+              {
+                "name": "RunCodeAnalysis",
+                "type": "bool",
+                "help": "Enables or disables code analysis."
+              },
+              {
+                "name": "NoWarn",
+                "type": "List<int>",
+                "separator": ";",
+                "help": "Suppresses the specified warnings."
+              },
+              {
+                "name": "WarningsAsErrors",
+                "type": "List<int>",
+                "separator": ";",
+                "help": "Treats the specified warnings as errors."
+              },
+              {
+                "name": "WarningLevel",
+                "type": "int",
+                "help": "Specifies the warning level (0-4)."
+              },
+              {
+                "name": "Configuration",
+                "type": "string",
+                "help": "Specifies the build configuration (e.g., Debug or Release)."
+              },
+              {
+                "name": "TreatWarningsAsErrors",
+                "type": "bool",
+                "help": "Treats all warnings as errors."
+              },
+              {
+                "name": "AssemblyVersion",
+                "type": "string",
+                "help": "Specifies the version of the assembly."
+              },
+              {
+                "name": "FileVersion",
+                "type": "string",
+                "help": "Specifies the version of the file."
+              },
+              {
+                "name": "InformationalVersion",
+                "type": "string",
+                "help": "Specifies the informational version of the assembly."
+              },
+              {
+                "name": "PackageOutputPath",
+                "type": "string",
+                "help": "Specifies the output path for the NuGet package."
+              },
+              {
+                "name": "IncludeSymbols",
+                "type": "bool",
+                "help": "Specifies whether to include symbols in the package."
+              },
+              {
+                "name": "PackageId",
+                "type": "string",
+                "help": "Specifies the ID of the NuGet package."
+              },
+              {
+                "name": "PackageVersion",
+                "type": "string",
+                "help": "Specifies the version of the NuGet package."
+              },
+              {
+                "name": "PackageVersionPrefix",
+                "type": "string",
+                "help": "Specifies the prefix for the NuGet package version."
+              },
+              {
+                "name": "PackageVersionSuffix",
+                "type": "string",
+                "help": "Specifies the suffix for the NuGet package version."
+              },
+              {
+                "name": "Authors",
+                "type": "List<string>",
+                "separator": ",",
+                "help": "Specifies the authors of the NuGet package."
+              },
+              {
+                "name": "Title",
+                "type": "string",
+                "help": "Specifies the title of the NuGet package."
+              },
+              {
+                "name": "Description",
+                "type": "string",
+                "help": "Specifies the description of the NuGet package."
+              },
+              {
+                "name": "Copyright",
+                "type": "string",
+                "help": "Specifies the copyright notice for the NuGet package."
+              },
+              {
+                "name": "PackageRequireLicenseAcceptance",
+                "type": "bool",
+                "help": "Specifies whether the package requires license acceptance."
+              },
+              {
+                "name": "PackageLicenseUrl",
+                "type": "string",
+                "help": "Specifies the URL for the package's license."
+              },
+              {
+                "name": "PackageProjectUrl",
+                "type": "string",
+                "help": "Specifies the URL for the package's project page."
+              },
+              {
+                "name": "PackageIconUrl",
+                "type": "string",
+                "help": "Specifies the URL for the package's icon."
+              },
+              {
+                "name": "PackageTags",
+                "type": "List<string>",
+                "separator": " ",
+                "help": "Specifies the tags for the NuGet package."
+              },
+              {
+                "name": "PackageReleaseNotes",
+                "type": "string",
+                "help": "Specifies the release notes for the NuGet package."
+              },
+              {
+                "name": "RepositoryUrl",
+                "type": "string",
+                "help": "Specifies the URL for the package's repository."
+              },
+              {
+                "name": "RepositoryType",
+                "type": "string",
+                "help": "Specifies the type of the package's repository."
+              },
+              {
+                "name": "RestoreSources",
+                "type": "List<string>",
+                "separator": ";",
+                "help": "List of package sources."
+              },
+              {
+                "name": "RestorePackagesPath",
+                "type": "string",
+                "help": "User packages folder path."
+              },
+              {
+                "name": "RestoreDisableParallel",
+                "type": "bool",
+                "help": "Limit downloads to one at a time."
+              },
+              {
+                "name": "RestoreConfigFile",
+                "type": "string",
+                "help": "Path to a Nuget.Config file to apply."
+              },
+              {
+                "name": "RestoreNoCache",
+                "type": "bool",
+                "help": "If true, avoids using the web cache."
+              },
+              {
+                "name": "RestoreIgnoreFailedSources",
+                "type": "bool",
+                "help": "If true, ignores failing or missing package sources."
+              },
+              {
+                "name": "RestoreTaskAssemblyFile",
+                "type": "string",
+                "help": "Path to <c>NuGet.Build.Tasks.dll</c>."
+              },
+              {
+                "name": "RestoreGraphProjectInput",
+                "type": "List<string>",
+                "separator": ";",
+                "help": "Semicolon-delimited list of projects to restore, which should contain absolute paths."
+              },
+              {
+                "name": "RestoreOutputPath",
+                "type": "string",
+                "help": "Output folder, defaulting to the obj folder."
+              },
+              {
+                "name": "SymbolPackageFormat",
+                "type": "MSBuildSymbolPackageFormat",
+                "help": "Format for packaging symbols."
+              },
+              {
+                "name": "PublishProfile",
+                "type": "string",
+                "help": "Name of ClickOnce publication .pubxml file found in project properties folder."
+              },
+              {
+                "name": "PublishDir",
+                "type": "string",
+                "help": "Path of publication directory."
+              },
+              {
+                "name": "RuntimeIdentifiers",
+                "type": "RuntimeIdentifiers",
+                "help": "<p>RuntimeIdentifiers of RFID see <a href=\"https://learn.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids\">.NET RID Catalog</a></p>"
+              },
+              {
+                "name": "UpdateUrl",
+                "type": "string",
+                "help": "Optional. Set its value if different from InstallURL."
+              },
+              {
+                "name": "BootstrapperEnabled",
+                "type": "bool",
+                "help": "<p>Determines whether to generate the setup.exe bootstrapper. <a href=\"https://learn.microsoft.com/en-us/visualstudio/deployment/building-clickonce-applications-from-the-command-line?view=vs-2022\">Build ClickOnce applications from the command line</a></p>"
+              },
+              {
+                "name": "GenerateManifests",
+                "type": "bool",
+                "help": "GenerateManifests and SignManifests must be true to work."
+              },
+              {
+                "name": "Platform",
+                "type": "Platform",
+                "help": "<p>Output assembly platform <a href=\"https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/output\">C# Compiler Options that control compiler output</a></p>"
+              },
+              {
+                "name": "TargetFramework",
+                "type": "TargetFramework",
+                "help": "<p>Set TargetFramework of output assembly. <a href=\"https://learn.microsoft.com/en-us/dotnet/standard/frameworks\">Target frameworks in SDK-style projects</a></p>"
+              },
+              {
+                "name": "ApplicationVersion",
+                "type": "string",
+                "help": "Specifies the application version for ClickOnce deployment."
+              },
+              {
+                "name": "ApplicationRevision",
+                "type": "string",
+                "help": "Specifies the application revision for ClickOnce deployment."
+              },
+              {
+                "name": "CreateWebPageOnPublish",
+                "type": "bool",
+                "help": "Specifies whether to create a web page when publishing."
+              },
+              {
+                "name": "Install",
+                "type": "bool",
+                "help": "<p>Determines whether the application is an installed application or a run-from-Web application <a href=\"https://learn.microsoft.com/en-us/visualstudio/deployment/building-dotnet-clickonce-applications-from-the-command-line?view=vs-2022\">Build .NET ClickOnce applications from the command line</a></p>"
+              },
+              {
+                "name": "InstallFrom",
+                "type": "InstallFrom",
+                "help": "<p>Possible installation source <a href=\"https://learn.microsoft.com/en-us/dotnet/api/microsoft.visualstudio.managedinterfaces.publish.installfrom?view=visualstudiosdk-2022\">InstallFrom Enum</a></p>"
+              },
+              {
+                "name": "MapFileExtensions",
+                "type": "bool",
+                "help": "<p>Optional. Defaults to false. If true, all files in the deployment must have a \".deploy\" extension. <a href=\"https://learn.microsoft.com/en-us/dotnet/api/microsoft.build.tasks.deployment.manifestutilities.deploymanifest.mapfileextensions?view=msbuild-17-netcore\">DeployManifest.MapFileExtensions Property</a> </p>"
+              },
+              {
+                "name": "OpenBrowserOnPublish",
+                "type": "bool",
+                "help": "<p> <a href=\"https://learn.microsoft.com/es-es/dotnet/api/microsoft.visualstudio.managedinterfaces.publish.ipublishproperties3.openbrowseronpublish?view=visualstudiosdk-2022#microsoft-visualstudio-managedinterfaces-publish-ipublishproperties3-openbrowseronpublish\" >OpenBrowserOnPublish</a></p>"
+              },
+              {
+                "name": "PublishProtocol",
+                "type": "string",
+                "help": "Default is \"ClickOnce\""
+              },
+              {
+                "name": "PublishReadyToRun",
+                "type": "bool",
+                "help": "Compiles application assemblies as ReadyToRun (R2R) format. R2R is a form of ahead-of-time (AOT) compilation."
+              },
+              {
+                "name": "PublishSingleFile",
+                "type": "bool",
+                "help": "Packages the app into a platform-specific single-file executable."
+              },
+              {
+                "name": "SelfContained",
+                "type": "bool",
+                "help": "Specifies whether to publish the .NET runtime with your application so the runtime doesn't need to be installed on the target machine."
+              },
+              {
+                "name": "SignManifests",
+                "type": "bool",
+                "help": "Specifies whether to sign the ClickOnce manifests."
+              },
+              {
+                "name": "SkipPublishVerification",
+                "type": "bool",
+                "help": "Specifies whether to skip verification after publishing."
+              },
+              {
+                "name": "UpdateEnabled",
+                "type": "bool",
+                "help": "Specifies whether ClickOnce updates are enabled."
+              },
+              {
+                "name": "ManifestKeyFile",
+                "type": "string",
+                "help": "Specifies the key file for signing the manifests."
+              },
+              {
+                "name": "CreateDesktopShortcut",
+                "type": "bool",
+                "help": "Specifies whether to create a desktop shortcut for the ClickOnce application."
+              },
+              {
+                "name": "UpdateRequired",
+                "type": "bool",
+                "help": "Specifies whether a ClickOnce update is required."
+              }
             ]
-        },
-        {
-            "name": "MSBuildVerbosity",
-            "values": [
-                "Quiet",
-                "Minimal",
-                "Normal",
-                "Detailed",
-                "Diagnostic"
-            ]
-        },
-        {
-            "name": "MSBuildTargetPlatform",
-            "values": [
-                "MSIL",
-                "x86",
-                "x64",
-                "arm",
-                "Win32"
-            ]
-        },
-        {
-            "name": "MSBuildSymbolPackageFormat",
-            "values": [
-                "symbols.nupkg",
-                "snupkg"
-            ]
-        },
-        {
-            "name": "RuntimeIdentifiers",
-            "values": [
-                "android-arm64",
-                "android-arm",
-                "android-x64",
-                "android-x86",
-                "ios-arm64",
-                "iossimulator-arm64",
-                "iossimulator-x64",
-                "linux-x64",
-                "linux-musl-x64",
-                "linux-musl-arm64",
-                "linux-arm",
-                "linux-arm64",
-                "linux-bionic-arm64",
-                "linux-loongarch64",
-                "osx-arm64",
-                "osx-x64",
-                "win-arm64",
-                "win-x64",
-                "win-x86"
-            ]
-        },
-        {
-            "name": "Platform",
-            "values": [
-                "anycpu",
-                "anycpu32bitpreferred",
-                "arm",
-                "Itanium",
-                "x64",
-                "x86"
-            ]
-        },
-        {
-            "name": "TargetFramework",
-            "values": [
-                "NETFRAMEWORK",
-                "NET481",
-                "NET48",
-                "NET472",
-                "NET471",
-                "NET47",
-                "NET462",
-                "NET461",
-                "NET46",
-                "NET452",
-                "NET451",
-                "NET45",
-                "NET40",
-                "NET35",
-                "NET20",
-                "NETSTANDARD",
-                "NETSTANDARD2_1",
-                "NETSTANDARD2_0",
-                "NETSTANDARD1_6",
-                "NETSTANDARD1_5",
-                "NETSTANDARD1_4",
-                "NETSTANDARD1_3",
-                "NETSTANDARD1_2",
-                "NETSTANDARD1_1",
-                "NETSTANDARD1_0",
-                "NET",
-                "NET10_0",
-                "NET9_0",
-                "NET8_0",
-                "NET7_0",
-                "NET6_0",
-                "NET5_0",
-                "NETCOREAPP",
-                "NETCOREAPP3_1",
-                "NETCOREAPP3_0",
-                "NETCOREAPP2_2",
-                "NETCOREAPP2_1",
-                "NETCOREAPP2_0",
-                "NETCOREAPP1_1",
-                "NETCOREAPP1_0"
-            ]
-        },
-        {
-            "name": "InstallFrom",
-            "values": [
-                "Web",
-                "Unc",
-                "Disk"
-            ]
-        }
-    ]
+          },
+          {
+            "name": "Restore",
+            "type": "bool",
+            "format": "/restore",
+            "help": "Runs the <c>Restore</c> target prior to building the actual targets."
+          },
+          {
+            "name": "Targets",
+            "type": "List<string>",
+            "format": "/target:{value}",
+            "separator": ";",
+            "help": "<p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows:<br/><c>/target:Resources;Compile</c></p><p>If you specify any targets by using this switch, they are run instead of any targets in the DefaultTargets attribute in the project file. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/ee216359.aspx\">Target Build Order</a> and <a href=\"https://msdn.microsoft.com/en-us/library/ms171463.aspx\">How to: Specify Which Target to Build First</a>.</p><p>A target is a group of tasks. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/ms171462.aspx\">Targets</a>.</p>"
+          },
+          {
+            "name": "ToolsVersion",
+            "type": "MSBuildToolsVersion",
+            "format": "/toolsversion:{value}",
+            "help": "<p>Specifies the version of the Toolset to use to build the project, as the following example shows: <c>/toolsversion:3.5</c></p><p>By using this switch, you can build a project and specify a version that differs from the version that's specified in the <a href=\"https://msdn.microsoft.com/en-us/library/bcxfsh87.aspx\">Project Element (MSBuild)</a>. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/bb383985.aspx\">Overriding ToolsVersion Settings</a>.</p><p>For MSBuild 4.5, you can specify the following values for version: 2.0, 3.5, and 4.0. If you specify 4.0, the VisualStudioVersion build property specifies which sub-toolset to use. For more information, see the Sub-toolsets section of <a href=\"https://msdn.microsoft.com/en-us/library/bb383796.aspx\">Toolset (ToolsVersion)</a>.</p><p>A Toolset consists of tasks, targets, and tools that are used to build an application. The tools include compilers such as csc.exe and vbc.exe. For more information about Toolsets, see <a href=\"https://msdn.microsoft.com/en-us/library/bb383796.aspx\">Toolset (ToolsVersion)</a>, <a href=\"https://msdn.microsoft.com/en-us/library/bb397428.aspx\">Standard and Custom Toolset Configurations</a>, and <a href=\"https://msdn.microsoft.com/en-us/library/hh264223.aspx\">Multitargeting</a>. Note: The toolset version isn't the same as the target framework, which is the version of the .NET Framework on which a project is built to run. For more information, see <a href=\"https://msdn.microsoft.com/en-us/library/hh264221.aspx\">Target Framework and Target Platform</a>.</p>"
+          },
+          {
+            "name": "MSBuildVersion",
+            "type": "MSBuildVersion?",
+            "noArgument": true,
+            "help": "Specifies the version of MSBuild to use."
+          },
+          {
+            "name": "Verbosity",
+            "type": "MSBuildVerbosity",
+            "format": "/verbosity:{value}",
+            "help": "<p>Specifies the amount of information to display in the build log. Each logger displays events based on the verbosity level that you set for that logger.</p><p>You can specify the following verbosity levels: <c>q[uiet]</c>, <c>m[inimal]</c>, <c>n[ormal]</c>, <c>d[etailed]</c>, and <c>diag[nostic]</c>.</p><p>The following setting is an example: <c>/verbosity:quiet</c></p>"
+          },
+          {
+            "name": "MSBuildPlatform",
+            "type": "MSBuildPlatform?",
+            "noArgument": true,
+            "help": "Specifies the MSBuild platform (e.g. x86, x64)."
+          },
+          {
+            "name": "Loggers",
+            "type": "List<string>",
+            "format": "/logger:{value}",
+            "help": "Specifies the loggers to use to log events from MSBuild."
+          },
+          {
+            "name": "NoConsoleLogger",
+            "type": "bool",
+            "format": "/noconsolelogger",
+            "help": "Disable the default console logger, and don't log events to the console."
+          }
+        ]
+      }
+    }
+  ],
+  "enumerations": [
+    {
+      "name": "MSBuildToolsVersion",
+      "values": [
+        "2.0",
+        "3.5",
+        "4.0",
+        "12.0",
+        "14.0",
+        "15.0"
+      ]
+    },
+    {
+      "name": "MSBuildVerbosity",
+      "values": [
+        "Quiet",
+        "Minimal",
+        "Normal",
+        "Detailed",
+        "Diagnostic"
+      ]
+    },
+    {
+      "name": "MSBuildTargetPlatform",
+      "values": [
+        "MSIL",
+        "x86",
+        "x64",
+        "arm",
+        "Win32"
+      ]
+    },
+    {
+      "name": "MSBuildSymbolPackageFormat",
+      "values": [
+        "symbols.nupkg",
+        "snupkg"
+      ]
+    },
+    {
+      "name": "RuntimeIdentifiers",
+      "values": [
+        "android-arm64",
+        "android-arm",
+        "android-x64",
+        "android-x86",
+        "ios-arm64",
+        "iossimulator-arm64",
+        "iossimulator-x64",
+        "linux-x64",
+        "linux-musl-x64",
+        "linux-musl-arm64",
+        "linux-arm",
+        "linux-arm64",
+        "linux-bionic-arm64",
+        "linux-loongarch64",
+        "osx-arm64",
+        "osx-x64",
+        "win-arm64",
+        "win-x64",
+        "win-x86"
+      ]
+    },
+    {
+      "name": "Platform",
+      "values": [
+        "anycpu",
+        "anycpu32bitpreferred",
+        "arm",
+        "Itanium",
+        "x64",
+        "x86"
+      ]
+    },
+    {
+      "name": "TargetFramework",
+      "values": [
+        "NETFRAMEWORK",
+        "NET481",
+        "NET48",
+        "NET472",
+        "NET471",
+        "NET47",
+        "NET462",
+        "NET461",
+        "NET46",
+        "NET452",
+        "NET451",
+        "NET45",
+        "NET40",
+        "NET35",
+        "NET20",
+        "NETSTANDARD",
+        "NETSTANDARD2_1",
+        "NETSTANDARD2_0",
+        "NETSTANDARD1_6",
+        "NETSTANDARD1_5",
+        "NETSTANDARD1_4",
+        "NETSTANDARD1_3",
+        "NETSTANDARD1_2",
+        "NETSTANDARD1_1",
+        "NETSTANDARD1_0",
+        "NET",
+        "NET10_0",
+        "NET9_0",
+        "NET8_0",
+        "NET7_0",
+        "NET6_0",
+        "NET5_0",
+        "NETCOREAPP",
+        "NETCOREAPP3_1",
+        "NETCOREAPP3_0",
+        "NETCOREAPP2_2",
+        "NETCOREAPP2_1",
+        "NETCOREAPP2_0",
+        "NETCOREAPP1_1",
+        "NETCOREAPP1_0"
+      ]
+    },
+    {
+      "name": "InstallFrom",
+      "values": [
+        "Web",
+        "Unc",
+        "Disk"
+      ]
+    }
+  ]
 }

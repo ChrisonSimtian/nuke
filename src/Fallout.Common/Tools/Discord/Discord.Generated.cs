@@ -1,4 +1,4 @@
-// Generated from https://github.com/ChrisonSimtian/Fallout/blob/main/src/Fallout.Common/Tools/Discord/Discord.json
+// Generated from https://github.com/Fallout-build/Fallout/blob/main/src/Fallout.Common/Tools/Discord/Discord.json
 
 using Fallout.Common;
 using Fallout.Common.Tooling;

@@ -41,7 +41,8 @@
         "RunTargetInDockerImageTest",
         "Test",
         "UpdateContributors",
-        "UpdateStargazers"
+        "UpdateStargazers",
+        "VerifyGeneratedTools"
       ]
     },
     "Verbosity": {

@@ -44,7 +44,7 @@ using Fallout.Components;
     // protected; all require the ubuntu-latest check.
     OnPullRequestBranches = new[] { MainBranch, ReleaseBranchPattern, SupportBranchPattern },
     OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
-    InvokedTargets = new[] { nameof(ITest.Test), nameof(IPack.Pack) },
+    InvokedTargets = new[] { nameof(VerifyGeneratedTools), nameof(ITest.Test), nameof(IPack.Pack) },
     PublishArtifacts = false)]
 [GitHubActions(
     "build-cross-platform",
