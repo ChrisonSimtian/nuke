@@ -154,13 +154,23 @@ public class GitRepository
             return (null, null);
 
         var configFileContent = configFile.ReadAllLines();
-        var data = configFileContent
+
+        // Git config files are INI-style: sections are denoted by a [header] line, with
+        // indented key = value pairs beneath them. To find the remote and merge ref for
+        // the given branch, we locate the matching [branch "..."] section, read all
+        // key-value lines until the next section begins, and project them into a dictionary.
+        // GroupBy + Last() handles the (uncommon) case of a duplicated key, keeping the
+        // final value as git itself would.
+        Dictionary<string, string> data = configFileContent
             .Select(x => x.Trim())
             .SkipWhile(x => x != $"[branch {branch.DoubleQuote()}]")
             .Skip(1)
             .TakeWhile(x => !x.StartsWith("["))
-            .Select(x => x.Split('='))
-            .ToDictionary(x => x.ElementAt(0).Trim(), x => x.ElementAt(1).Trim());
+            .Where(x => x.Contains('='))
+            .Select(x => x.Split('=', 2))
+            .GroupBy(x => x[0].Trim(), x => x[1].Trim())
+            .ToDictionary(x => x.Key, x => x.Last());
+
         return data.TryGetValue("remote", out var remote) && data.TryGetValue("merge", out var merge)
             ? (remote, merge.TrimStart("refs/heads/"))
             : (null, null);
