@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Fallout.Migrate.Common;
 using Spectre.Console;
 
@@ -8,12 +10,12 @@ namespace Fallout.Migrate.Steps;
 /// Asks the user to confirm before any subsequent step writes to disk. Runs last among the
 /// read-only/advisory steps, immediately before <see cref="RewriteCsprojsStep"/> — the first step
 /// in <see cref="Migration.steps"/> that mutates files. Sets <see cref="Summary.Cancelled"/> when
-/// the user declines, which <see cref="Migration.Run"/> checks to stop early.
+/// the user declines, which <see cref="Migration.RunAsync"/> checks to stop early.
 /// </summary>
 internal sealed class ConfirmMigrationStep : IMigrationStep
 {
     /// <inheritdoc />
-    public void Execute(MigrationContext context, Summary summary)
+    public async Task ExecuteAsync(MigrationContext context, Summary summary)
     {
         if (context.DryRun)
         {
@@ -28,9 +30,10 @@ internal sealed class ConfirmMigrationStep : IMigrationStep
             return;
         }
 
-        bool proceed = AnsiConsole.Confirm(
+        var prompt = new ConfirmationPrompt(
             $"This will modify files under [blue]{context.RootDirectory}[/]. Continue?");
 
+        bool proceed = await prompt.ShowAsync(AnsiConsole.Console, CancellationToken.None);
         if (!proceed)
         {
             summary.Cancelled = true;

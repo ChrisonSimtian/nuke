@@ -96,7 +96,7 @@ public class MigrationIntegrationSpecs
     }
 
     [Fact]
-    public void WarnsWhenBuildProjectTargetsOlderThanNet10()
+    public async Task WarnsWhenBuildProjectTargetsOlderThanNet10()
     {
         var temp = CreateVanillaFixture();
         var buildCsprojPath = Path.Combine(temp, "build", "_build.csproj");
@@ -104,7 +104,7 @@ public class MigrationIntegrationSpecs
 
         try
         {
-            var summary = new Migration(temp, dryRun: false, TextWriter.Null).Run();
+            var summary = await new Migration(temp, dryRun: false, TextWriter.Null).RunAsync();
 
             summary.Warnings.Should().Contain(w =>
                 w.Contains("net8.0") && w.Contains(".NET 10") && w.Contains("_build.csproj"));
@@ -116,7 +116,7 @@ public class MigrationIntegrationSpecs
     }
 
     [Fact]
-    public void BumpsDotNetVersionAndSdk()
+    public async Task BumpsDotNetVersionAndSdk()
     {
         var temp = CreateVanillaFixture();
         var buildCsprojPath = Path.Combine(temp, "build", "_build.csproj");
@@ -132,7 +132,7 @@ public class MigrationIntegrationSpecs
 
         try
         {
-            new Migration(temp, dryRun: false, TextWriter.Null).Run();
+            await new Migration(temp, dryRun: false, TextWriter.Null).RunAsync();
 
             File.ReadAllText(buildCsprojPath).Should().Contain("<TargetFramework>net10.0</TargetFramework>");
 

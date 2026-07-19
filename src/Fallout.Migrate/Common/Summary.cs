@@ -19,7 +19,7 @@ internal sealed class Summary
 
     /// <summary>
     /// Set when the user declined the confirmation prompt in <see cref="Fallout.Migrate.Steps.ConfirmMigrationStep"/>.
-    /// <see cref="Migration.Run"/> stops executing further steps once this is set.
+    /// <see cref="Migration.RunAsync"/> stops executing further steps once this is set.
     /// </summary>
     public bool Cancelled { get; set; }
 

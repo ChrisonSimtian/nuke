@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Fallout.Migrate.Common;
 
 namespace Fallout.Migrate.Steps;
@@ -59,7 +60,7 @@ internal sealed class BumpDotNetVersionStep : IMigrationStep
         RegexOptions.Compiled | RegexOptions.Singleline);
 
     /// <inheritdoc />
-    public void Execute(MigrationContext context, Summary summary)
+    public Task ExecuteAsync(MigrationContext context, Summary summary)
     {
         foreach (var path in MigrationFileOperations.EnumerateFiles(context.RootDirectory, "_build.csproj"))
         {
@@ -70,6 +71,8 @@ internal sealed class BumpDotNetVersionStep : IMigrationStep
         {
             MigrationFileOperations.ApplyRewrite(context, path, BumpSdkVersion, summary);
         }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>

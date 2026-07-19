@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Fallout.Common.IO;
 using Fallout.Migrate.Common;
 
@@ -34,7 +35,7 @@ internal sealed class VerifyBuildTargetFrameworkStep : IMigrationStep
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /// <inheritdoc />
-    public void Execute(MigrationContext context, Summary summary)
+    public Task ExecuteAsync(MigrationContext context, Summary summary)
     {
         foreach (AbsolutePath path in MigrationFileOperations.EnumerateFiles(context.RootDirectory, "_build.csproj"))
         {
@@ -63,6 +64,8 @@ internal sealed class VerifyBuildTargetFrameworkStep : IMigrationStep
                 "Check that all tools you invoke from the build (SDKs, global tools, etc.) also " +
                 $"support .NET {MinimumSupportedMajor} before finishing this migration.");
         }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
