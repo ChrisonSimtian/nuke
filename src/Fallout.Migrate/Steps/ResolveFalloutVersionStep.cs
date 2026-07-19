@@ -43,9 +43,9 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
     /// NuGet's flat-container index for <see cref="PackageId"/>: a JSON document listing every
     /// published version (stable and prerelease), oldest first.
     /// </summary>
-    private static readonly Uri FlatContainerIndex = new($"https://api.nuget.org/v3-flatcontainer/{PackageId}/index.json");
+    private static readonly Uri flatContainerIndex = new($"https://api.nuget.org/v3-flatcontainer/{PackageId}/index.json");
 
-    private static readonly HttpClient httpClient = new() { Timeout = TimeSpan.FromSeconds(3) };
+    private static readonly HttpClient httpClient = CreateHttpClient();
 
     /// <inheritdoc />
     public async Task ExecuteAsync(MigrationContext context, Summary summary)
@@ -68,6 +68,31 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
 
             context.FalloutVersion = localVersion;
         }
+    }
+
+    /// <summary>
+    /// Reads the tool assembly's <see cref="AssemblyInformationalVersionAttribute"/> and strips the
+    /// build-metadata suffix, falling back to <see cref="Fallback"/> when none is present.
+    /// </summary>
+    /// <returns>The Fallout version to pin into rewritten package references.</returns>
+    private static string ResolveFromAssembly()
+    {
+        string informational = typeof(ResolveFalloutVersionStep).Assembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion;
+
+        if (string.IsNullOrEmpty(informational))
+        {
+            return Fallback;
+        }
+
+        int plusIndex = informational.IndexOf('+');
+        if (plusIndex == -1)
+        {
+            return Fallback;
+        }
+
+        return informational[..plusIndex];
     }
 
     /// <summary>
@@ -95,7 +120,7 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
     {
         try
         {
-            using HttpResponseMessage response = await httpClient.GetAsync(FlatContainerIndex);
+            using HttpResponseMessage response = await httpClient.GetAsync(flatContainerIndex);
             if (!response.IsSuccessStatusCode)
             {
                 return null;
@@ -139,27 +164,16 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
     }
 
     /// <summary>
-    /// Reads the tool assembly's <see cref="AssemblyInformationalVersionAttribute"/> and strips the
-    /// build-metadata suffix, falling back to <see cref="Fallback"/> when none is present.
+    /// Creates the <see cref="HttpClient"/> used for the NuGet flat-container lookup, identifying
+    /// this tool via a <c>User-Agent</c> header so NuGet.org doesn't treat the request as anonymous
+    /// script traffic.
     /// </summary>
-    /// <returns>The Fallout version to pin into rewritten package references.</returns>
-    private static string ResolveFromAssembly()
+    /// <returns>A configured <see cref="HttpClient"/>.</returns>
+    private static HttpClient CreateHttpClient()
     {
-        string informational = typeof(ResolveFalloutVersionStep).Assembly
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-            ?.InformationalVersion;
+        HttpClient client = new() { Timeout = TimeSpan.FromSeconds(3) };
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("fallout-migrate");
 
-        if (string.IsNullOrEmpty(informational))
-        {
-            return Fallback;
-        }
-
-        int plusIndex = informational.IndexOf('+');
-        if (plusIndex == -1)
-        {
-            return Fallback;
-        }
-
-        return informational[..plusIndex];
+        return client;
     }
 }
