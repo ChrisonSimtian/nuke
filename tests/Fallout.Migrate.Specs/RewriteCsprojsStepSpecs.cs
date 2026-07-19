@@ -4,7 +4,7 @@ using Fallout.Migrate.Steps;
 
 namespace Fallout.Migrate.Specs;
 
-public class CsprojRewriterSpecs
+public class RewriteCsprojsStepSpecs
 {
     private const string TestFalloutVersion = "11.0.0";
 
@@ -20,7 +20,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.EditCount.Should().Be(2);
         result.Content.Should().Contain(@"Include=""Fallout.Common""");
@@ -40,7 +40,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.EditCount.Should().Be(4); // 2 opening + 2 closing tags
         result.Content.Should().Contain("<FalloutRootDirectory>");
@@ -60,7 +60,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.EditCount.Should().Be(0);
         result.Content.Should().Be(input);
@@ -77,7 +77,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.EditCount.Should().Be(0);
         result.Content.Should().Be(input);
@@ -97,7 +97,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.Content.Should().Contain(@"Include=""Fallout.Common"" Version=""11.0.0""");
         result.Content.Should().Contain(@"Include=""Fallout.Components"" Version=""11.0.0""");
@@ -117,7 +117,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.Content.Should().Contain(@"Include=""Fallout.Common"" PrivateAssets=""all"" Version=""11.0.0""");
     }
@@ -136,7 +136,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.Content.Should().Contain(@"<PackageReference Include=""Fallout.Common"" />");
         result.Content.Should().NotContain(@"Version=");
@@ -157,7 +157,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.Content.Should().NotContain("System.Security.Cryptography.Xml");
         result.Content.Should().Contain(@"Include=""Fallout.Common"" Version=""11.0.0""");
@@ -178,7 +178,7 @@ public class CsprojRewriterSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.EditCount.Should().Be(0);
         result.Content.Should().Be(input);
