@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fallout.Migrate.Common;
@@ -30,19 +29,11 @@ internal sealed class BumpDotNetVersionStep : IMigrationStep
     private static readonly Version minimumSupportedSdkVersion = new(10, 0, 100);
 
     /// <summary>
-    /// Matches a modern, dotted .NET moniker such as <c>net8.0</c> or <c>net10.0</c>.
-    /// </summary>
-    private static readonly Regex modernMonikerPattern = new(
-        @"^net(?<major>\d+)\.\d+$",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-    /// <summary>
     /// The minimum .NET target framework major version, derived from <see cref="TargetFramework"/>.
-    /// Monikers at or above this aren't touched.
+    /// Monikers at or above this aren't touched. Shared with
+    /// <see cref="VerifyBuildTargetFrameworkStep"/> so the minimum is only defined once.
     /// </summary>
-    private static readonly int minimumSupportedMajor = int.Parse(
-        modernMonikerPattern.Match(TargetFramework).Groups["major"].Value,
-        CultureInfo.InvariantCulture);
+    internal static readonly int MinimumSupportedMajor = TargetFrameworkMonikers.ExtractMajor(TargetFramework);
 
     /// <summary>
     /// Matches the <c>TargetFramework</c> element's raw value. Build projects don't multi-target,
@@ -77,14 +68,15 @@ internal sealed class BumpDotNetVersionStep : IMigrationStep
 
     /// <summary>
     /// Rewrites a build project's <c>TargetFramework</c> element to <see cref="TargetFramework"/>
-    /// when its current moniker is behind <see cref="minimumSupportedMajor"/>.
+    /// when its current moniker is behind <see cref="MinimumSupportedMajor"/>.
     /// </summary>
     /// <param name="original">The original <c>_build.csproj</c> content.</param>
     /// <returns>The rewritten content and the number of edits made.</returns>
     public static RewriteResult BumpTargetFramework(string original)
     {
         Match match = targetFrameworkElementPattern.Match(original);
-        if (!match.Success || !IsOlderThanMinimumSupportedFramework(match.Groups["value"].Value))
+        if (!match.Success ||
+            !TargetFrameworkMonikers.IsOlderThanMinimumSupported(match.Groups["value"].Value, MinimumSupportedMajor))
         {
             return new RewriteResult(original, 0);
         }
@@ -113,24 +105,6 @@ internal sealed class BumpDotNetVersionStep : IMigrationStep
 
         string content = sdkVersionPattern.Replace(original, SdkVersion, count: 1);
         return new RewriteResult(content, 1);
-    }
-
-    /// <summary>
-    /// Returns <c>true</c> when <paramref name="moniker"/> targets an older .NET than
-    /// <see cref="minimumSupportedMajor"/> — including non-modern monikers (.NET Framework,
-    /// .NET Standard, out-of-support <c>netcoreapp*</c>) which never satisfy the minimum.
-    /// </summary>
-    /// <param name="moniker">A single target framework moniker, e.g. <c>net8.0</c>.</param>
-    private static bool IsOlderThanMinimumSupportedFramework(string moniker)
-    {
-        Match match = modernMonikerPattern.Match(moniker);
-        if (!match.Success)
-        {
-            return true;
-        }
-
-        int major = int.Parse(match.Groups["major"].Value, CultureInfo.InvariantCulture);
-        return major < minimumSupportedMajor;
     }
 
     /// <summary>
