@@ -8,6 +8,7 @@
     <ToolCommandName>fallout-migrate</ToolCommandName>
     <Description>CLI that migrates an existing NUKE consumer repo to Fallout in one command.</Description>
     <PackageTags>build automation continuous-integration tools orchestration migration</PackageTags>
+    <AssemblyVersion>10.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
