@@ -95,6 +95,26 @@ public class MigrationIntegrationSpecs
         }
     }
 
+    [Fact]
+    public void WarnsWhenBuildProjectTargetsOlderThanNet10()
+    {
+        var temp = CreateVanillaFixture();
+        var buildCsprojPath = Path.Combine(temp, "build", "_build.csproj");
+        File.WriteAllText(buildCsprojPath, File.ReadAllText(buildCsprojPath).Replace("net10.0", "net8.0"));
+
+        try
+        {
+            var summary = new Migration(temp, dryRun: false, TextWriter.Null).Run();
+
+            summary.Warnings.Should().Contain(w =>
+                w.Contains("net8.0") && w.Contains(".NET 10") && w.Contains("_build.csproj"));
+        }
+        finally
+        {
+            Directory.Delete(temp, recursive: true);
+        }
+    }
+
     private static string CreateVanillaFixture()
     {
         var dir = Path.Combine(Path.GetTempPath(), "fallout-migrate-test-" + Guid.NewGuid().ToString("N")[..8]);
@@ -106,7 +126,7 @@ public class MigrationIntegrationSpecs
                                                                        <Project Sdk="Microsoft.NET.Sdk">
                                                                          <PropertyGroup>
                                                                            <OutputType>Exe</OutputType>
-                                                                           <TargetFramework>net8.0</TargetFramework>
+                                                                           <TargetFramework>net10.0</TargetFramework>
                                                                            <NukeRootDirectory>.\..</NukeRootDirectory>
                                                                            <NukeTelemetryVersion>1</NukeTelemetryVersion>
                                                                          </PropertyGroup>

@@ -24,6 +24,7 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
     private static readonly IReadOnlyList<IMigrationStep> steps =
     [
         new ResolveFalloutVersionStep(),
+        new VerifyBuildTargetFrameworkStep(),
         new RewriteCsprojsStep(),
         new RewriteCsFilesStep(),
         new RewriteBootstrapScriptsStep(),
