@@ -115,6 +115,36 @@ public class MigrationIntegrationSpecs
         }
     }
 
+    [Fact]
+    public void BumpsDotNetVersionAndSdk()
+    {
+        var temp = CreateVanillaFixture();
+        var buildCsprojPath = Path.Combine(temp, "build", "_build.csproj");
+        File.WriteAllText(buildCsprojPath, File.ReadAllText(buildCsprojPath).Replace("net10.0", "net8.0"));
+        File.WriteAllText(Path.Combine(temp, "global.json"), """
+                                                              {
+                                                                "sdk": {
+                                                                  "version": "8.0.100",
+                                                                  "rollForward": "latestMinor"
+                                                                }
+                                                              }
+                                                              """);
+
+        try
+        {
+            new Migration(temp, dryRun: false, TextWriter.Null).Run();
+
+            File.ReadAllText(buildCsprojPath).Should().Contain("<TargetFramework>net10.0</TargetFramework>");
+
+            var globalJson = File.ReadAllText(Path.Combine(temp, "global.json"));
+            globalJson.Should().Contain(@"""version"": ""10.0.100""");
+        }
+        finally
+        {
+            Directory.Delete(temp, recursive: true);
+        }
+    }
+
     private static string CreateVanillaFixture()
     {
         var dir = Path.Combine(Path.GetTempPath(), "fallout-migrate-test-" + Guid.NewGuid().ToString("N")[..8]);
