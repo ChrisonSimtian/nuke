@@ -25,6 +25,7 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
     [
         new ResolveFalloutVersionStep(),
         new VerifyBuildTargetFrameworkStep(),
+        new ConfirmMigrationStep(),
         new RewriteCsprojsStep(),
         new RewriteCsFilesStep(),
         new RewriteBootstrapScriptsStep(),
@@ -32,7 +33,8 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
     ];
 
     /// <summary>
-    /// Runs every step in <see cref="steps"/> against a fresh <see cref="MigrationContext"/>.
+    /// Runs every step in <see cref="steps"/> against a fresh <see cref="MigrationContext"/>, stopping
+    /// early if <see cref="ConfirmMigrationStep"/> (or any later step) sets <see cref="Summary.Cancelled"/>.
     /// </summary>
     /// <returns>A <see cref="Summary"/> of the files changed, edits made, and any warnings.</returns>
     public async Task<Summary> RunAsync()
@@ -43,6 +45,10 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
         foreach (var step in steps)
         {
             await step.ExecuteAsync(context, summary);
+            if (summary.Cancelled)
+            {
+                break;
+            }
         }
 
         return summary;

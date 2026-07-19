@@ -52,6 +52,11 @@ internal sealed class MigrateCommand : AsyncCommand<MigrateSettings>
         var migration = new Migration(rootDirectory, settings.DryRun, Console.Out);
         Summary summary = await migration.RunAsync();
 
+        if (summary.Cancelled)
+        {
+            return 1;
+        }
+
         PrintSummary(summary, settings.DryRun);
         return 0;
     }

@@ -17,6 +17,12 @@ internal sealed class Summary
     /// <summary>The number of directories renamed (currently just <c>.nuke/</c> → <c>.fallout/</c>).</summary>
     public int DirectoriesRenamed { get; set; }
 
+    /// <summary>
+    /// Set when the user declined the confirmation prompt in <see cref="Fallout.Migrate.Steps.ConfirmMigrationStep"/>.
+    /// <see cref="Migration.Run"/> stops executing further steps once this is set.
+    /// </summary>
+    public bool Cancelled { get; set; }
+
     /// <summary>Human-readable warnings about conditions the migration could not resolve automatically.</summary>
     public List<string> Warnings { get; } = new();
 }
