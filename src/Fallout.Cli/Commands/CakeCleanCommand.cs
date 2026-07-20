@@ -18,9 +18,9 @@ internal sealed class CakeCleanCommand : IFalloutCommand
     public string Name => "cake-clean";
 
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute());
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute()
     {
         var cakeFiles = CakeConverter.GetCakeFiles().ToList();
         Host.Information("Found .cake files:");

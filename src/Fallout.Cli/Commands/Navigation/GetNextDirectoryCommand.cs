@@ -12,9 +12,9 @@ internal sealed class GetNextDirectoryCommand : IFalloutCommand
     public string Name => "GetNextDirectory";
 
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute());
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute()
     {
         var content = NavigationSession.SessionFile.Existing()?.ReadAllLines();
         if (content == null || string.IsNullOrWhiteSpace(content[0]))

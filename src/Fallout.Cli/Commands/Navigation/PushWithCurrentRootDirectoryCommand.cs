@@ -11,9 +11,9 @@ internal sealed class PushWithCurrentRootDirectoryCommand : IFalloutCommand
     public string Name => "PushWithCurrentRootDirectory";
 
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute(rootDirectory));
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute(AbsolutePath rootDirectory)
     {
         return NavigationSession.PushAndSetNext(() => rootDirectory.NotNull("No root directory"));
     }

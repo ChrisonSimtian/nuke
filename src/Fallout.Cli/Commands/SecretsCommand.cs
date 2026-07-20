@@ -34,9 +34,9 @@ internal sealed class SecretsCommand : IFalloutCommand
 
     // ReSharper disable once CognitiveComplexity
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute(args, rootDirectory));
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute(string[] args, AbsolutePath rootDirectory)
     {
         var secretParameters = CompletionUtility.GetItemsFromSchema(
                 GetBuildSchemaFile(rootDirectory.NotNull("No root directory")),

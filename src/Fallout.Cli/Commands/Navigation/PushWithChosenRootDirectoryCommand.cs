@@ -19,9 +19,9 @@ internal sealed class PushWithChosenRootDirectoryCommand : IFalloutCommand
     public string Name => "PushWithChosenRootDirectory";
 
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute());
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute()
     {
         return NavigationSession.PushAndSetNext(() =>
         {

@@ -13,11 +13,12 @@ internal sealed class PushWithParentRootDirectoryCommand : IFalloutCommand
     public string Name => "PushWithParentRootDirectory";
 
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute(rootDirectory));
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute(AbsolutePath rootDirectory)
     {
-        return NavigationSession.PushAndSetNext(() => TryGetRootDirectoryFrom(Path.GetDirectoryName(rootDirectory.NotNull("No root directory")))
-            .NotNull("No parent root directory"));
+        return NavigationSession.PushAndSetNext(() =>
+            TryGetRootDirectoryFrom(Path.GetDirectoryName(rootDirectory.NotNull("No root directory")))
+                .NotNull("No parent root directory"));
     }
 }

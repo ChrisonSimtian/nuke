@@ -20,9 +20,9 @@ internal sealed class CompleteCommand : IFalloutCommand
     public string Name => "complete";
 
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute(args, rootDirectory));
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute(string[] args, AbsolutePath rootDirectory)
     {
         if (rootDirectory == null)
             return 0;

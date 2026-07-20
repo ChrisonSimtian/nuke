@@ -19,9 +19,9 @@ internal sealed class GetConfigurationCommand : IFalloutCommand
     public string Name => "get-configuration";
 
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute(buildScript));
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute(AbsolutePath buildScript)
     {
         var configuration = _configuration.Read(buildScript.NotNull(), evaluate: false);
 

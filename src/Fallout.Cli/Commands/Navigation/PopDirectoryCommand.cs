@@ -11,9 +11,9 @@ internal sealed class PopDirectoryCommand : IFalloutCommand
     public string Name => "PopDirectory";
 
     public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
-        => Task.FromResult(Execute(args, rootDirectory, buildScript));
+        => Task.FromResult(Execute());
 
-    private int Execute(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
+    private int Execute()
     {
         var content = NavigationSession.SessionFile.Existing()?.ReadAllLines().ToList();
         if (content == null || content.Count <= 1)
