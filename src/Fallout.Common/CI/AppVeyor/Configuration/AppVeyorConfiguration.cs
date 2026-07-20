@@ -110,8 +110,13 @@ public class AppVeyorConfiguration : ConfigurationEntity
 
         using (writer.WriteBlock("build_script:"))
         {
-            writer.WriteLine($@"- cmd: .\{BuildCmdPath} {InvokedTargets.JoinSpace()}");
-            writer.WriteLine($@"- sh: ./{BuildCmdPath} {InvokedTargets.JoinSpace()}");
+            // Invoke the `fallout` local tool (cross-platform) rather than the OS-specific build script.
+            // AppVeyor runs `- cmd:` lines only on Windows images and `- sh:` lines only on the rest, so
+            // emit both; the command itself is identical. See GitHub Actions (dotnet fallout) and issue #516.
+            writer.WriteLine("- cmd: dotnet tool restore");
+            writer.WriteLine($"- cmd: dotnet fallout {InvokedTargets.JoinSpace()}");
+            writer.WriteLine("- sh: dotnet tool restore");
+            writer.WriteLine($"- sh: dotnet fallout {InvokedTargets.JoinSpace()}");
         }
 
         if (Cache.Length > 0)
