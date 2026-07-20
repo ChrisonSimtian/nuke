@@ -51,7 +51,7 @@ public sealed class NewPluginHost
 
 ## `[Obsolete]` for deprecating public APIs
 
-When a public API is on its way out, mark it with [`System.ObsoleteAttribute`](https://learn.microsoft.com/dotnet/api/system.obsoleteattribute) and give it a `DiagnosticId`. This is the sanctioned deprecation path under [AGENTS.md rule #2](../../AGENTS.md) — keep the old surface working (usually bridging to the replacement) while steering consumers to the new one. `DiagnosticId`/`UrlFormat` ship in the .NET 5+ BCL — **no package reference needed** (the repo targets .NET 10).
+When a public API is on its way out, mark it with [`System.ObsoleteAttribute`](https://learn.microsoft.com/dotnet/api/system.obsoleteattribute) and give it a `DiagnosticId`. This is the sanctioned deprecation path under [AGENTS.md rule #2](https://github.com/Fallout-build/Fallout/blob/main/AGENTS.md/AGENTS.md) — keep the old surface working (usually bridging to the replacement) while steering consumers to the new one. `DiagnosticId`/`UrlFormat` ship in the .NET 5+ BCL — **no package reference needed** (the repo targets .NET 10).
 
 ```csharp
 using System;
