@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Fallout.Migrate.Common;
 using FluentAssertions;
 using Xunit;
 using Fallout.Migrate.Steps;
@@ -65,4 +69,123 @@ public class ScriptRewriterSpecs
         var result = ScriptRewriter.Rewrite(input);
         result.EditCount.Should().Be(0);
     }
+
+    [Fact]
+    public async Task Removes_Nuke_enterprise_unix_bootstrapper_leftovers()
+    {
+        var filename = "build.sh";
+        var dir = CreateBootstrapScript(filename, """
+                                                  echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)"
+
+                                                  if [[ ! -z ${NUKE_ENTERPRISE_TOKEN+x} && "$NUKE_ENTERPRISE_TOKEN" != "" ]]; then
+                                                      "$DOTNET_EXE" nuget remove source "nuke-enterprise" &>/dev/null || true
+                                                      "$DOTNET_EXE" nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password "$NUKE_ENTERPRISE_TOKEN" --store-password-in-clear-text &>/dev/null || true
+                                                  fi
+
+                                                  "$DOTNET_EXE" build "$BUILD_PROJECT_FILE" /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet
+                                                  "$DOTNET_EXE" run --project "$BUILD_PROJECT_FILE" --no-build -- "$@"
+                                                  """);
+
+        Summary summary = await ExecuteMigrationStep(dir);
+
+        var buildSh = await File.ReadAllTextAsync(Path.Combine(dir, filename));
+        summary.EditCount.Should().Be(1);
+        buildSh.Should().Be(
+            """
+            echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)"
+
+            "$DOTNET_EXE" build "$BUILD_PROJECT_FILE" /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet
+            "$DOTNET_EXE" run --project "$BUILD_PROJECT_FILE" --no-build -- "$@"
+            """);
+    }
+
+    [Fact]
+    public async Task Does_not_throw_when_Nuke_enterprise_check_is_last_in_file()
+    {
+        var filename = "build.sh";
+        var dir = CreateBootstrapScript(filename,"""
+                                                 if [[ ! -z ${NUKE_ENTERPRISE_TOKEN+x} && "$NUKE_ENTERPRISE_TOKEN" != "" ]]; then
+                                                     "$DOTNET_EXE" nuget remove source "nuke-enterprise" &>/dev/null || true
+                                                     "$DOTNET_EXE" nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password "$NUKE_ENTERPRISE_TOKEN" --store-password-in-clear-text &>/dev/null || true
+                                                 fi
+                                                 """);
+
+        Summary summary = await ExecuteMigrationStep(dir);
+
+        var buildSh = await File.ReadAllTextAsync(Path.Combine(dir, filename));
+        summary.EditCount.Should().Be(1);
+        buildSh.Should().Be("");
+    }
+
+    [Fact]
+    public async Task Removes_Nuke_enterprise_windows_bootstrapper_leftovers()
+    {
+        var filename = "build.ps1";
+        var dir = CreateBootstrapScript(filename,"""
+                                                 Write-Output "Microsoft (R) .NET SDK version $(& $env:DOTNET_EXE --version)"
+
+                                                 if (Test-Path env:NUKE_ENTERPRISE_TOKEN) {
+                                                     & $env:DOTNET_EXE nuget remove source "nuke-enterprise" > $null
+                                                     & $env:DOTNET_EXE nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password $env:NUKE_ENTERPRISE_TOKEN > $null
+                                                 }
+
+                                                 ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet }
+                                                 ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile --no-build -- $BuildArguments }
+                                                 """);
+
+        Summary summary = await ExecuteMigrationStep(dir);
+
+        var buildPs1 = await File.ReadAllTextAsync(Path.Combine(dir, filename));
+        summary.EditCount.Should().Be(1);
+        buildPs1.Should().Be(
+            """
+            Write-Output "Microsoft (R) .NET SDK version $(& $env:DOTNET_EXE --version)"
+
+            ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet }
+            ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile --no-build -- $BuildArguments }
+            """);
+    }
+
+    [Fact]
+    public async Task Leaves_bootstrapper_scripts_without_leftovers_alone()
+    {
+        var filename = "build.sh";
+        var dir = CreateBootstrapScript(filename,"""
+                                                 echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)"
+
+                                                 "$DOTNET_EXE" build "$BUILD_PROJECT_FILE" /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet
+                                                 "$DOTNET_EXE" run --project "$BUILD_PROJECT_FILE" --no-build -- "$@"
+                                                 """);
+
+        Summary summary = await ExecuteMigrationStep(dir);
+
+        var buildSh = await File.ReadAllTextAsync(Path.Combine(dir, filename));
+        summary.EditCount.Should().Be(0);
+        buildSh.Should().Be(
+            """
+            echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)"
+
+            "$DOTNET_EXE" build "$BUILD_PROJECT_FILE" /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet
+            "$DOTNET_EXE" run --project "$BUILD_PROJECT_FILE" --no-build -- "$@"
+            """);
+    }
+
+    private string CreateBootstrapScript(string bootstrapFile, string bootstrapFileConent)
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "fallout-migrate-test-" + Guid.NewGuid().ToString("N")[..8]);
+        Directory.CreateDirectory(dir);
+
+        File.WriteAllText(Path.Combine(dir, bootstrapFile), bootstrapFileConent);
+
+        return dir;
+    }
+
+    private static async Task<Summary> ExecuteMigrationStep(string dir)
+    {
+        var step = new CleanupBootstrapScriptsStep();
+        var summary = new Summary();
+        await step.ExecuteAsync(new MigrationContext(dir, false, TextWriter.Null), summary);
+        return summary;
+    }
+
 }

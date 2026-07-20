@@ -88,6 +88,7 @@ public class MigrationIntegrationSpecs : IDisposable
         buildSh.Should().Contain("dotnet fallout");
         buildSh.Should().NotContain("TELEMETRY_OPTOUT"); // telemetry removed — opt-out stripped, not renamed (ADR-0010)
         buildSh.Should().Contain(".fallout/temp");
+        buildSh.Should().NotContain("if [[ ! -z ${NUKE_ENTERPRISE_TOKEN+x} && \"$NUKE_ENTERPRISE_TOKEN\" != \"\" ]]; then");
 
         // .nuke/ moved to .fallout/.
         (tempDirectory / ".nuke").DirectoryExists().Should().BeFalse();
