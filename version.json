@@ -3,6 +3,7 @@
   "version": "10.0.0-preview.{height}",
   "publicReleaseRefSpec": [
     "^refs/heads/release/\\d{4}$",
+    "^refs/heads/release/v\\d+\\.\\d+$",
     "^refs/heads/support/\\d{4}$",
     "^refs/heads/support/v\\d+$"
   ],
