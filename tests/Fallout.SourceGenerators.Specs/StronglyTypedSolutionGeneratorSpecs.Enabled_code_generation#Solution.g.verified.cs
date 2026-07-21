@@ -20,6 +20,7 @@ internal class Solution(SolutionModel model, AbsolutePath path) : Fallout.Soluti
     public Fallout.Solutions.Project Fallout_Components_Specs => this.GetProject("Fallout.Components.Specs");
     public Fallout.Solutions.Project Fallout_Consumer_Local => this.GetProject("Fallout.Consumer.Local");
     public Fallout.Solutions.Project Fallout_Consumer_NuGet => this.GetProject("Fallout.Consumer.NuGet");
+    public Fallout.Solutions.Project Fallout_Consumer_ProjectModelShim => this.GetProject("Fallout.Consumer.ProjectModelShim");
     public Fallout.Solutions.Project Fallout_Core => this.GetProject("Fallout.Core");
     public Fallout.Solutions.Project Fallout_Core_Specs => this.GetProject("Fallout.Core.Specs");
     public Fallout.Solutions.Project Fallout_Migrate => this.GetProject("Fallout.Migrate");
