@@ -20,4 +20,12 @@ internal sealed class ShimAllPublicTypesUnderAttribute : System.Attribute
 
     public string FromNamespacePrefix { get; }
     public string ToNamespacePrefix { get; }
+
+    /// <summary>
+    /// Sub-namespaces under <c>fromNamespacePrefix</c> to leave unshimmed,
+    /// e.g. one whose types relocated to another namespace that a separate
+    /// marker already shims. Prevents two markers emitting the same target
+    /// shim type.
+    /// </summary>
+    public string[]? ExceptNamespacePrefixes { get; set; }
 }
