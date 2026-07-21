@@ -1,0 +1,26 @@
+{
+    "name": "@fallout/graph-control",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "description": "Fallout-branded build/run graph control (elkjs layout + React Flow). PoC for the VS Code extension, the --plan HTML report, and the future Fallout CI run graph.",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@xyflow/react": "^12.3.5",
+        "elkjs": "^0.9.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1"
+    },
+    "devDependencies": {
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.1",
+        "@vitejs/plugin-react": "^4.3.4",
+        "typescript": "^5.9.3",
+        "vite": "^6.0.7",
+        "vite-plugin-singlefile": "^2.1.0"
+    }
+}
