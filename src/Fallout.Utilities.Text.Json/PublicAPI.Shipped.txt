@@ -1,0 +1,17 @@
+Fallout.Common.Utilities.JsonExtensions
+Fallout.Common.Utilities.JsonNodeExtensions
+static Fallout.Common.Utilities.JsonExtensions.DefaultSerializerOptions.get -> System.Text.Json.JsonSerializerOptions
+static Fallout.Common.Utilities.JsonExtensions.GetJson<T>(this string content, System.Text.Json.JsonSerializerOptions options = null) -> T
+static Fallout.Common.Utilities.JsonExtensions.GetJsonObject(this string content, System.Text.Json.Nodes.JsonNodeOptions? nodeOptions = null) -> System.Text.Json.Nodes.JsonObject
+static Fallout.Common.Utilities.JsonExtensions.ReadJson<T>(this Fallout.Common.IO.AbsolutePath path, System.Text.Json.JsonSerializerOptions options = null) -> T
+static Fallout.Common.Utilities.JsonExtensions.ReadJsonObject(this Fallout.Common.IO.AbsolutePath path, System.Text.Json.Nodes.JsonNodeOptions? nodeOptions = null) -> System.Text.Json.Nodes.JsonObject
+static Fallout.Common.Utilities.JsonExtensions.ToJson<T>(this T obj, System.Text.Json.JsonSerializerOptions options = null) -> string
+static Fallout.Common.Utilities.JsonExtensions.UpdateJson<T>(this Fallout.Common.IO.AbsolutePath path, System.Action<T> update, System.Text.Json.JsonSerializerOptions options = null) -> Fallout.Common.IO.AbsolutePath
+static Fallout.Common.Utilities.JsonExtensions.UpdateJsonObject(this Fallout.Common.IO.AbsolutePath path, System.Action<System.Text.Json.Nodes.JsonObject> update, System.Text.Json.Nodes.JsonNodeOptions? nodeOptions = null) -> Fallout.Common.IO.AbsolutePath
+static Fallout.Common.Utilities.JsonExtensions.WriteJson<T>(this Fallout.Common.IO.AbsolutePath path, T obj, System.Text.Json.JsonSerializerOptions options = null) -> Fallout.Common.IO.AbsolutePath
+static Fallout.Common.Utilities.JsonNodeExtensions.GetChildren(this System.Text.Json.Nodes.JsonObject jsonObject, string name) -> System.Collections.Generic.IEnumerable<System.Text.Json.Nodes.JsonObject>
+static Fallout.Common.Utilities.JsonNodeExtensions.GetChildren<T>(this System.Text.Json.Nodes.JsonObject jsonObject, string name) -> System.Collections.Generic.IEnumerable<T>
+static Fallout.Common.Utilities.JsonNodeExtensions.GetPropertyStringValue(this System.Text.Json.Nodes.JsonObject jsonObject, string name) -> string
+static Fallout.Common.Utilities.JsonNodeExtensions.GetPropertyValue(this System.Text.Json.Nodes.JsonObject jsonObject, string name) -> System.Text.Json.Nodes.JsonObject
+static Fallout.Common.Utilities.JsonNodeExtensions.GetPropertyValue<T>(this System.Text.Json.Nodes.JsonObject jsonObject, string name) -> T
+static Fallout.Common.Utilities.JsonNodeExtensions.GetPropertyValueOrNull<T>(this System.Text.Json.Nodes.JsonObject jsonObject, string name) -> T

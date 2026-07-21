@@ -1,0 +1,28 @@
+Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.Aborted = 7 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.Collective = 8 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.Failed = 5 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.None = 0 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.NotRun = 2 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.Running = 6 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.Scheduled = 1 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.Skipped = 3 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ExecutionStatus.Succeeded = 4 -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ITargetModel
+Fallout.Common.Execution.ITargetModel.Description.get -> string
+Fallout.Common.Execution.ITargetModel.ExecutionDependencyNames.get -> System.Collections.Generic.IReadOnlyCollection<string>
+Fallout.Common.Execution.ITargetModel.IsDefault.get -> bool
+Fallout.Common.Execution.ITargetModel.Listed.get -> bool
+Fallout.Common.Execution.ITargetModel.Name.get -> string
+Fallout.Common.Execution.ITargetModel.OrderDependencyNames.get -> System.Collections.Generic.IReadOnlyCollection<string>
+Fallout.Common.Execution.ITargetModel.Status.get -> Fallout.Common.Execution.ExecutionStatus
+Fallout.Common.Execution.ITargetModel.TriggerNames.get -> System.Collections.Generic.IReadOnlyCollection<string>
+Fallout.Core.Planning.PlanResult<T>
+Fallout.Core.Planning.PlanResult<T>.AmbiguousStep.get -> System.Collections.Generic.IReadOnlyList<T>
+Fallout.Core.Planning.PlanResult<T>.Cycles.get -> System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<T>>
+Fallout.Core.Planning.PlanResult<T>.HasCycles.get -> bool
+Fallout.Core.Planning.PlanResult<T>.IsAmbiguous.get -> bool
+Fallout.Core.Planning.PlanResult<T>.Ordered.get -> System.Collections.Generic.IReadOnlyList<T>
+Fallout.Core.Planning.PlanResult<T>.PlanResult(System.Collections.Generic.IReadOnlyList<T> ordered, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<T>> cycles, System.Collections.Generic.IReadOnlyList<T> ambiguousStep) -> void
+Fallout.Core.Planning.TopoSort
+static Fallout.Core.Planning.TopoSort.Order<T>(System.Collections.Generic.IReadOnlyCollection<T> nodes, System.Func<T, System.Collections.Generic.IEnumerable<T>> dependencies, bool strict = false) -> Fallout.Core.Planning.PlanResult<T>

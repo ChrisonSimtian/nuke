@@ -1,0 +1,8 @@
+Fallout.Utilities.Text.Yaml.YamlExtensions
+static Fallout.Utilities.Text.Yaml.YamlExtensions.DefaultDeserializerBuilder -> YamlDotNet.Serialization.DeserializerBuilder
+static Fallout.Utilities.Text.Yaml.YamlExtensions.DefaultSerializerBuilder -> YamlDotNet.Serialization.SerializerBuilder
+static Fallout.Utilities.Text.Yaml.YamlExtensions.GetYaml<T>(this string content, YamlDotNet.Serialization.DeserializerBuilder deserializerBuilder = null) -> T
+static Fallout.Utilities.Text.Yaml.YamlExtensions.ReadYaml<T>(this Fallout.Common.IO.AbsolutePath path, YamlDotNet.Serialization.DeserializerBuilder deserializerBuilder = null) -> T
+static Fallout.Utilities.Text.Yaml.YamlExtensions.ToYaml<T>(this T obj, YamlDotNet.Serialization.SerializerBuilder serializerBuilder = null) -> string
+static Fallout.Utilities.Text.Yaml.YamlExtensions.UpdateYaml<T>(this Fallout.Common.IO.AbsolutePath path, System.Action<T> update, YamlDotNet.Serialization.DeserializerBuilder deserializerBuilder = null, YamlDotNet.Serialization.SerializerBuilder serializerBuilder = null) -> Fallout.Common.IO.AbsolutePath
+static Fallout.Utilities.Text.Yaml.YamlExtensions.WriteYaml<T>(this Fallout.Common.IO.AbsolutePath path, T obj, YamlDotNet.Serialization.SerializerBuilder serializerBuilder = null) -> Fallout.Common.IO.AbsolutePath

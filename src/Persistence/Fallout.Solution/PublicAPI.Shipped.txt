@@ -1,0 +1,46 @@
+Fallout.Solutions.IProjectContainer
+Fallout.Solutions.IProjectContainer.Parent.get -> Fallout.Solutions.IProjectContainer
+Fallout.Solutions.IProjectContainer.Projects.get -> System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.Project>
+Fallout.Solutions.IProjectContainer.SolutionFolders.get -> System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.SolutionFolder>
+Fallout.Solutions.Project
+Fallout.Solutions.Project.Directory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Solutions.Project.FileName.get -> string
+Fallout.Solutions.Project.GetModel() -> Fallout.Persistence.Solution.Model.SolutionProjectModel
+Fallout.Solutions.Project.Path.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Solutions.Project.Project(Fallout.Persistence.Solution.Model.SolutionProjectModel model, Fallout.Solutions.Solution solution) -> void
+Fallout.Solutions.Project.RelativePath.get -> string
+Fallout.Solutions.ProjectContainerExtensions
+Fallout.Solutions.Solution
+Fallout.Solutions.Solution.AllProjects.get -> System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.Project>
+Fallout.Solutions.Solution.AllSolutionFolders.get -> System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.SolutionFolder>
+Fallout.Solutions.Solution.Directory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Solutions.Solution.FileName.get -> string
+Fallout.Solutions.Solution.GetAllProjects(string wildcardPattern) -> System.Collections.Generic.IEnumerable<Fallout.Solutions.Project>
+Fallout.Solutions.Solution.GetModel() -> Fallout.Persistence.Solution.Model.SolutionModel
+Fallout.Solutions.Solution.Name.get -> string
+Fallout.Solutions.Solution.Path.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Solutions.Solution.Path.set -> void
+Fallout.Solutions.Solution.Projects.get -> System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.Project>
+Fallout.Solutions.Solution.Save(Fallout.Common.IO.AbsolutePath path = null) -> void
+Fallout.Solutions.Solution.Solution(Fallout.Persistence.Solution.Model.SolutionModel model, Fallout.Common.IO.AbsolutePath path = null) -> void
+Fallout.Solutions.Solution.SolutionFolders.get -> System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.SolutionFolder>
+Fallout.Solutions.SolutionFolder
+Fallout.Solutions.SolutionFolder.GetModel() -> Fallout.Persistence.Solution.Model.SolutionFolderModel
+Fallout.Solutions.SolutionFolder.Projects.get -> System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.Project>
+Fallout.Solutions.SolutionFolder.SolutionFolder(Fallout.Persistence.Solution.Model.SolutionFolderModel model, Fallout.Solutions.Solution solution) -> void
+Fallout.Solutions.SolutionFolder.SolutionFolders.get -> System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.SolutionFolder>
+Fallout.Solutions.SolutionItem
+Fallout.Solutions.SolutionItem.Name.get -> string
+Fallout.Solutions.SolutionItem.Parent.get -> Fallout.Solutions.IProjectContainer
+Fallout.Solutions.SolutionItem.Solution.get -> Fallout.Solutions.Solution
+Fallout.Solutions.SolutionItem.SolutionItem(Fallout.Persistence.Solution.Model.SolutionItemModel model, Fallout.Solutions.Solution solution) -> void
+Fallout.Solutions.SolutionModelExtensions
+override Fallout.Solutions.SolutionItem.ToString() -> string
+static Fallout.Solutions.Project.implicit operator Fallout.Common.IO.AbsolutePath(Fallout.Solutions.Project project) -> Fallout.Common.IO.AbsolutePath
+static Fallout.Solutions.Project.implicit operator string(Fallout.Solutions.Project project) -> string
+static Fallout.Solutions.ProjectContainerExtensions.GetProject(this Fallout.Solutions.IProjectContainer container, string name) -> Fallout.Solutions.Project
+static Fallout.Solutions.ProjectContainerExtensions.GetSolutionFolder(this Fallout.Solutions.IProjectContainer container, string name) -> Fallout.Solutions.SolutionFolder
+static Fallout.Solutions.Solution.implicit operator Fallout.Common.IO.AbsolutePath(Fallout.Solutions.Solution solution) -> Fallout.Common.IO.AbsolutePath
+static Fallout.Solutions.Solution.implicit operator string(Fallout.Solutions.Solution solution) -> string
+static Fallout.Solutions.SolutionModelExtensions.ReadSolution(this Fallout.Common.IO.AbsolutePath path) -> Fallout.Solutions.Solution
+static Fallout.Solutions.SolutionModelExtensions.ReadSolution<T>(this Fallout.Common.IO.AbsolutePath path) -> Fallout.Solutions.Solution
