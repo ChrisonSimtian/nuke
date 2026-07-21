@@ -16,7 +16,23 @@ cd poc/graph-control
 npm install
 npm run dev        # dev server, hot reload — opens the demo fixture
 npm run build      # → dist/index.html, a single self-contained file you can double-click
+npm run build:lib  # → dist-lib/fallout-graph-control.js, an IIFE for host embedding
 ```
+
+## Embedding in a host (webview / HTML report)
+
+`build:lib` emits one self-contained IIFE (React + React Flow + elkjs bundled,
+CSS injected at runtime) exposing a global. Load it as a single `<script>` and:
+
+```js
+FalloutGraph.mount(document.getElementById('graph'), buildGraph, {
+    onRunTarget: (name) => { /* host decides what "run" means */ },
+});
+```
+
+Re-calling `mount` on the same element reconciles in place — that's how the VS
+Code extension does its live refresh. The runtime `<style>` injection needs
+`style-src 'unsafe-inline'` in the host's CSP.
 
 ## How it maps to Fallout
 
