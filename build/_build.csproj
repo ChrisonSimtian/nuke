@@ -54,7 +54,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
     <!-- Nerdbank.GitVersioning lets us read ThisAssembly.AssemblyInformationalVersion in
          Build.cs as the canonical version source. Replaces GitVersion.Tool (#81). Direct
          dependency because _build.csproj turns off central package management. -->
