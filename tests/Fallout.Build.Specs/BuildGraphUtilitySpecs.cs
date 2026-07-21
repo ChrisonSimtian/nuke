@@ -143,7 +143,34 @@ public class BuildGraphUtilitySpecs
         firstTarget.EnumerateObject().Select(x => x.Name)
             .Should().Equal(
                 "name", "description", "declaredIn", "default", "listed",
-                "dependsOn", "after", "triggeredBy", "triggers");
+                "dependsOn", "after", "triggeredBy", "triggers", "status");
+    }
+
+    [Theory]
+    [InlineData(ExecutionStatus.Scheduled, "queued")]
+    [InlineData(ExecutionStatus.Running, "running")]
+    [InlineData(ExecutionStatus.Succeeded, "succeeded")]
+    [InlineData(ExecutionStatus.Failed, "failed")]
+    [InlineData(ExecutionStatus.Aborted, "failed")]
+    [InlineData(ExecutionStatus.Skipped, "skipped")]
+    // Neutral states emit null so a structural/plan snapshot stays unstyled; only a real run paints.
+    [InlineData(ExecutionStatus.None, null)]
+    [InlineData(ExecutionStatus.NotRun, null)]
+    [InlineData(ExecutionStatus.Collective, null)]
+    public void Execution_status_projects_to_the_control_vocabulary(ExecutionStatus status, string expected)
+    {
+        var target = new ExecutableTarget { Name = "Compile", Status = status };
+
+        BuildGraphUtility.GetModel(new[] { target }, SampleVersion).Targets.Single().Status
+            .Should().Be(expected);
+    }
+
+    [Fact]
+    public void Status_is_added_without_bumping_the_schema_version()
+    {
+        // The status field is additive — a consumer that predates it ignores the extra key — so it
+        // rides schema v1. This guard pairs with Schema_version_is_1 to make that intent explicit.
+        BuildGraphUtility.SchemaVersion.Should().Be(1);
     }
 
     [Theory]
