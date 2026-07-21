@@ -67,4 +67,45 @@ public class CodeRewriterSpecs
         var result = CodeRewriter.Rewrite(input);
         result.EditCount.Should().Be(0);
     }
+
+    [Fact]
+    public void RewritesNukeProjectModelUsingToSolutions()
+    {
+        // The solution types moved to Fallout.Solutions in v11 — a NUKE-era
+        // `using` must land there, not on the dead Fallout.Common.ProjectModel.
+        const string input = "using Nuke.Common.ProjectModel;";
+        var result = CodeRewriter.Rewrite(input);
+        result.EditCount.Should().Be(1);
+        result.Content.Should().Be("using Fallout.Solutions;");
+    }
+
+    [Fact]
+    public void RewritesQualifiedNukeProjectModelTypeToSolutions()
+    {
+        const string input = "Nuke.Common.ProjectModel.Solution x;";
+        var result = CodeRewriter.Rewrite(input);
+        result.EditCount.Should().Be(1);
+        result.Content.Should().Be("Fallout.Solutions.Solution x;");
+    }
+
+    [Fact]
+    public void RewritesAlreadyPartiallyMigratedProjectModelNamespace()
+    {
+        // Code previously run through a prefix-only migrator lands on the dead
+        // Fallout.Common.ProjectModel; the ProjectModel rule salvages it.
+        const string input = "using Fallout.Common.ProjectModel;";
+        var result = CodeRewriter.Rewrite(input);
+        result.EditCount.Should().Be(1);
+        result.Content.Should().Be("using Fallout.Solutions;");
+    }
+
+    [Fact]
+    public void DoesNotMatchProjectModelAsPartOfAnotherIdentifier()
+    {
+        // `ProjectModelFoo` must not be truncated by the ProjectModel rule.
+        const string input = "using Nuke.Common.ProjectModelFoo;";
+        var result = CodeRewriter.Rewrite(input);
+        result.EditCount.Should().Be(1);
+        result.Content.Should().Be("using Fallout.Common.ProjectModelFoo;");
+    }
 }
