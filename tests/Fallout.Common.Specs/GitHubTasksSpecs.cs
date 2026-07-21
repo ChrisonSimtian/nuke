@@ -19,6 +19,12 @@ public class GitHubTasksSpecs
         if (!repository.IsGitHubRepository())
             return;
 
+        // The URL helpers below are branch-based (GetGitHubDownloadUrl asserts Branch != null).
+        // A tag-triggered release build checks out a detached HEAD, which has no branch, so
+        // there is nothing meaningful to assert here.
+        if (repository.Branch is null)
+            return;
+
         var rawUrl = $"https://raw.githubusercontent.com/{repository.Identifier}/{repository.Branch}";
         var blobUrl = $"https://github.com/{repository.Identifier}/blob/{repository.Branch}";
         var treeUrl = $"https://github.com/{repository.Identifier}/tree/{repository.Branch}";
