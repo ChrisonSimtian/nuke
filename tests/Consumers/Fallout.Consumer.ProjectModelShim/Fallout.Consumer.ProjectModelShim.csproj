@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>Fallout.Consumer.ProjectModelShim</RootNamespace>
+    <NoWarn>$(NoWarn);CS0649</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    Compile-time sentinel for the Fallout.Common.ProjectModel transition shim.
+
+    The solution types shipped under `Fallout.Common.ProjectModel` in Fallout
+    11.0.1–11.0.12 and moved to `Fallout.Solutions` in 11.0.13 (#248 / #257).
+    Build.cs deliberately keeps the OLD `using Fallout.Common.ProjectModel;` +
+    `[Solution] readonly Solution Solution;` shape, so that if the shim in
+    src/Fallout.Common/ProjectModel/TransitionShims.cs regresses, this stops
+    compiling and CI fails — mirroring how Nuke.Consumer guards the
+    Nuke.Common.ProjectModel shim.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Fallout.Common\Fallout.Common.csproj" />
+    <ProjectReference Include="..\..\..\src\Fallout.Build\Fallout.Build.csproj" />
+    <ProjectReference Include="..\..\..\src\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
+    <ProjectReference Include="..\..\..\src\Fallout.Components\Fallout.Components.csproj" />
+  </ItemGroup>
+
+</Project>
