@@ -16,8 +16,7 @@ public class GitRepositoryWorktreeSpecs
     {
         var tempDir = GetTemporaryDirectory();
         const string worktreeName = "test-worktree";
-        var branchName = GitRepository.FromLocalDirectory(Directory.GetCurrentDirectory()).Branch;
-        var worktreePath = CreateWorktree(tempDir, worktreeName, branchName);
+        var worktreePath = CreateWorktree(tempDir, worktreeName);
 
         try
         {
@@ -25,7 +24,7 @@ public class GitRepositoryWorktreeSpecs
             var mainRepository = GitRepository.FromLocalDirectory(Directory.GetCurrentDirectory());
 
             AssertWorktreeRepository(repository, mainRepository, worktreePath);
-            repository.Branch.Should().StartWith($"{branchName}-test-"); // Verify branch name resolution
+            repository.Branch.Should().StartWith(WorktreeBranchPrefix); // Verify branch name resolution
         }
         finally
         {
@@ -39,8 +38,7 @@ public class GitRepositoryWorktreeSpecs
     {
         var tempDir = GetTemporaryDirectory();
         const string worktreeName = "nested-worktree";
-        var branchName = GitRepository.FromLocalDirectory(Directory.GetCurrentDirectory()).Branch;
-        var worktreePath = CreateWorktree(tempDir, worktreeName, branchName);
+        var worktreePath = CreateWorktree(tempDir, worktreeName);
         var nestedPath = worktreePath / "nested" / "deeply" / "nested";
         nestedPath.CreateDirectory();
 
@@ -63,8 +61,7 @@ public class GitRepositoryWorktreeSpecs
     {
         var tempDir = GetTemporaryDirectory();
         const string worktreeName = "detached-head-worktree";
-        var branchName = GitRepository.FromLocalDirectory(Directory.GetCurrentDirectory()).Branch;
-        var worktreePath = CreateWorktree(tempDir, worktreeName, branchName);
+        var worktreePath = CreateWorktree(tempDir, worktreeName);
 
         try
         {
@@ -151,13 +148,18 @@ public class GitRepositoryWorktreeSpecs
         return tempDir;
     }
 
-    private static AbsolutePath CreateWorktree(AbsolutePath tempDir, string worktreeName, string branchName)
+    private const string WorktreeBranchPrefix = "worktree-test-";
+
+    private static AbsolutePath CreateWorktree(AbsolutePath tempDir, string worktreeName)
     {
         var worktreePath = tempDir / worktreeName;
-        var uniqueBranchName = $"{branchName}-test-{Guid.NewGuid().ToString("N")[..8]}";
+        var uniqueBranchName = $"{WorktreeBranchPrefix}{Guid.NewGuid().ToString("N")[..8]}";
 
-        // Create a new branch from the specified branch and checkout in worktree
-        ProcessTasks.StartProcess("git", $"worktree add -b {uniqueBranchName} {worktreePath} {branchName}", workingDirectory: Directory.GetCurrentDirectory())
+        // Base the new branch on HEAD, which resolves whether or not the ambient checkout is
+        // on a named branch. A tag-triggered release build checks out a detached HEAD, where
+        // GitRepository.Branch is null; deriving the base ref from it previously produced an
+        // invalid `git worktree add` invocation and failed the release pack.
+        ProcessTasks.StartProcess("git", $"worktree add -b {uniqueBranchName} {worktreePath} HEAD", workingDirectory: Directory.GetCurrentDirectory())
             .AssertZeroExitCode();
 
         return worktreePath;
