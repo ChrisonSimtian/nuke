@@ -9,6 +9,7 @@ import {
     type NodeMouseHandler,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import './theme.css';
 import './control.css';
 import { TargetNode } from './TargetNode';
 import { layoutGraph, type TargetNodeData } from './layout';

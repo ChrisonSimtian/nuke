@@ -8,6 +8,12 @@ import cssInjectedByJs from 'vite-plugin-css-injected-by-js';
 // The runtime <style> injection needs `style-src 'unsafe-inline'` in the host CSP.
 export default defineConfig({
     plugins: [react(), cssInjectedByJs()],
+    // Vite library mode (unlike app mode) does not substitute process.env.NODE_ENV,
+    // so React's reference would throw `process is not defined` in a plain browser
+    // <script> host. Bake it in — the bundle ships React's production build.
+    define: {
+        'process.env.NODE_ENV': JSON.stringify('production'),
+    },
     build: {
         target: 'es2022',
         outDir: 'dist-lib',
