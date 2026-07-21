@@ -5,9 +5,16 @@
 // the Fallout.Common namespace despite being declared in the Fallout.Build
 // project).
 
+// ProjectModel is excluded here: those solution types relocated to
+// Fallout.Solutions in v11 and are shimmed by the marker below. Fallout.Common
+// also re-exports Solution/SolutionAttribute under Fallout.Common.ProjectModel as
+// a Fallout-side entry-point grace shim (#257 mitigation) — without this
+// exclusion, Rule 1 and the Fallout.Solutions rule would both emit
+// Nuke.Common.ProjectModel.Solution, colliding (CS0263/CS0111).
 [assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder(
     fromNamespacePrefix: "Fallout.Common",
-    toNamespacePrefix: "Nuke.Common")]
+    toNamespacePrefix: "Nuke.Common",
+    ExceptNamespacePrefixes = new[] { "Fallout.Common.ProjectModel" })]
 
 // The solution-handling types moved from Fallout.Common.ProjectModel to the
 // dedicated Fallout.Solutions namespace in v11 (see #248 and the broader

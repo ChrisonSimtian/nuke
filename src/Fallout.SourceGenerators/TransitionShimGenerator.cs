@@ -90,13 +90,19 @@ public sealed class TransitionShimGenerator : IIncrementalGenerator
 
     private readonly struct ShimMarker
     {
-        public ShimMarker(string fromPrefix, string toPrefix)
+        public ShimMarker(string fromPrefix, string toPrefix, ImmutableArray<string> exceptPrefixes)
         {
             FromPrefix = fromPrefix;
             ToPrefix = toPrefix;
+            ExceptPrefixes = exceptPrefixes;
         }
         public string FromPrefix { get; }
         public string ToPrefix { get; }
+
+        // Sub-namespaces under FromPrefix to leave unshimmed — e.g. a namespace
+        // whose types relocated elsewhere and are shimmed by a different marker.
+        // Without this, two markers can emit the same target shim type.
+        public ImmutableArray<string> ExceptPrefixes { get; }
     }
 
     private static ImmutableArray<ShimMarker> ExtractMarkers(ISymbol target)
@@ -114,7 +120,20 @@ public sealed class TransitionShimGenerator : IIncrementalGenerator
             var to = attr.ConstructorArguments[1].Value as string;
             if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(to))
                 continue;
-            results.Add(new ShimMarker(from!, to!));
+
+            var except = ImmutableArray<string>.Empty;
+            foreach (var named in attr.NamedArguments)
+            {
+                if (named.Key != "ExceptNamespacePrefixes" || named.Value.IsNull)
+                    continue;
+                except = named.Value.Values
+                    .Select(v => v.Value as string)
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(s => s!)
+                    .ToImmutableArray();
+            }
+
+            results.Add(new ShimMarker(from!, to!, except));
         }
         return results.ToImmutable();
     }
@@ -192,7 +211,7 @@ public sealed class TransitionShimGenerator : IIncrementalGenerator
             if (string.IsNullOrEmpty(fullNamespace)) continue;
             var matches = fullNamespace == marker.FromPrefix
                 || fullNamespace.StartsWith(marker.FromPrefix + ".", StringComparison.Ordinal);
-            if (!matches) continue;
+            if (!matches || IsUnderExcludedPrefix(fullNamespace, marker)) continue;
             var fqn = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             counts[fqn] = counts.TryGetValue(fqn, out var existing) ? existing + 1 : 1;
         }
@@ -213,7 +232,7 @@ public sealed class TransitionShimGenerator : IIncrementalGenerator
             if (string.IsNullOrEmpty(fullNamespace)) continue;
             var matches = fullNamespace == marker.FromPrefix
                 || fullNamespace.StartsWith(marker.FromPrefix + ".", StringComparison.Ordinal);
-            if (!matches) continue;
+            if (!matches || IsUnderExcludedPrefix(fullNamespace, marker)) continue;
 
             EmitOrSkipType(ctx, type, marker, emittedHints, ambiguousFqns, handBridgedFqns);
         }
@@ -532,6 +551,22 @@ public sealed class TransitionShimGenerator : IIncrementalGenerator
         return marker.ToPrefix + original.Substring(marker.FromPrefix.Length);
     }
 
+    // True when the namespace sits under one of the marker's excluded prefixes
+    // (the prefix itself or a sub-namespace of it). Such types are left unshimmed
+    // by this marker — typically because another marker owns their shim.
+    private static bool IsUnderExcludedPrefix(string fullNamespace, ShimMarker marker)
+    {
+        if (marker.ExceptPrefixes.IsDefaultOrEmpty)
+            return false;
+        foreach (var except in marker.ExceptPrefixes)
+        {
+            if (fullNamespace == except
+                || fullNamespace.StartsWith(except + ".", StringComparison.Ordinal))
+                return true;
+        }
+        return false;
+    }
+
     private static string FormatGenericParameters(INamedTypeSymbol type)
     {
         if (type.TypeParameters.IsDefaultOrEmpty || type.TypeParameters.Length == 0)
@@ -684,6 +719,14 @@ public sealed class TransitionShimGenerator : IIncrementalGenerator
 
             public string FromNamespacePrefix { get; }
             public string ToNamespacePrefix { get; }
+
+            /// <summary>
+            /// Sub-namespaces under <c>fromNamespacePrefix</c> to leave unshimmed,
+            /// e.g. one whose types relocated to another namespace that a separate
+            /// marker already shims. Prevents two markers emitting the same target
+            /// shim type.
+            /// </summary>
+            public string[]? ExceptNamespacePrefixes { get; set; }
         }
         """;
 }
