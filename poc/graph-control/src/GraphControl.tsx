@@ -87,7 +87,7 @@ export function GraphControl({ graph, onRunTarget }: GraphControlProps) {
                 <span><i className="k-depends" /> depends on</span>
                 <span><i className="k-after" /> runs after</span>
                 <span><i className="k-trigger" /> triggers</span>
-                <span className="legend-hint">click a target to run it</span>
+                {onRunTarget && <span className="legend-hint">click a target to run it</span>}
             </div>
         </div>
     );

@@ -8,6 +8,7 @@
         "dev": "vite",
         "build": "vite build",
         "build:lib": "vite build --config vite.lib.config.ts",
+        "report": "node scripts/report.mjs",
         "preview": "vite preview"
     },
     "dependencies": {

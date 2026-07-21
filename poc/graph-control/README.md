@@ -17,7 +17,20 @@ npm install
 npm run dev        # dev server, hot reload — opens the demo fixture
 npm run build      # → dist/index.html, a single self-contained file you can double-click
 npm run build:lib  # → dist-lib/fallout-graph-control.js, an IIFE for host embedding
+npm run report     # → dist-lib/report.html, a self-contained static build-graph report
 ```
+
+## Static HTML report
+
+`npm run report [build-graph.json] [out.html]` emits one self-contained HTML file
+(the control's IIFE and the graph JSON inlined) — double-clickable, offline, no
+server. This is the shape the `fallout` `--plan` HTML report will take. With no
+graph path a small sample is used.
+
+**Dark by default** (`data-theme="dark"` is pinned), with a toggle that remembers
+the viewer's choice in `localStorage` — a shared report stays dark regardless of
+the viewer's OS, but can be flipped to light. In the VS Code webview the control
+instead follows the editor theme (no pin), and no toggle is shown.
 
 ## Embedding in a host (webview / HTML report)
 
