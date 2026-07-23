@@ -208,7 +208,7 @@ By default, the generated workflow file will include a [caching step](https://gi
 
 ```yaml title=".github/workflows/continuous.yml"
 - name: 'Cache: .fallout/temp, ~/.nuget/packages'
-  uses: actions/cache@v4
+  uses: actions/cache@v6
   with:
     path: |
       .fallout/temp

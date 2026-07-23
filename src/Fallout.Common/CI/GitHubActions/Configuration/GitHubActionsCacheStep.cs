@@ -17,7 +17,7 @@ public class GitHubActionsCacheStep : GitHubActionsStep
         writer.WriteLine("- name: " + $"Cache: {IncludePatterns.JoinCommaSpace()}".SingleQuoteYaml());
         using (writer.Indent())
         {
-            writer.WriteLine("uses: actions/cache@v4");
+            writer.WriteLine("uses: actions/cache@v6");
             writer.WriteLine("with:");
             using (writer.Indent())
             {
