@@ -88,7 +88,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: 'Setup: .NET SDK'
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
