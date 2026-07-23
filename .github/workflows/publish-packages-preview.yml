@@ -53,7 +53,7 @@ jobs:
         with:
           fetch-depth: 0           # Nerdbank.GitVersioning needs full history
       - name: 'Cache: .fallout/temp, ~/.nuget/packages'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .fallout/temp
