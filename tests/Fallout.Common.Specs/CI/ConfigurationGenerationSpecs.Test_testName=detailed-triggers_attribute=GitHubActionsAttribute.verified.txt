@@ -68,7 +68,7 @@ jobs:
           progress: false
           filter: tree:0
       - name: 'Cache: .fallout/temp, ~/.nuget/packages'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .fallout/temp
@@ -122,7 +122,7 @@ jobs:
           progress: false
           filter: tree:0
       - name: 'Cache: .fallout/temp, ~/.nuget/packages'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .fallout/temp
@@ -176,7 +176,7 @@ jobs:
           progress: false
           filter: tree:0
       - name: 'Cache: .fallout/temp, ~/.nuget/packages'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .fallout/temp
