@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # Monitor NuGet packages (Directory.Packages.props)
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      nuget-dependencies:
+        patterns:
+          - "*"
+
+  # Monitor .NET SDK version (global.json)
+  - package-ecosystem: "dotnet-sdk"
+    directory: "/"
+    schedule:
+      interval: "weekly"

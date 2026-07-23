@@ -27,6 +27,7 @@ Originally NUKE by [matkoch](https://github.com/matkoch); under new maintenance 
 - Central package versions in `Directory.Packages.props` — never add a `Version=` to an individual `PackageReference`.
 - xUnit + FluentAssertions + Verify.Xunit for tests.
 - Solution file is `fallout.slnx` (new XML solution format, not `.sln`).
+- Dependency updates: Handled by Dependabot (weekly grouped PRs).
 
 ## Common commands
 
