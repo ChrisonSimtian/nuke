@@ -86,9 +86,9 @@ jobs:
     name: ubuntu-latest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: 'Setup: .NET SDK'
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
@@ -121,7 +121,7 @@ Target Pack => _ => _
 <summary>Generated output</summary>
 
 ```yaml title=".github/workflows/continuous.yml"
-- uses: actions/upload-artifact@v5
+- uses: actions/upload-artifact@v7
   with:
     name: packages
     path: output/packages

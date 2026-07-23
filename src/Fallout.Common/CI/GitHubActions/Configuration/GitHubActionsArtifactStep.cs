@@ -13,7 +13,7 @@ public class GitHubActionsArtifactStep : GitHubActionsStep
     public override void Write(CustomFileWriter writer)
     {
         writer.WriteLine("- name: " + $"Publish: {Name}".SingleQuoteYaml());
-        writer.WriteLine("  uses: actions/upload-artifact@v5");
+        writer.WriteLine("  uses: actions/upload-artifact@v7");
 
         using (writer.Indent())
         {
