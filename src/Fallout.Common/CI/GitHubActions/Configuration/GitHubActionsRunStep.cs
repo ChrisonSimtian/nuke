@@ -14,7 +14,7 @@ public class GitHubActionsRunStep : GitHubActionsStep
         writer.WriteLine("- name: 'Setup: .NET SDK'");
         using (writer.Indent())
         {
-            writer.WriteLine("uses: actions/setup-dotnet@v5");
+            writer.WriteLine("uses: actions/setup-dotnet@v6");
             writer.WriteLine("with:");
             using (writer.Indent())
             {

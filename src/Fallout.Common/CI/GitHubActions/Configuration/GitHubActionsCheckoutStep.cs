@@ -28,7 +28,7 @@ public class GitHubActionsCheckoutStep : GitHubActionsStep
 
     public override void Write(CustomFileWriter writer)
     {
-        writer.WriteLine("- uses: actions/checkout@v6");
+        writer.WriteLine("- uses: actions/checkout@v7");
 
         if (Submodules.HasValue || Lfs.HasValue || FetchDepth.HasValue || Progress.HasValue ||
             !Filter.IsNullOrWhiteSpace() || !Ref.IsNullOrWhiteSpace() || CheckoutWith.Length > 0)

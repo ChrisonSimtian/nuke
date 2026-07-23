@@ -60,7 +60,7 @@ jobs:
       name: environment-name
       url: environment-url
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
           lfs: true
@@ -75,7 +75,7 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Setup: .NET SDK'
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
@@ -86,19 +86,19 @@ jobs:
           OptionalInput: ${{ github.event.inputs.OptionalInput }}
           RequiredInput: ${{ github.event.inputs.RequiredInput }}
       - name: 'Publish: src'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: src
           path: src
       - name: 'Publish: test-results'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: test-results
           path: output/test-results
       - name: 'Publish: coverage-report.zip'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: coverage-report.zip
@@ -114,7 +114,7 @@ jobs:
       name: environment-name
       url: environment-url
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
           lfs: true
@@ -129,7 +129,7 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Setup: .NET SDK'
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
@@ -140,19 +140,19 @@ jobs:
           OptionalInput: ${{ github.event.inputs.OptionalInput }}
           RequiredInput: ${{ github.event.inputs.RequiredInput }}
       - name: 'Publish: src'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: src
           path: src
       - name: 'Publish: test-results'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: test-results
           path: output/test-results
       - name: 'Publish: coverage-report.zip'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: coverage-report.zip
@@ -168,7 +168,7 @@ jobs:
       name: environment-name
       url: environment-url
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
           lfs: true
@@ -183,7 +183,7 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Setup: .NET SDK'
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
@@ -194,19 +194,19 @@ jobs:
           OptionalInput: ${{ github.event.inputs.OptionalInput }}
           RequiredInput: ${{ github.event.inputs.RequiredInput }}
       - name: 'Publish: src'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: src
           path: src
       - name: 'Publish: test-results'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: test-results
           path: output/test-results
       - name: 'Publish: coverage-report.zip'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: coverage-report.zip
