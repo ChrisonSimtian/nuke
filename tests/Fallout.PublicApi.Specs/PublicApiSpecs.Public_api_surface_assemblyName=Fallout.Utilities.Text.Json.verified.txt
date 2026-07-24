@@ -1,0 +1,25 @@
+﻿namespace Fallout.Common.Utilities
+{
+    public static class JsonExtensions
+    {
+        public static System.Text.Json.JsonSerializerOptions DefaultSerializerOptions { get; }
+        public static T GetJson<T>(this string content, System.Text.Json.JsonSerializerOptions options = null) { }
+        public static System.Text.Json.Nodes.JsonObject GetJsonObject(this string content, System.Text.Json.Nodes.JsonNodeOptions? nodeOptions = default) { }
+        public static T ReadJson<T>(this Fallout.Common.IO.AbsolutePath path, System.Text.Json.JsonSerializerOptions options = null) { }
+        public static System.Text.Json.Nodes.JsonObject ReadJsonObject(this Fallout.Common.IO.AbsolutePath path, System.Text.Json.Nodes.JsonNodeOptions? nodeOptions = default) { }
+        public static string ToJson<T>(this T obj, System.Text.Json.JsonSerializerOptions options = null) { }
+        public static Fallout.Common.IO.AbsolutePath UpdateJson<T>(this Fallout.Common.IO.AbsolutePath path, System.Action<T> update, System.Text.Json.JsonSerializerOptions options = null) { }
+        public static Fallout.Common.IO.AbsolutePath UpdateJsonObject(this Fallout.Common.IO.AbsolutePath path, System.Action<System.Text.Json.Nodes.JsonObject> update, System.Text.Json.Nodes.JsonNodeOptions? nodeOptions = default) { }
+        public static Fallout.Common.IO.AbsolutePath WriteJson<T>(this Fallout.Common.IO.AbsolutePath path, T obj, System.Text.Json.JsonSerializerOptions options = null) { }
+    }
+    public static class JsonNodeExtensions
+    {
+        public static System.Collections.Generic.IEnumerable<System.Text.Json.Nodes.JsonObject> GetChildren(this System.Text.Json.Nodes.JsonObject jsonObject, string name) { }
+        public static System.Collections.Generic.IEnumerable<T> GetChildren<T>(this System.Text.Json.Nodes.JsonObject jsonObject, string name)
+            where T : System.Text.Json.Nodes.JsonNode { }
+        public static string GetPropertyStringValue(this System.Text.Json.Nodes.JsonObject jsonObject, string name) { }
+        public static System.Text.Json.Nodes.JsonObject GetPropertyValue(this System.Text.Json.Nodes.JsonObject jsonObject, string name) { }
+        public static T GetPropertyValue<T>(this System.Text.Json.Nodes.JsonObject jsonObject, string name) { }
+        public static T GetPropertyValueOrNull<T>(this System.Text.Json.Nodes.JsonObject jsonObject, string name) { }
+    }
+}

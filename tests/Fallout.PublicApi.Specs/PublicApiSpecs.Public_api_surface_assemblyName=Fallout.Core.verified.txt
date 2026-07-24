@@ -1,0 +1,42 @@
+﻿namespace Fallout.Common.Execution
+{
+    public enum ExecutionStatus
+    {
+        None = 0,
+        Scheduled = 1,
+        NotRun = 2,
+        Skipped = 3,
+        Succeeded = 4,
+        Failed = 5,
+        Running = 6,
+        Aborted = 7,
+        Collective = 8,
+    }
+    public interface ITargetModel
+    {
+        string Description { get; }
+        System.Collections.Generic.IReadOnlyCollection<string> ExecutionDependencyNames { get; }
+        bool IsDefault { get; }
+        bool Listed { get; }
+        string Name { get; }
+        System.Collections.Generic.IReadOnlyCollection<string> OrderDependencyNames { get; }
+        Fallout.Common.Execution.ExecutionStatus Status { get; }
+        System.Collections.Generic.IReadOnlyCollection<string> TriggerNames { get; }
+    }
+}
+namespace Fallout.Core.Planning
+{
+    public sealed class PlanResult<T>
+    {
+        public PlanResult(System.Collections.Generic.IReadOnlyList<T> ordered, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<T>> cycles, System.Collections.Generic.IReadOnlyList<T> ambiguousStep) { }
+        public System.Collections.Generic.IReadOnlyList<T> AmbiguousStep { get; }
+        public System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<T>> Cycles { get; }
+        public bool HasCycles { get; }
+        public bool IsAmbiguous { get; }
+        public System.Collections.Generic.IReadOnlyList<T> Ordered { get; }
+    }
+    public static class TopoSort
+    {
+        public static Fallout.Core.Planning.PlanResult<T> Order<T>(System.Collections.Generic.IReadOnlyCollection<T> nodes, System.Func<T, System.Collections.Generic.IEnumerable<T>> dependencies, bool strict = false) { }
+    }
+}

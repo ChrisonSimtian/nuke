@@ -1,0 +1,17 @@
+﻿namespace Fallout.Common.IO
+{
+    public static class Globbing
+    {
+        public static Fallout.Common.IO.GlobbingCaseSensitivity GlobbingCaseSensitivity;
+        public static System.Collections.Generic.IReadOnlyCollection<Fallout.Common.IO.AbsolutePath> GlobDirectories(this Fallout.Common.IO.AbsolutePath directory, params string[] patterns) { }
+        public static System.Collections.Generic.IReadOnlyCollection<string> GlobDirectories(string directory, params string[] patterns) { }
+        public static System.Collections.Generic.IReadOnlyCollection<Fallout.Common.IO.AbsolutePath> GlobFiles(this Fallout.Common.IO.AbsolutePath directory, params string[] patterns) { }
+        public static System.Collections.Generic.IReadOnlyCollection<string> GlobFiles(string directory, params string[] patterns) { }
+    }
+    public enum GlobbingCaseSensitivity
+    {
+        Auto = 0,
+        CaseSensitive = 1,
+        CaseInsensitive = 2,
+    }
+}

@@ -46,6 +46,7 @@
   <Project Path="tests\Nuke.Common.Shim.Specs\Nuke.Common.Shim.Specs.csproj" />
   <Project Path="tests\Nuke.Components.Shim.Specs\Nuke.Components.Shim.Specs.csproj" />
   <Project Path="tests\Fallout.ProjectModel.Specs\Fallout.ProjectModel.Specs.csproj" />
+  <Project Path="tests\Fallout.PublicApi.Specs\Fallout.PublicApi.Specs.csproj" />
   <Project Path="tests\Fallout.Solution.Specs\Fallout.Solution.Specs.csproj" />
   <Project Path="tests\Fallout.SourceGenerators.Specs\Fallout.SourceGenerators.Specs.csproj" />
   <Project Path="tests\Benchmarks\Fallout.Persistence.Solution.Benchmarks\Fallout.Persistence.Solution.Benchmarks.csproj" />
