@@ -27,14 +27,30 @@ public class ScriptRewriterSpecs
     public void RewritesLegacyEnvVars()
     {
         const string input = """
-                             export NUKE_TELEMETRY_OPTOUT=1
                              $env:NUKE_GLOBAL_TOOL_VERSION = "10.0"
                              """;
 
         var result = ScriptRewriter.Rewrite(input);
-        result.EditCount.Should().Be(2);
-        result.Content.Should().Contain("FALLOUT_TELEMETRY_OPTOUT");
+        result.EditCount.Should().Be(1);
         result.Content.Should().Contain("FALLOUT_GLOBAL_TOOL_VERSION");
+    }
+
+    [Fact]
+    public void StripsTelemetryOptOutLineEntirely()
+    {
+        // Telemetry was removed from Fallout (ADR-0010) — the opt-out is dropped, not renamed
+        // to a dead FALLOUT_TELEMETRY_OPTOUT. The surrounding lines are untouched.
+        const string input = """
+                             export DOTNET_ROLL_FORWARD="Major"
+                             export NUKE_TELEMETRY_OPTOUT=1
+                             dotnet nuke "$@"
+                             """;
+
+        var result = ScriptRewriter.Rewrite(input);
+
+        result.Content.Should().NotContain("TELEMETRY_OPTOUT");
+        result.Content.Should().Contain("DOTNET_ROLL_FORWARD");
+        result.Content.Should().Contain("dotnet fallout");
     }
 
     [Fact]
