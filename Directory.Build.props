@@ -69,4 +69,26 @@
     <Compile Include="$(MSBuildThisFileDirectory)AssemblyInfo.cs" />
   </ItemGroup>
 
+  <!-- JetBrains.Annotations [PublicAPI] — an IDE authoring hint only (no runtime/semantic effect); see
+       docs/adr/0011-reintroduce-publicapi-ide-hint.md. The "outer" (consumer-facing) layer gets a blanket
+       [assembly: PublicAPI] so Rider/ReSharper treat its entire public surface as intentional API and never
+       flag it as unused (it is unused *in-repo* by design — external consumers call it, we don't).
+       _FalloutOuterApiAssemblies is the single source of truth for that layer. Inner layers (Cli, Migrate,
+       SourceGenerators, MSBuildTasks, Tooling.Generator, Persistence.Solution) are NOT blanket-marked; any
+       genuine extensibility type there is annotated with [PublicAPI] in source (the hybrid split — see the
+       ADR and docs/api-encapsulation-audit.md). A project opts out with <FalloutPublicApi>false</FalloutPublicApi>
+       set before this import. This is NOT public-API break detection — that is the Roslyn PublicApiAnalyzers
+       track (#410 / #530), a separate concern. -->
+  <PropertyGroup>
+    <_FalloutOuterApiAssemblies>;Fallout.Common;Fallout.Build;Fallout.Build.Shared;Fallout.Components;Fallout.Core;Fallout.Tooling;Fallout.ProjectModel;Fallout.Utilities;Fallout.Utilities.IO.Compression;Fallout.Utilities.IO.Globbing;Fallout.Utilities.Net;Fallout.Utilities.Text.Json;Fallout.Utilities.Text.Yaml;Fallout.Solution;Nuke.Common;Nuke.Build;Nuke.Components;</_FalloutOuterApiAssemblies>
+    <FalloutPublicApi Condition="'$(FalloutPublicApi)' == '' and $(_FalloutOuterApiAssemblies.Contains(';$(MSBuildProjectName);'))">true</FalloutPublicApi>
+  </PropertyGroup>
+
+  <!-- The reference flows to consumers (no PrivateAssets) so a consumer's Rider/ReSharper also sees the
+       annotations baked into our public surface. CPM is off for build/_build.csproj, so guard on it. -->
+  <ItemGroup Condition="'$(FalloutPublicApi)' == 'true' and '$(ManagePackageVersionsCentrally)' != 'false'">
+    <PackageReference Include="JetBrains.Annotations" />
+    <AssemblyAttribute Include="JetBrains.Annotations.PublicAPIAttribute" />
+  </ItemGroup>
+
 </Project>

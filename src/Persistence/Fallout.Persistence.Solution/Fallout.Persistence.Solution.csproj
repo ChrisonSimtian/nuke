@@ -28,6 +28,14 @@
     <InternalsVisibleTo Include="Fallout.Persistence.Solution.Tests" />
   </ItemGroup>
 
+  <!-- This assembly is NOT in Directory.Build.props' outer allowlist (its public surface is a small
+       whitelist, not the whole assembly), so it gets no blanket [assembly: PublicAPI]. Instead the few
+       model types that surface through Fallout.Solution's public API carry a per-type [PublicAPI] in source
+       (the hybrid split — ADR-0011). The reference is non-private so the annotation flows to consumers. -->
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" />
+  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Update="Errors.resx">
       <Generator>ResXFileCodeGenerator</Generator>

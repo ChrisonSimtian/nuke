@@ -8,6 +8,8 @@ namespace Fallout.Persistence.Solution.Model;
 /// <summary>
 /// Represents a project in the solution model.
 /// </summary>
+// [PublicAPI]: surfaces through Fallout.Solution's public API (Project ctor + GetModel) — IDE authoring hint, see docs/adr/0011-reintroduce-publicapi-ide-hint.md
+[JetBrains.Annotations.PublicAPI]
 public sealed class SolutionProjectModel : SolutionItemModel
 {
     private Guid typeId;

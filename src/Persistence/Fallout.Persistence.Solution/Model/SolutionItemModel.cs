@@ -6,6 +6,8 @@ namespace Fallout.Persistence.Solution.Model;
 /// <summary>
 /// Represents an item in the solution model, either a project or a solution folder.
 /// </summary>
+// [PublicAPI]: surfaces through Fallout.Solution's public API (SolutionItem ctor) — IDE authoring hint, see docs/adr/0011-reintroduce-publicapi-ide-hint.md
+[JetBrains.Annotations.PublicAPI]
 public abstract class SolutionItemModel : PropertyContainerModel
 {
     private Guid? id;

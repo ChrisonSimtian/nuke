@@ -8,6 +8,8 @@ namespace Fallout.Persistence.Solution.Model;
 /// <summary>
 /// Represents a solution folder in the solution model.
 /// </summary>
+// [PublicAPI]: surfaces through Fallout.Solution's public API (SolutionFolder ctor + GetModel) — IDE authoring hint, see docs/adr/0011-reintroduce-publicapi-ide-hint.md
+[JetBrains.Annotations.PublicAPI]
 public sealed class SolutionFolderModel : SolutionItemModel
 {
     private const string CycleBreaker = "***"; // to ensure no cycles
