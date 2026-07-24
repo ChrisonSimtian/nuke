@@ -15,3 +15,13 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+
+  # Monitor GitHub Actions (.github/workflows/*.yml)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions-dependencies:
+        patterns:
+          - "*"
