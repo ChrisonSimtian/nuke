@@ -29,7 +29,6 @@ internal sealed class AddPackageCommand : IFalloutCommand
     {
         ToolBanner.Print();
         Logging.Configure();
-        Telemetry.AddPackage();
         ProjectModelTasks.Initialize();
 
         var packageId = args.ElementAt(0);
