@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.MSpec;
 
 /// <summary><p>MSpec is called a 'context/specification' test framework because of the 'grammar' that is used in describing and coding the tests or 'specs'.</p><p>For more details, visit the <a href="https://github.com/machine/machine.specifications">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId)]
 public partial class MSpecTasks : ToolTasks, IRequireNuGetPackage
@@ -35,6 +36,7 @@ public partial class MSpecTasks : ToolTasks, IRequireNuGetPackage
 }
 #region MSpecSettings
 /// <inheritdoc cref="MSpecTasks.MSpec(Fallout.Common.Tools.MSpec.MSpecSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(MSpecTasks), Command = nameof(MSpecTasks.MSpec))]
 public partial class MSpecSettings : ToolOptions
@@ -71,6 +73,7 @@ public partial class MSpecSettings : ToolOptions
 #endregion
 #region MSpecSettingsExtensions
 /// <inheritdoc cref="MSpecTasks.MSpec(Fallout.Common.Tools.MSpec.MSpecSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class MSpecSettingsExtensions
 {

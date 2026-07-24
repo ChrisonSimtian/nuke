@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Fixie;
 
 /// <summary><p>Fixie is a .NET modern test framework similar to NUnit and xUnit, but with an emphasis on low-ceremony defaults and flexible customization.</p><p>For more details, visit the <a href="https://fixie.github.io/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class FixieTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class FixieTasks : ToolTasks, IRequireNuGetPackage
 }
 #region FixieSettings
 /// <inheritdoc cref="FixieTasks.Fixie(Fallout.Common.Tools.Fixie.FixieSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(FixieTasks), Command = nameof(FixieTasks.Fixie))]
 public partial class FixieSettings : ToolOptions
@@ -54,6 +56,7 @@ public partial class FixieSettings : ToolOptions
 #endregion
 #region FixieSettingsExtensions
 /// <inheritdoc cref="FixieTasks.Fixie(Fallout.Common.Tools.Fixie.FixieSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class FixieSettingsExtensions
 {

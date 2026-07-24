@@ -18,6 +18,7 @@ namespace Fallout.Common.Tools.Discord;
 
 #region DiscordMessage
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DiscordMessage : Options
 {
@@ -35,6 +36,7 @@ public partial class DiscordMessage : Options
 #endregion
 #region DiscordEmbed
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DiscordEmbed : Options
 {
@@ -64,6 +66,7 @@ public partial class DiscordEmbed : Options
 #endregion
 #region DiscordEmbedFooter
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DiscordEmbedFooter : Options
 {
@@ -75,6 +78,7 @@ public partial class DiscordEmbedFooter : Options
 #endregion
 #region DiscordEmbedImage
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DiscordEmbedImage : Options
 {
@@ -88,6 +92,7 @@ public partial class DiscordEmbedImage : Options
 #endregion
 #region DiscordEmbedThumbnail
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DiscordEmbedThumbnail : Options
 {
@@ -101,6 +106,7 @@ public partial class DiscordEmbedThumbnail : Options
 #endregion
 #region DiscordEmbedAuthor
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DiscordEmbedAuthor : Options
 {
@@ -114,6 +120,7 @@ public partial class DiscordEmbedAuthor : Options
 #endregion
 #region DiscordEmbedField
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DiscordEmbedField : Options
 {
@@ -127,6 +134,7 @@ public partial class DiscordEmbedField : Options
 #endregion
 #region DiscordMessageExtensions
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DiscordMessageExtensions
 {
@@ -201,6 +209,7 @@ public static partial class DiscordMessageExtensions
 #endregion
 #region DiscordEmbedExtensions
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DiscordEmbedExtensions
 {
@@ -326,6 +335,7 @@ public static partial class DiscordEmbedExtensions
 #endregion
 #region DiscordEmbedFooterExtensions
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DiscordEmbedFooterExtensions
 {
@@ -349,6 +359,7 @@ public static partial class DiscordEmbedFooterExtensions
 #endregion
 #region DiscordEmbedImageExtensions
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DiscordEmbedImageExtensions
 {
@@ -380,6 +391,7 @@ public static partial class DiscordEmbedImageExtensions
 #endregion
 #region DiscordEmbedThumbnailExtensions
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DiscordEmbedThumbnailExtensions
 {
@@ -411,6 +423,7 @@ public static partial class DiscordEmbedThumbnailExtensions
 #endregion
 #region DiscordEmbedAuthorExtensions
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DiscordEmbedAuthorExtensions
 {
@@ -442,6 +455,7 @@ public static partial class DiscordEmbedAuthorExtensions
 #endregion
 #region DiscordEmbedFieldExtensions
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DiscordEmbedFieldExtensions
 {
@@ -483,6 +497,7 @@ public static partial class DiscordEmbedFieldExtensions
 #region DiscordEmbedType
 /// <summary>Used within <see cref="DiscordTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DiscordEmbedType>))]
 public partial class DiscordEmbedType : Enumeration

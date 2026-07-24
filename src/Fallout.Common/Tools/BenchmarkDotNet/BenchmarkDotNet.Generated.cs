@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.BenchmarkDotNet;
 
 /// <summary><p>Powerful .NET library for benchmarking</p><p>For more details, visit the <a href="https://benchmarkdotnet.org/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class BenchmarkDotNetTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class BenchmarkDotNetTasks : ToolTasks, IRequireNuGetPackage
 }
 #region BenchmarkDotNetSettings
 /// <inheritdoc cref="BenchmarkDotNetTasks.BenchmarkDotNet(Fallout.Common.Tools.BenchmarkDotNet.BenchmarkDotNetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(BenchmarkDotNetTasks), Command = nameof(BenchmarkDotNetTasks.BenchmarkDotNet))]
 public partial class BenchmarkDotNetSettings : ToolOptions
@@ -142,6 +144,7 @@ public partial class BenchmarkDotNetSettings : ToolOptions
 #endregion
 #region BenchmarkDotNetSettingsExtensions
 /// <inheritdoc cref="BenchmarkDotNetTasks.BenchmarkDotNet(Fallout.Common.Tools.BenchmarkDotNet.BenchmarkDotNetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class BenchmarkDotNetSettingsExtensions
 {
@@ -779,6 +782,7 @@ public static partial class BenchmarkDotNetSettingsExtensions
 #region BenchmarkDotNetJob
 /// <summary>Used within <see cref="BenchmarkDotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<BenchmarkDotNetJob>))]
 public partial class BenchmarkDotNetJob : Enumeration
@@ -797,6 +801,7 @@ public partial class BenchmarkDotNetJob : Enumeration
 #region BenchmarkDotNetOutlierMode
 /// <summary>Used within <see cref="BenchmarkDotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<BenchmarkDotNetOutlierMode>))]
 public partial class BenchmarkDotNetOutlierMode : Enumeration
@@ -814,6 +819,7 @@ public partial class BenchmarkDotNetOutlierMode : Enumeration
 #region BenchmarkDotNetExporter
 /// <summary>Used within <see cref="BenchmarkDotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<BenchmarkDotNetExporter>))]
 public partial class BenchmarkDotNetExporter : Enumeration
@@ -834,6 +840,7 @@ public partial class BenchmarkDotNetExporter : Enumeration
 #region BenchmarkDotNetProfiler
 /// <summary>Used within <see cref="BenchmarkDotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<BenchmarkDotNetProfiler>))]
 public partial class BenchmarkDotNetProfiler : Enumeration
@@ -851,6 +858,7 @@ public partial class BenchmarkDotNetProfiler : Enumeration
 #region BenchmarkDotNetRunStrategy
 /// <summary>Used within <see cref="BenchmarkDotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<BenchmarkDotNetRunStrategy>))]
 public partial class BenchmarkDotNetRunStrategy : Enumeration
@@ -867,6 +875,7 @@ public partial class BenchmarkDotNetRunStrategy : Enumeration
 #region BenchmarkDotNetCaseMode
 /// <summary>Used within <see cref="BenchmarkDotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<BenchmarkDotNetCaseMode>))]
 public partial class BenchmarkDotNetCaseMode : Enumeration

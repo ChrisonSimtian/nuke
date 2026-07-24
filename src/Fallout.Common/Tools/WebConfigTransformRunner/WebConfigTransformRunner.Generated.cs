@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.WebConfigTransformRunner;
 
 /// <summary><p>This is a commandline tool to run an ASP.Net web.config tranformation.</p><p>For more details, visit the <a href="https://github.com/erichexter/WebConfigTransformRunner">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class WebConfigTransformRunnerTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class WebConfigTransformRunnerTasks : ToolTasks, IRequireNuGetPac
 }
 #region WebConfigTransformRunnerSettings
 /// <inheritdoc cref="WebConfigTransformRunnerTasks.WebConfigTransformRunner(Fallout.Common.Tools.WebConfigTransformRunner.WebConfigTransformRunnerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(WebConfigTransformRunnerTasks), Command = nameof(WebConfigTransformRunnerTasks.WebConfigTransformRunner))]
 public partial class WebConfigTransformRunnerSettings : ToolOptions
@@ -50,6 +52,7 @@ public partial class WebConfigTransformRunnerSettings : ToolOptions
 #endregion
 #region WebConfigTransformRunnerSettingsExtensions
 /// <inheritdoc cref="WebConfigTransformRunnerTasks.WebConfigTransformRunner(Fallout.Common.Tools.WebConfigTransformRunner.WebConfigTransformRunnerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class WebConfigTransformRunnerSettingsExtensions
 {

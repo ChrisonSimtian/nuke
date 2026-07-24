@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.TestCloud;
 
 /// <summary><p>Test Cloud is a cloud based service consisting of thousands of physical mobile devices. Users upload their apps and tests to Test Cloud, which will install the apps on the devices and run the tests. When the tests are complete, Test Cloud, the results made available to users through an easy to use and informative web-based front end.</p><p>For more details, visit the <a href="https://developer.xamarin.com/guides/testcloud/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class TestCloudTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class TestCloudTasks : ToolTasks, IRequireNuGetPackage
 }
 #region TestCloudSettings
 /// <inheritdoc cref="TestCloudTasks.TestCloud(Fallout.Common.Tools.TestCloud.TestCloudSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(TestCloudTasks), Command = nameof(TestCloudTasks.TestCloud), Arguments = "submit")]
 public partial class TestCloudSettings : ToolOptions
@@ -68,6 +70,7 @@ public partial class TestCloudSettings : ToolOptions
 #endregion
 #region TestCloudSettingsExtensions
 /// <inheritdoc cref="TestCloudTasks.TestCloud(Fallout.Common.Tools.TestCloud.TestCloudSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class TestCloudSettingsExtensions
 {

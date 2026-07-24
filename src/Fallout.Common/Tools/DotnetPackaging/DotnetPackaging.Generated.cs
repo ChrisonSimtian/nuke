@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.DotnetPackaging;
 
 /// <summary><p>DotnetPackaging is able to package your application into various formats, including Deb and AppImage.</p><p>For more details, visit the <a href="https://github.com/superjmn/dotnetpackaging">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class DotnetPackagingTasks : ToolTasks, IRequireNuGetPackage
@@ -43,6 +44,7 @@ public partial class DotnetPackagingTasks : ToolTasks, IRequireNuGetPackage
 }
 #region DotnetPackagingDebSettings
 /// <inheritdoc cref="DotnetPackagingTasks.DotnetPackagingDeb(Fallout.Common.Tools.DotnetPackaging.DotnetPackagingDebSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotnetPackagingTasks), Command = nameof(DotnetPackagingTasks.DotnetPackagingDeb), Arguments = "deb")]
 public partial class DotnetPackagingDebSettings : ToolOptions
@@ -57,6 +59,7 @@ public partial class DotnetPackagingDebSettings : ToolOptions
 #endregion
 #region DotnetPackagingAppImageSettings
 /// <inheritdoc cref="DotnetPackagingTasks.DotnetPackagingAppImage(Fallout.Common.Tools.DotnetPackaging.DotnetPackagingAppImageSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotnetPackagingTasks), Command = nameof(DotnetPackagingTasks.DotnetPackagingAppImage), Arguments = "appimage")]
 public partial class DotnetPackagingAppImageSettings : ToolOptions
@@ -89,6 +92,7 @@ public partial class DotnetPackagingAppImageSettings : ToolOptions
 #endregion
 #region DotnetPackagingDebSettingsExtensions
 /// <inheritdoc cref="DotnetPackagingTasks.DotnetPackagingDeb(Fallout.Common.Tools.DotnetPackaging.DotnetPackagingDebSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotnetPackagingDebSettingsExtensions
 {
@@ -120,6 +124,7 @@ public static partial class DotnetPackagingDebSettingsExtensions
 #endregion
 #region DotnetPackagingAppImageSettingsExtensions
 /// <inheritdoc cref="DotnetPackagingTasks.DotnetPackagingAppImage(Fallout.Common.Tools.DotnetPackaging.DotnetPackagingAppImageSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotnetPackagingAppImageSettingsExtensions
 {
@@ -254,6 +259,7 @@ public static partial class DotnetPackagingAppImageSettingsExtensions
 #region DotnetPackagingMainCategory
 /// <summary>Used within <see cref="DotnetPackagingTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DotnetPackagingMainCategory>))]
 public partial class DotnetPackagingMainCategory : Enumeration
@@ -278,6 +284,7 @@ public partial class DotnetPackagingMainCategory : Enumeration
 #region DotnetPackagingAdditionalCategory
 /// <summary>Used within <see cref="DotnetPackagingTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DotnetPackagingAdditionalCategory>))]
 public partial class DotnetPackagingAdditionalCategory : Enumeration

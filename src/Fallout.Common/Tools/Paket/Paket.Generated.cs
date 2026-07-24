@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Paket;
 
 /// <summary><p>Paket is a dependency manager for .NET and mono projects, which is designed to work well with <a href="https://www.nuget.org/">NuGet</a> packages and also enables referencing files directly from <a href="https://fsprojects.github.io/Paket/git-dependencies.html">Git repositories</a> or any <a href="https://fsprojects.github.io/Paket/http-dependencies.html">HTTP resource</a>. It enables precise and predictable control over what packages the projects within your application reference.</p><p>If you want to learn how to use Paket then read the <a href="https://fsprojects.github.io/Paket/getting-started.html"><em>Getting started</em> tutorial</a> and take a look at the <a href="https://fsprojects.github.io/Paket/faq.html">FAQs</a>.</p><p>If you are already using NuGet for package management in your solution then you can learn about the upgrade process in the <a href="https://fsprojects.github.io/Paket/getting-started.html#Automatic-NuGet-conversion">convert from NuGet</a> section.</p><p>For more details, visit the <a href="https://fsprojects.github.io/paket">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class PaketTasks : ToolTasks, IRequireNuGetPackage
@@ -57,6 +58,7 @@ public partial class PaketTasks : ToolTasks, IRequireNuGetPackage
 }
 #region PaketUpdateSettings
 /// <inheritdoc cref="PaketTasks.PaketUpdate(Fallout.Common.Tools.Paket.PaketUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PaketTasks), Command = nameof(PaketTasks.PaketUpdate), Arguments = "update")]
 public partial class PaketUpdateSettings : ToolOptions
@@ -99,6 +101,7 @@ public partial class PaketUpdateSettings : ToolOptions
 #endregion
 #region PaketRestoreSettings
 /// <inheritdoc cref="PaketTasks.PaketRestore(Fallout.Common.Tools.Paket.PaketRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PaketTasks), Command = nameof(PaketTasks.PaketRestore), Arguments = "restore")]
 public partial class PaketRestoreSettings : ToolOptions
@@ -133,6 +136,7 @@ public partial class PaketRestoreSettings : ToolOptions
 #endregion
 #region PaketPushSettings
 /// <inheritdoc cref="PaketTasks.PaketPush(Fallout.Common.Tools.Paket.PaketPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PaketTasks), Command = nameof(PaketTasks.PaketPush), Arguments = "push")]
 public partial class PaketPushSettings : ToolOptions
@@ -157,6 +161,7 @@ public partial class PaketPushSettings : ToolOptions
 #endregion
 #region PaketPackSettings
 /// <inheritdoc cref="PaketTasks.PaketPack(Fallout.Common.Tools.Paket.PaketPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PaketTasks), Command = nameof(PaketTasks.PaketPack), Arguments = "pack")]
 public partial class PaketPackSettings : ToolOptions
@@ -201,6 +206,7 @@ public partial class PaketPackSettings : ToolOptions
 #endregion
 #region PaketUpdateSettingsExtensions
 /// <inheritdoc cref="PaketTasks.PaketUpdate(Fallout.Common.Tools.Paket.PaketUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PaketUpdateSettingsExtensions
 {
@@ -461,6 +467,7 @@ public static partial class PaketUpdateSettingsExtensions
 #endregion
 #region PaketRestoreSettingsExtensions
 /// <inheritdoc cref="PaketTasks.PaketRestore(Fallout.Common.Tools.Paket.PaketRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PaketRestoreSettingsExtensions
 {
@@ -659,6 +666,7 @@ public static partial class PaketRestoreSettingsExtensions
 #endregion
 #region PaketPushSettingsExtensions
 /// <inheritdoc cref="PaketTasks.PaketPush(Fallout.Common.Tools.Paket.PaketPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PaketPushSettingsExtensions
 {
@@ -757,6 +765,7 @@ public static partial class PaketPushSettingsExtensions
 #endregion
 #region PaketPackSettingsExtensions
 /// <inheritdoc cref="PaketTasks.PaketPack(Fallout.Common.Tools.Paket.PaketPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PaketPackSettingsExtensions
 {

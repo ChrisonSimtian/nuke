@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Stryker;
 
 /// <summary><p>Stryker.NET offers you mutation testing for your .NET Core and .NET Framework projects. It allows you to test your tests by temporarily inserting bugs. Stryker.NET is installed using NuGet.  New to Stryker.NET? Begin with our guide on <a href='https://stryker-mutator.io/docs/stryker-net/Getting-started'>getting started</a></p><p>For more details, visit the <a href="https://stryker-mutator.io/docs/stryker-net/configuration">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class StrykerTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class StrykerTasks : ToolTasks, IRequireNuGetPackage
 }
 #region StrykerSettings
 /// <inheritdoc cref="StrykerTasks.Stryker(Fallout.Common.Tools.Stryker.StrykerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(StrykerTasks), Command = nameof(StrykerTasks.Stryker))]
 public partial class StrykerSettings : ToolOptions
@@ -106,6 +108,7 @@ public partial class StrykerSettings : ToolOptions
 #endregion
 #region StrykerSettingsExtensions
 /// <inheritdoc cref="StrykerTasks.Stryker(Fallout.Common.Tools.Stryker.StrykerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class StrykerSettingsExtensions
 {
@@ -452,6 +455,7 @@ public static partial class StrykerSettingsExtensions
 #region StrykerMutationLevel
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerMutationLevel>))]
 public partial class StrykerMutationLevel : Enumeration
@@ -469,6 +473,7 @@ public partial class StrykerMutationLevel : Enumeration
 #region StrykerReporter
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerReporter>))]
 public partial class StrykerReporter : Enumeration
@@ -490,6 +495,7 @@ public partial class StrykerReporter : Enumeration
 #region StrykerOpenReport
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerOpenReport>))]
 public partial class StrykerOpenReport : Enumeration
@@ -505,6 +511,7 @@ public partial class StrykerOpenReport : Enumeration
 #region StrykerVerbosity
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerVerbosity>))]
 public partial class StrykerVerbosity : Enumeration
@@ -523,6 +530,7 @@ public partial class StrykerVerbosity : Enumeration
 #region StrykerTestRunner
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerTestRunner>))]
 public partial class StrykerTestRunner : Enumeration

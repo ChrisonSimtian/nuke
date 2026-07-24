@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.PowerShell;
 
 /// <summary><p>PowerShell is a cross-platform task automation solution made up of a command-line shell, a scripting language, and a configuration management framework. PowerShell runs on Windows, Linux, and macOS.</p><p>For more details, visit the <a href="https://docs.microsoft.com/en-us/powershell/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class PowerShellTasks : ToolTasks
 {
@@ -33,6 +34,7 @@ public partial class PowerShellTasks : ToolTasks
 }
 #region PowerShellSettings
 /// <inheritdoc cref="PowerShellTasks.PowerShell(Fallout.Common.Tools.PowerShell.PowerShellSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PowerShellTasks), Command = nameof(PowerShellTasks.PowerShell))]
 public partial class PowerShellSettings : ToolOptions
@@ -77,6 +79,7 @@ public partial class PowerShellSettings : ToolOptions
 #endregion
 #region PowerShellSettingsExtensions
 /// <inheritdoc cref="PowerShellTasks.PowerShell(Fallout.Common.Tools.PowerShell.PowerShellSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PowerShellSettingsExtensions
 {
@@ -307,6 +310,7 @@ public static partial class PowerShellSettingsExtensions
 #region PowerShellFormat
 /// <summary>Used within <see cref="PowerShellTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PowerShellFormat>))]
 public partial class PowerShellFormat : Enumeration
@@ -322,6 +326,7 @@ public partial class PowerShellFormat : Enumeration
 #region PowerShellWindowStyle
 /// <summary>Used within <see cref="PowerShellTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PowerShellWindowStyle>))]
 public partial class PowerShellWindowStyle : Enumeration

@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Chocolatey;
 
 /// <summary><p>Chocolatey has the largest online registry of Windows packages. Chocolatey packages encapsulate everything required to manage a particular piece of software into one deployment artifact by wrapping installers, executables, zips, and/or scripts into a compiled package file.</p><p>For more details, visit the <a href="https://chocolatey.org/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class ChocolateyTasks : ToolTasks, IRequirePathTool
@@ -77,6 +78,7 @@ public partial class ChocolateyTasks : ToolTasks, IRequirePathTool
 }
 #region ChocolateySearchSettings
 /// <inheritdoc cref="ChocolateyTasks.ChocolateySearch(Fallout.Common.Tools.Chocolatey.ChocolateySearchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(ChocolateyTasks), Command = nameof(ChocolateyTasks.ChocolateySearch), Arguments = "search")]
 public partial class ChocolateySearchSettings : ToolOptions
@@ -175,6 +177,7 @@ public partial class ChocolateySearchSettings : ToolOptions
 #endregion
 #region ChocolateyListSettings
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyList(Fallout.Common.Tools.Chocolatey.ChocolateyListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(ChocolateyTasks), Command = nameof(ChocolateyTasks.ChocolateyList), Arguments = "list")]
 public partial class ChocolateyListSettings : ToolOptions
@@ -273,6 +276,7 @@ public partial class ChocolateyListSettings : ToolOptions
 #endregion
 #region ChocolateyFindSettings
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyFind(Fallout.Common.Tools.Chocolatey.ChocolateyFindSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(ChocolateyTasks), Command = nameof(ChocolateyTasks.ChocolateyFind), Arguments = "find")]
 public partial class ChocolateyFindSettings : ToolOptions
@@ -371,6 +375,7 @@ public partial class ChocolateyFindSettings : ToolOptions
 #endregion
 #region ChocolateyOutdatedSettings
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyOutdated(Fallout.Common.Tools.Chocolatey.ChocolateyOutdatedSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(ChocolateyTasks), Command = nameof(ChocolateyTasks.ChocolateyOutdated), Arguments = "outdated")]
 public partial class ChocolateyOutdatedSettings : ToolOptions
@@ -437,6 +442,7 @@ public partial class ChocolateyOutdatedSettings : ToolOptions
 #endregion
 #region ChocolateyPackSettings
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyPack(Fallout.Common.Tools.Chocolatey.ChocolateyPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(ChocolateyTasks), Command = nameof(ChocolateyTasks.ChocolateyPack), Arguments = "pack")]
 public partial class ChocolateyPackSettings : ToolOptions
@@ -493,6 +499,7 @@ public partial class ChocolateyPackSettings : ToolOptions
 #endregion
 #region ChocolateyPushSettings
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyPush(Fallout.Common.Tools.Chocolatey.ChocolateyPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(ChocolateyTasks), Command = nameof(ChocolateyTasks.ChocolateyPush), Arguments = "push")]
 public partial class ChocolateyPushSettings : ToolOptions
@@ -549,6 +556,7 @@ public partial class ChocolateyPushSettings : ToolOptions
 #endregion
 #region ChocolateyNewSettings
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyNew(Fallout.Common.Tools.Chocolatey.ChocolateyNewSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(ChocolateyTasks), Command = nameof(ChocolateyTasks.ChocolateyNew), Arguments = "new")]
 public partial class ChocolateyNewSettings : ToolOptions
@@ -637,6 +645,7 @@ public partial class ChocolateyNewSettings : ToolOptions
 #endregion
 #region ChocolateySearchSettingsExtensions
 /// <inheritdoc cref="ChocolateyTasks.ChocolateySearch(Fallout.Common.Tools.Chocolatey.ChocolateySearchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class ChocolateySearchSettingsExtensions
 {
@@ -1280,6 +1289,7 @@ public static partial class ChocolateySearchSettingsExtensions
 #endregion
 #region ChocolateyListSettingsExtensions
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyList(Fallout.Common.Tools.Chocolatey.ChocolateyListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class ChocolateyListSettingsExtensions
 {
@@ -1923,6 +1933,7 @@ public static partial class ChocolateyListSettingsExtensions
 #endregion
 #region ChocolateyFindSettingsExtensions
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyFind(Fallout.Common.Tools.Chocolatey.ChocolateyFindSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class ChocolateyFindSettingsExtensions
 {
@@ -2566,6 +2577,7 @@ public static partial class ChocolateyFindSettingsExtensions
 #endregion
 #region ChocolateyOutdatedSettingsExtensions
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyOutdated(Fallout.Common.Tools.Chocolatey.ChocolateyOutdatedSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class ChocolateyOutdatedSettingsExtensions
 {
@@ -2973,6 +2985,7 @@ public static partial class ChocolateyOutdatedSettingsExtensions
 #endregion
 #region ChocolateyPackSettingsExtensions
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyPack(Fallout.Common.Tools.Chocolatey.ChocolateyPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class ChocolateyPackSettingsExtensions
 {
@@ -3313,6 +3326,7 @@ public static partial class ChocolateyPackSettingsExtensions
 #endregion
 #region ChocolateyPushSettingsExtensions
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyPush(Fallout.Common.Tools.Chocolatey.ChocolateyPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class ChocolateyPushSettingsExtensions
 {
@@ -3644,6 +3658,7 @@ public static partial class ChocolateyPushSettingsExtensions
 #endregion
 #region ChocolateyNewSettingsExtensions
 /// <inheritdoc cref="ChocolateyTasks.ChocolateyNew(Fallout.Common.Tools.Chocolatey.ChocolateyNewSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class ChocolateyNewSettingsExtensions
 {

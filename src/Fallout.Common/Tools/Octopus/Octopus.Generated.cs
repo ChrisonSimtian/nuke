@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Octopus;
 
 /// <summary><p>Octopus Deploy is an automated deployment server, which you install yourself, much like you would install SQL Server, Team Foundation Server or JetBrains TeamCity. Octopus makes it easy to automate deployment of ASP.NET web applications and Windows Services into development, test and production environments.<para/>Along with the Octopus Deploy server, you'll also install a lightweight agent service on each of the machines that you plan to deploy to, for example your web and application servers. We call this the Tentacle agent; the idea being that one Octopus server controls many Tentacles, potentially a lot more than 8! With Octopus and Tentacle, you can easily deploy to your own servers, or cloud services from providers like Amazon Web Services or Microsoft Azure.</p><p>For more details, visit the <a href="https://octopus.com/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class OctopusTasks : ToolTasks, IRequireNuGetPackage
@@ -64,6 +65,7 @@ public partial class OctopusTasks : ToolTasks, IRequireNuGetPackage
 }
 #region OctopusPackSettings
 /// <inheritdoc cref="OctopusTasks.OctopusPack(Fallout.Common.Tools.Octopus.OctopusPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(OctopusTasks), Command = nameof(OctopusTasks.OctopusPack), Arguments = "pack")]
 public partial class OctopusPackSettings : ToolOptions, IToolOptionsWithFramework
@@ -100,6 +102,7 @@ public partial class OctopusPackSettings : ToolOptions, IToolOptionsWithFramewor
 #endregion
 #region OctopusPushSettings
 /// <inheritdoc cref="OctopusTasks.OctopusPush(Fallout.Common.Tools.Octopus.OctopusPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(OctopusTasks), Command = nameof(OctopusTasks.OctopusPush), Arguments = "push")]
 public partial class OctopusPushSettings : ToolOptions, IToolOptionsWithFramework
@@ -140,6 +143,7 @@ public partial class OctopusPushSettings : ToolOptions, IToolOptionsWithFramewor
 #endregion
 #region OctopusCreateReleaseSettings
 /// <inheritdoc cref="OctopusTasks.OctopusCreateRelease(Fallout.Common.Tools.Octopus.OctopusCreateReleaseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(OctopusTasks), Command = nameof(OctopusTasks.OctopusCreateRelease), Arguments = "create-release")]
 public partial class OctopusCreateReleaseSettings : ToolOptions, IToolOptionsWithFramework
@@ -238,6 +242,7 @@ public partial class OctopusCreateReleaseSettings : ToolOptions, IToolOptionsWit
 #endregion
 #region OctopusDeployReleaseSettings
 /// <inheritdoc cref="OctopusTasks.OctopusDeployRelease(Fallout.Common.Tools.Octopus.OctopusDeployReleaseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(OctopusTasks), Command = nameof(OctopusTasks.OctopusDeployRelease), Arguments = "deploy-release")]
 public partial class OctopusDeployReleaseSettings : ToolOptions, IToolOptionsWithFramework
@@ -316,6 +321,7 @@ public partial class OctopusDeployReleaseSettings : ToolOptions, IToolOptionsWit
 #endregion
 #region OctopusBuildInformationSettings
 /// <inheritdoc cref="OctopusTasks.OctopusBuildInformation(Fallout.Common.Tools.Octopus.OctopusBuildInformationSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(OctopusTasks), Command = nameof(OctopusTasks.OctopusBuildInformation), Arguments = "build-information")]
 public partial class OctopusBuildInformationSettings : ToolOptions, IToolOptionsWithFramework
@@ -360,6 +366,7 @@ public partial class OctopusBuildInformationSettings : ToolOptions, IToolOptions
 #endregion
 #region OctopusPackSettingsExtensions
 /// <inheritdoc cref="OctopusTasks.OctopusPack(Fallout.Common.Tools.Octopus.OctopusPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class OctopusPackSettingsExtensions
 {
@@ -527,6 +534,7 @@ public static partial class OctopusPackSettingsExtensions
 #endregion
 #region OctopusPushSettingsExtensions
 /// <inheritdoc cref="OctopusTasks.OctopusPush(Fallout.Common.Tools.Octopus.OctopusPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class OctopusPushSettingsExtensions
 {
@@ -713,6 +721,7 @@ public static partial class OctopusPushSettingsExtensions
 #endregion
 #region OctopusCreateReleaseSettingsExtensions
 /// <inheritdoc cref="OctopusTasks.OctopusCreateRelease(Fallout.Common.Tools.Octopus.OctopusCreateReleaseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class OctopusCreateReleaseSettingsExtensions
 {
@@ -1245,6 +1254,7 @@ public static partial class OctopusCreateReleaseSettingsExtensions
 #endregion
 #region OctopusDeployReleaseSettingsExtensions
 /// <inheritdoc cref="OctopusTasks.OctopusDeployRelease(Fallout.Common.Tools.Octopus.OctopusDeployReleaseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class OctopusDeployReleaseSettingsExtensions
 {
@@ -1670,6 +1680,7 @@ public static partial class OctopusDeployReleaseSettingsExtensions
 #endregion
 #region OctopusBuildInformationSettingsExtensions
 /// <inheritdoc cref="OctopusTasks.OctopusBuildInformation(Fallout.Common.Tools.Octopus.OctopusBuildInformationSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class OctopusBuildInformationSettingsExtensions
 {
@@ -1864,6 +1875,7 @@ public static partial class OctopusBuildInformationSettingsExtensions
 #region OctopusPackFormat
 /// <summary>Used within <see cref="OctopusTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<OctopusPackFormat>))]
 public partial class OctopusPackFormat : Enumeration
@@ -1879,6 +1891,7 @@ public partial class OctopusPackFormat : Enumeration
 #region OctopusOverwriteMode
 /// <summary>Used within <see cref="OctopusTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<OctopusOverwriteMode>))]
 public partial class OctopusOverwriteMode : Enumeration

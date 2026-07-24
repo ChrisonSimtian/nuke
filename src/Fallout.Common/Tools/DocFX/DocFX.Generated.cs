@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.DocFX;
 
 /// <summary><p>DocFX is an API documentation generator for .NET, and currently it supports C# and VB. It generates API reference documentation from triple-slash comments in your source code. It also allows you to use Markdown files to create additional topics such as tutorials and how-tos, and to customize the generated reference documentation. DocFX builds a static HTML website from your source code and Markdown files, which can be easily hosted on any web servers (for example, <em>github.io</em>). Also, DocFX provides you the flexibility to customize the layout and style of your website through templates. If you are interested in creating your own website with your own styles, you can follow <a href="http://dotnet.github.io/docfx/tutorial/howto_create_custom_template.html">how to create custom template</a> to create custom templates.</p><p>For more details, visit the <a href="https://dotnet.github.io/docfx/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class DocFXTasks : ToolTasks, IRequireNuGetPackage
@@ -99,6 +100,7 @@ public partial class DocFXTasks : ToolTasks, IRequireNuGetPackage
 }
 #region DocFXBuildSettings
 /// <inheritdoc cref="DocFXTasks.DocFXBuild(Fallout.Common.Tools.DocFX.DocFXBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXBuild), Arguments = "build")]
 public partial class DocFXBuildSettings : ToolOptions
@@ -195,6 +197,7 @@ public partial class DocFXBuildSettings : ToolOptions
 #endregion
 #region DocFXDependencySettings
 /// <inheritdoc cref="DocFXTasks.DocFXDependency(Fallout.Common.Tools.DocFX.DocFXDependencySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXDependency), Arguments = "dependency")]
 public partial class DocFXDependencySettings : ToolOptions
@@ -211,6 +214,7 @@ public partial class DocFXDependencySettings : ToolOptions
 #endregion
 #region DocFXDownloadSettings
 /// <inheritdoc cref="DocFXTasks.DocFXDownload(Fallout.Common.Tools.DocFX.DocFXDownloadSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXDownload), Arguments = "download")]
 public partial class DocFXDownloadSettings : ToolOptions
@@ -225,6 +229,7 @@ public partial class DocFXDownloadSettings : ToolOptions
 #endregion
 #region DocFXHelpSettings
 /// <inheritdoc cref="DocFXTasks.DocFXHelp(Fallout.Common.Tools.DocFX.DocFXHelpSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXHelp), Arguments = "help")]
 public partial class DocFXHelpSettings : ToolOptions
@@ -235,6 +240,7 @@ public partial class DocFXHelpSettings : ToolOptions
 #endregion
 #region DocFXInitSettings
 /// <inheritdoc cref="DocFXTasks.DocFXInit(Fallout.Common.Tools.DocFX.DocFXInitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXInit), Arguments = "init")]
 public partial class DocFXInitSettings : ToolOptions
@@ -257,6 +263,7 @@ public partial class DocFXInitSettings : ToolOptions
 #endregion
 #region DocFXMergeSettings
 /// <inheritdoc cref="DocFXTasks.DocFXMerge(Fallout.Common.Tools.DocFX.DocFXMergeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXMerge), Arguments = "merge")]
 public partial class DocFXMergeSettings : ToolOptions
@@ -289,6 +296,7 @@ public partial class DocFXMergeSettings : ToolOptions
 #endregion
 #region DocFXMetadataSettings
 /// <inheritdoc cref="DocFXTasks.DocFXMetadata(Fallout.Common.Tools.DocFX.DocFXMetadataSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXMetadata), Arguments = "metadata")]
 public partial class DocFXMetadataSettings : ToolOptions
@@ -329,6 +337,7 @@ public partial class DocFXMetadataSettings : ToolOptions
 #endregion
 #region DocFXPdfSettings
 /// <inheritdoc cref="DocFXTasks.DocFXPdf(Fallout.Common.Tools.DocFX.DocFXPdfSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXPdf), Arguments = "pdf")]
 public partial class DocFXPdfSettings : ToolOptions
@@ -449,6 +458,7 @@ public partial class DocFXPdfSettings : ToolOptions
 #endregion
 #region DocFXServeSettings
 /// <inheritdoc cref="DocFXTasks.DocFXServe(Fallout.Common.Tools.DocFX.DocFXServeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXServe), Arguments = "serve")]
 public partial class DocFXServeSettings : ToolOptions
@@ -465,6 +475,7 @@ public partial class DocFXServeSettings : ToolOptions
 #endregion
 #region DocFXTemplateSettings
 /// <inheritdoc cref="DocFXTasks.DocFXTemplate(Fallout.Common.Tools.DocFX.DocFXTemplateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DocFXTasks), Command = nameof(DocFXTasks.DocFXTemplate), Arguments = "template")]
 public partial class DocFXTemplateSettings : ToolOptions
@@ -481,6 +492,7 @@ public partial class DocFXTemplateSettings : ToolOptions
 #endregion
 #region DocFXBuildSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXBuild(Fallout.Common.Tools.DocFX.DocFXBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXBuildSettingsExtensions
 {
@@ -1092,6 +1104,7 @@ public static partial class DocFXBuildSettingsExtensions
 #endregion
 #region DocFXDependencySettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXDependency(Fallout.Common.Tools.DocFX.DocFXDependencySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXDependencySettingsExtensions
 {
@@ -1140,6 +1153,7 @@ public static partial class DocFXDependencySettingsExtensions
 #endregion
 #region DocFXDownloadSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXDownload(Fallout.Common.Tools.DocFX.DocFXDownloadSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXDownloadSettingsExtensions
 {
@@ -1180,6 +1194,7 @@ public static partial class DocFXDownloadSettingsExtensions
 #endregion
 #region DocFXHelpSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXHelp(Fallout.Common.Tools.DocFX.DocFXHelpSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXHelpSettingsExtensions
 {
@@ -1195,6 +1210,7 @@ public static partial class DocFXHelpSettingsExtensions
 #endregion
 #region DocFXInitSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXInit(Fallout.Common.Tools.DocFX.DocFXInitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXInitSettingsExtensions
 {
@@ -1294,6 +1310,7 @@ public static partial class DocFXInitSettingsExtensions
 #endregion
 #region DocFXMergeSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXMerge(Fallout.Common.Tools.DocFX.DocFXMergeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXMergeSettingsExtensions
 {
@@ -1445,6 +1462,7 @@ public static partial class DocFXMergeSettingsExtensions
 #endregion
 #region DocFXMetadataSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXMetadata(Fallout.Common.Tools.DocFX.DocFXMetadataSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXMetadataSettingsExtensions
 {
@@ -1667,6 +1685,7 @@ public static partial class DocFXMetadataSettingsExtensions
 #endregion
 #region DocFXPdfSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXPdf(Fallout.Common.Tools.DocFX.DocFXPdfSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXPdfSettingsExtensions
 {
@@ -2425,6 +2444,7 @@ public static partial class DocFXPdfSettingsExtensions
 #endregion
 #region DocFXServeSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXServe(Fallout.Common.Tools.DocFX.DocFXServeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXServeSettingsExtensions
 {
@@ -2473,6 +2493,7 @@ public static partial class DocFXServeSettingsExtensions
 #endregion
 #region DocFXTemplateSettingsExtensions
 /// <inheritdoc cref="DocFXTasks.DocFXTemplate(Fallout.Common.Tools.DocFX.DocFXTemplateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DocFXTemplateSettingsExtensions
 {
@@ -2531,6 +2552,7 @@ public static partial class DocFXTemplateSettingsExtensions
 #region DocFXLogLevel
 /// <summary>Used within <see cref="DocFXTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DocFXLogLevel>))]
 public partial class DocFXLogLevel : Enumeration
@@ -2550,6 +2572,7 @@ public partial class DocFXLogLevel : Enumeration
 #region DocFXTemplateCommand
 /// <summary>Used within <see cref="DocFXTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DocFXTemplateCommand>))]
 public partial class DocFXTemplateCommand : Enumeration

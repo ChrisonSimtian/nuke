@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.VSTest;
 
 /// <summary><p>VSTest.Console.exe is the command-line command that is used to run tests. You can specify several options in any order on the VSTest.Console.exe command line.</p><p>For more details, visit the <a href="https://msdn.microsoft.com/en-us/library/jj155796.aspx">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class VSTestTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class VSTestTasks : ToolTasks, IRequireNuGetPackage
 }
 #region VSTestSettings
 /// <inheritdoc cref="VSTestTasks.VSTest(Fallout.Common.Tools.VSTest.VSTestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(VSTestTasks), Command = nameof(VSTestTasks.VSTest))]
 public partial class VSTestSettings : ToolOptions
@@ -80,6 +82,7 @@ public partial class VSTestSettings : ToolOptions
 #endregion
 #region VSTestSettingsExtensions
 /// <inheritdoc cref="VSTestTasks.VSTest(Fallout.Common.Tools.VSTest.VSTestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class VSTestSettingsExtensions
 {
@@ -349,6 +352,7 @@ public static partial class VSTestSettingsExtensions
 #region VsTestPlatform
 /// <summary>Used within <see cref="VSTestTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<VsTestPlatform>))]
 public partial class VsTestPlatform : Enumeration
@@ -365,6 +369,7 @@ public partial class VsTestPlatform : Enumeration
 #region VsTestFramework
 /// <summary>Used within <see cref="VSTestTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<VsTestFramework>))]
 public partial class VsTestFramework : Enumeration

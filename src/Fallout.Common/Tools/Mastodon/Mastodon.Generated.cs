@@ -18,6 +18,7 @@ namespace Fallout.Common.Tools.Mastodon;
 
 #region MastodonStatus
 /// <summary>Used within <see cref="MastodonTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class MastodonStatus : Options
 {
@@ -29,6 +30,7 @@ public partial class MastodonStatus : Options
 #endregion
 #region MastodonStatusExtensions
 /// <summary>Used within <see cref="MastodonTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class MastodonStatusExtensions
 {

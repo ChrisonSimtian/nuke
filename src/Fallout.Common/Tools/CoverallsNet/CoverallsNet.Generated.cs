@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.CoverallsNet;
 
 /// <summary><p>Coveralls uploader for .Net Code coverage of your C# source code. Should work with any code files that get reported with the supported coverage tools, but the primary focus is CSharp.</p><p>For more details, visit the <a href="https://coverallsnet.readthedocs.io">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class CoverallsNetTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class CoverallsNetTasks : ToolTasks, IRequireNuGetPackage
 }
 #region CoverallsNetSettings
 /// <inheritdoc cref="CoverallsNetTasks.CoverallsNet(Fallout.Common.Tools.CoverallsNet.CoverallsNetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(CoverallsNetTasks), Command = nameof(CoverallsNetTasks.CoverallsNet))]
 public partial class CoverallsNetSettings : ToolOptions
@@ -82,6 +84,7 @@ public partial class CoverallsNetSettings : ToolOptions
 #endregion
 #region CoverallsNetSettingsExtensions
 /// <inheritdoc cref="CoverallsNetTasks.CoverallsNet(Fallout.Common.Tools.CoverallsNet.CoverallsNetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class CoverallsNetSettingsExtensions
 {

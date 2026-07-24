@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.DotNet;
 
 /// <summary><p>For more details, visit the <a href="https://docs.microsoft.com/en-us/dotnet/core/tools/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class DotNetTasks : ToolTasks, IRequirePathTool
@@ -196,6 +197,7 @@ public partial class DotNetTasks : ToolTasks, IRequirePathTool
 }
 #region DotNetTestSettings
 /// <inheritdoc cref="DotNetTasks.DotNetTest(Fallout.Common.Tools.DotNet.DotNetTestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetTest), Arguments = "test")]
 public partial class DotNetTestSettings : ToolOptions
@@ -280,6 +282,7 @@ public partial class DotNetTestSettings : ToolOptions
 #endregion
 #region DotNetRunSettings
 /// <inheritdoc cref="DotNetTasks.DotNetRun(Fallout.Common.Tools.DotNet.DotNetRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetRun), Arguments = "run")]
 public partial class DotNetRunSettings : ToolOptions
@@ -346,6 +349,7 @@ public partial class DotNetRunSettings : ToolOptions
 #endregion
 #region DotNetRestoreSettings
 /// <inheritdoc cref="DotNetTasks.DotNetRestore(Fallout.Common.Tools.DotNet.DotNetRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetRestore), Arguments = "restore")]
 public partial class DotNetRestoreSettings : ToolOptions
@@ -388,6 +392,7 @@ public partial class DotNetRestoreSettings : ToolOptions
 #endregion
 #region DotNetPackSettings
 /// <inheritdoc cref="DotNetTasks.DotNetPack(Fallout.Common.Tools.DotNet.DotNetPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetPack), Arguments = "pack")]
 public partial class DotNetPackSettings : ToolOptions
@@ -448,6 +453,7 @@ public partial class DotNetPackSettings : ToolOptions
 #endregion
 #region DotNetBuildSettings
 /// <inheritdoc cref="DotNetTasks.DotNetBuild(Fallout.Common.Tools.DotNet.DotNetBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetBuild), Arguments = "build")]
 public partial class DotNetBuildSettings : ToolOptions
@@ -510,6 +516,7 @@ public partial class DotNetBuildSettings : ToolOptions
 #endregion
 #region DotNetMSBuildSettings
 /// <inheritdoc cref="DotNetTasks.DotNetMSBuild(Fallout.Common.Tools.DotNet.DotNetMSBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetMSBuild), Arguments = "msbuild")]
 public partial class DotNetMSBuildSettings : ToolOptions
@@ -546,6 +553,7 @@ public partial class DotNetMSBuildSettings : ToolOptions
 #endregion
 #region DotNetCleanSettings
 /// <inheritdoc cref="DotNetTasks.DotNetClean(Fallout.Common.Tools.DotNet.DotNetCleanSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetClean), Arguments = "clean")]
 public partial class DotNetCleanSettings : ToolOptions
@@ -572,6 +580,7 @@ public partial class DotNetCleanSettings : ToolOptions
 #endregion
 #region DotNetFormatSettings
 /// <inheritdoc cref="DotNetTasks.DotNetFormat(Fallout.Common.Tools.DotNet.DotNetFormatSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetFormat), Arguments = "format")]
 public partial class DotNetFormatSettings : ToolOptions
@@ -602,6 +611,7 @@ public partial class DotNetFormatSettings : ToolOptions
 #endregion
 #region DotNetPublishSettings
 /// <inheritdoc cref="DotNetTasks.DotNetPublish(Fallout.Common.Tools.DotNet.DotNetPublishSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetPublish), Arguments = "publish")]
 public partial class DotNetPublishSettings : ToolOptions
@@ -666,6 +676,7 @@ public partial class DotNetPublishSettings : ToolOptions
 #endregion
 #region DotNetNuGetPushSettings
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetPush(Fallout.Common.Tools.DotNet.DotNetNuGetPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetNuGetPush), Arguments = "nuget push")]
 public partial class DotNetNuGetPushSettings : ToolOptions
@@ -696,6 +707,7 @@ public partial class DotNetNuGetPushSettings : ToolOptions
 #endregion
 #region DotNetNuGetDeleteSettings
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetDelete(Fallout.Common.Tools.DotNet.DotNetNuGetDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetNuGetDelete), Arguments = "nuget delete")]
 public partial class DotNetNuGetDeleteSettings : ToolOptions
@@ -720,6 +732,7 @@ public partial class DotNetNuGetDeleteSettings : ToolOptions
 #endregion
 #region DotNetNuGetSignSettings
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetSign(Fallout.Common.Tools.DotNet.DotNetNuGetSignSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetNuGetSign), Arguments = "nuget sign")]
 public partial class DotNetNuGetSignSettings : ToolOptions
@@ -754,6 +767,7 @@ public partial class DotNetNuGetSignSettings : ToolOptions
 #endregion
 #region DotNetNuGetVerifySettings
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetVerify(Fallout.Common.Tools.DotNet.DotNetNuGetVerifySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetNuGetVerify), Arguments = "nuget verify")]
 public partial class DotNetNuGetVerifySettings : ToolOptions
@@ -770,6 +784,7 @@ public partial class DotNetNuGetVerifySettings : ToolOptions
 #endregion
 #region DotNetNuGetAddSourceSettings
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetAddSource(Fallout.Common.Tools.DotNet.DotNetNuGetAddSourceSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetNuGetAddSource), Arguments = "nuget add source")]
 public partial class DotNetNuGetAddSourceSettings : ToolOptions
@@ -792,6 +807,7 @@ public partial class DotNetNuGetAddSourceSettings : ToolOptions
 #endregion
 #region DotNetNuGetUpdateSourceSettings
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetUpdateSource(Fallout.Common.Tools.DotNet.DotNetNuGetUpdateSourceSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetNuGetUpdateSource), Arguments = "nuget update source")]
 public partial class DotNetNuGetUpdateSourceSettings : ToolOptions
@@ -814,6 +830,7 @@ public partial class DotNetNuGetUpdateSourceSettings : ToolOptions
 #endregion
 #region DotNetToolInstallSettings
 /// <inheritdoc cref="DotNetTasks.DotNetToolInstall(Fallout.Common.Tools.DotNet.DotNetToolInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetToolInstall), Arguments = "tool install")]
 public partial class DotNetToolInstallSettings : ToolOptions
@@ -838,6 +855,7 @@ public partial class DotNetToolInstallSettings : ToolOptions
 #endregion
 #region DotNetToolRestoreSettings
 /// <inheritdoc cref="DotNetTasks.DotNetToolRestore(Fallout.Common.Tools.DotNet.DotNetToolRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetToolRestore), Arguments = "tool restore")]
 public partial class DotNetToolRestoreSettings : ToolOptions
@@ -860,6 +878,7 @@ public partial class DotNetToolRestoreSettings : ToolOptions
 #endregion
 #region DotNetToolUninstallSettings
 /// <inheritdoc cref="DotNetTasks.DotNetToolUninstall(Fallout.Common.Tools.DotNet.DotNetToolUninstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetToolUninstall), Arguments = "tool uninstall")]
 public partial class DotNetToolUninstallSettings : ToolOptions
@@ -876,6 +895,7 @@ public partial class DotNetToolUninstallSettings : ToolOptions
 #endregion
 #region DotNetToolUpdateSettings
 /// <inheritdoc cref="DotNetTasks.DotNetToolUpdate(Fallout.Common.Tools.DotNet.DotNetToolUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetToolUpdate), Arguments = "tool update")]
 public partial class DotNetToolUpdateSettings : ToolOptions
@@ -900,6 +920,7 @@ public partial class DotNetToolUpdateSettings : ToolOptions
 #endregion
 #region DotNetWorkloadInstallSettings
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadInstall(Fallout.Common.Tools.DotNet.DotNetWorkloadInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetWorkloadInstall), Arguments = "workload install")]
 public partial class DotNetWorkloadInstallSettings : ToolOptions
@@ -932,6 +953,7 @@ public partial class DotNetWorkloadInstallSettings : ToolOptions
 #endregion
 #region DotNetWorkloadUninstallSettings
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadUninstall(Fallout.Common.Tools.DotNet.DotNetWorkloadUninstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetWorkloadUninstall), Arguments = "workload uninstall")]
 public partial class DotNetWorkloadUninstallSettings : ToolOptions
@@ -942,6 +964,7 @@ public partial class DotNetWorkloadUninstallSettings : ToolOptions
 #endregion
 #region DotNetWorkloadRestoreSettings
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadRestore(Fallout.Common.Tools.DotNet.DotNetWorkloadRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetWorkloadRestore), Arguments = "workload restore")]
 public partial class DotNetWorkloadRestoreSettings : ToolOptions
@@ -974,6 +997,7 @@ public partial class DotNetWorkloadRestoreSettings : ToolOptions
 #endregion
 #region DotNetWorkloadUpdateSettings
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadUpdate(Fallout.Common.Tools.DotNet.DotNetWorkloadUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetWorkloadUpdate), Arguments = "workload update")]
 public partial class DotNetWorkloadUpdateSettings : ToolOptions
@@ -1006,6 +1030,7 @@ public partial class DotNetWorkloadUpdateSettings : ToolOptions
 #endregion
 #region DotNetWorkloadRepairSettings
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadRepair(Fallout.Common.Tools.DotNet.DotNetWorkloadRepairSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotNetTasks), Command = nameof(DotNetTasks.DotNetWorkloadRepair), Arguments = "workload repair")]
 public partial class DotNetWorkloadRepairSettings : ToolOptions
@@ -1034,6 +1059,7 @@ public partial class DotNetWorkloadRepairSettings : ToolOptions
 #endregion
 #region DotNetTestSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetTest(Fallout.Common.Tools.DotNet.DotNetTestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetTestSettingsExtensions
 {
@@ -1537,6 +1563,7 @@ public static partial class DotNetTestSettingsExtensions
 #endregion
 #region DotNetRunSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetRun(Fallout.Common.Tools.DotNet.DotNetRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetRunSettingsExtensions
 {
@@ -2347,6 +2374,7 @@ public static partial class DotNetRunSettingsExtensions
 #endregion
 #region DotNetRestoreSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetRestore(Fallout.Common.Tools.DotNet.DotNetRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetRestoreSettingsExtensions
 {
@@ -2983,6 +3011,7 @@ public static partial class DotNetRestoreSettingsExtensions
 #endregion
 #region DotNetPackSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetPack(Fallout.Common.Tools.DotNet.DotNetPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetPackSettingsExtensions
 {
@@ -3745,6 +3774,7 @@ public static partial class DotNetPackSettingsExtensions
 #endregion
 #region DotNetBuildSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetBuild(Fallout.Common.Tools.DotNet.DotNetBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetBuildSettingsExtensions
 {
@@ -4521,6 +4551,7 @@ public static partial class DotNetBuildSettingsExtensions
 #endregion
 #region DotNetMSBuildSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetMSBuild(Fallout.Common.Tools.DotNet.DotNetMSBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetMSBuildSettingsExtensions
 {
@@ -5130,6 +5161,7 @@ public static partial class DotNetMSBuildSettingsExtensions
 #endregion
 #region DotNetCleanSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetClean(Fallout.Common.Tools.DotNet.DotNetCleanSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetCleanSettingsExtensions
 {
@@ -5624,6 +5656,7 @@ public static partial class DotNetCleanSettingsExtensions
 #endregion
 #region DotNetFormatSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetFormat(Fallout.Common.Tools.DotNet.DotNetFormatSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetFormatSettingsExtensions
 {
@@ -6182,6 +6215,7 @@ public static partial class DotNetFormatSettingsExtensions
 #endregion
 #region DotNetPublishSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetPublish(Fallout.Common.Tools.DotNet.DotNetPublishSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetPublishSettingsExtensions
 {
@@ -6957,6 +6991,7 @@ public static partial class DotNetPublishSettingsExtensions
 #endregion
 #region DotNetNuGetPushSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetPush(Fallout.Common.Tools.DotNet.DotNetNuGetPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetNuGetPushSettingsExtensions
 {
@@ -7097,6 +7132,7 @@ public static partial class DotNetNuGetPushSettingsExtensions
 #endregion
 #region DotNetNuGetDeleteSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetDelete(Fallout.Common.Tools.DotNet.DotNetNuGetDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetNuGetDeleteSettingsExtensions
 {
@@ -7204,6 +7240,7 @@ public static partial class DotNetNuGetDeleteSettingsExtensions
 #endregion
 #region DotNetNuGetSignSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetSign(Fallout.Common.Tools.DotNet.DotNetNuGetSignSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetNuGetSignSettingsExtensions
 {
@@ -7324,6 +7361,7 @@ public static partial class DotNetNuGetSignSettingsExtensions
 #endregion
 #region DotNetNuGetVerifySettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetVerify(Fallout.Common.Tools.DotNet.DotNetNuGetVerifySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetNuGetVerifySettingsExtensions
 {
@@ -7363,6 +7401,7 @@ public static partial class DotNetNuGetVerifySettingsExtensions
 #endregion
 #region DotNetNuGetAddSourceSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetAddSource(Fallout.Common.Tools.DotNet.DotNetNuGetAddSourceSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetNuGetAddSourceSettingsExtensions
 {
@@ -7450,6 +7489,7 @@ public static partial class DotNetNuGetAddSourceSettingsExtensions
 #endregion
 #region DotNetNuGetUpdateSourceSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetNuGetUpdateSource(Fallout.Common.Tools.DotNet.DotNetNuGetUpdateSourceSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetNuGetUpdateSourceSettingsExtensions
 {
@@ -7537,6 +7577,7 @@ public static partial class DotNetNuGetUpdateSourceSettingsExtensions
 #endregion
 #region DotNetToolInstallSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetToolInstall(Fallout.Common.Tools.DotNet.DotNetToolInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetToolInstallSettingsExtensions
 {
@@ -7632,6 +7673,7 @@ public static partial class DotNetToolInstallSettingsExtensions
 #endregion
 #region DotNetToolRestoreSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetToolRestore(Fallout.Common.Tools.DotNet.DotNetToolRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetToolRestoreSettingsExtensions
 {
@@ -7746,6 +7788,7 @@ public static partial class DotNetToolRestoreSettingsExtensions
 #endregion
 #region DotNetToolUninstallSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetToolUninstall(Fallout.Common.Tools.DotNet.DotNetToolUninstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetToolUninstallSettingsExtensions
 {
@@ -7794,6 +7837,7 @@ public static partial class DotNetToolUninstallSettingsExtensions
 #endregion
 #region DotNetToolUpdateSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetToolUpdate(Fallout.Common.Tools.DotNet.DotNetToolUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetToolUpdateSettingsExtensions
 {
@@ -7889,6 +7933,7 @@ public static partial class DotNetToolUpdateSettingsExtensions
 #endregion
 #region DotNetWorkloadInstallSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadInstall(Fallout.Common.Tools.DotNet.DotNetWorkloadInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetWorkloadInstallSettingsExtensions
 {
@@ -8070,6 +8115,7 @@ public static partial class DotNetWorkloadInstallSettingsExtensions
 #endregion
 #region DotNetWorkloadUninstallSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadUninstall(Fallout.Common.Tools.DotNet.DotNetWorkloadUninstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetWorkloadUninstallSettingsExtensions
 {
@@ -8100,6 +8146,7 @@ public static partial class DotNetWorkloadUninstallSettingsExtensions
 #endregion
 #region DotNetWorkloadRestoreSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadRestore(Fallout.Common.Tools.DotNet.DotNetWorkloadRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetWorkloadRestoreSettingsExtensions
 {
@@ -8266,6 +8313,7 @@ public static partial class DotNetWorkloadRestoreSettingsExtensions
 #endregion
 #region DotNetWorkloadUpdateSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadUpdate(Fallout.Common.Tools.DotNet.DotNetWorkloadUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetWorkloadUpdateSettingsExtensions
 {
@@ -8441,6 +8489,7 @@ public static partial class DotNetWorkloadUpdateSettingsExtensions
 #endregion
 #region DotNetWorkloadRepairSettingsExtensions
 /// <inheritdoc cref="DotNetTasks.DotNetWorkloadRepair(Fallout.Common.Tools.DotNet.DotNetWorkloadRepairSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetWorkloadRepairSettingsExtensions
 {
@@ -8583,6 +8632,7 @@ public static partial class DotNetWorkloadRepairSettingsExtensions
 #region DotNetVerbosity
 /// <summary>Used within <see cref="DotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DotNetVerbosity>))]
 public partial class DotNetVerbosity : Enumeration
@@ -8601,6 +8651,7 @@ public partial class DotNetVerbosity : Enumeration
 #region DotNetSymbolPackageFormat
 /// <summary>Used within <see cref="DotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DotNetSymbolPackageFormat>))]
 public partial class DotNetSymbolPackageFormat : Enumeration
@@ -8616,6 +8667,7 @@ public partial class DotNetSymbolPackageFormat : Enumeration
 #region DotNetNuGetAuthentication
 /// <summary>Used within <see cref="DotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DotNetNuGetAuthentication>))]
 public partial class DotNetNuGetAuthentication : Enumeration
@@ -8634,6 +8686,7 @@ public partial class DotNetNuGetAuthentication : Enumeration
 #region DotNetFormatSeverity
 /// <summary>Used within <see cref="DotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DotNetFormatSeverity>))]
 public partial class DotNetFormatSeverity : Enumeration
@@ -8650,6 +8703,7 @@ public partial class DotNetFormatSeverity : Enumeration
 #region DotNetNuGetSignHashAlgorithm
 /// <summary>Used within <see cref="DotNetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DotNetNuGetSignHashAlgorithm>))]
 public partial class DotNetNuGetSignHashAlgorithm : Enumeration

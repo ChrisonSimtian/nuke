@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.InnoSetup;
 
 /// <summary><p>Inno Setup is a free installer for Windows programs by Jordan Russell and Martijn Laan. First introduced in 1997, Inno Setup today rivals and even surpasses many commercial installers in feature set and stability.</p><p>For more details, visit the <a href="http://www.jrsoftware.org/isinfo.php">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class InnoSetupTasks : ToolTasks, IRequirePathTool
@@ -35,6 +36,7 @@ public partial class InnoSetupTasks : ToolTasks, IRequirePathTool
 }
 #region InnoSetupSettings
 /// <inheritdoc cref="InnoSetupTasks.InnoSetup(Fallout.Common.Tools.InnoSetup.InnoSetupSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(InnoSetupTasks), Command = nameof(InnoSetupTasks.InnoSetup))]
 public partial class InnoSetupSettings : ToolOptions
@@ -63,6 +65,7 @@ public partial class InnoSetupSettings : ToolOptions
 #endregion
 #region InnoSetupSettingsExtensions
 /// <inheritdoc cref="InnoSetupTasks.InnoSetup(Fallout.Common.Tools.InnoSetup.InnoSetupSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class InnoSetupSettingsExtensions
 {

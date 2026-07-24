@@ -81,6 +81,7 @@ public static class DataClassGenerator
             .WriteLine($"#region {dataClass.Name}")
             .WriteSummary(dataClass)
             .WriteObsoleteAttributeWhenObsolete(dataClass)
+            .WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"Fallout.Tooling.Generator\", \"1.0.0\")]")
             .WriteLine("[ExcludeFromCodeCoverage]")
             .WriteLine(GetCommandAttribute())
             .WriteLine($"public partial class {dataClass.Name} : {baseTypes.JoinCommaSpace()}")

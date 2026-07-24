@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.CMake;
 
 /// <summary><p>The cmake executable is the command-line interface of the cross-platform build system generator CMake.</p><p>For more details, visit the <a href="https://cmake.org/cmake/help/latest/manual/cmake.1.html">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class CMakeTasks : ToolTasks, IRequirePathTool
@@ -49,6 +50,7 @@ public partial class CMakeTasks : ToolTasks, IRequirePathTool
 }
 #region CMakeGenerateSettings
 /// <inheritdoc cref="CMakeTasks.CMakeGenerate(Fallout.Common.Tools.CMake.CMakeGenerateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(CMakeTasks), Command = nameof(CMakeTasks.CMakeGenerate))]
 public partial class CMakeGenerateSettings : ToolOptions
@@ -93,6 +95,7 @@ public partial class CMakeGenerateSettings : ToolOptions
 #endregion
 #region CMakeBuildSettings
 /// <inheritdoc cref="CMakeTasks.CMakeBuild(Fallout.Common.Tools.CMake.CMakeBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(CMakeTasks), Command = nameof(CMakeTasks.CMakeBuild), Arguments = "--build")]
 public partial class CMakeBuildSettings : ToolOptions
@@ -115,6 +118,7 @@ public partial class CMakeBuildSettings : ToolOptions
 #endregion
 #region CMakeInstallSettings
 /// <inheritdoc cref="CMakeTasks.CMakeInstall(Fallout.Common.Tools.CMake.CMakeInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(CMakeTasks), Command = nameof(CMakeTasks.CMakeInstall), Arguments = "--install")]
 public partial class CMakeInstallSettings : ToolOptions
@@ -135,6 +139,7 @@ public partial class CMakeInstallSettings : ToolOptions
 #endregion
 #region CMakeGenerateSettingsExtensions
 /// <inheritdoc cref="CMakeTasks.CMakeGenerate(Fallout.Common.Tools.CMake.CMakeGenerateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class CMakeGenerateSettingsExtensions
 {
@@ -388,6 +393,7 @@ public static partial class CMakeGenerateSettingsExtensions
 #endregion
 #region CMakeBuildSettingsExtensions
 /// <inheritdoc cref="CMakeTasks.CMakeBuild(Fallout.Common.Tools.CMake.CMakeBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class CMakeBuildSettingsExtensions
 {
@@ -499,6 +505,7 @@ public static partial class CMakeBuildSettingsExtensions
 #endregion
 #region CMakeInstallSettingsExtensions
 /// <inheritdoc cref="CMakeTasks.CMakeInstall(Fallout.Common.Tools.CMake.CMakeInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class CMakeInstallSettingsExtensions
 {
@@ -573,6 +580,7 @@ public static partial class CMakeInstallSettingsExtensions
 #region CMakeGenerator
 /// <summary>Used within <see cref="CMakeTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CMakeGenerator>))]
 public partial class CMakeGenerator : Enumeration
@@ -592,6 +600,7 @@ public partial class CMakeGenerator : Enumeration
 #region CMakePlatform
 /// <summary>Used within <see cref="CMakeTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CMakePlatform>))]
 public partial class CMakePlatform : Enumeration
@@ -609,6 +618,7 @@ public partial class CMakePlatform : Enumeration
 #region CMakeConfiguration
 /// <summary>Used within <see cref="CMakeTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CMakeConfiguration>))]
 public partial class CMakeConfiguration : Enumeration
@@ -626,6 +636,7 @@ public partial class CMakeConfiguration : Enumeration
 #region CMakeLogLevel
 /// <summary>Used within <see cref="CMakeTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CMakeLogLevel>))]
 public partial class CMakeLogLevel : Enumeration

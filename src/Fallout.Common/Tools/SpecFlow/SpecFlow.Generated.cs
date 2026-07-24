@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.SpecFlow;
 
 /// <summary><p>Use SpecFlow to define, manage and automatically execute human-readable acceptance tests in .NET projects. Writing easily understandable tests is a cornerstone of the BDD paradigm and also helps build up a living documentation of your system.</p><p>For more details, visit the <a href="https://specflow.org/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class SpecFlowTasks : ToolTasks, IRequireNuGetPackage
@@ -85,6 +86,7 @@ public partial class SpecFlowTasks : ToolTasks, IRequireNuGetPackage
 }
 #region SpecFlowNUnitExecutionReportSettings
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowNUnitExecutionReport(Fallout.Common.Tools.SpecFlow.SpecFlowNUnitExecutionReportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SpecFlowTasks), Command = nameof(SpecFlowTasks.SpecFlowNUnitExecutionReport), Arguments = "nunitexecutionreport")]
 public partial class SpecFlowNUnitExecutionReportSettings : ToolOptions
@@ -107,6 +109,7 @@ public partial class SpecFlowNUnitExecutionReportSettings : ToolOptions
 #endregion
 #region SpecFlowMSTestExecutionReportSettings
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowMSTestExecutionReport(Fallout.Common.Tools.SpecFlow.SpecFlowMSTestExecutionReportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SpecFlowTasks), Command = nameof(SpecFlowTasks.SpecFlowMSTestExecutionReport), Arguments = "mstestexecutionreport")]
 public partial class SpecFlowMSTestExecutionReportSettings : ToolOptions
@@ -123,6 +126,7 @@ public partial class SpecFlowMSTestExecutionReportSettings : ToolOptions
 #endregion
 #region SpecFlowStepDefinitionReportSettings
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowStepDefinitionReport(Fallout.Common.Tools.SpecFlow.SpecFlowStepDefinitionReportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SpecFlowTasks), Command = nameof(SpecFlowTasks.SpecFlowStepDefinitionReport), Arguments = "stepdefinitionreport")]
 public partial class SpecFlowStepDefinitionReportSettings : ToolOptions
@@ -139,6 +143,7 @@ public partial class SpecFlowStepDefinitionReportSettings : ToolOptions
 #endregion
 #region SpecFlowRunSettings
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowRun(Fallout.Common.Tools.SpecFlow.SpecFlowRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SpecFlowTasks), Command = nameof(SpecFlowTasks.SpecFlowRun), Arguments = "run")]
 public partial class SpecFlowRunSettings : ToolOptions
@@ -161,6 +166,7 @@ public partial class SpecFlowRunSettings : ToolOptions
 #endregion
 #region SpecFlowBuildServerRunSettings
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowBuildServerRun(Fallout.Common.Tools.SpecFlow.SpecFlowBuildServerRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SpecFlowTasks), Command = nameof(SpecFlowTasks.SpecFlowBuildServerRun), Arguments = "buildserverrun")]
 public partial class SpecFlowBuildServerRunSettings : ToolOptions
@@ -183,6 +189,7 @@ public partial class SpecFlowBuildServerRunSettings : ToolOptions
 #endregion
 #region SpecFlowRegisterSettings
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowRegister(Fallout.Common.Tools.SpecFlow.SpecFlowRegisterSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SpecFlowTasks), Command = nameof(SpecFlowTasks.SpecFlowRegister), Arguments = "register")]
 public partial class SpecFlowRegisterSettings : ToolOptions
@@ -195,6 +202,7 @@ public partial class SpecFlowRegisterSettings : ToolOptions
 #endregion
 #region SpecFlowUnregisterSettings
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowUnregister(Fallout.Common.Tools.SpecFlow.SpecFlowUnregisterSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SpecFlowTasks), Command = nameof(SpecFlowTasks.SpecFlowUnregister), Arguments = "register")]
 public partial class SpecFlowUnregisterSettings : ToolOptions
@@ -203,6 +211,7 @@ public partial class SpecFlowUnregisterSettings : ToolOptions
 #endregion
 #region SpecFlowAboutSettings
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowAbout(Fallout.Common.Tools.SpecFlow.SpecFlowAboutSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SpecFlowTasks), Command = nameof(SpecFlowTasks.SpecFlowAbout), Arguments = "register")]
 public partial class SpecFlowAboutSettings : ToolOptions
@@ -211,6 +220,7 @@ public partial class SpecFlowAboutSettings : ToolOptions
 #endregion
 #region SpecFlowNUnitExecutionReportSettingsExtensions
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowNUnitExecutionReport(Fallout.Common.Tools.SpecFlow.SpecFlowNUnitExecutionReportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SpecFlowNUnitExecutionReportSettingsExtensions
 {
@@ -274,6 +284,7 @@ public static partial class SpecFlowNUnitExecutionReportSettingsExtensions
 #endregion
 #region SpecFlowMSTestExecutionReportSettingsExtensions
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowMSTestExecutionReport(Fallout.Common.Tools.SpecFlow.SpecFlowMSTestExecutionReportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SpecFlowMSTestExecutionReportSettingsExtensions
 {
@@ -313,6 +324,7 @@ public static partial class SpecFlowMSTestExecutionReportSettingsExtensions
 #endregion
 #region SpecFlowStepDefinitionReportSettingsExtensions
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowStepDefinitionReport(Fallout.Common.Tools.SpecFlow.SpecFlowStepDefinitionReportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SpecFlowStepDefinitionReportSettingsExtensions
 {
@@ -352,6 +364,7 @@ public static partial class SpecFlowStepDefinitionReportSettingsExtensions
 #endregion
 #region SpecFlowRunSettingsExtensions
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowRun(Fallout.Common.Tools.SpecFlow.SpecFlowRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SpecFlowRunSettingsExtensions
 {
@@ -424,6 +437,7 @@ public static partial class SpecFlowRunSettingsExtensions
 #endregion
 #region SpecFlowBuildServerRunSettingsExtensions
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowBuildServerRun(Fallout.Common.Tools.SpecFlow.SpecFlowBuildServerRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SpecFlowBuildServerRunSettingsExtensions
 {
@@ -487,6 +501,7 @@ public static partial class SpecFlowBuildServerRunSettingsExtensions
 #endregion
 #region SpecFlowRegisterSettingsExtensions
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowRegister(Fallout.Common.Tools.SpecFlow.SpecFlowRegisterSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SpecFlowRegisterSettingsExtensions
 {
@@ -510,6 +525,7 @@ public static partial class SpecFlowRegisterSettingsExtensions
 #endregion
 #region SpecFlowUnregisterSettingsExtensions
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowUnregister(Fallout.Common.Tools.SpecFlow.SpecFlowUnregisterSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SpecFlowUnregisterSettingsExtensions
 {
@@ -517,6 +533,7 @@ public static partial class SpecFlowUnregisterSettingsExtensions
 #endregion
 #region SpecFlowAboutSettingsExtensions
 /// <inheritdoc cref="SpecFlowTasks.SpecFlowAbout(Fallout.Common.Tools.SpecFlow.SpecFlowAboutSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SpecFlowAboutSettingsExtensions
 {
@@ -525,6 +542,7 @@ public static partial class SpecFlowAboutSettingsExtensions
 #region SpecFlowToolIntegration
 /// <summary>Used within <see cref="SpecFlowTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<SpecFlowToolIntegration>))]
 public partial class SpecFlowToolIntegration : Enumeration

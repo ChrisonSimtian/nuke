@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.SonarScanner;
 
 /// <summary><p>The SonarScanner for MSBuild is the recommended way to launch a SonarQube or SonarCloud analysis for projects/solutions using MSBuild or dotnet command as build tool.</p><p>For more details, visit the <a href="https://www.sonarqube.org/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class SonarScannerTasks : ToolTasks, IRequireNuGetPackage
@@ -43,6 +44,7 @@ public partial class SonarScannerTasks : ToolTasks, IRequireNuGetPackage
 }
 #region SonarScannerBeginSettings
 /// <inheritdoc cref="SonarScannerTasks.SonarScannerBegin(Fallout.Common.Tools.SonarScanner.SonarScannerBeginSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SonarScannerTasks), Command = nameof(SonarScannerTasks.SonarScannerBegin), Arguments = "begin")]
 public partial class SonarScannerBeginSettings : ToolOptions, IToolOptionsWithFramework
@@ -139,6 +141,7 @@ public partial class SonarScannerBeginSettings : ToolOptions, IToolOptionsWithFr
 #endregion
 #region SonarScannerEndSettings
 /// <inheritdoc cref="SonarScannerTasks.SonarScannerEnd(Fallout.Common.Tools.SonarScanner.SonarScannerEndSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SonarScannerTasks), Command = nameof(SonarScannerTasks.SonarScannerEnd), Arguments = "end")]
 public partial class SonarScannerEndSettings : ToolOptions, IToolOptionsWithFramework
@@ -155,6 +158,7 @@ public partial class SonarScannerEndSettings : ToolOptions, IToolOptionsWithFram
 #endregion
 #region SonarScannerBeginSettingsExtensions
 /// <inheritdoc cref="SonarScannerTasks.SonarScannerBegin(Fallout.Common.Tools.SonarScanner.SonarScannerBeginSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SonarScannerBeginSettingsExtensions
 {
@@ -772,6 +776,7 @@ public static partial class SonarScannerBeginSettingsExtensions
 #endregion
 #region SonarScannerEndSettingsExtensions
 /// <inheritdoc cref="SonarScannerTasks.SonarScannerEnd(Fallout.Common.Tools.SonarScanner.SonarScannerEndSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SonarScannerEndSettingsExtensions
 {

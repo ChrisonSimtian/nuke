@@ -25,6 +25,7 @@ public static class EnumerationGenerator
             .WriteSummary(enumeration)
             .WriteLine("[Serializable]")
             .WriteObsoleteAttributeWhenObsolete(enumeration)
+            .WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"Fallout.Tooling.Generator\", \"1.0.0\")]")
             .WriteLine("[ExcludeFromCodeCoverage]")
             .WriteLine($"[TypeConverter(typeof(TypeConverter<{enumeration.Name}>))]")
             .WriteLine($"public partial class {enumeration.Name} : Enumeration")

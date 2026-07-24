@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Squirrel;
 
 /// <summary><p>Squirrel is both a set of tools and a library, to completely manage both installation and updating your Desktop Windows application, written in either C# or any other language (i.e., Squirrel can manage native C++ applications).</p><p>For more details, visit the <a href="https://github.com/Squirrel/Squirrel.Windows">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class SquirrelTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class SquirrelTasks : ToolTasks, IRequireNuGetPackage
 }
 #region SquirrelSettings
 /// <inheritdoc cref="SquirrelTasks.Squirrel(Fallout.Common.Tools.Squirrel.SquirrelSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SquirrelTasks), Command = nameof(SquirrelTasks.Squirrel))]
 public partial class SquirrelSettings : ToolOptions
@@ -92,6 +94,7 @@ public partial class SquirrelSettings : ToolOptions
 #endregion
 #region SquirrelSettingsExtensions
 /// <inheritdoc cref="SquirrelTasks.Squirrel(Fallout.Common.Tools.Squirrel.SquirrelSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SquirrelSettingsExtensions
 {

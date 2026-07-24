@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.CorFlags;
 
 /// <summary><p>The CorFlags Conversion tool allows you to configure the CorFlags section of the header of a portable executable image.</p><p>For more details, visit the <a href="https://docs.microsoft.com/en-us/dotnet/framework/tools/corflags-exe-corflags-conversion-tool">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class CorFlagsTasks : ToolTasks, IRequirePathTool
@@ -35,6 +36,7 @@ public partial class CorFlagsTasks : ToolTasks, IRequirePathTool
 }
 #region CorFlagsSettings
 /// <inheritdoc cref="CorFlagsTasks.CorFlags(Fallout.Common.Tools.CorFlags.CorFlagsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(CorFlagsTasks), Command = nameof(CorFlagsTasks.CorFlags))]
 public partial class CorFlagsSettings : ToolOptions
@@ -59,6 +61,7 @@ public partial class CorFlagsSettings : ToolOptions
 #endregion
 #region CorFlagsSettingsExtensions
 /// <inheritdoc cref="CorFlagsTasks.CorFlags(Fallout.Common.Tools.CorFlags.CorFlagsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class CorFlagsSettingsExtensions
 {

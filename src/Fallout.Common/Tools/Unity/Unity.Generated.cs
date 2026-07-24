@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Unity;
 
 /// <summary><p>Unity is usually launched by double-clicking its icon from the desktop. However, it is also possible to run it from the command line (from the macOS Terminal or the Windows Command Prompt). When launched in this way, Unity can receive commands and information on startup, which can be very useful for test suites, automated builds and other production tasks.</p><p>For more details, visit the <a href="https://unity3d.com/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class UnityTasks : ToolTasks
 {
@@ -61,6 +62,7 @@ public partial class UnityTasks : ToolTasks
 }
 #region UnityCreateManualActivationFileSettings
 /// <inheritdoc cref="UnityTasks.UnityCreateManualActivationFile(Fallout.Common.Tools.Unity.UnityCreateManualActivationFileSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(UnityTasks), Command = nameof(UnityTasks.UnityCreateManualActivationFile), Arguments = "-createManualActivationFile")]
 public partial class UnityCreateManualActivationFileSettings : UnityOptionsBase
@@ -83,6 +85,7 @@ public partial class UnityCreateManualActivationFileSettings : UnityOptionsBase
 #endregion
 #region UnityManualLicenseFileSettings
 /// <inheritdoc cref="UnityTasks.UnityManualLicenseFile(Fallout.Common.Tools.Unity.UnityManualLicenseFileSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(UnityTasks), Command = nameof(UnityTasks.UnityManualLicenseFile))]
 public partial class UnityManualLicenseFileSettings : UnityOptionsBase
@@ -107,6 +110,7 @@ public partial class UnityManualLicenseFileSettings : UnityOptionsBase
 #endregion
 #region UnitySettings
 /// <inheritdoc cref="UnityTasks.Unity(Fallout.Common.Tools.Unity.UnitySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(UnityTasks), Command = nameof(UnityTasks.Unity))]
 public partial class UnitySettings : UnityProjectOptions
@@ -161,6 +165,7 @@ public partial class UnitySettings : UnityProjectOptions
 #endregion
 #region UnityReturnLicenseSettings
 /// <inheritdoc cref="UnityTasks.UnityReturnLicense(Fallout.Common.Tools.Unity.UnityReturnLicenseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(UnityTasks), Command = nameof(UnityTasks.UnityReturnLicense), Arguments = "-returnlicense")]
 public partial class UnityReturnLicenseSettings : UnityOptionsBase
@@ -183,6 +188,7 @@ public partial class UnityReturnLicenseSettings : UnityOptionsBase
 #endregion
 #region UnityRunTestsSettings
 /// <inheritdoc cref="UnityTasks.UnityRunTests(Fallout.Common.Tools.Unity.UnityRunTestsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(UnityTasks), Command = nameof(UnityTasks.UnityRunTests), Arguments = "-runTests")]
 public partial class UnityRunTestsSettings : UnityProjectOptions
@@ -213,6 +219,7 @@ public partial class UnityRunTestsSettings : UnityProjectOptions
 #endregion
 #region UnityOptionsBase
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class UnityOptionsBase : ToolOptions
 {
@@ -228,6 +235,7 @@ public partial class UnityOptionsBase : ToolOptions
 #endregion
 #region UnityProjectOptions
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class UnityProjectOptions : UnityOptionsBase
 {
@@ -273,6 +281,7 @@ public partial class UnityProjectOptions : UnityOptionsBase
 #endregion
 #region UnityCreateManualActivationFileSettingsExtensions
 /// <inheritdoc cref="UnityTasks.UnityCreateManualActivationFile(Fallout.Common.Tools.Unity.UnityCreateManualActivationFileSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class UnityCreateManualActivationFileSettingsExtensions
 {
@@ -372,6 +381,7 @@ public static partial class UnityCreateManualActivationFileSettingsExtensions
 #endregion
 #region UnityManualLicenseFileSettingsExtensions
 /// <inheritdoc cref="UnityTasks.UnityManualLicenseFile(Fallout.Common.Tools.Unity.UnityManualLicenseFileSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class UnityManualLicenseFileSettingsExtensions
 {
@@ -479,6 +489,7 @@ public static partial class UnityManualLicenseFileSettingsExtensions
 #endregion
 #region UnitySettingsExtensions
 /// <inheritdoc cref="UnityTasks.Unity(Fallout.Common.Tools.Unity.UnitySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class UnitySettingsExtensions
 {
@@ -760,6 +771,7 @@ public static partial class UnitySettingsExtensions
 #endregion
 #region UnityReturnLicenseSettingsExtensions
 /// <inheritdoc cref="UnityTasks.UnityReturnLicense(Fallout.Common.Tools.Unity.UnityReturnLicenseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class UnityReturnLicenseSettingsExtensions
 {
@@ -859,6 +871,7 @@ public static partial class UnityReturnLicenseSettingsExtensions
 #endregion
 #region UnityRunTestsSettingsExtensions
 /// <inheritdoc cref="UnityTasks.UnityRunTests(Fallout.Common.Tools.Unity.UnityRunTestsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class UnityRunTestsSettingsExtensions
 {
@@ -1020,6 +1033,7 @@ public static partial class UnityRunTestsSettingsExtensions
 #endregion
 #region UnityOptionsBaseExtensions
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class UnityOptionsBaseExtensions
 {
@@ -1083,6 +1097,7 @@ public static partial class UnityOptionsBaseExtensions
 #endregion
 #region UnityProjectOptionsExtensions
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class UnityProjectOptionsExtensions
 {
@@ -1354,6 +1369,7 @@ public static partial class UnityProjectOptionsExtensions
 #region UnityBuildTarget
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<UnityBuildTarget>))]
 public partial class UnityBuildTarget : Enumeration
@@ -1405,6 +1421,7 @@ public partial class UnityBuildTarget : Enumeration
 #region UnityGLCore
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<UnityGLCore>))]
 public partial class UnityGLCore : Enumeration
@@ -1426,6 +1443,7 @@ public partial class UnityGLCore : Enumeration
 #region UnityGLES
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<UnityGLES>))]
 public partial class UnityGLES : Enumeration
@@ -1442,6 +1460,7 @@ public partial class UnityGLES : Enumeration
 #region UnityStackTraceLogType
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<UnityStackTraceLogType>))]
 public partial class UnityStackTraceLogType : Enumeration
@@ -1458,6 +1477,7 @@ public partial class UnityStackTraceLogType : Enumeration
 #region UnityPlatformTextureFormat
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<UnityPlatformTextureFormat>))]
 public partial class UnityPlatformTextureFormat : Enumeration
@@ -1477,6 +1497,7 @@ public partial class UnityPlatformTextureFormat : Enumeration
 #region UnityTestPlatform
 /// <summary>Used within <see cref="UnityTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<UnityTestPlatform>))]
 public partial class UnityTestPlatform : Enumeration

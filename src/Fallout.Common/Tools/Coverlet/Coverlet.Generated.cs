@@ -18,6 +18,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Coverlet;
 
 /// <summary><p><c>Coverlet</c> is a cross platform code coverage library for .NET Core, with support for line, branch and method coverage.The <c>dotnet test</c> command is used to execute unit tests in a given project. Unit tests are console application projects that have dependencies on the unit test framework (for example, MSTest, NUnit, or xUnit) and the dotnet test runner for the unit testing framework. These are packaged as NuGet packages and are restored as ordinary dependencies for the project.</p><p>For more details, visit the <a href="https://github.com/tonerdo/coverlet/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class CoverletTasks : ToolTasks, IRequireNuGetPackage
@@ -37,6 +38,7 @@ public partial class CoverletTasks : ToolTasks, IRequireNuGetPackage
 }
 #region CoverletSettings
 /// <inheritdoc cref="CoverletTasks.Coverlet(Fallout.Common.Tools.Coverlet.CoverletSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(CoverletTasks), Command = nameof(CoverletTasks.Coverlet))]
 public partial class CoverletSettings : ToolOptions
@@ -69,6 +71,7 @@ public partial class CoverletSettings : ToolOptions
 #endregion
 #region CoverletSettingsExtensions
 /// <inheritdoc cref="CoverletTasks.Coverlet(Fallout.Common.Tools.Coverlet.CoverletSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class CoverletSettingsExtensions
 {
@@ -256,6 +259,7 @@ public static partial class CoverletSettingsExtensions
 #endregion
 #region DotNetTestSettingsExtensions
 /// <summary>Used within <see cref="CoverletTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotNetTestSettingsExtensions
 {
@@ -324,6 +328,7 @@ public static partial class DotNetTestSettingsExtensions
 #region CoverletOutputFormat
 /// <summary>Used within <see cref="CoverletTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CoverletOutputFormat>))]
 public partial class CoverletOutputFormat : Enumeration
@@ -342,6 +347,7 @@ public partial class CoverletOutputFormat : Enumeration
 #region CoverletThresholdType
 /// <summary>Used within <see cref="CoverletTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CoverletThresholdType>))]
 public partial class CoverletThresholdType : Enumeration
