@@ -39,7 +39,6 @@ internal sealed class CakeConvertCommand : IFalloutCommand
     {
         ToolBanner.Print();
         Logging.Configure();
-        Telemetry.ConvertCake();
         ProjectModelTasks.Initialize();
 
         Host.Warning(

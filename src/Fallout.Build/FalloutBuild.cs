@@ -55,7 +55,6 @@ namespace Fallout.Common;
 [SerializeBuildGraph(Priority = 20)]
 [HandlePlanRequests(Priority = 10)]
 [HandleHelpRequests(Priority = 5)]
-[Telemetry]
 [HandleVisualStudioDebugging]
 [InjectNonParameterValues(Priority = -100)]
 // After finish
