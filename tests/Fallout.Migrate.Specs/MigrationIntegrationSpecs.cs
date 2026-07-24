@@ -34,7 +34,7 @@ public class MigrationIntegrationSpecs
 
             var buildSh = File.ReadAllText(Path.Combine(temp, "build.sh"));
             buildSh.Should().Contain("dotnet fallout");
-            buildSh.Should().Contain("FALLOUT_TELEMETRY_OPTOUT");
+            buildSh.Should().NotContain("TELEMETRY_OPTOUT"); // telemetry removed — opt-out stripped, not renamed (ADR-0010)
             buildSh.Should().Contain(".fallout/temp");
 
             // .nuke/ moved to .fallout/.
