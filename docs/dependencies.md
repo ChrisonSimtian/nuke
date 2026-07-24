@@ -64,12 +64,6 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 |---|---|
 | `NuGet.Packaging` | Read .nupkg metadata. Used by `NuGetVersionResolver`, `ProjectUpdater`. |
 
-## Telemetry — currently inactive
-
-| Package | Purpose | Status |
-|---|---|---|
-| `Microsoft.ApplicationInsights` | Telemetry client | **Dead weight today.** `Telemetry.cs` short-circuits because `InstrumentationKey = ""` (the original NUKE key was matkoch-owned, we don't reuse). Removal tracked in [#79](https://github.com/Fallout-build/Fallout/issues/79). Re-introduce when we stand up a Fallout-owned endpoint. |
-
 ## Vendored source
 
 | Package | Source | Why vendored |

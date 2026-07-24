@@ -116,7 +116,7 @@ You can examine the status of targets by using any of the appropriate `ICollecti
 
 ## Build Events
 
-For implementing cross-cutting concerns, like telemetry and similar, you can hook into various build events:
+For implementing cross-cutting concerns, like logging or notifications, you can hook into various build events:
 
 ```csharp title="FalloutBuild.cs"
 abstract class FalloutBuild
