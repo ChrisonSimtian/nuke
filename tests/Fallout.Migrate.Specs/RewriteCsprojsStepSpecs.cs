@@ -35,6 +35,27 @@ public class RewriteCsprojsStepSpecs
                              <Project Sdk="Microsoft.NET.Sdk">
                                <PropertyGroup>
                                  <NukeRootDirectory>.\..</NukeRootDirectory>
+                               </PropertyGroup>
+                             </Project>
+                             """;
+
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+
+        result.EditCount.Should().Be(2); // 1 opening + 1 closing tag
+        result.Content.Should().Contain("<FalloutRootDirectory>");
+        result.Content.Should().Contain("</FalloutRootDirectory>");
+        result.Content.Should().NotContain("<NukeRootDirectory>");
+    }
+
+    [Fact]
+    public void StripsTelemetryVersionProperty()
+    {
+        // Telemetry was removed from Fallout (ADR-0010): NukeTelemetryVersion is dropped, not
+        // renamed to a dead FalloutTelemetryVersion. Sibling properties are left intact.
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <NukeRootDirectory>.\..</NukeRootDirectory>
                                  <NukeTelemetryVersion>1</NukeTelemetryVersion>
                                </PropertyGroup>
                              </Project>
@@ -42,11 +63,8 @@ public class RewriteCsprojsStepSpecs
 
         var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
-        result.EditCount.Should().Be(4); // 2 opening + 2 closing tags
+        result.Content.Should().NotContain("TelemetryVersion");
         result.Content.Should().Contain("<FalloutRootDirectory>");
-        result.Content.Should().Contain("</FalloutRootDirectory>");
-        result.Content.Should().Contain("<FalloutTelemetryVersion>");
-        result.Content.Should().NotContain("<NukeRootDirectory>");
     }
 
     [Fact]

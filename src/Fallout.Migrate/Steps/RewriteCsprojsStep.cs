@@ -34,12 +34,19 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     // with the literal "Nuke".
     private static readonly Regex msBuildPropertyPattern = new(
         @"\bNuke(?=" +
-        "(?:RootDirectory|ScriptDirectory|TelemetryVersion|BaseDirectory|BaseNamespace|" +
+        "(?:RootDirectory|ScriptDirectory|BaseDirectory|BaseNamespace|" +
         "UseNestedNamespaces|RepositoryUrl|UpdateReferences|ContinueOnError|TaskTimeout|" +
         "Timeout|TasksEnabled|DefaultExcludes|ExcludeBoot|ExcludeConfig|ExcludeLogs|" +
         "ExcludeDirectoryBuild|ExcludeCi|SpecificationFiles|ExternalFiles|TasksAssembly|" +
         "TasksDirectory)\\b)",
         RegexOptions.Compiled);
+
+    // Strip the telemetry-version property entirely — telemetry was removed from Fallout
+    // (ADR-0010), so a migrated project must not carry a dead <FalloutTelemetryVersion>.
+    // Matches the whole element line (either legacy Nuke* or already-Fallout* spelling).
+    private static readonly Regex telemetryVersionPropertyPattern = new(
+        @"^[ \t]*<(?<tag>(?:Nuke|Fallout)TelemetryVersion)>.*?</\k<tag>>\s*\r?\n?",
+        RegexOptions.Compiled | RegexOptions.Multiline);
 
     // Strip explicit `System.Security.Cryptography.Xml` PackageReferences. NUKE-era projects
     // often pinned this directly at an older major (e.g. 9.x). Fallout.Common 10.2.12+ transitively
@@ -102,7 +109,14 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
             return "Fallout";
         });
 
-        // Pass 3 — strip the stale System.Security.Cryptography.Xml direct pin.
+        // Pass 3 — strip the telemetry-version property (feature removed in ADR-0010).
+        content = telemetryVersionPropertyPattern.Replace(content, _ =>
+        {
+            edits++;
+            return string.Empty;
+        });
+
+        // Pass 4 — strip the stale System.Security.Cryptography.Xml direct pin.
         content = cryptographyXmlPackageRefPattern.Replace(content, _ =>
         {
             edits++;
