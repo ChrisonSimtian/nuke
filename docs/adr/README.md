@@ -40,3 +40,4 @@ If you change a decision, do NOT silently rewrite the old ADR — add a new one 
 | [0004](0004-calendar-versioning-and-dual-pace-channels.md) | Calendar versioning + dual-pace channels (edge/stable) + experimental APIs | Accepted (§3 amended by 0007; channel ladder §2 superseded by 0008) |
 | [0007](0007-cut-release-branch-on-demand.md) | Cut `release/YYYY` on demand, not preemptively | Accepted |
 | [0008](0008-collapse-experimental-into-main.md) | Collapse `experimental` into `main`; `main` is the sole prerelease lane | Accepted |
+| [0010](0010-no-telemetry-collection.md) | Fallout collects no telemetry | Accepted |

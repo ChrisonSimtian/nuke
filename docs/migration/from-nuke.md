@@ -66,8 +66,9 @@ If your build had previously worked against NUKE, it should now work against Fal
 | Fully-qualified type refs | `Nuke.Common.AbsolutePath` | `Fallout.Common.AbsolutePath` |
 | Base class name | `: NukeBuild` | `: FalloutBuild` |
 | Base interface name | `: INukeBuild` | `: IFalloutBuild` |
-| MSBuild properties in `_build.csproj` | `<NukeRootDirectory>`, `<NukeTelemetryVersion>` | `<FalloutRootDirectory>`, `<FalloutTelemetryVersion>` |
-| Bootstrap scripts | `dotnet nuke`, `NUKE_TELEMETRY_OPTOUT`, `.nuke/temp` | `dotnet fallout`, `FALLOUT_TELEMETRY_OPTOUT`, `.fallout/temp` |
+| MSBuild properties in `_build.csproj` | `<NukeRootDirectory>` | `<FalloutRootDirectory>` |
+| Bootstrap scripts | `dotnet nuke`, `.nuke/temp` | `dotnet fallout`, `.fallout/temp` |
+| Telemetry knobs (removed) | `<NukeTelemetryVersion>`, `NUKE_TELEMETRY_OPTOUT` | *dropped* — Fallout has no telemetry ([ADR-0010](../adr/0010-no-telemetry-collection.md)); `fallout migrate` strips them |
 | Config directory | `.nuke/` | `.fallout/` (contents preserved) |
 
 The 1:1 namespace prefix swap is the only structural change. Type names (other than `NukeBuild` / `INukeBuild`) keep their identifiers — `[Parameter]`, `[Solution]`, `[GitHubActions]`, `Solution`, `GitRepository`, etc. all stay the same.
@@ -103,9 +104,9 @@ You'll need a GitHub Personal Access Token with the `read:packages` scope. Then 
 
 If you'd rather drive the rewrite by hand (small projects, or you want to learn what the tool does):
 
-1. Edit `build/_build.csproj`. For every `<PackageReference Include="Nuke.X" ...>`, change `Nuke.X` → `Fallout.X`. Same for `<NukeRootDirectory>` / `<NukeTelemetryVersion>` MSBuild properties.
+1. Edit `build/_build.csproj`. For every `<PackageReference Include="Nuke.X" ...>`, change `Nuke.X` → `Fallout.X`. Same for the `<NukeRootDirectory>` MSBuild property. Delete any `<NukeTelemetryVersion>` — Fallout has no telemetry ([ADR-0010](../adr/0010-no-telemetry-collection.md)).
 2. In every `.cs` file under `build/`, change `using Nuke.X.Y;` to `using Fallout.X.Y;`. Replace `: NukeBuild` with `: FalloutBuild` and `INukeBuild` with `IFalloutBuild`.
-3. In `build.ps1`, `build.sh`, `build.cmd`: `dotnet nuke` → `dotnet fallout`, `NUKE_TELEMETRY_OPTOUT` → `FALLOUT_TELEMETRY_OPTOUT`, `.nuke/temp` → `.fallout/temp`.
+3. In `build.ps1`, `build.sh`, `build.cmd`: `dotnet nuke` → `dotnet fallout`, `.nuke/temp` → `.fallout/temp`. Delete any `NUKE_TELEMETRY_OPTOUT` line (no telemetry to opt out of).
 4. Rename the `.nuke/` directory to `.fallout/`. Contents are preserved.
 5. Run `./build.ps1` to verify.
 
