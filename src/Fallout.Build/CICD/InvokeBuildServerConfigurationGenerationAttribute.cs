@@ -57,7 +57,6 @@ public class InvokeBuildServerConfigurationGenerationAttribute
         if (changedFiles.Count == 0)
             return false;
 
-        Telemetry.ConfigurationGenerated(generator.HostType, generator.Id, Build);
         // TODO: multi-line logging
         Log.Warning("Configuration files for {Configuration} have changed.", generator.DisplayName);
         changedFiles.ForEach(x => Log.Verbose("Updated {File}", x));

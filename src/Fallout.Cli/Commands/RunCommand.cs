@@ -75,7 +75,6 @@ internal sealed class RunCommand : IFalloutCommand
         startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
         startInfo.Environment["DOTNET_NOLOGO"] = "1";
         startInfo.Environment["DOTNET_ROLL_FORWARD"] = "Major";
-        startInfo.Environment["FALLOUT_TELEMETRY_OPTOUT"] = "1";
         startInfo.Environment[GlobalToolVersionEnvironmentKey] = typeof(RunCommand).Assembly.GetVersionText();
         startInfo.Environment[GlobalToolStartTimeEnvironmentKey] = DateTime.Now.ToString("O");
 

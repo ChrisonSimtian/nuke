@@ -42,7 +42,6 @@ internal sealed class SetupCommand : IFalloutCommand
     {
         ToolBanner.Print();
         Logging.Configure();
-        Telemetry.SetupBuild();
 
         AnsiConsole.WriteLine();
         AnsiConsole.MarkupLine("[bold]Let's setup a new build![/]");
@@ -141,7 +140,6 @@ internal sealed class SetupCommand : IFalloutCommand
                         RootDirectory = buildDirectory.GetWinRelativePathTo(rootDirectory),
                         ScriptDirectory = buildDirectory.GetWinRelativePathTo(WorkingDirectory),
                         TargetFramework = TARGET_FRAMEWORK,
-                        TelemetryVersion = Telemetry.CurrentVersion,
                         FalloutVersion = falloutVersion,
                     })));
 

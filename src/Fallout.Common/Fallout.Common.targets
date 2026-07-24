@@ -10,7 +10,6 @@
     <FalloutTasksEnabled Condition="'$(FalloutTasksEnabled)' == '' AND '$(NukeTasksEnabled)' != ''">$(NukeTasksEnabled)</FalloutTasksEnabled>
     <FalloutRootDirectory Condition="'$(FalloutRootDirectory)' == '' AND '$(NukeRootDirectory)' != ''">$(NukeRootDirectory)</FalloutRootDirectory>
     <FalloutScriptDirectory Condition="'$(FalloutScriptDirectory)' == '' AND '$(NukeScriptDirectory)' != ''">$(NukeScriptDirectory)</FalloutScriptDirectory>
-    <FalloutTelemetryVersion Condition="'$(FalloutTelemetryVersion)' == '' AND '$(NukeTelemetryVersion)' != ''">$(NukeTelemetryVersion)</FalloutTelemetryVersion>
     <FalloutDefaultExcludes Condition="'$(FalloutDefaultExcludes)' == '' AND '$(NukeDefaultExcludes)' != ''">$(NukeDefaultExcludes)</FalloutDefaultExcludes>
     <FalloutExcludeBoot Condition="'$(FalloutExcludeBoot)' == '' AND '$(NukeExcludeBoot)' != ''">$(NukeExcludeBoot)</FalloutExcludeBoot>
     <FalloutExcludeConfig Condition="'$(FalloutExcludeConfig)' == '' AND '$(NukeExcludeConfig)' != ''">$(NukeExcludeConfig)</FalloutExcludeConfig>
@@ -90,7 +89,6 @@
     <_LegacyFalloutProperty Include="NukeTasksEnabled"             Condition="'$(NukeTasksEnabled)' != ''"             ><NewName>FalloutTasksEnabled</NewName></_LegacyFalloutProperty>
     <_LegacyFalloutProperty Include="NukeRootDirectory"            Condition="'$(NukeRootDirectory)' != ''"            ><NewName>FalloutRootDirectory</NewName></_LegacyFalloutProperty>
     <_LegacyFalloutProperty Include="NukeScriptDirectory"          Condition="'$(NukeScriptDirectory)' != ''"          ><NewName>FalloutScriptDirectory</NewName></_LegacyFalloutProperty>
-    <_LegacyFalloutProperty Include="NukeTelemetryVersion"         Condition="'$(NukeTelemetryVersion)' != ''"         ><NewName>FalloutTelemetryVersion</NewName></_LegacyFalloutProperty>
     <_LegacyFalloutProperty Include="NukeDefaultExcludes"          Condition="'$(NukeDefaultExcludes)' != ''"          ><NewName>FalloutDefaultExcludes</NewName></_LegacyFalloutProperty>
     <_LegacyFalloutProperty Include="NukeExcludeBoot"              Condition="'$(NukeExcludeBoot)' != ''"              ><NewName>FalloutExcludeBoot</NewName></_LegacyFalloutProperty>
     <_LegacyFalloutProperty Include="NukeExcludeConfig"            Condition="'$(NukeExcludeConfig)' != ''"            ><NewName>FalloutExcludeConfig</NewName></_LegacyFalloutProperty>

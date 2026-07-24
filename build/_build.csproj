@@ -9,7 +9,6 @@
     <RootNamespace></RootNamespace>
     <NoWarn>CS0649;CS0169</NoWarn>
     <FalloutRootDirectory>.\..</FalloutRootDirectory>
-    <FalloutTelemetryVersion>1</FalloutTelemetryVersion>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <IsPackable>false</IsPackable>
   </PropertyGroup>

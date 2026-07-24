@@ -7,7 +7,6 @@
     <NoWarn>CS0649;CS0169;CA1050;CA1822;CA2211;IDE1006</NoWarn>
     <FalloutRootDirectory>_ROOT_DIRECTORY_</FalloutRootDirectory>
     <FalloutScriptDirectory>_SCRIPT_DIRECTORY_</FalloutScriptDirectory>
-    <FalloutTelemetryVersion>_TELEMETRY_VERSION_</FalloutTelemetryVersion>
     <IsPackable>false</IsPackable>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <UseArtifactsOutput>false</UseArtifactsOutput>

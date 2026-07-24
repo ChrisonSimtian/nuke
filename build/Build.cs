@@ -103,9 +103,6 @@ partial class Build
     [Parameter]
     public int TestDegreeOfParallelism { get; } = 1;
 
-    Configure<DotNetTestSettings> ITest.TestSettings => _ => _
-        .SetProcessEnvironmentVariable("FALLOUT_TELEMETRY_OPTOUT", bool.TrueString);
-
     Target ITest.Test => _ => _
         .Inherit<ITest>()
         .Partition(2);
