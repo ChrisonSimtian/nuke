@@ -11,6 +11,8 @@ namespace Fallout.Persistence.Solution.Model;
 /// This contains a list of projects and folders and the information
 /// required to build the solution in different configurations.
 /// </summary>
+// [PublicAPI]: surfaces through Fallout.Solution's public API (Solution ctor + GetModel) — IDE authoring hint, see docs/adr/0011-reintroduce-publicapi-ide-hint.md
+[JetBrains.Annotations.PublicAPI]
 public sealed class SolutionModel : PropertyContainerModel
 {
 #if NETFRAMEWORK || NETSTANDARD
