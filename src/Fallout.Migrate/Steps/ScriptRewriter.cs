@@ -13,12 +13,16 @@ internal static class ScriptRewriter
     /// <summary>The ordered find/replace patterns applied by <see cref="Rewrite"/>.</summary>
     private static readonly (Regex Pattern, string Replacement)[] patterns =
     {
+        // Strip any telemetry opt-out line entirely — telemetry was removed from Fallout
+        // (ADR-0010), so there is nothing to opt out of. Handles bash `export`, PowerShell
+        // `$env:`, and cmd `set` spellings by matching the whole line. Runs before the
+        // env-var renames below so the line is gone rather than renamed to a dead variable.
+        (new Regex(@"^.*\b(?:NUKE|FALLOUT)_TELEMETRY_OPTOUT\b.*\r?\n?", RegexOptions.Compiled | RegexOptions.Multiline), ""),
         // `dotnet nuke` invocations
         (new Regex(@"\bdotnet\s+nuke\b", RegexOptions.Compiled), "dotnet fallout"),
         // .nuke directory references → .fallout
         (new Regex(@"(?<=[\\/.""'\s])\.nuke(?=[\\/""'\s])", RegexOptions.Compiled), ".fallout"),
         // Legacy env vars (consumer-facing ones from P3.5c)
-        (new Regex(@"\bNUKE_TELEMETRY_OPTOUT\b", RegexOptions.Compiled), "FALLOUT_TELEMETRY_OPTOUT"),
         (new Regex(@"\bNUKE_GLOBAL_TOOL_VERSION\b", RegexOptions.Compiled), "FALLOUT_GLOBAL_TOOL_VERSION"),
         (new Regex(@"\bNUKE_GLOBAL_TOOL_START_TIME\b", RegexOptions.Compiled), "FALLOUT_GLOBAL_TOOL_START_TIME"),
         (new Regex(@"\bNUKE_INTERNAL_INTERCEPTOR\b", RegexOptions.Compiled), "FALLOUT_INTERNAL_INTERCEPTOR"),
