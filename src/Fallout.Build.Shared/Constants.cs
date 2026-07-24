@@ -53,7 +53,6 @@ internal static class Constants
     internal const string FalloutRepositoryGit = $"{FalloutWebsite}.git";
     internal const string FalloutRawRepository = $"https://raw.githubusercontent.com/{FalloutOwner}/{FalloutRepoName}/main";
     internal const string FalloutDocsUrl = "https://docs.fallout.build/";
-    internal const string FalloutTelemetryDocsUrl = $"{FalloutWebsite}#telemetry";
     internal const string FalloutNotificationsUrl = $"{FalloutRawRepository}/notifications.json";
 
     // Upstream NUKE references — only for attribution / fallback recognition of legacy project URLs.
