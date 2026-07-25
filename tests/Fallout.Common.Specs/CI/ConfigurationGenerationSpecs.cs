@@ -357,6 +357,23 @@ public class ConfigurationGenerationSpecs
                 }
             );
 
+            // Every emitted action is overridable, in each accepted form: a bare ref appended to the default
+            // action name, a complete reference, a SHA pin carrying its version as a trailing comment, and a
+            // fork. Pack is invoked because it produces artifacts, so the upload step actually renders.
+            yield return
+            (
+                "action-overrides",
+                new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
+                {
+                    On = new[] { GitHubActionsTrigger.Push },
+                    InvokedTargets = new[] { nameof(Pack) },
+                    CheckoutAction = "v8",
+                    SetupDotNetAction = "actions/setup-dotnet@v7",
+                    CacheAction = "0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.4",
+                    UploadArtifactAction = "my-org/upload-artifact@v7"
+                }
+            );
+
             yield return
             (
                 null,

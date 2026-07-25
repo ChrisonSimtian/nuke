@@ -179,6 +179,43 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     /// </summary>
     public string[] CheckoutWith { get; set; } = new string[0];
 
+    /// <summary>
+    /// The <c>actions/checkout</c> reference the generated workflow uses, so a newer action release doesn't
+    /// have to wait on a Fallout release. Two forms are accepted:
+    /// <list type="bullet">
+    /// <item>a bare ref, appended to <c>actions/checkout</c> — <c>"v8"</c> emits <c>actions/checkout@v8</c>.
+    /// A ref that itself contains a <c>/</c> (a branch such as <c>releases/v1</c>) reads exactly like an
+    /// <c>owner/repo</c>, so it needs a leading <c>@</c> — <c>"@releases/v1"</c>; the bare slash form is
+    /// otherwise rejected as ambiguous rather than guessed at;</item>
+    /// <item>a complete reference (one that contains an <c>@</c>), emitted verbatim —
+    /// <c>"my-org/checkout@v9"</c>, or <c>"actions/checkout@11bd7190… # v7.1.0"</c> to pin a commit with the
+    /// version as a trailing comment.</item>
+    /// </list>
+    /// A trailing <c># comment</c> is allowed on either form and is split off before the value is
+    /// classified, so a <c>/</c> or <c>@</c> inside it changes nothing. A malformed reference is rejected
+    /// when the workflow is generated. Null or whitespace restores the pinned default.
+    /// </summary>
+    public string CheckoutAction { get; set; } = GitHubActionsDefaults.CheckoutAction;
+
+    /// <summary>
+    /// The <c>actions/cache</c> reference the generated workflow uses; same forms as
+    /// <see cref="CheckoutAction"/>. Set <c>"v4"</c> to stay on the last major that runs on node20, for
+    /// self-hosted runners older than 2.327.1.
+    /// </summary>
+    public string CacheAction { get; set; } = GitHubActionsDefaults.CacheAction;
+
+    /// <summary>
+    /// The <c>actions/setup-dotnet</c> reference the generated workflow uses; same forms as
+    /// <see cref="CheckoutAction"/>.
+    /// </summary>
+    public string SetupDotNetAction { get; set; } = GitHubActionsDefaults.SetupDotNetAction;
+
+    /// <summary>
+    /// The <c>actions/upload-artifact</c> reference the generated workflow uses; same forms as
+    /// <see cref="CheckoutAction"/>.
+    /// </summary>
+    public string UploadArtifactAction { get; set; } = GitHubActionsDefaults.UploadArtifactAction;
+
     public override CustomFileWriter CreateWriter(StreamWriter streamWriter)
     {
         return new CustomFileWriter(streamWriter, indentationFactor: 2, commentPrefix: "#");
@@ -200,6 +237,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         }
 
         ValidateWorkflowDispatchInputs();
+        ValidateActionReferences();
 
         var configuration = new GitHubActionsConfiguration
                             {
@@ -247,6 +285,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     {
         var checkout = new GitHubActionsCheckoutStep
                        {
+                           Uses = CheckoutAction,
                            Submodules = submodules,
                            Lfs = lfs,
                            FetchDepth = fetchDepth,
@@ -259,6 +298,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         var cache = CacheKeyFiles.Any()
             ? new GitHubActionsCacheStep
               {
+                  Uses = CacheAction,
                   IncludePatterns = CacheIncludePatterns,
                   ExcludePatterns = CacheExcludePatterns,
                   KeyFiles = CacheKeyFiles
@@ -267,6 +307,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
 
         var run = new GitHubActionsRunStep
                   {
+                      SetupDotNetAction = SetupDotNetAction,
                       InvokedTargets = InvokedTargets,
                       Imports = GetImports().ToDictionary(x => x.Key, x => x.Value)
                   };
@@ -284,6 +325,7 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
             foreach (var artifact in artifactPaths)
                 artifacts.Add(new GitHubActionsArtifactStep
                               {
+                                  Uses = UploadArtifactAction,
                                   Name = artifact.ToString().TrimStart(artifact.Parent.ToString()).TrimStart('/', '\\'),
                                   Path = Build.RootDirectory.GetUnixRelativePathTo(artifact),
                                   Condition = PublishCondition
@@ -313,6 +355,24 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         return steps.ToArray();
     }
 
+    // The cache and artifact steps are conditional, so their overrides would otherwise go unvalidated —
+    // and silently ignored — whenever caching or artifact publishing is off. Resolving all four here means
+    // a malformed reference fails at generation time; the discarded results are re-resolved by the step
+    // setters, which is cheap and keeps the steps the single owner of what they emit.
+    private void ValidateActionReferences()
+    {
+        foreach (var (property, value, defaultAction) in new[]
+                 {
+                     (nameof(CheckoutAction), CheckoutAction, GitHubActionsDefaults.CheckoutAction),
+                     (nameof(CacheAction), CacheAction, GitHubActionsDefaults.CacheAction),
+                     (nameof(SetupDotNetAction), SetupDotNetAction, GitHubActionsDefaults.SetupDotNetAction),
+                     (nameof(UploadArtifactAction), UploadArtifactAction, GitHubActionsDefaults.UploadArtifactAction)
+                 })
+        {
+            GitHubActionsActionReference.Resolve(defaultAction, value, $"'{property}' in workflow '{name}'");
+        }
+    }
+
     private void ValidateCustomSteps(GitHubActionsStepPipeline pipeline)
     {
         foreach (var step in pipeline.AllInserts)
@@ -327,6 +387,17 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                 $"Custom step '{id}' in workflow '{name}' sets '{nameof(GitHubActionsCustomStep.With)}' but no '{nameof(GitHubActionsCustomStep.Uses)}'; 'with:' is only valid on a 'uses:' step");
             Assert.True(step.Shell.IsNullOrWhiteSpace() || !hasUses,
                 $"Custom step '{id}' in workflow '{name}' sets '{nameof(GitHubActionsCustomStep.Shell)}' on a 'uses:' step; shell applies only to run steps");
+
+            // A custom step's Uses is emitted verbatim into an unquoted YAML scalar, and — unlike the
+            // built-in steps' same-named property — carries no default to resolve a bare ref against. The
+            // whitespace half keeps a stray token or an injected key out of the workflow file; the '/' half
+            // turns the shorthand the built-in steps accept into an error rather than a broken 'uses: v8'.
+            if (hasUses)
+            {
+                var uses = step.Uses.Trim();
+                Assert.True(uses.All(x => !char.IsWhiteSpace(x) && !char.IsControl(x)) && uses.Contains('/'),
+                    $"Custom step '{id}' in workflow '{name}' must name its action in full — '{nameof(GitHubActionsCustomStep.Uses)}' takes 'owner/repo@ref', './local-action', or 'docker://image', never a bare ref");
+            }
         }
     }
 
