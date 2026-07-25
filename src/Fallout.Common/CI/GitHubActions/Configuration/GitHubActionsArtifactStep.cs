@@ -6,6 +6,18 @@ namespace Fallout.Common.CI.GitHubActions.Configuration;
 
 public class GitHubActionsArtifactStep : GitHubActionsStep
 {
+    /// <summary>
+    /// The upload-artifact action to reference. Accepts a complete <c>owner/repo@ref</c> or a bare ref that
+    /// gets appended to <c>actions/upload-artifact</c>. Defaults to the version the generator pins; setting
+    /// null or whitespace restores it.
+    /// </summary>
+    public string Uses
+    {
+        get;
+        set => field = GitHubActionsActionReference.Resolve(
+            GitHubActionsDefaults.UploadArtifactAction, value, $"{nameof(GitHubActionsArtifactStep)}.{nameof(Uses)}");
+    } = GitHubActionsDefaults.UploadArtifactAction;
+
     public string Name { get; set; }
     public string Path { get; set; }
     public string Condition { get; set; }
@@ -13,7 +25,7 @@ public class GitHubActionsArtifactStep : GitHubActionsStep
     public override void Write(CustomFileWriter writer)
     {
         writer.WriteLine("- name: " + $"Publish: {Name}".SingleQuoteYaml());
-        writer.WriteLine("  uses: actions/upload-artifact@v7");
+        writer.WriteLine($"  uses: {Uses}");
 
         using (writer.Indent())
         {

@@ -6,6 +6,18 @@ namespace Fallout.Common.CI.GitHubActions.Configuration;
 
 public class GitHubActionsCheckoutStep : GitHubActionsStep
 {
+    /// <summary>
+    /// The checkout action to reference. Accepts a complete <c>owner/repo@ref</c> or a bare ref that gets
+    /// appended to <c>actions/checkout</c>. Defaults to the version the generator pins; setting null or
+    /// whitespace restores it.
+    /// </summary>
+    public string Uses
+    {
+        get;
+        set => field = GitHubActionsActionReference.Resolve(
+            GitHubActionsDefaults.CheckoutAction, value, $"{nameof(GitHubActionsCheckoutStep)}.{nameof(Uses)}");
+    } = GitHubActionsDefaults.CheckoutAction;
+
     public GitHubActionsSubmodules? Submodules { get; set; }
     public bool? Lfs { get; set; }
     public uint? FetchDepth { get; set; }
@@ -28,7 +40,7 @@ public class GitHubActionsCheckoutStep : GitHubActionsStep
 
     public override void Write(CustomFileWriter writer)
     {
-        writer.WriteLine("- uses: actions/checkout@v7");
+        writer.WriteLine($"- uses: {Uses}");
 
         if (Submodules.HasValue || Lfs.HasValue || FetchDepth.HasValue || Progress.HasValue ||
             !Filter.IsNullOrWhiteSpace() || !Ref.IsNullOrWhiteSpace() || CheckoutWith.Length > 0)
