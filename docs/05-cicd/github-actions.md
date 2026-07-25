@@ -228,3 +228,38 @@ You can customize the caching step by overwriting the following properties:
     CacheExcludePatterns = new string[0])]
 class Build : FalloutBuild { /* ... */ }
 ```
+
+### Pinning Action Versions
+
+The generated workflow references four marketplace actions. Each one is overridable, so a new action release never has to wait on a Fallout release:
+
+| Property | Action | Default |
+| --- | --- | --- |
+| `CheckoutAction` | [`actions/checkout`](https://github.com/actions/checkout) | `v7` |
+| `CacheAction` | [`actions/cache`](https://github.com/actions/cache) | `v6` |
+| `SetupDotNetAction` | [`actions/setup-dotnet`](https://github.com/actions/setup-dotnet) | `v6` |
+| `UploadArtifactAction` | [`actions/upload-artifact`](https://github.com/actions/upload-artifact) | `v7` |
+
+A value containing an `@` is a complete reference and is emitted as-is; anything else is a bare ref and gets appended to the default action:
+
+```csharp title="Build.cs"
+[GitHubActions(
+    // ...
+    CheckoutAction = "v8",                                                   // actions/checkout@v8
+    CacheAction = "0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.4",       // SHA pin, version as comment
+    UploadArtifactAction = "my-org/upload-artifact@v7")]                     // fork or drop-in replacement
+class Build : FalloutBuild { /* ... */ }
+```
+
+Both forms take a trailing `# comment`, which is what makes the [SHA-pinning](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions#using-third-party-actions) idiom above readable. The comment is split off before the value is classified, so a slash or an `@` inside it changes nothing.
+
+A ref that itself contains a `/` — a branch like `releases/v1` — reads exactly like an `owner/repo`, so it needs a leading `@` to disambiguate:
+
+```csharp
+CheckoutAction = "@releases/v1"     // actions/checkout@releases/v1
+CheckoutAction = "releases/v1"      // error: ambiguous, names neither form
+```
+
+:::note
+`actions/cache@v5` and later run on the node24 runtime and require a self-hosted runner of at least `2.327.1`. Set `CacheAction = "v4"` if your runners are older.
+:::
