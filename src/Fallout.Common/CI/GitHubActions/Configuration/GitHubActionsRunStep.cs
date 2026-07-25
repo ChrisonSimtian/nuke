@@ -6,6 +6,19 @@ namespace Fallout.Common.CI.GitHubActions.Configuration;
 
 public class GitHubActionsRunStep : GitHubActionsStep
 {
+    /// <summary>
+    /// The SDK-setup action to reference — this step emits the setup, the tool restore, and the build run,
+    /// so only the first of the three is configurable. Accepts a complete <c>owner/repo@ref</c> or a bare
+    /// ref that gets appended to <c>actions/setup-dotnet</c>. Defaults to the version the generator pins;
+    /// setting null or whitespace restores it.
+    /// </summary>
+    public string SetupDotNetAction
+    {
+        get;
+        set => field = GitHubActionsActionReference.Resolve(
+            GitHubActionsDefaults.SetupDotNetAction, value, $"{nameof(GitHubActionsRunStep)}.{nameof(SetupDotNetAction)}");
+    } = GitHubActionsDefaults.SetupDotNetAction;
+
     public string[] InvokedTargets { get; set; }
     public Dictionary<string, string> Imports { get; set; }
 
@@ -14,7 +27,7 @@ public class GitHubActionsRunStep : GitHubActionsStep
         writer.WriteLine("- name: 'Setup: .NET SDK'");
         using (writer.Indent())
         {
-            writer.WriteLine("uses: actions/setup-dotnet@v6");
+            writer.WriteLine($"uses: {SetupDotNetAction}");
             writer.WriteLine("with:");
             using (writer.Indent())
             {

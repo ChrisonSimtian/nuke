@@ -83,6 +83,17 @@ public class GitHubActionsCustomStepValidationSpecs
         => Generate(new GitHubActionsCustomStep { Run = new[] { "echo hi" }, Shell = "pwsh" })
             .Should().NotThrow();
 
+    // A custom step's Uses has no default to resolve a bare ref against, so the shorthand the built-in
+    // steps accept must fail loudly here instead of emitting an unusable 'uses: v8'. The same guard keeps
+    // a multi-line value from injecting extra keys into the generated workflow.
+    [Theory]
+    [InlineData("v8")]
+    [InlineData("a/b@v1 with: x")]
+    [InlineData("a/b@v1\n  with:\n    x: y")]
+    public void Uses_that_is_not_a_complete_reference_throws(string uses)
+        => Generate(new GitHubActionsCustomStep { Uses = uses })
+            .Should().Throw<ArgumentException>();
+
     // Collections are publicly settable, so a caller can null them. That must be treated as empty, not crash.
     [Fact]
     public void Null_collections_on_a_uses_step_do_not_throw()

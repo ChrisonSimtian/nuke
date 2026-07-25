@@ -8,6 +8,18 @@ namespace Fallout.Common.CI.GitHubActions.Configuration;
 // https://github.com/actions/cache
 public class GitHubActionsCacheStep : GitHubActionsStep
 {
+    /// <summary>
+    /// The cache action to reference. Accepts a complete <c>owner/repo@ref</c> or a bare ref that gets
+    /// appended to <c>actions/cache</c>. Defaults to the version the generator pins; setting null or
+    /// whitespace restores it.
+    /// </summary>
+    public string Uses
+    {
+        get;
+        set => field = GitHubActionsActionReference.Resolve(
+            GitHubActionsDefaults.CacheAction, value, $"{nameof(GitHubActionsCacheStep)}.{nameof(Uses)}");
+    } = GitHubActionsDefaults.CacheAction;
+
     public string[] IncludePatterns { get; set; }
     public string[] ExcludePatterns { get; set; }
     public string[] KeyFiles { get; set; }
@@ -17,7 +29,7 @@ public class GitHubActionsCacheStep : GitHubActionsStep
         writer.WriteLine("- name: " + $"Cache: {IncludePatterns.JoinCommaSpace()}".SingleQuoteYaml());
         using (writer.Indent())
         {
-            writer.WriteLine("uses: actions/cache@v6");
+            writer.WriteLine($"uses: {Uses}");
             writer.WriteLine("with:");
             using (writer.Indent())
             {
