@@ -208,7 +208,7 @@ public class RewriteCsprojsStepSpecs
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
                                <PropertyGroup>
-                                 <NukeVersion>10.1.0</NukeVersion>
+                                 <NukeVersion >10.1.0</NukeVersion >
                                </PropertyGroup>
                                <ItemGroup>
                                  <PackageReference Include="System.Text.Json" Version="9.0.0" />
@@ -219,11 +219,11 @@ public class RewriteCsprojsStepSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.Content.Should().NotContain("NukeVersion")
             .And.Contain("$(FalloutVersion)", Exactly.Twice())
-            .And.Contain("<FalloutVersion>11.0.0</FalloutVersion>");
+            .And.Contain("<FalloutVersion >11.0.0</FalloutVersion >");
     }
 
     [Fact]
@@ -243,7 +243,7 @@ public class RewriteCsprojsStepSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.Content.Should().NotContain("FalloutVersion")
             .And.Contain("$(CiProjectVersion)", Exactly.Twice())
@@ -265,10 +265,94 @@ public class RewriteCsprojsStepSpecs
                              </Project>
                              """;
 
-        var result = CsprojRewriter.Rewrite(input, TestFalloutVersion);
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
 
         result.Content.Should().Contain("<UnreferencedVersion>10.3.49</UnreferencedVersion>")
-          .And.Contain("<CiProjectVersion>11.0.0</CiProjectVersion>")
-          .And.Contain("$(CiProjectVersion)", Exactly.Once());
+            .And.Contain("<CiProjectVersion>11.0.0</CiProjectVersion>")
+            .And.Contain("$(CiProjectVersion)", Exactly.Once());
+    }
+
+    [Fact]
+    public void Does_not_bump_variables_used_for_non_Fallout_packages()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <NewtonsoftVersion>13.0.3</NewtonsoftVersion>
+                               </PropertyGroup>
+                               <ItemGroup>
+                                 <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftVersion)" />
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+
+        result.EditCount.Should().Be(0);
+        result.Content.Should().Be(input);
+    }
+
+    [Fact]
+    public void Decouples_ambiguously_used_variables()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <PkgVersion>10.1.0</PkgVersion>
+                               </PropertyGroup>
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" Version="$(PkgVersion)" />
+                                 <PackageReference Include="Some.ThirdParty" Version="$(PkgVersion)" />
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+        result.Content.Should()
+          .Contain("<PkgVersion>10.1.0</PkgVersion>")
+          .And.Contain("<FalloutVersion>")
+          .And.Contain("$(FalloutVersion)", Exactly.Once());
+    }
+
+    [Fact]
+    public void Decouples_ambiguously_used_variables_even_when_no_property_group_found()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" Version="$(PkgVersion)" />
+                                 <PackageReference Include="Some.ThirdParty" Version="$(PkgVersion)" />
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+        result.Content.Should()
+            .Contain("<PropertyGroup>")
+            .And.Contain("<FalloutVersion>11.0.0</FalloutVersion>")
+            .And.Contain("$(FalloutVersion)", Exactly.Once())
+            .And.Contain("$(PkgVersion)");
+    }
+
+    [Fact]
+    public void Decouples_ambiguously_used_variables_when_a_property_group_but_no_variable_exists()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                               </PropertyGroup>
+                               <ItemGroup>
+                                 <PackageReference Include="Nuke.Common" Version="$(PkgVersion)" />
+                                 <PackageReference Include="Some.ThirdParty" Version="$(PkgVersion)" />
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+        result.Content.Should()
+            .Contain("<PropertyGroup>")
+            .And.Contain("<FalloutVersion>11.0.0</FalloutVersion>")
+            .And.Contain("$(FalloutVersion)", Exactly.Once())
+            .And.Contain("$(PkgVersion)");
     }
 }
