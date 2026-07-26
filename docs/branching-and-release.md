@@ -12,6 +12,7 @@ A maturity ladder feeding the production line (amended [ADR-0004](adr/0004-calen
 |---|---|---|---|---|
 | `main` | **Integration trunk + sole prerelease lane (`-preview` channel).** Default branch. Both deliberate improvements / bug fixes **and** faster / AI-assisted work land here. Per-commit `…-preview` prereleases to GitHub Packages. **Never nuget.org.** Breaking work accumulates here gated behind `[Experimental("FALLOUT0xx")]` (or on a short-lived topic branch off `main`) for the yearly major. | Long-lived | Yes | **Preview only** (GitHub Packages, no nuget.org / no GH Release) |
 | `release/YYYY` | **Production line** for the calendar year (e.g. `release/2026`), **cut from `main` on demand at the first release of the year, not preemptively** ([ADR-0007](adr/0007-cut-release-branch-on-demand.md)). `-rc.N` → GA. Non-breaking minors/patches only after the cut. | Cut on demand; long-lived once cut | Yes | **Yes** — tags pushed here fire the full release pipeline (nuget.org opt-in) |
+| `release/vMAJOR.MINOR` | **Production line for a semver minor** (e.g. `release/v10.4`) — the shape in use while the line still ships `10.x`, before the CalVer major cut. Same rules and pipeline as `release/YYYY`; both are matched by `publicReleaseRefSpec` and by `validate-ref`. | Cut on demand; long-lived once cut | Yes | **Yes** — same pipeline |
 | `support/v10` (+ `hotfix/v10.1`, `hotfix/v10.2`) | **Legacy** semver `10.x` maintenance line — security/critical fixes only. (Renamed from `release/v10`.) | Long-lived | Yes | Yes — tags fire the pipeline (nuget.org opt-in) |
 | `support/YYYY` | **Retired** year production line (e.g. `support/2026` once 2027 supersedes it). Security/critical fixes only. | Long-lived | Yes | Yes — tags fire the pipeline (nuget.org opt-in) |
 | `release/v11` | **Retired and deleted** — nothing clean shipped; work re-homed onto `2026`. Branch removed per [ADR-0007](adr/0007-cut-release-branch-on-demand.md) §6 (no unique history; dead branches are deletable, tags are the durable markers). | Deleted | — | No |
@@ -23,15 +24,29 @@ This *is* gitflow with the project's vocabulary: `main` ≈ the integration trun
 
 ## Channel taxonomy
 
+### Lines live right now
+
+Keep this block current — the examples further down use these values.
+
+| Line | Branch | Ships | Latest |
+|---|---|---|---|
+| Preview | `main` | `10.0.0-preview.<height>.g<sha>` → GitHub Packages, per commit | rolling |
+| Production | `release/v10.4` | `10.4.0-rc.N` → GitHub Packages + GH Release; nuget.org opt-in | `v10.4.0-rc.4` |
+| Legacy | `support/v10` | `10.x` security/critical only | `10.3.47` |
+
+`main` is deliberately **not** in `publicReleaseRefSpec`, which is why its previews carry the `.g<sha>` suffix — they're non-public builds by design. Production lines are listed there, so their packages are clean (see [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md) for the CalVer target; the current line is still `10.x`).
+
+### Channels
+
 Releases fire to multiple channels, each with its own GitHub Environment:
 
 **GitHub Packages = the test/preview channel; nuget.org = production.** The version ladder orders cleanly under SemVer: `…-preview.N` < `…-rc.N` < `…` (GA) — the `-alpha` rung was retired with the `experimental` branch ([ADR-0008](adr/0008-collapse-experimental-into-main.md)).
 
 | Channel | Built from | Cadence | Gating | Version shape |
 |---|---|---|---|---|
-| **preview** → `github-packages` env | `main` | Per-commit | None | `2026.1.0-preview.<height>.g<commit>` |
-| **stable** → `nuget-org` env | `release/YYYY` tags | Slow, deliberate | **Flag opt-in + approval-gated** | `2026.1.3` (CalVer) |
-| **stable/legacy** → `github-packages` env | `release/YYYY`, `support/*` tags | Every tag | None | CalVer / `10.x` |
+| **preview** → `github-packages` env | `main` | Per-commit | None | `10.0.0-preview.<height>.g<commit>` |
+| **stable** → `nuget-org` env | `release/*` tags | Slow, deliberate | **Flag opt-in + approval-gated** | `10.4.0-rc.N` today; `YYYY.M.P` after the CalVer cut |
+| **stable/legacy** → `github-packages` env | `release/*`, `support/*` tags | Every tag | None | Same as the tag |
 | **legacy** → `nuget-org` env | `support/v10`, `support/YYYY` tags | Security/critical only | **Flag opt-in + approval-gated** | `10.x` / `YYYY.x` |
 | `github-releases` env (bundled) | `release/*`, `support/*` tags | Same tag as the package publish | None | Same as the tag |
 | Docker local NuGet server | Per-PR / per-commit | None (local) | PR-derived | Available via `tests/integration/docker-compose.yml` |
@@ -51,24 +66,31 @@ On a release branch, `version.json`'s `version` pins the prerelease number liter
 
 ### Routine stable release (GitHub Packages only)
 
-The default path. Pushing a `v2026.1.X` tag to `release/2026` publishes to GitHub Packages + GitHub Releases. nuget.org is **not** touched. (Git tags keep the `v` prefix — `v2026.1.3` — so the `v*` tag-protection ruleset and `validate-ref` apply; the package version core is `2026.1.3`.)
+The default path. Pushing a tag to a production branch publishes to GitHub Packages + GitHub Releases. nuget.org is **not** touched. Git tags keep the `v` prefix — `v10.4.0-rc.4`, `v2026.1.3` — so the `v*` tag-protection ruleset and `validate-ref` apply; the package version core drops it (`10.4.0-rc.4`).
+
+Examples below use the live line, `release/v10.4`. A CalVer `release/YYYY` cut works identically — substitute the branch and tag.
 
 ```bash
-# 1. Make sure your local release/YYYY is up to date
+# 1. Make sure your local release branch is up to date
 git fetch
-git switch release/2026
+git switch release/v10.4
 git pull --ff-only
 
-# 2. (Optional) Verify what version NB.GV will compute
-dotnet nbgv get-version   # should report 2026.1.X clean, no -g<sha>
+# 2. Bump the rc number in version.json via a PR if you haven't (see above),
+#    then verify what NB.GV will compute. Note PublicRelease=1: a plain local
+#    run reports a .g<sha> suffix because your checked-out branch is only a
+#    public ref in CI's eyes.
+PublicRelease=1 dotnet nbgv get-version -v NuGetPackageVersion   # e.g. 10.4.0-rc.4
 
 # 3. Create the tag + GitHub Release in one step.
 #    --notes-start-tag is load-bearing: see "Release notes" below.
-gh release create v2026.1.X \
-    --target release/2026 \
-    --title "v2026.1.X" \
+#    Add --prerelease for an rc.
+gh release create v10.4.0-rc.4 \
+    --target release/v10.4 \
+    --title "v10.4.0-rc.4" \
+    --prerelease \
     --generate-notes \
-    --notes-start-tag <last-GA-tag>     # e.g. 10.3.47, NOT the previous rc
+    --notes-start-tag 10.3.47           # the last GA, NOT the previous rc
 ```
 
 ### Release notes
@@ -90,16 +112,19 @@ That tag push triggers `.github/workflows/publish-packages-release.yml`:
 
 ### Stabilised release (nuget.org publish)
 
-When a `release/2026` release is stabilised enough for nuget.org, or for cutting a `support/v10` legacy security patch, use `workflow_dispatch` with the opt-in flag:
+When a release is stabilised enough for nuget.org, or for cutting a `support/v10` legacy security patch, use `workflow_dispatch` with the opt-in flag:
 
 ```bash
 # Option A: via gh CLI
 gh workflow run publish-packages-release.yml \
-    -f tag=v2026.1.X \
+    --ref release/v10.4 \
+    -f tag=v10.4.0-rc.4 \
     -f publish-to-nugetorg=true
 
 # Option B: via Actions UI → publish-packages-release → "Run workflow" → set publish-to-nugetorg to true
 ```
+
+> **`--ref` is not optional.** `workflow_dispatch` takes the **workflow definition** from the ref you dispatch against, while `-f tag=` only controls which source gets checked out and packed. Dispatch against the default branch and you run `main`'s copy of the pipeline — which will differ from the release branch's whenever a pipeline fix hasn't been forward-ported yet, and will happily push the resulting packages to nuget.org. Always pass the production branch.
 
 The workflow:
 
@@ -111,16 +136,29 @@ The workflow:
 
 Two layers of safety on the nuget.org path: the flag opt-in + the env approval. You can also test the wiring without burning a release — set the flag, get the approval prompt, then cancel without approving.
 
+**A green run is not proof anything published.** Every publish job is conditional, so a misconfigured condition skips it while the run still reports success — this happened to all three jobs on the `workflow_dispatch` path until 2026-07-26. After any release, check the jobs actually ran and then confirm the packages resolve:
+
+```bash
+# Did the publish jobs run, or silently skip?
+gh api repos/Fallout-build/Fallout/actions/runs/<run-id>/jobs \
+    --jq '.jobs[] | "\(.name): \(.conclusion)"'
+
+# Is the version really on nuget.org? (expect the version listed)
+curl -s https://api.nuget.org/v3-flatcontainer/fallout.common/index.json | jq '.versions[-3:]'
+```
+
+Allow a minute or two for nuget.org to index — a package can be pushed successfully and not yet appear, especially a brand-new package ID.
+
 ### If a publish fails partway through
 
 Each `dotnet nuget push` uses `--skip-duplicate`. Re-running a publish job is idempotent on packages already pushed. For a transient failure mid-publish:
 
 ```bash
 # Routine re-run — leave publish-to-nugetorg false
-gh workflow run publish-packages-release.yml -f tag=v2026.1.X
+gh workflow run publish-packages-release.yml --ref release/v10.4 -f tag=v10.4.0-rc.4
 
 # Stabilised re-run — include the flag if you want to retry the nuget.org push
-gh workflow run publish-packages-release.yml -f tag=v2026.1.X -f publish-to-nugetorg=true
+gh workflow run publish-packages-release.yml --ref release/v10.4 -f tag=v10.4.0-rc.4 -f publish-to-nugetorg=true
 ```
 
 ## Promotion and hotfixing
@@ -137,17 +175,18 @@ A stabilised non-breaking change on `main` is promoted to the production line, t
 
 ```bash
 git fetch
-git switch -c promote-XXXX-to-2026 release/2026
+git switch -c promote-XXXX-to-v10.4 release/v10.4
 git cherry-pick <sha-on-main> [<sha> …]
 git push origin HEAD
-gh pr create --base release/2026 ...   # rigorous review tier
+gh pr create --base release/v10.4 ...   # rigorous review tier
 # once merged:
-gh release create v2026.1.X+1 --target release/2026 --generate-notes
+gh release create v10.4.0-rc.5 --target release/v10.4 --prerelease \
+    --generate-notes --notes-start-tag 10.3.47
 ```
 
 ### Forward-porting a stable-urgent fix
 
-If a fix must land on the production line first (prod-down), land it on `release/2026`, then **forward-port** to `main` so the trunk never regresses:
+If a fix must land on the production line first (prod-down), land it on `release/v10.4`, then **forward-port** to `main` so the trunk never regresses:
 
 ```bash
 git switch -c forward-port-XXXX main
