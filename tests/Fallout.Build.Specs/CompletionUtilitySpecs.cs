@@ -55,7 +55,7 @@ public class CompletionUtilitySpecs
                       "properties": {
                         "NoLogo": {
                           "type": "boolean",
-                          "description": "Disables displaying the NUKE logo"
+                          "description": "Disables displaying the Fallout logo"
                         },
                         "Configuration": {
                           "type": "string",
