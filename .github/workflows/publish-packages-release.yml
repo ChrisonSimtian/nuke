@@ -165,7 +165,7 @@ jobs:
       && (inputs.publish-to-nugetorg == true || inputs.publish-to-nugetorg == 'true')
     environment:
       name: nuget-org
-      url: https://www.nuget.org/profiles/Fallout
+      url: https://www.nuget.org/profiles/Fallout.build
     steps:
       - name: 'Setup: .NET SDK'
         uses: actions/setup-dotnet@v6
