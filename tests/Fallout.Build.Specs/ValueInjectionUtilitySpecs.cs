@@ -14,6 +14,7 @@ namespace Fallout.Common.Specs;
 /// A counting attribute makes the cache observable: the injected value is the running call count, so
 /// a cached read repeats the previous value while a post-<c>ClearCache</c> read re-injects a fresh one.
 /// </summary>
+[Collection(ProcessGlobalStateCollection.Name)]
 public class ValueInjectionUtilitySpecs
 {
     [Fact]
