@@ -40,6 +40,15 @@ Releases fire to multiple channels, each with its own GitHub Environment:
 
 ## Cutting a release
 
+### Prerelease numbers on a release branch are a manual counter
+
+On a release branch, `version.json`'s `version` pins the prerelease number literally — `10.4.0-rc.4`, not `10.4.0-rc.{height}`. **Bump it in a PR before you tag.** Two consequences:
+
+- Every commit on the branch reports the same version until you bump, so the number tracks *release intent* rather than however many commits a promotion happened to carry. (`{height}` sent `rc.3` straight to `rc.23` on the first 19-commit promotion.)
+- Tagging twice without bumping republishes an existing version. `dotnet nuget push --skip-duplicate` swallows that silently, so the packages simply won't update — **check the number first**.
+
+`main` keeps `{height}` (`10.0.0-preview.{height}`): per-commit previews want a value that always moves on its own.
+
 ### Routine stable release (GitHub Packages only)
 
 The default path. Pushing a `v2026.1.X` tag to `release/2026` publishes to GitHub Packages + GitHub Releases. nuget.org is **not** touched. (Git tags keep the `v` prefix — `v2026.1.3` — so the `v*` tag-protection ruleset and `validate-ref` apply; the package version core is `2026.1.3`.)
@@ -53,12 +62,22 @@ git pull --ff-only
 # 2. (Optional) Verify what version NB.GV will compute
 dotnet nbgv get-version   # should report 2026.1.X clean, no -g<sha>
 
-# 3. Create the tag + GitHub Release in one step
+# 3. Create the tag + GitHub Release in one step.
+#    --notes-start-tag is load-bearing: see "Release notes" below.
 gh release create v2026.1.X \
     --target release/2026 \
     --title "v2026.1.X" \
-    --generate-notes
+    --generate-notes \
+    --notes-start-tag <last-GA-tag>     # e.g. 10.3.47, NOT the previous rc
 ```
+
+### Release notes
+
+**Always use `--generate-notes`.** It groups merged PRs by the label taxonomy in [`.github/release.yml`](https://github.com/Fallout-build/Fallout/blob/main/.github/release.yml) and credits every contributor, including a "New Contributors" section. Don't hand-write notes.
+
+**Set `--notes-start-tag` to the last GA tag, not the previous prerelease.** Left to itself, `gh` picks the most recent tag — so an rc diffs against the rc before it and the notes collapse to whatever landed in between. Anchoring on the last GA (`10.3.47` for the 10.4 line) makes every rc's notes show the full set of changes since the last real release, which is what someone evaluating an rc wants to read.
+
+One known gap: work promoted onto a release branch by cherry-pick gets **new commit SHAs**, so GitHub can't map it back to the PRs it came from and it shows up as the single promotion PR instead of the individual ones. The pre-cut history (inherited when the branch was cut) maps fine. If a promotion carried work worth itemising, add a short summary paragraph above the generated section rather than replacing it.
 
 That tag push triggers `.github/workflows/publish-packages-release.yml`:
 
