@@ -61,17 +61,20 @@ public partial class Host
     {
         return DelegateDisposable.CreateBracket(() =>
         {
-            var formattedBlockText = text
+            var blockTextLines = text
                 .Split(new[]
                 {
                     EnvironmentInfo.NewLine
-                }, StringSplitOptions.None)
-                .Select(Theme.FormatInformation);
+                }, StringSplitOptions.None);
+
+            // The rule spans the widest content line plus the "║ " prefix. Measure the raw lines,
+            // not the themed ones — theming adds escape sequences that occupy no console cells.
+            var rule = "╬" + '═'.Repeat(blockTextLines.Max(x => x.Length) + 1);
 
             Debug();
-            Debug("╬" + '═'.Repeat(text.Length + 5));
-            formattedBlockText.ForEach(x => Debug($"║ {x}"));
-            Debug("╬" + '═'.Repeat(Math.Max(text.Length - 4, 2)));
+            Debug(rule);
+            blockTextLines.Select(Theme.FormatInformation).ForEach(x => Debug($"║ {x}"));
+            Debug(rule);
             Debug();
         });
     }
