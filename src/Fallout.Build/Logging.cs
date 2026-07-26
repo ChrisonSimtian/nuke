@@ -24,8 +24,12 @@ public static class Logging
         ? AnsiConsoleHostTheme.Default256AnsiColorTheme
         : SystemConsoleHostTheme.DefaultSystemColorTheme;
 
-    internal static string ErrorsAndWarningsOutputTemplate => "[{Level:u3}] {ExecutingTarget}: {Message:l}{NewLine}";
-    internal static string StandardOutputTemplate => "[{Level:u3}] {Message:l}{NewLine}{Exception}";
+    // Full level names, not the {Level:u3} codes. Abbreviating bought a fixed-width level column, but
+    // DBG/VRB/FTL are not self-explaining. Aligning the message column is #391's job — Spectre owns
+    // the frame there and can indent properly instead of truncating the words. The build.log
+    // templates below deliberately keep their compact single-letter column.
+    internal static string ErrorsAndWarningsOutputTemplate => "[{Level}] {ExecutingTarget}: {Message:l}{NewLine}";
+    internal static string StandardOutputTemplate => "[{Level}] {Message:l}{NewLine}{Exception}";
     internal static string TimestampOutputTemplate => $"{{Timestamp:HH:mm:ss}} {StandardOutputTemplate}";
 
     private const int TargetNameLength = 20;
