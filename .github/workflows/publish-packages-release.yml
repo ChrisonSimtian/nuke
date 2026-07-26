@@ -119,7 +119,7 @@ jobs:
       - name: 'Run: Test + Pack'
         run: dotnet fallout Test Pack
       - name: 'Upload: package artifacts'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: packages
           path: output/packages/*.nupkg
@@ -149,7 +149,7 @@ jobs:
         with:
           dotnet-version: '10.x'
       - name: 'Download: package artifacts'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: packages
           path: output/packages
@@ -190,7 +190,7 @@ jobs:
         with:
           dotnet-version: '10.x'
       - name: 'Download: package artifacts'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: packages
           path: output/packages
@@ -226,7 +226,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: 'Download: package artifacts'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: packages
           path: output/packages
