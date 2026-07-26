@@ -52,7 +52,7 @@ public partial class Host
             string.Empty,
             $"                       {LogoDimmed}.NET build system{LogoReset}",
             $"                     {LogoYellow}☢{LogoReset} {LogoDimmed}survived the NUKE{LogoReset}"
-        }.ForEach(x => Debug(x.Replace(" ", " ")));
+        }.ForEach(Debug);
 
         Debug();
     }
