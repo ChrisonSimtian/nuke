@@ -26,6 +26,23 @@ Applies to AI tools and humans. Many readers are non-native English speakers —
 
 Covers GitHub issues, PR titles/bodies/comments, and commit messages.
 
+## Glossary of repo jargon
+
+Terms that come up often in issues, PRs, and code comments. Link here (or gloss
+the term in one clause) the first time a PR or issue uses one of these —
+per [issue-and-pr-style.md](issue-and-pr-style.md), don't assume the reader
+already knows the vocabulary.
+
+| Term | Meaning |
+| --- | --- |
+| **Shim** | A small compatibility layer that makes old code keep compiling/working against a new API, without being the real implementation. |
+| **Transition shim** | A shim meant to be temporary — it exists only to ease an upgrade and is expected to be removed later. |
+| **Sentinel** (e.g. "consumer sentinel") | A small test project whose only job is to fail the build if something regresses — an early-warning check, not a feature. |
+| **Canonical type / namespace** | The current, "real" location of a type — as opposed to an old namespace kept alive only by a shim. |
+| **Ceiling** (of a shim/fix) | The limit of what a shim or fix covers — what it does *not* handle, so the reader knows when to reach for something else. |
+| **Shallow (by design)** | The change intentionally covers only the common case, not every possible scenario. |
+| **Blast radius** | How many consumers/how much code is affected by a change. |
+
 ## `[Experimental]` for opt-in unstable APIs
 
 Per [ADR-0004 §5](../adr/0004-calendar-versioning-and-dual-pace-channels.md) (channel ladder amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md)), public APIs that aren't ready to commit to a stability guarantee are marked with [`System.Diagnostics.CodeAnalysis.ExperimentalAttribute`](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute) instead of being held back or shipped silently. The attribute ships in the .NET 8+ BCL — **no package reference needed** (the repo targets .NET 10).
