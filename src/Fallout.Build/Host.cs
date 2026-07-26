@@ -114,7 +114,9 @@ public partial class Host
     /// second, otherwise <c>m:ss</c> with minutes accumulating past the hour.
     /// </summary>
     internal static string FormatDuration(TimeSpan duration)
-        => $"{(int)duration.TotalMinutes}:{duration:ss}".Replace("0:00", "< 1sec");
+        => duration < TimeSpan.FromSeconds(1)
+            ? "< 1sec"
+            : $"{(int)duration.TotalMinutes}:{duration.Seconds:00}";
 
     protected internal virtual void WriteTargetOutcome(IFalloutBuild build)
     {
