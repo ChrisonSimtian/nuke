@@ -40,6 +40,15 @@ Releases fire to multiple channels, each with its own GitHub Environment:
 
 ## Cutting a release
 
+### Prerelease numbers on a release branch are a manual counter
+
+On a release branch, `version.json`'s `version` pins the prerelease number literally — `10.4.0-rc.4`, not `10.4.0-rc.{height}`. **Bump it in a PR before you tag.** Two consequences:
+
+- Every commit on the branch reports the same version until you bump, so the number tracks *release intent* rather than however many commits a promotion happened to carry. (`{height}` sent `rc.3` straight to `rc.23` on the first 19-commit promotion.)
+- Tagging twice without bumping republishes an existing version. `dotnet nuget push --skip-duplicate` swallows that silently, so the packages simply won't update — **check the number first**.
+
+`main` keeps `{height}` (`10.0.0-preview.{height}`): per-commit previews want a value that always moves on its own.
+
 ### Routine stable release (GitHub Packages only)
 
 The default path. Pushing a `v2026.1.X` tag to `release/2026` publishes to GitHub Packages + GitHub Releases. nuget.org is **not** touched. (Git tags keep the `v` prefix — `v2026.1.3` — so the `v*` tag-protection ruleset and `validate-ref` apply; the package version core is `2026.1.3`.)
