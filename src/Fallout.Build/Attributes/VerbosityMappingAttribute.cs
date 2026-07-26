@@ -17,6 +17,7 @@ public class VerbosityMappingAttribute : BuildExtensionAttributeBase, IOnBuildIn
 
     public string Quiet { get; set; }
     public string Minimal { get; set; }
+    public string Information { get; set; }
     public string Normal { get; set; }
     public string Verbose { get; set; }
 
@@ -34,6 +35,8 @@ public class VerbosityMappingAttribute : BuildExtensionAttributeBase, IOnBuildIn
             VerbosityMapping.Mappings.Add(targetType, (Verbosity.Quiet, GetMappedValue(Quiet)));
         if (Minimal != null)
             VerbosityMapping.Mappings.Add(targetType, (Verbosity.Minimal, GetMappedValue(Minimal)));
+        if (Information != null)
+            VerbosityMapping.Mappings.Add(targetType, (Verbosity.Information, GetMappedValue(Information)));
         if (Normal != null)
             VerbosityMapping.Mappings.Add(targetType, (Verbosity.Normal, GetMappedValue(Normal)));
         if (Verbose != null)
