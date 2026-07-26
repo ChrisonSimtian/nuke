@@ -13,6 +13,7 @@ namespace Fallout.Common.Specs;
 /// stop one run's warnings/errors bleeding into the next build in the same process; <c>Dispose()</c>
 /// delegates to the same reset.
 /// </summary>
+[Collection(ProcessGlobalStateCollection.Name)]
 public class InMemorySinkSpecs
 {
     private static readonly Logging.InMemorySink Sink = Logging.InMemorySink.Instance;
