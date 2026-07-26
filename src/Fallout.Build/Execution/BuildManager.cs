@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyModel;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
-using Fallout.Common.ValueInjection;
 using Serilog;
 #pragma warning disable CA2255
 
@@ -18,12 +17,12 @@ internal static class BuildManager
 {
     private const int ErrorExitCode = -1;
 
-    private static readonly LinkedList<Action> cancellationHandlers = new();
-
+    // Facade over the active BuildContext (FT-2): callers register/unregister during a run; the
+    // context owns the handler list and discards it on dispose.
     public static event Action CancellationHandler
     {
-        add => cancellationHandlers.AddFirst(value);
-        remove => cancellationHandlers.Remove(value);
+        add => BuildContext.Current?.RegisterCancellationHandler(value);
+        remove => BuildContext.Current?.UnregisterCancellationHandler(value);
     }
 
     [ModuleInitializer]
@@ -40,15 +39,10 @@ internal static class BuildManager
         Console.OutputEncoding = Encoding.UTF8;
         Console.InputEncoding = Encoding.UTF8;
 
+        // The per-run scope owns the global subscriptions + teardown (FT-2 / #307). Disposed at
+        // method exit, so re-invocation in the same process starts clean even if `new T()` throws.
+        using var context = BuildContext.Activate();
         var build = new T();
-
-        // Hold the per-run global subscriptions in locals so the finally can undo exactly them —
-        // otherwise each Execute in the same process (tests, hosted scenarios) accumulates handlers.
-        // FT-1 / #306.
-        ConsoleCancelEventHandler onCancelKeyPress = (_, _) => cancellationHandlers.ForEach(x => x());
-        EventHandler onToolOptionsCreated = (options, _) => VerbosityMapping.Apply((ToolOptions)options);
-        Console.CancelKeyPress += onCancelKeyPress;
-        ToolOptions.Created += onToolOptionsCreated;
 
         try
         {
@@ -95,16 +89,8 @@ internal static class BuildManager
         {
             Finish();
             Log.CloseAndFlush();
-
-            // FT-1 (#306): undo this run's process-global state so a subsequent Execute in the same
-            // process starts clean — no accumulated handlers, no carried-over log events / caches / config.
-            CancellationHandler -= Finish;
-            Console.CancelKeyPress -= onCancelKeyPress;
-            ToolOptions.Created -= onToolOptionsCreated;
-            Logging.InMemorySink.Instance.Clear();
-            ValueInjectionUtility.ClearCache();
-            NuGetToolPathResolver.Reset();
-            NpmToolPathResolver.Reset();
+            // Per-run teardown (handler unsubscription + state reset) is owned by the BuildContext,
+            // run when `context` is disposed at method exit.
         }
 
         void Finish()
