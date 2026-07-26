@@ -142,11 +142,27 @@ jobs:
   # (see header comment). When a release/YYYY production line is ready for the
   # broad audience — or for cutting a support/v10 maintenance patch — invoke
   # workflow_dispatch with the flag set.
+  #
+  # The condition below accepts the string 'true' as well as the boolean. A
+  # `type: boolean` input only arrives as a real boolean when the run is started
+  # from the Actions UI; the REST API — and therefore `gh workflow run`, which
+  # rejects a JSON boolean outright — can only send strings. Comparing a string
+  # to a boolean casts both to numbers ('true' → NaN, true → 1), so a bare
+  # `== true` silently skipped every CLI-triggered publish while the run still
+  # reported success. See the runbook's `gh workflow run` invocation.
   publish-nuget-org:
     name: publish → nuget.org
     runs-on: ubuntu-latest
     needs: [test-and-pack]
-    if: github.event_name == 'workflow_dispatch' && inputs.publish-to-nugetorg == true
+    # `always() && needs...result == 'success'` rather than a bare dependency:
+    # validate-ref is skipped by design on workflow_dispatch, and a skipped job
+    # propagates through the graph — test-and-pack's own always() rescues only
+    # itself, not its dependents. Without this the whole dispatch path silently
+    # published nothing while the run still reported success.
+    if: >-
+      always() && needs.test-and-pack.result == 'success'
+      && github.event_name == 'workflow_dispatch'
+      && (inputs.publish-to-nugetorg == true || inputs.publish-to-nugetorg == 'true')
     environment:
       name: nuget-org
       url: https://www.nuget.org/profiles/Fallout
@@ -186,6 +202,10 @@ jobs:
     name: publish → GitHub Packages
     runs-on: ubuntu-latest
     needs: [test-and-pack]
+    # See publish-nuget-org: survives validate-ref's by-design skip on
+    # workflow_dispatch, which is what makes a re-run after a partial publish
+    # actually re-publish.
+    if: always() && needs.test-and-pack.result == 'success'
     permissions:
       packages: write
     environment:
@@ -225,6 +245,8 @@ jobs:
     name: publish → GitHub Releases
     runs-on: ubuntu-latest
     needs: [test-and-pack]
+    # See publish-nuget-org.
+    if: always() && needs.test-and-pack.result == 'success'
     permissions:
       contents: write
     environment:
