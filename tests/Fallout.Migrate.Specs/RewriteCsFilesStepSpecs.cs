@@ -4,7 +4,7 @@ using Fallout.Migrate.Steps;
 
 namespace Fallout.Migrate.Specs;
 
-public class CodeRewriterSpecs
+public class RewriteCsFilesStepSpecs
 {
     [Fact]
     public void RewritesUsingDirective()
@@ -15,7 +15,7 @@ public class CodeRewriterSpecs
                              using Fallout.Common;
                              """;
 
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
 
         result.EditCount.Should().Be(2);
         result.Content.Should().Contain("using Fallout.Common;");
@@ -26,7 +26,7 @@ public class CodeRewriterSpecs
     public void RewritesQualifiedTypeReference()
     {
         const string input = "var x = new Nuke.Common.Tools.DotNet.DotNetTasks();";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(1);
         result.Content.Should().Be("var x = new Fallout.Common.Tools.DotNet.DotNetTasks();");
     }
@@ -35,7 +35,7 @@ public class CodeRewriterSpecs
     public void RewritesNukeBuildBaseType()
     {
         const string input = "class Build : NukeBuild { }";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(1);
         result.Content.Should().Be("class Build : FalloutBuild { }");
     }
@@ -44,7 +44,7 @@ public class CodeRewriterSpecs
     public void RewritesINukeBuildInterface()
     {
         const string input = "public static int IsApplicable(INukeBuild build) => 0;";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(1);
         result.Content.Should().Be("public static int IsApplicable(IFalloutBuild build) => 0;");
     }
@@ -54,7 +54,7 @@ public class CodeRewriterSpecs
     {
         // A type like `NukeAdjacentThing` must not match `\bNukeBuild\b`.
         const string input = "var x = new NukeBuilderXYZ();";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(0);
         result.Content.Should().Be(input);
     }
@@ -64,7 +64,7 @@ public class CodeRewriterSpecs
     {
         // ".nuke/foo" filenames stay as-is — handled by ScriptRewriter / DirectoryRenamer.
         const string input = """var path = "/repo/.nuke/parameters.json";""";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(0);
     }
 
@@ -74,7 +74,7 @@ public class CodeRewriterSpecs
         // The solution types moved to Fallout.Solutions in v11 — a NUKE-era
         // `using` must land there, not on the dead Fallout.Common.ProjectModel.
         const string input = "using Nuke.Common.ProjectModel;";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(1);
         result.Content.Should().Be("using Fallout.Solutions;");
     }
@@ -83,7 +83,7 @@ public class CodeRewriterSpecs
     public void RewritesQualifiedNukeProjectModelTypeToSolutions()
     {
         const string input = "Nuke.Common.ProjectModel.Solution x;";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(1);
         result.Content.Should().Be("Fallout.Solutions.Solution x;");
     }
@@ -94,7 +94,7 @@ public class CodeRewriterSpecs
         // Code previously run through a prefix-only migrator lands on the dead
         // Fallout.Common.ProjectModel; the ProjectModel rule salvages it.
         const string input = "using Fallout.Common.ProjectModel;";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(1);
         result.Content.Should().Be("using Fallout.Solutions;");
     }
@@ -104,7 +104,7 @@ public class CodeRewriterSpecs
     {
         // `ProjectModelFoo` must not be truncated by the ProjectModel rule.
         const string input = "using Nuke.Common.ProjectModelFoo;";
-        var result = CodeRewriter.Rewrite(input);
+        var result = RewriteCsFilesStep.Rewrite(input);
         result.EditCount.Should().Be(1);
         result.Content.Should().Be("using Fallout.Common.ProjectModelFoo;");
     }
