@@ -176,3 +176,6 @@ dotnet_style_require_accessibility_modifiers = omit_if_default:silent
 
 [tests/**/*.cs]
 dotnet_naming_rule.private_fields_should_be_camel_case.severity = suggestion
+
+# In tests, using async isn't adding a lot of value other than noise
+resharper_method_has_async_overload_highlighting = none
