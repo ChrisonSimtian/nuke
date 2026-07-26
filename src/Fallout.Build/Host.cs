@@ -109,6 +109,15 @@ public partial class Host
         }
     }
 
+    /// <summary>
+    /// Renders a target duration for the summary table's duration column: <c>&lt; 1sec</c> below one
+    /// second, otherwise <c>m:ss</c> with minutes accumulating past the hour.
+    /// </summary>
+    internal static string FormatDuration(TimeSpan duration)
+        => duration < TimeSpan.FromSeconds(1)
+            ? "< 1sec"
+            : $"{(int)duration.TotalMinutes}:{duration.Seconds:00}";
+
     protected internal virtual void WriteTargetOutcome(IFalloutBuild build)
     {
         var firstColumn = Math.Max(build.ExecutionPlan.Max(x => x.Name.Length) + 4, val2: 19);
@@ -127,11 +136,8 @@ public partial class Host
             => target.Status == ExecutionStatus.Succeeded ||
                target.Status == ExecutionStatus.Failed ||
                target.Status == ExecutionStatus.Aborted
-                ? GetDuration(target.Duration)
+                ? FormatDuration(target.Duration)
                 : string.Empty;
-
-        static string GetDuration(TimeSpan duration)
-            => $"{(int)duration.TotalMinutes}:{duration:ss}".Replace("0:00", "< 1sec");
 
         static string GetInformation(ExecutableTarget target)
             => target.SummaryInformation.Any()
@@ -174,7 +180,7 @@ public partial class Host
         }
 
         Debug('─'.Repeat(allColumns));
-        Information(CreateLine("Total", string.Empty, GetDuration(totalDuration)));
+        Information(CreateLine("Total", string.Empty, FormatDuration(totalDuration)));
         Debug('═'.Repeat(allColumns));
     }
 
