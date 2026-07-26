@@ -66,8 +66,8 @@ public abstract partial class FalloutBuild
     [Parameter("Logging verbosity during build execution. Default is 'Normal'.")]
     public static Verbosity Verbosity
     {
-        get => (Verbosity) Logging.Level;
-        set => Logging.Level = (LogLevel) value;
+        get => Logging.Level.ToVerbosity();
+        set => Logging.Level = value.ToLogLevel();
     }
 
     /// <summary>

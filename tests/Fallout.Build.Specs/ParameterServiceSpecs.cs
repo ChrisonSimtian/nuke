@@ -105,6 +105,7 @@ public class ParameterServiceSpecs
         var build = new TestBuild();
         var verbosities = new[]
         {
+            (nameof(Verbosity.Information), Verbosity.Information),
             (nameof(Verbosity.Minimal), Verbosity.Minimal),
             (nameof(Verbosity.Normal), Verbosity.Normal),
             (nameof(Verbosity.Quiet), Verbosity.Quiet),
