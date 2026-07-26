@@ -118,6 +118,13 @@ jobs:
         run: dotnet tool restore
       - name: 'Run: Test + Pack'
         run: dotnet fallout Test Pack
+        env:
+          # We check out the tag above, so HEAD is detached and matches none of
+          # version.json's publicReleaseRefSpec entries (they're all branch refs,
+          # and nbgv never matches that spec against refs/tags/*). Without this,
+          # NB.GV treats the build as non-public and stamps a git-height suffix
+          # onto every package — v10.4.0-rc.3 shipped as 10.4.0-rc.3.geabd043cc2.
+          PublicRelease: true
       - name: 'Upload: package artifacts'
         uses: actions/upload-artifact@v7
         with:
