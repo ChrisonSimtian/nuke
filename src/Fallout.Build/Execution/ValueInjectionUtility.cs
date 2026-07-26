@@ -86,11 +86,31 @@ internal static class ValueInjectionUtility
 
     public static IReadOnlyCollection<MemberInfo> GetParameterMembers(Type type, bool includeUnlisted)
     {
-        // TODO: check duplicated names
         return GetInjectionMembers(type)
             .Where(x => x.Attribute is ParameterAttribute attribute && (includeUnlisted || attribute.List))
             .Select(x => x.Member)
+            // A build class implementing a component interface can re-declare one of the interface's
+            // parameters. Both members then describe the same CLI parameter, which used to be listed
+            // twice by --help and to overwrite itself in the generated schema. Group by the name the
+            // user actually types and keep the most specific declaration.
+            .GroupBy(ParameterService.GetParameterDashedName, StringComparer.OrdinalIgnoreCase)
+            .Select(x => x
+                .OrderBy(GetDeclarationSpecificity)
+                .ThenBy(y => y.DeclaringType.NotNull().FullName, StringComparer.Ordinal)
+                .Last())
             .OrderBy(ParameterService.GetParameterMemberName).ToList();
+    }
+
+    /// <summary>
+    /// Ranks competing declarations of one parameter. Interface declarations rank below any class
+    /// declaration; among classes, the deeper the inheritance chain, the more specific.
+    /// </summary>
+    private static int GetDeclarationSpecificity(MemberInfo member)
+    {
+        var declaringType = member.DeclaringType.NotNull();
+        return declaringType.IsInterface
+            ? 0
+            : declaringType.Descendants(x => x.BaseType).Count();
     }
 
     public static IReadOnlyCollection<(MemberInfo Member, ValueInjectionAttributeBase Attribute)> GetInjectionMembers(Type type)
