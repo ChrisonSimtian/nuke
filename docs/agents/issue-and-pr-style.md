@@ -19,7 +19,23 @@ does not constrain an agent running `gh issue create`).
   marketing tone ("elegant", "robust", "seamlessly"), no emoji section headers.
 - **Write for non-native English readers.** Plain words over idiom, short
   sentences, no slang or cultural references — many contributors read English as
-  a second language. Clarity beats cleverness.
+  a second language. Clarity beats cleverness. Concretely:
+  - **One idea per sentence.** Don't stack clauses with em-dashes or semicolons
+    ("This doesn't do X — that stands — it does Y, and gives Z a path off W").
+    Split into separate sentences or bullets.
+  - **No idioms or figurative language.** "Blast radius", "shrinks the gap",
+    "grace period", "ceiling", "shallow by design" don't translate. Say what you
+    mean literally: "affects fewer consumers", "closes the gap", "temporary
+    fallback", "limit", "handles the common case only".
+  - **Define repo jargon on first use, or link it.** Terms like "shim",
+    "sentinel", "canonical type" are fine once explained — link to the
+    [glossary in conventions.md](conventions.md#glossary-of-repo-jargon) or a
+    one-clause gloss the first time a PR uses them, don't assume the reader
+    already knows the vocabulary.
+  - **Spell out cross-references.** Don't lean on `#257`/`#253` alone — add a
+    3–5 word gloss of what each one did ("#257, the ProjectModel rename").
+  - **Prefer short, common words.** "use" over "leverage", "keep" over
+    "preserve", "shows" over "surfaces", "fixes" over "remediates".
 - **Bullets over prose** for anything enumerable.
 - **Link, don't recap.** Reference issues (`#123`), PRs, docs, and code
   (`path/to/file.cs:42`) instead of pasting them.
@@ -93,3 +109,5 @@ Closes #<issue>
 | Three paragraphs restating the title | One line, then bullets |
 | Pasting the full stack trace inline | Link to the run / collapse in `<details>` |
 | "As part of this work, I also…" | A second bullet, or a second PR |
+| "This doesn't reclassify #257 — that break stands — it shrinks the blast radius for consumers upgrading from 11.0.1–11.0.12" | "#257 (the ProjectModel rename) is still breaking. This PR only makes upgrading past it easier for 11.0.1–11.0.12 users." |
+| "Deliberately shallow… same ceiling as the generated shim" | "This only covers the common case. For everything else, use `fallout-migrate`." |
