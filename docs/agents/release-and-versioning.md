@@ -22,22 +22,28 @@ CI providers in use: **GitHub Actions only** (others were dropped — see [#8](h
 
 ### Branch protection on `release/YYYY` and `support/*`
 
-`main`, every `release/YYYY`, and every `support/*` branch share `main`'s protection profile:
+`main`, every release line, and every `support/*` branch share the same protection profile:
 
 - Required status check: `ubuntu-latest`
 - Linear history required (no merge commits)
-- CODEOWNER review required
-- Dismiss stale approvals when new commits land
+- CODEOWNER review required (0 additional approvals)
 - Direct pushes blocked (PRs only)
 - Force-push and branch deletion blocked
 - Conversation resolution required
 - Admins not enforced (admins can bypass in emergencies)
 
-Apply by mirroring `main`'s protection JSON to the new branch via the GitHub API (or via repo Settings → Branches). Tag protection for `v*` tags (restricting who can fire a release tag) is tracked separately under milestone #13.
+Stale approvals are **not** dismissed when new commits land (`dismiss_stale_reviews: false`).
+
+**How it's applied differs by branch:**
+
+- **Release lines** (`release/v10.4`, a future `release/2027`) — covered by the pattern-based ruleset on `refs/heads/release/**` ([19766406](https://github.com/Fallout-build/Fallout/rules/19766406)), so protection attaches automatically at branch creation. Payload committed at `.github/release-branch-ruleset.json`. **Nothing to apply by hand.**
+- **`main` and `support/*`** — classic per-branch protection, configured individually.
+
+Tag protection for `v*` tags is a separate ruleset ([17017817](https://github.com/Fallout-build/Fallout/rules/17017817)).
 
 **Validation workflows.** `build.yml` runs Test+Pack on Linux on every PR targeting `main`, `release/*`, or `support/*` (with `paths-ignore` for `docs/**`, `.assets/**`, `**/*.md`); its job `ubuntu-latest` is the only required status check. `build-cross-platform.yml` runs Test+Pack on Windows and macOS (one job each) only on PRs targeting `release/*` / `support/*` and on `v*` tag pushes — cross-platform is gated to release intent, not routine `main` work. This is a deliberate cost trade-off. (Both workflows are **generated** from `build/Build.CI.GitHubActions.cs` — change the branch lists in the `MainBranch`/`*BranchPattern` constants there and regenerate, don't hand-edit the `.yml`. The `build-skip.yml` no-op shim reports the `ubuntu-latest` check on docs-only PRs.)
 
-**Merging.** Rebase merge only — squash and plain merge commits are both disabled by repo setting (linear history). Every reviewed commit lands on `main` verbatim, so curate commits into a clean sequence before final approval. See [CONTRIBUTING.md → Merging](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md#merging) for the convention.
+**Merging.** Rebase merge only. Plain merge commits are disabled by repo setting; **squash is still enabled at the repo level**, so on release branches the convention — not the setting — is what keeps squashes out. Squashing a promotion would collapse it into one opaque commit, defeating the point of promoting reviewed commits verbatim. Every reviewed commit lands on `main` verbatim, so curate commits into a clean sequence before final approval. See [CONTRIBUTING.md → Merging](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md#merging) for the convention.
 
 ## Versioning
 

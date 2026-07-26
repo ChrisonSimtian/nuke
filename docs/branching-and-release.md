@@ -178,12 +178,10 @@ git pull --ff-only
 git switch -c release/2027 main
 git push -u origin release/2027
 
-# 3. Apply branch protection (mirror main's profile — see
-#    docs/agents/release-and-versioning.md → Branch protection on release/YYYY).
-#    NOTE: scripts/release-branch-protection.json does not exist yet; capture
-#    main's live protection JSON into it (or apply via repo Settings → Branches).
-gh api -X PUT repos/Fallout-build/Fallout/branches/release/2027/protection \
-    --input scripts/release-branch-protection.json
+# 3. Nothing to do — branch protection is already in force. The "Protect
+#    release/** production lines" ruleset targets refs/heads/release/**, so a
+#    new release branch is protected the moment it is pushed. See
+#    "Branch protection" below.
 
 # 4. On release/2027 (the branch itself), set version.json "version": "2027.0".
 #    publicReleaseRefSpec already matches "^refs/heads/release/\\d{4}$" — confirm
@@ -210,6 +208,27 @@ Once a `support/YYYY` or `support/v10` line hits end-of-life:
 4. Optionally apply a more restrictive protection profile (e.g. require admin approval on every merge) to make accidental tags less likely.
 
 Branches are cheap. Deletion is destructive. Default to keeping.
+
+## Branch protection
+
+Production branches are protected by the **"Protect release/\*\* production lines"** ruleset ([ruleset 19766406](https://github.com/Fallout-build/Fallout/rules/19766406)), which targets `refs/heads/release/**`. Because it matches on a pattern, every release line — `release/v10.4` today, a `release/2027` CalVer cut later — is protected the moment the branch exists. There is no per-branch step to remember.
+
+It mirrors `main`'s profile: no deletion, no force-push, linear history required, PRs required with CODEOWNERS review and conversation resolution, and the `ubuntu-latest` status check. Repo admins (`RepositoryRole 5`) bypass, matching the tag ruleset.
+
+The payload lives at [`.github/release-branch-ruleset.json`](https://github.com/Fallout-build/Fallout/blob/main/.github/release-branch-ruleset.json) so the config is reviewable rather than only visible in repo settings. To re-apply after editing it:
+
+```bash
+# Update the existing ruleset in place (preferred — keeps the ID stable)
+gh api -X PUT repos/Fallout-build/Fallout/rulesets/19766406 \
+    --input .github/release-branch-ruleset.json
+
+# Verify which rules actually bind to a branch
+gh api repos/Fallout-build/Fallout/rules/branches/release%2Fv10.4 --jq '[.[].type]'
+```
+
+`support/*` lines are **not** covered by this ruleset — they carry their own classic per-branch protection, applied when the line is created.
+
+> Historical note: `release/v10.4` ran unprotected from its cut until 2026-07-26, because the on-demand cut ([ADR-0007](adr/0007-cut-release-branch-on-demand.md)) had no protection step attached. The pattern-based ruleset exists so that can't recur.
 
 ## Tag protection
 
