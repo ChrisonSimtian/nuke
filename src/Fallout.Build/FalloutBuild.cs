@@ -135,9 +135,9 @@ public abstract partial class FalloutBuild : IFalloutBuild
     public bool Help { get; }
 
     /// <summary>
-    /// Gets a value whether to display the NUKE logo.
+    /// Gets a value whether to display the Fallout logo.
     /// </summary>
-    [Parameter("Disables displaying the NUKE logo.")]
+    [Parameter("Disables displaying the Fallout logo.")]
     public bool NoLogo { get; set; }
 
     /// <summary>
