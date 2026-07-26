@@ -176,3 +176,33 @@ dotnet_style_require_accessibility_modifiers = omit_if_default:silent
 
 [tests/**/*.cs]
 dotnet_naming_rule.private_fields_should_be_camel_case.severity = suggestion
+
+####################################################################
+## Public API analyzer (Microsoft.CodeAnalysis.PublicApiAnalyzers)
+####################################################################
+# Only active on the assemblies opted in via _FalloutPublicApiAssemblies in
+# Directory.Build.props. RS0016/RS0017 are the guard: adding public surface not
+# recorded in PublicAPI.Unshipped.txt, or renaming/removing surface still listed
+# in PublicAPI.Shipped.txt, fails the build. The remaining rules are opinionated
+# API-design/nullability lint that would only add noise to a mature surface.
+# Guard severities are set globally: RS0016 anchors to the .cs declaration site,
+# but RS0017 (a tracked API entry no longer found in the code — the rename/removal
+# guard) anchors to the PublicAPI text file, not a .cs file. A [*.cs] scope would
+# leave RS0017 a non-blocking warning, so both are elevated under [*]. These rules
+# only fire where the analyzer is wired (the opted-in assemblies), so a global
+# scope is harmless everywhere else.
+[*]
+dotnet_diagnostic.RS0016.severity = error   # public symbol missing from the API files
+dotnet_diagnostic.RS0017.severity = error   # tracked API entry no longer in the code (rename/removal)
+dotnet_diagnostic.RS0026.severity = none     # avoid optional params on public methods (advisory)
+dotnet_diagnostic.RS0027.severity = none     # public API with optional params should not add overloads (advisory)
+dotnet_diagnostic.RS0036.severity = none     # nullability recording (baseline is oblivious)
+dotnet_diagnostic.RS0037.severity = none     # enable #nullable in API files (baseline is oblivious)
+
+# Generated tool wrappers are regenerated from the *.json specs and guarded by the
+# SourceGenerators Verify snapshots — exclude them from public-API tracking so a
+# GenerateTools regen doesn't churn the baselines. Ordered after the [*] block so
+# last-match-wins turns the guard off for these files.
+[*.Generated.cs]
+dotnet_diagnostic.RS0016.severity = none
+dotnet_diagnostic.RS0017.severity = none

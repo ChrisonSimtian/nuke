@@ -1,0 +1,4 @@
+Fallout.Common.Utilities.CompletionUtility
+static Fallout.Common.Utilities.CompletionUtility.GetItemsFromSchema(Fallout.Common.IO.AbsolutePath schemaFile, System.Collections.Generic.IEnumerable<string> profileNames = null, System.Func<System.Text.Json.JsonProperty, bool> filter = null) -> System.Collections.Generic.IReadOnlyDictionary<string, string[]>
+static Fallout.Common.Utilities.CompletionUtility.GetItemsFromSchema(System.Text.Json.JsonDocument schema, System.Collections.Generic.IEnumerable<string> profileNames = null, System.Func<System.Text.Json.JsonProperty, bool> filter = null) -> System.Collections.Generic.IReadOnlyDictionary<string, string[]>
+static Fallout.Common.Utilities.CompletionUtility.GetRelevantItems(string words, System.Collections.Generic.IReadOnlyDictionary<string, string[]> completionItems) -> System.Collections.Generic.IEnumerable<string>

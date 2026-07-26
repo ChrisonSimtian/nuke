@@ -69,4 +69,43 @@
     <Compile Include="$(MSBuildThisFileDirectory)AssemblyInfo.cs" />
   </ItemGroup>
 
+  <!-- ── Public API surface tracking ─────────────────────────────────────────
+       Consumer-facing assemblies opt in below. For each listed assembly the
+       Roslyn Public API analyzer tracks the declared public surface against the
+       committed PublicAPI.Shipped.txt / PublicAPI.Unshipped.txt: renaming or
+       removing tracked API fails the build (RS0017), and adding public surface
+       fails (RS0016) until it is recorded in PublicAPI.Unshipped.txt. This is the
+       guard that would have flagged the #257 SolutionModel -> Solution rename.
+
+       Generated tool wrappers (*.Generated.cs) are excluded via .editorconfig -
+       that surface is regenerated deterministically from the *.json specs and is
+       already contract-guarded by the SourceGenerators Verify snapshots.
+
+       Rollout is phased: mid-size assemblies (Fallout.Build, Fallout.Tooling,
+       Fallout.Utilities) are tracked in a follow-up. Keep the list sorted. -->
+  <PropertyGroup>
+    <_FalloutPublicApiAssemblies>;Fallout.Build.Shared;Fallout.Common;Fallout.Components;Fallout.Core;Fallout.ProjectModel;Fallout.Solution;Fallout.Utilities.IO.Compression;Fallout.Utilities.IO.Globbing;Fallout.Utilities.Net;Fallout.Utilities.Text.Json;Fallout.Utilities.Text.Yaml;</_FalloutPublicApiAssemblies>
+    <_IsFalloutPublicApiAssembly Condition="$(_FalloutPublicApiAssemblies.Contains(';$(MSBuildProjectName);'))">true</_IsFalloutPublicApiAssembly>
+  </PropertyGroup>
+
+  <!-- Promote the removal/rename guard (RS0017) to build-breaking. RS0017 anchors to
+       the PublicAPI.*.txt additional file, where per-file .editorconfig severity does
+       not reach it, so it is promoted here at the MSBuild level (anchor-agnostic).
+       RS0016 is deliberately NOT listed: it is elevated to error via .editorconfig,
+       which also lets [*.Generated.cs] switch it off for the generated tool wrappers.
+       A command-line /warnaserror:RS0016 would outrank that per-file suppression and
+       re-promote the entire generated surface — exactly what we exclude. -->
+  <PropertyGroup Condition="'$(_IsFalloutPublicApiAssembly)' == 'true'">
+    <WarningsAsErrors>$(WarningsAsErrors);RS0017</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(_IsFalloutPublicApiAssembly)' == 'true'">
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+
 </Project>

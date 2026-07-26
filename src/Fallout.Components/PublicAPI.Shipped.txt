@@ -1,0 +1,145 @@
+Fallout.Components.Configuration
+Fallout.Components.Configuration.Configuration() -> void
+Fallout.Components.ICompile
+Fallout.Components.ICompile.Compile.get -> Fallout.Common.Target
+Fallout.Components.ICompile.CompileSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetBuildSettings>
+Fallout.Components.ICompile.CompileSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetBuildSettings>
+Fallout.Components.ICompile.PublishConfigurations.get -> System.Collections.Generic.IEnumerable<(Fallout.Solutions.Project Project, string Framework)>
+Fallout.Components.ICompile.PublishDegreeOfParallelism.get -> int
+Fallout.Components.ICompile.PublishSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetPublishSettings>
+Fallout.Components.ICompile.PublishSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetPublishSettings>
+Fallout.Components.ICreateGitHubRelease
+Fallout.Components.ICreateGitHubRelease.AssetFiles.get -> System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath>
+Fallout.Components.ICreateGitHubRelease.CreateGitHubRelease.get -> Fallout.Common.Target
+Fallout.Components.ICreateGitHubRelease.Draft.get -> bool
+Fallout.Components.ICreateGitHubRelease.GitHubToken.get -> string
+Fallout.Components.ICreateGitHubRelease.Name.get -> string
+Fallout.Components.ICreateGitHubRelease.Prerelease.get -> bool
+Fallout.Components.IGlobalTool
+Fallout.Components.IGlobalTool.GlobalToolPackageName.get -> string
+Fallout.Components.IGlobalTool.GlobalToolVersion.get -> string
+Fallout.Components.IGlobalTool.InstallGlobalTool.get -> Fallout.Common.Target
+Fallout.Components.IGlobalTool.PackGlobalTool.get -> Fallout.Common.Target
+Fallout.Components.IGlobalTool.UninstallGlobalTool.get -> Fallout.Common.Target
+Fallout.Components.IHasArtifacts
+Fallout.Components.IHasArtifacts.ArtifactsDirectory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.IHasChangelog
+Fallout.Components.IHasChangelog.ChangelogFile.get -> string
+Fallout.Components.IHasChangelog.NuGetReleaseNotes.get -> string
+Fallout.Components.IHasConfiguration
+Fallout.Components.IHasConfiguration.Configuration.get -> Fallout.Components.Configuration
+Fallout.Components.IHasGitRepository
+Fallout.Components.IHasGitRepository.GitRepository.get -> Fallout.Common.Git.GitRepository
+Fallout.Components.IHasGitVersion
+Fallout.Components.IHasGitVersion.Versioning.get -> Fallout.Common.Tools.GitVersion.GitVersion
+Fallout.Components.IHasNerdbankGitVersioning
+Fallout.Components.IHasNerdbankGitVersioning.Versioning.get -> Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioning
+Fallout.Components.IHasReports
+Fallout.Components.IHasReports.ReportDirectory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.IHasSolution
+Fallout.Components.IHasSolution.Solution.get -> Fallout.Solutions.Solution
+Fallout.Components.IHasTwitterCredentials
+Fallout.Components.IHasTwitterCredentials.AccessToken.get -> string
+Fallout.Components.IHasTwitterCredentials.AccessTokenSecret.get -> string
+Fallout.Components.IHasTwitterCredentials.ConsumerKey.get -> string
+Fallout.Components.IHasTwitterCredentials.ConsumerSecret.get -> string
+Fallout.Components.IPack
+Fallout.Components.IPack.Pack.get -> Fallout.Common.Target
+Fallout.Components.IPack.PackSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetPackSettings>
+Fallout.Components.IPack.PackSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetPackSettings>
+Fallout.Components.IPack.PackagesDirectory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.IPublish
+Fallout.Components.IPublish.NuGetApiKey.get -> string
+Fallout.Components.IPublish.NuGetSource.get -> string
+Fallout.Components.IPublish.PackagePushSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetNuGetPushSettings>
+Fallout.Components.IPublish.Publish.get -> Fallout.Common.Target
+Fallout.Components.IPublish.PushCompleteOnFailure.get -> bool
+Fallout.Components.IPublish.PushDegreeOfParallelism.get -> int
+Fallout.Components.IPublish.PushPackageFiles.get -> System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath>
+Fallout.Components.IPublish.PushSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetNuGetPushSettings>
+Fallout.Components.IPublish.PushSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetNuGetPushSettings>
+Fallout.Components.IReportCoverage
+Fallout.Components.IReportCoverage.CodecovSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Codecov.CodecovSettings>
+Fallout.Components.IReportCoverage.CodecovSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Codecov.CodecovSettings>
+Fallout.Components.IReportCoverage.CodecovToken.get -> string
+Fallout.Components.IReportCoverage.CoverageReportArchive.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.IReportCoverage.CoverageReportDirectory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.IReportCoverage.CreateCoverageHtmlReport.get -> bool
+Fallout.Components.IReportCoverage.ReportCoverage.get -> Fallout.Common.Target
+Fallout.Components.IReportCoverage.ReportGeneratorSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.ReportGenerator.ReportGeneratorSettings>
+Fallout.Components.IReportCoverage.ReportGeneratorSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.ReportGenerator.ReportGeneratorSettings>
+Fallout.Components.IReportCoverage.ReportToCodecov.get -> bool
+Fallout.Components.IReportCoverage.UploadCoverageData() -> void
+Fallout.Components.IRestore
+Fallout.Components.IRestore.IgnoreFailedSources.get -> bool
+Fallout.Components.IRestore.Restore.get -> Fallout.Common.Target
+Fallout.Components.IRestore.RestoreSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetRestoreSettings>
+Fallout.Components.IRestore.RestoreSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetRestoreSettings>
+Fallout.Components.ISignPackages
+Fallout.Components.ISignPackages.ApiToken.get -> string
+Fallout.Components.ISignPackages.Settings.get -> Fallout.Components.ISignPackages.SignPathSettings
+Fallout.Components.ISignPackages.SignPackages.get -> Fallout.Common.Target
+Fallout.Components.ISignPackages.SignPathPackages.get -> System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath>
+Fallout.Components.ISignPackages.SignPathReplacePackages.get -> bool
+Fallout.Components.ISignPackages.SignPathRequestArchive.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.ISignPackages.SignPathRequestDirectory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.ISignPackages.SignPathResponseArchive.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.ISignPackages.SignPathResponseDirectory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.ISignPackages.SignPathSettings
+Fallout.Components.ISignPackages.SignPathSettings.Deconstruct(out string OrganizationId, out string ProjectSlug, out string PolicySlug) -> void
+Fallout.Components.ISignPackages.SignPathSettings.OrganizationId.get -> string
+Fallout.Components.ISignPackages.SignPathSettings.OrganizationId.init -> void
+Fallout.Components.ISignPackages.SignPathSettings.PolicySlug.get -> string
+Fallout.Components.ISignPackages.SignPathSettings.PolicySlug.init -> void
+Fallout.Components.ISignPackages.SignPathSettings.ProjectSlug.get -> string
+Fallout.Components.ISignPackages.SignPathSettings.ProjectSlug.init -> void
+Fallout.Components.ISignPackages.SignPathSettings.SignPathSettings(Fallout.Components.ISignPackages.SignPathSettings original) -> void
+Fallout.Components.ISignPackages.SignPathSettings.SignPathSettings(string OrganizationId, string ProjectSlug, string PolicySlug) -> void
+Fallout.Components.ISignPackages.SignPathTemporaryDirectory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.ITest
+Fallout.Components.ITest.ReportTestCount() -> void
+Fallout.Components.ITest.ReportTestResults() -> void
+Fallout.Components.ITest.Test.get -> Fallout.Common.Target
+Fallout.Components.ITest.TestDegreeOfParallelism.get -> int
+Fallout.Components.ITest.TestProjectSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetTestSettings, Fallout.Solutions.Project>
+Fallout.Components.ITest.TestProjectSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetTestSettings, Fallout.Solutions.Project>
+Fallout.Components.ITest.TestProjects.get -> System.Collections.Generic.IEnumerable<Fallout.Solutions.Project>
+Fallout.Components.ITest.TestResultDirectory.get -> Fallout.Common.IO.AbsolutePath
+Fallout.Components.ITest.TestSettings.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetTestSettings>
+Fallout.Components.ITest.TestSettingsBase.get -> Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetTestSettings>
+Fallout.Components.PublishPackageRouter
+Fallout.Components.PublishTarget
+Fallout.Components.PublishTarget.Accepts(string packageName) -> bool
+Fallout.Components.PublishTarget.ApiKey.get -> string
+Fallout.Components.PublishTarget.ApiKey.init -> void
+Fallout.Components.PublishTarget.ExcludePackages.get -> System.Collections.Generic.IReadOnlyList<string>
+Fallout.Components.PublishTarget.ExcludePackages.init -> void
+Fallout.Components.PublishTarget.IncludePackages.get -> System.Collections.Generic.IReadOnlyList<string>
+Fallout.Components.PublishTarget.IncludePackages.init -> void
+Fallout.Components.PublishTarget.Name.get -> string
+Fallout.Components.PublishTarget.Name.init -> void
+Fallout.Components.PublishTarget.PublishTarget() -> void
+Fallout.Components.PublishTarget.SkipDuplicate.get -> bool
+Fallout.Components.PublishTarget.SkipDuplicate.init -> void
+Fallout.Components.PublishTarget.Source.get -> string
+Fallout.Components.PublishTarget.Source.init -> void
+[FALLOUT001]Fallout.Components.IPublish.PublishTargets.get -> System.Collections.Generic.IEnumerable<Fallout.Components.PublishTarget>
+[FALLOUT001]Fallout.Components.IPublish.PublishTo.get -> string[]
+const Fallout.Components.ICreateGitHubRelease.GitHubRelease = "GitHubRelease" -> string
+const Fallout.Components.IHasTwitterCredentials.Twitter = "Twitter" -> string
+const Fallout.Components.ISignPackages.SignPath = "SignPath" -> string
+override Fallout.Components.ISignPackages.SignPathSettings.Equals(object obj) -> bool
+override Fallout.Components.ISignPackages.SignPathSettings.GetHashCode() -> int
+override Fallout.Components.ISignPackages.SignPathSettings.ToString() -> string
+static Fallout.Components.Configuration.Debug -> Fallout.Components.Configuration
+static Fallout.Components.Configuration.Release -> Fallout.Components.Configuration
+static Fallout.Components.Configuration.implicit operator string(Fallout.Components.Configuration configuration) -> string
+static Fallout.Components.ISignPackages.SignPathSettings.operator !=(Fallout.Components.ISignPackages.SignPathSettings left, Fallout.Components.ISignPackages.SignPathSettings right) -> bool
+static Fallout.Components.ISignPackages.SignPathSettings.operator ==(Fallout.Components.ISignPackages.SignPathSettings left, Fallout.Components.ISignPackages.SignPathSettings right) -> bool
+static Fallout.Components.PublishPackageRouter.GlobMatches(string pattern, string value) -> bool
+static Fallout.Components.PublishPackageRouter.MatchesAny(System.Collections.Generic.IEnumerable<string> patterns, string value) -> bool
+static Fallout.Components.PublishPackageRouter.Route(Fallout.Components.PublishTarget target, System.Collections.Generic.IEnumerable<string> packageNames) -> System.Collections.Generic.IEnumerable<string>
+virtual Fallout.Components.ISignPackages.SignPathSettings.<Clone>$() -> Fallout.Components.ISignPackages.SignPathSettings
+virtual Fallout.Components.ISignPackages.SignPathSettings.EqualityContract.get -> System.Type
+virtual Fallout.Components.ISignPackages.SignPathSettings.Equals(Fallout.Components.ISignPackages.SignPathSettings other) -> bool
+virtual Fallout.Components.ISignPackages.SignPathSettings.PrintMembers(System.Text.StringBuilder builder) -> bool

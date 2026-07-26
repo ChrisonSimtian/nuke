@@ -1,0 +1,18 @@
+Fallout.Solutions.ProjectExtensions
+Fallout.Solutions.ProjectModelTasks
+static Fallout.Solutions.ProjectExtensions.GetItemMetadata(this Fallout.Solutions.Project project, string itemGroupName, string metadataName) -> System.Collections.Generic.IEnumerable<string>
+static Fallout.Solutions.ProjectExtensions.GetItemMetadata<T>(this Fallout.Solutions.Project project, string itemGroupName, string metadataName) -> System.Collections.Generic.IEnumerable<T>
+static Fallout.Solutions.ProjectExtensions.GetItemMetadataSingleOrDefault(this Fallout.Solutions.Project project, string itemGroupName, string includeName, string metadataName) -> string
+static Fallout.Solutions.ProjectExtensions.GetItemMetadataSingleOrDefault<T>(this Fallout.Solutions.Project project, string itemGroupName, string includeName, string metadataName) -> T
+static Fallout.Solutions.ProjectExtensions.GetItems(this Fallout.Solutions.Project project, string itemGroupName) -> System.Collections.Generic.IEnumerable<string>
+static Fallout.Solutions.ProjectExtensions.GetItems<T>(this Fallout.Solutions.Project project, string itemGroupName) -> System.Collections.Generic.IEnumerable<T>
+static Fallout.Solutions.ProjectExtensions.GetMSBuildProject(this Fallout.Solutions.Project project, string configuration = null, string targetFramework = null) -> Microsoft.Build.Evaluation.Project
+static Fallout.Solutions.ProjectExtensions.GetOutputType(this Fallout.Solutions.Project project) -> string
+static Fallout.Solutions.ProjectExtensions.GetPackageReferenceVersion(this Fallout.Solutions.Project project, string packageId) -> string
+static Fallout.Solutions.ProjectExtensions.GetProperty(this Fallout.Solutions.Project project, string propertyName) -> string
+static Fallout.Solutions.ProjectExtensions.GetProperty<T>(this Fallout.Solutions.Project project, string propertyName) -> T
+static Fallout.Solutions.ProjectExtensions.GetRuntimeIdentifiers(this Fallout.Solutions.Project project) -> System.Collections.Generic.IReadOnlyCollection<string>
+static Fallout.Solutions.ProjectExtensions.GetTargetFrameworks(this Fallout.Solutions.Project project) -> System.Collections.Generic.IReadOnlyCollection<string>
+static Fallout.Solutions.ProjectExtensions.HasPackageReference(this Fallout.Solutions.Project project, string packageId) -> bool
+static Fallout.Solutions.ProjectModelTasks.Initialize() -> void
+static Fallout.Solutions.ProjectModelTasks.ParseProject(string projectFile, string configuration = null, string targetFramework = null) -> Microsoft.Build.Evaluation.Project
