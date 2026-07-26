@@ -63,6 +63,8 @@ The CLI installs as `fallout`. Verify with `fallout --help`.
 > ```sh
 > dotnet tool uninstall -g Fallout.GlobalTools
 > ```
+>
+> If a repo pins the old id in `.config/dotnet-tools.json`, change the version too — the pin you have does not exist under the new id. `fallout-migrate` does both. See [Fallout.GlobalTool → Fallout.GlobalTools](docs/migration/tool-package-id.md).
 
 For per-repo manifest pinning (`.config/dotnet-tools.json`), project setup, and shell completion, see the [Installation guide on docs.fallout.build](https://docs.fallout.build/getting-started/installation).
 
