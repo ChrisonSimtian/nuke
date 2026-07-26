@@ -9,7 +9,7 @@ public class RewriteCsprojsStepSpecs
     private const string TestFalloutVersion = "11.0.0";
 
     [Fact]
-    public void RewritesPackageReferenceNamespace()
+    public void Nuke_package_references_are_renamed_to_their_fallout_equivalents()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -29,7 +29,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void RewritesNukeRootDirectoryProperty()
+    public void Nuke_root_directory_property_is_renamed()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -48,7 +48,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void StripsTelemetryVersionProperty()
+    public void Telemetry_version_property_is_stripped_instead_of_renamed()
     {
         // Telemetry was removed from Fallout (ADR-0010): NukeTelemetryVersion is dropped, not
         // renamed to a dead FalloutTelemetryVersion. Sibling properties are left intact.
@@ -68,7 +68,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void LeavesUnrelatedNukePrefixedIdentifiersAlone()
+    public void Unrelated_nuke_prefixed_properties_are_left_alone()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -85,7 +85,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void ReturnsZeroEditsForUnchangedContent()
+    public void Content_without_nuke_references_is_returned_unchanged()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -102,7 +102,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void BumpsNukeInlineVersionToCurrentFalloutVersion()
+    public void Inline_nuke_package_versions_are_bumped_to_the_current_fallout_version()
     {
         // Regression guard for #217: NUKE-era pins like 10.1.0 never existed as Fallout.X
         // and would trip NU1603 on the migrated project. Migrate must bump in the same pass.
@@ -123,7 +123,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void BumpsVersionAcrossExtraAttributesBetweenIncludeAndVersion()
+    public void Version_is_bumped_across_extra_attributes_between_include_and_version()
     {
         // PrivateAssets / IncludeAssets are common NUKE-era attributes that sit between
         // Include and Version. The combined-rewrite pattern needs to tolerate them.
@@ -141,7 +141,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void LeavesCpmManagedReferencesWithoutInlineVersionUntouchedByVersionPass()
+    public void Centrally_managed_references_do_not_gain_an_inline_version()
     {
         // Central package management — no inline Version attribute, version lives in
         // Directory.Packages.props. The namespace-only pass still renames Nuke. → Fallout.
@@ -161,7 +161,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void StripsSystemSecurityCryptographyXmlPackageReference()
+    public void Conflicting_system_security_cryptography_xml_pin_is_stripped()
     {
         // #217: NUKE-era projects often carry an explicit System.Security.Cryptography.Xml pin
         // that conflicts with Fallout.Common's transitive >= 10.0.6 requirement (NU1605 downgrade).
@@ -182,7 +182,7 @@ public class RewriteCsprojsStepSpecs
     }
 
     [Fact]
-    public void LeavesOtherSystemPackagesAlone()
+    public void Other_system_packages_are_left_alone()
     {
         // Only System.Security.Cryptography.Xml is the known culprit. Other System.* packages
         // (System.Text.Json etc.) stay as the user pinned them — they're not in any known

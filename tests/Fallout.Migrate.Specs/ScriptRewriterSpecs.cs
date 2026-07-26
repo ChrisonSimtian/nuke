@@ -7,7 +7,7 @@ namespace Fallout.Migrate.Specs;
 public class ScriptRewriterSpecs
 {
     [Fact]
-    public void RewritesDotnetNukeInvocations()
+    public void Dotnet_nuke_invocations_become_dotnet_fallout()
     {
         var result = ScriptRewriter.Rewrite("dotnet nuke Compile");
         result.EditCount.Should().Be(1);
@@ -15,7 +15,7 @@ public class ScriptRewriterSpecs
     }
 
     [Fact]
-    public void RewritesDotDirectoryReferences()
+    public void Dot_nuke_directory_references_become_dot_fallout()
     {
         var result = ScriptRewriter.Rewrite("""TEMP_DIRECTORY="$SCRIPT_DIR/.nuke/temp" """);
         result.EditCount.Should().Be(1);
@@ -24,7 +24,7 @@ public class ScriptRewriterSpecs
     }
 
     [Fact]
-    public void RewritesLegacyEnvVars()
+    public void Legacy_nuke_env_vars_are_renamed_to_their_fallout_equivalents()
     {
         const string input = """
                              $env:NUKE_GLOBAL_TOOL_VERSION = "10.0"
@@ -35,16 +35,20 @@ public class ScriptRewriterSpecs
         result.Content.Should().Contain("FALLOUT_GLOBAL_TOOL_VERSION");
     }
 
-    [Fact]
-    public void StripsTelemetryOptOutLineEntirely()
+    [Theory]
+    [InlineData("export NUKE_TELEMETRY_OPTOUT=1")]         // build.sh
+    [InlineData("""$env:NUKE_TELEMETRY_OPTOUT = "1" """)]  // build.ps1
+    [InlineData("set NUKE_TELEMETRY_OPTOUT=1")]            // build.cmd
+    public void Telemetry_opt_out_line_is_stripped_entirely(string optOutLine)
     {
         // Telemetry was removed from Fallout (ADR-0010) — the opt-out is dropped, not renamed
-        // to a dead FALLOUT_TELEMETRY_OPTOUT. The surrounding lines are untouched.
-        const string input = """
-                             export DOTNET_ROLL_FORWARD="Major"
-                             export NUKE_TELEMETRY_OPTOUT=1
-                             dotnet nuke "$@"
-                             """;
+        // to a dead FALLOUT_TELEMETRY_OPTOUT. Whichever bootstrap script spelled it, the whole
+        // line goes and the surrounding ones are untouched.
+        var input = $"""
+                     export DOTNET_ROLL_FORWARD="Major"
+                     {optOutLine}
+                     dotnet nuke "$@"
+                     """;
 
         var result = ScriptRewriter.Rewrite(input);
 
@@ -54,7 +58,7 @@ public class ScriptRewriterSpecs
     }
 
     [Fact]
-    public void LeavesPlainWordNukeAlone()
+    public void Plain_word_nuke_in_prose_is_left_alone()
     {
         // The word "nuke" in a comment or string isn't a command invocation.
         const string input = "# This was previously a NUKE-based build.";
