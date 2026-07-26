@@ -40,10 +40,11 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
     private const string PackageId = "fallout.common";
 
     /// <summary>
-    /// NuGet's flat-container index for <see cref="PackageId"/>: a JSON document listing every
-    /// published version (stable and prerelease), oldest first.
+    /// The dotnet-tool package id pinned in a migrated <c>dotnet-tools.json</c>. Resolved separately
+    /// from <see cref="PackageId"/>: the tool id was introduced later, so it has its own, much
+    /// shorter, set of published versions (#575).
     /// </summary>
-    private static readonly Uri flatContainerIndex = new($"https://api.nuget.org/v3-flatcontainer/{PackageId}/index.json");
+    private const string ToolPackageId = "fallout.globaltools";
 
     private static readonly HttpClient httpClient = CreateHttpClient();
 
@@ -53,7 +54,7 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
         string localVersion = ResolveFromAssembly();
         int localMajor = ExtractMajor(localVersion);
 
-        string nuGetVersion = await ResolveFromNuGetAsync(localMajor);
+        string nuGetVersion = await ResolveFromNuGetAsync(PackageId, localMajor, allowPrerelease: false);
         if (nuGetVersion != null)
         {
             AnsiConsole.MarkupLineInterpolated(
@@ -68,6 +69,26 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
 
             context.FalloutVersion = localVersion;
         }
+
+        context.ToolVersion = await ResolveToolVersionAsync(localMajor);
+    }
+
+    /// <summary>
+    /// Resolves the version to pin for <see cref="ToolPackageId"/>, preferring the latest stable
+    /// release within <paramref name="major"/> and falling back to the latest prerelease when the id
+    /// has no stable release yet.
+    /// </summary>
+    /// <param name="major">The major version to restrict the lookup to.</param>
+    /// <returns>The version to pin, or <c>null</c> when NuGet has nothing for this major.</returns>
+    /// <remarks>
+    /// Resolves quietly. Warning about a prerelease pin, or about not resolving at all, is
+    /// <see cref="RewriteToolManifestStep"/>'s job — it is the only step that knows whether the repo
+    /// being migrated has a tool manifest for this to matter to.
+    /// </remarks>
+    private static async Task<string> ResolveToolVersionAsync(int major)
+    {
+        return await ResolveFromNuGetAsync(ToolPackageId, major, allowPrerelease: false)
+               ?? await ResolveFromNuGetAsync(ToolPackageId, major, allowPrerelease: true);
     }
 
     /// <summary>
@@ -110,14 +131,23 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
     }
 
     /// <summary>
-    /// Queries NuGet for the latest non-prerelease version of <see cref="PackageId"/> whose major
-    /// version matches <paramref name="major"/>.
+    /// Queries NuGet for the latest version of <paramref name="packageId"/> whose major version
+    /// matches <paramref name="major"/>.
     /// </summary>
+    /// <param name="packageId">The package to look up, lowercase.</param>
     /// <param name="major">The major version (calendar year) to restrict the lookup to.</param>
-    /// <returns>The latest published stable version within <paramref name="major"/>, or <c>null</c>
-    /// if NuGet couldn't be reached or has no matching-major stable version.</returns>
-    private static async Task<string> ResolveFromNuGetAsync(int major)
+    /// <param name="allowPrerelease">
+    /// When <c>false</c>, prerelease versions are skipped. When <c>true</c>, the newest version wins
+    /// whether or not it is a prerelease — used for a package id that has no stable release yet.
+    /// </param>
+    /// <returns>The latest matching published version, or <c>null</c> if NuGet couldn't be reached or
+    /// has no matching version.</returns>
+    private static async Task<string> ResolveFromNuGetAsync(string packageId, int major, bool allowPrerelease)
     {
+        // NuGet's flat-container index: a JSON document listing every published version (stable and
+        // prerelease) for one package, oldest first.
+        var flatContainerIndex = new Uri($"https://api.nuget.org/v3-flatcontainer/{packageId}/index.json");
+
         try
         {
             using HttpResponseMessage response = await httpClient.GetAsync(flatContainerIndex);
@@ -134,25 +164,34 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
             }
 
             Version latest = null;
+            string latestRaw = null;
             foreach (JsonElement element in versions.EnumerateArray())
             {
                 string raw = element.GetString();
-
-                // Skip prerelease versions (e.g. "2026.1.0-preview.12+g1a2b3c") — only stable
-                // releases are pinned into migrated package references.
-                if (string.IsNullOrEmpty(raw) || raw.Contains('-'))
+                if (string.IsNullOrEmpty(raw))
                 {
                     continue;
                 }
 
-                if (Version.TryParse(raw, out Version parsed) && parsed.Major == major &&
-                    (latest is null || parsed > latest))
+                // Prerelease versions look like "2026.1.0-preview.12+g1a2b3c". Only stable releases
+                // are pinned unless the caller has asked for prereleases too.
+                int suffixIndex = raw.IndexOfAny(['-', '+']);
+                bool isPrerelease = suffixIndex != -1;
+                if (isPrerelease && !allowPrerelease)
+                {
+                    continue;
+                }
+
+                string core = isPrerelease ? raw[..suffixIndex] : raw;
+                if (Version.TryParse(core, out Version parsed) && parsed.Major == major &&
+                    (latest is null || parsed >= latest))
                 {
                     latest = parsed;
+                    latestRaw = raw;
                 }
             }
 
-            return latest?.ToString();
+            return latestRaw;
         }
         catch (Exception ex)
         {

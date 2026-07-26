@@ -26,4 +26,14 @@ internal sealed class MigrationContext(AbsolutePath rootDirectory, bool dryRun, 
     /// subsequent steps read it.
     /// </summary>
     public string FalloutVersion { get; internal set; }
+
+    /// <summary>
+    /// The version to pin for the <c>fallout.globaltools</c> dotnet tool in a rewritten
+    /// <c>dotnet-tools.json</c>, or <c>null</c> when it could not be resolved. Tracked separately from
+    /// <see cref="FalloutVersion"/> because the tool ships under its own package id, which was
+    /// introduced later and so has a different set of published versions (#575). Set by
+    /// <see cref="Fallout.Migrate.Steps.ResolveFalloutVersionStep"/>; read by
+    /// <see cref="Fallout.Migrate.Steps.RewriteToolManifestStep"/>.
+    /// </summary>
+    public string ToolVersion { get; internal set; }
 }

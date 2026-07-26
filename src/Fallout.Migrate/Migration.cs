@@ -19,7 +19,8 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
 {
     /// <summary>
     /// The steps executed by <see cref="RunAsync"/>, in order. <see cref="ResolveFalloutVersionStep"/> must
-    /// run first, since later steps read <see cref="MigrationContext.FalloutVersion"/> from it.
+    /// run first, since later steps read <see cref="MigrationContext.FalloutVersion"/> and
+    /// <see cref="MigrationContext.ToolVersion"/> from it.
     /// </summary>
     private static readonly IReadOnlyList<IMigrationStep> steps =
     [
@@ -31,6 +32,7 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
         new RewriteCsFilesStep(),
         new RewriteBootstrapScriptsStep(),
         new CleanupBootstrapScriptsStep(),
+        new RewriteToolManifestStep(),
         new RenameNukeDirectoryStep()
     ];
 
