@@ -58,7 +58,7 @@
         },
         "NoLogo": {
           "type": "boolean",
-          "description": "Disables displaying the NUKE logo"
+          "description": "Disables displaying the Fallout logo"
         },
         "NullableBooleanParam": {
           "type": "boolean"
