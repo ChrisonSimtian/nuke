@@ -52,6 +52,17 @@ public class AbsolutePath : IAbsolutePathHolder, IFormattable
         return new AbsolutePath(path);
     }
 
+    /// <summary>
+    /// Returns a unique path within the OS temp directory, optionally prefixed with <paramref name="prefix"/>.
+    /// Does not create the file or directory.
+    /// </summary>
+    public static AbsolutePath Temp(string prefix = null)
+    {
+        var suffix = Guid.NewGuid().ToString("N").Substring(0, 8);
+        var name = string.IsNullOrEmpty(prefix) ? suffix : $"{prefix}-{suffix}";
+        return Create(Path.GetTempPath()) / name;
+    }
+
     private readonly string path;
 
     private AbsolutePath(string path)
