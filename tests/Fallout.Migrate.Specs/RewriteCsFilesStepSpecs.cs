@@ -1,111 +1,160 @@
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Fallout.Common.IO;
+using Fallout.Migrate.Common;
+using Fallout.Migrate.Steps;
 using FluentAssertions;
 using Xunit;
-using Fallout.Migrate.Steps;
 
 namespace Fallout.Migrate.Specs;
 
-public class RewriteCsFilesStepSpecs
+public class RewriteCsFilesStepSpecs : IDisposable
 {
-    [Fact]
-    public void RewritesUsingDirective()
+    private readonly AbsolutePath tempDirectory;
+    private readonly MigrationContext context;
+    private readonly Summary summary = new();
+
+    public RewriteCsFilesStepSpecs()
     {
-        const string input = """
-                             using Nuke.Common;
-                             using Nuke.Common.IO;
-                             using Fallout.Common;
-                             """;
+        tempDirectory = AbsolutePath.Temp("fallout-migrate-test");
+        context = new MigrationContext(tempDirectory, dryRun: false, TextWriter.Null);
+    }
 
-        var result = RewriteCsFilesStep.Rewrite(input);
-
-        result.EditCount.Should().Be(2);
-        result.Content.Should().Contain("using Fallout.Common;");
-        result.Content.Should().Contain("using Fallout.Common.IO;");
+    public void Dispose()
+    {
+        tempDirectory.DeleteDirectory();
     }
 
     [Fact]
-    public void RewritesQualifiedTypeReference()
+    public async Task Nuke_using_directives_are_rewritten_to_fallout()
     {
-        const string input = "var x = new Nuke.Common.Tools.DotNet.DotNetTasks();";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(1);
-        result.Content.Should().Be("var x = new Fallout.Common.Tools.DotNet.DotNetTasks();");
+        (tempDirectory / "Build.cs").WriteAllText("""
+                                                   using Nuke.Common;
+                                                   using Nuke.Common.IO;
+                                                   using Fallout.Common;
+                                                   """);
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(2);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText();
+        buildCs.Should().Contain("using Fallout.Common;");
+        buildCs.Should().Contain("using Fallout.Common.IO;");
     }
 
     [Fact]
-    public void RewritesNukeBuildBaseType()
+    public async Task Qualified_nuke_type_references_are_rewritten_to_fallout()
     {
-        const string input = "class Build : NukeBuild { }";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(1);
-        result.Content.Should().Be("class Build : FalloutBuild { }");
+        (tempDirectory / "Build.cs").WriteAllText("var x = new Nuke.Common.Tools.DotNet.DotNetTasks();");
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(1);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText().Trim();
+        buildCs.Should().Be("var x = new Fallout.Common.Tools.DotNet.DotNetTasks();");
     }
 
     [Fact]
-    public void RewritesINukeBuildInterface()
+    public async Task NukeBuild_base_type_is_renamed_to_FalloutBuild()
     {
-        const string input = "public static int IsApplicable(INukeBuild build) => 0;";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(1);
-        result.Content.Should().Be("public static int IsApplicable(IFalloutBuild build) => 0;");
+        (tempDirectory / "Build.cs").WriteAllText("class Build : NukeBuild { }");
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(1);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText().Trim();
+        buildCs.Should().Be("class Build : FalloutBuild { }");
     }
 
     [Fact]
-    public void DoesNotMatchNukeAsPartOfAnotherIdentifier()
+    public async Task INukeBuild_interface_is_renamed_to_IFalloutBuild()
+    {
+        (tempDirectory / "Build.cs").WriteAllText("public static int IsApplicable(INukeBuild build) => 0;");
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(1);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText().Trim();
+        buildCs.Should().Be("public static int IsApplicable(IFalloutBuild build) => 0;");
+    }
+
+    [Fact]
+    public async Task Nuke_as_part_of_another_identifier_is_not_matched()
     {
         // A type like `NukeAdjacentThing` must not match `\bNukeBuild\b`.
         const string input = "var x = new NukeBuilderXYZ();";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(0);
-        result.Content.Should().Be(input);
+        (tempDirectory / "Build.cs").WriteAllText(input);
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(0);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText().Trim();
+        buildCs.Should().Be(input);
     }
 
     [Fact]
-    public void DoesNotMatchLowercaseNukePrefix()
+    public async Task Lowercase_nuke_prefix_in_a_path_is_not_matched()
     {
         // ".nuke/foo" filenames stay as-is — handled by ScriptRewriter / DirectoryRenamer.
         const string input = """var path = "/repo/.nuke/parameters.json";""";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(0);
+        (tempDirectory / "Build.cs").WriteAllText(input);
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(0);
     }
 
     [Fact]
-    public void RewritesNukeProjectModelUsingToSolutions()
+    public async Task Nuke_project_model_using_is_rewritten_to_solutions()
     {
         // The solution types moved to Fallout.Solutions in v11 — a NUKE-era
         // `using` must land there, not on the dead Fallout.Common.ProjectModel.
-        const string input = "using Nuke.Common.ProjectModel;";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(1);
-        result.Content.Should().Be("using Fallout.Solutions;");
+        (tempDirectory / "Build.cs").WriteAllText("using Nuke.Common.ProjectModel;");
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(1);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText().Trim();
+        buildCs.Should().Be("using Fallout.Solutions;");
     }
 
     [Fact]
-    public void RewritesQualifiedNukeProjectModelTypeToSolutions()
+    public async Task Qualified_nuke_project_model_type_is_rewritten_to_solutions()
     {
-        const string input = "Nuke.Common.ProjectModel.Solution x;";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(1);
-        result.Content.Should().Be("Fallout.Solutions.Solution x;");
+        (tempDirectory / "Build.cs").WriteAllText("Nuke.Common.ProjectModel.Solution x;");
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(1);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText().Trim();
+        buildCs.Should().Be("Fallout.Solutions.Solution x;");
     }
 
     [Fact]
-    public void RewritesAlreadyPartiallyMigratedProjectModelNamespace()
+    public async Task Already_partially_migrated_project_model_namespace_is_salvaged()
     {
         // Code previously run through a prefix-only migrator lands on the dead
         // Fallout.Common.ProjectModel; the ProjectModel rule salvages it.
-        const string input = "using Fallout.Common.ProjectModel;";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(1);
-        result.Content.Should().Be("using Fallout.Solutions;");
+        (tempDirectory / "Build.cs").WriteAllText("using Fallout.Common.ProjectModel;");
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(1);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText().Trim();
+        buildCs.Should().Be("using Fallout.Solutions;");
     }
 
     [Fact]
-    public void DoesNotMatchProjectModelAsPartOfAnotherIdentifier()
+    public async Task ProjectModel_as_part_of_another_identifier_is_not_truncated()
     {
         // `ProjectModelFoo` must not be truncated by the ProjectModel rule.
-        const string input = "using Nuke.Common.ProjectModelFoo;";
-        var result = RewriteCsFilesStep.Rewrite(input);
-        result.EditCount.Should().Be(1);
-        result.Content.Should().Be("using Fallout.Common.ProjectModelFoo;");
+        (tempDirectory / "Build.cs").WriteAllText("using Nuke.Common.ProjectModelFoo;");
+
+        await new RewriteCsFilesStep().ExecuteAsync(context, summary);
+
+        summary.EditCount.Should().Be(1);
+        var buildCs = (tempDirectory / "Build.cs").ReadAllText().Trim();
+        buildCs.Should().Be("using Fallout.Common.ProjectModelFoo;");
     }
 }

@@ -49,7 +49,7 @@ internal sealed class RewriteCsFilesStep : IMigrationStep
     /// </summary>
     /// <param name="original">The original <c>.cs</c> file content.</param>
     /// <returns>The rewritten content and the number of edits made.</returns>
-    public static RewriteResult Rewrite(string original)
+    private static RewriteResult Rewrite(string original)
     {
         var edits = 0;
 
