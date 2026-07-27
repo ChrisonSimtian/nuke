@@ -52,16 +52,16 @@ fallout-migrate
 ## Install
 
 ```sh
-dotnet tool install -g Fallout.GlobalTools
+dotnet tool install -g Fallout.GlobalTool
 ```
 
 The CLI installs as `fallout`. Verify with `fallout --help`.
 
 > [!NOTE]
-> **Upgrading from `Fallout.GlobalTool`?** The dotnet-tool package is now `Fallout.GlobalTools` — same `fallout` command. Uninstall the old one first so you don't end up with two tools claiming the same command:
+> **Coming from NUKE's `10.x` tool?** Nothing to do — `Fallout.GlobalTool` is the same package id you already have pinned, so `dotnet tool update` just works. The only exception is the short-lived `Fallout.GlobalTools` (plural) id: if you installed `10.4.0-rc.4` from it, uninstall it and reinstall from `Fallout.GlobalTool` so you don't have two tools claiming the `fallout` command.
 >
 > ```sh
-> dotnet tool uninstall -g Fallout.GlobalTool
+> dotnet tool uninstall -g Fallout.GlobalTools
 > ```
 
 For per-repo manifest pinning (`.config/dotnet-tools.json`), project setup, and shell completion, see the [Installation guide on docs.fallout.build](https://docs.fallout.build/getting-started/installation).
