@@ -66,8 +66,9 @@ If your build had previously worked against NUKE, it should now work against Fal
 | Fully-qualified type refs | `Nuke.Common.AbsolutePath` | `Fallout.Common.AbsolutePath` |
 | Base class name | `: NukeBuild` | `: FalloutBuild` |
 | Base interface name | `: INukeBuild` | `: IFalloutBuild` |
-| MSBuild properties in `_build.csproj` | `<NukeRootDirectory>` | `<FalloutRootDirectory>` |
-| Bootstrap scripts | `dotnet nuke`, `.nuke/temp` | `dotnet fallout`, `.fallout/temp` |
+| MSBuild properties in `_build.csproj` | `<NukeRootDirectory>`, `<NukeTelemetryVersion>` | `<FalloutRootDirectory>`, `<FalloutTelemetryVersion>` |
+| Bootstrap scripts | `dotnet nuke`, `NUKE_TELEMETRY_OPTOUT`, `.nuke/temp` | `dotnet fallout`, `FALLOUT_TELEMETRY_OPTOUT`, `.fallout/temp` |
+| Removes stale Nuke Enterprise NuGet source | The whole env var check for `NUKE_ENTERPRISE_TOKEN` and its handling | The bootstrapper files (`build.sh` and `build.ps1`) without these `if`'s |
 | Telemetry knobs (removed) | `<NukeTelemetryVersion>`, `NUKE_TELEMETRY_OPTOUT` | *dropped* — Fallout has no telemetry ([ADR-0010](../adr/0010-no-telemetry-collection.md)); `fallout migrate` strips them |
 | Config directory | `.nuke/` | `.fallout/` (contents preserved) |
 
