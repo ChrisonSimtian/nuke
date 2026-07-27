@@ -28,7 +28,7 @@ internal sealed class MigrationContext(AbsolutePath rootDirectory, bool dryRun, 
     public string FalloutVersion { get; internal set; }
 
     /// <summary>
-    /// The version to pin for the <c>fallout.globaltools</c> dotnet tool in a rewritten
+    /// The version to pin for the <c>fallout.globaltool</c> dotnet tool in a rewritten
     /// <c>dotnet-tools.json</c>, or <c>null</c> when it could not be resolved. Tracked separately from
     /// <see cref="FalloutVersion"/> because the tool ships under its own package id, which was
     /// introduced later and so has a different set of published versions (#575). Set by

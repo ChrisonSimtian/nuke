@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CliWrap" />
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="Spectre.Console.Cli" />
   </ItemGroup>

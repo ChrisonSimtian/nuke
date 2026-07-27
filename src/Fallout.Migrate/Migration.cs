@@ -20,7 +20,10 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
     /// <summary>
     /// The steps executed by <see cref="RunAsync"/>, in order. <see cref="ResolveFalloutVersionStep"/> must
     /// run first, since later steps read <see cref="MigrationContext.FalloutVersion"/> and
-    /// <see cref="MigrationContext.ToolVersion"/> from it.
+    /// <see cref="MigrationContext.ToolVersion"/> from it. <see cref="SwitchGlobalToolStep"/> runs
+    /// after <see cref="RewriteToolManifestStep"/>: the manifest rewrite fixes the repo, the switch
+    /// fixes the machine, and doing the repo first means an interrupted run still leaves the
+    /// committed state correct.
     /// </summary>
     private static readonly IReadOnlyList<IMigrationStep> steps =
     [
@@ -33,6 +36,7 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
         new RewriteBootstrapScriptsStep(),
         new CleanupBootstrapScriptsStep(),
         new RewriteToolManifestStep(),
+        new SwitchGlobalToolStep(),
         new RenameNukeDirectoryStep()
     ];
 

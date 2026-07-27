@@ -2,8 +2,8 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "fallout.globaltools": {
-      "version": "10.4.0-rc.4",
+    "fallout.globaltool": {
+      "version": "10.3.49",
       "commands": [
         "fallout"
       ]

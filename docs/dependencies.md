@@ -64,6 +64,13 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 |---|---|
 | `NuGet.Packaging` | Read .nupkg metadata. Used by `NuGetVersionResolver`, `ProjectUpdater`. |
 
+## Console / process
+
+| Package | Purpose | Used by |
+|---|---|---|
+| `Spectre.Console` (+ `.Cli`) | Console rendering and command-line parsing | `Fallout.Migrate` |
+| `CliWrap` | Run an external process and buffer its output, with a cancellation token and no manual `ProcessStartInfo` plumbing | `Fallout.Migrate` — `SwitchGlobalToolStep` shells out to `dotnet tool`. Deliberately not used in `Fallout.Common`, which has its own `ProcessTasks` layer that build authors consume. |
+
 ## Vendored source
 
 | Package | Source | Why vendored |

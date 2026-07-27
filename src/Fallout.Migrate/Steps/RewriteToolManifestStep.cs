@@ -8,25 +8,27 @@ namespace Fallout.Migrate.Steps;
 
 /// <summary>
 /// Rewrites every <c>dotnet-tools.json</c> manifest under the repository root: a tool entry naming a
-/// retired Fallout or NUKE tool package is renamed to <c>fallout.globaltools</c> and re-pinned to a
+/// retired Fallout or NUKE tool package is renamed to <c>fallout.globaltool</c> and re-pinned to a
 /// version that exists under that id.
 /// </summary>
 /// <remarks>
-/// The published tool id changed twice — <c>nuke.globaltool</c> to <c>fallout.globaltool</c> to
-/// <c>fallout.globaltools</c> — and the older ids were left on nuget.org with no successor pointer.
-/// A manifest pinning one of them cannot reach 10.4 or later, because <c>rollForward</c> resolves
-/// inside a single package id and cannot cross to a different one. See #575.
+/// The Fallout tool has shipped under three ids. <c>nuke.globaltool</c> is the NUKE-era id.
+/// <c>fallout.cli</c> and <c>fallout.globaltools</c> were both short-lived and are retired. The
+/// current id is <c>fallout.globaltool</c>, which #581 settled on because it carries the whole
+/// existing install base. A manifest pinning a retired id cannot reach current releases, because
+/// <c>rollForward</c> resolves inside a single package id and cannot cross to a different one.
+/// See #575 and #582.
 /// </remarks>
 internal sealed class RewriteToolManifestStep : IMigrationStep
 {
     /// <summary>The current published tool package id.</summary>
-    private const string CurrentToolId = "fallout.globaltools";
+    internal const string CurrentToolId = "fallout.globaltool";
 
     /// <summary>Tool ids this step migrates away from.</summary>
-    private static readonly IReadOnlyList<string> retiredToolIds =
+    internal static readonly IReadOnlyList<string> RetiredToolIds =
     [
         "nuke.globaltool",
-        "fallout.globaltool",
+        "fallout.globaltools",
         "fallout.cli"
     ];
 
@@ -39,7 +41,7 @@ internal sealed class RewriteToolManifestStep : IMigrationStep
     /// than the lowercase form <c>dotnet tool install</c> writes.
     /// </summary>
     private static readonly Regex retiredToolEntry = new(
-        $@"""(?:{string.Join("|", retiredToolIds.Select(x => x.Replace(".", @"\.")))})""(?<between>\s*:\s*\{{)(?<body>[^{{}}]*)",
+        $@"""(?:{string.Join("|", RetiredToolIds.Select(x => x.Replace(".", @"\.")))})""(?<between>\s*:\s*\{{)(?<body>[^{{}}]*)",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /// <summary>The <c>version</c> property inside a single tool entry body.</summary>

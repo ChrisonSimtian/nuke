@@ -1,54 +1,55 @@
 ---
-title: Fallout.GlobalTool → Fallout.GlobalTools
-description: The dotnet-tool NuGet package id changed. The fallout command did not. This page shows how to move an existing install or manifest.
+title: Moving off a retired tool package id
+description: The Fallout CLI ships as Fallout.GlobalTool. Three other package ids were used along the way and are now retired. This page shows how to move an install or a manifest onto the current one.
 ---
 
-The dotnet-tool NuGet package id is now **`Fallout.GlobalTools`**. The **command stays `fallout`**, so
-build scripts, CI steps, and shell invocations do not change. Only the install or restore reference
-moves.
+The Fallout CLI ships as **`Fallout.GlobalTool`**. This is the same package id NUKE users have had
+pinned since the rebrand, so most readers have nothing to do.
 
-If you have never installed the tool, you do not need this page. Follow
-[Installation](../01-getting-started/01-installation.md).
+Three other ids were used along the way and are now retired. If you pin one of them, this page shows
+how to move. The **command stays `fallout`** in every case, so build scripts, CI steps, and shell
+invocations do not change. Only the install or restore reference moves.
 
-## Why you need to act
+## Do you need to act?
 
-The older package ids are still on nuget.org, still listed, and frozen. `dotnet tool update` on an old
-id reports that you are already on the latest version, because you are — for that id. The newer
-releases are published under the new id.
+Run `dotnet tool list --global`, and open `.config/dotnet-tools.json` if your repo has one.
 
-| Package id | Last version | Status |
-|---|---|---|
-| `Nuke.GlobalTool` | NUKE-era | Frozen. Not a Fallout package. |
-| `Fallout.GlobalTool` | `10.3.49` | Frozen. Receives no further releases. |
-| `Fallout.Cli` | `10.3.47`, `11.0.18` | Frozen. The `11.0.x` line was withdrawn; see [v11 is defunct](#a-note-on-the-110x-versions). |
-| **`Fallout.GlobalTools`** | current | **Active. All future tool releases.** |
+| Package id | Status |
+|---|---|
+| **`Fallout.GlobalTool`** | **Current. All releases. Nothing to do.** |
+| `Nuke.GlobalTool` | Retired. The NUKE-era id, not a Fallout package. |
+| `Fallout.Cli` | Retired. The `11.0.x` line was withdrawn; see [the note below](#a-note-on-the-110x-versions). |
+| `Fallout.GlobalTools` | Retired. Note the trailing **s**. One prerelease, `10.4.0-rc.4`. |
 
 `rollForward: true` in your manifest does not help. It resolves a version *within* one package id, so
 it cannot move you to a different id.
 
 ## The easy way
 
-`fallout-migrate` rewrites the manifest for you, including the version pin:
+`fallout-migrate` rewrites the manifest for you, including the version pin, and switches your global
+install:
 
 ```sh
 dotnet tool install -g Fallout.Migrate
 fallout-migrate .
 ```
 
+Run it with `--dry-run` first if you want to see the commands it would run without running them.
+
 ## Local manifest, by hand
 
 Open `.config/dotnet-tools.json`. Change the tool id **and the version**. The version you had pinned
-belongs to the old id and does not exist under the new one, so renaming the key alone gives you a
-manifest that fails to restore.
+belongs to the retired id and does not exist under the current one, so renaming the key alone gives
+you a manifest that fails to restore.
 
 ```diff
  {
    "version": 1,
    "isRoot": true,
    "tools": {
--    "fallout.globaltool": {
--      "version": "10.3.49",
-+    "fallout.globaltools": {
+-    "fallout.cli": {
+-      "version": "11.0.18",
++    "fallout.globaltool": {
 +      "version": "<current version>",
        "commands": [ "fallout" ]
      }
@@ -62,15 +63,15 @@ Then restore:
 dotnet tool restore
 ```
 
-`dotnet tool list` should show a `fallout.globaltools` row and no `fallout.globaltool` row.
+`dotnet tool list` should show a `fallout.globaltool` row and no row for the retired id.
 
 ## Global install, by hand
 
-Uninstall the old package first. Two tools claiming the `fallout` command will conflict.
+Uninstall the retired package first. Two tools claiming the `fallout` command will conflict.
 
 ```sh
-dotnet tool uninstall -g Fallout.GlobalTool
-dotnet tool install -g Fallout.GlobalTools
+dotnet tool uninstall -g Fallout.Cli
+dotnet tool install -g Fallout.GlobalTool
 ```
 
 `dotnet tool list -g` confirms the result.
@@ -92,3 +93,5 @@ from `10.x` to calendar versioning without a v11 line. Do not pin `11.0.x`.
 ## Refs
 
 - [#575](https://github.com/Fallout-build/Fallout/issues/575) — the upgrade path this page documents.
+- [#581](https://github.com/Fallout-build/Fallout/pull/581) — settled on `Fallout.GlobalTool` as the id to keep.
+- [#582](https://github.com/Fallout-build/Fallout/issues/582) — the rule that stops this happening again.

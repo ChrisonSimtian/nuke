@@ -44,7 +44,7 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
     /// from <see cref="PackageId"/>: the tool id was introduced later, so it has its own, much
     /// shorter, set of published versions (#575).
     /// </summary>
-    private const string ToolPackageId = "fallout.globaltools";
+    private const string ToolPackageId = RewriteToolManifestStep.CurrentToolId;
 
     private static readonly HttpClient httpClient = CreateHttpClient();
 
