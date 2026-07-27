@@ -80,7 +80,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     /// <param name="original">The original <c>.csproj</c> file content.</param>
     /// <param name="falloutVersion">The Fallout version to pin into rewritten inline-versioned references.</param>
     /// <returns>The rewritten content and the number of edits made.</returns>
-    public static RewriteResult Rewrite(string original, string falloutVersion)
+    private static RewriteResult Rewrite(string original, string falloutVersion)
     {
         var edits = 0;
         var content = original;
