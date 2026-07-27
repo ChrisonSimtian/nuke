@@ -69,7 +69,10 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 | Package | Purpose | Used by |
 |---|---|---|
 | `Spectre.Console` (+ `.Cli`) | Console rendering and command-line parsing | `Fallout.Migrate` |
-| `CliWrap` | Run an external process and buffer its output, with a cancellation token and no manual `ProcessStartInfo` plumbing | `Fallout.Migrate` — `SwitchGlobalToolStep` shells out to `dotnet tool`. Deliberately not used in `Fallout.Common`, which has its own `ProcessTasks` layer that build authors consume. |
+
+Running an external process is served in-house by `ProcessTasks` (`src/Fallout.Tooling`), not by a
+third-party process runner. `CliWrap` was trialled for `Fallout.Migrate` and rejected — see
+[#583](https://github.com/Fallout-build/Fallout/issues/583) for the measured comparison.
 
 ## Vendored source
 

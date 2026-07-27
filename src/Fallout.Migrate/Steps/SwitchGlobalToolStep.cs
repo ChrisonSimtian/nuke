@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using CliWrap;
-using CliWrap.Buffered;
+using Fallout.Common.Tooling;
+using Fallout.Common.Utilities;
 using Fallout.Migrate.Common;
 using Spectre.Console;
 
@@ -38,9 +37,20 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
     private static readonly TimeSpan commandTimeout = TimeSpan.FromMinutes(2);
 
     /// <inheritdoc />
-    public async Task ExecuteAsync(MigrationContext context, Summary summary)
+    public Task ExecuteAsync(MigrationContext context, Summary summary)
     {
-        var listed = await ListGlobalToolsAsync(summary);
+        Execute(context, summary);
+
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// The step's actual work. Synchronous because <see cref="ProcessTasks"/> is; the interface's
+    /// async signature is satisfied by the wrapper above.
+    /// </summary>
+    private static void Execute(MigrationContext context, Summary summary)
+    {
+        var listed = ListGlobalTools(summary);
         if (listed == null)
         {
             // Could not read the global tool list, so we don't know what is installed. Warned already.
@@ -79,7 +89,7 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
 
         foreach (var id in installedRetiredIds)
         {
-            await UninstallAsync(id, summary);
+            Uninstall(id, summary);
         }
 
         if (currentAlreadyInstalled)
@@ -89,7 +99,7 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
             return;
         }
 
-        await InstallAsync(context.ToolVersion, summary);
+        Install(context.ToolVersion, summary);
     }
 
     /// <summary>
@@ -100,9 +110,9 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
     /// The installed package ids, lowercased, or <c>null</c> when the command could not be run — which
     /// is different from an empty list, meaning "ran fine, nothing installed".
     /// </returns>
-    private static async Task<IReadOnlyCollection<string>> ListGlobalToolsAsync(Summary summary)
+    private static IReadOnlyCollection<string> ListGlobalTools(Summary summary)
     {
-        var result = await RunAsync(["tool", "list", "--global"]);
+        var result = Run(["tool", "list", "--global"]);
         if (result == null || result.ExitCode != 0)
         {
             summary.Warnings.Add(
@@ -145,9 +155,9 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
     }
 
     /// <summary>Uninstalls one retired tool id, warning rather than failing when it doesn't work.</summary>
-    private static async Task UninstallAsync(string packageId, Summary summary)
+    private static void Uninstall(string packageId, Summary summary)
     {
-        var result = await RunAsync(["tool", "uninstall", "--global", packageId]);
+        var result = Run(["tool", "uninstall", "--global", packageId]);
         if (result == null || result.ExitCode != 0)
         {
             summary.Warnings.Add(
@@ -163,7 +173,7 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
     /// Installs <see cref="RewriteToolManifestStep.CurrentToolId"/>, pinned to
     /// <paramref name="toolVersion"/> when one was resolved.
     /// </summary>
-    private static async Task InstallAsync(string toolVersion, Summary summary)
+    private static void Install(string toolVersion, Summary summary)
     {
         var arguments = new List<string> { "tool", "install", "--global", RewriteToolManifestStep.CurrentToolId };
         if (toolVersion != null)
@@ -178,7 +188,7 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
             }
         }
 
-        var result = await RunAsync(arguments);
+        var result = Run(arguments);
         if (result == null || result.ExitCode != 0)
         {
             summary.Warnings.Add(
@@ -192,31 +202,56 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
     }
 
     /// <summary>
-    /// Runs <c>dotnet</c> with <paramref name="arguments"/> and buffers its output.
+    /// Runs <c>dotnet</c> with <paramref name="arguments"/> and collects its output.
     /// </summary>
     /// <returns>
-    /// The buffered result, or <c>null</c> when the process could not be started or timed out —
-    /// CliWrap throws for both, and neither should end the migration.
+    /// The exit code and captured streams, or <c>null</c> when the process could not be started or
+    /// outlived <see cref="commandTimeout"/>. Neither should end the migration.
     /// </returns>
-    private static async Task<BufferedCommandResult> RunAsync(IEnumerable<string> arguments)
+    /// <remarks>
+    /// Uses the framework's own <see cref="ProcessTasks"/> rather than a process-runner package, so
+    /// the migrate tool takes no dependency the framework does not already carry. Output logging is
+    /// off: <see cref="ProcessTasks"/> logs through Serilog, and this tool renders through Spectre.
+    /// </remarks>
+    private static CommandResult Run(IEnumerable<string> arguments)
     {
-        using var cancellation = new CancellationTokenSource(commandTimeout);
-
         try
         {
-            return await Cli.Wrap("dotnet")
-                .WithArguments(arguments)
-                // Non-zero is an expected outcome here (tool not installed, feed unreachable), so it
-                // is inspected via ExitCode rather than raised as an exception.
-                .WithValidation(CommandResultValidation.None)
-                .ExecuteBufferedAsync(cancellation.Token);
+            // ProcessTasks takes one pre-quoted argument string rather than a list.
+            var argumentLine = arguments.Select(x => x.DoubleQuoteIfNeeded()).JoinSpace();
+
+            using var process = ProcessTasks.StartProcess(
+                "dotnet",
+                argumentLine,
+                timeout: (int)commandTimeout.TotalMilliseconds,
+                logOutput: false,
+                logInvocation: false);
+
+            if (process == null || !process.WaitForExit())
+            {
+                // Timed out. WaitForExit has already killed the process.
+                return null;
+            }
+
+            // Non-zero is an expected outcome here (tool not installed, feed unreachable), so the
+            // exit code is returned for inspection rather than asserted.
+            return new CommandResult(
+                process.ExitCode,
+                Join(process.Output, OutputType.Std),
+                Join(process.Output, OutputType.Err));
         }
         catch (Exception)
         {
-            // No dotnet on PATH, or the command outlived commandTimeout.
+            // No dotnet on PATH — ToolPathResolver asserts rather than returning null.
             return null;
         }
+
+        static string Join(IEnumerable<Output> output, OutputType type)
+            => output.Where(x => x.Type == type).Select(x => x.Text).JoinNewLine();
     }
+
+    /// <summary>The parts of a finished <c>dotnet</c> invocation this step reads.</summary>
+    private sealed record CommandResult(int ExitCode, string StandardOutput, string StandardError);
 
     /// <summary>Renders the install command's tail for a warning or a dry-run line.</summary>
     internal static string DescribeInstall(string toolVersion)
@@ -227,7 +262,7 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
     }
 
     /// <summary>Appends the failing command's own error output to a warning, when there is any.</summary>
-    private static string Describe(BufferedCommandResult result)
+    private static string Describe(CommandResult result)
     {
         var error = result?.StandardError.Trim();
 

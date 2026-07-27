@@ -16,12 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CliWrap" />
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="Spectre.Console.Cli" />
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Fallout.Tooling is referenced for ProcessTasks: SwitchGlobalToolStep shells out to
+         `dotnet tool`, and the framework's own process layer keeps this tool free of a
+         third-party process-runner package. See #583. -->
+    <ProjectReference Include="..\Fallout.Tooling\Fallout.Tooling.csproj" />
     <ProjectReference Include="..\Fallout.Utilities\Fallout.Utilities.csproj" />
   </ItemGroup>
 
