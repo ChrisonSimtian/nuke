@@ -34,7 +34,10 @@ dotnet tool install -g Fallout.Migrate
 fallout-migrate .
 ```
 
-Run it with `--dry-run` first if you want to see the commands it would run without running them.
+Run it with `--dry-run` first if you want to see what it would change without changing anything.
+
+`fallout-migrate` only edits the repository by default. Add `--switch-global-tool` if you also want it
+to move a machine-wide (`--global`) install off a retired id.
 
 ## Local manifest, by hand
 

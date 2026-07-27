@@ -50,6 +50,13 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
     /// </summary>
     private static void Execute(MigrationContext context, Summary summary)
     {
+        if (!context.SwitchGlobalTool)
+        {
+            // Opt-in only. Migrating a repository must not install or uninstall software on the
+            // machine by surprise, and MigrationIntegrationSpecs runs this pipeline for real.
+            return;
+        }
+
         var listed = ListGlobalTools(summary);
         if (listed == null)
         {

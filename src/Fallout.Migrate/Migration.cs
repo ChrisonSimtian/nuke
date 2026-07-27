@@ -15,7 +15,14 @@ namespace Fallout.Migrate;
 /// <param name="rootDirectory">The repository root to migrate.</param>
 /// <param name="dryRun">When <c>true</c>, reports intended changes without writing them.</param>
 /// <param name="log">The writer steps use to report progress.</param>
-internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWriter log)
+/// <param name="switchGlobalTool">
+/// When <c>true</c>, <see cref="SwitchGlobalToolStep"/> may change machine-wide tool installs.
+/// </param>
+internal sealed class Migration(
+    AbsolutePath rootDirectory,
+    bool dryRun,
+    TextWriter log,
+    bool switchGlobalTool = false)
 {
     /// <summary>
     /// The steps executed by <see cref="RunAsync"/>, in order. <see cref="ResolveFalloutVersionStep"/> must
@@ -48,7 +55,7 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
     public async Task<Summary> RunAsync()
     {
         var summary = new Summary();
-        var context = new MigrationContext(rootDirectory, dryRun, log);
+        var context = new MigrationContext(rootDirectory, dryRun, log, switchGlobalTool);
 
         foreach (var step in steps)
         {

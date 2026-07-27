@@ -49,7 +49,7 @@ internal sealed class MigrateCommand : AsyncCommand<MigrateSettings>
 
         PrintBanner(rootDirectory, settings.DryRun);
 
-        var migration = new Migration(rootDirectory, settings.DryRun, Console.Out);
+        var migration = new Migration(rootDirectory, settings.DryRun, Console.Out, settings.SwitchGlobalTool);
         Summary summary = await migration.RunAsync();
 
         if (summary.Cancelled)
