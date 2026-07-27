@@ -57,12 +57,6 @@ partial class Build
     // matches the PR's base ref. See ADR-0004 (calendar versioning) / milestone #13.
     const string ReleaseBranchPattern = "release/*";
 
-    // The dotnet-tool package id shipped from src/Fallout.Cli. Deliberately not the project
-    // name — the assembly is Fallout.Cli but we keep publishing under the NUKE-era
-    // Fallout.GlobalTool id so the existing install base never has to migrate. Keep in sync
-    // with <PackageId> in Fallout.Cli.csproj.
-    const string GlobalToolPackageId = "Fallout.GlobalTool";
-
     // Glob matching the gitflow support-branch family (ADR-0004, amended 2026-05-30):
     // the legacy semver line (support/v10, ...) and retired CalVer years (support/2026, ...).
     // Same protected-branch validation rationale as ReleaseBranchPattern.
@@ -289,8 +283,13 @@ partial class Build
         .DependsOn<IPack>()
         .Executes(() =>
         {
-            SuppressErrors(() => DotNet($"tool uninstall -g {GlobalToolPackageId}"), logWarning: false);
-            DotNet($"tool install -g {GlobalToolPackageId} --add-source {OutputDirectory} --version {DefaultDeploymentVersion}");
+            // Read the id off the csproj rather than hardcoding it: the tool's PackageId is
+            // deliberately decoupled from its project/assembly name (Fallout.Cli packs as
+            // Fallout.GlobalTool), so Solution.Fallout_Cli.Name would install the wrong package.
+            var packageId = Solution.Fallout_Cli.GetProperty("PackageId");
+
+            SuppressErrors(() => DotNet($"tool uninstall -g {packageId}"), logWarning: false);
+            DotNet($"tool install -g {packageId} --add-source {OutputDirectory} --version {DefaultDeploymentVersion}");
         });
 
     T From<T>()
