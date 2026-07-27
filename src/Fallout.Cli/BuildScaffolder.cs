@@ -57,10 +57,10 @@ internal sealed class BuildScaffolder : IBuildScaffolder
                     })),
             platformFamily: PlatformFamily.Windows);
 
-        // .config/dotnet-tools.json pins Fallout.GlobalTools as a local tool so the thin shims
+        // .config/dotnet-tools.json pins Fallout.GlobalTool as a local tool so the thin shims
         // (build.sh / build.ps1) can `dotnet tool restore` and `dotnet fallout` deterministically.
         // Skip if the consumer already has a manifest — they may have other tools pinned and we
-        // don't want to clobber. They can add the `fallout.globaltools` entry manually.
+        // don't want to clobber. They can add the `fallout.globaltool` entry manually.
         var toolManifest = rootDirectory / ".config" / "dotnet-tools.json";
         if (!toolManifest.FileExists())
         {
