@@ -13,6 +13,7 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 ## Baseline contributions
 
 - Star the [GitHub project](https://github.com/Fallout-build/Fallout/stargazers) to help others find it.
+- Show the [badge](docs/badge.md) in your own README if you build with Fallout — copy-paste markdown, nothing to host.
 - File issues with concrete reproduction steps, version info, and logs.
 - Help triage existing issues — confirming bugs or pointing to fixes counts.
 
