@@ -51,6 +51,12 @@ public class MigrationIntegrationSpecs : IDisposable
             #!/usr/bin/env bash
             export NUKE_TELEMETRY_OPTOUT=1
             TEMP_DIRECTORY="$SCRIPT_DIR/.nuke/temp"
+
+            if [[ ! -z ${NUKE_ENTERPRISE_TOKEN+x} && "$NUKE_ENTERPRISE_TOKEN" != "" ]]; then
+                "$DOTNET_EXE" nuget remove source "nuke-enterprise" &>/dev/null || true
+                "$DOTNET_EXE" nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password "$NUKE_ENTERPRISE_TOKEN" --store-password-in-clear-text &>/dev/null || true
+            fi
+
             dotnet nuke "$@"
             """);
 
