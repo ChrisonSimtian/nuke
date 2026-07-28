@@ -64,6 +64,16 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 |---|---|
 | `NuGet.Packaging` | Read .nupkg metadata. Used by `NuGetVersionResolver`, `ProjectUpdater`. |
 
+## Console / process
+
+| Package | Purpose | Used by |
+|---|---|---|
+| `Spectre.Console` (+ `.Cli`) | Console rendering and command-line parsing | `Fallout.Migrate` |
+
+Running an external process is served in-house by `ProcessTasks` (`src/Fallout.Tooling`), not by a
+third-party process runner. `CliWrap` was trialled for `Fallout.Migrate` and rejected — see
+[#583](https://github.com/Fallout-build/Fallout/issues/583) for the measured comparison.
+
 ## Vendored source
 
 | Package | Source | Why vendored |

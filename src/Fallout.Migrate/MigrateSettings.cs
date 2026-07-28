@@ -25,4 +25,13 @@ internal sealed class MigrateSettings : CommandSettings
     [CommandOption("-n|--dry-run")]
     [Description("Show what would change without writing.")]
     public bool DryRun { get; init; }
+
+    /// <summary>
+    /// When <c>true</c>, <see cref="Steps.SwitchGlobalToolStep"/> may uninstall a retired global tool
+    /// and install the current one. Off by default: migrating a repository should not change software
+    /// installed on the machine unless the user asks for it.
+    /// </summary>
+    [CommandOption("--switch-global-tool")]
+    [Description("Also move a machine-wide (--global) install off a retired tool package id.")]
+    public bool SwitchGlobalTool { get; init; }
 }

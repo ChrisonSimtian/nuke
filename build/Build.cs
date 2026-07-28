@@ -283,8 +283,13 @@ partial class Build
         .DependsOn<IPack>()
         .Executes(() =>
         {
-            SuppressErrors(() => DotNet($"tool uninstall -g {Solution.Fallout_Cli.Name}"), logWarning: false);
-            DotNet($"tool install -g {Solution.Fallout_Cli.Name} --add-source {OutputDirectory} --version {DefaultDeploymentVersion}");
+            // Read the id off the csproj rather than hardcoding it: the tool's PackageId is
+            // deliberately decoupled from its project/assembly name (Fallout.Cli packs as
+            // Fallout.GlobalTool), so Solution.Fallout_Cli.Name would install the wrong package.
+            var packageId = Solution.Fallout_Cli.GetProperty("PackageId");
+
+            SuppressErrors(() => DotNet($"tool uninstall -g {packageId}"), logWarning: false);
+            DotNet($"tool install -g {packageId} --add-source {OutputDirectory} --version {DefaultDeploymentVersion}");
         });
 
     T From<T>()

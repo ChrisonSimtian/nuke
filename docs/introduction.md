@@ -45,7 +45,7 @@ Get a feeling how your Cake scripts would look like in Fallout.
 
 ```powershell
 # terminal-command
-dotnet tool install Fallout.GlobalTools --global
+dotnet tool install Fallout.GlobalTool --global
 ```
 
 **2. Go to a repository built with Cake.**

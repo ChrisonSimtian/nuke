@@ -15,11 +15,22 @@ namespace Fallout.Migrate;
 /// <param name="rootDirectory">The repository root to migrate.</param>
 /// <param name="dryRun">When <c>true</c>, reports intended changes without writing them.</param>
 /// <param name="log">The writer steps use to report progress.</param>
-internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWriter log)
+/// <param name="switchGlobalTool">
+/// When <c>true</c>, <see cref="SwitchGlobalToolStep"/> may change machine-wide tool installs.
+/// </param>
+internal sealed class Migration(
+    AbsolutePath rootDirectory,
+    bool dryRun,
+    TextWriter log,
+    bool switchGlobalTool = false)
 {
     /// <summary>
     /// The steps executed by <see cref="RunAsync"/>, in order. <see cref="ResolveFalloutVersionStep"/> must
-    /// run first, since later steps read <see cref="MigrationContext.FalloutVersion"/> from it.
+    /// run first, since later steps read <see cref="MigrationContext.FalloutVersion"/> and
+    /// <see cref="MigrationContext.ToolVersion"/> from it. <see cref="SwitchGlobalToolStep"/> runs
+    /// after <see cref="RewriteToolManifestStep"/>: the manifest rewrite fixes the repo, the switch
+    /// fixes the machine, and doing the repo first means an interrupted run still leaves the
+    /// committed state correct.
     /// </summary>
     private static readonly IReadOnlyList<IMigrationStep> steps =
     [
@@ -31,6 +42,8 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
         new RewriteCsFilesStep(),
         new RewriteBootstrapScriptsStep(),
         new CleanupBootstrapScriptsStep(),
+        new RewriteToolManifestStep(),
+        new SwitchGlobalToolStep(),
         new RenameNukeDirectoryStep()
     ];
 
@@ -42,7 +55,7 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
     public async Task<Summary> RunAsync()
     {
         var summary = new Summary();
-        var context = new MigrationContext(rootDirectory, dryRun, log);
+        var context = new MigrationContext(rootDirectory, dryRun, log, switchGlobalTool);
 
         foreach (var step in steps)
         {
