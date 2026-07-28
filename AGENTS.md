@@ -10,7 +10,7 @@ This is the **canonical brief**. GitHub Copilot reads this `AGENTS.md` natively;
 
 Originally NUKE by [matkoch](https://github.com/matkoch); under new maintenance as of 2026 and being renamed to Fallout. The codebase is mature, large, and has long-standing conventions — prefer matching existing patterns over introducing new ones.
 
-**Rebrand status:** the structural rename has landed — namespaces (`Fallout.*`), package IDs, project filenames, and the global tool name (`dotnet fallout`) are all in place. Legacy `Nuke.*` lives on only as the consumer transition shims under `src/Shims/`. See [docs/rebrand-plan.md](docs/rebrand-plan.md) for the locked namespace mapping.
+**Rebrand status:** the structural rename has landed — namespaces (`Fallout.*`), package IDs, project filenames, and the global tool name (`dotnet fallout`) are all in place. Legacy `Nuke.*` lives on only as the consumer transition shims under `src/Shims/`. The mapping is a strict 1:1 prefix swap — every `Nuke.X.Y.Z` namespace and assembly is `Fallout.X.Y.Z`, with no consolidation — which `[TypeForwardedTo]` in the shims locks in place. Consumer-facing migration is [docs/migration/from-nuke.md](docs/migration/from-nuke.md).
 
 **Versioning & channels (calendar versioning, two-tier ladder — [ADR-0004](docs/adr/0004-calendar-versioning-and-dual-pace-channels.md), channel ladder superseded by [ADR-0008](docs/adr/0008-collapse-experimental-into-main.md)).** The project ships on **calendar versions `YYYY.MINOR.PATCH`** (mechanically valid semver; major = year). A maturity ladder feeds the production line — **GitHub Packages = test/preview; nuget.org = production**:
 - **`main` = the integration trunk + sole `-preview` channel** — default branch; both deliberate improvements/bug fixes *and* faster AI-assisted work land here. Per-commit `-preview` prereleases (`2026.1.0-preview.<height>.g<commit>`) to **GitHub Packages only — never nuget.org**. Ordinary review. (The dedicated `experimental` `-alpha` lane was removed by ADR-0008 — it ran behind `main` and carried no unique work.)
@@ -70,7 +70,7 @@ Full conventions + what-not-to-do list: [docs/agents/conventions.md](docs/agents
 - **[docs/agents/conventions.md](docs/agents/conventions.md)** — conventions, what-not-to-do list, tool-wrapper recipe
 - **[docs/agents/issue-and-pr-style.md](docs/agents/issue-and-pr-style.md)** — how to write terse issues, user stories, and PR descriptions
 - **[docs/architecture.md](docs/architecture.md)** — high-level architecture overview
-- **[docs/rebrand-plan.md](docs/rebrand-plan.md)** — namespace mapping + bridge strategy
+- **[docs/migration/from-nuke.md](docs/migration/from-nuke.md)** — consumer-facing NUKE → Fallout migration guide
 - **[docs/roadmap.md](docs/roadmap.md)** — v11/v12/v13 milestones and RFCs
 - **[docs/dependencies.md](docs/dependencies.md)** — third-party dependencies (update when adding meaningful libraries)
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — contributor-facing flow (branching, PR review, merging convention)

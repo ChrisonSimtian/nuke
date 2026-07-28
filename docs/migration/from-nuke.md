@@ -1,6 +1,6 @@
 # Migrating from NUKE to Fallout
 
-Fallout is the hard-fork successor to [NUKE](https://github.com/nuke-build/nuke). If you maintain a NUKE-based build, this guide gets you running on Fallout in under five minutes. Why the rename and the relationship to upstream NUKE are explained in [the rebrand plan](https://github.com/Fallout-build/Fallout/blob/main/docs/rebrand-plan.md).
+Fallout is the hard-fork successor to [NUKE](https://github.com/nuke-build/nuke). If you maintain a NUKE-based build, this guide gets you running on Fallout in under five minutes. Why the rename and the relationship to upstream NUKE are explained in [Based on NUKE](https://github.com/Fallout-build/Fallout#based-on-nuke).
 
 ## TL;DR
 
