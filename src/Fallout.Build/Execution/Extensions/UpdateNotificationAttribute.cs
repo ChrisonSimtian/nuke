@@ -33,7 +33,7 @@ internal class UpdateNotificationAttribute : BuildExtensionAttributeBase, IOnBui
         Host.Warning(
             new[]
             {
-                "--- UPDATE RECOMMENDED FROM 5.1.0 ---",
+                "--- UPDATE RECOMMENDED ---",
                 "1. Update your global tool",
                 "   dotnet tool update Fallout.GlobalTool -g",
                 "2. Update your build",
