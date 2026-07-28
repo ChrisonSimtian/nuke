@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Fallout.Common.Utilities;
-using static Fallout.Common.Constants;
+using static Fallout.Constants;
 using static Fallout.Common.FalloutPaths;
 
 namespace Fallout.Common.Execution;
@@ -36,7 +36,7 @@ internal class UpdateNotificationAttribute : BuildExtensionAttributeBase, IOnBui
             {
                 "--- UPDATE RECOMMENDED ---",
                 "1. Update your global tool",
-                "   dotnet tool update Fallout.GlobalTool -g",
+                $"   dotnet tool update {FalloutGlobalToolPackageId} -g",
                 "2. Update your build",
                 "   fallout :update",
                 "3. Confirm on update for configuration file and build scripts",
