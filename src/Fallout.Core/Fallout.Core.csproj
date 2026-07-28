@@ -2,13 +2,19 @@
 
   <PropertyGroup>
     <!--
-      netstandard2.0 is required so Fallout.SourceGenerators (Roslyn) and Fallout.MSBuildTasks
-      (net472) can consume Constants. Without it those two need their own copy of the values.
+      netstandard2.0 is here for exactly one reason: Fallout.Build.Shared multi-targets it, and its
+      own code (FalloutPaths, Notifications) reads these constants. Build.Shared in turn keeps
+      netstandard2.0 only so Fallout.SourceGenerators can reference it — a Roslyn generator has to
+      be netstandard2.0. Nothing else forces it: no generator and no MSBuild task reads Constants.
 
-      Keep new Core code netstandard2.0-clean, or guard it with #if NETSTANDARD2_1_OR_GREATER.
-      Drop this target once neither of those consumers needs it.
+      netstandard2.1 is deliberately absent. Core uses no 2.1-only API, so that asset would be
+      identical to this one, and a 2.1 consumer resolves netstandard2.0 anyway. Keep new Core code
+      netstandard2.0-clean; if it ever needs a 2.1 API, add the target back behind an #if.
+
+      Exit condition: once #442 frees the SourceGenerators cone, Fallout.Build.Shared can drop
+      netstandard2.0 and this target goes with it — see #441.
     -->
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
     <Description>The reactor core of Fallout — pure domain types and graph algorithms of the build execution pipeline. No I/O, no process, no console, no logging. References nothing else in the repo.</Description>
   </PropertyGroup>
 
