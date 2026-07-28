@@ -10,7 +10,7 @@
          deliberately kept as the NUKE-era `Fallout.GlobalTool` (singular): it is the id the whole
          10.2.x/10.3.x install base already has pinned, so continuing to publish under it means no
          consumer ever has to migrate and no id ever has to be unlisted. The command stays `fallout`.
-         Do not rename this to match the assembly — see docs/rebrand-plan.md. -->
+         Do not rename this to match the assembly — see Fallout-build/Fallout#582. -->
     <PackageId>Fallout.GlobalTool</PackageId>
   </PropertyGroup>
 
