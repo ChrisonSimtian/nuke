@@ -1,7 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
+    <!--
+      netstandard2.0 is only here so Core can be consumed by Fallout.SourceGenerators (Roslyn
+      requires it) and Fallout.MSBuildTasks (net472). Without it, anything those two need has
+      to be duplicated into a lower-floor project — see #584.
+
+      Keep new Core code netstandard2.0-clean, or guard it with #if NETSTANDARD2_1_OR_GREATER.
+      Drop this target once the generator and MSBuild tasks no longer need it.
+    -->
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
     <Description>The reactor core of Fallout — pure domain types and graph algorithms of the build execution pipeline. No I/O, no process, no console, no logging. References nothing else in the repo.</Description>
   </PropertyGroup>
 
