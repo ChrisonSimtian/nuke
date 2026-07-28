@@ -39,29 +39,18 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
     /// <inheritdoc />
     public Task ExecuteAsync(MigrationContext context, Summary summary)
     {
-        Execute(context, summary);
-
-        return Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// The step's actual work. Synchronous because <see cref="ProcessTasks"/> is; the interface's
-    /// async signature is satisfied by the wrapper above.
-    /// </summary>
-    private static void Execute(MigrationContext context, Summary summary)
-    {
         if (!context.SwitchGlobalTool)
         {
             // Opt-in only. Migrating a repository must not install or uninstall software on the
             // machine by surprise, and MigrationIntegrationSpecs runs this pipeline for real.
-            return;
+            return Task.CompletedTask;
         }
 
         var listed = ListGlobalTools(summary);
         if (listed == null)
         {
             // Could not read the global tool list, so we don't know what is installed. Warned already.
-            return;
+            return Task.CompletedTask;
         }
 
         var installedRetiredIds = RewriteToolManifestStep.RetiredToolIds
@@ -72,7 +61,7 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
         {
             // Nothing retired is installed machine-wide. Installing the current tool is not this
             // step's job when the user never had a global install in the first place.
-            return;
+            return Task.CompletedTask;
         }
 
         bool currentAlreadyInstalled = listed.Contains(
@@ -91,7 +80,7 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
                 context.Log.WriteLine($"would run: dotnet tool install --global {DescribeInstall(context.ToolVersion)}");
             }
 
-            return;
+            return Task.CompletedTask;
         }
 
         foreach (var id in installedRetiredIds)
@@ -103,10 +92,12 @@ internal sealed class SwitchGlobalToolStep : IMigrationStep
         {
             // The current id was already there alongside a retired one. Removing the retired install
             // above is the whole fix; reinstalling would only risk downgrading a newer tool.
-            return;
+            return Task.CompletedTask;
         }
 
         Install(context.ToolVersion, summary);
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
