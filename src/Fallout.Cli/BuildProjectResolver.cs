@@ -3,6 +3,7 @@ using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using static Fallout.Common.Constants;
+using static Fallout.Common.FalloutPaths;
 
 namespace Fallout.Cli;
 

@@ -17,7 +17,7 @@ public class ArgumentsFromParametersFileAttribute : BuildExtensionAttributeBase,
     public void OnBuildCreated(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {
         // TODO: probably remove
-        if (!Constants.GetFalloutDirectory(FalloutBuild.RootDirectory).DirectoryExists())
+        if (!FalloutPaths.GetFalloutDirectory(FalloutBuild.RootDirectory).DirectoryExists())
             return;
 
 
@@ -45,9 +45,9 @@ public class ArgumentsFromParametersFileAttribute : BuildExtensionAttributeBase,
         //         : value;
 
         var parameterMembers = ValueInjectionUtility.GetParameterMembers(Build.GetType(), includeUnlisted: true);
-        var parameterObjectsAndProfiles = new[] { (File: Constants.GetDefaultParametersFile(FalloutBuild.RootDirectory), Profile: Constants.DefaultProfileName) }
+        var parameterObjectsAndProfiles = new[] { (File: FalloutPaths.GetDefaultParametersFile(FalloutBuild.RootDirectory), Profile: Constants.DefaultProfileName) }
             .Where(x => File.Exists(x.File))
-            .Concat(FalloutBuild.LoadedLocalProfiles.Select(x => (File: Constants.GetParametersProfileFile(FalloutBuild.RootDirectory, x), Profile: x)))
+            .Concat(FalloutBuild.LoadedLocalProfiles.Select(x => (File: FalloutPaths.GetParametersProfileFile(FalloutBuild.RootDirectory, x), Profile: x)))
             .ForEachLazy(x => Assert.FileExists(x.File))
             .Select(x => (JsonObject: JsonNode.Parse(File.ReadAllText(x.File)).NotNull().AsObject(), x.Profile))
             .Reverse();

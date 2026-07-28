@@ -5,6 +5,7 @@ using Fallout.Common.CI;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using static Fallout.Common.Constants;
+using static Fallout.Common.FalloutPaths;
 
 namespace Fallout.Common.Execution;
 

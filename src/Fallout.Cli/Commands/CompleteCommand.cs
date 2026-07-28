@@ -7,6 +7,7 @@ using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using Fallout.Utilities.Text.Yaml;
 using static Fallout.Common.Constants;
+using static Fallout.Common.FalloutPaths;
 
 namespace Fallout.Cli.Commands;
 

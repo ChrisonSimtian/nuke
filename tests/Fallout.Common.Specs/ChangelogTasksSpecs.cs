@@ -16,7 +16,7 @@ namespace Fallout.Common.Specs;
 
 public class ChangelogTasksSpecs
 {
-    private static AbsolutePath RootDirectory => Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
+    private static AbsolutePath RootDirectory => FalloutPaths.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
 
     private static AbsolutePath PathToChangelogReferenceFiles => RootDirectory / "tests" / "Fallout.Common.Specs" / "ChangelogReferenceFiles";
 

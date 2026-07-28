@@ -11,7 +11,7 @@ internal class HandleVisualStudioDebuggingAttribute : BuildExtensionAttributeBas
 {
     private const int TimeoutInMilliseconds = 10_000;
 
-    private AbsolutePath VisualStudioDebugFile => Constants.GetVisualStudioDebugFile(Build.RootDirectory);
+    private AbsolutePath VisualStudioDebugFile => FalloutPaths.GetVisualStudioDebugFile(Build.RootDirectory);
 
     public void OnBuildCreated(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {

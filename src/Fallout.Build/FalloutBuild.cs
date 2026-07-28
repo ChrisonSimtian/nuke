@@ -11,6 +11,7 @@ using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Common.ValueInjection;
 using static Fallout.Common.Constants;
+using static Fallout.Common.FalloutPaths;
 
 // ReSharper disable VirtualMemberNeverOverridden.Global
 

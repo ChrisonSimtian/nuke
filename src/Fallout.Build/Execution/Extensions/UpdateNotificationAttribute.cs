@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Fallout.Common.Utilities;
 using static Fallout.Common.Constants;
+using static Fallout.Common.FalloutPaths;
 
 namespace Fallout.Common.Execution;
 

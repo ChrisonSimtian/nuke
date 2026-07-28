@@ -25,7 +25,7 @@ internal partial class Program
 
             var buildScript = rootDirectory != null
                 ? rootDirectory.GetFiles(CliConventions.CurrentBuildScriptName, depth: 2)
-                    .FirstOrDefault(x => Constants.TryGetRootDirectoryFrom(x.Parent) == rootDirectory)
+                    .FirstOrDefault(x => FalloutPaths.TryGetRootDirectoryFrom(x.Parent) == rootDirectory)
                 : null;
 
             using var services = BuildServiceProvider();
@@ -86,6 +86,6 @@ internal partial class Program
         if (EnvironmentInfo.GetNamedArgument<bool>(Constants.RootDirectoryParameterName))
             return EnvironmentInfo.WorkingDirectory;
 
-        return Constants.TryGetRootDirectoryFrom(Directory.GetCurrentDirectory());
+        return FalloutPaths.TryGetRootDirectoryFrom(Directory.GetCurrentDirectory());
     }
 }

@@ -170,7 +170,7 @@ public class StronglyTypedSolutionGenerator : ISourceGenerator
 
         static AbsolutePath GetSolutionFileFromParametersFile(AbsolutePath rootDirectory, string memberName)
         {
-            var parametersFile = Constants.GetDefaultParametersFile(rootDirectory);
+            var parametersFile = FalloutPaths.GetDefaultParametersFile(rootDirectory);
             Assert.FileExists(parametersFile);
             var obj = JsonNode.Parse(File.ReadAllText(parametersFile)).NotNull().AsObject();
             var solutionRelativePath = obj[memberName].NotNull($"Property '{memberName}' does not exist in '{parametersFile}'.")
@@ -187,7 +187,7 @@ public class StronglyTypedSolutionGenerator : ISourceGenerator
                 // For testing only
                 : Directory.GetCurrentDirectory());
 
-            return Constants.TryGetRootDirectoryFrom(startDirectory).NotNull();
+            return FalloutPaths.TryGetRootDirectoryFrom(startDirectory).NotNull();
         }
     }
 }

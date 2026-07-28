@@ -22,7 +22,7 @@ namespace Fallout.Common.Specs;
 
 public class SettingsSpecs
 {
-    private static AbsolutePath RootDirectory => Constants.TryGetRootDirectoryFrom(Directory.GetCurrentDirectory()).NotNull();
+    private static AbsolutePath RootDirectory => FalloutPaths.TryGetRootDirectoryFrom(Directory.GetCurrentDirectory()).NotNull();
 
     [Fact]
     public void TestCommon()

@@ -15,7 +15,7 @@ namespace Fallout.Common.Specs;
 public class CompletionUtilitySpecs
 {
     private readonly VerifySettings _verifySettings;
-    private static AbsolutePath RootDirectory => Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
+    private static AbsolutePath RootDirectory => FalloutPaths.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
     private static AbsolutePath TestDirectory => RootDirectory / "tests" / "Fallout.Build.Specs";
 
     public CompletionUtilitySpecs()

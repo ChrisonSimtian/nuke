@@ -9,7 +9,7 @@ namespace Fallout.Common.Specs;
 
 public class ProjectModelSpecs
 {
-    private static AbsolutePath RootDirectory => Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
+    private static AbsolutePath RootDirectory => FalloutPaths.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
 
     private static AbsolutePath SolutionFile => RootDirectory / "fallout.slnx";
 

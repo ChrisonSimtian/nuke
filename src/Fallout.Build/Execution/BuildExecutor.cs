@@ -16,7 +16,7 @@ namespace Fallout.Common.Execution;
 internal static class BuildExecutor
 {
     // NOTE: no IFalloutBuild because of BuildAttemptFile + WriteTarget
-    private static AbsolutePath BuildAttemptFile => Constants.GetBuildAttemptFile(FalloutBuild.RootDirectory);
+    private static AbsolutePath BuildAttemptFile => FalloutPaths.GetBuildAttemptFile(FalloutBuild.RootDirectory);
 
     public static void Execute(FalloutBuild build, IReadOnlyCollection<string> skippedTargets)
     {
