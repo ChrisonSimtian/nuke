@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using FluentAssertions;
@@ -57,6 +58,38 @@ public class ArchitectureFitnessSpecs
         result.IsSuccessful.Should().BeTrue(
             because: "Fallout.Core sits at the bottom and must reference no other Fallout project; " +
                      "offending types: " + FailingTypes(result));
+    }
+
+    /// <summary>
+    /// Namespaces that predate this rule and cannot be corrected yet. <c>Fallout.Common.Execution</c>
+    /// holds <c>ExecutionStatus</c> and <c>ITargetModel</c>, both lifted into Core by the
+    /// de-statification work and both <c>public</c> — renaming their namespace is a breaking change,
+    /// so it is batched to the yearly major cut (AGENTS.md rule #1). The list is frozen: it is a
+    /// baseline to shrink, never to grow.
+    /// </summary>
+    private static readonly string[] GrandfatheredNamespaces = ["Fallout.Common.Execution"];
+
+    /// <summary>
+    /// Core is the innermost ring, so it must not declare a type under an outer layer's namespace.
+    /// It owns <c>Fallout.Core.*</c>, plus the root <c>Fallout</c> namespace for genuinely
+    /// cross-cutting values such as <c>Fallout.Constants</c>. A type sitting in, say,
+    /// <c>Fallout.Common</c> while shipping in <c>Fallout.Core.dll</c> inverts the onion in naming
+    /// even when the reference direction is legal, which the dependency tests above cannot see.
+    /// </summary>
+    [Fact]
+    public void Core_declares_no_type_in_an_outer_layer_namespace()
+    {
+        var offenders = CoreAssembly.GetTypes()
+            .Select(x => x.Namespace)
+            .Where(x => x is not null && x.StartsWith("Fallout", StringComparison.Ordinal))
+            .Where(x => x != "Fallout" && !x!.StartsWith("Fallout.Core", StringComparison.Ordinal))
+            .Where(x => !GrandfatheredNamespaces.Contains(x))
+            .Distinct()
+            .ToList();
+
+        offenders.Should().BeEmpty(
+            because: "Fallout.Core may only declare types under Fallout.Core.* or the root Fallout " +
+                     "namespace; offending namespaces: " + string.Join(", ", offenders));
     }
 
     private static string FailingTypes(TestResult result) =>

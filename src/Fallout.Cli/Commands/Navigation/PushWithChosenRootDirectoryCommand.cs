@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Fallout.Cli.Prompts;
 using Fallout.Common;
 using Fallout.Common.IO;
-using static Fallout.Common.Constants;
+using static Fallout.Constants;
 
 namespace Fallout.Cli.Commands.Navigation;
 

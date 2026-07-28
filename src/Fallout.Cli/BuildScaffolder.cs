@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
-using static Fallout.Common.Constants;
+using static Fallout.Constants;
 using static Fallout.Common.FalloutPaths;
 using static Fallout.Common.EnvironmentInfo;
 using static Fallout.Common.Tooling.ProcessTasks;

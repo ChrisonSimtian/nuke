@@ -1,4 +1,4 @@
-namespace Fallout.Common;
+namespace Fallout;
 
 /// <summary>
 /// Fallout's own fixed values: directory and file names, parameter names, environment variable
@@ -6,8 +6,14 @@ namespace Fallout.Common;
 /// generator and the IDE extensions.
 /// </summary>
 /// <remarks>
-/// Values only. Anything that derives a path or reads the file system lives in
-/// <see cref="FalloutPaths"/>, which cannot sit here because Core references nothing.
+/// Deliberately in the root <c>Fallout</c> namespace rather than a layer's. Core is the innermost
+/// ring, so it must not declare types under an outer layer's namespace such as
+/// <c>Fallout.Common</c> — <c>ArchitectureFitnessSpecs</c> enforces that. Every call site sits
+/// somewhere under <c>Fallout</c>, so unqualified <c>Constants.X</c> resolves without a using.
+/// <para>
+/// Values only. Anything that derives a path or reads the file system lives in <c>FalloutPaths</c>
+/// (<c>Fallout.Build.Shared</c>), which cannot sit here because Core references nothing.
+/// </para>
 /// </remarks>
 internal static class Constants
 {
@@ -22,8 +28,12 @@ internal static class Constants
     internal const string FalloutCommonPackageId = "Fallout.Common";
 
     // The dotnet-tool package id. Deliberately not the project or assembly name — Fallout.Cli
-    // packs as Fallout.GlobalTool so the existing install base never has to migrate. Keep in
-    // sync with <PackageId> in Fallout.Cli.csproj.
+    // packs as Fallout.GlobalTool so the existing install base never has to migrate (#582).
+    // Still hand-written: <PackageId> in Fallout.Cli.csproj is the source of truth, but the one
+    // consumer here (UpdateNotificationAttribute) ships inside Fallout.Common and runs in someone
+    // else's build, where no Fallout csproj exists to read it from. Flowing the id in at compile
+    // time — one shared MSBuild property feeding both <PackageId> and a generated constant — is
+    // the follow-up tracked on #584; until then keep these two in sync by hand.
     internal const string FalloutGlobalToolPackageId = "Fallout.GlobalTool";
 
     internal const string BuildSchemaFileName = "build.schema.json";
