@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.Json;
 using FluentAssertions;
 using Fallout.Common.IO;
 using Xunit;
@@ -217,6 +218,17 @@ public class PathConstructionSpecs
         ((string) ((UnixRelativePath) "foo/bar/foo" / ..)).Should().Be("foo/bar");
         ((string) ((WinRelativePath) "foo/bar/foo" / ..)).Should().Be("foo\\bar");
         ((string) ((RelativePath) "foo/bar" / ..)).Should().Be("foo");
+    }
+
+    [Fact]
+    public void TestSerialization()
+    {
+        AbsolutePath path = "/foo/bar";
+        string json = JsonSerializer.Serialize(path);
+        json.Should().Be("\"/foo/bar\"");
+
+        AbsolutePath deserialized = JsonSerializer.Deserialize<AbsolutePath>(json);
+        deserialized.Should().Be(path);
     }
 
     private static string ParseRelativePath(object[] parts)
