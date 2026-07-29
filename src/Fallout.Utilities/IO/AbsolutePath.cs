@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
+#if NET6_0_OR_GREATER
+using System.Text.Json.Serialization;
+using Fallout.Utilities.Converters;
+#endif
 using Fallout.Common.Utilities;
 using static Fallout.Common.IO.PathConstruction;
+using TypeConverter = Fallout.Utilities.Converters.TypeConverter;
 
 namespace Fallout.Common.IO;
 
@@ -14,6 +17,9 @@ namespace Fallout.Common.IO;
 /// Represents an absolute path without distinction between files and directories.
 /// </summary>
 [Serializable]
+#if NET6_0_OR_GREATER
+[JsonConverter(typeof(AbsolutePathJsonConverter))]
+#endif
 [TypeConverter(typeof(TypeConverter))]
 [DebuggerDisplay("{" + nameof(path) + "}")]
 public class AbsolutePath : IAbsolutePathHolder, IFormattable
@@ -23,29 +29,6 @@ public class AbsolutePath : IAbsolutePathHolder, IFormattable
     public const string SingleQuote = "s";
     public const string SingleQuoteIfNeeded = "sn";
     public const string NoQuotes = "nq";
-
-    public class TypeConverter : System.ComponentModel.TypeConverter
-    {
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
-        }
-
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-        {
-            if (value is string stringValue)
-            {
-                return HasPathRoot(stringValue)
-                    ? (AbsolutePath) stringValue
-                    : EnvironmentInfo.WorkingDirectory / stringValue;
-            }
-
-            if (value is null)
-                return null;
-
-            return base.ConvertFrom(context, culture, value);
-        }
-    }
 
     public static AbsolutePath Create(string path)
     {
@@ -149,11 +132,14 @@ public class AbsolutePath : IAbsolutePathHolder, IFormattable
     {
         if (ReferenceEquals(objA: null, obj))
             return false;
+
         if (ReferenceEquals(this, obj))
             return true;
+
         if (obj.GetType() != GetType())
             return false;
-        return Equals((AbsolutePath) obj);
+
+        return Equals((AbsolutePath)obj);
     }
 
     public override int GetHashCode()
