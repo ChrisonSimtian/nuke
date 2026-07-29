@@ -8,6 +8,8 @@ using ICSharpCode.SharpZipLib.BZip2;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
+using SharpCompress.Common;
+using SharpCompress.Readers;
 using ZipFile = ICSharpCode.SharpZipLib.Zip.ZipFile;
 
 namespace Fallout.Common.IO;
@@ -28,6 +30,10 @@ public static class CompressionExtensions
         {
             directory.TarBZip2To(archiveFile, filter);
         }
+        else if (archiveFile.HasExtension(".tar.xz", ".txz"))
+        {
+            Assert.Fail($"Compressing a .tar.xz archive currently not supported. Archive file: '{Path.GetFileName(archiveFile)}'");
+        }
         else
         {
             Assert.Fail($"Unknown archive extension for archive '{Path.GetFileName(archiveFile)}'");
@@ -47,6 +53,10 @@ public static class CompressionExtensions
         else if (archiveFile.HasExtension(".tar.bz2", ".tbz2", ".tbz"))
         {
             archiveFile.UnTarBZip2To(directory);
+        }
+        else if (archiveFile.HasExtension(".tar.xz", ".txz"))
+        {
+            archiveFile.UnTarXzTo(directory);
         }
         else
         {
@@ -147,6 +157,26 @@ public static class CompressionExtensions
     public static void UnTarBZip2To(this AbsolutePath archiveFile, AbsolutePath directory)
     {
         UncompressTar(archiveFile, directory, x => new BZip2InputStream(x));
+    }
+
+    public static void UnTarXzTo(this AbsolutePath archive, AbsolutePath directory)
+    {
+        using Stream stream = File.OpenRead(archive);
+        using var reader = ReaderFactory.OpenReader(stream);
+
+        while (reader.MoveToNextEntry())
+        {
+            if (reader.Entry.IsDirectory)
+            {
+                continue;
+            }
+
+            reader.WriteEntryToDirectory(directory, new ExtractionOptions
+            {
+                ExtractFullPath = true,
+                Overwrite = true
+            });
+        }
     }
 
     private static void CompressTar(
