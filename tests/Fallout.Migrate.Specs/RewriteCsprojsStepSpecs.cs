@@ -104,6 +104,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                                </PropertyGroup>
                              </Project>
                              """;
+
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
 
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
@@ -123,6 +124,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                                </PropertyGroup>
                              </Project>
                              """;
+
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
 
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
@@ -232,6 +234,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                                </ItemGroup>
                              </Project>
                              """;
+
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
 
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
@@ -239,5 +242,57 @@ public class RewriteCsprojsStepSpecs : IDisposable
         summary.EditCount.Should().Be(0);
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
         buildCsproj.Should().Be(input);
+    }
+
+    [Fact]
+    public async Task Telemetry_remove_pattern_does_not_act_greedy()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                                 <PropertyGroup>
+                                     <FalloutTelemetryVersion>1</FalloutTelemetryVersion>
+                                     <IsPackable>false</IsPackable>
+                                 </PropertyGroup>
+                             </Project>
+                             """;
+
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+        buildCsproj.Should().Be("""
+                                <Project Sdk="Microsoft.NET.Sdk">
+                                    <PropertyGroup>
+                                        <IsPackable>false</IsPackable>
+                                    </PropertyGroup>
+                                </Project>
+                                """);
+    }
+
+    [Fact]
+    public async Task Cryptography_package_pin_remove_pattern_does_not_act_greedy()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                                 <ItemGroup>
+                                     <PackageReference Include="Fallout.Common" Version="10.3.49" />
+                                     <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
+                                 </ItemGroup>
+                             </Project>
+                             """;
+
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+        buildCsproj.Should().Be("""
+                                <Project Sdk="Microsoft.NET.Sdk">
+                                    <ItemGroup>
+                                        <PackageReference Include="Fallout.Common" Version="10.3.49" />
+                                    </ItemGroup>
+                                </Project>
+                                """);
     }
 }
