@@ -201,4 +201,50 @@ public class RewriteCsprojsStepSpecs
         result.EditCount.Should().Be(0);
         result.Content.Should().Be(input);
     }
+
+    [Fact]
+    public void Telemetry_remove_pattern_does_not_act_greedy()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                                 <PropertyGroup>
+                                     <FalloutTelemetryVersion>1</FalloutTelemetryVersion>
+                                     <IsPackable>false</IsPackable>
+                                 </PropertyGroup>
+                             </Project>
+                             """;
+
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+
+        result.Content.Should().Be("""
+                                   <Project Sdk="Microsoft.NET.Sdk">
+                                       <PropertyGroup>
+                                           <IsPackable>false</IsPackable>
+                                       </PropertyGroup>
+                                   </Project>
+                                   """);
+    }
+
+    [Fact]
+    public void Cryptography_package_pin_remove_pattern_does_not_act_greedy()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                                 <ItemGroup>
+                                     <PackageReference Include="Fallout.Common" Version="10.3.49" />
+                                     <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
+                                 </ItemGroup>
+                             </Project>
+                             """;
+
+        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+
+        result.Content.Should().Be("""
+                                   <Project Sdk="Microsoft.NET.Sdk">
+                                       <ItemGroup>
+                                           <PackageReference Include="Fallout.Common" Version="10.3.49" />
+                                       </ItemGroup>
+                                   </Project>
+                                   """);
+    }
 }
