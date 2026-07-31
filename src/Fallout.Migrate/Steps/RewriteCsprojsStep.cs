@@ -45,7 +45,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     // (ADR-0010), so a migrated project must not carry a dead <FalloutTelemetryVersion>.
     // Matches the whole element line (either legacy Nuke* or already-Fallout* spelling).
     private static readonly Regex telemetryVersionPropertyPattern = new(
-        @"^[ \t]*<(?<tag>(?:Nuke|Fallout)TelemetryVersion)>.*?</\k<tag>>\s*\r?\n?",
+        @"^[ \t]*<(?<tag>(?:Nuke|Fallout)TelemetryVersion)>.*?</\k<tag>>[ \t]*\r?\n?",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
     // Strip explicit `System.Security.Cryptography.Xml` PackageReferences. NUKE-era projects
@@ -55,7 +55,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     // migrated project wants (#217). Matches a self-closing element with optional surrounding
     // indentation + trailing newline.
     private static readonly Regex cryptographyXmlPackageRefPattern = new(
-        @"^[ \t]*<PackageReference\s+Include=""System\.Security\.Cryptography\.Xml""[^/]*/>\s*\r?\n?",
+        @"^[ \t]*<PackageReference\s+Include=""System\.Security\.Cryptography\.Xml""[^/]*/>[ \t]*\r?\n?",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
     /// <inheritdoc />
