@@ -103,7 +103,7 @@ One known gap: work promoted onto a release branch by cherry-pick gets **new com
 
 That tag push triggers `.github/workflows/publish-packages-release.yml`:
 
-1. **`validate-ref`** confirms the tag points at a commit reachable from a production branch (`release/YYYY` or `support/*`).
+1. **`validate-ref`** confirms the tag points at a commit reachable from a production branch (`release/YYYY`, `release/vMAJOR.MINOR`, or `support/*`).
 2. **`test-and-pack`** runs `dotnet fallout Test Pack`, uploads `output/packages/*.nupkg` as an artifact.
 3. Three parallel publish jobs consume the artifact:
    - `publish-nuget-org` — **skipped** (not opt-in by default)

@@ -8,7 +8,7 @@ The branch/channel/versioning model is defined by [ADR-0004](../adr/0004-calenda
 
 A two-tier maturity ladder (`main` → `release/YYYY`) feeding the production line. GitHub Packages = test/preview; nuget.org = production. Long-lived branches:
 
-- `main` — the **integration trunk *and* the sole prerelease lane.** Default branch. **Both** deliberate improvements + bug fixes **and** faster/AI-assisted work land here. Every push publishes an NB.GV-native prerelease `YYYY.MINOR.PATCH-preview.<height>.g<commit>` (e.g. `2026.1.0-preview.42.gfbb83ef`) to **GitHub Packages only — never nuget.org.** Ordinary review.
+- `main` — the **integration trunk *and* the sole prerelease lane.** Default branch. **Both** deliberate improvements + bug fixes **and** faster/AI-assisted work land here. Every push publishes an NB.GV-native prerelease `YYYY.MINOR.PATCH-preview.<height>.g<commit>` (currently `10.4.0-preview.<height>.g<commit>`, on the 10.x line) to **GitHub Packages only — never nuget.org.** Ordinary review.
 - `release/YYYY` (e.g. `release/2026`) — the **production line** for the calendar year. **Cut from `main` on demand at the first release of the year, not preemptively** ([ADR-0007](../adr/0007-cut-release-branch-on-demand.md)); until then `main` (`-preview`) is the most-stable line. Hardened deliberately (slow crowd's domain, rigorous review), `-rc.N` → GA. After the cut it takes **non-breaking minors + patches only** — never a breaking change. Tag-triggered releases fire from here (the nuget.org tier). Protected per the policy below.
 - `support/v10` (+ `hotfix/v10.1`, `hotfix/v10.2`) — **legacy semver maintenance line**, `10.x`, **security and critical fixes only, no new features** (renamed from `release/v10`). Not renumbered into CalVer. Coexists indefinitely.
 - `support/YYYY` — a **retired** year production line (e.g. `support/2026` once 2027 supersedes it). Security/critical fixes only.
@@ -50,8 +50,8 @@ Tag protection for `v*` tags is a separate ruleset ([17017817](https://github.co
 **Calendar versioning: `YYYY.MINOR.PATCH`** (see [ADR-0004](../adr/0004-calendar-versioning-and-dual-pace-channels.md), as amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md)). It is mechanically valid SemVer 2.0 — all three components are numeric — so [Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning), NuGet, and version ordering all work unchanged. The major *is* the calendar year.
 
 - **`MAJOR` = year**, hand-set in `version.json` at the yearly cut. **`MINOR`** = feature drop within the year. **`PATCH`** = git-height fixes.
-- Per-branch via `version.json`. The preview lane is a **non-public ref** carrying the next planned version with a prerelease tag: `main` → `"2026.1.0-preview.{height}"` (`firstUnstableTag` is `preview`). Each `release/YYYY` carries `"version": "YYYY.x"`; `support/v10` keeps `"version": "10.x"`; `support/YYYY` keeps `"version": "YYYY.x"`. `publicReleaseRefSpec` matches the three production patterns: `^refs/heads/release/\d{4}$`, `^refs/heads/support/\d{4}$`, `^refs/heads/support/v\d+$` (**not** `main`).
-- Preview-lane builds carry the height + commit in the **prerelease segment** (`2026.1.0-preview.<height>.g<commit>`), never the version core — a core like `2026.05.29` would parse as a *stable* release, not a nightly. `main` is a non-public ref, so NB.GV appends the `.g<commit>` suffix. The ladder orders cleanly: `-preview` < `-rc` < GA.
+- Per-branch via `version.json`. The preview lane is a **non-public ref** carrying the next planned version with a prerelease tag: `main` → `"10.4.0-preview.{height}"` (`firstUnstableTag` is `preview`). Each `release/YYYY` carries `"version": "YYYY.x"`; the current `release/v10.4` pins its prerelease literally (`"version": "10.4.0-rc.N"` — a manual counter, see the runbook); `support/v10` keeps `"version": "10.x"`; `support/YYYY` keeps `"version": "YYYY.x"`. `publicReleaseRefSpec` matches the four production patterns: `^refs/heads/release/\d{4}$`, `^refs/heads/release/v\d+\.\d+$`, `^refs/heads/support/\d{4}$`, `^refs/heads/support/v\d+$` (**not** `main`).
+- Preview-lane builds carry the height + commit in the **prerelease segment** (`10.4.0-preview.<height>.g<commit>`), never the version core — a core like `2026.05.29` would parse as a *stable* release, not a nightly. `main` is a non-public ref, so NB.GV appends the `.g<commit>` suffix. The ladder orders cleanly: `-preview` < `-rc` < GA.
 
 GitVersion is still installed as a transitional helper for `MajorMinorPatchVersion` in `Build.cs`; full removal is a follow-up.
 
@@ -97,7 +97,7 @@ If you only discover the breaking nature mid-review, apply all relevant steps be
 
 ## Release pipeline
 
-`.github/workflows/publish-packages-release.yml` is **tag-triggered**: pushing a `v*` tag on a production branch (`release/YYYY` or `support/*`) fires the pipeline. The workflow validates the tag is reachable from such a branch, then fans out a Test+Pack job to three parallel publish jobs:
+`.github/workflows/publish-packages-release.yml` is **tag-triggered**: pushing a `v*` tag on a production branch (`release/YYYY`, `release/vMAJOR.MINOR`, or `support/*`) fires the pipeline. The workflow validates the tag is reachable from such a branch, then fans out a Test+Pack job to three parallel publish jobs:
 
 | Job | Environment | Fires on tag push? | What ships | Gating |
 |---|---|---|---|---|
