@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
@@ -132,6 +131,106 @@ public sealed class PackageAnalyzerSpecs
         serilog.Providers.Should().BeEquivalentTo(new[] { "3.0.0", "4.0.0" });
     }
 
+    [Fact]
+    public void Detects_redundancy_reachable_through_a_multi_hop_transitive_chain()
+    {
+        // Direct refs A and B. A -> C -> B, so B is redundant via A across two hops.
+        var assets = WriteAssets(Scenario(
+            directDependencies: """
+                                "A": { "target": "Package", "version": "[1.0.0, )" },
+                                "B": { "target": "Package", "version": "[1.0.0, )" }
+                                """,
+            target: """
+                    "A/1.0.0": { "type": "package", "dependencies": { "C": "1.0.0" } },
+                    "C/1.0.0": { "type": "package", "dependencies": { "B": "1.0.0" } },
+                    "B/1.0.0": { "type": "package" }
+                    """));
+
+        var finding = Analyze(assets).Single(x => x.PackageId == "B");
+
+        finding.Kind.Should().Be(FindingKind.RedundantViaPackage);
+        finding.Providers.Should().ContainSingle().Which.Should().Be("A");
+        finding.SafeToRemove.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Does_not_flag_a_conflict_when_one_project_pins_different_versions_across_its_own_tfms()
+    {
+        // One project, two TFMs. Serilog resolves to 3.0.0 on net8.0 and 4.0.0 on net10.0.
+        // That is legal multi-targeting, not a conflict — detection is per target framework.
+        var assets = AssetsFixture.WriteAssets(AssetsFixture.Assets(
+            "MultiTarget",
+            new AssetsFixture.Framework(
+                Tfm: "net8.0",
+                DirectDependencies: """ "Serilog": { "target": "Package", "version": "[3.0.0, )" } """,
+                Target: """ "Serilog/3.0.0": { "type": "package" } """),
+            new AssetsFixture.Framework(
+                Tfm: "net10.0",
+                DirectDependencies: """ "Serilog": { "target": "Package", "version": "[4.0.0, )" } """,
+                Target: """ "Serilog/4.0.0": { "type": "package" } """)));
+
+        var projects = ProjectAssetsReader.Read(assets);
+        projects.Should().HaveCount(2);
+
+        var findings = new PackageAnalyzer().Analyze(projects);
+
+        findings.Where(x => x.Kind == FindingKind.VersionConflict).Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Reports_a_conflict_only_from_the_frameworks_where_versions_diverge()
+    {
+        // net8.0: both projects resolve Serilog to 3.0.0 (agree — not a conflict there).
+        // net10.0: ProjectOne=4.0.0, ProjectTwo=5.0.0 (diverge — a conflict).
+        // Only the net10.0 versions should be reported; the agreed 3.0.0 must not appear.
+        static string Project(string name, string netEight, string netTen) => AssetsFixture.Assets(
+            name,
+            new AssetsFixture.Framework(
+                Tfm: "net8.0",
+                DirectDependencies: $$""" "Serilog": { "target": "Package", "version": "[{{netEight}}, )" } """,
+                Target: $$""" "Serilog/{{netEight}}": { "type": "package" } """),
+            new AssetsFixture.Framework(
+                Tfm: "net10.0",
+                DirectDependencies: $$""" "Serilog": { "target": "Package", "version": "[{{netTen}}, )" } """,
+                Target: $$""" "Serilog/{{netTen}}": { "type": "package" } """));
+
+        var one = ProjectAssetsReader.Read(AssetsFixture.WriteAssets(Project("ProjectOne", "3.0.0", "4.0.0")));
+        var two = ProjectAssetsReader.Read(AssetsFixture.WriteAssets(Project("ProjectTwo", "3.0.0", "5.0.0")));
+
+        var conflict = new PackageAnalyzer()
+            .Analyze(one.Concat(two).ToList())
+            .Single(x => x.Kind == FindingKind.VersionConflict && x.PackageId == "Serilog");
+
+        conflict.ConflictVersions.Select(x => x.Version).Should().BeEquivalentTo(new[] { "4.0.0", "5.0.0" });
+        conflict.ResolvedVersion.Should().Be("5.0.0"); // the highest resolved version
+    }
+
+    [Fact]
+    public void Restricts_analysis_to_the_requested_target_framework()
+    {
+        // The same redundancy (B via A) exists on both TFMs; asking for net10.0 yields net10.0 findings only.
+        static AssetsFixture.Framework Redundant(string tfm) => new(
+            Tfm: tfm,
+            DirectDependencies: """
+                                "A": { "target": "Package", "version": "[1.0.0, )" },
+                                "B": { "target": "Package", "version": "[1.0.0, )" }
+                                """,
+            Target: """
+                    "A/1.0.0": { "type": "package", "dependencies": { "B": "1.0.0" } },
+                    "B/1.0.0": { "type": "package" }
+                    """);
+
+        var assets = AssetsFixture.WriteAssets(AssetsFixture.Assets("MultiTarget", Redundant("net8.0"), Redundant("net10.0")));
+        var projects = ProjectAssetsReader.Read(assets);
+
+        var options = new AnalyzerOptions { TargetFramework = "net10.0" };
+        var findings = new PackageAnalyzer().Analyze(projects, options);
+
+        findings.Should().NotBeEmpty();
+        findings.Should().OnlyContain(x => x.TargetFramework == "net10.0");
+        findings.Should().Contain(x => x.PackageId == "B");
+    }
+
     private static IReadOnlyList<Finding> Analyze(string assetsFile, AnalyzerOptions options = null)
     {
         var projects = ProjectAssetsReader.Read(assetsFile);
@@ -146,52 +245,7 @@ public sealed class PackageAnalyzerSpecs
         string projectReferences = null,
         string projectName = "TestProject",
         string tfm = "net10.0")
-    {
-        var projectReferencesJson = projectReferences == null
-            ? string.Empty
-            : $$""""
-                ,
-                        "projectReferences": {
-                            {{projectReferences}}
-                        }
-                """";
+        => AssetsFixture.SingleFramework(directDependencies, target, projectReferences, projectName, tfm);
 
-        return $$"""
-                 {
-                     "version": 3,
-                     "targets": {
-                         "net10.0": {
-                             {{target}}
-                         }
-                     },
-                     "project": {
-                         "version": "1.0.0",
-                         "restore": {
-                             "projectName": "{{projectName}}",
-                             "projectPath": "/repo/{{projectName}}/{{projectName}}.csproj",
-                             "frameworks": {
-                                 "{{tfm}}": {
-                                     "targetAlias": "{{tfm}}"{{projectReferencesJson}}
-                                 }
-                             }
-                         },
-                         "frameworks": {
-                             "{{tfm}}": {
-                                 "targetAlias": "{{tfm}}",
-                                 "dependencies": {
-                                     {{directDependencies}}
-                                 }
-                             }
-                         }
-                     }
-                 }
-                 """;
-    }
-
-    private static string WriteAssets(string json)
-    {
-        var path = Path.Combine(Path.GetTempPath(), $"assets-{System.Guid.NewGuid():N}.json");
-        File.WriteAllText(path, json);
-        return path;
-    }
+    private static string WriteAssets(string json) => AssetsFixture.WriteAssets(json);
 }
