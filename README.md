@@ -25,15 +25,6 @@
 [![Open PRs](https://img.shields.io/github/issues-pr/Fallout-build/Fallout)](https://github.com/Fallout-build/Fallout/pulls)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/ChrisonSimtian?label=sponsor&logo=githubsponsors&color=EA4AAA)](https://github.com/sponsors/ChrisonSimtian)
 
-> [!IMPORTANT]
-> **Rebrand in progress + roadmap published.** This repository is being renamed from **NUKE** to **Fallout** as part of a hard fork. URLs, package names, and namespaces are migrating in stages.
->
-> **Versioning & channels.** Fallout ships on **calendar versions** (`YYYY.MINOR.PATCH`; the major is the year) via a maturity ladder: `main` is the deliberate **preview** trunk where work stabilises; the `release/YYYY` **production line** carries non-breaking minors/patches after the yearly cut. GitHub Packages = test/preview; nuget.org = production. See [ADR-0004](docs/adr/0004-calendar-versioning-and-dual-pace-channels.md) (as amended by [ADR-0008](docs/adr/0008-collapse-experimental-into-main.md)) and [docs/branching-and-release.md](docs/branching-and-release.md).
->
-> **What's next:** the rebrand completes and the internal foundation for a plugin architecture lands on the 2026 line; a later major ships the public `Fallout.Plugin.Sdk`. The full plan is in [**docs/roadmap.md**](docs/roadmap.md). Five RFCs are open now to shape the SDK — your input matters most before it firms up.
->
-> Track the work in [milestone #6](https://github.com/Fallout-build/Fallout/milestone/6) (rebrand + plugin foundation) and [milestone #7](https://github.com/Fallout-build/Fallout/milestone/7) (public plugin SDK).
-
 ## Based on NUKE
 
 Fallout is the successor to **[NUKE](https://github.com/nuke-build/nuke)**, originally created by **Matthias Koch** ([matkoch](https://github.com/matkoch)) and many contributors. Fallout continues NUKE's mission as a C#-first build automation framework for .NET — under new maintenance, with an enterprise-CI/CD focus.
