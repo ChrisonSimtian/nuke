@@ -30,8 +30,8 @@ Keep this block current — the examples further down use these values.
 
 | Line | Branch | Ships | Latest |
 |---|---|---|---|
-| Preview | `main` | `10.4.0-preview.<height>.g<sha>` → GitHub Packages, per commit | rolling |
-| Production | `release/v10.4` | `10.4.0-rc.N` → GitHub Packages + GH Release; nuget.org opt-in | `v10.4.0-rc.4` |
+| Preview | `main` | `10.5.0-preview.<height>.g<sha>` → GitHub Packages, per commit | rolling |
+| Production | `release/v10.4` | `10.4.0-rc.N` → GitHub Packages + GH Release; nuget.org opt-in | `v10.4.0-rc.5` |
 | Legacy | `support/v10` | `10.x` security/critical only | `10.3.47` |
 
 `main` is deliberately **not** in `publicReleaseRefSpec`, which is why its previews carry the `.g<sha>` suffix — they're non-public builds by design. Production lines are listed there, so their packages are clean (see [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md) for the CalVer target; the current line is still `10.x`).
@@ -44,7 +44,7 @@ Releases fire to multiple channels, each with its own GitHub Environment:
 
 | Channel | Built from | Cadence | Gating | Version shape |
 |---|---|---|---|---|
-| **preview** → `github-packages` env | `main` | Per-commit | None | `10.4.0-preview.<height>.g<commit>` |
+| **preview** → `github-packages` env | `main` | Per-commit | None | `10.5.0-preview.<height>.g<commit>` |
 | **stable** → `nuget-org` env | `release/*` tags | Slow, deliberate | **Flag opt-in + approval-gated** | `10.4.0-rc.N` today; `YYYY.M.P` after the CalVer cut |
 | **stable/legacy** → `github-packages` env | `release/*`, `support/*` tags | Every tag | None | Same as the tag |
 | **legacy** → `nuget-org` env | `support/v10`, `support/YYYY` tags | Security/critical only | **Flag opt-in + approval-gated** | `10.x` / `YYYY.x` |
@@ -62,7 +62,7 @@ On a release branch, `version.json`'s `version` pins the prerelease number liter
 - Every commit on the branch reports the same version until you bump, so the number tracks *release intent* rather than however many commits a promotion happened to carry. (`{height}` sent `rc.3` straight to `rc.23` on the first 19-commit promotion.)
 - Tagging twice without bumping republishes an existing version. `dotnet nuget push --skip-duplicate` swallows that silently, so the packages simply won't update — **check the number first**.
 
-`main` keeps `{height}` (`10.4.0-preview.{height}`): per-commit previews want a value that always moves on its own.
+`main` keeps `{height}` (`10.5.0-preview.{height}`): per-commit previews want a value that always moves on its own.
 
 ### Routine stable release (GitHub Packages only)
 
