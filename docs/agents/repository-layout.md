@@ -10,7 +10,7 @@ Canonical top-level structure. See [docs/architecture.md](../architecture.md) fo
 | `build/` | The build orchestrator (`_build.csproj` + `Build.*.cs` partial files). |
 | `docs/` | Documentation site content. Architecture notes and the agent brief sub-files live here too. |
 | `.assets/` | Images, icons, logos — anything binary and non-code. |
-| Root | Solution file (`fallout.slnx`), shared MSBuild plumbing (`Directory.Build.props/targets`, `Directory.Packages.props`), `AssemblyInfo.cs`, project conventions (`README.md`/`CONTRIBUTING.md`/`CODE_OF_CONDUCT.md`/`LICENSE`/`CHANGELOG.md`/`AGENTS.md`/`CLAUDE.md`). |
+| Root | Solution file (`fallout.slnx`), shared MSBuild plumbing (`Directory.Build.props/targets`, `Directory.Packages.props`), `AssemblyInfo.cs`, project conventions (`README.md`/`CONTRIBUTING.md`/`CODE_OF_CONDUCT.md`/`LICENSE`/`AGENTS.md`/`CLAUDE.md`). |
 
 ## Production projects under `src/`
 

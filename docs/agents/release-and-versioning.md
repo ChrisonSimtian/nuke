@@ -57,9 +57,11 @@ GitVersion is still installed as a transitional helper for `MajorMinorPatchVersi
 
 ## Versioning policy
 
-This project ships calendar versions that are valid [Semantic Versioning](https://semver.org/spec/v2.0.0.html) per [CHANGELOG.md](https://github.com/Fallout-build/Fallout/blob/main/CHANGELOG.md). The rule is: **breaking changes are batched to the yearly major cut.**
+This project ships calendar versions that are valid [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The rule is: **breaking changes are batched to the yearly major cut.**
 
-- A breaking change lands on **`main`, gated behind `[Experimental("FALLOUT0xx")]`** (or, when it can't be gated, on a short-lived topic branch off `main` held until the cut), is held for the next yearly major (it does **not** bump `version.json`'s major mid-year), and is recorded in `CHANGELOG.md` under the next-major `[Unreleased]` heading with a migration path.
+There is **no `CHANGELOG.md`** — the file was retired. Release notes are generated from PR labels via [`.github/release.yml`](https://github.com/Fallout-build/Fallout/blob/main/.github/release.yml), so the PR description and its labels are the durable record of a change.
+
+- A breaking change lands on **`main`, gated behind `[Experimental("FALLOUT0xx")]`** (or, when it can't be gated, on a short-lived topic branch off `main` held until the cut), is held for the next yearly major (it does **not** bump `version.json`'s major mid-year), and describes its migration path in the PR description under a `⚠️ Breaking change` callout.
 - **A `release/YYYY` production line never takes a breaking change** — it's strictly non-breaking (minor = features, patch = fixes). The production-cut review is the backstop that keeps ungated breaking work off the production line (ADR-0008).
 - Surface that isn't ready to commit to can ship behind `[Experimental("FALLOUT0xx")]` instead of being held back — opt-in for consumers, and not a breaking change to add or remove. With the `experimental` branch retired, the attribute is now the primary per-API isolation tool.
 
@@ -69,7 +71,7 @@ A "breaking change" is any of:
 - A `BREAKING CHANGE:` footer in the commit body.
 - A change a reviewer reasonably flags as breaking even without the marker (renamed/removed public API, package ID change, on-disk format change, CI/CD shape change consumers depend on) — **except** changes to `[Experimental]` surface, which carry no stability guarantee.
 
-**Reviewer responsibility:** if a PR carries `!` (or a flagged breaking change), confirm it targets `main` (not a production train), that the breaking surface is gated behind `[Experimental("FALLOUT0xx")]` (or held on a topic branch when it can't be gated), and that the CHANGELOG entry sits under the next-major heading. Block otherwise. The production-cut review is the backstop for any ungated breaking change reaching a `release/YYYY` cut.
+**Reviewer responsibility:** if a PR carries `!` (or a flagged breaking change), confirm it targets `main` (not a production train), that the breaking surface is gated behind `[Experimental("FALLOUT0xx")]` (or held on a topic branch when it can't be gated), and that the PR description carries the `⚠️ Breaking change` callout with a migration path. Block otherwise. The production-cut review is the backstop for any ungated breaking change reaching a `release/YYYY` cut.
 
 ## Milestones and version targeting
 
@@ -91,7 +93,7 @@ If the PR includes a **breaking change** (any commit uses `!`, has a `BREAKING C
 4. **Add the `breaking-change` label** (this is its changelog category — use it instead of `enhancement`/`bug`). `gh pr create --label target/vNext --label breaking-change …`.
 5. **Open the PR body with a `⚠️ Breaking change` callout** that names the affected surface (public API, package ID, CLI flag, on-disk format, CI/CD shape, etc.) and the consumer-side impact in one sentence. This is what reviewers and downstream consumers read first.
 6. **Confirm the PR targets `main`, not a `release/YYYY` production train, and that the breaking surface is gated behind `[Experimental("FALLOUT0xx")]`** (or, when it can't be gated, lives on a short-lived topic branch off `main` held until the year cut). Breaking changes accumulate on `main` for the next yearly major; they may not land on a production train. (Do **not** bump `version.json`'s major in the PR — the major is set once, at the yearly cut.)
-7. **Add a `CHANGELOG.md` entry** under the next-major `[Unreleased]` heading, in the same PR, describing the breaking change and the migration path (one paragraph minimum).
+7. **Spell out the migration path in the PR description** (one paragraph minimum) — what a consumer has to change, and what to run. The `breaking-change` label carries it into the generated release notes; there is no `CHANGELOG.md` to record it in.
 
 If you only discover the breaking nature mid-review, apply all relevant steps before requesting re-review.
 
