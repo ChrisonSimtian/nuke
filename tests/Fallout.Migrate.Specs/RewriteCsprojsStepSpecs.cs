@@ -297,7 +297,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
     }
 
     [Fact]
-    public void Recognizes_a_version_variable_prefixed_with_Nuke()
+    public async Task Recognizes_a_version_variable_prefixed_with_Nuke()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -312,16 +312,19 @@ public class RewriteCsprojsStepSpecs : IDisposable
                                </ItemGroup>
                              </Project>
                              """;
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
+        
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
-        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
 
-        result.Content.Should().NotContain("NukeVersion")
+        buildCsproj.Should().NotContain("NukeVersion")
             .And.Contain("$(FalloutVersion)", Exactly.Twice())
             .And.Contain("<FalloutVersion >11.0.0</FalloutVersion >");
     }
 
     [Fact]
-    public void Leaves_an_arbitrary_version_variable_alone_but_updates_the_version()
+    public async Task Leaves_an_arbitrary_version_variable_alone_but_updates_the_version()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -337,15 +340,19 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              </Project>
                              """;
 
-        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
+        
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
-        result.Content.Should().NotContain("FalloutVersion")
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should().NotContain("FalloutVersion")
             .And.Contain("$(CiProjectVersion)", Exactly.Twice())
             .And.Contain("<CiProjectVersion>11.0.0</CiProjectVersion>");
     }
 
     [Fact]
-    public void Leaves_an_unreferenced_arbitrary_variable_alone()
+    public async Task Leaves_an_unreferenced_arbitrary_variable_alone()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -359,15 +366,19 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              </Project>
                              """;
 
-        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
+        
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
-        result.Content.Should().Contain("<UnreferencedVersion>10.3.49</UnreferencedVersion>")
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should().Contain("<UnreferencedVersion>10.3.49</UnreferencedVersion>")
             .And.Contain("<CiProjectVersion>11.0.0</CiProjectVersion>")
             .And.Contain("$(CiProjectVersion)", Exactly.Once());
     }
 
     [Fact]
-    public void Does_not_bump_variables_used_for_non_Fallout_packages()
+    public async Task Does_not_bump_variables_used_for_non_Fallout_packages()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -380,14 +391,18 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              </Project>
                              """;
 
-        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+        
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
-        result.EditCount.Should().Be(0);
-        result.Content.Should().Be(input);
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        summary.EditCount.Should().Be(0);
+        buildCsproj.Should().Be(input);
     }
 
     [Fact]
-    public void Decouples_ambiguously_used_variables()
+    public async Task Decouples_ambiguously_used_variables()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -401,15 +416,20 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              </Project>
                              """;
 
-        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
-        result.Content.Should()
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
+        
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should()
           .Contain("<PkgVersion>10.1.0</PkgVersion>")
           .And.Contain("<FalloutVersion>")
           .And.Contain("$(FalloutVersion)", Exactly.Once());
     }
 
     [Fact]
-    public void Decouples_ambiguously_used_variables_even_when_no_property_group_found()
+    public async Task Decouples_ambiguously_used_variables_even_when_no_property_group_found()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -420,8 +440,13 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              </Project>
                              """;
 
-        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
-        result.Content.Should()
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
+        
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should()
             .Contain("<PropertyGroup>")
             .And.Contain("<FalloutVersion>11.0.0</FalloutVersion>")
             .And.Contain("$(FalloutVersion)", Exactly.Once())
@@ -429,7 +454,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
     }
 
     [Fact]
-    public void Decouples_ambiguously_used_variables_when_a_property_group_but_no_variable_exists()
+    public async Task Decouples_ambiguously_used_variables_when_a_property_group_but_no_variable_exists()
     {
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
@@ -442,8 +467,13 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              </Project>
                              """;
 
-        var result = RewriteCsprojsStep.Rewrite(input, TestFalloutVersion);
-        result.Content.Should()
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
+        
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should()
             .Contain("<PropertyGroup>")
             .And.Contain("<FalloutVersion>11.0.0</FalloutVersion>")
             .And.Contain("$(FalloutVersion)", Exactly.Once())
