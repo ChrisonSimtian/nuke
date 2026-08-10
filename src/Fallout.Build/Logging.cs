@@ -10,14 +10,26 @@ using Fallout.Common.Utilities.Collections;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Extensions.Logging;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
+
+// Both Serilog and Microsoft.Extensions.Logging declare an ILogger. This file is the seam between
+// them, so the unqualified name is bound to the abstraction the framework codes against; Serilog's
+// own pipeline is reached through the static Log class below.
+using ILogger = Microsoft.Extensions.Logging.ILogger;
+using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Fallout.Common.Execution;
 
 public static class Logging
 {
     public static readonly LoggingLevelSwitch LevelSwitch = new();
+
+    /// <summary>Category for framework log records written without a category of their own.</summary>
+    internal const string DefaultCategoryName = "Fallout";
+
+    private static ILoggerFactory loggerFactory;
 
     internal static bool SupportsAnsiOutput => Environment.GetEnvironmentVariable("TERM") is { } term && term.StartsWithOrdinalIgnoreCase("xterm");
     internal static IHostTheme DefaultTheme { get; } = SupportsAnsiOutput
@@ -34,6 +46,57 @@ public static class Logging
     {
         get => LevelSwitch.MinimumLevel.ToLogLevel();
         set => LevelSwitch.MinimumLevel = value.ToLogEventLevel();
+    }
+
+    /// <summary>
+    /// Logger factory for the current build run, backed by the Serilog pipeline that
+    /// <see cref="Configure"/> installs. <c>BuildManager</c> feeds this from its composition root
+    /// (see <c>AddFalloutLogging</c>). Outside a run there is no container — the CLI commands call
+    /// <see cref="Configure"/> directly — so this falls back to a factory over the ambient Serilog
+    /// pipeline, and the seam is usable either way.
+    /// </summary>
+    internal static ILoggerFactory Factory => loggerFactory ??= CreateSerilogLoggerFactory();
+
+    /// <summary>
+    /// Logger for framework code that has no category of its own. Deliberately not cached — each
+    /// access creates a logger against the pipeline that is current right now, which is what keeps
+    /// the façade correct across the reassignments described on
+    /// <see cref="CreateSerilogLoggerFactory"/>.
+    /// </summary>
+    internal static ILogger Logger => Factory.CreateLogger(DefaultCategoryName);
+
+    /// <summary>
+    /// Points <see cref="Factory"/> at <paramref name="factory"/> until the returned bracket is
+    /// disposed. Ownership stays with the caller: disposing the bracket restores the previous
+    /// factory, it does not dispose <paramref name="factory"/>.
+    /// </summary>
+    internal static IDisposable UseLoggerFactory(ILoggerFactory factory)
+    {
+        return DelegateDisposable.SetAndRestore(() => loggerFactory, factory.NotNull());
+    }
+
+    /// <summary>
+    /// Bridges <see cref="ILogger"/> onto Serilog.
+    /// </summary>
+    /// <remarks>
+    /// Passing no logger leaves the factory itself unbound, so each logger it hands out reads the
+    /// ambient <see cref="Log.Logger"/> as it is created. That matters because the pipeline is not
+    /// stable for the lifetime of the process: <see cref="Configure"/> installs it late and
+    /// replaces it on re-entry, and <c>Host.WriteErrorsAndWarnings</c> swaps it again to render the
+    /// end-of-build summary. Pinning a logger into the factory would strand every consumer on
+    /// whichever pipeline happened to exist first.
+    ///
+    /// Binding still happens per logger rather than per write, because the category name is
+    /// attached as Serilog's <c>SourceContext</c> at construction. Two consequences the callers
+    /// depend on: <c>AddFalloutLogging</c> configures the pipeline <em>before</em> it registers the
+    /// factory, so a container-resolved logger can never bind a stale one; and <see cref="Logger"/>
+    /// is not cached.
+    ///
+    /// Serilog owns the pipeline's lifetime (<c>Log.CloseAndFlush</c>), hence <c>dispose: false</c>.
+    /// </remarks>
+    internal static ILoggerFactory CreateSerilogLoggerFactory()
+    {
+        return new SerilogLoggerFactory(logger: null, dispose: false);
     }
 
     public static void Configure(IFalloutBuild build = null)

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.Logging;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
@@ -44,9 +46,16 @@ internal static class BuildManager
         using var context = BuildContext.Activate();
         var build = new T();
 
+        // The composition root for the run. Declared out here so it survives into `finally` —
+        // Finish() still writes the outcome summary — but built inside the `try`, so a failure while
+        // configuring logging is reported the same way it was before there was a container.
+        ServiceProvider services = null;
+        IDisposable loggerFactoryScope = null;
+
         try
         {
-            Logging.Configure(build);
+            services = new ServiceCollection().AddFalloutLogging(build).BuildServiceProvider();
+            loggerFactoryScope = Logging.UseLoggerFactory(services.GetRequiredService<ILoggerFactory>());
 
             build.ExecutableTargets = ExecutableTargetFactory.CreateAll(build, defaultTargetExpressions);
             build.ExecuteExtension<IOnBuildCreated>(x => x.OnBuildCreated(build.ExecutableTargets));
@@ -89,6 +98,8 @@ internal static class BuildManager
         {
             Finish();
             Log.CloseAndFlush();
+            loggerFactoryScope?.Dispose();
+            services?.Dispose();
             // Per-run teardown (handler unsubscription + state reset) is owned by the BuildContext,
             // run when `context` is disposed at method exit.
         }
