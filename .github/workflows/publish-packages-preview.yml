@@ -1,9 +1,9 @@
-# Hand-written. The "preview" channel — `main` (ADR-0004, amended 2026-05-30).
+# Hand-written. The "preview" channel — `main` (ADR-0004 as deferred by ADR-0012).
 #
 # Shape:
 #   - Trigger: push to `main`. `main` is the integration trunk / `-preview`
 #     channel — the deliberate lane where work stabilises. Nerdbank.GitVersioning
-#     produces a prerelease of the form `2026.1.0-preview.<height>.g<commit>`
+#     produces a prerelease of the form `10.5.0-preview.<height>.g<commit>`
 #     (`main` is intentionally NOT a public-release ref in version.json), so these
 #     never look like a stable release.
 #   - Builds + packs, then pushes every *.nupkg to GitHub Packages ONLY.
