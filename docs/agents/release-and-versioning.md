@@ -75,7 +75,7 @@ A "breaking change" is any of:
 
 ## Milestones and version targeting
 
-Milestones are **theme-based** (e.g. "Plugin Architecture Foundation & Rebrand Completion", "Public Plugin SDK", "Continuous Delivery Vision") and carry across releases; version targeting uses **evergreen `target/vCurrent` / `target/vNext`** labels — `target/vCurrent` is the current release line, `target/vNext` is next year's major. Legacy v10 maintenance work uses `target/v10`. A breaking change is held for the next yearly major — so its PR carries `target/vNext`.
+Milestones are **theme-based** (e.g. "Plugin Architecture Foundation & Rebrand Completion", "Public Plugin SDK", "Continuous Delivery Vision") and carry across releases; version targeting uses **evergreen `target/vCurrent` / `target/vNext`** labels — `target/vCurrent` is the current release line, `target/vNext` is next year's major. A breaking change is held for the next yearly major — so its PR carries `target/vNext`.
 
 ## PR-creation flow
 
@@ -85,7 +85,7 @@ not as a follow-up — every PR gets:
 
 0. **Working from a fork? Branch from `upstream/main`, push to `origin`, PR against `upstream`.** If `git remote -v` shows both an `origin` (a personal fork, e.g. `<you>/Fallout`) and an `upstream` remote pointing at `Fallout-build/Fallout`, treat `upstream` as the core repo: `git fetch upstream main` and branch from `upstream/main` (never `origin/main`, which can be arbitrarily stale relative to the core repo and will produce huge, spurious merge conflicts), push the new branch to `origin`, and open the PR against `upstream` — `gh pr create --repo Fallout-build/Fallout --draft ...`. Do this by default unless the user explicitly asks to branch off the fork's own `main` instead. Doesn't apply to a plain single-remote clone.
 1. **Create the PR as a draft** — `gh pr create --draft` (see [issue-and-pr-style.md](issue-and-pr-style.md#pr-description-shape)) unless the user explicitly asks for a ready-for-review PR. This is easy to miss because it's a small flag on the same `gh pr create` call as the labels below — don't drop it.
-2. **A `target/vCurrent` or `target/vNext` label** matching where it will release. Default to `target/vCurrent` (the current release line). If the PR carries a breaking change, it's held for the next yearly major — use `target/vNext`. Legacy v10 maintenance work uses `target/v10`. Pass via `--label target/vCurrent` to `gh pr create`.
+2. **A `target/vCurrent` or `target/vNext` label** matching where it will release. Default to `target/vCurrent` (the current release line). If the PR carries a breaking change, it's held for the next yearly major — use `target/vNext`. Pass via `--label target/vCurrent` to `gh pr create`.
 3. **A changelog-category label** describing the change, from [`.github/release.yml`](../../.github/release.yml) — that file is the source of truth for the taxonomy and carries a one-line blurb on each label. Apply the one category the PR belongs under (`enhancement`, `bug`, `security`, `documentation`; `breaking-change` when it applies — see below), or `skip-changelog` for housekeeping with no release note. Pass it in the same `gh pr create --label …` call. Don't leave a PR uncategorized — it falls through to "Other Changes". This is the labelling AI applies on the user's behalf whenever it raises a PR.
 
 If the PR includes a **breaking change** (any commit uses `!`, has a `BREAKING CHANGE:` footer, or otherwise meets the breaking-change definition above), additionally:
