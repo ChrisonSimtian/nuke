@@ -20,6 +20,6 @@
   "release": {
     "versionIncrement": "minor",
     "firstUnstableTag": "preview",
-    "branchName": "release/{version}"
+    "branchName": "release/v{version}"
   }
 }
