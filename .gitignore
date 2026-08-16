@@ -57,8 +57,14 @@ _dotTrace*
 # Tests
 *.received.txt
 
-# Claude Code — local-only files (shared settings.json IS committed)
-.claude/settings.local.json
+# Local-only, by convention: anything named *.local.* is this-machine state and never
+# committed. Covers CLAUDE.local.md (personal agent directives), .claude/settings.local.json,
+# and .*crunch*.local.xml above. The shared sibling — settings.json, AGENTS.md, CLAUDE.md —
+# IS committed.
+*.local.*
+
+# Claude Code — local state the pattern above doesn't catch. Credentials especially:
+# these must never reach a public repo.
 .claude/.credentials*
 .claude/scheduled_tasks.lock
 .claude/worktrees/
