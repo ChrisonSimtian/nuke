@@ -122,7 +122,9 @@ Want to contribute code, docs, or triage? Start with [CONTRIBUTING.md](CONTRIBUT
 
 ## Sponsorship
 
-Fallout is volunteer-run. There's no donation channel yet, but we want to be transparent about what running the project costs — see [`costs.md`](costs.md) for the full list. If you or your organisation would like to help offset those costs, open an issue and we'll work out the details.
+Fallout is volunteer-run, and we want to be transparent about what running the project costs — see [`costs.md`](https://github.com/Fallout-build/.github/blob/main/costs.md) for the full list. It lives with the organisation's other shared project files, since the spend covers every repository rather than this one.
+
+If you or your organisation would like to help offset those costs, use the sponsor button on any Fallout repository, or open an issue and we'll work out the details.
 
 ## Credits
 
