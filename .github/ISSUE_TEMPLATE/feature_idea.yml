@@ -1,6 +1,6 @@
 name: 💡 Feature Idea
 description: "Suggest new features for the project."
-labels: ["enhancement", "triage"]
+labels: ["enhancement", "needs-triage"]
 body:
   - type: markdown
     attributes:
