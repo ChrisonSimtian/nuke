@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-Fallout welcomes contributions. As a community, we want to help each other, provide constructive feedback, and make a better product. Our [code of conduct](CODE_OF_CONDUCT.md) applies at all times.
+Fallout welcomes contributions. As a community, we want to help each other, provide constructive feedback, and make a better product. Our [code of conduct](https://github.com/Fallout-build/.github/blob/main/CODE_OF_CONDUCT.md) applies at all times.
 
 > **About the project.** Fallout is the hard-fork successor to [NUKE](https://github.com/nuke-build/nuke) (originally by [Matthias Koch](https://github.com/matkoch) and contributors). Maintenance moved to a new team in 2026; the codebase is in active rebrand. See the [README](README.md) for the full backstory.
 
