@@ -55,7 +55,7 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 - There's no committed `.editorconfig` or ReSharper/`*.DotSettings` file — they were removed during the takeover. Rely on `dotnet format` defaults and review; don't reintroduce them without a maintainer-level decision.
 - Add tests when meaningful — every `Foo` project has a sibling `Foo.Tests`.
 - Commit the regenerated `.cs` output alongside the `.json` spec — `VerifyGeneratedTools` fails CI if they drift.
-- **Label the PR `target/vCurrent`** for the current release line (use `target/vNext` for work held to next year's major). Legacy `support/v10` maintenance work uses `target/v10`. **Breaking changes are batched to the yearly major cut**: they land on `main` gated behind `[Experimental("FALLOUT0xx")]` (or, when they can't be gated, on a short-lived topic branch off `main`) — never on a `release/YYYY` production train — are held for next year's `YYYY+1.0.0`, and additionally get a `breaking-change` label plus a `⚠️ Breaking change` callout in the PR description naming the migration path. Surface that isn't ready to commit to can ship behind `[Experimental("FALLOUT0xx")]` instead of being held back. See the [PR-creation flow](docs/agents/release-and-versioning.md#pr-creation-flow) for the full procedure.
+- **Label the PR `target/vCurrent`** for the current release line (use `target/vNext` for work held to next year's major). **Breaking changes are batched to the yearly major cut**: they land on `main` gated behind `[Experimental("FALLOUT0xx")]` (or, when they can't be gated, on a short-lived topic branch off `main`) — never on a `release/YYYY` production train — are held for next year's `YYYY+1.0.0`, and additionally get a `breaking-change` label plus a `⚠️ Breaking change` callout in the PR description naming the migration path. Surface that isn't ready to commit to can ship behind `[Experimental("FALLOUT0xx")]` instead of being held back. See the [PR-creation flow](docs/agents/release-and-versioning.md#pr-creation-flow) for the full procedure.
 
 ### Tool wrappers
 
@@ -99,4 +99,4 @@ Merging to `main` publishes a **preview prerelease** (`2026.MINOR.PATCH-preview.
 - Promotion + hotfix flow (forward-only `main → release/YYYY`; the legacy `support/v10` line takes security/critical fixes directly)
 - When to cut a new year
 
-Contributors don't usually need to do any of this — releases are maintainer-driven. But if you're filing a PR labelled `target/v10` (legacy maintenance) or one that carries a breaking change held for next year's major, expect the maintainer to route it accordingly.
+Contributors don't usually need to do any of this — releases are maintainer-driven. But if you're filing a fix for the legacy `support/v10` line, or one that carries a breaking change held for next year's major, expect the maintainer to route it accordingly.
