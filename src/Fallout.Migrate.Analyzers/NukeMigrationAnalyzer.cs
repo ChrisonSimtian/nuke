@@ -17,7 +17,7 @@ public sealed class NukeMigrationAnalyzer : DiagnosticAnalyzer
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
         description: "The Nuke.* namespaces and bare types NukeBuild/INukeBuild are provided by the transition shim only. Long-term consumers should reference Fallout.* directly.",
-        helpLinkUri: "https://github.com/Fallout-build/Fallout/blob/main/docs/migration/from-nuke.md");
+        helpLinkUri: "https://github.com/Fallout-build/Fallout/blob/main/docs/website/migration/from-nuke.md");
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Rule);
 

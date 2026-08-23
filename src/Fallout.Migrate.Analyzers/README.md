@@ -39,4 +39,4 @@ If you want to migrate an entire repo in one shot from the command line, use the
 
 ## Deprecation
 
-This package will be removed alongside the `Nuke.Common` transition shim. That removal is a breaking change, so it lands at a yearly major cut — no date is set yet. (The previous plan, "ship through 11.x, remove in 12.0", was written before the `11.x` line was skipped in favour of calendar versioning; see [ADR-0004](../../docs/adr/0004-calendar-versioning-and-dual-pace-channels.md).)
+This package will be removed alongside the `Nuke.Common` transition shim. That removal is a breaking change, so it lands at a yearly major cut — no date is set yet. (The previous plan, "ship through 11.x, remove in 12.0", was written before the `11.x` line was skipped in favour of calendar versioning; see [ADR-0004](../../docs/website/adr/0004-calendar-versioning-and-dual-pace-channels.md).)

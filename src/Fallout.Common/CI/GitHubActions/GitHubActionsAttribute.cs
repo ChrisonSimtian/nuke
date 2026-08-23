@@ -58,11 +58,11 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     public string[] OnPullRequestExcludePaths { get; set; } = new string[0];
     [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.",
         DiagnosticId = "FALLOUTOBS001",
-        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
+        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/website/obsolete_apis.md")]
     public string[] OnWorkflowDispatchOptionalInputs { get; set; } = new string[0];
     [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.",
         DiagnosticId = "FALLOUTOBS001",
-        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
+        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/website/obsolete_apis.md")]
     public string[] OnWorkflowDispatchRequiredInputs { get; set; } = new string[0];
     public string OnCronSchedule { get; set; }
 
