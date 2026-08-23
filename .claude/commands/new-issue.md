@@ -4,8 +4,8 @@ argument-hint: <one-line description of the problem/ask>
 allowed-tools: Read, Bash(gh issue create:*), Bash(gh label list:*)
 ---
 
-Read `docs/agents/issue-and-pr-style.md` and follow it as the binding style
-contract. Then draft a GitHub issue for: **$ARGUMENTS**
+Read `.agents/skills/creating-a-pr/references/writing-style.md` and follow it
+as the binding style contract. Then draft a GitHub issue for: **$ARGUMENTS**
 
 Assemble the body to the canonical shape:
 
@@ -30,5 +30,5 @@ Rules:
 
 Show me the drafted title and body first. **Do not file it until I confirm.**
 On confirmation, run `gh issue create --title "…" --body "…" --label enhancement`
-plus the correct `target/vCurrent`/`target/vNext` label (see the PR-creation flow), and report only
-the resulting issue URL.
+plus the correct `target/vCurrent`/`target/vNext` label (see the `creating-a-pr`
+skill), and report only the resulting issue URL.

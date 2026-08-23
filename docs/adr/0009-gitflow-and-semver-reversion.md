@@ -107,4 +107,4 @@ Bump straight to `v11.0.0` now, since the calendar-versioning experiment is bein
 - [ADR-0007: Cut `release/YYYY` on demand](0007-cut-release-branch-on-demand.md) — kept, renamed onto `develop`/`release/vX.Y`
 - [ADR-0008: Collapse `experimental` into `main`](0008-collapse-experimental-into-main.md) — kept, renamed onto `develop`
 - [docs/branching-and-release.md](../branching-and-release.md) — maintainer runbook, updated for this model
-- [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md) — PR-flow + release-pipeline reference, updated for this model
+- `AGENTS.md` and the `creating-a-pr` / `cutting-a-release` skills — agent-facing PR-flow and release-pipeline procedures, updated for this model

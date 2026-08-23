@@ -144,7 +144,7 @@ Version ladder (SemVer prerelease ordering): `…-alpha.N` < `…-preview.N` < `
 ### Neutral
 
 - **ADR-0001's branch/channel/CD model and ADR-0002's nuget.org-opt-in policy are unchanged.** This ADR changes the *versioning scheme*, adds the *test lanes* (`experimental` alpha + `main` preview, both GitHub Packages only), and adds the *`[Experimental]` + review-tier* conventions. The three-environment fan-out, tag-triggered trigger, and cherry-pick hotfix flow all carry over.
-- ~~**`target/vN` labels become `target/YYYY`** (`target/2026`, …).~~ Legacy work keeps `target/v10`. Milestones remain theme-based. **(Superseded 2026-07-13:** the year-based label migration was never carried out; the repo standardised on **evergreen `target/vCurrent` / `target/vNext`** labels instead — see AGENTS.md rule #1 and [release-and-versioning.md](../agents/release-and-versioning.md#milestones-and-version-targeting).)
+- ~~**`target/vN` labels become `target/YYYY`** (`target/2026`, …).~~ Legacy work keeps `target/v10`. Milestones remain theme-based. **(Superseded 2026-07-13:** the year-based label migration was never carried out; the repo standardised on **evergreen `target/vCurrent` / `target/vNext`** labels instead — see AGENTS.md rule #1 and the "Milestones and version targeting" section of `.agents/skills/creating-a-pr/references/pr-creation-flow.md`.)
 
 ## Alternatives considered
 
@@ -177,5 +177,4 @@ Make daily builds literally `2026.05.29`.
 - [ADR-0001: Release-branch model & multi-channel CD](0001-release-branch-model.md) — parent; versioning section superseded here, channel model extended.
 - [ADR-0002: v11 off nuget.org by default](0002-v11-off-nuget-by-default.md) — nuget.org-opt-in policy, retained.
 - [docs/branching-and-release.md](../branching-and-release.md) — maintainer runbook (updated for this model).
-- [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md) — agent-facing branching/versioning/PR-flow reference (updated for this model).
 - Discussion thread: [#302 — Calendar versioning + dual-pace channels (feedback)](https://github.com/Fallout-build/Fallout/discussions/302).

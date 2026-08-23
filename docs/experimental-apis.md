@@ -2,7 +2,7 @@
 
 Fallout marks not-yet-stable public APIs with [`System.Diagnostics.CodeAnalysis.ExperimentalAttribute`](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute) so consumers opt into instability deliberately. This page is the **canonical registry of allocated `FALLOUT0xx` diagnostic IDs**.
 
-See [ADR-0004 §5](adr/0004-calendar-versioning-and-dual-pace-channels.md#5-experimental-for-opt-in-unstable-apis) (carried forward unchanged by [ADR-0009](adr/0009-gitflow-and-semver-reversion.md)) for the decision and [the agent conventions](agents/conventions.md#experimental-for-opt-in-unstable-apis) for the contributor rules.
+See [ADR-0004 §5](adr/0004-calendar-versioning-and-dual-pace-channels.md#5-experimental-for-opt-in-unstable-apis) (carried forward unchanged by [ADR-0009](adr/0009-gitflow-and-semver-reversion.md)) for the decision and the `marking-experimental-apis` skill (`.agents/skills/marking-experimental-apis/SKILL.md`) for the contributor rules.
 
 ## How it works
 
@@ -41,6 +41,7 @@ or, project-wide, in your `.csproj`:
 - Every allocation is recorded in the registry table below, in the same PR that introduces the attribute.
 - **Promoting an API to stable means deleting the `[Experimental]` attribute** (the feature already rode the trunk — no cross-branch cherry-pick). The ID's row moves to **Promoted** status and the ID is retired, not recycled. Adding or removing `[Experimental]` is not a breaking change.
 - **Channel discipline:** on the `develop` (preview) test lane the attribute is a courtesy; on a `release/vX.Y` / `main` production line any risky-but-shipped public surface **must** wear it. (Per [ADR-0008](adr/0008-collapse-experimental-into-main.md), carried forward by [ADR-0009](adr/0009-gitflow-and-semver-reversion.md), `develop` is the sole prerelease lane and the primary home for not-yet-stable surface, so gating it behind this attribute is what keeps the production cut clean.)
+- See also [docs/obsolete_apis.md](obsolete_apis.md), the counterpart registry for `[Obsolete]` deprecations.
 
 ## Registry
 

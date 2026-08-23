@@ -82,4 +82,4 @@ Never use `--force` alone.
 Rewrite the PR title and description to match the restructured commits.
 Structure: Summary → one Changes section per commit → optional Combined effect.
 Each Changes section maps 1-to-1 to a commit. Apply the PR-creation flow from
-`docs/agents/release-and-versioning.md` for labels and breaking-change callouts.
+`.agents/skills/creating-a-pr/SKILL.md` for labels and breaking-change callouts.
