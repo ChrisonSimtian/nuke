@@ -6,7 +6,7 @@
   <strong>📖 Documentation: <a href="https://docs.fallout.build/">docs.fallout.build</a></strong>
 </p>
 
-> 📦 **Fallout is the successor to NUKE.** [Migrating from NUKE →](docs/website/migration/from-nuke.md)
+> 📦 **Fallout is the successor to NUKE.** [Migrating from NUKE →](docs/Migration/from-nuke.md)
 
 # Fallout
 
@@ -33,7 +33,7 @@ The original NUKE code is preserved here under the MIT License with attribution.
 
 ### Migrating from NUKE
 
-If you maintain a NUKE-based build, **[docs/website/migration/from-nuke.md](docs/website/migration/from-nuke.md)** walks you through it. The short version:
+If you maintain a NUKE-based build, **[docs/Migration/from-nuke.md](docs/Migration/from-nuke.md)** walks you through it. The short version:
 
 ```sh
 dotnet tool install -g Fallout.Migrate
@@ -59,7 +59,7 @@ The CLI installs as `fallout`. Verify with `fallout --help`.
 For per-repo manifest pinning (`.config/dotnet-tools.json`), project setup, and shell completion, see the [Installation guide on docs.fallout.build](https://docs.fallout.build/getting-started/installation).
 
 > [!NOTE]
-> **Channels.** Stable releases ship on **calendar versions** (`YYYY.MINOR.PATCH`, e.g. `2026.1.3`; the major is the year) from the `release/YYYY` production line — published to GitHub Packages, with nuget.org publishing opt-in per release. The `main` integration trunk publishes a faster `…-preview.…` prerelease to **GitHub Packages only**; opt in by adding the GitHub Packages feed and a prerelease version range. The legacy NUKE `10.x` line (`support/v10`) stays on semver and receives security/critical fixes only. See [ADR-0004](docs/website/adr/0004-calendar-versioning-and-dual-pace-channels.md) (as amended by [ADR-0008](docs/website/adr/0008-collapse-experimental-into-main.md)) and [docs/website/branching-and-release.md](docs/website/branching-and-release.md) for the full model.
+> **Channels.** Stable releases ship on **calendar versions** (`YYYY.MINOR.PATCH`, e.g. `2026.1.3`; the major is the year) from the `release/YYYY` production line — published to GitHub Packages, with nuget.org publishing opt-in per release. The `main` integration trunk publishes a faster `…-preview.…` prerelease to **GitHub Packages only**; opt in by adding the GitHub Packages feed and a prerelease version range. The legacy NUKE `10.x` line (`support/v10`) stays on semver and receives security/critical fixes only. See [ADR-0004](docs/adr/0004-calendar-versioning-and-dual-pace-channels.md) (as amended by [ADR-0008](docs/adr/0008-collapse-experimental-into-main.md)) and [docs/branching-and-release.md](docs/branching-and-release.md) for the full model.
 
 ## Table of Contents
 

@@ -2,8 +2,8 @@
 #
 # GitHub reads this to auto-generate release notes, grouping merged PRs into the
 # sections below by label. It is ALSO the canonical list of changelog labels that
-# tooling and AI apply at PR-creation time — see docs/website/agents/issue-and-pr-style.md
-# and the PR-creation flow in docs/website/agents/release-and-versioning.md.
+# tooling and AI apply at PR-creation time — see docs/agents/issue-and-pr-style.md
+# and the PR-creation flow in docs/agents/release-and-versioning.md.
 #
 # When raising a PR: apply the one category label that matches the change (the
 # blurbs below say which is which), in the same `gh pr create` call, alongside the

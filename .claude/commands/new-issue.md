@@ -4,7 +4,7 @@ argument-hint: <one-line description of the problem/ask>
 allowed-tools: Read, Bash(gh issue create:*), Bash(gh label list:*)
 ---
 
-Read `docs/website/agents/issue-and-pr-style.md` and follow it as the binding style
+Read `docs/agents/issue-and-pr-style.md` and follow it as the binding style
 contract. Then draft a GitHub issue for: **$ARGUMENTS**
 
 Assemble the body to the canonical shape:

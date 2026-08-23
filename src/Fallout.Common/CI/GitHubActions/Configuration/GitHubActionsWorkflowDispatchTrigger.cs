@@ -10,12 +10,12 @@ public class GitHubActionsWorkflowDispatchTrigger : GitHubActionsDetailedTrigger
 {
     [Obsolete($"Set {nameof(Inputs)} instead. Removed in 2027.x.x.",
         DiagnosticId = "FALLOUTOBS001",
-        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/website/obsolete_apis.md")]
+        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
     public string[] OptionalInputs { get; set; } = new string[0];
 
     [Obsolete($"Set {nameof(Inputs)} instead. Removed in 2027.x.x.",
         DiagnosticId = "FALLOUTOBS001",
-        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/website/obsolete_apis.md")]
+        UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
     public string[] RequiredInputs { get; set; } = new string[0];
 
     public GitHubActionsWorkflowDispatchInput[] Inputs { get; set; } = new GitHubActionsWorkflowDispatchInput[0];

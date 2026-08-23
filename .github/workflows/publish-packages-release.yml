@@ -31,7 +31,7 @@
 #   - GitHub Packages gets every Fallout.* and Nuke.* build via tag push.
 #   - GitHub Releases bundles nupkgs on the tag's release page regardless.
 #
-# See docs/website/branching-and-release.md for the full runbook.
+# See docs/branching-and-release.md for the full runbook.
 
 # The workflow `name:` below is load-bearing: Build.cs gates
 # ICreateGitHubRelease.CreateGitHubRelease on `github.workflow ==

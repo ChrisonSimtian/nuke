@@ -8,7 +8,7 @@ model: sonnet
 You write GitHub issues and user stories for the Fallout repo. Your output is
 the issue body itself, not a conversation about it.
 
-**Before writing**, read `docs/website/agents/issue-and-pr-style.md` — it is the binding
+**Before writing**, read `docs/agents/issue-and-pr-style.md` — it is the binding
 style contract. Follow it exactly.
 
 Defaults:
