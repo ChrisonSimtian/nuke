@@ -1,10 +1,10 @@
-# Hand-written. The "preview" channel — `main` (ADR-0004, amended 2026-05-30).
+# Hand-written. The "preview" channel — `develop` (ADR-0009, superseding ADR-0004).
 #
 # Shape:
-#   - Trigger: push to `main`. `main` is the integration trunk / `-preview`
+#   - Trigger: push to `develop`. `develop` is the integration trunk / `-preview`
 #     channel — the deliberate lane where work stabilises. Nerdbank.GitVersioning
-#     produces a prerelease of the form `2026.1.0-preview.<height>.g<commit>`
-#     (`main` is intentionally NOT a public-release ref in version.json), so these
+#     produces a prerelease of the form `10.5.0-preview.<height>.g<commit>`
+#     (`develop` is intentionally NOT a public-release ref in version.json), so these
 #     never look like a stable release.
 #   - Builds + packs, then pushes every *.nupkg to GitHub Packages ONLY.
 #   - Deliberately does NOT touch nuget.org and does NOT create a GitHub Release.
@@ -12,20 +12,20 @@
 #     (they add the feed), so it causes none of the nuget.org Dependabot
 #     fan-out that ADR-0001 / ADR-0002 were avoiding.
 #
-# `main` is the sole continuous prerelease lane (ADR-0008 collapsed the former
-# `experimental` `-alpha` lane into `main`). Stable + legacy releases are
-# deliberate and tag-triggered — see publish-packages-release.yml.
-# Cross-platform validation (macOS/Windows) is gated to release intent
-# (build-cross-platform.yml) and does NOT run on `main` pushes; on `main` the
-# ubuntu-latest gate (build.yml) is the edge. This workflow's job is publishing,
-# not gating.
+# `develop` is the only continuous prerelease lane. ADR-0008 folded the former
+# `experimental` `-alpha` lane into the trunk; ADR-0009 keeps that, just renamed
+# onto `develop`. Stable and legacy releases are deliberate and tag-triggered —
+# see publish-packages-release.yml. Cross-platform validation (macOS/Windows)
+# only runs on release intent (build-cross-platform.yml), not on `develop`
+# pushes — `develop` relies on the ubuntu-latest gate (build.yml) instead.
+# This workflow's job is publishing, not gating.
 
 name: publish-packages-preview
 
 on:
   push:
     branches:
-      - main
+      - develop
     paths-ignore:
       - 'docs/**'
       - '.assets/**'

@@ -32,7 +32,7 @@ partial class Build
                 GenerateCode(
                     x,
                     namespaceProvider: x => $"Fallout.Common.Tools.{x.Name}",
-                    sourceFileProvider: x => $"https://github.com/{CanonicalRepositoryIdentifier}/blob/{MainBranch}/{RootDirectory.GetUnixRelativePathTo(x.SpecificationFile)}"));
+                    sourceFileProvider: x => $"https://github.com/{CanonicalRepositoryIdentifier}/blob/{DevelopBranch}/{RootDirectory.GetUnixRelativePathTo(x.SpecificationFile)}"));
         });
 
     // CI gate: `GenerateTools` only runs when a contributor remembers to invoke it, so a .json

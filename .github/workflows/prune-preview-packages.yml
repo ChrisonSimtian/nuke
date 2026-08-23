@@ -3,12 +3,12 @@
 # Why this exists: GitHub Packages has NO retention policy feature — no TTL, no
 # auto-expiry, nothing to configure. Package versions live forever until something
 # deletes them. publish-packages-preview.yml pushes the full package set to GitHub
-# Packages on EVERY `main` commit (ADR-0004), so versions accumulate without bound;
-# by August 2026 that had reached ~2,280 versions across 24 packages. Every package
-# is public, and public package storage is free, so there is no quota pressure today.
-# This prune is hygiene: it stops the feed growing without limit. Actions artifacts
-# are not the problem (they DO have retention — see `retention-days` in
-# publish-packages-release.yml).
+# Packages on EVERY `develop` commit (ADR-0009, formerly `main` under ADR-0004), so
+# versions accumulate without bound; by August 2026 that had reached ~2,280 versions
+# across 24 packages. Every package is public, and public package storage is free,
+# so there is no quota pressure today. This prune is hygiene: it stops the feed
+# growing without limit. Actions artifacts are not the problem (they DO have
+# retention — see `retention-days` in publish-packages-release.yml).
 #
 # Shape:
 #   - Discovers the org's NuGet packages from the API rather than hard-coding a
@@ -20,18 +20,20 @@
 #   - Runs weekly, matching the Dependabot cadence, and on demand.
 #
 # "Newest" means most-recently-created, not highest version number: the action
-# orders by CREATED_AT descending. That matters because the feed currently holds
-# two different preview schemes (`2026.1.0-preview.<height>` and the lower-sorting
-# `10.0.0-preview.<height>` that `main` publishes today), so a version-number sort
-# would keep the wrong ones. Creation order is correct regardless of scheme.
+# orders by CREATED_AT descending. That matters because the versioning scheme has
+# changed more than once (`2026.1.0-preview.<height>` under the retired CalVer
+# model, `10.0.0-preview.<height>` before that, now `10.5.0-preview.<height>` from
+# `develop`), so at times the feed holds more than one scheme at once. A
+# version-number sort would keep the wrong versions. Creation order is correct
+# no matter which scheme is in use.
 #
 # Deletion is IRREVERSIBLE. Run it via workflow_dispatch with dry-run=true first;
 # the report step prints exactly what a real run would remove.
 #
 # Note: preview versions are disposable by design — they are per-commit builds of
 # the integration trunk, reproducible from the commit in the version string
-# (`2026.1.0-preview.<height>.g<commit>`). Consumers pinning a preview should move
-# to a `-rc` or GA version, which this workflow never prunes.
+# (e.g. `10.5.0-preview.<height>.g<commit>`). Consumers pinning a preview should
+# move to a `-rc` or GA version, which this workflow never prunes.
 
 name: prune-preview-packages
 
