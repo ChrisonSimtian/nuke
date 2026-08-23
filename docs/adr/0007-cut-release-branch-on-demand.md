@@ -4,6 +4,8 @@
 
 Accepted (2026-06-08). **Amends [ADR-0004](0004-calendar-versioning-and-dual-pace-channels.md) §3 and the branching section of [ADR-0001](0001-release-branch-model.md).** The tag-triggered multi-channel CD, the three GitHub Environments, `validate-ref`, `publicReleaseRefSpec`, the Nerdbank.GitVersioning prepare-release mechanics, and the dual-pace social model all remain in force — only the *lifecycle* of the production branch changes.
 
+> **Kept by [ADR-0009](0009-gitflow-and-semver-reversion.md) (2026-08-23).** ADR-0004's `main`/`release/YYYY` shape is replaced by classic GitFlow (`develop`/`release/vX.Y`/`main`). This ADR's decision does not change: `release/vX.Y` is still cut on demand, at the first release, just from `develop` instead of `main`. Read "cut from `main`" below as "cut from `develop`."
+
 ## Context
 
 ADR-0004 §3 decided *"`release/2026` is cut now, even though `main`/`experimental` are still churning, so the slow crowd has something to own from day one."* In practice that branch was created preemptively and sat idle: **18 commits behind `main`**, carrying only its own org-repoint chore (#347, already mirrored onto `main` via #345), with **nothing released from it**.
