@@ -8,7 +8,7 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 
 - Discuss non-trivial changes in an [issue](https://github.com/Fallout-build/Fallout/issues) first.
 - Small fixes (typos, broken links, tool wrapper additions) can go straight to a PR against `main`.
-- **`main` feeds the production line.** `main` is the **integration trunk + sole `-preview` channel** — the default branch where both deliberate improvements/bug fixes *and* faster work land. Breaking changes also land on `main`, gated behind `[Experimental("FALLOUT0xx")]` (or held on a short-lived topic branch off `main` when they can't be gated) and batched to the yearly major. **Stable releases ship from `release/YYYY` branches** (the calendar-year production line, the nuget.org tier), and the legacy `support/v10` line takes security/critical fixes only (see [Branching and release flow](docs/branching-and-release.md) and [ADR-0004](docs/adr/0004-calendar-versioning-and-dual-pace-channels.md), as amended by [ADR-0008](docs/adr/0008-collapse-experimental-into-main.md), for the full model). **Branch from, and PR against, `main`.** The only time you target a production branch directly is for a maintainer-driven hotfix.
+- **`main` feeds the production line.** `main` is the **integration trunk + sole `-preview` channel** — the default branch where both deliberate improvements/bug fixes *and* faster work land. Breaking changes also land on `main`, gated behind `[Experimental("FALLOUT0xx")]` (or held on a short-lived topic branch off `main` when they can't be gated) and batched to the next major. **Stable releases ship from `release/v<major>.<minor>` branches** (currently `release/v10.4`, the nuget.org tier), and the legacy `support/v10` line takes security/critical fixes only (see [Branching and release flow](docs/branching-and-release.md) and [ADR-0012](docs/adr/0012-current-state-semver-10x-north-star-calver-gitflow.md) for the full model — note that calendar versioning and GitFlow are the project's **North Star**, not current state). **Branch from, and PR against, `main`.** The only time you target a production branch directly is for a maintainer-driven hotfix.
 
 ## Baseline contributions
 
@@ -55,7 +55,7 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 - There's no committed `.editorconfig` or ReSharper/`*.DotSettings` file — they were removed during the takeover. Rely on `dotnet format` defaults and review; don't reintroduce them without a maintainer-level decision.
 - Add tests when meaningful — every `Foo` project has a sibling `Foo.Tests`.
 - Commit the regenerated `.cs` output alongside the `.json` spec — `VerifyGeneratedTools` fails CI if they drift.
-- **Label the PR `target/vCurrent`** for the current release line (use `target/vNext` for work held to next year's major). **Breaking changes are batched to the yearly major cut**: they land on `main` gated behind `[Experimental("FALLOUT0xx")]` (or, when they can't be gated, on a short-lived topic branch off `main`) — never on a `release/YYYY` production train — are held for next year's `YYYY+1.0.0`, and additionally get a `breaking-change` label plus a `⚠️ Breaking change` callout in the PR description naming the migration path. Surface that isn't ready to commit to can ship behind `[Experimental("FALLOUT0xx")]` instead of being held back. See the [PR-creation flow](docs/agents/release-and-versioning.md#pr-creation-flow) for the full procedure.
+- **Label the PR `target/vCurrent`** for the current release line (use `target/vNext` for work held to the next major). **Breaking changes are batched to the next major cut**: they land on `main` gated behind `[Experimental("FALLOUT0xx")]` (or, when they can't be gated, on a short-lived topic branch off `main`) — never on a `release/v<major>.<minor>` production train — and additionally get a `breaking-change` label plus a `⚠️ Breaking change` callout in the PR description naming the migration path. Surface that isn't ready to commit to can ship behind `[Experimental("FALLOUT0xx")]` instead of being held back. See the [PR-creation flow](docs/agents/release-and-versioning.md#pr-creation-flow) for the full procedure.
 
 ### Tool wrappers
 
@@ -77,7 +77,7 @@ Tool wrapper JSON lives under `src/Fallout.Common/Tools/<Tool>/<Tool>.json`. Whe
 ### After opening a PR
 
 - The PR gate is the `ubuntu-latest` job (from `build.yml`) only — fires on PRs against `main`, `release/*`, or `support/*`. Docs-only PRs hit a no-op shim workflow (`build-skip.yml`) that reports the same status check name. `build-cross-platform.yml` runs Windows + macOS validation on `release/*` / `support/*` PRs and `v*` tag pushes (gated to release intent), not on routine `main` work.
-- **Review rises with the ladder.** PRs to `main` (preview) get ordinary review — it's the integration trunk. Promotion to a `release/YYYY` production train (and the GA cut) gets rigorous, unhurried review — that's the project's quality gate. Match your expectations to where the PR is headed.
+- **Review rises with the ladder.** PRs to `main` (preview) get ordinary review — it's the integration trunk. Promotion to a production train (and the GA cut) gets rigorous, unhurried review — that's the project's quality gate. Match your expectations to where the PR is headed.
 - Address review feedback in additional commits rather than force-pushing — easier to review the changes.
 - If CI fails on something unrelated to your change, ping a maintainer.
 
@@ -92,11 +92,11 @@ The merger (typically a CODEOWNER) clicks **Rebase and merge** — there's no bu
 
 ## Releases
 
-Merging to `main` publishes a **preview prerelease** (`2026.MINOR.PATCH-preview.…`) to **GitHub Packages only** — never nuget.org. This is the preview lane. **Stable releases** fire from `release/YYYY` branches via tag push, with a multi-channel publish fan-out (GitHub Packages + GitHub Releases by default; nuget.org is **opt-in**). The full lifecycle is documented in [docs/branching-and-release.md](docs/branching-and-release.md):
+Merging to `main` publishes a **preview prerelease** (currently `10.5.0-preview.…`) to **GitHub Packages only** — never nuget.org. This is the preview lane. **Stable releases** fire from `release/v<major>.<minor>` branches via tag push, with a multi-channel publish fan-out (GitHub Packages + GitHub Releases by default; nuget.org is **opt-in**). The full lifecycle is documented in [docs/branching-and-release.md](docs/branching-and-release.md):
 
-- How releases happen (tag a `release/YYYY` branch, parallel publish jobs)
+- How releases happen (tag a `release/v<major>.<minor>` branch, parallel publish jobs)
 - The channel taxonomy (preview → GitHub Packages; stable → GitHub Packages + GitHub Releases, nuget.org opt-in; Docker local for pre-merge)
-- Promotion + hotfix flow (forward-only `main → release/YYYY`; the legacy `support/v10` line takes security/critical fixes directly)
+- Promotion + hotfix flow (forward-only `main → release/v<major>.<minor>`; the legacy `support/v10` line takes security/critical fixes directly)
 - When to cut a new year
 
 Contributors don't usually need to do any of this — releases are maintainer-driven. But if you're filing a fix for the legacy `support/v10` line, or one that carries a breaking change held for next year's major, expect the maintainer to route it accordingly.

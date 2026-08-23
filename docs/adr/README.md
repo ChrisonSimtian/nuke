@@ -37,7 +37,8 @@ If you change a decision, do NOT silently rewrite the old ADR — add a new one 
 | [0002](0002-cross-provider-auth-and-secret-conventions.md) | Cross-provider auth and secret conventions | Proposed |
 | [0002](0002-v11-off-nuget-by-default.md) | v11 publishes to GitHub Packages by default; nuget.org opt-in | Accepted |
 | [0003](0003-variables-and-substitution.md) | Variables and `${…}` substitution layer | Proposed |
-| [0004](0004-calendar-versioning-and-dual-pace-channels.md) | Calendar versioning + dual-pace channels (edge/stable) + experimental APIs | Accepted (§3 amended by 0007; channel ladder §2 superseded by 0008) |
-| [0007](0007-cut-release-branch-on-demand.md) | Cut `release/YYYY` on demand, not preemptively | Accepted |
-| [0008](0008-collapse-experimental-into-main.md) | Collapse `experimental` into `main`; `main` is the sole prerelease lane | Accepted |
+| [0004](0004-calendar-versioning-and-dual-pace-channels.md) | Calendar versioning + dual-pace channels (edge/stable) + experimental APIs | Accepted (§3 amended by 0007; channel ladder §2 superseded by 0008; CalVer §1 deferred by 0012 — retained as North Star) |
+| [0007](0007-cut-release-branch-on-demand.md) | Cut the release branch on demand, not preemptively | Accepted (branch pattern re-expressed by 0012) |
+| [0008](0008-collapse-experimental-into-main.md) | Collapse `experimental` into `main`; `main` is the sole prerelease lane | Accepted (in force for current state; to be revisited if 0012's GitFlow North Star is adopted) |
 | [0010](0010-no-telemetry-collection.md) | Fallout collects no telemetry | Accepted |
+| [0012](0012-current-state-semver-10x-north-star-calver-gitflow.md) | Current state is semver `10.x`; North Star is CalVer + GitFlow | Accepted |
