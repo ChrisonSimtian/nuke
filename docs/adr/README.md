@@ -33,12 +33,12 @@ If you change a decision, do NOT silently rewrite the old ADR — add a new one 
 | # | Title | Status |
 |---|---|---|
 | [0001](0001-cd-primitives-attributes-vs-tasks.md) | CD primitives — attributes for config, tasks for state | Proposed |
-| [0001](0001-release-branch-model.md) | Release-branch model with tag-triggered multi-channel CD | Accepted (versioning amended by 0004, further by 0005; branch lifecycle by 0007) |
+| [0001](0001-release-branch-model.md) | Release-branch model with tag-triggered multi-channel CD | Accepted (versioning amended by 0004, further by 0009; branch lifecycle by 0007) |
 | [0002](0002-cross-provider-auth-and-secret-conventions.md) | Cross-provider auth and secret conventions | Proposed |
 | [0002](0002-v11-off-nuget-by-default.md) | v11 publishes to GitHub Packages by default; nuget.org opt-in | Accepted |
 | [0003](0003-variables-and-substitution.md) | Variables and `${…}` substitution layer | Proposed |
-| [0004](0004-calendar-versioning-and-dual-pace-channels.md) | Calendar versioning + dual-pace channels (edge/stable) + experimental APIs | Superseded by 0005 |
-| [0005](0009-gitflow-and-semver-reversion.md) | Revert to classic GitFlow; stay on semver 10.x until a breaking change is needed | Accepted |
-| [0007](0007-cut-release-branch-on-demand.md) | Cut `release/YYYY` on demand, not preemptively | Accepted (kept, renamed onto `develop`/`release/vX.Y`, by 0005) |
-| [0008](0008-collapse-experimental-into-main.md) | Collapse `experimental` into `main`; `main` is the sole prerelease lane | Accepted (kept, renamed onto `develop`, by 0005) |
+| [0004](0004-calendar-versioning-and-dual-pace-channels.md) | Calendar versioning + dual-pace channels (edge/stable) + experimental APIs | Superseded by 0009 |
+| [0007](0007-cut-release-branch-on-demand.md) | Cut `release/YYYY` on demand, not preemptively | Accepted (kept, renamed onto `develop`/`release/vX.Y`, by 0009) |
+| [0008](0008-collapse-experimental-into-main.md) | Collapse `experimental` into `main`; `main` is the sole prerelease lane | Accepted (kept, renamed onto `develop`, by 0009) |
+| [0009](0009-gitflow-and-semver-reversion.md) | Revert to classic GitFlow; stay on semver 10.x until a breaking change is needed | Accepted |
 | [0010](0010-no-telemetry-collection.md) | Fallout collects no telemetry | Accepted |
