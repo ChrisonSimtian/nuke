@@ -17,24 +17,12 @@ does not constrain an agent running `gh issue create`).
   There is no minimum length to hit.
 - **Cut filler.** No preamble, no restating the title, no hedging, no
   marketing tone ("elegant", "robust", "seamlessly"), no emoji section headers.
-- **Write for non-native English readers.** Plain words over idiom, short
-  sentences, no slang or cultural references — many contributors read English as
-  a second language. Clarity beats cleverness. Concretely:
-  - **One idea per sentence.** Don't stack clauses with em-dashes or semicolons
-    ("This doesn't do X — that stands — it does Y, and gives Z a path off W").
-    Split into separate sentences or bullets.
-  - **No idioms or figurative language.** "Blast radius", "shrinks the gap",
-    "grace period", "ceiling", "shallow by design" don't translate. Say what you
-    mean literally: "affects fewer consumers", "closes the gap", "temporary
-    fallback", "limit", "handles the common case only".
-  - **Define repo jargon on first use, or link it.** Terms like "shim",
-    "sentinel", "canonical type" are fine once explained — link to the
-    [glossary](../../../../docs/glossary.md) or a one-clause gloss the first
-    time a PR uses them, don't assume the reader already knows the vocabulary.
-  - **Spell out cross-references.** Don't lean on `#257`/`#253` alone — add a
-    3–5 word gloss of what each one did ("#257, the ProjectModel rename").
-  - **Prefer short, common words.** "use" over "leverage", "keep" over
-    "preserve", "shows" over "surfaces", "fixes" over "remediates".
+- **Write for non-native English readers.** Many contributors read English as
+  a second language. Clarity beats cleverness. See the
+  [plain-english skill](../../plain-english/SKILL.md) for the full rule set
+  (one idea per sentence, no idioms, gloss jargon and cross-references, prefer
+  short common words) — apply it to every PR and issue, not just this shape
+  guide.
 - **Bullets over prose** for anything enumerable.
 - **Link, don't recap.** Reference issues (`#123`), PRs, docs, and code
   (`path/to/file.cs:42`) instead of pasting them.
