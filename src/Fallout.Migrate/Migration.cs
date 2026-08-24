@@ -30,6 +30,7 @@ internal sealed class Migration(AbsolutePath rootDirectory, bool dryRun, TextWri
         new BumpDotNetVersionStep(),
         new RewriteCsFilesStep(),
         new RewriteBootstrapScriptsStep(),
+        new CleanupBootstrapScriptsStep(),
         new RenameNukeDirectoryStep()
     ];
 

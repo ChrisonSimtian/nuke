@@ -72,7 +72,7 @@ internal sealed class BumpDotNetVersionStep : IMigrationStep
     /// </summary>
     /// <param name="original">The original <c>_build.csproj</c> content.</param>
     /// <returns>The rewritten content and the number of edits made.</returns>
-    public static RewriteResult BumpTargetFramework(string original)
+    private static RewriteResult BumpTargetFramework(string original)
     {
         Match match = targetFrameworkElementPattern.Match(original);
         if (!match.Success ||

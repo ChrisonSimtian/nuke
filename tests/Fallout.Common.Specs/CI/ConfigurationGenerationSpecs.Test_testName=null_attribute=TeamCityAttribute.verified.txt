@@ -82,7 +82,7 @@ project {
             label = "Verbosity",
             description = "Logging verbosity during build execution. Default is 'Normal'.",
             value = "Normal",
-            options = listOf("Minimal" to "Minimal", "Normal" to "Normal", "Quiet" to "Quiet", "Verbose" to "Verbose"),
+            options = listOf("Information" to "Information", "Minimal" to "Minimal", "Normal" to "Normal", "Quiet" to "Quiet", "Verbose" to "Verbose"),
             display = ParameterDisplay.NORMAL)
         password (
             "env.GitHubToken",

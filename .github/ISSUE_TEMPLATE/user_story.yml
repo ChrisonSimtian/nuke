@@ -1,6 +1,6 @@
 name: 📝 User Story
 description: "Describe a desired capability as a small, outcome-focused story."
-labels: ["enhancement", "triage"]
+labels: ["enhancement", "needs-triage"]
 body:
   - type: markdown
     attributes:

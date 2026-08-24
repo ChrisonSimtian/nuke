@@ -32,22 +32,8 @@ public static class Logging
 
     public static LogLevel Level
     {
-        get => LevelSwitch.MinimumLevel switch
-        {
-            LogEventLevel.Verbose => LogLevel.Trace,
-            LogEventLevel.Debug => LogLevel.Normal,
-            LogEventLevel.Warning => LogLevel.Warning,
-            LogEventLevel.Error => LogLevel.Error,
-            _ => throw new ArgumentOutOfRangeException(nameof(LevelSwitch), LevelSwitch.MinimumLevel, message: null)
-        };
-        set => LevelSwitch.MinimumLevel = value switch
-        {
-            LogLevel.Trace => LogEventLevel.Verbose,
-            LogLevel.Normal => LogEventLevel.Debug,
-            LogLevel.Warning => LogEventLevel.Warning,
-            LogLevel.Error => LogEventLevel.Error,
-            _ => throw new ArgumentOutOfRangeException(nameof(value), value, message: null)
-        };
+        get => LevelSwitch.MinimumLevel.ToLogLevel();
+        set => LevelSwitch.MinimumLevel = value.ToLogEventLevel();
     }
 
     public static void Configure(IFalloutBuild build = null)

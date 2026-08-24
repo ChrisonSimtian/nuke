@@ -24,6 +24,7 @@ namespace Fallout.Migrate;
                - Rewrites `dotnet nuke` -> `dotnet fallout` and legacy NUKE_* env vars
                  in build.cmd / build.ps1 / build.sh
                - Renames .nuke/ to .fallout/
+               - Removes legacy NUKE_ENTERPRISE_TOKEN check from bootstrapper scripts, if exists
                - Prints a summary of files changed and warnings to address manually
              """)]
 [UsedImplicitly]

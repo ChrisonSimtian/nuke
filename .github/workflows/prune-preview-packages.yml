@@ -1,0 +1,143 @@
+# Hand-written. Storage hygiene for the `-preview` channel.
+#
+# Why this exists: GitHub Packages has NO retention policy feature — no TTL, no
+# auto-expiry, nothing to configure. Package versions live forever until something
+# deletes them. publish-packages-preview.yml pushes the full package set to GitHub
+# Packages on EVERY `develop` commit (ADR-0009, formerly `main` under ADR-0004), so
+# versions accumulate without bound; by August 2026 that had reached ~2,280 versions
+# across 24 packages. Every package is public, and public package storage is free,
+# so there is no quota pressure today. This prune is hygiene: it stops the feed
+# growing without limit. Actions artifacts are not the problem (they DO have
+# retention — see `retention-days` in publish-packages-release.yml).
+#
+# Shape:
+#   - Discovers the org's NuGet packages from the API rather than hard-coding a
+#     list, so a newly-added package is covered the moment it first publishes.
+#   - Prunes ONLY `-preview.` versions, keeping the newest `keep` of them.
+#   - `ignore-versions` protects everything that is not a per-commit preview:
+#     GA, `-rc.N`, and the legacy `-alpha.N` versions are never touched. Those are
+#     the durable release markers and must outlive any cleanup.
+#   - Runs weekly, matching the Dependabot cadence, and on demand.
+#
+# "Newest" means most-recently-created, not highest version number: the action
+# orders by CREATED_AT descending. That matters because the versioning scheme has
+# changed more than once (`2026.1.0-preview.<height>` under the retired CalVer
+# model, `10.0.0-preview.<height>` before that, now `10.5.0-preview.<height>` from
+# `develop`), so at times the feed holds more than one scheme at once. A
+# version-number sort would keep the wrong versions. Creation order is correct
+# no matter which scheme is in use.
+#
+# Deletion is IRREVERSIBLE. Run it via workflow_dispatch with dry-run=true first;
+# the report step prints exactly what a real run would remove.
+#
+# Note: preview versions are disposable by design — they are per-commit builds of
+# the integration trunk, reproducible from the commit in the version string
+# (e.g. `10.5.0-preview.<height>.g<commit>`). Consumers pinning a preview should
+# move to a `-rc` or GA version, which this workflow never prunes.
+
+name: prune-preview-packages
+
+on:
+  schedule:
+    # Mondays 03:00 UTC — same weekly cadence as Dependabot.
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      keep:
+        description: 'Number of newest -preview versions to keep per package'
+        required: false
+        default: '20'
+      dry-run:
+        description: 'Report what would be pruned without deleting anything'
+        type: boolean
+        required: false
+        default: true
+
+# Never race a prune against another prune.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  KEEP: ${{ inputs.keep || '20' }}
+
+jobs:
+  discover:
+    name: discover packages
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    outputs:
+      packages: ${{ steps.list.outputs.packages }}
+    steps:
+      # If GITHUB_TOKEN ever stops being able to list org packages, swap in a PAT
+      # with `read:packages` — the rest of the workflow is unchanged.
+      - name: 'Discover: NuGet packages'
+        id: list
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          packages=$(gh api "/orgs/${{ github.repository_owner }}/packages?package_type=nuget&per_page=100" \
+            --paginate -q '.[].name' | sort | jq -R . | jq -sc .)
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+          echo "Found $(echo "$packages" | jq 'length') package(s)."
+
+      # The report is the dry-run. It re-implements the keep-newest-N count in shell
+      # rather than calling the action, so treat it as a close estimate of what the
+      # prune job will remove, not a byte-exact promise.
+      - name: 'Report: what would be pruned'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          total=0
+          {
+            echo "### Preview-package prune (keep newest $KEEP per package)"
+            echo
+            echo "| Package | Preview versions | Would prune |"
+            echo "|---|---:|---:|"
+          } >> "$GITHUB_STEP_SUMMARY"
+          for p in $(echo '${{ steps.list.outputs.packages }}' | jq -r '.[]'); do
+            n=$(gh api "/orgs/${{ github.repository_owner }}/packages/nuget/$p/versions?per_page=100" \
+              --paginate -q '.[].name' | grep -c -- '-preview\.' || true)
+            d=$(( n > KEEP ? n - KEEP : 0 ))
+            total=$(( total + d ))
+            echo "| \`$p\` | $n | $d |" >> "$GITHUB_STEP_SUMMARY"
+          done
+          {
+            echo
+            echo "**Total versions that would be pruned: $total**"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  prune:
+    name: prune ${{ matrix.package }}
+    needs: discover
+    # Scheduled runs always prune. Manual runs default to dry-run, so pruning for
+    # real is an explicit choice the operator makes at dispatch time.
+    if: github.event_name == 'schedule' || inputs.dry-run == false
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      # One package's failure must not abandon the others — partial cleanup is
+      # still cleanup, and the next scheduled run retries whatever failed.
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        package: ${{ fromJSON(needs.discover.outputs.packages) }}
+    steps:
+      - name: 'Prune: old -preview versions'
+        uses: actions/delete-package-versions@v5
+        with:
+          owner: ${{ github.repository_owner }}
+          package-name: ${{ matrix.package }}
+          package-type: nuget
+          min-versions-to-keep: ${{ env.KEEP }}
+          # Protect every version that is NOT a per-commit preview — GA, `-rc.N`,
+          # and legacy `-alpha.N` all match this and are ignored. Deliberately not
+          # `delete-only-pre-release-versions`, which would also eat rc + alpha.
+          ignore-versions: '^(?!.*-preview\.).*$'

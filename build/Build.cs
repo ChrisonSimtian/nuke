@@ -44,22 +44,35 @@ partial class Build
     AbsolutePath OutputDirectory => RootDirectory / "output";
     AbsolutePath SourceDirectory => RootDirectory / "source";
 
-    // The integration trunk and sole prerelease lane (ADR-0008). Per-commit
-    // -preview prereleases to GitHub Packages (see .github/workflows/preview.yml).
-    // Long-lived + protected, so it needs ubuntu-latest PR/push validation.
+    // The literal GitFlow develop branch (ADR-0009, replacing ADR-0004/ADR-0008). This
+    // is the integration trunk and the only prerelease lane: every push publishes a
+    // `-preview` prerelease to GitHub Packages (see
+    // .github/workflows/publish-packages-preview.yml). It's also the default branch.
+    // Long-lived and protected, so it needs ubuntu-latest PR/push validation.
+    const string DevelopBranch = "develop";
+
+    // The classic GitFlow production trunk (ADR-0009, replacing ADR-0004/ADR-0008,
+    // where `main` did both jobs: integration trunk and preview channel). It only
+    // takes merges from a `release/vX.Y` stabilization branch (GA) or a
+    // `hotfix/vX.Y.Z` branch. GA tags fire here. Long-lived and protected, so it
+    // needs the same ubuntu-latest PR/push validation as develop.
     const string MainBranch = "main";
 
-    // Glob matching the long-lived release-branch family: CalVer production lines
-    // (release/2026, release/2027, ...).
+    // Glob matching the long-lived release-branch family: semver stabilization
+    // branches (release/v10.5, release/v10.6, ...), cut on demand from `develop`
+    // once the next release is ready to harden. This is the same on-demand-cut
+    // rule ADR-0007 set, now applied to `develop` instead of `main`, and to every
+    // 10.x minor rather than just an eventual major.
     // Used by Build.CI.GitHubActions to extend PR-validation workflows to cover PRs
     // targeting any release branch — branch protection on a release branch requires the
     // ubuntu-latest status check, which only fires if the workflow's branches: list
-    // matches the PR's base ref. See ADR-0004 (calendar versioning) / milestone #13.
+    // matches the PR's base ref. See ADR-0009 (GitFlow + semver reversion) / milestone #13.
     const string ReleaseBranchPattern = "release/*";
 
-    // Glob matching the gitflow support-branch family (ADR-0004, amended 2026-05-30):
-    // the legacy semver line (support/v10, ...) and retired CalVer years (support/2026, ...).
-    // Same protected-branch validation rationale as ReleaseBranchPattern.
+    // Glob matching the gitflow support-branch family (ADR-0009): legacy and, once
+    // the project eventually cuts a breaking major, retired major-maintenance
+    // branches (support/v10 today; support/v11 once a later major replaces it).
+    // Same protected-branch validation reason as ReleaseBranchPattern.
     const string SupportBranchPattern = "support/*";
 
     // Trunk-based versioning. Nerdbank.GitVersioning computes the canonical version

@@ -4,6 +4,8 @@
 
 Accepted (2026-05-29). **Amended (2026-05-30)** — see the amendment below; the channel model changed from "`main` is the edge channel" to a three-tier maturity ladder (`experimental` → `main` → `release/YYYY`). **Supersedes the versioning section of [ADR-0001](0001-release-branch-model.md) and extends its channel model**; the release-branch + tag-triggered multi-channel CD machinery from ADR-0001 and the nuget.org-opt-in policy from [ADR-0002](0002-v11-off-nuget-by-default.md) remain in force. Discussion thread: [#302](https://github.com/Fallout-build/Fallout/discussions/302).
 
+**Replaced in full by [ADR-0009](0009-gitflow-and-semver-reversion.md) (2026-08-23).** The project moved back to classic GitFlow (a literal `develop` branch, tags on `main`) and classic semver, staying on `10.x` until a breaking change is actually needed rather than resuming a new major right away. This ADR is kept for historical context. Do not follow its versioning or branch guidance for new work. The two amendments below (ADR-0007's on-demand cut, ADR-0008's `experimental` collapse) are kept by ADR-0009 too, just renamed onto the new branch shape — read them as history as well.
+
 > **⚠️ §2 (channel ladder) superseded by [ADR-0008](0008-collapse-experimental-into-main.md) (2026-06-18).** The dedicated `experimental` (`-alpha`) lane added by the 2026-05-30 amendment below has been **removed** — it ran behind `main`, carried no unique work, and cost a publisher + a branch + a forward-port obligation for no realised benefit. **`main` (`-preview`, GitHub Packages only) is now the sole prerelease lane**; breaking work batches on `main` behind `[Experimental("FALLOUT0xx")]` rather than on a separate branch. Everything else in this ADR — calendar versioning (§1), the production line + `[Experimental]` + review tiers (§3–§6) — is unchanged. The amendment text below is preserved as history; read it through the lens of ADR-0008.
 
 > **§3 amended by [ADR-0007](0007-cut-release-branch-on-demand.md) (2026-06-08).** `release/YYYY` is now **cut on demand at the first release of the year, not preemptively from day one** — until then `main` (`-preview`) is the most-stable line. Everything else in §3 (the production tier, rc → GA, nuget.org-opt-in routing, rigorous review) is unchanged.
@@ -142,7 +144,7 @@ Version ladder (SemVer prerelease ordering): `…-alpha.N` < `…-preview.N` < `
 ### Neutral
 
 - **ADR-0001's branch/channel/CD model and ADR-0002's nuget.org-opt-in policy are unchanged.** This ADR changes the *versioning scheme*, adds the *test lanes* (`experimental` alpha + `main` preview, both GitHub Packages only), and adds the *`[Experimental]` + review-tier* conventions. The three-environment fan-out, tag-triggered trigger, and cherry-pick hotfix flow all carry over.
-- ~~**`target/vN` labels become `target/YYYY`** (`target/2026`, …).~~ Legacy work keeps `target/v10`. Milestones remain theme-based. **(Superseded 2026-07-13:** the year-based label migration was never carried out; the repo standardised on **evergreen `target/vCurrent` / `target/vNext`** labels instead — see AGENTS.md rule #1 and [release-and-versioning.md](../agents/release-and-versioning.md#milestones-and-version-targeting).)
+- ~~**`target/vN` labels become `target/YYYY`** (`target/2026`, …).~~ Legacy work keeps `target/v10`. Milestones remain theme-based. **(Superseded 2026-07-13:** the year-based label migration was never carried out; the repo standardised on **evergreen `target/vCurrent` / `target/vNext`** labels instead — see AGENTS.md rule #1 and the "Milestones and version targeting" section of `.agents/skills/creating-a-pr/references/pr-creation-flow.md`.)
 
 ## Alternatives considered
 
@@ -175,5 +177,4 @@ Make daily builds literally `2026.05.29`.
 - [ADR-0001: Release-branch model & multi-channel CD](0001-release-branch-model.md) — parent; versioning section superseded here, channel model extended.
 - [ADR-0002: v11 off nuget.org by default](0002-v11-off-nuget-by-default.md) — nuget.org-opt-in policy, retained.
 - [docs/branching-and-release.md](../branching-and-release.md) — maintainer runbook (updated for this model).
-- [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md) — agent-facing branching/versioning/PR-flow reference (updated for this model).
 - Discussion thread: [#302 — Calendar versioning + dual-pace channels (feedback)](https://github.com/Fallout-build/Fallout/discussions/302).

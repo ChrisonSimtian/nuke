@@ -14,7 +14,9 @@ public class ConsoleUtility
 
     private static string Default => "[default: {0}]";
 
-    private static string Confirmed => "¬";
+    // Single-cell check mark: the prompt writers pad to BufferWidth on raw character count, so a
+    // wider glyph would push the line past the buffer. Glyph vocabulary at large is #557.
+    private static string Confirmed => "✓";
 
     private static string Selected => "»";
 

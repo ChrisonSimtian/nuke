@@ -1,10 +1,9 @@
 {
   "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
-  "version": "10.4.0",
+  "version": "10.5.0-preview.{height}",
   "publicReleaseRefSpec": [
-    "^refs/heads/release/\\d{4}$",
-    "^refs/heads/release/v\\d+\\.\\d+$",
-    "^refs/heads/support/\\d{4}$",
+    "^refs/heads/main$",
+    "^refs/heads/release/v\\d+(\\.\\d+)?$",
     "^refs/heads/support/v\\d+$"
   ],
   "pathFilters": [
@@ -20,6 +19,6 @@
   "release": {
     "versionIncrement": "minor",
     "firstUnstableTag": "preview",
-    "branchName": "release/{version}"
+    "branchName": "release/v{version}"
   }
 }

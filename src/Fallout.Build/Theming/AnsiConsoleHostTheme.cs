@@ -110,10 +110,9 @@ public class AnsiConsoleHostTheme : AnsiConsoleTheme, IHostTheme
 
     private string Format(string text, string code)
     {
-        // TODO: replace multi-spaces
         // TODO: settings for bold/non-bold ?
         return !text.IsNullOrWhiteSpace()
             ? $"{code}{text}{AnsiStyleReset}"
-            : "​";
+            : string.Empty;
     }
 }

@@ -59,11 +59,13 @@ public static class SchemaUtility
             ? new JsonObject { ["type"] = "string" }
             : StringEnumSchema(targetNames);
 
+        // Reflected, not hardcoded: the list used to be spelled out here and drifted from the enum
+        // whenever a rung was added. See #556.
         ctx.Definitions["Verbosity"] = new JsonObject
         {
             ["type"] = "string",
             ["description"] = string.Empty,
-            ["enum"] = new JsonArray("Verbose", "Normal", "Minimal", "Quiet")
+            ["enum"] = new JsonArray(Enum.GetNames<Verbosity>().Select(x => (JsonNode)x).ToArray())
         };
 
         // Build the FalloutBuild base schema (all framework-level parameters) and the user extension

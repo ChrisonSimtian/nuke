@@ -4,7 +4,7 @@ Fallout deprecates public APIs with [`System.ObsoleteAttribute`](https://learn.m
 
 This is the counterpart to the [`[Experimental]` registry](experimental-apis.md): `[Experimental]` gates *not-yet-stable* surface you opt into (error-by-default); `[Obsolete]` marks *on-the-way-out* surface that still works (warning-by-default). The two use **separate ID sequences** — `FALLOUTOBS0xx` here, `FALLOUT0xx` there — so a suppression can never cross the two.
 
-See [the agent conventions](agents/conventions.md#obsolete-for-deprecating-public-apis) for the contributor rules.
+See the `marking-experimental-apis` skill (`.agents/skills/marking-experimental-apis/SKILL.md`) for the contributor rules.
 
 ## How it works
 
@@ -14,7 +14,7 @@ A deprecated API carries a message, a diagnostic ID, and a help URL:
 using System;
 
 [Obsolete(
-    "Use [GitHubActionsInputAttribute] instead. Removed in 2027.x.x.",
+    "Use [GitHubActionsInputAttribute] instead. Removed in v11.",
     DiagnosticId = "FALLOUTOBS001",
     UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
 public string[] OnWorkflowDispatchOptionalInputs { get; set; } = new string[0];
@@ -36,7 +36,7 @@ This matters for consumers building with `TreatWarningsAsErrors`: without a per-
 - The `FALLOUTOBS0xx` sequence is **independent** of the `FALLOUT0xx` sequence used by [`[Experimental]`](experimental-apis.md) — allocate from this registry only.
 - An ID is **never reused** — once retired it stays retired, so a consumer's `NoWarn` can never silently re-bind to a different deprecation.
 - Every allocation is recorded in the registry table below, in the same PR that introduces the attribute.
-- **Adding `[Obsolete]` is not a breaking change** — a warning-level deprecation keeps existing code compiling. The break is *removing* the API, which is batched to the next yearly major (see [AGENTS.md rule #2](https://github.com/Fallout-build/Fallout/blob/main/AGENTS.md/AGENTS.md) and the [release/versioning policy](agents/release-and-versioning.md)). Record the removal target in the message and the registry so consumers can plan.
+- **Adding `[Obsolete]` is not a breaking change** — a warning-level deprecation keeps existing code compiling. The break is *removing* the API, which waits for the next major (v11, whenever that happens — see [AGENTS.md rule 2](https://github.com/Fallout-build/Fallout/blob/main/AGENTS.md) and the versioning policy in the `creating-a-pr` skill). Record the removal target in the message and the registry so consumers can plan.
 - **When the API is finally removed**, its row moves to **Removed** status and the ID is retired, not recycled.
 
 ## Registry
@@ -45,10 +45,10 @@ Status values: **Deprecated** (live, warns on use), **Removed** (API deleted —
 
 | ID | Surface | Deprecated | Status | Notes |
 |----|---------|------------|--------|-------|
-| `FALLOUTOBS001` | `GitHubActionsAttribute.OnWorkflowDispatch{Optional,Required}Inputs`, `GitHubActionsWorkflowDispatchTrigger.{Optional,Required}Inputs` | 2026.x | Deprecated | Untyped `workflow_dispatch` input arrays. Use `[GitHubActionsInputAttribute]` / `GitHubActionsWorkflowDispatchTrigger.Inputs` instead. Removal target: 2027.0.0. |
+| `FALLOUTOBS001` | `GitHubActionsAttribute.OnWorkflowDispatch{Optional,Required}Inputs`, `GitHubActionsWorkflowDispatchTrigger.{Optional,Required}Inputs` | 10.5.x | Deprecated | Untyped `workflow_dispatch` input arrays. Use `[GitHubActionsInputAttribute]` / `GitHubActionsWorkflowDispatchTrigger.Inputs` instead. Removal target: v11. |
 
 <!--
 Allocation example (do not uncomment unless a real API is deprecated):
 
-| `FALLOUTOBS002` | `Fallout.Namespace.SomeType.OldMember` | 2026.x | Deprecated | Use `NewMember` instead. Removal target: 2027.0.0. |
+| `FALLOUTOBS002` | `Fallout.Namespace.SomeType.OldMember` | 10.5.x | Deprecated | Use `NewMember` instead. Removal target: v11. |
 -->
