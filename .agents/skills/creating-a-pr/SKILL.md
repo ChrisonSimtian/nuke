@@ -59,9 +59,9 @@ requesting re-review.
 
 ## Writing the description
 
-Follow [references/writing-style.md](references/writing-style.md) for the
-terse, scannable shape (issues too) — lead with the point, bullets over
-prose, link don't recap.
+Follow the [plain-english skill](../plain-english/SKILL.md) for the terse,
+scannable shape (issues too) — lead with the point, bullets over prose, link
+don't recap.
 
 ## Full policy reference
 

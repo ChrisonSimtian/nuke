@@ -4,8 +4,8 @@ argument-hint: <one-line description of the problem/ask>
 allowed-tools: Read, Bash(gh issue create:*), Bash(gh label list:*)
 ---
 
-Read `.agents/skills/creating-a-pr/references/writing-style.md` and follow it
-as the binding style contract. Then draft a GitHub issue for: **$ARGUMENTS**
+Read `.agents/skills/plain-english/SKILL.md` and follow it as the binding
+style contract. Then draft a GitHub issue for: **$ARGUMENTS**
 
 Assemble the body to the canonical shape:
 
