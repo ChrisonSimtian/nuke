@@ -7,6 +7,8 @@ Three groups: conventions to respect, things never to do, and the tool-wrapper r
 - **Centralized package versions** — add new packages to `Directory.Packages.props`, never inline. Adding a *meaningful* library (not a tiny transitive helper)? Add a row to [docs/dependencies.md](https://github.com/Fallout-build/Fallout/blob/main/docs/dependencies.md) in the same PR — reviewers will ask.
 - **Test naming follows AV1600 behavior-focused style.** Write test names as short, present-tense descriptions of observable behavior, not method calls. Example good: `Missing_changelog_does_not_add_a_full_changelog_link_to_release_notes`. Example bad: `GetNuGetReleaseNotes_WithMissingChangelog_AndGitHubRepository_DoesNotThrow`. Focus on "what happens" not "what method is called" (see [AV1600](https://csharpcodingguidelines.com/testability-guidelines/#AV1620)).
 - **Test files and classes use `Specs` suffix.** Name test projects `Foo.Specs`, test files `FooSpecs.cs`, and test classes `FooSpecs`. Use `Specs` not `Test` or `Tests` — it clarifies that the class describes the expected behavior (specification) of the subject under test.
+- **AAA structure, marked with Pascal-case comments.** Mark the Arrange/Act/Assert sections of a test with `// Arrange`, `// Act`, `// Assert` comments (not `// ARRANGE` etc.). Omit a section's comment when a test has nothing to arrange (e.g. the fixture already set up in the constructor covers it).
+- **Disk-based test fixtures use a constructor + `IDisposable.Dispose()`, not per-test `try/finally`.** xUnit creates a fresh instance per `[Fact]`, so the constructor is the Arrange step for shared setup and `Dispose()` is the teardown — this replaces hand-rolled `try/finally` cleanup in every test. Use `AbsolutePath.Temp(prefix)` to allocate the scratch directory; it returns a unique path under the OS temp directory without creating it. See `MigrationIntegrationSpecs.cs` and `BumpDotNetVersionStepSpecs.cs` for the pattern.
 - **Tool wrappers**: copy/paste from neighbours; cover full commands; use `<c>`, `<a>`, `<ul>`/`<ol>`, `<em>`, `<para/>` in `help`; don't write `secret: false` or `default: xxx`. See [Tool wrapper recipe](#tool-wrapper-recipe) below.
 - **Tests next to code, separate folder**: every `Foo` project under `src/` has a sibling `Foo.Tests` project under `tests/`. Mirror the namespace.
 - **No IDE-specific style files committed.** `.editorconfig` and `*.DotSettings` were removed during the takeover — relying on `dotnet format` defaults and review.
@@ -45,7 +47,7 @@ already knows the vocabulary.
 
 ## `[Experimental]` for opt-in unstable APIs
 
-Per [ADR-0004 §5](../adr/0004-calendar-versioning-and-dual-pace-channels.md) (channel ladder amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md)), public APIs that aren't ready to commit to a stability guarantee are marked with [`System.Diagnostics.CodeAnalysis.ExperimentalAttribute`](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute) instead of being held back or shipped silently. The attribute ships in the .NET 8+ BCL — **no package reference needed** (the repo targets .NET 10).
+Per [ADR-0004 §5](../adr/0004-calendar-versioning-and-dual-pace-channels.md) (channel ladder amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md), both carried forward onto the `develop`/`main` shape by [ADR-0009](../adr/0009-gitflow-and-semver-reversion.md)), public APIs that aren't ready to commit to a stability guarantee are marked with [`System.Diagnostics.CodeAnalysis.ExperimentalAttribute`](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis.experimentalattribute) instead of being held back or shipped silently. The attribute ships in the .NET 8+ BCL — **no package reference needed** (the repo targets .NET 10).
 
 ```csharp
 using System.Diagnostics.CodeAnalysis;
@@ -61,8 +63,8 @@ public sealed class NewPluginHost
 
 - **Diagnostic-ID scheme: `FALLOUT0xx`.** Each experimental surface gets its own ID (e.g. `FALLOUT001`), allocated **sequentially and never reused** — a retired ID stays retired. Register every allocation in the [diagnostic-ID registry](../experimental-apis.md) in the same PR that introduces it.
 - **Consumers must explicitly opt in.** `ExperimentalAttribute` is an *error-by-default* diagnostic: code that touches the API fails to compile until the consumer suppresses the exact ID — `#pragma warning disable FALLOUT001` around the call site, or `<NoWarn>$(NoWarn);FALLOUT001</NoWarn>` in their project. Opting into instability is therefore a conscious, per-API choice — which is right for a *framework* (a product devs build on), not an app.
-- **Promoting to stable = removing the attribute.** Because the feature already rode the `main` test lane, deleting the `[Experimental]` line is the whole promotion — no special cross-branch dance. This is what lets stabilised work feed into the production line without a divergent fork. Adding *or* removing `[Experimental]` is **not** a breaking change.
-- **Channel discipline differs.** On the `main` (preview) test lane, churn is expected and the attribute is a courtesy. On a `release/YYYY` **production line**, any risky-but-shipped public surface **must** wear `[Experimental]` — that contract is what keeps the stable line trustworthy while still carrying new work. With the `experimental` branch retired ([ADR-0008](../adr/0008-collapse-experimental-into-main.md)), `[Experimental]` is now the primary mechanism for isolating unstable surface on `main` — including breaking changes batched toward the yearly major.
+- **Promoting to stable = removing the attribute.** Because the feature already rode the `develop` test lane, deleting the `[Experimental]` line is the whole promotion — no special cross-branch dance. This is what lets stabilised work feed into the production line without a divergent fork. Adding *or* removing `[Experimental]` is **not** a breaking change.
+- **Channel discipline differs.** On the `develop` (preview) test lane, churn is expected and the attribute is a courtesy. On a `release/vX.Y` / `main` **production line**, any risky-but-shipped public surface **must** wear `[Experimental]`. That's what keeps the stable line trustworthy while it still carries new work. There is no separate `experimental` branch ([ADR-0008](../adr/0008-collapse-experimental-into-main.md)), so `[Experimental]` is the main way to isolate unstable surface on `develop` — including breaking changes waiting for the next major.
 - **Don't apply it speculatively.** Because the diagnostic is error-by-default, marking an API that's already used internally breaks the build everywhere it's referenced. Only add `[Experimental]` to a genuinely not-yet-stable API, and suppress every internal usage in the same change so the build stays green.
 
 ## `[Obsolete]` for deprecating public APIs
@@ -73,7 +75,7 @@ When a public API is on its way out, mark it with [`System.ObsoleteAttribute`](h
 using System;
 
 [Obsolete(
-    "Use [GitHubActionsInputAttribute] instead. Removed in 2027.x.x.",
+    "Use [GitHubActionsInputAttribute] instead. Removed in v11.",
     DiagnosticId = "FALLOUTOBS001",
     UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
 public string[] OnWorkflowDispatchOptionalInputs { get; set; } = new string[0];
@@ -81,19 +83,19 @@ public string[] OnWorkflowDispatchOptionalInputs { get; set; } = new string[0];
 
 **Rules:**
 
-- **Adding `[Obsolete]` is not a breaking change.** It's warning-level by default, so existing code keeps compiling — this is why it's preferred over a hard break. The *removal* is the break, and it's batched to the next yearly major. State the removal target in the message (e.g. `Removed in 2027.x.x.`).
+- **Adding `[Obsolete]` is not a breaking change.** It's warning-level by default, so existing code keeps compiling — this is why it's preferred over a hard break. The *removal* is the break, and it waits for the next major. State the removal target in the message (e.g. `Removed in v11.`).
 - **Always set a `DiagnosticId`.** Without one the compiler reports the generic `CS0618`, so a `TreatWarningsAsErrors` consumer can only fix every usage at once or blanket-`NoWarn` all deprecations. A per-deprecation `FALLOUTOBS0xx` ID lets them suppress just this one while they migrate.
 - **Diagnostic-ID scheme: `FALLOUTOBS0xx`.** Allocated **sequentially and never reused**, from a sequence **separate** from the `FALLOUT0xx` used by `[Experimental]`. Register every allocation in the [diagnostic-ID registry](../obsolete_apis.md) in the same PR that introduces the attribute.
 - **Keep the deprecated surface functional.** Prefer bridging the old member to the new one (e.g. fold legacy arrays into the typed replacement) over leaving it inert, and suppress the internal bridge usage with `#pragma warning disable` scoped to the exact ID.
 
 ## CI pipeline & triggers
 
-Shaped by [milestone #18](https://github.com/Fallout-build/Fallout/milestone/18) and the [ADR-0004](../adr/0004-calendar-versioning-and-dual-pace-channels.md) ladder (amended by [ADR-0008](../adr/0008-collapse-experimental-into-main.md), which collapsed `experimental` into `main`). Invariants:
+Shaped by [milestone #18](https://github.com/Fallout-build/Fallout/milestone/18) and the [ADR-0009](../adr/0009-gitflow-and-semver-reversion.md) branch model (carrying forward [ADR-0008](../adr/0008-collapse-experimental-into-main.md), which collapsed `experimental` into the integration trunk). Invariants:
 
-- **Feature branches run zero CI until a PR is opened.** Push triggers list **only** long-lived branches; nothing fires on `feature/*`, `bugfix/*`, etc. until they're PR'd against `main`/`release/*`/`support/*`. Do **not** add a working-branch pattern to any `OnPush*`/`branches:` trigger.
+- **Feature branches run zero CI until a PR is opened.** Push triggers list **only** long-lived branches; nothing fires on `feature/*`, `bugfix/*`, etc. until they're PR'd against `develop`/`main`/`release/*`/`support/*`. Do **not** add a working-branch pattern to any `OnPush*`/`branches:` trigger.
 - **The Linux PR gate (job `ubuntu-latest`, from `build.yml`) is the only required check** — runs on PRs to the long-lived branches. (Branch protection keys on the job name, not the workflow file.)
-- **`main` (push) → `-preview`** to GitHub Packages (`publish-packages-preview.yml`) — the sole continuous publisher now that `experimental.yml` is deleted.
-- **Cross-platform `windows`/`macos` are gated to release intent** — one `build-cross-platform.yml` workflow (a job per OS), firing on PR-to-`release/*`/`support/*` or a `v*` tag push only. They do **not** run on `main` pushes. ("On `main` we've got our edge.")
+- **A push to `develop` publishes `-preview`** to GitHub Packages (`publish-packages-preview.yml`). It's the only continuous publisher — there is still no `experimental.yml`.
+- **Cross-platform `windows`/`macos` only run on release intent** — one `build-cross-platform.yml` workflow (a job per OS), firing on a PR into `main`/`release/*`/`support/*`, or a `v*` tag push. They do **not** run on `develop` pushes. `develop` relies on the Linux gate instead.
 - **`concurrency: cancel-in-progress` on every build workflow except `publish-packages-release.yml`** — never cancel a publish mid-flight.
 - **Canonical CI-ignore paths:** `docs/**`, `.assets/**`, `**/*.md` — applied to every PR/push trigger.
 - The `build.yml` (Linux gate) and `build-cross-platform.yml` (macOS+Windows) workflows are **generated** from `build/Build.CI.GitHubActions.cs` — edit the attributes + constants there and regenerate (`./build.sh`), never hand-edit the `.yml`. `build-skip.yml`, `publish-packages-preview.yml`, and `publish-packages-release.yml` are hand-written.
@@ -104,7 +106,7 @@ Shaped by [milestone #18](https://github.com/Fallout-build/Fallout/milestone/18)
 
 - **Never ping the former NUKE maintainer, Matthias Koch (GitHub handle `matkoch`).** He no longer maintains this project and does not want the notifications. Do **not** `@`-mention him (never write `@` before his handle — not in issues, PRs, comments, commit messages, *or* committed files), add him as a PR/issue reviewer or assignee, request his review, tag him in issue/PR/commit-comment text, or add him as a commit co-author or `Co-authored-by:` trailer — on any GitHub surface, from any AI tool. When you need to credit NUKE's origin, use his name or a plain profile link (`https://github.com/matkoch`) — just never with a leading `@`, which is what fires a mention.
 - Don't reintroduce `source/` — production code lives under `src/`, tests under `tests/`. Same for `images/` (now `.assets/`).
-- Don't add `main` (or any working-branch pattern) to the **push** triggers of the cross-platform workflows — they're release-intent-gated on purpose (milestone #18 / #318 / #326).
+- Don't add `develop` (or any working-branch pattern) to the **push** triggers of the cross-platform workflows — they're release-intent-gated on purpose (milestone #18 / #318 / #326).
 - Don't add `submodules: recursive` to checkouts — there are no submodules (no `.gitmodules`); it's a dead init step.
 - Don't add `secret`/`default` defaults to tool JSON files (see CONTRIBUTING.md).
 - Don't introduce a new test framework or assertion library — stay on xUnit + FluentAssertions + Verify.
@@ -121,3 +123,32 @@ When asked to add or extend a tool wrapper:
 2. Copy its shape; cover a full command with all arguments.
 3. Run `./build.ps1 GenerateTools` to regenerate the `.cs` output.
 4. Commit the regenerated `.cs` output alongside the `.json` spec — `VerifyGeneratedTools` fails CI if they drift.
+
+## Migration step recipe
+
+`fallout-migrate` runs a fixed, ordered list of `IMigrationStep` implementations, built in
+`src/Fallout.Migrate/Migration.cs`. A **step is one operation over one set of files**, and it owns the
+rewrite rules for those files. `RewriteCsprojsStep` holds five rules for `*.csproj`;
+`RewriteCsFilesStep` holds the rules for `*.cs`.
+
+When asked to make `fallout-migrate` handle a new rename, removal, or rewrite:
+
+1. Find the step for that file type — `RewriteCsprojsStep` for `*.csproj`, `RewriteCsFilesStep` for
+   `*.cs`, `RewriteBootstrapScriptsStep` for the bootstrap scripts.
+2. Add a `private static readonly Regex` field to that step, with a comment saying what moved and why.
+3. Apply it as another statement in the step's `Rewrite` method, incrementing `edits` per replacement.
+4. Add cases to that step's spec class in `tests/Fallout.Migrate.Specs`.
+
+**Do not add a step per rename.** A new step means a second pass over the same files, so each file is
+written twice and the `Summary` edit count is inflated. Rule order also matters — a specific rule
+usually has to run before a general one — and inside one `Rewrite` method that order is plain
+statement order. Split across steps it becomes a hidden dependency between entries in
+`Migration.steps`.
+
+Add a **new step** only for a new set of files or a genuinely different operation, such as renaming a
+directory or prompting the user. That is one new class implementing `IMigrationStep` plus one line in
+`Migration.steps`. If the new step depends on an earlier one, say so in the comment on that list, the
+way `ResolveFalloutVersionStep` does.
+
+Keep `Steps/` free of helper classes. A rewriter that only serves one step belongs inside that step —
+see `aef6c073` (`CsprojRewriter`) and #528 (`CodeRewriter`) for the shape.

@@ -23,8 +23,8 @@ changelog:
       - dependabot
   categories:
     # breaking-change: removes/renames public API, package IDs, CLI flags, on-disk
-    # formats, or CI/CD shape. Also needs the ⚠️ callout + CHANGELOG entry and rides
-    # the next yearly major — see the PR-creation flow.
+    # formats, or CI/CD shape. Also needs the ⚠️ callout in the PR description and
+    # rides the next major — see the PR-creation flow.
     - title: "⚠️ Breaking Changes"
       labels:
         - breaking-change

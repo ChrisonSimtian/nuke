@@ -3,17 +3,19 @@
 # NuGetApiKey parameter, which would otherwise have to share a name).
 #
 # This is the DELIBERATE (production) release path. The fast test lane —
-# main (-preview), push → GitHub Packages — lives in publish-packages-preview.yml. See ADR-0004
-# (amended 2026-05-30), as further amended by ADR-0008 (which collapsed the
-# former experimental/-alpha lane into main).
+# develop (-preview), push → GitHub Packages — lives in publish-packages-preview.yml.
+# See ADR-0009 (superseding ADR-0004, and carrying forward ADR-0008's no-`experimental`
+# decision onto `develop`).
 #
 # Shape:
-#   - Trigger: tag push `v*` on a production branch — CalVer production lines
-#     (release/2026 → tag v2026.1.3) or gitflow support lines (support/v10 → v10.x,
-#     support/2026 → v2026.x). main is NEVER tagged for release.
-#     Tags keep the `v` prefix so the `v*` tag-protection ruleset applies; the
-#     package version core is the bare CalVer/semver (e.g. 2026.1.3). Tag
-#     protection restricts who can create those tags to repo admins.
+#   - Trigger: tag push `v*` on a production branch — the classic GitFlow
+#     production trunk (main → tag v10.5.0), release stabilization lines
+#     (release/v10.5 → tag v10.5.0-rc.N), or gitflow support lines (support/v10 →
+#     v10.x, and eventually a retired support/v11 once a later major replaces it).
+#     develop is NEVER tagged for release. Tags keep the `v` prefix so the `v*`
+#     tag-protection ruleset applies; the package version core is the bare semver
+#     (e.g. 10.5.0). Tag protection restricts who can create those tags to repo
+#     admins.
 #   - Optional fallback: workflow_dispatch with an existing-tag input, for
 #     re-runs after a transient publish-API failure, OR to opt into a
 #     nuget.org publish (see below).
@@ -22,12 +24,12 @@
 #       - publish-github-packages (all packages — Fallout.* + Nuke.*)
 #       - publish-github-releases (artifact bundling on the tag's GH Release)
 #
-# Channel routing (ADR-0004):
+# Channel routing (ADR-0009):
 #   - nuget.org is OPT-IN. Tag pushes do NOT auto-publish there. To publish
 #     Fallout.* to nuget.org you invoke workflow_dispatch with
 #     publish-to-nugetorg=true — a conscious "this release is stabilised enough"
-#     switch, used when a release/YYYY production line is ready for the broad
-#     consumer audience, or for a support/v10 legacy security patch.
+#     switch, used when a `main` GA release is ready for the broad consumer
+#     audience, or for a support/v10 legacy security patch.
 #   - GitHub Packages gets every Fallout.* and Nuke.* build via tag push.
 #   - GitHub Releases bundles nupkgs on the tag's release page regardless.
 #
@@ -54,7 +56,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Existing tag to (re-)release (e.g. v11.0.5)'
+        description: 'Existing tag to (re-)release (e.g. v10.5.5)'
         required: true
       publish-to-nugetorg:
         description: 'Publish Fallout.* to nuget.org? Default false — opt-in for stabilised releases only.'
@@ -78,13 +80,14 @@ jobs:
         run: |
           set -euo pipefail
           TAG_SHA="${{ github.sha }}"
-          # Match CalVer production lines (release/2026, …), legacy-style minor
-          # release lines (release/v10.4, …), and gitflow support lines
-          # (support/v10 legacy semver, support/2026 retired years, …).
-          REACHABLE=$(git branch -r --contains "$TAG_SHA" | grep -E 'origin/(release/(v[0-9]+\.[0-9]+|[0-9]{4})|support/(v[0-9]+|[0-9]{4}))' || true)
+          # Match the GitFlow production trunk (main, GA tags), release
+          # stabilization lines (release/v10.5, …, rc tags), and gitflow
+          # support lines (support/v10 legacy semver, and eventually a retired
+          # support/v11, …).
+          REACHABLE=$(git branch -r --contains "$TAG_SHA" | grep -E 'origin/(main|release/v[0-9]+(\.[0-9]+)?|support/v[0-9]+)$' || true)
           if [ -z "$REACHABLE" ]; then
             echo "::error::Tag ${GITHUB_REF_NAME} at $TAG_SHA is not reachable from any production branch."
-            echo "Tag-triggered releases only fire from release/YYYY (production) or support/* (legacy/retired) branches."
+            echo "Tag-triggered releases only fire from main (GA), release/vX.Y (rc), or support/* (legacy/retired) branches."
             exit 1
           fi
           echo "Tag ${GITHUB_REF_NAME} validated. Reachable from:"
@@ -139,8 +142,8 @@ jobs:
   # in via the input flag, you still approve the deployment.
   #
   # The opt-in defaults to false because the default channel is GitHub Packages
-  # (see header comment). When a release/YYYY production line is ready for the
-  # broad audience — or for cutting a support/v10 maintenance patch — invoke
+  # (see header comment). When a `main` GA release is ready for the broad
+  # audience — or for cutting a support/v10 maintenance patch — invoke
   # workflow_dispatch with the flag set.
   #
   # The condition below accepts the string 'true' as well as the boolean. A

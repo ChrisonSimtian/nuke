@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fallout.Migrate.Common;
@@ -18,8 +20,9 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     // `WarningsAsErrors` in the migrated project escalates. Bumping in the same pass avoids
     // a broken post-migrate build (#217). Tolerates extra attributes between Include and Version
     // (e.g. `PrivateAssets="all"`).
+    // We don't mach MSBuild variables (`$(...)`) here, because they are handled below
     private static readonly Regex nukePackageWithInlineVersionPattern = new(
-        @"(?<prefix><PackageReference\s+Include="")Nuke\.(?<name>[A-Z][A-Za-z0-9.]+)(?<between>""[^>]*?\s+Version="")[^""]+",
+        @"(?<prefix><PackageReference\s+Include="")Nuke\.(?<name>[A-Z][A-Za-z0-9.]+)(?<between>""[^>]*?\s+Version="")(?!\$\()[^""]+",
         RegexOptions.Compiled);
 
     // PackageReference / ProjectReference `Include="Nuke.X"` → `Include="Fallout.X"` — namespace
@@ -28,13 +31,26 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     private static readonly Regex packageReferencePattern =
         new(@"(?<=\b(?:Include|Update|Remove)="")Nuke\.(?=[A-Z])", RegexOptions.Compiled);
 
+    // Detects MSBuild variables used by already-rewritten Fallout.* PackageReferences:
+    // Version="$(MyVar)". Scoped to Fallout.* so variables shared with unrelated packages
+    // aren't mistaken for Fallout version variables.
+    private static readonly Regex falloutPackageReferenceVariablePattern = new(
+        @"<PackageReference\s+Include=""Fallout\.[^""]+""[^>]*?Version=""\$\((?<variable>[^)]+)\)""",
+        RegexOptions.Compiled);
+
+    // Same variable-usage detection, but for PackageReferences that are NOT Fallout.* — used to
+    // detect a variable ambiguously shared between a Fallout package and an unrelated one.
+    private static readonly Regex nonFalloutPackageReferenceVariablePattern = new(
+        @"<PackageReference\s+Include=""(?!Fallout\.)[^""]+""[^>]*?Version=""\$\((?<variable>[^)]+)\)""",
+        RegexOptions.Compiled);
+
     // MSBuild element/property names that begin with `Nuke` followed by an uppercase
     // letter (e.g. <NukeRootDirectory>...). Limited to known consumer-facing names from
     // P3.5b so we don't rewrite unrelated user-defined identifiers that happen to start
     // with the literal "Nuke".
     private static readonly Regex msBuildPropertyPattern = new(
         @"\bNuke(?=" +
-        "(?:RootDirectory|ScriptDirectory|BaseDirectory|BaseNamespace|" +
+        "(?:Version|RootDirectory|ScriptDirectory|BaseDirectory|BaseNamespace|" +
         "UseNestedNamespaces|RepositoryUrl|UpdateReferences|ContinueOnError|TaskTimeout|" +
         "Timeout|TasksEnabled|DefaultExcludes|ExcludeBoot|ExcludeConfig|ExcludeLogs|" +
         "ExcludeDirectoryBuild|ExcludeCi|SpecificationFiles|ExternalFiles|TasksAssembly|" +
@@ -45,7 +61,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     // (ADR-0010), so a migrated project must not carry a dead <FalloutTelemetryVersion>.
     // Matches the whole element line (either legacy Nuke* or already-Fallout* spelling).
     private static readonly Regex telemetryVersionPropertyPattern = new(
-        @"^[ \t]*<(?<tag>(?:Nuke|Fallout)TelemetryVersion)>.*?</\k<tag>>\s*\r?\n?",
+        @"^[ \t]*<(?<tag>(?:Nuke|Fallout)TelemetryVersion)>.*?</\k<tag>>[ \t]*\r?\n?",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
     // Strip explicit `System.Security.Cryptography.Xml` PackageReferences. NUKE-era projects
@@ -55,7 +71,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     // migrated project wants (#217). Matches a self-closing element with optional surrounding
     // indentation + trailing newline.
     private static readonly Regex cryptographyXmlPackageRefPattern = new(
-        @"^[ \t]*<PackageReference\s+Include=""System\.Security\.Cryptography\.Xml""[^/]*/>\s*\r?\n?",
+        @"^[ \t]*<PackageReference\s+Include=""System\.Security\.Cryptography\.Xml""[^/]*/>[ \t]*\r?\n?",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
     /// <inheritdoc />
@@ -80,7 +96,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
     /// <param name="original">The original <c>.csproj</c> file content.</param>
     /// <param name="falloutVersion">The Fallout version to pin into rewritten inline-versioned references.</param>
     /// <returns>The rewritten content and the number of edits made.</returns>
-    public static RewriteResult Rewrite(string original, string falloutVersion)
+    private static RewriteResult Rewrite(string original, string falloutVersion)
     {
         var edits = 0;
         var content = original;
@@ -123,6 +139,132 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
             return string.Empty;
         });
 
+        return HandleMsBuildVariable(falloutVersion, content, edits);
+    }
+
+    // Pass 5 — extract variables used by Fallout.* PackageReferences, decouple the ones ambiguously
+    // shared with non-Fallout packages via a dedicated $(FalloutVersion) property, and bump every
+    // variable that's now exclusively Fallout's to the current Fallout version.
+    private static RewriteResult HandleMsBuildVariable(string falloutVersion, string content, int edits)
+    {
+        const string falloutVersionVariable = "FalloutVersion";
+
+        var (variablesToBump, ambiguousVariables) =
+            ClassifyPackageReferenceVariables(content, falloutVersionVariable);
+
+        (content, int redirectEdits) = RedirectAmbiguousVariablesToFalloutVersion(content, ambiguousVariables, falloutVersionVariable);
+        edits += redirectEdits;
+
+        content = EnsureFalloutVersionPropertyExists(content, ambiguousVariables, falloutVersionVariable, falloutVersion, ref edits);
+
+        (content, int bumpEdits) = BumpVariableProperties(content, variablesToBump, falloutVersion);
+        edits += bumpEdits;
+
         return new RewriteResult(content, edits);
+    }
+
+    // A variable also shared with a non-Fallout package is ambiguous: bumping it directly would
+    // change that unrelated package's version too, so it's decoupled instead — the Fallout
+    // reference is redirected to a dedicated $(FalloutVersion) property.
+    private static (HashSet<string> variablesToBump, HashSet<string> ambiguousVariables) ClassifyPackageReferenceVariables(
+        string content, string falloutVersionVariable)
+    {
+        var nonFalloutVariables = nonFalloutPackageReferenceVariablePattern.Matches(content)
+            .Select(m => m.Groups["variable"].Value)
+            .ToHashSet();
+
+        var variablesToBump = new HashSet<string> { falloutVersionVariable };
+        var ambiguousVariables = new HashSet<string>();
+
+        foreach (var variable in falloutPackageReferenceVariablePattern.Matches(content)
+                     .Select(m => m.Groups["variable"].Value))
+        {
+            (nonFalloutVariables.Contains(variable) ? ambiguousVariables : variablesToBump).Add(variable);
+        }
+
+        return (variablesToBump, ambiguousVariables);
+    }
+
+    private static (string content, int edits) RedirectAmbiguousVariablesToFalloutVersion(
+        string content, HashSet<string> ambiguousVariables, string falloutVersionVariable)
+    {
+        var edits = 0;
+
+        foreach (var variable in ambiguousVariables)
+        {
+            // Matches `Version="$(variable)"` on a Fallout.* PackageReference only, capturing
+            // everything up to and including the opening `Version="` so it can be re-emitted
+            // unchanged while just swapping the variable reference.
+            var redirectPattern = new Regex(
+                $@"(<PackageReference\s+Include=""Fallout\.[^""]+""[^>]*?Version="")\$\({Regex.Escape(variable)}\)");
+            content = redirectPattern.Replace(content, m =>
+            {
+                edits++;
+                return m.Groups[1].Value + $"$({falloutVersionVariable})";
+            });
+        }
+
+        return (content, edits);
+    }
+
+    private static string EnsureFalloutVersionPropertyExists(
+        string content, HashSet<string> ambiguousVariables, string falloutVersionVariable, string falloutVersion, ref int edits)
+    {
+        if (ambiguousVariables.Count == 0 || content.Contains($"<{falloutVersionVariable}>"))
+        {
+            return content;
+        }
+
+        var propertyGroupIndex = content.IndexOf("<PropertyGroup>", System.StringComparison.Ordinal);
+        if (propertyGroupIndex >= 0)
+        {
+            edits++;
+            return content.Insert(
+                propertyGroupIndex + "<PropertyGroup>".Length,
+                $"\n    <{falloutVersionVariable}>{falloutVersion}</{falloutVersionVariable}>");
+        }
+
+        // No PropertyGroup exists at all (e.g. a project relying solely on Directory.Build.props
+        // for properties) — synthesize one right after the opening <Project> tag so the newly
+        // introduced $(FalloutVersion) reference has somewhere to resolve from.
+        var projectTagStart = content.IndexOf("<Project", System.StringComparison.Ordinal);
+        var projectTagEnd = projectTagStart >= 0
+            ? content.IndexOf('>', projectTagStart)
+            : -1;
+        if (projectTagEnd < 0)
+        {
+            return content;
+        }
+
+        edits++;
+        return content.Insert(
+            projectTagEnd + 1,
+            $"\n  <PropertyGroup>\n    <{falloutVersionVariable}>{falloutVersion}</{falloutVersionVariable}>\n  </PropertyGroup>");
+    }
+
+    private static (string content, int edits) BumpVariableProperties(string content, HashSet<string> variablesToBump, string falloutVersion)
+    {
+        var edits = 0;
+
+        foreach (var variable in variablesToBump)
+        {
+            // Matches the text content of the <variable>...</variable> property element itself
+            // (via lookbehind/lookahead, so the tags aren't part of the match and stay intact).
+            var pattern = $@"(?<=<{variable}\s*>)[^<]+(?=</{variable}\s*>)";
+            content = Regex.Replace(content,
+                pattern,
+                m =>
+                {
+                    if (m.Value == falloutVersion)
+                    {
+                        return m.Value;
+                    }
+
+                    edits++;
+                    return falloutVersion;
+                });
+        }
+
+        return (content, edits);
     }
 }

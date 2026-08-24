@@ -74,32 +74,32 @@ public class SystemConsoleHostTheme : SystemConsoleTheme, IHostTheme
 
     string IHostTheme.FormatSuccess(string text)
     {
-        return text;
+        return Format(text);
     }
 
     string IHostTheme.FormatVerbose(string text)
     {
-        return text;
+        return Format(text);
     }
 
     string IHostTheme.FormatDebug(string text)
     {
-        return text;
+        return Format(text);
     }
 
     string IHostTheme.FormatInformation(string text)
     {
-        return text;
+        return Format(text);
     }
 
     string IHostTheme.FormatWarning(string text)
     {
-        return text;
+        return Format(text);
     }
 
     string IHostTheme.FormatError(string text)
     {
-        return text;
+        return Format(text);
     }
 
     private void Write(string text, SystemConsoleThemeStyle style)
@@ -107,7 +107,15 @@ public class SystemConsoleHostTheme : SystemConsoleTheme, IHostTheme
         using (DelegateDisposable.SetAndRestore(() => Console.ForegroundColor, style.Foreground ?? Console.ForegroundColor))
         using (DelegateDisposable.SetAndRestore(() => Console.BackgroundColor, style.Background ?? Console.BackgroundColor))
         {
-            Console.WriteLine(!text.IsNullOrWhiteSpace() ? text : "​");
+            Console.WriteLine(Format(text));
         }
+    }
+
+    private string Format(string text)
+    {
+        // This theme carries colour through the console's own foreground/background, so formatting
+        // is identity for real text. Blank text still normalises to an empty string, matching
+        // AnsiConsoleHostTheme.
+        return !text.IsNullOrWhiteSpace() ? text : string.Empty;
     }
 }

@@ -1,4 +1,4 @@
-// Generated from https://github.com/Fallout-build/Fallout/blob/main/src/Fallout.Common/Tools/SonarScanner/SonarScanner.json
+// Generated from https://github.com/Fallout-build/Fallout/blob/develop/src/Fallout.Common/Tools/SonarScanner/SonarScanner.json
 
 using Fallout.Common;
 using Fallout.Common.Tooling;
