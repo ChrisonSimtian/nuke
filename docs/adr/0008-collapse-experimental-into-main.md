@@ -4,6 +4,8 @@
 
 Accepted (2026-06-18). **Supersedes the channel-ladder section (§2) of [ADR-0004](0004-calendar-versioning-and-dual-pace-channels.md)** — specifically its 2026-05-30 amendment, which had added a dedicated `experimental` fast lane below `main`. The calendar-versioning scheme (§1), the production line + `[Experimental]` opt-in + review-tier decisions (§3–§6) of ADR-0004, the on-demand release-branch cut from [ADR-0007](0007-cut-release-branch-on-demand.md), and the nuget.org-opt-in policy from [ADR-0002](0002-v11-off-nuget-by-default.md) all remain in force.
 
+> **Kept by [ADR-0009](0009-gitflow-and-semver-reversion.md) (2026-08-23).** ADR-0004's calendar-versioning scheme is replaced by classic semver majors. `main`'s integration-trunk/preview role moves to a new, literal `develop` branch. This ADR's decision does not change: there is still no separate `experimental`/`-alpha` lane. Read "`main`" below as "`develop`."
+
 **Amendment (2026-07-13):** the marketing site moved out of this repo into its own repo (`Fallout-build/fallout.build`, served via GitHub Pages from `main`). The `gh-pages` branch this ADR listed as a steady-state branch no longer exists here; steady state is now just `main` + `support/*`. See §Decision below.
 
 ## Context

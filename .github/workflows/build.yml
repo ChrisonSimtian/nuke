@@ -19,6 +19,7 @@ name: build
 on:
   pull_request:
     branches:
+      - develop
       - main
       - 'release/*'
       - 'support/*'

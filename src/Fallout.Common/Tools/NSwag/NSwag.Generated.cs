@@ -1,4 +1,4 @@
-// Generated from https://github.com/Fallout-build/Fallout/blob/main/src/Fallout.Common/Tools/NSwag/NSwag.json
+// Generated from https://github.com/Fallout-build/Fallout/blob/develop/src/Fallout.Common/Tools/NSwag/NSwag.json
 
 using Fallout.Common;
 using Fallout.Common.Tooling;

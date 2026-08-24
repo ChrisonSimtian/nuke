@@ -1,9 +1,9 @@
 # Hand-written (not auto-generated). Companion to build.yml.
 #
 # Why this exists:
-#   - main branch protection requires the `ubuntu-latest` status check (the job
-#     name emitted by build.yml — branch protection keys on the job, not the
-#     workflow file/name).
+#   - develop/main branch protection requires the `ubuntu-latest` status check
+#     (the job name emitted by build.yml — branch protection keys on the job, not
+#     the workflow file/name).
 #   - build.yml has `paths-ignore: docs/**, .assets/**, **/*.md` so it doesn't
 #     fire on docs-only PRs.
 #   - Without a substitute, docs-only PRs sit BLOCKED waiting for a check that
@@ -23,6 +23,7 @@ name: build
 on:
   pull_request:
     branches:
+      - develop
       - main
       - 'release/*'
       - 'support/*'
