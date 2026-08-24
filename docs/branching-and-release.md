@@ -2,7 +2,7 @@
 
 Maintainer reference for branching, releasing, hotfixing, and the GitHub Environments that gate publishes. The model is [ADR-0009](adr/0009-gitflow-and-semver-reversion.md) (classic GitFlow, staying on semver `10.x`), which replaces [ADR-0004](adr/0004-calendar-versioning-and-dual-pace-channels.md) and changes part of [ADR-0001](adr/0001-release-branch-model.md) ([milestone #13](https://github.com/Fallout-build/Fallout/milestone/13), [RFC #267](https://github.com/Fallout-build/Fallout/issues/267)). It keeps [ADR-0007](adr/0007-cut-release-branch-on-demand.md)'s on-demand cut and [ADR-0008](adr/0008-collapse-experimental-into-main.md)'s decision against a separate `experimental` branch.
 
-> **Audience.** Maintainers cutting releases or hotfixing older lines. Contributors filing PRs against `develop` don't need this — see [CONTRIBUTING.md](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md). AI coding tools should also read [docs/agents/release-and-versioning.md](agents/release-and-versioning.md).
+> **Audience.** Maintainers cutting releases or hotfixing older lines. Contributors filing PRs against `develop` don't need this — see [CONTRIBUTING.md](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md). An AI tool asked to cut a release should use the `cutting-a-release` skill (`.agents/skills/cutting-a-release/SKILL.md`), which follows this doc.
 
 ## Branches
 
@@ -26,6 +26,8 @@ Work moves **forward-only**: `develop → release/vX.Y → main`. A breaking cha
 - `develop` uses `{height}`, so its preview build always moves forward on its own: `10.5.0-preview.{height}`.
 - A `release/vX.Y` branch pins its prerelease number by hand — e.g. `10.5.0-rc.4`, not `10.5.0-rc.{height}`. **Bump it in a PR before tagging.** Two reasons: every commit reports the same version until you bump it (so the number reflects release intent, not commit count), and tagging twice without bumping silently republishes the same version (`--skip-duplicate` swallows it).
 - `publicReleaseRefSpec` matches `main`, `release/v\d+(\.\d+)?`, and `support/v\d+` — not `develop`. That's why `develop`'s previews carry the `.g<sha>` suffix (non-public build) while production lines don't.
+
+`GitVersion` is still installed as a transitional helper for `MajorMinorPatchVersion` in `Build.cs`; full removal is a follow-up.
 
 ## Cutting a release
 
@@ -111,7 +113,20 @@ Once a `support/*` line hits end-of-life: ship a final patch, announce it in the
 
 ## Protection
 
-**Release branches** (`release/v10.5`, and so on) are covered by the **"Protect release/\*\* production lines"** ruleset ([19766406](https://github.com/Fallout-build/Fallout/rules/19766406)), targeting `refs/heads/release/**` — protection attaches the moment a branch is pushed, nothing to apply by hand. It mirrors `main`'s profile: no deletion, no force-push, linear history, CODEOWNER review, conversation resolution, the `ubuntu-latest` check. Repo admins bypass. The payload lives at [`.github/release-branch-ruleset.json`](https://github.com/Fallout-build/Fallout/blob/main/.github/release-branch-ruleset.json); re-apply after editing it with:
+`develop`, `main`, every release line, and every `support/*` branch share the
+same protection profile:
+
+- Required status check: `ubuntu-latest`
+- Linear history required (no merge commits)
+- CODEOWNER review required (0 additional approvals)
+- Direct pushes blocked (PRs only)
+- Force-push and branch deletion blocked
+- Conversation resolution required
+- Admins not enforced (admins can bypass in emergencies)
+
+Stale approvals are **not** dismissed when new commits land (`dismiss_stale_reviews: false`).
+
+**Release branches** (`release/v10.5`, and so on) are covered by the **"Protect release/\*\* production lines"** ruleset ([19766406](https://github.com/Fallout-build/Fallout/rules/19766406)), targeting `refs/heads/release/**` — protection attaches the moment a branch is pushed, nothing to apply by hand. It mirrors `main`'s profile above. Repo admins bypass. The payload lives at [`.github/release-branch-ruleset.json`](https://github.com/Fallout-build/Fallout/blob/main/.github/release-branch-ruleset.json); re-apply after editing it with:
 
 ```bash
 gh api -X PUT repos/Fallout-build/Fallout/rulesets/19766406 --input .github/release-branch-ruleset.json
@@ -123,11 +138,18 @@ gh api -X PUT repos/Fallout-build/Fallout/rulesets/19766406 --input .github/rele
 
 > **Maintainer follow-up.** This doc describes the target shape. Three GitHub-settings changes still need doing, separately from this repo's docs/CI: rename `main` to `develop`, rename `release/v10.4` to `main`, and make `develop` the default branch (which re-points `develop`'s branch protection from what used to apply to `main`). See [ADR-0009](adr/0009-gitflow-and-semver-reversion.md)'s Negative consequences.
 
+## Adding a new `Fallout.X` package — first-publish gotcha
+
+nuget.org's `Fallout.*` prefix reservation is per-ID, not per-prefix-wildcard: CI's first `nuget push` for any never-published `Fallout.X` package ID returns `403 (does not have permission to access the specified package)` until someone manually web-uploads one nupkg to register the ID. **Two traps when doing that upload:**
+
+1. **Set the package owner to the org, not your personal account.** The nuget.org upload UI doesn't prompt you; ownership defaults to the uploading user's profile. If you forget, the package ID is reserved but the org's `NUGET_API_KEY` still 403s on subsequent pushes (the key is scoped to org-owned packages). Fix via `Manage Package → Owners → Add owner → <org>` then optionally remove your personal account. Or upload using credentials of the org's service account directly. See [#208](https://github.com/Fallout-build/Fallout/issues/208) for what this looks like when it goes wrong.
+2. **Validation can lag** the upload by 5–30 minutes. The package page may say "approved" while the API key permission hasn't propagated yet. Wait, then rerun the release pipeline (`gh run rerun <id> --failed`); `--skip-duplicate` makes the retry safe for already-published packages.
+
 ## See also
 
-- [docs/agents/release-and-versioning.md](agents/release-and-versioning.md) — PR-creation flow, semver policy, release pipeline reference.
 - [docs/adr/0009-gitflow-and-semver-reversion.md](adr/0009-gitflow-and-semver-reversion.md) — the branching/versioning decision.
 - [docs/adr/0001-release-branch-model.md](adr/0001-release-branch-model.md) — the release-branch + multi-channel CD model.
 - [milestone #13](https://github.com/Fallout-build/Fallout/milestone/13) — the original work-breakdown.
 - [RFC #267](https://github.com/Fallout-build/Fallout/issues/267) — original design discussion.
 - [CONTRIBUTING.md](https://github.com/Fallout-build/Fallout/blob/main/CONTRIBUTING.md) — contributor-facing flow.
+- `.agents/skills/cutting-a-release/SKILL.md` — the on-demand agent procedure that follows this doc.

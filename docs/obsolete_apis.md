@@ -4,7 +4,7 @@ Fallout deprecates public APIs with [`System.ObsoleteAttribute`](https://learn.m
 
 This is the counterpart to the [`[Experimental]` registry](experimental-apis.md): `[Experimental]` gates *not-yet-stable* surface you opt into (error-by-default); `[Obsolete]` marks *on-the-way-out* surface that still works (warning-by-default). The two use **separate ID sequences** — `FALLOUTOBS0xx` here, `FALLOUT0xx` there — so a suppression can never cross the two.
 
-See [the agent conventions](agents/conventions.md#obsolete-for-deprecating-public-apis) for the contributor rules.
+See the `marking-experimental-apis` skill (`.agents/skills/marking-experimental-apis/SKILL.md`) for the contributor rules.
 
 ## How it works
 
@@ -36,7 +36,7 @@ This matters for consumers building with `TreatWarningsAsErrors`: without a per-
 - The `FALLOUTOBS0xx` sequence is **independent** of the `FALLOUT0xx` sequence used by [`[Experimental]`](experimental-apis.md) — allocate from this registry only.
 - An ID is **never reused** — once retired it stays retired, so a consumer's `NoWarn` can never silently re-bind to a different deprecation.
 - Every allocation is recorded in the registry table below, in the same PR that introduces the attribute.
-- **Adding `[Obsolete]` is not a breaking change** — a warning-level deprecation keeps existing code compiling. The break is *removing* the API, which waits for the next major (v11, whenever that happens — see [AGENTS.md rule #2](https://github.com/Fallout-build/Fallout/blob/main/AGENTS.md/AGENTS.md) and the [release/versioning policy](agents/release-and-versioning.md)). Record the removal target in the message and the registry so consumers can plan.
+- **Adding `[Obsolete]` is not a breaking change** — a warning-level deprecation keeps existing code compiling. The break is *removing* the API, which waits for the next major (v11, whenever that happens — see [AGENTS.md rule 2](https://github.com/Fallout-build/Fallout/blob/main/AGENTS.md) and the versioning policy in the `creating-a-pr` skill). Record the removal target in the message and the registry so consumers can plan.
 - **When the API is finally removed**, its row moves to **Removed** status and the ID is retired, not recycled.
 
 ## Registry

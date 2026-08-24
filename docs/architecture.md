@@ -72,10 +72,12 @@ This file covers *layout*. For how the build orchestrator works inside — the s
 
 ## Build conventions
 
-- **Central package versions.** All `PackageReference` versions live in `Directory.Packages.props`. Never inline `Version=` on a `PackageReference` — the build will error.
+- **Central package versions.** All `PackageReference` versions live in `Directory.Packages.props`. Never inline `Version=` on a `PackageReference` — the build will error. Don't bypass this or `Directory.Build.targets` with project-local overrides.
 - **Smart `PackageReference`.** `Directory.Build.targets` rewrites `PackageReference`s that match a project in the current solution into `ProjectReference`s. Lets us reference our own packages by ID across the dev/release boundary.
 - **`AssemblyInfo.cs` at root.** Shared `InternalsVisibleTo` declarations. Included automatically via `Directory.Build.props`.
 - **No per-file license headers.** The MIT notice lives in [`LICENSE`](https://github.com/Fallout-build/Fallout/blob/main/LICENSE) at the repo root. NuGet packages declare MIT via `PackageLicenseExpression` in `Directory.Build.props`. Vendored Microsoft code under `src/Persistence/Fallout.Persistence.Solution/` keeps its own headers — leave those alone.
+- **Don't reintroduce `source/` or `images/`.** Production code lives under `src/`, tests under `tests/` (see the split rationale above); binary assets live under `.assets/`.
+- **Don't commit build output.** No `output/`, `bin/`, `obj/`, or the generated `fallout-global.sln`/`fallout-global.*` files (produced by `GenerateGlobalSolution`).
 
 ## CI layout
 
