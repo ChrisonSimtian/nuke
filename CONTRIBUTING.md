@@ -53,26 +53,17 @@ Fallout welcomes contributions. As a community, we want to help each other, prov
 - **Write functional commit and PR titles** — describe what the change accomplishes, not how it's categorised. Do not use conventional-commit prefixes (`feat:`, `fix:`, `chore:`, `refactor:`, etc.). Good examples: "Add retry logic to the HTTP tool wrapper", "Fix null-reference in target dependency resolution". The `!` suffix (e.g. `fix(security)!: …`) is recognised only as a breaking-change detection signal, not a general style requirement.
 - Aim for qualitative, readable code that matches the surrounding style.
 - There's no committed `.editorconfig` or ReSharper/`*.DotSettings` file — they were removed during the takeover. Rely on `dotnet format` defaults and review; don't reintroduce them without a maintainer-level decision.
-- Add tests when meaningful — every `Foo` project has a sibling `Foo.Tests`.
+- Add tests when meaningful — every `Foo` project has a sibling `Foo.Tests`. A few conventions to follow:
+  - **Test names read as behavior, not method calls** (AV1600-style): `Missing_changelog_does_not_add_a_full_changelog_link_to_release_notes`, not `GetNuGetReleaseNotes_WithMissingChangelog_AndGitHubRepository_DoesNotThrow`.
+  - **`Specs` suffix, not `Test`/`Tests`** — test projects are `Foo.Specs`, files `FooSpecs.cs`, classes `FooSpecs`. It signals the class specifies expected behavior.
+  - **AAA structure with Pascal-case comments** — `// Arrange`, `// Act`, `// Assert`. Omit a section's comment when there's nothing to arrange (e.g. constructor fixtures already cover it).
+  - **Disk-based fixtures use a constructor + `IDisposable.Dispose()`**, not per-test `try/finally` — xUnit creates a fresh instance per `[Fact]`, so the constructor is Arrange and `Dispose()` is teardown. Use `AbsolutePath.Temp(prefix)` for the scratch directory. See `MigrationIntegrationSpecs.cs` and `BumpDotNetVersionStepSpecs.cs` for the pattern.
 - Commit the regenerated `.cs` output alongside the `.json` spec — `VerifyGeneratedTools` fails CI if they drift.
-- **Label the PR `target/vCurrent`** for the current release line (use `target/vNext` for work held for the next major). **Breaking changes wait for the next major.** They land on `develop`, behind `[Experimental("FALLOUT0xx")]` (or, if that doesn't fit, on a short-lived branch off `develop`) — never on a `release/vX.Y` or `main` production branch. They also get a `breaking-change` label plus a `⚠️ Breaking change` callout in the PR description that names the migration path. Surface that isn't ready to commit to yet can ship behind `[Experimental("FALLOUT0xx")]` instead of being held back. See the [PR-creation flow](docs/agents/release-and-versioning.md#pr-creation-flow) for the full procedure.
+- **Label the PR `target/vCurrent`** for the current release line (use `target/vNext` for work held for the next major). **Breaking changes wait for the next major.** They land on `develop`, behind `[Experimental("FALLOUT0xx")]` (or, if that doesn't fit, on a short-lived branch off `develop`) — never on a `release/vX.Y` or `main` production branch. They also get a `breaking-change` label plus a `⚠️ Breaking change` callout in the PR description that names the migration path. Surface that isn't ready to commit to yet can ship behind `[Experimental("FALLOUT0xx")]` instead of being held back. See the `creating-a-pr` skill (`.agents/skills/creating-a-pr/SKILL.md`) for the full procedure.
 
 ### Tool wrappers
 
-Tool wrapper JSON lives under `src/Fallout.Common/Tools/<Tool>/<Tool>.json`. When adding or extending one:
-
-- Copy the shape from a neighbouring tool.
-- Cover at least a full command with all its arguments.
-- Use formatting tags in `help`:
-  - `<c>` for inline code
-  - `<a>` for links
-  - `<ul>` / `<ol>` for lists
-  - `<em>` for emphasized text
-  - `<para/>` between paragraphs (not `<p>...</p>`)
-- Don't write `secret: false` (it's the default).
-- Don't write `default: xxx` (obsolete).
-- Run `./build.ps1 GenerateTools` to regenerate the `.cs` output.
-- Commit the regenerated `.cs` output alongside the `.json` spec — `VerifyGeneratedTools` fails CI if they drift.
+Tool wrapper JSON lives under `src/Fallout.Common/Tools/<Tool>/<Tool>.json`. See the `adding-a-tool-wrapper` skill (`.agents/skills/adding-a-tool-wrapper/SKILL.md`) for the recipe: copy a neighbour's shape, cover a full command with all its arguments, regenerate with `./build.ps1 GenerateTools`, and commit the regenerated `.cs` alongside the `.json` spec.
 
 ### After opening a PR
 

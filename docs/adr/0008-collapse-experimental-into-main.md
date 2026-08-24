@@ -79,5 +79,4 @@ Cut `release/YYYY` from day one (the pre-ADR-0007 model) so there's always a sta
 - [ADR-0007: Cut `release/YYYY` on demand](0007-cut-release-branch-on-demand.md) — reaffirmed.
 - [ADR-0002: v11 off nuget.org by default](0002-v11-off-nuget-by-default.md) — nuget.org-opt-in policy, retained.
 - [docs/branching-and-release.md](../branching-and-release.md) — maintainer runbook (updated for this model).
-- [docs/agents/release-and-versioning.md](../agents/release-and-versioning.md) — agent-facing reference (updated for this model).
 - Discussion thread: [#302 — Calendar versioning + dual-pace channels](https://github.com/Fallout-build/Fallout/discussions/302).
