@@ -16,4 +16,4 @@ Add this fork's GitHub Packages feed to your `nuget.config`:
 
 Then bump your `Nuke.Build` package reference to the latest 10.3.x or later.
 
-Full migration walkthrough: [`docs/migration/from-nuke.md`](../../../docs/migration/from-nuke.md).
+Full migration walkthrough: [`docs/Migration/from-nuke.md`](../../../docs/Migration/from-nuke.md).

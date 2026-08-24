@@ -8,7 +8,8 @@ Canonical top-level structure. See [docs/architecture.md](../architecture.md) fo
 | `tests/` | All test projects (`tests/Fallout.<X>.Tests/Fallout.<X>.Tests.csproj`), plus `tests/Nuke.Common.Shim.Tests/` and `tests/Nuke.Components.Shim.Tests/` covering the shims. |
 | `vendor/` | Vendored third-party source we maintain a fork of (currently the `vs-solutionpersistence` fork — packaged as `Fallout.VisualStudio.SolutionPersistence`). |
 | `build/` | The build orchestrator (`_build.csproj` + `Build.*.cs` partial files). |
-| `docs/` | Documentation site content. Architecture notes and the agent brief sub-files live here too. |
+| `docs/website/` | Only what's published to docs.fallout.build: the user-facing guide (`01-getting-started/` … `07-ide/`), `introduction.md`, `badge.md`, and `_snippets/`. |
+| `docs/` (root) | Everything else: ADRs, the agent brief sub-files, `architecture.md`, `branching-and-release.md`, `engine-de-statification.md`, `experimental-apis.md`, `obsolete_apis.md`, `Migration/`, `dependencies.md`, `roadmap.md`, and the generated `cli-tools/` CLI snapshots. Not published to the site. |
 | `.assets/` | Images, icons, logos — anything binary and non-code. |
 | Root | Solution file (`fallout.slnx`), shared MSBuild plumbing (`Directory.Build.props/targets`, `Directory.Packages.props`), `AssemblyInfo.cs`, project conventions (`README.md`/`CONTRIBUTING.md`/`LICENSE`/`AGENTS.md`/`CLAUDE.md`). The code of conduct, security policy and funding config are inherited org-wide from [`Fallout-build/.github`](https://github.com/Fallout-build/.github) — add a local copy only to deliberately override the default. |
 
