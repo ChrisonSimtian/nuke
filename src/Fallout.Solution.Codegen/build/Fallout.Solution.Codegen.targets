@@ -1,0 +1,45 @@
+<Project>
+
+  <!--
+    Pre-build codegen for the strongly-typed [Solution] accessor.
+
+    When FalloutSolutionCodegenMode == Build (the net10 path), this target runs the codegen
+    console before compile, writes <Member>.g.cs into obj/, and includes it in the build. The
+    in-compiler StronglyTypedSolutionGenerator reads the same property (exposed below) and no-ops,
+    so exactly one path emits.
+
+    The consuming project sets:
+      - FalloutSolutionCodegenMode    = Build            (opt in to the console path)
+      - FalloutSolutionCodegenProject = path to the console .csproj   (in-repo / dogfood), OR
+        FalloutSolutionCodegenAssembly = path to the published console .dll (packaged consumers)
+      - FalloutBaseDirectory          = repo root (where the solution / parameters file live)
+  -->
+
+  <ItemGroup>
+    <CompilerVisibleProperty Include="FalloutSolutionCodegenMode" />
+  </ItemGroup>
+
+  <Target Name="RunFalloutSolutionCodegen"
+          BeforeTargets="BeforeCompile;CoreCompile"
+          Condition="'$(FalloutSolutionCodegenMode)' == 'Build'">
+
+    <PropertyGroup>
+      <_FalloutSolutionCodegenOut>$(IntermediateOutputPath)FalloutSolution</_FalloutSolutionCodegenOut>
+      <_FalloutSolutionCodegenRoot Condition="'$(FalloutBaseDirectory)' != ''">$(FalloutBaseDirectory)</_FalloutSolutionCodegenRoot>
+      <_FalloutSolutionCodegenRoot Condition="'$(_FalloutSolutionCodegenRoot)' == ''">$(MSBuildProjectDirectory)</_FalloutSolutionCodegenRoot>
+      <_FalloutSolutionCodegenInvoke Condition="'$(FalloutSolutionCodegenAssembly)' != ''">dotnet "$(FalloutSolutionCodegenAssembly)"</_FalloutSolutionCodegenInvoke>
+      <_FalloutSolutionCodegenInvoke Condition="'$(_FalloutSolutionCodegenInvoke)' == '' and '$(FalloutSolutionCodegenProject)' != ''">dotnet run -c $(Configuration) --project "$(FalloutSolutionCodegenProject)" --</_FalloutSolutionCodegenInvoke>
+    </PropertyGroup>
+
+    <Error Condition="'$(_FalloutSolutionCodegenInvoke)' == ''"
+           Text="FalloutSolutionCodegenMode=Build requires FalloutSolutionCodegenProject or FalloutSolutionCodegenAssembly to be set." />
+
+    <MakeDir Directories="$(_FalloutSolutionCodegenOut)" />
+    <Exec Command="$(_FalloutSolutionCodegenInvoke) --root &quot;$(_FalloutSolutionCodegenRoot)&quot; --out &quot;$(_FalloutSolutionCodegenOut)&quot; @(Compile->'--source &quot;%(FullPath)&quot;', ' ')" />
+
+    <ItemGroup>
+      <Compile Include="$(_FalloutSolutionCodegenOut)\*.g.cs" />
+    </ItemGroup>
+  </Target>
+
+</Project>

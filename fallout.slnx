@@ -28,6 +28,8 @@
   <Project Path="src\Persistence\Fallout.Persistence.Solution\Fallout.Persistence.Solution.csproj" />
   <Project Path="src\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
   <Project Path="src\Fallout.SourceGenerators\Fallout.SourceGenerators.csproj" />
+  <Project Path="src\Fallout.Solution.Codegen\Fallout.Solution.Codegen.csproj" />
+  <Project Path="src\Fallout.Solution.Codegen.Emit\Fallout.Solution.Codegen.Emit.csproj" />
   <Project Path="src\Fallout.Tooling.Generator\Fallout.Tooling.Generator.csproj" />
   <Project Path="src\Fallout.Tooling\Fallout.Tooling.csproj" />
   <Project Path="src\Fallout.Utilities.IO.Compression\Fallout.Utilities.IO.Compression.csproj" />
@@ -47,6 +49,7 @@
   <Project Path="tests\Nuke.Components.Shim.Specs\Nuke.Components.Shim.Specs.csproj" />
   <Project Path="tests\Fallout.ProjectModel.Specs\Fallout.ProjectModel.Specs.csproj" />
   <Project Path="tests\Fallout.Solution.Specs\Fallout.Solution.Specs.csproj" />
+  <Project Path="tests\Fallout.Solution.Codegen.Specs\Fallout.Solution.Codegen.Specs.csproj" />
   <Project Path="tests\Fallout.SourceGenerators.Specs\Fallout.SourceGenerators.Specs.csproj" />
   <Project Path="tests\Benchmarks\Fallout.Persistence.Solution.Benchmarks\Fallout.Persistence.Solution.Benchmarks.csproj" />
   <Project Path="tests\Consumers\Nuke.Consumer\Nuke.Consumer.csproj" />

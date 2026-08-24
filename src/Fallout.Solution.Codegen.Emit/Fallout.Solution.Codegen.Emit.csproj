@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- ns2.0 so the Roslyn StronglyTypedSolutionGenerator (also ns2.0) can reference it;
+         net10 so the Fallout.Solution.Codegen console gets a modern build. When the generator
+         fallback is eventually retired (#441), the ns2.0 target can be dropped. -->
+    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <Description>Shared emit logic for the strongly-typed [Solution] accessor (Solution.g.cs). Consumed by both the in-compiler StronglyTypedSolutionGenerator (ns2.0 fallback) and the net10 Fallout.Solution.Codegen console, so both produce byte-identical output.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
+    <ProjectReference Include="..\Fallout.Utilities\Fallout.Utilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Scriban" />
+  </ItemGroup>
+
+</Project>
