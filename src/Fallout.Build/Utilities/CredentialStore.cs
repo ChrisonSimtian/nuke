@@ -63,13 +63,13 @@ public static class CredentialStore
     {
         string PromptForPassword()
         {
-            Host.Information($"Enter password for {Constants.GetParametersFileName(profile)}:");
+            Host.Information($"Enter password for {FalloutPaths.GetParametersFileName(profile)}:");
             return ConsoleUtility.ReadSecret();
         }
 
-        var credentialStoreName = Constants.GetCredentialStoreName(rootDirectory, profile);
-        var legacyCredentialStoreName = Constants.GetLegacyCredentialStoreName(rootDirectory, profile);
-        var passwordParameterName = Constants.GetProfilePasswordParameterName(profile);
+        var credentialStoreName = FalloutPaths.GetCredentialStoreName(rootDirectory, profile);
+        var legacyCredentialStoreName = FalloutPaths.GetLegacyCredentialStoreName(rootDirectory, profile);
+        var passwordParameterName = FalloutPaths.GetProfilePasswordParameterName(profile);
 
         return TryGetPassword(credentialStoreName) ??
                TryGetLegacyPasswordWithWarning(legacyCredentialStoreName, credentialStoreName) ??

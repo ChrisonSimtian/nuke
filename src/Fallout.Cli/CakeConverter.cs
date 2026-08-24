@@ -8,7 +8,8 @@ using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Cli.Rewriting.Cake;
-using static Fallout.Common.Constants;
+using static Fallout.Constants;
+using static Fallout.Common.FalloutPaths;
 using static Fallout.Common.EnvironmentInfo;
 
 namespace Fallout.Cli;

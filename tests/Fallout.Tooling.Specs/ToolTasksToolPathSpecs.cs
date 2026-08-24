@@ -12,7 +12,7 @@ public class ToolTasksToolPathSpecs
 {
     public ToolTasksToolPathSpecs()
     {
-        var rootDirectory = Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory);
+        var rootDirectory = FalloutPaths.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory);
         NuGetToolPathResolver.NuGetPackagesConfigFile = rootDirectory / "build" / "_build.csproj";
     }
 

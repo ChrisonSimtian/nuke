@@ -26,7 +26,7 @@ public abstract class FileSystemDependentSpecs
             .GetValue(testOutputHelper).NotNull()).TestCase.TestMethod.Method.Name;
 
         ExecutionDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).NotNull();
-        RootDirectory = Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory);
+        RootDirectory = FalloutPaths.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory);
         TestProjectDirectory = ExecutionDirectory.FindParentOrSelf(x => x.ContainsFile("*.csproj"));
         TestTempDirectory = ExecutionDirectory / "temp" / $"{GetType().Name}.{TestName}";
 

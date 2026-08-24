@@ -11,7 +11,7 @@ using Fallout.Solutions;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Utilities;
-using static Fallout.Common.Constants;
+using static Fallout.Constants;
 
 namespace Fallout.Cli.Commands;
 

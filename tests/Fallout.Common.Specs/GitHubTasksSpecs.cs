@@ -10,7 +10,7 @@ namespace Fallout.Common.Specs;
 
 public class GitHubTasksSpecs
 {
-    private static AbsolutePath RootDirectory => Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
+    private static AbsolutePath RootDirectory => FalloutPaths.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
 
     [Fact]
     public void GitHubRepositoryFromLocalDirectorySpec()

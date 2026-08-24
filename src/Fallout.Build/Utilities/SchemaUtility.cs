@@ -11,7 +11,7 @@ using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Common.ValueInjection;
-using static Fallout.Common.Constants;
+using static Fallout.Constants;
 
 namespace Fallout.Common.Execution;
 

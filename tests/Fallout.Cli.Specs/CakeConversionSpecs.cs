@@ -12,7 +12,7 @@ namespace Fallout.Cli.Specs;
 
 public class CakeConversionSpecs
 {
-    private static AbsolutePath RootDirectory => Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory);
+    private static AbsolutePath RootDirectory => FalloutPaths.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory);
 
     [Theory]
     [MemberData(nameof(CakeFileNames))]

@@ -33,7 +33,7 @@ public class HandleSingleFileExecutionAttribute : BuildExtensionAttributeBase, I
         if (!packageResourceNames.Any())
             return;
 
-        var globalPackagesDirectory = Constants.GlobalFalloutDirectory / "packages";
+        var globalPackagesDirectory = FalloutPaths.GlobalFalloutDirectory / "packages";
         Log.Information("Extracting packages to {PackagesDirectory}", globalPackagesDirectory);
 
         foreach (var packageResourceName in packageResourceNames)
@@ -69,7 +69,7 @@ public class HandleSingleFileExecutionAttribute : BuildExtensionAttributeBase, I
         HttpTasks.HttpDownloadFile(ScriptUrl, ScriptFile);
 
         var version = GetDotNetRuntimeVersion();
-        var installLocation = Constants.GlobalFalloutDirectory / "dotnet-runtime" / (version ?? "current");
+        var installLocation = FalloutPaths.GlobalFalloutDirectory / "dotnet-runtime" / (version ?? "current");
         var dotnetExecutable = installLocation / (EnvironmentInfo.IsWin ? "dotnet.exe" : "dotnet");
 
         if (version == null || !dotnetExecutable.Exists())
@@ -97,7 +97,7 @@ public class HandleSingleFileExecutionAttribute : BuildExtensionAttributeBase, I
     private bool IsSingleFileExecution => Assembly.GetEntryAssembly().NotNull().Location == string.Empty;
 
     private string ScriptFileName => EnvironmentInfo.IsWin ? "dotnet-install.ps1" : "dotnet-install.sh";
-    private AbsolutePath ScriptFile => Constants.GlobalFalloutDirectory / ScriptFileName;
+    private AbsolutePath ScriptFile => FalloutPaths.GlobalFalloutDirectory / ScriptFileName;
 
     private string GetDotNetRuntimeVersion()
     {

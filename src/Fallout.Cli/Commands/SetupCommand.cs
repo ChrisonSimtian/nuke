@@ -14,7 +14,7 @@ using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 using Spectre.Console;
-using static Fallout.Common.Constants;
+using static Fallout.Constants;
 using static Fallout.Common.EnvironmentInfo;
 using static Fallout.Common.Utilities.TemplateUtility;
 

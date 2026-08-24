@@ -9,7 +9,7 @@ namespace Fallout.Common.Execution;
 
 internal class HandleReSharperSurrogateArgumentsAttribute : BuildExtensionAttributeBase, IOnBuildCreated
 {
-    private AbsolutePath ReSharperSurrogateFile => Constants.GetReSharperSurrogateFile(Build.RootDirectory);
+    private AbsolutePath ReSharperSurrogateFile => FalloutPaths.GetReSharperSurrogateFile(Build.RootDirectory);
 
     public void OnBuildCreated(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {
