@@ -255,10 +255,11 @@ jobs:
               --skip-duplicate
           done
 
-  # Bundled artifact distribution. Attaches all nupkgs, plus the PackageGuard SBOM, to the
-  # GitHub Release for the tag. Idempotent: if the release already exists (workflow_dispatch
-  # retry case), uploads or replaces missing assets via --clobber. The risk-report SARIF isn't
-  # attached here — it's reported to GitHub's code-scanning feature instead (security-scan.yml).
+  # Bundled artifact distribution. Attaches all nupkgs, plus the PackageGuard SBOM and HTML
+  # risk report, to the GitHub Release for the tag. Idempotent: if the release already exists
+  # (workflow_dispatch retry case), uploads or replaces missing assets via --clobber. The .sarif
+  # itself isn't attached here — it's reported to GitHub's code-scanning feature instead
+  # (security-scan.yml); the HTML is the human-readable counterpart of the same report.
   publish-github-releases:
     name: publish → GitHub Releases
     runs-on: ubuntu-latest
@@ -277,7 +278,7 @@ jobs:
         with:
           name: packages
           path: output/packages
-      - name: 'Download: PackageGuard SBOM'
+      - name: 'Download: PackageGuard SBOM + risk report'
         uses: actions/download-artifact@v8
         with:
           name: packageguard
@@ -296,6 +297,9 @@ jobs:
           assets=(output/packages/*.nupkg)
           if [ -f output/packageguard/sbom.json ]; then
             assets+=("output/packageguard/sbom.json")
+          fi
+          if [ -f output/packageguard/risk-report.html ]; then
+            assets+=("output/packageguard/risk-report.html")
           fi
           if gh release view "$TAG" > /dev/null 2>&1; then
             echo "Release $TAG already exists — uploading assets with --clobber."
