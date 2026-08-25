@@ -119,8 +119,8 @@ jobs:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
         run: dotnet tool restore
-      - name: 'Run: Test + Pack'
-        run: dotnet fallout Test Pack
+      - name: 'Run: Test + Pack + PackageGuard'
+        run: dotnet fallout Test Pack PackageGuard
         env:
           # We check out the tag above, so HEAD is detached and matches none of
           # version.json's publicReleaseRefSpec entries (they're all branch refs,
@@ -128,11 +128,25 @@ jobs:
           # NB.GV treats the build as non-public and stamps a git-height suffix
           # onto every package — v10.4.0-rc.3 shipped as 10.4.0-rc.3.geabd043cc2.
           PublicRelease: true
+          # PackageGuard's own target (build/Build.PackageGuard.cs) is gated on either being on
+          # a long-lived branch or running in this workflow (GitHubActions.Workflow ==
+          # "publish-packages-release") — the tag checkout above leaves HEAD detached, so the
+          # branch check alone can't pass here; validate-ref already proved the tag is
+          # reachable from a production branch. GITHUB_TOKEN lets it authenticate to GitHub
+          # (license lookups) instead of hitting anonymous rate limits.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Upload: package artifacts'
         uses: actions/upload-artifact@v7
         with:
           name: packages
           path: output/packages/*.nupkg
+          retention-days: 7
+          if-no-files-found: error
+      - name: 'Upload: PackageGuard SBOM + risk report'
+        uses: actions/upload-artifact@v7
+        with:
+          name: packageguard
+          path: output/packageguard/*
           retention-days: 7
           if-no-files-found: error
 
@@ -241,9 +255,10 @@ jobs:
               --skip-duplicate
           done
 
-  # Bundled artifact distribution. Attaches all nupkgs to the GitHub Release
-  # for the tag. Idempotent: if the release already exists (workflow_dispatch
-  # retry case), uploads or replaces missing assets via --clobber.
+  # Bundled artifact distribution. Attaches all nupkgs, plus the PackageGuard SBOM, to the
+  # GitHub Release for the tag. Idempotent: if the release already exists (workflow_dispatch
+  # retry case), uploads or replaces missing assets via --clobber. The risk-report SARIF isn't
+  # attached here — it's reported to GitHub's code-scanning feature instead (security-scan.yml).
   publish-github-releases:
     name: publish → GitHub Releases
     runs-on: ubuntu-latest
@@ -262,6 +277,11 @@ jobs:
         with:
           name: packages
           path: output/packages
+      - name: 'Download: PackageGuard SBOM'
+        uses: actions/download-artifact@v8
+        with:
+          name: packageguard
+          path: output/packageguard
       - name: 'Create or update GitHub Release with package artifacts'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -273,14 +293,18 @@ jobs:
             TAG="${GITHUB_REF_NAME}"
           fi
           echo "Tag: $TAG"
+          assets=(output/packages/*.nupkg)
+          if [ -f output/packageguard/sbom.json ]; then
+            assets+=("output/packageguard/sbom.json")
+          fi
           if gh release view "$TAG" > /dev/null 2>&1; then
             echo "Release $TAG already exists — uploading assets with --clobber."
-            gh release upload "$TAG" output/packages/*.nupkg --clobber
+            gh release upload "$TAG" "${assets[@]}" --clobber
           else
             echo "Creating new release $TAG."
             gh release create "$TAG" \
               --title "$TAG" \
               --target "$(git rev-parse HEAD)" \
               --generate-notes \
-              output/packages/*.nupkg
+              "${assets[@]}"
           fi

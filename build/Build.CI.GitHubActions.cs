@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.CI.GitHubActions.Configuration;
 using Fallout.Components;
 
-// Two generated build workflows. Both run Test+Pack; both are GENERATED from the
-// attributes below — edit here and regenerate (`./build.sh`), never hand-edit the
-// `.yml`.
+// Three generated workflows. build.yml and build-cross-platform.yml both run Test+Pack; all
+// three are GENERATED from the attributes below — edit here and regenerate (`./build.sh`),
+// never hand-edit the `.yml`.
 //
 //   build.yml               — the Linux PR gate, and the ONLY required status
 //                             check (job `ubuntu-latest`; branch protection keys on
@@ -61,7 +63,34 @@ using Fallout.Components;
     OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
     InvokedTargets = new[] { nameof(ITest.Test), nameof(IPack.Pack) },
     PublishArtifacts = false)]
-partial class Build
+//   security-scan.yml        — the PackageGuard compliance scan (build/Build.PackageGuard.cs).
+//                             Push-only, and only to the four long-lived branches — this is
+//                             the CI-side half of the branch restriction; the target's own
+//                             OnlyWhenStatic(IsOnLongLivedBranch) guard is the other half, for
+//                             anyone invoking the target outside this workflow. Runs on its own
+//                             schedule rather than piggy-backing on build.yml/build-cross-platform.yml,
+//                             because those check out the PR's source branch (never one of the
+//                             four) — a PackageGuard run gated on being IN one of those workflows
+//                             would just always skip. EnableGitHubToken feeds GITHUB_TOKEN to
+//                             PackageGuard (avoids GitHub API rate-limiting on license lookups)
+//                             and to the upload-sarif step's security-events:write use.
+[GitHubActions(
+    "security-scan",
+    GitHubActionsImage.UbuntuLatest,
+    FetchDepth = 0,
+    ConcurrencyGroup = "${{ github.workflow }}-${{ github.ref }}",
+    ConcurrencyCancelInProgress = true,
+    OnPushBranches = new[] { DevelopBranch, MainBranch, ReleaseBranchPattern, SupportBranchPattern },
+    OnPushExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
+    InvokedTargets = new[] { nameof(PackageGuard) },
+    EnableGitHubToken = true,
+    // Specifying any `permissions:` block switches the job from GitHub's default read-all to
+    // explicit-only — contents:read has to be listed too, or upload-sarif (and checkout) lose
+    // it. See GitHub's own upload-sarif docs for this exact pairing.
+    ReadPermissions = new[] { GitHubActionsPermissions.Contents },
+    WritePermissions = new[] { GitHubActionsPermissions.SecurityEvents },
+    PublishArtifacts = false)]
+partial class Build : IConfigureGitHubActions
 {
     // The release workflow is intentionally hand-written at
     // .github/workflows/publish-packages-release.yml — that lets us name the GitHub
@@ -71,4 +100,24 @@ partial class Build
     // workflow's `name:` — it gates ICreateGitHubRelease.CreateGitHubRelease
     // (Build.cs) to the release workflow only.
     const string ReleaseWorkflow = "publish-packages-release";
+
+    // Injects the SARIF upload after security-scan's "dotnet fallout PackageGuard" run step —
+    // GitHubActionsStepPosition.PostRun is exactly "after the run block, before the built-in
+    // artifact upload". Scoped to this one generated job by WorkflowName; other jobs get no
+    // insertions.
+    void IConfigureGitHubActions.ConfigureSteps(GitHubActionsStepPipeline pipeline)
+    {
+        if (pipeline.WorkflowName == "security-scan")
+        {
+            pipeline.Insert(GitHubActionsStepPosition.PostRun, new GitHubActionsCustomStep
+            {
+                Name = "Upload risk-report SARIF to GitHub code scanning",
+                Uses = "github/codeql-action/upload-sarif@v3",
+                With = new Dictionary<string, string>
+                {
+                    ["sarif_file"] = "output/packageguard/risk-report.sarif",
+                },
+            });
+        }
+    }
 }
