@@ -14,6 +14,7 @@ using Fallout.Common.Tools.Discord;
 using Fallout.Common.Tools.Docker;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.Kubernetes;
+using Fallout.Common.Tools.PackageGuard;
 using Fallout.Common.Utilities;
 using VerifyXunit;
 using Xunit;
@@ -190,6 +191,21 @@ public class SettingsSpecs
                 .SetArguments("arg1", "arg2")
                 .SetCluster("cluster"),
             "exec --container=container --cluster=cluster -- command arg1 arg2");
+    }
+
+    [Fact]
+    public void TestPackageGuard()
+    {
+        Assert(new PackageGuardSettings()
+                .SetProjectPath("MySolution.sln")
+                .SetConfigPath("packageguard.config.json")
+                .EnableForceRestore()
+                .SetRiskCacheMaxAgeHours(48)
+                .SetNpmPackageManager(NpmPackageManager.Yarn)
+                .EnableReportRisk()
+                .SetSbom(SbomFormat.cyclonedx)
+                .SetSbomOutput("sbom.json"),
+            "MySolution.sln --config-path packageguard.config.json --force-restore --risk-cache-max-age-hours 48 --npm Yarn --report-risk --sbom cyclonedx --sbom-output sbom.json");
     }
 
     private static void Assert<T>(T options, string expected)
