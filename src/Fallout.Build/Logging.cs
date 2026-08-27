@@ -87,10 +87,14 @@ public static class Logging
     /// whichever pipeline happened to exist first.
     ///
     /// Binding still happens per logger rather than per write, because the category name is
-    /// attached as Serilog's <c>SourceContext</c> at construction. Two consequences the callers
-    /// depend on: <c>AddFalloutLogging</c> configures the pipeline <em>before</em> it registers the
-    /// factory, so a container-resolved logger can never bind a stale one; and <see cref="Logger"/>
-    /// is not cached.
+    /// attached as Serilog's <c>SourceContext</c> at construction. Three consequences the callers
+    /// depend on. <see cref="Configure"/> runs before the container is built, so a resolved logger
+    /// can never bind a pipeline that is already gone. The container registrations for
+    /// <c>ILogger&lt;T&gt;</c> and <see cref="ILogger"/> are transient, so each
+    /// resolution binds the pipeline that is current right now. And <see cref="Logger"/> is not
+    /// cached, for the same reason. A component that resolves a logger once and holds it across a
+    /// reassignment still writes into the old pipeline, so anything living that long must read
+    /// <see cref="Logger"/> at the point of writing.
     ///
     /// Serilog owns the pipeline's lifetime (<c>Log.CloseAndFlush</c>), hence <c>dispose: false</c>.
     /// </remarks>

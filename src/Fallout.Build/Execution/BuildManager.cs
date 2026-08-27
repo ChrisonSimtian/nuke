@@ -54,7 +54,11 @@ internal static class BuildManager
 
         try
         {
-            services = new ServiceCollection().AddFalloutLogging(build).BuildServiceProvider();
+            // Configure installs the pipeline; AddFalloutLogging only registers the abstraction over
+            // it. Order matters here rather than inside the registration: a logger binds the ambient
+            // pipeline when it is created, so the pipeline has to exist before anything resolves one.
+            Logging.Configure(build);
+            services = new ServiceCollection().AddFalloutLogging().BuildServiceProvider();
             loggerFactoryScope = Logging.UseLoggerFactory(services.GetRequiredService<ILoggerFactory>());
 
             build.ExecutableTargets = ExecutableTargetFactory.CreateAll(build, defaultTargetExpressions);

@@ -6,6 +6,7 @@ using Fallout.Common.Utilities;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -182,6 +183,54 @@ public class LoggerBridgeSpecs
     }
 
     [Fact]
+    public void A_container_logger_binds_the_pipeline_current_at_resolution()
+    {
+        // The container-side pair of The_facade_logger_tracks_the_current_pipeline. Logger<T> binds
+        // its inner logger in its constructor, so the registration has to be transient. As a
+        // singleton it would strand every consumer on whichever pipeline was current at the first
+        // resolution, which is the failure Logging.Logger stays uncached to avoid.
+        var sink = new CollectingSink();
+
+        using var pipeline = PreserveAmbientPipeline();
+        using var services = new ServiceCollection().AddFalloutLogging().BuildServiceProvider();
+
+        services.GetRequiredService<ILogger<LoggerBridgeSpecs>>();
+
+        Log.Logger = CreateLogger(sink);
+        services.GetRequiredService<ILogger<LoggerBridgeSpecs>>().LogWarning(Marker + " after the swap");
+
+        sink.Marked.Should().ContainSingle();
+    }
+
+    [Fact]
+    public void The_container_hands_out_a_new_logger_per_resolution()
+    {
+        using var pipeline = PreserveAmbientPipeline();
+        using var services = new ServiceCollection().AddFalloutLogging().BuildServiceProvider();
+
+        services.GetRequiredService<ILogger<LoggerBridgeSpecs>>()
+            .Should().NotBeSameAs(services.GetRequiredService<ILogger<LoggerBridgeSpecs>>());
+        services.GetRequiredService<ILogger>()
+            .Should().NotBeSameAs(services.GetRequiredService<ILogger>());
+    }
+
+    [Fact]
+    public void Registering_the_seam_leaves_the_pipeline_alone()
+    {
+        // AddFalloutLogging registers, it does not configure. Logging.Configure is not idempotent:
+        // with no build it installs a pipeline with no file sinks, no host sink and no filter. A
+        // second container calling AddFalloutLogging must not wipe out the pipeline the first one
+        // is using.
+        using var pipeline = PreserveAmbientPipeline();
+        Log.Logger = CreateLogger(new CollectingSink());
+        var installed = Log.Logger;
+
+        using var services = new ServiceCollection().AddFalloutLogging().BuildServiceProvider();
+
+        Log.Logger.Should().BeSameAs(installed);
+    }
+
+    [Fact]
     public void Using_a_logger_factory_restores_the_previous_one()
     {
         var previous = Logging.Factory;
@@ -270,7 +319,10 @@ public class LoggerBridgeSpecs
 
     private class StubLoggerFactory : ILoggerFactory
     {
-        public ILogger CreateLogger(string categoryName) => throw new NotSupportedException();
+        // A no-op rather than a throw: this stub owns the process-wide Logging.Factory while it
+        // is installed, and #428 moves framework code onto Logging.Logger. A throwing stub would
+        // turn any unrelated log write during that window into an intermittent failure.
+        public ILogger CreateLogger(string categoryName) => NullLogger.Instance;
 
         public void AddProvider(ILoggerProvider provider) => throw new NotSupportedException();
 

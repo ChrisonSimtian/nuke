@@ -15,6 +15,7 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 | `Microsoft.Build` (+ `.Framework`, `.Tasks.Core`, `.Utilities.Core`) | MSBuild engine — read/evaluate `.csproj`/`.props` files | `Fallout.ProjectModel`, `Fallout.MSBuildTasks` |
 | `Microsoft.Build.Locator` | Locate an installed MSBuild at runtime | `Fallout.ProjectModel` |
 | `Microsoft.CodeAnalysis.*` (CSharp, Workspaces, MSBuild, Analyzers) | Roslyn — C# parsing/compilation/analysis | `Fallout.SourceGenerators`, `Fallout.Cli` (Cake rewriter) |
+| `Microsoft.Extensions.DependencyInjection` | DI container for the per-run composition root that wires the logging seam ([#428](https://github.com/Fallout-build/Fallout/issues/428)) | `Fallout.Build`. Note the footprint: `Fallout.Build` is consumer-facing, so every consumer now pulls the container transitively. Deliberate, not accidental. It currently serves one internal composition root, and the plugin foundation ([milestone #6](https://github.com/Fallout-build/Fallout/milestone/6)) is what will use it more widely. |
 | `Microsoft.Extensions.DependencyModel` | Parse `.deps.json` runtime metadata | `Fallout.Build` |
 | `Microsoft.SourceLink.GitHub` | Source-link symbols into published nupkgs so debuggers can step into Fallout | All packable libs |
 | `Nerdbank.GitVersioning` | Build-time semver derived from git history | All packable libs |
@@ -27,6 +28,8 @@ Central package versions are pinned in `Directory.Packages.props`; this page lin
 |---|---|
 | `Serilog` + `Sinks.Console` + `Sinks.File` | The logging framework. All `Log.Information/Warning/Error` calls route through this. |
 | `Serilog.Formatting.Compact` (+ `.Reader`) | Structured JSON log format for machine-readable logs |
+| `Serilog.Extensions.Logging` | Serilog provider for `Microsoft.Extensions.Logging`. Backs the `ILogger` seam in `Fallout.Build`, so framework code logs against the abstraction while Serilog stays the provider. |
+| `Microsoft.Extensions.Logging.Abstractions` | The `ILogger` / `ILoggerFactory` abstraction itself. Abstractions only, no implementation and no filter pipeline. |
 
 ## Azure
 
