@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Fallout.Common.Execution;
 using Fallout.Common.IO;
+using Fallout.Common.ValueInjection;
 
 namespace Fallout.Build.Execution.Extensions;
 
@@ -25,7 +26,10 @@ internal class SerializeBuildGraphAttribute : BuildExtensionAttributeBase, IOnBu
     {
         try
         {
-            var json = BuildGraphUtility.GetJsonString(executableTargets, FindFalloutVersion());
+            var json = BuildGraphUtility.GetJsonString(
+                executableTargets,
+                FindFalloutVersion(),
+                ValueInjectionUtility.GetParameterMembers(Build.GetType(), includeUnlisted: false));
             GraphFile.WriteAllText(json);
         }
         catch (Exception exception)

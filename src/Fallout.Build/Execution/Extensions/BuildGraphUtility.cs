@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
+using Fallout.Common;
 using Fallout.Common.Execution;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
+using Fallout.Common.ValueInjection;
 
 namespace Fallout.Build.Execution.Extensions;
 
@@ -37,12 +40,29 @@ internal static class BuildGraphUtility
     internal static BuildGraphModel GetModel(
         IReadOnlyCollection<ExecutableTarget> targets,
         string falloutVersion)
+        => GetModel(targets, falloutVersion, new MemberInfo[0]);
+
+    /// <summary>Projects the targets and the build's declared parameters into the serializable model.</summary>
+    /// <param name="targets">The build's executable targets, in any order.</param>
+    /// <param name="falloutVersion">The running Fallout version, or <c>null</c> for a local/dev build.</param>
+    /// <param name="parameterMembers">
+    /// The declared parameter members, from <see cref="ValueInjectionUtility.GetParameterMembers" /> —
+    /// the same set <c>--help</c> lists, inherited component parameters included.
+    /// </param>
+    internal static BuildGraphModel GetModel(
+        IReadOnlyCollection<ExecutableTarget> targets,
+        string falloutVersion,
+        IReadOnlyCollection<MemberInfo> parameterMembers)
         => new(
             SchemaVersion,
             falloutVersion,
             targets
                 .OrderBy(x => x.Name, StringComparer.Ordinal)
                 .Select(ToModel)
+                .ToList(),
+            parameterMembers
+                .Select(ToModel)
+                .OrderBy(x => x.Name, StringComparer.Ordinal)
                 .ToList());
 
     /// <summary>Serializes the graph model to the exact JSON written into <c>build-graph.json</c>.</summary>
@@ -50,6 +70,13 @@ internal static class BuildGraphUtility
         IReadOnlyCollection<ExecutableTarget> targets,
         string falloutVersion)
         => GetModel(targets, falloutVersion).ToJson(serializerOptions);
+
+    /// <summary>Serializes the graph model, parameters included.</summary>
+    internal static string GetJsonString(
+        IReadOnlyCollection<ExecutableTarget> targets,
+        string falloutVersion,
+        IReadOnlyCollection<MemberInfo> parameterMembers)
+        => GetModel(targets, falloutVersion, parameterMembers).ToJson(serializerOptions);
 
     // Takes the informational version up to the build-metadata separator ('+'), so the pin aligns with
     // the running tool. Returns the input unchanged when there is no separator, and null only when the
@@ -104,10 +131,51 @@ internal static class BuildGraphUtility
     private static IReadOnlyList<string> SortedNames(IEnumerable<ExecutableTarget> targets)
         => targets.Select(x => x.Name).OrderBy(x => x, StringComparer.Ordinal).ToList();
 
+    // Projects one declared parameter. The value is deliberately absent: a [Secret] member's
+    // injected value must never reach the emitted model, and emitting non-secret defaults only
+    // would make the field's meaning depend on the flag next to it.
+    private static ParameterModel ToModel(MemberInfo member)
+    {
+        var attribute = member.GetCustomAttribute<ParameterAttribute>();
+        return new ParameterModel(
+            ParameterService.GetParameterDashedName(member),
+            UnderlyingTypeName(member.GetMemberType()),
+            member.DeclaringType?.Name,
+            ParameterService.GetParameterDescription(member),
+            member.GetCustomAttribute<RequiredAttribute>() != null,
+            member.GetCustomAttribute<SecretAttribute>() != null,
+            attribute?.List ?? true,
+            Default: null,
+            AllowedValues: null);
+    }
+
+    // `int?` and `int` describe the same thing to someone typing --retries 3, so the wrapper is
+    // unwrapped. Note this is NOT ReflectionUtility.GetNullableType, which goes the other way
+    // (it *wraps* a value type) and throws outright on an interface-typed member.
+    private static string UnderlyingTypeName(Type type)
+        => (Nullable.GetUnderlyingType(type) ?? type).FullName;
+
     internal sealed record BuildGraphModel(
         int Version,
         string FalloutVersion,
-        IReadOnlyList<TargetModel> Targets);
+        IReadOnlyList<TargetModel> Targets,
+        IReadOnlyList<ParameterModel> Parameters);
+
+    /// <summary>
+    /// One declared <c>[Parameter]</c>. <paramref name="Name" /> is the dashed spelling a consumer
+    /// types; <paramref name="Type" /> the CLR type with <see cref="Nullable{T}" /> unwrapped.
+    /// <paramref name="Default" /> is always null — see <c>ToModel</c> for why.
+    /// </summary>
+    internal sealed record ParameterModel(
+        string Name,
+        string Type,
+        string DeclaredIn,
+        string Description,
+        bool Required,
+        bool Secret,
+        bool List,
+        string Default,
+        IReadOnlyList<string> AllowedValues);
 
     internal sealed record TargetModel(
         string Name,
