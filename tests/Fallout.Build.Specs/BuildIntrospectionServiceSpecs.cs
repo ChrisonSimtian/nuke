@@ -119,18 +119,38 @@ public class BuildIntrospectionServiceSpecs
     }
 
     [Fact]
-    public void An_empty_skip_list_skips_every_target_as_the_executor_does()
+    public void An_empty_skip_list_skips_every_target_except_the_invoked_ones()
     {
         var json = BuildIntrospectionService.GetPlanJson(
             new[] { "Compile" },
-            new[] { new ExecutableTarget { Name = "Restore" }, new ExecutableTarget { Name = "Compile" } },
+            new[]
+            {
+                new ExecutableTarget { Name = "Restore" },
+                new ExecutableTarget { Name = "Compile", Invoked = true },
+            },
             new string[0]);
 
         using var document = JsonDocument.Parse(json);
+        var entries = document.RootElement.GetProperty("plan");
 
-        document.RootElement.GetProperty("plan").EnumerateArray()
-            .Select(x => x.GetProperty("skip").GetString())
-            .Should().AllBe("via parameter");
+        entries[0].GetProperty("skip").GetString().Should().Be("via parameter");
+        entries[1].GetProperty("skip").ValueKind.Should().Be(JsonValueKind.Null);
+    }
+
+    [Fact]
+    public void An_explicitly_invoked_target_is_never_reported_as_skipped()
+    {
+        // BuildExecutor.MarkTargetSkipped only skips when !target.Invoked, so naming an invoked
+        // target in --skip does not stop it running. The predicted plan has to say the same.
+        var json = BuildIntrospectionService.GetPlanJson(
+            new[] { "Compile" },
+            new[] { new ExecutableTarget { Name = "Compile", Invoked = true } },
+            new[] { "Compile" });
+
+        using var document = JsonDocument.Parse(json);
+
+        document.RootElement.GetProperty("plan")[0]
+            .GetProperty("skip").ValueKind.Should().Be(JsonValueKind.Null);
     }
 
     [Fact]

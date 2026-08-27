@@ -49,6 +49,23 @@ internal static class BuildManager
             Logging.Configure(build);
 
             build.ExecutableTargets = ExecutableTargetFactory.CreateAll(build, defaultTargetExpressions);
+
+            // A read-only introspection request short-circuits before ANY extension runs and long
+            // before EnsureToolRequirements. That single gate is what makes "changes nothing, runs
+            // nothing" structural: IOnBuildCreated alone rewrites .fallout/build.schema.json
+            // (HandleShellCompletionAttribute) and can block on Console.ReadKey
+            // (UpdateNotificationAttribute), which would deadlock a piped consumer.
+            if (BuildIntrospectionService.IsRequested(build))
+            {
+                build.ExecutionPlan = ExecutionPlanner.GetExecutionPlan(
+                    build.ExecutableTargets,
+                    ParameterService.GetParameter<string[]>(() => build.InvokedTargets));
+
+                Console.Out.Write(
+                    BuildIntrospectionService.GetDocument(build, build.ExecutableTargets, build.ExecutionPlan));
+                return build.ExitCode ??= 0;
+            }
+
             build.ExecuteExtension<IOnBuildCreated>(x => x.OnBuildCreated(build.ExecutableTargets));
 
             NuGetToolPathResolver.EmbeddedPackagesDirectory = build.EmbeddedPackagesDirectory;
@@ -56,24 +73,13 @@ internal static class BuildManager
             NuGetToolPathResolver.NuGetAssetsConfigFile = build.NuGetAssetsConfigFile;
             NpmToolPathResolver.NpmPackageJsonFile = build.NpmPackageJsonFile;
 
-            // An introspection request owns standard output: the document must be the only thing on it.
-            if (!build.NoLogo && !BuildIntrospectionService.IsRequested(build))
+            if (!build.NoLogo)
                 build.WriteLogo();
 
             // TODO: move InvokedTargets to ExecutableTargetFactory
             build.ExecutionPlan = ExecutionPlanner.GetExecutionPlan(
                 build.ExecutableTargets,
                 ParameterService.GetParameter<string[]>(() => build.InvokedTargets));
-
-            // Read-only introspection short-circuits ABOVE EnsureToolRequirements deliberately:
-            // everything below this line writes files or shells out to a tool, which --describe
-            // must not do. Returning here also means the executor is never reached.
-            if (BuildIntrospectionService.IsRequested(build))
-            {
-                Console.Out.Write(
-                    BuildIntrospectionService.GetDocument(build, build.ExecutableTargets, build.ExecutionPlan));
-                return build.ExitCode ??= 0;
-            }
 
             ToolRequirementService.EnsureToolRequirements(build, build.ExecutionPlan);
             build.ExecuteExtension<IOnBuildInitialized>(x => x.OnBuildInitialized(build.ExecutableTargets, build.ExecutionPlan));
@@ -93,7 +99,9 @@ internal static class BuildManager
             // emitting the document has to keep that promise rather than switch to human prose.
             if (BuildIntrospectionService.IsRequested(build))
             {
-                Log.Verbose(exception, "Introspection request failed");
+                // Nothing is logged here on purpose: Serilog's console sink writes to standard
+                // output, so a log line would land inside the document a consumer is parsing. The
+                // envelope carries the kind and message instead.
                 Console.Out.Write(BuildIntrospectionService.GetErrorJson(exception));
                 return build.ExitCode ??= ErrorExitCode;
             }

@@ -26,10 +26,7 @@ internal class SerializeBuildGraphAttribute : BuildExtensionAttributeBase, IOnBu
     {
         try
         {
-            var json = BuildGraphUtility.GetJsonString(
-                executableTargets,
-                FindFalloutVersion(),
-                ValueInjectionUtility.GetParameterMembers(Build.GetType(), includeUnlisted: false));
+            var json = BuildGraphUtility.GetJsonString(Build, executableTargets);
             GraphFile.WriteAllText(json);
         }
         catch (Exception exception)
@@ -39,11 +36,4 @@ internal class SerializeBuildGraphAttribute : BuildExtensionAttributeBase, IOnBu
         }
     }
 
-    // Mirrors Fallout.Migrate: the informational version of the running Fallout assembly, up to the
-    // build-metadata separator, so the pin aligns with the running tool. Null when unstamped.
-    private static string FindFalloutVersion()
-        => BuildGraphUtility.NormalizeVersion(
-            typeof(SerializeBuildGraphAttribute).Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                ?.InformationalVersion);
 }

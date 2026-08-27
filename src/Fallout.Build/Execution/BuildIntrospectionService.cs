@@ -22,28 +22,38 @@ namespace Fallout.Common.Execution;
 /// </summary>
 internal static class BuildIntrospectionService
 {
-    // The exact reason string BuildExecutor records, so the predicted plan and the executed one
-    // describe a --skip the same way.
-    private const string SkippedViaParameter = "via parameter";
+    /// <summary>
+    /// Version of the <c>--plan --json</c> document. Deliberately its own constant rather than
+    /// <see cref="BuildGraphUtility.SchemaVersion" />: the plan and <c>build-graph.json</c> are
+    /// different shapes, and one number could not tell a consumer which contract it received —
+    /// nor could it be bumped for one without falsely signalling a break in the other.
+    /// </summary>
+    internal const int PlanSchemaVersion = 1;
 
-    private static readonly JsonSerializerOptions serializerOptions =
-        new()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true,
-        };
+    /// <summary>Version of the error envelope, separate for the same reason.</summary>
+    internal const int ErrorSchemaVersion = 1;
 
     /// <summary>Whether this invocation is a read-only introspection request rather than a build.</summary>
+    /// <remarks>
+    /// Each flag is read from the injected property OR straight from the arguments, because this is
+    /// asked <em>before</em> value injection has run: InjectParameterValuesAttribute is itself an
+    /// IOnBuildCreated extension, and the gate has to fire before any extension does. Reading only
+    /// the property here would make every request look like an ordinary build.
+    /// </remarks>
     // --plan alone keeps its existing meaning (the HTML graph); only --json redirects it here.
     internal static bool IsRequested(FalloutBuild build)
-        => build.Describe || (build.Plan && build.Json);
+        => Flag(build.Describe, nameof(FalloutBuild.Describe)) ||
+           (Flag(build.Plan, nameof(FalloutBuild.Plan)) && Flag(build.Json, nameof(FalloutBuild.Json)));
+
+    private static bool Flag(bool injected, string parameterName)
+        => injected || ParameterService.GetParameter<bool>(parameterName);
 
     /// <summary>The document for whichever request <see cref="IsRequested" /> matched.</summary>
     internal static string GetDocument(
         FalloutBuild build,
         IReadOnlyCollection<ExecutableTarget> targets,
         IReadOnlyCollection<ExecutableTarget> plan)
-        => build.Describe
+        => Flag(build.Describe, nameof(FalloutBuild.Describe))
             ? GetDescribeJson(build, targets)
             : GetPlanJson(
                 ParameterService.GetParameter<string[]>(() => build.InvokedTargets) ?? new string[0],
@@ -70,36 +80,40 @@ internal static class BuildIntrospectionService
                 target.Name,
                 index,
                 target.Invoked,
+                // MarkTargetSkipped only skips when !Invoked, so an explicitly invoked target runs
+                // even when --skip names it. The prediction has to agree with the executor.
+                !target.Invoked &&
                 skippedTargets != null &&
                 (skipped.Count == 0 || skipped.Contains(target.Name, StringComparer.OrdinalIgnoreCase))
-                    ? SkippedViaParameter
+                    ? BuildExecutor.SkippedViaParameterReason
                     : null,
                 target.StaticConditions.Select(x => x.Text).ToList(),
                 target.DynamicConditions.Select(x => x.Text).ToList()))
             .ToList();
 
         return new PlanModel(
-                BuildGraphUtility.SchemaVersion,
+                PlanSchemaVersion,
                 invokedTargets.ToList(),
                 entries)
-            .ToJson(serializerOptions);
+            .ToJson(BuildGraphUtility.SerializerOptions);
     }
 
     /// <summary>The whole build model: targets, dependency edges, tool requirements, parameters.</summary>
     internal static string GetDescribeJson(
         FalloutBuild build,
         IReadOnlyCollection<ExecutableTarget> targets)
-        => GetDescribeJson(build, targets, FindFalloutVersion());
+        => BuildGraphUtility.GetJsonString(build, targets);
 
     /// <summary>Overload taking an explicit version, so the document can be asserted deterministically.</summary>
     internal static string GetDescribeJson(
         FalloutBuild build,
         IReadOnlyCollection<ExecutableTarget> targets,
         string falloutVersion)
-        => BuildGraphUtility.GetJsonString(
-            targets,
-            falloutVersion,
-            ValueInjectionUtility.GetParameterMembers(build.GetType(), includeUnlisted: false));
+        => BuildGraphUtility.GetModel(
+                targets,
+                falloutVersion,
+                ValueInjectionUtility.GetParameterMembers(build.GetType(), includeUnlisted: false))
+            .ToJson(BuildGraphUtility.SerializerOptions);
 
     /// <summary>
     /// The failure form of both documents, so a consumer parsing standard output gets JSON whether
@@ -107,9 +121,9 @@ internal static class BuildIntrospectionService
     /// </summary>
     internal static string GetErrorJson(Exception exception)
         => new ErrorModel(
-                BuildGraphUtility.SchemaVersion,
+                ErrorSchemaVersion,
                 new ErrorDetailModel(exception.GetType().Name, exception.Message))
-            .ToJson(serializerOptions);
+            .ToJson(BuildGraphUtility.SerializerOptions);
 
     internal sealed record ErrorModel(int Version, ErrorDetailModel Error);
 
@@ -132,12 +146,4 @@ internal static class BuildIntrospectionService
         string Skip,
         IReadOnlyList<string> StaticConditions,
         IReadOnlyList<string> DynamicConditions);
-
-    // Mirrors SerializeBuildGraphAttribute: the informational version of the running Fallout
-    // assembly, up to the build-metadata separator. Null when unstamped (a local/dev build).
-    private static string FindFalloutVersion()
-        => BuildGraphUtility.NormalizeVersion(
-            typeof(BuildIntrospectionService).Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                ?.InformationalVersion);
 }

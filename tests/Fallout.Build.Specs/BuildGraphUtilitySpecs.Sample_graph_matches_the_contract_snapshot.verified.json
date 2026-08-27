@@ -1,6 +1,7 @@
 ﻿{
   "version": 1,
   "falloutVersion": "2026.1.0-preview.42",
+  "toolRequirements": [],
   "targets": [
     {
       "name": "Compile",

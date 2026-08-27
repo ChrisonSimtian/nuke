@@ -27,12 +27,26 @@ internal static class BuildGraphUtility
     /// <summary>Schema version consumers gate on; bump only on a breaking shape change.</summary>
     internal const int SchemaVersion = 1;
 
-    private static readonly JsonSerializerOptions serializerOptions =
+    /// <summary>
+    /// Serialization settings for every machine-readable document Fallout emits, so the plan and
+    /// error envelopes cannot drift from <c>build-graph.json</c> in casing or indentation.
+    /// </summary>
+    internal static readonly JsonSerializerOptions SerializerOptions =
         new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = true,
         };
+
+    /// <summary>
+    /// The running Fallout version, up to the build-metadata separator, so the pin aligns with the
+    /// running tool. Null when unstamped (a local/dev build).
+    /// </summary>
+    internal static string GetFalloutVersion()
+        => NormalizeVersion(
+            typeof(BuildGraphUtility).Assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                ?.InformationalVersion);
 
     /// <summary>Projects the targets into the serializable graph model.</summary>
     /// <param name="targets">The build's executable targets, in any order.</param>
@@ -53,30 +67,67 @@ internal static class BuildGraphUtility
         IReadOnlyCollection<ExecutableTarget> targets,
         string falloutVersion,
         IReadOnlyCollection<MemberInfo> parameterMembers)
+        => GetModel(targets, falloutVersion, parameterMembers, new ToolRequirement[0]);
+
+    /// <summary>Projects targets, parameters, and the build's class-level tool requirements.</summary>
+    /// <param name="buildRequirements">
+    /// Requirements declared with <c>[Requires&lt;T&gt;]</c> on the build class or a component
+    /// interface. That attribute targets Class/Interface only, so these can never appear on a
+    /// target and would be missing from the document entirely if not passed separately.
+    /// </param>
+    internal static BuildGraphModel GetModel(
+        IReadOnlyCollection<ExecutableTarget> targets,
+        string falloutVersion,
+        IReadOnlyCollection<MemberInfo> parameterMembers,
+        IReadOnlyCollection<ToolRequirement> buildRequirements)
         => new(
             SchemaVersion,
             falloutVersion,
+            SortedRequirements(buildRequirements),
             targets
                 .OrderBy(x => x.Name, StringComparer.Ordinal)
                 .Select(ToModel)
                 .ToList(),
-            parameterMembers
-                .Select(ToModel)
-                .OrderBy(x => x.Name, StringComparer.Ordinal)
-                .ToList());
+            GetParameterModels(parameterMembers));
+
+    /// <summary>
+    /// Projects just the declared parameters, for callers that need them without paying for the
+    /// whole target graph (<c>--help</c>'s parameter section).
+    /// </summary>
+    internal static IReadOnlyList<ParameterModel> GetParameterModels(
+        IReadOnlyCollection<MemberInfo> parameterMembers)
+        => parameterMembers
+            .Select(ToModel)
+            .OrderBy(x => x.Name, StringComparer.Ordinal)
+            .ToList();
 
     /// <summary>Serializes the graph model to the exact JSON written into <c>build-graph.json</c>.</summary>
     internal static string GetJsonString(
         IReadOnlyCollection<ExecutableTarget> targets,
         string falloutVersion)
-        => GetModel(targets, falloutVersion).ToJson(serializerOptions);
+        => GetModel(targets, falloutVersion).ToJson(SerializerOptions);
 
     /// <summary>Serializes the graph model, parameters included.</summary>
     internal static string GetJsonString(
         IReadOnlyCollection<ExecutableTarget> targets,
         string falloutVersion,
         IReadOnlyCollection<MemberInfo> parameterMembers)
-        => GetModel(targets, falloutVersion, parameterMembers).ToJson(serializerOptions);
+        => GetModel(targets, falloutVersion, parameterMembers).ToJson(SerializerOptions);
+
+    /// <summary>Serializes the whole model for a build: targets, parameters, build-level requirements.</summary>
+    internal static string GetJsonString(IFalloutBuild build, IReadOnlyCollection<ExecutableTarget> targets)
+        => GetModel(
+                targets,
+                GetFalloutVersion(),
+                ValueInjectionUtility.GetParameterMembers(build.GetType(), includeUnlisted: false),
+                BuildRequirements(build))
+            .ToJson(SerializerOptions);
+
+    // Same source ToolRequirementService reads for class-level requirements.
+    private static IReadOnlyCollection<ToolRequirement> BuildRequirements(IFalloutBuild build)
+        => build.GetType().GetCustomAttributes<RequiresAttribute>()
+            .Select(x => x.GetRequirement())
+            .ToList();
 
     // Takes the informational version up to the build-metadata separator ('+'), so the pin aligns with
     // the running tool. Returns the input unchanged when there is no separator, and null only when the
@@ -103,12 +154,13 @@ internal static class BuildGraphUtility
             SortedNames(target.OrderDependencies),
             SortedNames(target.TriggerDependencies),
             SortedNames(target.Triggers),
-            ToolRequirements(target));
+            SortedRequirements(target.ToolRequirements));
 
     // Sorted for the same reason as SortedNames: the declaration order carries no meaning to a
     // consumer, and a stable ordering keeps build-graph.json free of spurious churn.
-    private static IReadOnlyList<ToolRequirementModel> ToolRequirements(ExecutableTarget target)
-        => target.ToolRequirements
+    private static IReadOnlyList<ToolRequirementModel> SortedRequirements(
+        IEnumerable<ToolRequirement> requirements)
+        => requirements
             .Select(ToModel)
             .OrderBy(x => x.Kind, StringComparer.Ordinal)
             .ThenBy(x => x.PackageId, StringComparer.Ordinal)
@@ -135,29 +187,43 @@ internal static class BuildGraphUtility
     // injected value must never reach the emitted model, and emitting non-secret defaults only
     // would make the field's meaning depend on the flag next to it.
     private static ParameterModel ToModel(MemberInfo member)
-    {
-        var attribute = member.GetCustomAttribute<ParameterAttribute>();
-        return new ParameterModel(
+        => new(
             ParameterService.GetParameterDashedName(member),
-            UnderlyingTypeName(member.GetMemberType()),
+            TypeName(member.GetMemberType()),
             member.DeclaringType?.Name,
             ParameterService.GetParameterDescription(member),
             member.GetCustomAttribute<RequiredAttribute>() != null,
             member.GetCustomAttribute<SecretAttribute>() != null,
-            attribute?.List ?? true,
             Default: null,
             AllowedValues: null);
-    }
 
     // `int?` and `int` describe the same thing to someone typing --retries 3, so the wrapper is
     // unwrapped. Note this is NOT ReflectionUtility.GetNullableType, which goes the other way
     // (it *wraps* a value type) and throws outright on an interface-typed member.
-    private static string UnderlyingTypeName(Type type)
-        => (Nullable.GetUnderlyingType(type) ?? type).FullName;
+    //
+    // Generic arguments are rendered recursively rather than via Type.FullName, whose constructed
+    // form embeds the assembly name and runtime version — `List`1[[System.String, ...,
+    // Version=10.0.0.0, ...]]` — which would put the running runtime into the emitted contract and
+    // churn it on every SDK bump.
+    private static string TypeName(Type type)
+    {
+        type = Nullable.GetUnderlyingType(type) ?? type;
+
+        if (type.IsArray)
+            return $"{TypeName(type.GetElementType())}[]";
+
+        if (!type.IsGenericType)
+            return type.FullName ?? type.Name;
+
+        var definition = type.GetGenericTypeDefinition().FullName ?? type.GetGenericTypeDefinition().Name;
+        var name = definition[..definition.IndexOf('`')];
+        return $"{name}<{type.GetGenericArguments().Select(TypeName).JoinComma()}>";
+    }
 
     internal sealed record BuildGraphModel(
         int Version,
         string FalloutVersion,
+        IReadOnlyList<ToolRequirementModel> ToolRequirements,
         IReadOnlyList<TargetModel> Targets,
         IReadOnlyList<ParameterModel> Parameters);
 
@@ -173,7 +239,6 @@ internal static class BuildGraphUtility
         string Description,
         bool Required,
         bool Secret,
-        bool List,
         string Default,
         IReadOnlyList<string> AllowedValues);
 

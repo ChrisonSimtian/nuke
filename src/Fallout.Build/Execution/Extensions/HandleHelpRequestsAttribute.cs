@@ -25,10 +25,12 @@ internal class HandleHelpRequestsAttribute : BuildExtensionAttributeBase, IOnBui
 
     public string GetTargetsText()
     {
-        // Every displayed field comes from the same projection --describe emits, so the human and
-        // machine views cannot drift (#642). Only the iteration order is ours: the model sorts
-        // ordinally, while the help listing keeps declaration order, which usually mirrors the
-        // pipeline (Restore, Compile, Test, Pack) and reads better than alphabetical.
+        // The displayed FIELDS come from the same projection --describe emits, so what the two
+        // views say about a target cannot drift (#642). ORDER stays with the declarations, for
+        // both the target list and each dependency line: the model sorts ordinally for
+        // determinism, whereas declaration order carries the pipeline reading a human wants
+        // (Restore, Compile, Test, Pack). Rendering the sorted lists here would silently
+        // alphabetize --help, which this deliberately does not do.
         var model = BuildGraphUtility.GetModel(Build.ExecutableTargets, falloutVersion: null)
             .Targets.ToDictionary(x => x.Name, StringComparer.Ordinal);
 
@@ -38,15 +40,19 @@ internal class HandleHelpRequestsAttribute : BuildExtensionAttributeBase, IOnBui
         var padRightTargets = Math.Max(longestTargetName, val2: 20);
         builder.AppendLine("Targets (with their direct dependencies):");
         builder.AppendLine();
-        foreach (var target in Build.ExecutableTargets.Select(x => model[x.Name]).Where(x => x.Listed))
+        foreach (var target in Build.ExecutableTargets)
         {
-            var dependencies = target.DependsOn.Count > 0
-                ? $" -> {target.DependsOn.JoinCommaSpace()}"
+            var projected = model[target.Name];
+            if (!projected.Listed)
+                continue;
+
+            var dependencies = target.ExecutionDependencies.Count > 0
+                ? $" -> {target.ExecutionDependencies.Select(x => x.Name).JoinCommaSpace()}"
                 : string.Empty;
-            var targetEntry = target.Name + (target.Default ? " (default)" : string.Empty);
+            var targetEntry = projected.Name + (projected.Default ? " (default)" : string.Empty);
             builder.AppendLine($"  {targetEntry.PadRight(padRightTargets)}{dependencies}");
-            if (!string.IsNullOrWhiteSpace(target.Description))
-                builder.AppendLine($"    {target.Description}");
+            if (!string.IsNullOrWhiteSpace(projected.Description))
+                builder.AppendLine($"    {projected.Description}");
         }
 
         return builder.ToString();
@@ -57,12 +63,16 @@ internal class HandleHelpRequestsAttribute : BuildExtensionAttributeBase, IOnBui
         var defaultTargets = Build.ExecutableTargets.Where(x => x.IsDefault).Select(x => x.Name).ToList();
         var builder = new StringBuilder();
 
-        // Same projection as --describe (#642): name, description and declaring type all come from
-        // the model rather than being re-derived from reflection here.
+        // Same projection as --describe (#642) for the displayed name and description. As above,
+        // ORDER stays with GetParameterMembers (culture-ordered by member name), not the model's
+        // ordinal-by-dashed-name, so --help's listing is unchanged.
         var members = ValueInjectionUtility.GetParameterMembers(Build.GetType(), includeUnlisted: false);
-        var parameters = BuildGraphUtility
-            .GetModel(Build.ExecutableTargets, falloutVersion: null, members).Parameters;
-        var padRightParameter = Math.Max(parameters.Max(x => x.Name.Length), val2: 16);
+        var model = BuildGraphUtility.GetParameterModels(members)
+            .ToDictionary(x => x.Name, StringComparer.Ordinal);
+        var parameters = members
+            .Select(x => (Member: x, Model: model[ParameterService.GetParameterDashedName(x)]))
+            .ToList();
+        var padRightParameter = Math.Max(parameters.Max(x => x.Model.Name.Length), val2: 16);
 
         List<string> SplitLines(string text)
         {
@@ -80,29 +90,31 @@ internal class HandleHelpRequestsAttribute : BuildExtensionAttributeBase, IOnBui
             return lines;
         }
 
-        void PrintParameter(BuildGraphUtility.ParameterModel parameter)
+        void PrintParameter((MemberInfo Member, BuildGraphUtility.ParameterModel Model) parameter)
         {
             var description = SplitLines(
                 // TODO: remove
-                parameter.Description
+                parameter.Model.Description
                     ?.Replace("{default_target}", defaultTargets.Count > 0 ? defaultTargets.JoinCommaSpace() : "<none>")
                     .TrimEnd(".").Append(".")
                 ?? "<no description>");
-            builder.AppendLine($"  --{parameter.Name.PadRight(padRightParameter)}  {description.First()}");
+            builder.AppendLine($"  --{parameter.Model.Name.PadRight(padRightParameter)}  {description.First()}");
             foreach (var line in description.Skip(count: 1))
                 builder.AppendLine($"{' '.Repeat(padRightParameter + 6)}{line}");
         }
 
         builder.AppendLine("Parameters:");
 
-        var customParameters = parameters.Where(x => x.DeclaredIn != nameof(FalloutBuild)).ToList();
+        // Type identity, not the model's DeclaredIn name: a user type merely *called* FalloutBuild
+        // in another namespace must not have its parameters filed under the built-in block.
+        var customParameters = parameters.Where(x => x.Member.DeclaringType != typeof(FalloutBuild)).ToList();
         if (customParameters.Count > 0)
             builder.AppendLine();
         customParameters.ForEach(PrintParameter);
 
         builder.AppendLine();
 
-        var inheritedParameters = parameters.Where(x => x.DeclaredIn == nameof(FalloutBuild)).ToList();
+        var inheritedParameters = parameters.Where(x => x.Member.DeclaringType == typeof(FalloutBuild)).ToList();
         inheritedParameters.ForEach(PrintParameter);
 
         return builder.ToString();

@@ -1,6 +1,7 @@
 ﻿{
   "version": 1,
   "falloutVersion": null,
+  "toolRequirements": [],
   "targets": [],
   "parameters": []
 }

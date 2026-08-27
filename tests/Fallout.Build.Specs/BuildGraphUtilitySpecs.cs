@@ -145,7 +145,7 @@ public class BuildGraphUtilitySpecs
         using var doc = JsonDocument.Parse(BuildGraphUtility.GetJsonString(SampleGraph(), SampleVersion));
 
         doc.RootElement.EnumerateObject().Select(x => x.Name)
-            .Should().Equal("version", "falloutVersion", "targets", "parameters");
+            .Should().Equal("version", "falloutVersion", "toolRequirements", "targets", "parameters");
 
         var firstTarget = doc.RootElement.GetProperty("targets").EnumerateArray().First();
         firstTarget.EnumerateObject().Select(x => x.Name)
@@ -177,6 +177,32 @@ public class BuildGraphUtilitySpecs
     public void Targets_without_tool_requirements_emit_an_empty_list()
     {
         ModelFor("Restore").ToolRequirements.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Build_level_requirements_are_projected_at_the_document_root()
+    {
+        // [Requires<T>] targets Class/Interface only, so a build-level requirement can never appear
+        // on a target and would be missing from the document entirely if not projected separately.
+        var model = BuildGraphUtility.GetModel(
+            SampleGraph(),
+            SampleVersion,
+            new MemberInfo[0],
+            new ToolRequirement[] { new NuGetPackageRequirement("GitVersion.Tool", "5.12.0") });
+
+        model.ToolRequirements.Should().Equal(
+            new BuildGraphUtility.ToolRequirementModel("nuget", "GitVersion.Tool", "5.12.0"));
+    }
+
+    [Fact]
+    public void A_generic_parameter_type_is_named_without_assembly_or_runtime_version()
+    {
+        // Type.FullName would emit List`1[[System.String, System.Private.CoreLib, Version=...]],
+        // putting the running runtime into the contract and churning it on every SDK bump.
+        var type = ParameterModelFor("tags").Type;
+
+        type.Should().Be("System.Collections.Generic.List<System.String>");
+        type.Should().NotContain("Version=").And.NotContain("PublicKeyToken");
     }
 
     [Fact]
@@ -250,5 +276,8 @@ public class BuildGraphUtilitySpecs
 
         [Parameter("How often to retry.")]
         private readonly int? Retries;
+
+        [Parameter("Tags to apply.")]
+        private readonly List<string> Tags;
     }
 }
