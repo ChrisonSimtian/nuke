@@ -25,6 +25,13 @@
 
 name: build
 
+# Mirrors build.yml. This job does real work now, so rapid pushes to a docs PR
+# would otherwise stack concurrent builds, which is the cost this file exists to
+# avoid in the first place.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   pull_request:
     branches:

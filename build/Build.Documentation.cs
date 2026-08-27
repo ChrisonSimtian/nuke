@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -38,7 +39,7 @@ partial class Build
     string ToPublicUrl(AbsolutePath page)
     {
         var relative = DocsWebsiteDirectory.GetUnixRelativePathTo(page).ToString();
-        var slug = relative[..^".md".Length]
+        var slug = relative[..^Path.GetExtension(relative).Length]
             .Split('/')
             .Select(StripOrderPrefix)
             .JoinSlash();
@@ -56,13 +57,17 @@ partial class Build
         var category = DocsWebsiteDirectory / directorySlug / "_category_.json";
         if (category.FileExists())
         {
-            var label = category.ReadJsonObject().GetPropertyValue<string>("label");
+            // OrNull, not GetPropertyValue: that one throws when the property is absent, which
+            // would make the fallback below unreachable. A _category_.json may legitimately carry
+            // only "position" or "collapsed".
+            var label = category.ReadJsonObject().GetPropertyValueOrNull<string>("label");
             if (!label.IsNullOrWhiteSpace())
                 return label;
         }
 
         return StripOrderPrefix(directorySlug)
             .Split('-')
+            .Where(x => x.Length > 0)
             .Select(x => char.ToUpperInvariant(x[0]) + x[1..])
             .JoinSpace();
     }
@@ -99,7 +104,7 @@ partial class Build
         // has a page that relies on it: badge.md carries no frontmatter at all and is served as
         // "Badge". Rejecting it would refuse a page the site renders correctly, so the fallback
         // matches Docusaurus. A page with neither still fails, because that leaves no link text.
-        var title = frontmatter.GetValueOrDefault("title") ?? GetFirstHeading(lines);
+        var title = frontmatter.GetValueOrDefault("title") ?? GetFirstHeading(lines, frontmatterEnd);
         Assert.NotNullOrWhiteSpace(
             title,
             $"{DocsWebsiteDirectory.GetUnixRelativePathTo(file)} has neither a 'title' in its "
@@ -121,16 +126,30 @@ partial class Build
             // under "Optional", depending on IsPrimary.
             Section: isNested ? ToSectionTitle(segments[0]) : null,
             SectionOrder: isNested ? GetOrder(segments[0]) : int.MaxValue,
-            Order: GetOrder(segments[^1]),
+            // Docusaurus lets a page's own 'sidebar_position' override the numeric filename prefix,
+            // and docs/website uses it: 07-ide has no prefixes, and rider.md declares position 1 to
+            // sort first. Reading only the prefix would order that section by title instead.
+            Order: frontmatter.TryGetValue("sidebar_position", out var position) && int.TryParse(position, out var parsed)
+                ? parsed
+                : GetOrder(segments[^1]),
             IsPrimary: isNested || frontmatter.ContainsKey("sidebar_position"));
     }
 
-    static string GetFirstHeading(string[] lines)
+    // Starts after the frontmatter and ignores fenced code, because "# terminal-command" is used as
+    // a marker throughout this doc set and would otherwise become a page's link text.
+    static string GetFirstHeading(string[] lines, int frontmatterEnd)
     {
-        return lines
-            .Select(x => x.Trim())
-            .FirstOrDefault(x => x.StartsWith("# "))
-            ?[2..].Trim();
+        var insideFence = false;
+        foreach (var line in lines.Skip(frontmatterEnd))
+        {
+            var trimmed = line.Trim();
+            if (trimmed.StartsWith("```"))
+                insideFence = !insideFence;
+            else if (!insideFence && trimmed.StartsWith("# "))
+                return trimmed[2..].Trim();
+        }
+
+        return null;
     }
 
     static int GetFrontmatterEnd(string[] lines)
@@ -139,7 +158,11 @@ partial class Build
             return 0;
 
         var end = Array.FindIndex(lines, startIndex: 1, x => x.Trim() == "---");
-        return end < 0 ? 0 : end + 1;
+        // An opened but unclosed block is malformed. Returning 0 would hand the delimiter and the
+        // key/value lines to the prose reader and ship them as a description, so fail instead: a
+        // wrong entry in a generated index is worse than a build that says what is wrong.
+        Assert.True(end >= 0, "Frontmatter is opened with '---' but never closed.");
+        return end + 1;
     }
 
     static Dictionary<string, string> ReadFrontmatter(string[] lines, int frontmatterEnd)
@@ -152,6 +175,13 @@ partial class Build
                 continue;
 
             var value = match.Groups["value"].Value.Trim().TrimMatchingDoubleQuotes().Trim('\'');
+
+            // ">" and "|" open a YAML block scalar whose text sits on the following lines. This
+            // parser is line-based, so it would store the indicator itself and render
+            // "- [Title](url): >". Treat the key as absent and let the prose fallback handle it.
+            if (value is ">" or "|" or ">-" or "|-")
+                continue;
+
             if (!value.IsNullOrWhiteSpace())
                 entries[match.Groups["key"].Value] = value;
         }
@@ -213,13 +243,22 @@ partial class Build
         return flattened[..(cut > 0 ? cut : MaxDescriptionLength)].TrimEnd(',', ';', ':', '.') + "...";
     }
 
+    // Docusaurus routes both .md and .mdx, and excludes anything whose file or directory name
+    // starts with an underscore (**/_*.md, **/_*/**). docs/website/_snippets/ exists for exactly
+    // that reason, so indexing it would emit URLs the site never serves.
     IReadOnlyList<DocPage> ReadDocPages()
     {
-        return DocsWebsiteDirectory.GlobFiles("**/*.md")
+        return DocsWebsiteDirectory.GlobFiles("**/*.md", "**/*.mdx")
+            .Where(x => !DocsWebsiteDirectory.GetUnixRelativePathTo(x).ToString()
+                .Split('/')
+                .Any(segment => segment.StartsWith('_')))
             .Select(ReadPage)
             .OrderBy(x => x.SectionOrder)
             .ThenBy(x => x.Order)
-            .ThenBy(x => x.Title)
+            // Ordinal, not the culture-sensitive default: docs/llms.txt is verified byte for byte,
+            // so a contributor on another culture must not regenerate a differently ordered file
+            // and trip VerifyLlmsTxt with no real drift.
+            .ThenBy(x => x.Title, StringComparer.Ordinal)
             .ToList();
     }
 
@@ -237,7 +276,14 @@ partial class Build
         // Single source for the summary: introduction.md's own 'description', which is what the
         // site serves as its meta description. Generating it from anywhere else would let the two
         // drift apart.
-        var summary = pages.Single(x => x.Url == DocsBaseUrl + "introduction").Description;
+        var introduction = pages.SingleOrDefault(x => x.Url == DocsBaseUrl + "introduction");
+        Assert.NotNull(
+            introduction,
+            "No page resolves to " + DocsBaseUrl + "introduction, which is where the llms.txt summary "
+            + "comes from. If introduction.md was renamed, moved into a section or given a 'slug', "
+            + "point this lookup at its new location.");
+
+        var summary = introduction.Description;
         builder.AppendLine($"> {summary}");
         builder.AppendLine();
         builder.AppendLine(
