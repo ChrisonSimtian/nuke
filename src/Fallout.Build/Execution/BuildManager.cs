@@ -88,6 +88,16 @@ internal static class BuildManager
         catch (Exception exception)
         {
             exception = exception.Unwrap();
+
+            // An introspection request promised JSON on standard output; a failure on the way to
+            // emitting the document has to keep that promise rather than switch to human prose.
+            if (BuildIntrospectionService.IsRequested(build))
+            {
+                Log.Verbose(exception, "Introspection request failed");
+                Console.Out.Write(BuildIntrospectionService.GetErrorJson(exception));
+                return build.ExitCode ??= ErrorExitCode;
+            }
+
             if (exception is not TargetExecutionException)
             {
                 Log.Verbose(exception, "Target-unrelated exception was thrown");

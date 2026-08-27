@@ -101,6 +101,20 @@ internal static class BuildIntrospectionService
             falloutVersion,
             ValueInjectionUtility.GetParameterMembers(build.GetType(), includeUnlisted: false));
 
+    /// <summary>
+    /// The failure form of both documents, so a consumer parsing standard output gets JSON whether
+    /// the request succeeded or the build threw on its way to being described.
+    /// </summary>
+    internal static string GetErrorJson(Exception exception)
+        => new ErrorModel(
+                BuildGraphUtility.SchemaVersion,
+                new ErrorDetailModel(exception.GetType().Name, exception.Message))
+            .ToJson(serializerOptions);
+
+    internal sealed record ErrorModel(int Version, ErrorDetailModel Error);
+
+    internal sealed record ErrorDetailModel(string Kind, string Message);
+
     internal sealed record PlanModel(
         int Version,
         IReadOnlyList<string> InvokedTargets,

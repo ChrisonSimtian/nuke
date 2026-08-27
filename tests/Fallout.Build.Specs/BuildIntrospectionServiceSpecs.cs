@@ -133,6 +133,20 @@ public class BuildIntrospectionServiceSpecs
             .Should().AllBe("via parameter");
     }
 
+    [Fact]
+    public void Error_envelope_names_the_exception_kind_and_message()
+    {
+        var json = BuildIntrospectionService.GetErrorJson(new InvalidOperationException("boom"));
+
+        using var document = JsonDocument.Parse(json);
+        var root = document.RootElement;
+
+        root.GetProperty("version").GetInt32().Should().Be(1);
+        var error = root.GetProperty("error");
+        error.GetProperty("kind").GetString().Should().Be(nameof(InvalidOperationException));
+        error.GetProperty("message").GetString().Should().Be("boom");
+    }
+
     private static IReadOnlyCollection<ExecutableTarget> SampleGraph()
     {
         var restore = new ExecutableTarget { Name = "Restore", Listed = true };
