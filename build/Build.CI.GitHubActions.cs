@@ -9,8 +9,8 @@ using Fallout.Components;
 //                             check (job `ubuntu-latest`; branch protection keys on
 //                             that job name, not the workflow file/name). PR-only:
 //                             feature-branch pushes run zero CI until a PR is opened
-//                             against a long-lived branch (#327), targeting main,
-//                             release/YYYY, or support/*. CheckoutRef = github.head_ref
+//                             against a long-lived branch (#327), targeting develop,
+//                             main, release/*, or support/*. CheckoutRef = github.head_ref
 //                             pins checkout to the PR source branch instead of the
 //                             merge SHA, keeping HEAD attached so
 //                             GitHubTasksTest.GitHubRepositoryFromLocalDirectoryTest
@@ -20,10 +20,10 @@ using Fallout.Components;
 //   build-cross-platform.yml — macOS + Windows in ONE workflow (one job per image).
 //                             Cross-platform full Test+Pack is gated to RELEASE
 //                             INTENT (#318/#326): it runs only on a PR into a
-//                             production branch (release/YYYY, support/*) and on a
-//                             release tag push (v*) — never on routine pushes/PRs to
-//                             main. On main "we've got our edge": the ubuntu-latest
-//                             gate above + the preview pipeline
+//                             production branch (main, release/*, support/*) and on
+//                             a release tag push (v*) — never on routine pushes/PRs to
+//                             develop. On develop "we've got our edge": the
+//                             ubuntu-latest gate above + the preview pipeline
 //                             (.github/workflows/publish-packages-preview.yml).
 //                             (workflow_dispatch as a manual cross-platform trigger
 //                             isn't emitted — the generator only writes
@@ -40,9 +40,9 @@ using Fallout.Components;
     ConcurrencyGroup = "${{ github.workflow }}-${{ github.ref }}",
     ConcurrencyCancelInProgress = true,
     CheckoutRef = "${{ github.head_ref }}",
-    // PRs targeting main or any release/YYYY / support/* branch — all long-lived and
-    // protected; all require the ubuntu-latest check.
-    OnPullRequestBranches = new[] { MainBranch, ReleaseBranchPattern, SupportBranchPattern },
+    // PRs targeting develop, main, or any release/* / support/* branch — all
+    // long-lived and protected; all require the ubuntu-latest check.
+    OnPullRequestBranches = new[] { DevelopBranch, MainBranch, ReleaseBranchPattern, SupportBranchPattern },
     OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
     InvokedTargets = new[] { nameof(VerifyGeneratedTools), nameof(ITest.Test), nameof(IPack.Pack) },
     PublishArtifacts = false)]
@@ -54,7 +54,10 @@ using Fallout.Components;
     ConcurrencyGroup = "${{ github.workflow }}-${{ github.ref }}",
     ConcurrencyCancelInProgress = true,
     OnPushTags = new[] { "v*" },
-    OnPullRequestBranches = new[] { ReleaseBranchPattern, SupportBranchPattern },
+    // main is the production trunk now (ADR-0009). A PR into it is always a
+    // release/vX.Y GA merge or a hotfix, so it belongs on this release-intent gate,
+    // alongside release/* and support/*.
+    OnPullRequestBranches = new[] { MainBranch, ReleaseBranchPattern, SupportBranchPattern },
     OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
     InvokedTargets = new[] { nameof(ITest.Test), nameof(IPack.Pack) },
     PublishArtifacts = false)]

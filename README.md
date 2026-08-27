@@ -6,19 +6,19 @@
   <strong>📖 Documentation: <a href="https://docs.fallout.build/">docs.fallout.build</a></strong>
 </p>
 
-> 📦 **Fallout is the successor to NUKE.** [Migrating from NUKE →](docs/migration/from-nuke.md)
+> 📦 **Fallout is the successor to NUKE.** [Migrating from NUKE →](docs/Migration/from-nuke.md)
 
 # Fallout
 
 > Build automation for C#/.NET — the hard-fork successor to NUKE.
 
-[![built with Fallout](https://img.shields.io/badge/built%20with-Fallout-F5C800?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTIiIGZpbGw9IiNGNUM4MDAiLz48ZyBmaWxsPSIjMTExIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIzLjEiLz48cGF0aCBkPSJNOS45OSA5LjAyQTMuNiAzLjYgMCAwIDEgMTQuMDEgOS4wMkwxOC40OSAyLjM4QTExLjYgMTEuNiAwIDAgMCA1LjUxIDIuMzhaTTE1LjU5IDExLjc1QTMuNiAzLjYgMCAwIDEgMTMuNTggMTUuMjRMMTcuMDkgMjIuNDNBMTEuNiAxMS42IDAgMCAwIDIzLjU3IDExLjE5Wk0xMC40MiAxNS4yNEEzLjYgMy42IDAgMCAxIDguNDEgMTEuNzVMMC40MyAxMS4xOUExMS42IDExLjYgMCAwIDAgNi45MSAyMi40M1oiLz48L2c%2BPC9zdmc%2B)](docs/badge.md)
+[![built with Fallout](https://img.shields.io/badge/built%20with-Fallout-F5C800?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTIiIGZpbGw9IiNGNUM4MDAiLz48ZyBmaWxsPSIjMTExIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIzLjEiLz48cGF0aCBkPSJNOS45OSA5LjAyQTMuNiAzLjYgMCAwIDEgMTQuMDEgOS4wMkwxOC40OSAyLjM4QTExLjYgMTEuNiAwIDAgMCA1LjUxIDIuMzhaTTE1LjU5IDExLjc1QTMuNiAzLjYgMCAwIDEgMTMuNTggMTUuMjRMMTcuMDkgMjIuNDNBMTEuNiAxMS42IDAgMCAwIDIzLjU3IDExLjE5Wk0xMC40MiAxNS4yNEEzLjYgMy42IDAgMCAxIDguNDEgMTEuNzVMMC40MyAxMS4xOUExMS42IDExLjYgMCAwIDAgNi45MSAyMi40M1oiLz48L2c%2BPC9zdmc%2B)](docs/website/badge.md)
 [![Docs](https://img.shields.io/badge/docs-docs.fallout.build-blue?logo=readthedocs&logoColor=white)](https://docs.fallout.build/)
-[![CI](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-preview.yml?branch=main&label=CI&logo=githubactions&logoColor=white)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-preview.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-preview.yml?branch=develop&label=CI&logo=githubactions&logoColor=white)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-preview.yml)
 [![NuGet](https://img.shields.io/nuget/v/Fallout.Common?label=Fallout.Common)](https://www.nuget.org/packages/Fallout.Common)
 [![NuGet downloads](https://img.shields.io/nuget/dt/Fallout.Common?label=downloads)](https://www.nuget.org/packages/Fallout.Common)
 [![Latest release](https://img.shields.io/github/v/release/Fallout-build/Fallout?label=release)](https://github.com/Fallout-build/Fallout/releases/latest)
-[![GitHub last commit](https://img.shields.io/github/last-commit/Fallout-build/Fallout)](https://github.com/Fallout-build/Fallout/commits/main)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Fallout-build/Fallout)](https://github.com/Fallout-build/Fallout/commits/develop)
 [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dot.net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Open issues](https://img.shields.io/github/issues/Fallout-build/Fallout)](https://github.com/Fallout-build/Fallout/issues)
@@ -33,7 +33,7 @@ The original NUKE code is preserved here under the MIT License with attribution.
 
 ### Migrating from NUKE
 
-If you maintain a NUKE-based build, **[docs/migration/from-nuke.md](docs/migration/from-nuke.md)** walks you through it. The short version:
+If you maintain a NUKE-based build, **[docs/Migration/from-nuke.md](docs/Migration/from-nuke.md)** walks you through it. The short version:
 
 ```sh
 dotnet tool install -g Fallout.Migrate
@@ -59,7 +59,7 @@ The CLI installs as `fallout`. Verify with `fallout --help`.
 For per-repo manifest pinning (`.config/dotnet-tools.json`), project setup, and shell completion, see the [Installation guide on docs.fallout.build](https://docs.fallout.build/getting-started/installation).
 
 > [!NOTE]
-> **Channels.** Stable releases ship on **calendar versions** (`YYYY.MINOR.PATCH`, e.g. `2026.1.3`; the major is the year) from the `release/YYYY` production line — published to GitHub Packages, with nuget.org publishing opt-in per release. The `main` integration trunk publishes a faster `…-preview.…` prerelease to **GitHub Packages only**; opt in by adding the GitHub Packages feed and a prerelease version range. The legacy NUKE `10.x` line (`support/v10`) stays on semver and receives security/critical fixes only. See [ADR-0004](docs/adr/0004-calendar-versioning-and-dual-pace-channels.md) (as amended by [ADR-0008](docs/adr/0008-collapse-experimental-into-main.md)) and [docs/branching-and-release.md](docs/branching-and-release.md) for the full model.
+> **Channels.** Stable releases use **classic semver** (`MAJOR.MINOR.PATCH`) and ship from `main`, staying on `10.x` (e.g. `10.5.3`) until a breaking change is actually needed — v11 is deferred as long as possible, so Dependabot/Renovate upgrades within `10.x` are always safe. Releases reach `main` through a `release/vX.Y` branch, cut on demand from `develop`. Releases publish to GitHub Packages, and to nuget.org if you opt in. The `develop` trunk publishes a faster `…-preview.…` prerelease to **GitHub Packages only** — add the GitHub Packages feed and a prerelease version range to opt in. The older `support/v10` line covers versions before `10.4`, and gets security and critical fixes only. See [ADR-0009](docs/adr/0009-gitflow-and-semver-reversion.md) and [docs/branching-and-release.md](docs/branching-and-release.md) for the full model.
 
 ## Table of Contents
 
@@ -77,14 +77,14 @@ Fallout (NUKE's successor) brings your build automation to an even level with ev
 
 ## Build Status
 
-CI runs on every PR targeting `main`, `release/*`, or `support/*` on `build.yml` (Linux) — its `ubuntu-latest` job is the only required status check. Cross-platform Test+Pack (Windows + macOS) is gated to release intent — PRs into `release/*` / `support/*` and `v*` tag pushes — via `build-cross-platform.yml`; it does not run on routine `main` work. A `…-preview` prerelease is published to **GitHub Packages** under the reserved `Fallout.*` prefix on every push to `main`. **Stable** releases fire from `release/YYYY` tags via `.github/workflows/publish-packages-release.yml` (GitHub Packages + GitHub Releases by default; nuget.org opt-in per release). Docs-only PRs are served by a no-op companion workflow (`build-skip`) so branch protection is satisfied without spending CI minutes on a real build.
+CI runs on every PR targeting `develop`, `main`, `release/*`, or `support/*`, via `build.yml` (Linux). Its `ubuntu-latest` job is the only required status check. Cross-platform Test+Pack (Windows + macOS) only runs on PRs into `main` / `release/*` / `support/*`, and on `v*` tag pushes, via `build-cross-platform.yml` — not on routine `develop` work. Every push to `develop` publishes a `…-preview` prerelease to **GitHub Packages** under the reserved `Fallout.*` prefix. **Stable** releases fire from `main` tags via `.github/workflows/publish-packages-release.yml` (GitHub Packages + GitHub Releases by default; nuget.org by opt-in). Docs-only PRs go through a no-op companion workflow (`build-skip`), so branch protection is satisfied without spending CI minutes on a real build.
 
 | Workflow | Status | Trigger |
 |---|---|---|
-| [`build`](.github/workflows/build.yml) | [![build](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/build.yml?event=pull_request&label=&logo=ubuntu&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/build.yml) | PR to `main` / `release/*` / `support/*` (code paths) — job `ubuntu-latest` is the **required check** |
-| [`build-cross-platform`](.github/workflows/build-cross-platform.yml) | [![build-cross-platform](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/build-cross-platform.yml?event=pull_request&label=&logo=github&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/build-cross-platform.yml) | PR to `release/*` / `support/*` or `v*` tag push — Windows + macOS (release intent) |
-| [`publish-packages-preview`](.github/workflows/publish-packages-preview.yml) | [![publish-packages-preview](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-preview.yml?branch=main&label=&logo=githubactions&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-preview.yml) | push to `main` → `…-preview` prerelease to GitHub Packages |
-| [`publish-packages-release`](.github/workflows/publish-packages-release.yml) | [![publish-packages-release](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-release.yml?event=push&label=&logo=nuget&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-release.yml) | tag push on `release/YYYY` (stable) or `support/*` (legacy/retired) — nuget.org opt-in |
+| [`build`](.github/workflows/build.yml) | [![build](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/build.yml?event=pull_request&label=&logo=ubuntu&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/build.yml) | PR to `develop` / `main` / `release/*` / `support/*` (code paths) — job `ubuntu-latest` is the **required check** |
+| [`build-cross-platform`](.github/workflows/build-cross-platform.yml) | [![build-cross-platform](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/build-cross-platform.yml?event=pull_request&label=&logo=github&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/build-cross-platform.yml) | PR to `main` / `release/*` / `support/*` or `v*` tag push — Windows + macOS (release intent) |
+| [`publish-packages-preview`](.github/workflows/publish-packages-preview.yml) | [![publish-packages-preview](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-preview.yml?branch=develop&label=&logo=githubactions&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-preview.yml) | push to `develop` → `…-preview` prerelease to GitHub Packages |
+| [`publish-packages-release`](.github/workflows/publish-packages-release.yml) | [![publish-packages-release](https://img.shields.io/github/actions/workflow/status/Fallout-build/Fallout/publish-packages-release.yml?event=push&label=&logo=nuget&logoColor=white&style=flat-square)](https://github.com/Fallout-build/Fallout/actions/workflows/publish-packages-release.yml) | tag push on `main` (GA), `release/vX.Y` (rc), or `support/*` (legacy/retired) — nuget.org opt-in |
 
 Multi-provider CI support (Azure Pipelines, GitLab, TeamCity, AppVeyor) was removed during the takeover and is being revived demand-driven — see [#8](https://github.com/Fallout-build/Fallout/issues/8).
 
@@ -116,13 +116,15 @@ Two things help the project and take about a minute:
 [![built with Fallout](https://img.shields.io/badge/built%20with-Fallout-F5C800?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTIiIGZpbGw9IiNGNUM4MDAiLz48ZyBmaWxsPSIjMTExIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIzLjEiLz48cGF0aCBkPSJNOS45OSA5LjAyQTMuNiAzLjYgMCAwIDEgMTQuMDEgOS4wMkwxOC40OSAyLjM4QTExLjYgMTEuNiAwIDAgMCA1LjUxIDIuMzhaTTE1LjU5IDExLjc1QTMuNiAzLjYgMCAwIDEgMTMuNTggMTUuMjRMMTcuMDkgMjIuNDNBMTEuNiAxMS42IDAgMCAwIDIzLjU3IDExLjE5Wk0xMC40MiAxNS4yNEEzLjYgMy42IDAgMCAxIDguNDEgMTEuNzVMMC40MyAxMS4xOUExMS42IDExLjYgMCAwIDAgNi45MSAyMi40M1oiLz48L2c%2BPC9zdmc%2B)](https://github.com/Fallout-build/Fallout)
 ```
 
-More styles and wordings, plus the logo source, are in [docs/badge.md](docs/badge.md).
+More styles and wordings, plus the logo source, are in [docs/website/badge.md](docs/website/badge.md).
 
 Want to contribute code, docs, or triage? Start with [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Sponsorship
 
-Fallout is volunteer-run. There's no donation channel yet, but we want to be transparent about what running the project costs — see [`costs.md`](costs.md) for the full list. If you or your organisation would like to help offset those costs, open an issue and we'll work out the details.
+Fallout is volunteer-run, and we want to be transparent about what running the project costs — see [`costs.md`](https://github.com/Fallout-build/.github/blob/main/costs.md) for the full list. It lives with the organisation's other shared project files, since the spend covers every repository rather than this one.
+
+If you or your organisation would like to help offset those costs, use the sponsor button on any Fallout repository, or open an issue and we'll work out the details.
 
 ## Credits
 

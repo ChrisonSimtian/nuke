@@ -37,4 +37,4 @@ The scaffolding was kept on the stated intent of wiring up a "Fallout-controlled
 ## References
 
 - [#79](https://github.com/Fallout-build/Fallout/issues/79) — dead `Microsoft.ApplicationInsights` dependency, subsumed here.
-- [docs/migration/from-nuke.md](../migration/from-nuke.md) — telemetry knobs are stripped on migration.
+- [docs/Migration/from-nuke.md](../Migration/from-nuke.md) — telemetry knobs are stripped on migration.

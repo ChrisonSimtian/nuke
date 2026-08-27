@@ -1,6 +1,6 @@
 name: 🐞 Bug Report
 description: "Report something that doesn't look alright."
-labels: ["bug", "triage"]
+labels: ["bug", "needs-triage"]
 body:
   - type: markdown
     attributes:

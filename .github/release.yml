@@ -2,8 +2,8 @@
 #
 # GitHub reads this to auto-generate release notes, grouping merged PRs into the
 # sections below by label. It is ALSO the canonical list of changelog labels that
-# tooling and AI apply at PR-creation time — see docs/agents/issue-and-pr-style.md
-# and the PR-creation flow in docs/agents/release-and-versioning.md.
+# tooling and AI apply at PR-creation time — see the `creating-a-pr` skill
+# (.agents/skills/creating-a-pr/SKILL.md) for the full PR-creation flow.
 #
 # When raising a PR: apply the one category label that matches the change (the
 # blurbs below say which is which), in the same `gh pr create` call, alongside the
@@ -24,7 +24,7 @@ changelog:
   categories:
     # breaking-change: removes/renames public API, package IDs, CLI flags, on-disk
     # formats, or CI/CD shape. Also needs the ⚠️ callout in the PR description and
-    # rides the next yearly major — see the PR-creation flow.
+    # rides the next major — see the PR-creation flow.
     - title: "⚠️ Breaking Changes"
       labels:
         - breaking-change
