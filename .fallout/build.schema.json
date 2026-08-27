@@ -30,6 +30,7 @@
         "CreateGitHubRelease",
         "DeletePackages",
         "DownloadLicenses",
+        "GenerateLlmsTxt",
         "GeneratePublicApi",
         "GenerateTools",
         "Install",
