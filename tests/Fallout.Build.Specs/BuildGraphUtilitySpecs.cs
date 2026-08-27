@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Fallout.Build.Execution.Extensions;
 using Fallout.Common.Execution;
+using Fallout.Common.Tooling;
 using FluentAssertions;
 using VerifyXunit;
 using Xunit;
@@ -40,6 +41,10 @@ public class BuildGraphUtilitySpecs
         test.OrderDependencies.Add(restore);
         publish.TriggerDependencies.Add(test);
         compile.Triggers.Add(publish);
+
+        // Two kinds, one carrying a version and one not, so the projection covers both shapes.
+        compile.ToolRequirements.Add(new NuGetPackageRequirement("GitVersion.Tool", "5.12.0"));
+        compile.ToolRequirements.Add(new PathToolRequirement("git"));
 
         // Deliberately unsorted so the ordinal ordering guarantee is exercised.
         return new[] { test, publish, compile, restore };
@@ -143,7 +148,7 @@ public class BuildGraphUtilitySpecs
         firstTarget.EnumerateObject().Select(x => x.Name)
             .Should().Equal(
                 "name", "description", "declaredIn", "default", "listed",
-                "dependsOn", "after", "triggeredBy", "triggers");
+                "dependsOn", "after", "triggeredBy", "triggers", "toolRequirements");
     }
 
     [Theory]
@@ -155,6 +160,20 @@ public class BuildGraphUtilitySpecs
     public void NormalizeVersion_strips_build_metadata(string input, string expected)
     {
         BuildGraphUtility.NormalizeVersion(input).Should().Be(expected);
+    }
+
+    [Fact]
+    public void Tool_requirements_are_projected_with_their_kind()
+    {
+        ModelFor("Compile").ToolRequirements.Should().Equal(
+            new BuildGraphUtility.ToolRequirementModel("nuget", "GitVersion.Tool", "5.12.0"),
+            new BuildGraphUtility.ToolRequirementModel("path", "git", Version: null));
+    }
+
+    [Fact]
+    public void Targets_without_tool_requirements_emit_an_empty_list()
+    {
+        ModelFor("Restore").ToolRequirements.Should().BeEmpty();
     }
 
     private static BuildGraphUtility.TargetModel ModelFor(string name)

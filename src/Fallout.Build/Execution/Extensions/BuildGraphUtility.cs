@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Fallout.Common.Execution;
+using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 
 namespace Fallout.Build.Execution.Extensions;
@@ -74,7 +75,29 @@ internal static class BuildGraphUtility
             SortedNames(target.ExecutionDependencies),
             SortedNames(target.OrderDependencies),
             SortedNames(target.TriggerDependencies),
-            SortedNames(target.Triggers));
+            SortedNames(target.Triggers),
+            ToolRequirements(target));
+
+    // Sorted for the same reason as SortedNames: the declaration order carries no meaning to a
+    // consumer, and a stable ordering keeps build-graph.json free of spurious churn.
+    private static IReadOnlyList<ToolRequirementModel> ToolRequirements(ExecutableTarget target)
+        => target.ToolRequirements
+            .Select(ToModel)
+            .OrderBy(x => x.Kind, StringComparer.Ordinal)
+            .ThenBy(x => x.PackageId, StringComparer.Ordinal)
+            .ToList();
+
+    // A path requirement names an executable rather than a package, and neither it nor an apt-get
+    // requirement carries a version — both report null rather than inventing one.
+    private static ToolRequirementModel ToModel(ToolRequirement requirement)
+        => requirement switch
+        {
+            NuGetPackageRequirement x => new ToolRequirementModel("nuget", x.PackageId, x.Version),
+            NpmPackageRequirement x => new ToolRequirementModel("npm", x.PackageId, x.Version),
+            AptGetPackageRequirement x => new ToolRequirementModel("aptget", x.PackageId, Version: null),
+            PathToolRequirement x => new ToolRequirementModel("path", x.PathExecutable, Version: null),
+            _ => new ToolRequirementModel("unknown", requirement.GetType().Name, Version: null)
+        };
 
     // Sorted for deterministic output — the graph carries no execution order, so the display
     // order is irrelevant to consumers and a stable ordering avoids spurious file churn.
@@ -95,5 +118,13 @@ internal static class BuildGraphUtility
         IReadOnlyList<string> DependsOn,
         IReadOnlyList<string> After,
         IReadOnlyList<string> TriggeredBy,
-        IReadOnlyList<string> Triggers);
+        IReadOnlyList<string> Triggers,
+        IReadOnlyList<ToolRequirementModel> ToolRequirements);
+
+    /// <summary>
+    /// One declared tool dependency. <paramref name="Kind" /> is <c>nuget</c>, <c>npm</c>,
+    /// <c>aptget</c> or <c>path</c>; <paramref name="PackageId" /> carries the executable name for
+    /// a path requirement. <paramref name="Version" /> is null for the kinds that have none.
+    /// </summary>
+    internal sealed record ToolRequirementModel(string Kind, string PackageId, string Version);
 }
