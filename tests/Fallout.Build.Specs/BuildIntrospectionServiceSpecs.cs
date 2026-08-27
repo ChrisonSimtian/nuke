@@ -69,6 +69,70 @@ public class BuildIntrospectionServiceSpecs
         names.Should().Contain("api-key");
     }
 
+    [Fact]
+    public void Plan_document_preserves_order_and_never_evaluates_conditions()
+    {
+        var evaluated = false;
+        var restore = new ExecutableTarget { Name = "Restore" };
+        var compile = new ExecutableTarget { Name = "Compile", Invoked = true };
+        compile.StaticConditions.Add(("IsServerBuild", () => { evaluated = true; return true; }));
+
+        var json = BuildIntrospectionService.GetPlanJson(
+            new[] { "Compile" }, new[] { restore, compile }, skippedTargets: null);
+
+        using var document = JsonDocument.Parse(json);
+        var root = document.RootElement;
+
+        root.GetProperty("version").GetInt32().Should().Be(1);
+        root.GetProperty("invokedTargets").EnumerateArray().Select(x => x.GetString())
+            .Should().Equal("Compile");
+
+        var entries = root.GetProperty("plan");
+        entries[0].GetProperty("name").GetString().Should().Be("Restore");
+        entries[0].GetProperty("order").GetInt32().Should().Be(0);
+        entries[0].GetProperty("invoked").GetBoolean().Should().BeFalse();
+        entries[0].GetProperty("skip").ValueKind.Should().Be(JsonValueKind.Null);
+
+        entries[1].GetProperty("name").GetString().Should().Be("Compile");
+        entries[1].GetProperty("order").GetInt32().Should().Be(1);
+        entries[1].GetProperty("invoked").GetBoolean().Should().BeTrue();
+        entries[1].GetProperty("staticConditions")[0].GetString().Should().Be("IsServerBuild");
+
+        evaluated.Should().BeFalse("the plan reports what gates a target, never the gate's value");
+    }
+
+    [Fact]
+    public void A_named_skipped_target_carries_the_executor_s_own_reason()
+    {
+        var restore = new ExecutableTarget { Name = "Restore" };
+        var compile = new ExecutableTarget { Name = "Compile" };
+
+        var json = BuildIntrospectionService.GetPlanJson(
+            new[] { "Compile" }, new[] { restore, compile }, new[] { "re-store" });
+
+        using var document = JsonDocument.Parse(json);
+        var entries = document.RootElement.GetProperty("plan");
+
+        // BuildExecutor strips dashes before matching, so --skip re-store hits Restore.
+        entries[0].GetProperty("skip").GetString().Should().Be("via parameter");
+        entries[1].GetProperty("skip").ValueKind.Should().Be(JsonValueKind.Null);
+    }
+
+    [Fact]
+    public void An_empty_skip_list_skips_every_target_as_the_executor_does()
+    {
+        var json = BuildIntrospectionService.GetPlanJson(
+            new[] { "Compile" },
+            new[] { new ExecutableTarget { Name = "Restore" }, new ExecutableTarget { Name = "Compile" } },
+            new string[0]);
+
+        using var document = JsonDocument.Parse(json);
+
+        document.RootElement.GetProperty("plan").EnumerateArray()
+            .Select(x => x.GetProperty("skip").GetString())
+            .Should().AllBe("via parameter");
+    }
+
     private static IReadOnlyCollection<ExecutableTarget> SampleGraph()
     {
         var restore = new ExecutableTarget { Name = "Restore", Listed = true };

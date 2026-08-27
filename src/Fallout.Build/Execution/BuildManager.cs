@@ -68,9 +68,10 @@ internal static class BuildManager
             // Read-only introspection short-circuits ABOVE EnsureToolRequirements deliberately:
             // everything below this line writes files or shells out to a tool, which --describe
             // must not do. Returning here also means the executor is never reached.
-            if (build.Describe)
+            if (BuildIntrospectionService.IsRequested(build))
             {
-                Console.Out.Write(BuildIntrospectionService.GetDescribeJson(build, build.ExecutableTargets));
+                Console.Out.Write(
+                    BuildIntrospectionService.GetDocument(build, build.ExecutableTargets, build.ExecutionPlan));
                 return build.ExitCode ??= 0;
             }
 
