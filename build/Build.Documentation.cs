@@ -8,6 +8,7 @@ using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 using Serilog;
+using static Fallout.Common.Tools.Git.GitTasks;
 
 partial class Build
 {
@@ -282,5 +283,25 @@ partial class Build
             LlmsTxtFile.WriteAllText(RenderLlmsTxt(pages));
 
             Log.Information("Wrote {File} with {Count} pages", RootDirectory.GetUnixRelativePathTo(LlmsTxtFile), pages.Count);
+        });
+
+    // CI gate, in the shape of VerifyGeneratedTools: GenerateLlmsTxt only runs when a contributor
+    // remembers to invoke it, so a page added under docs/website without regenerating would merge
+    // with docs/llms.txt silently missing it. `Requires` is asserted for the whole scheduled plan
+    // before any target runs, so the "start clean" check below still fires before GenerateLlmsTxt
+    // regenerates anything; the explicit re-check afterward catches drift with a message pointing
+    // at the fix.
+    //
+    // Wired into BOTH workflows on purpose. build.yml ignores docs/**, so on its own it would never
+    // fire on the change that actually invalidates the file; build-skip.yml is the workflow that
+    // handles those PRs, and it runs this target for exactly that reason.
+    Target VerifyLlmsTxt => _ => _
+        .Requires(() => GitHasCleanWorkingCopy())
+        .DependsOn(GenerateLlmsTxt)
+        .Executes(() =>
+        {
+            Assert.True(
+                GitHasCleanWorkingCopy(),
+                "docs/llms.txt is out of sync with docs/website. Run './build.ps1 GenerateLlmsTxt' locally and commit the result.");
         });
 }

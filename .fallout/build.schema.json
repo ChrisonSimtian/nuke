@@ -43,7 +43,8 @@
         "Test",
         "UpdateContributors",
         "UpdateStargazers",
-        "VerifyGeneratedTools"
+        "VerifyGeneratedTools",
+        "VerifyLlmsTxt"
       ]
     },
     "Verbosity": {
