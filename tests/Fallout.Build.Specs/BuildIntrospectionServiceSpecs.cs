@@ -39,6 +39,24 @@ public class BuildIntrospectionServiceSpecs
         BuildIntrospectionService.IsRequested(new SampleBuild()).Should().BeFalse();
     }
 
+    [Theory]
+    [InlineData(true, "--describe")]
+    [InlineData(true, "-describe")]
+    [InlineData(true, "--DESCRIBE")]
+    [InlineData(true, "Compile", "--describe")]
+    [InlineData(true, "--plan", "--json")]
+    [InlineData(false, "--plan")]
+    [InlineData(false, "--json")]
+    [InlineData(false, "Compile")]
+    // A target that merely reads like the flag must not be mistaken for one.
+    [InlineData(false, "describe")]
+    public void Raw_arguments_are_recognised_the_same_way_the_injected_flags_are(
+        bool expected,
+        params string[] arguments)
+    {
+        BuildIntrospectionService.IsRequested(arguments).Should().Be(expected);
+    }
+
     [Fact]
     public void Describe_document_carries_targets_and_parameters_and_parses_as_json()
     {

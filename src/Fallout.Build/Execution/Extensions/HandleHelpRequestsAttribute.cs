@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -58,6 +59,22 @@ internal class HandleHelpRequestsAttribute : BuildExtensionAttributeBase, IOnBui
         return builder.ToString();
     }
 
+    // Console.BufferWidth throws IOException ("The handle is invalid") when standard output has no
+    // console behind it — a redirected pipe, a file, or a CI agent without a console — which used to
+    // abort --help outright, printing the targets and then dying before the parameters (#616). The
+    // wrap width is cosmetic, so an unavailable console falls back to the 90-column cap below.
+    private static int GetBufferWidth()
+    {
+        try
+        {
+            return Console.BufferWidth;
+        }
+        catch (IOException)
+        {
+            return int.MaxValue;
+        }
+    }
+
     public string GetParametersText()
     {
         var defaultTargets = Build.ExecutableTargets.Where(x => x.IsDefault).Select(x => x.Name).ToList();
@@ -73,6 +90,7 @@ internal class HandleHelpRequestsAttribute : BuildExtensionAttributeBase, IOnBui
             .Select(x => (Member: x, Model: model[ParameterService.GetParameterDashedName(x)]))
             .ToList();
         var padRightParameter = Math.Max(parameters.Max(x => x.Model.Name.Length), val2: 16);
+        var bufferWidth = GetBufferWidth();
 
         List<string> SplitLines(string text)
         {
@@ -81,7 +99,7 @@ internal class HandleHelpRequestsAttribute : BuildExtensionAttributeBase, IOnBui
             foreach (var word in words)
             {
                 var nextLength = padRightParameter + 6 + lines.Last().Length + word.Length;
-                if (nextLength >= Console.BufferWidth || nextLength > 90)
+                if (nextLength >= bufferWidth || nextLength > 90)
                     lines.Add(string.Empty);
 
                 lines[lines.Count - 1] = $"{lines.Last()} {word}";

@@ -61,7 +61,9 @@ internal static class BuildManager
                     build.ExecutableTargets,
                     ParameterService.GetParameter<string[]>(() => build.InvokedTargets));
 
-                Console.Out.Write(
+                // Newline-terminated, matching SchemaUtility's emitted JSON and the usual
+                // expectation that a document written to a pipe ends with one.
+                Console.Out.WriteLine(
                     BuildIntrospectionService.GetDocument(build, build.ExecutableTargets, build.ExecutionPlan));
                 return build.ExitCode ??= 0;
             }
@@ -102,7 +104,7 @@ internal static class BuildManager
                 // Nothing is logged here on purpose: Serilog's console sink writes to standard
                 // output, so a log line would land inside the document a consumer is parsing. The
                 // envelope carries the kind and message instead.
-                Console.Out.Write(BuildIntrospectionService.GetErrorJson(exception));
+                Console.Out.WriteLine(BuildIntrospectionService.GetErrorJson(exception));
                 return build.ExitCode ??= ErrorExitCode;
             }
 

@@ -48,6 +48,22 @@ internal static class BuildIntrospectionService
     private static bool Flag(bool injected, string parameterName)
         => injected || ParameterService.GetParameter<bool>(parameterName);
 
+    /// <summary>
+    /// Whether raw command-line arguments request introspection, for callers that must decide
+    /// before a build process exists — the CLI, which has to know where to send the build step's
+    /// own output. Shares this type with the property-based overload so the two entry points
+    /// cannot disagree about what counts as a read-only request.
+    /// </summary>
+    internal static bool IsRequested(IReadOnlyCollection<string> arguments)
+        => HasFlag(arguments, nameof(FalloutBuild.Describe)) ||
+           (HasFlag(arguments, nameof(FalloutBuild.Plan)) && HasFlag(arguments, nameof(FalloutBuild.Json)));
+
+    // Accepts every spelling the parameter parser does: --describe, -describe, --DESCRIBE.
+    private static bool HasFlag(IReadOnlyCollection<string> arguments, string parameterName)
+        => arguments.Any(x =>
+            x.StartsWith("-", StringComparison.Ordinal) &&
+            x.TrimStart('-').Replace("-", string.Empty).EqualsOrdinalIgnoreCase(parameterName));
+
     /// <summary>The document for whichever request <see cref="IsRequested" /> matched.</summary>
     internal static string GetDocument(
         FalloutBuild build,
