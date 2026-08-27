@@ -36,6 +36,10 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
+        "Describe": {
+          "type": "boolean",
+          "description": "Prints the build model as JSON and exits without executing any target"
+        },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
@@ -43,6 +47,10 @@
         "Host": {
           "description": "Host for execution. Default is 'automatic'",
           "$ref": "#/definitions/Host"
+        },
+        "Json": {
+          "type": "boolean",
+          "description": "Emits machine-readable JSON on standard output for read-only requests (--plan)"
         },
         "NoLogo": {
           "type": "boolean",

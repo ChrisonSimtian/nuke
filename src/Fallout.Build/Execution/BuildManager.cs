@@ -56,13 +56,23 @@ internal static class BuildManager
             NuGetToolPathResolver.NuGetAssetsConfigFile = build.NuGetAssetsConfigFile;
             NpmToolPathResolver.NpmPackageJsonFile = build.NpmPackageJsonFile;
 
-            if (!build.NoLogo)
+            // An introspection request owns standard output: the document must be the only thing on it.
+            if (!build.NoLogo && !BuildIntrospectionService.IsRequested(build))
                 build.WriteLogo();
 
             // TODO: move InvokedTargets to ExecutableTargetFactory
             build.ExecutionPlan = ExecutionPlanner.GetExecutionPlan(
                 build.ExecutableTargets,
                 ParameterService.GetParameter<string[]>(() => build.InvokedTargets));
+
+            // Read-only introspection short-circuits ABOVE EnsureToolRequirements deliberately:
+            // everything below this line writes files or shells out to a tool, which --describe
+            // must not do. Returning here also means the executor is never reached.
+            if (build.Describe)
+            {
+                Console.Out.Write(BuildIntrospectionService.GetDescribeJson(build, build.ExecutableTargets));
+                return build.ExitCode ??= 0;
+            }
 
             ToolRequirementService.EnsureToolRequirements(build, build.ExecutionPlan);
             build.ExecuteExtension<IOnBuildInitialized>(x => x.OnBuildInitialized(build.ExecutableTargets, build.ExecutionPlan));
@@ -95,7 +105,9 @@ internal static class BuildManager
 
         void Finish()
         {
-            if (build.ExecutionPlan == null)
+            // The plan is resolved before the introspection short-circuit returns, so guarding on
+            // it alone would print the outcome tables over the emitted document.
+            if (build.ExecutionPlan == null || BuildIntrospectionService.IsRequested(build))
                 return;
 
             foreach (var target in build.ExecutionPlan)

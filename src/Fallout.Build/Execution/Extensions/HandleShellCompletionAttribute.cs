@@ -28,6 +28,11 @@ internal class HandleShellCompletionAttribute : BuildExtensionAttributeBase, IOn
         }
         else if (Build.BuildProjectFile != null)
         {
+            // A read-only introspection request must leave the working tree untouched, and this
+            // hook fires long before the request can short-circuit — so it has to opt out here.
+            if (Build is FalloutBuild build && BuildIntrospectionService.IsRequested(build))
+                return;
+
             var buildSchema = SchemaUtility.GetJsonString(Build);
             var buildSchemaFile = GetBuildSchemaFile(Build.RootDirectory);
             buildSchemaFile.WriteAllText(buildSchema);
