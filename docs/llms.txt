@@ -1,0 +1,67 @@
+# Fallout
+
+> Fallout is a C#-first build automation framework for .NET — the hard-fork successor to NUKE. Write your CI/CD pipelines in plain C#, debug them locally, and share build steps across repositories.
+
+Generated from the documentation sources by './build.ps1 GenerateLlmsTxt'. Do not edit by hand.
+
+- [Introduction](https://docs.fallout.build/docs/introduction): Fallout is a C#-first build automation framework for .NET — the hard-fork successor to NUKE. Write your CI/CD pipelines in plain C#, debug them locally, and share build steps across repositories.
+
+## Getting Started
+
+- [Installation](https://docs.fallout.build/docs/getting-started/installation): Before you can set up a build project, you need to install Fallout's dedicated .NET global tool:
+- [Build Setup](https://docs.fallout.build/docs/getting-started/setup): After installing the Fallout global tool, you can call it from anywhere on your machine to set up a new build:
+- [Build Execution](https://docs.fallout.build/docs/getting-started/execution): After you've set up a build you can run it either through the global tool or one of the installed bootstrapping scripts:
+
+## Fundamentals
+
+- [Build Anatomy](https://docs.fallout.build/docs/fundamentals/builds): A build project is a regular .NET console application. However, unlike regular console applications, Fallout chooses to name the main class `Build` instead of `Program`. This establishes a convention...
+- [Target Definitions](https://docs.fallout.build/docs/fundamentals/targets): Inside a `Build` class, you can define your build steps as `Target` properties. The implementation for a build step is provided as a lambda function through the `Executes` method:
+- [Parameters](https://docs.fallout.build/docs/fundamentals/parameters): Another important aspect of build automation is the ability of passing input values to your build. These input values can be anything from generic texts, numeric and enum values, file and directory...
+- [Logging](https://docs.fallout.build/docs/fundamentals/logging): As with any other application, good logging greatly reduces the time to detect the source of errors and fix them quickly. Fallout integrates with Serilog and prepares a console and file logger for...
+- [Assertions](https://docs.fallout.build/docs/fundamentals/assertions): As in any other codebase, it is good practice to assert assumptions before continuing with more heavy procedures in your build automation. When an assertion is violated, it usually entails that the...
+
+## Common Tasks
+
+- [Constructing Paths](https://docs.fallout.build/docs/common/paths): Referencing files and directories seems like a trivial task. Nevertheless, developers often run into problems where relative paths no longer match the current working directory, or find themselves...
+- [Repository Insights](https://docs.fallout.build/docs/common/repository): Having knowledge about the current branch, applied tags, and the repository origin is eminently important in various scenarios. For instance, the deployment destination for an application is different...
+- [Data Serialization](https://docs.fallout.build/docs/common/serialization): Structured data plays an essential role in build automation. You may want to read a list of repositories to be checked out, write data that's consumed by another tool, or update version numbers of...
+- [Versioning Artifacts](https://docs.fallout.build/docs/common/versioning): Whenever a build produces artifacts, those should be identifiable with a unique version number. This avoids making wrong expectations about available features or fixed bugs, and allows for clear...
+- [Solution & Project Model](https://docs.fallout.build/docs/common/solution-project-model): Particularly when building .NET applications, your build may require information related to solution or project files. Such information is often duplicated with string literals and quickly becomes...
+- [Executing CLI Tools](https://docs.fallout.build/docs/common/cli-tools): Interacting with third-party command-line interface tools (CLIs) is an essential task in build automation. This includes a wide range of aspects, such as resolution of the tool path, construction of...
+- [Archive Compression](https://docs.fallout.build/docs/common/compression): In many situations you have to deal with compressed archives. Good examples are when you want to provide additional assets for your GitHub releases, or when you depend on other project's release...
+- [Chats & Social Media](https://docs.fallout.build/docs/common/chats): As a final step of your build automation process, you may want to report errors or announce a new version through different chats and social media channels. Fallout comes with basic support for the...
+
+## Build Sharing
+
+- [Global Builds](https://docs.fallout.build/docs/sharing/global-builds): Instead of adding and maintaining build projects in all your repositories, you can also build them by convention using a global build. Global builds are based on the concept of .NET global tools and...
+- [Build Components](https://docs.fallout.build/docs/sharing/build-components): With build components you can implement your build infrastructure once, and compose individual builds across different repositories. Central to the idea of build components are interface default...
+
+## CI/CD Support
+
+- [AppVeyor](https://docs.fallout.build/docs/cicd/appveyor): Running on AppVeyor will automatically enable custom theming for your build log output:
+- [Azure Pipelines](https://docs.fallout.build/docs/cicd/azure-pipelines): Running on Azure Pipelines will automatically enable custom theming for your build log output including collapsible sections for better structuring:
+- [Bitbucket](https://docs.fallout.build/docs/cicd/bitbucket): Running on Bitbucket will use the standard theming for your build log output.
+- [GitHub Actions](https://docs.fallout.build/docs/cicd/github-actions): Running on GitHub Actions will automatically enable custom theming for your build log output including collapsible groups for better structuring:
+- [GitLab](https://docs.fallout.build/docs/cicd/gitlab): Running on GitLab will automatically enable custom theming for your build log output including collapsible sections for better structuring:
+- [Jenkins](https://docs.fallout.build/docs/cicd/jenkins): Running on Jenkins will use the standard theming for your build log output.
+- [Space Automation](https://docs.fallout.build/docs/cicd/space-automation): Running on JetBrains Space will use the standard theming for your build log output:
+- [TeamCity](https://docs.fallout.build/docs/cicd/teamcity): Running on TeamCity will automatically enable custom theming for your build log output including collapsible blocks for better structuring:
+
+## Global Tool
+
+- [Shell Completion](https://docs.fallout.build/docs/global-tool/shell-completion): Typing long target names or parameters can be tedious and error-prone. The global tool helps you to invoke commands more quickly and without any typos, similar to tab completion for the .NET CLI.
+- [Adding NuGet Packages](https://docs.fallout.build/docs/global-tool/packages): In many cases, build automation relies on third-party tools. Fallout provides you with a great API for working with CLI tools, however, it is the responsibility of a build project to reference these...
+- [Managing Secrets](https://docs.fallout.build/docs/global-tool/secrets): Historically, secret values like passwords or auth-tokens are often saved as environment variables on local machines or CI/CD servers. This imposes both, security issues because other processes can...
+- [Navigation](https://docs.fallout.build/docs/global-tool/navigation): Over time, you might accumulate more and more projects that are built using Fallout. Some of these might even form a hierarchical structure, where one root directory contains several other root...
+- [Converting from Cake](https://docs.fallout.build/docs/global-tool/cake): Over the years, the .NET community has come up with a lot of great build automation tools, including FAKE, Cake, FlubuCore, and BullsEye. When coming from Cake Scripting, the time for converting build...
+
+## IDE Support
+
+- [JetBrains Rider](https://docs.fallout.build/docs/ide/rider): In JetBrains Rider you can install the _NUKE Support plugin_ to be more productive in writing, running, and debugging your builds.
+- [ReSharper](https://docs.fallout.build/docs/ide/resharper): In ReSharper you can install the _NUKE Support extension_ to be more productive in writing, running, and debugging your builds.
+- [Visual Studio](https://docs.fallout.build/docs/ide/visual-studio): In Visual Studio you can install the _NUKE Support extension_ to be more productive in writing, running, and debugging your builds.
+- [Visual Studio Code](https://docs.fallout.build/docs/ide/vscode): In Visual Studio Code you can install the _NUKE Support extension_ to be more productive in writing, running, and debugging your builds.
+
+## Optional
+
+- [Badge](https://docs.fallout.build/docs/badge): If you build with Fallout, link back with the badge. It is the quickest way to help other people find the project.
