@@ -1,0 +1,148 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json",
+  "references": [
+    "https://github.com/dennisdoomen/packageguard/blob/main/Src/PackageGuard/AnalyzeCommandSettings.cs"
+  ],
+  "name": "PackageGuard",
+  "officialUrl": "https://github.com/dennisdoomen/packageguard",
+  "help": "PackageGuard scans the NuGet, npm, Yarn and pnpm dependencies of a solution or project against an allow- or deny-list, so you can control which open-source licenses and package versions are acceptable. It can also print a colored risk summary, generate HTML/SARIF risk reports, and produce a Software Bill of Materials.",
+  "nugetPackageId": "PackageGuard",
+  "nugetFramework": true,
+  "packageExecutable": "PackageGuard.dll|PackageGuard.exe",
+  "tasks": [
+    {
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "ProjectPath",
+            "type": "string",
+            "format": "{value}",
+            "position": 1,
+            "help": "The path to a directory containing a <c>.sln</c>/<c>.slnx</c> file and/or a <c>package.json</c>, a specific <c>.sln</c>/<c>.slnx</c> file, a specific <c>.csproj</c> file, or a specific <c>package.json</c>. Defaults to the current working directory."
+          },
+          {
+            "name": "ConfigPath",
+            "type": "string",
+            "format": "--config-path {value}",
+            "help": "The path to the configuration file. Defaults to hierarchical discovery of <c>packageguard.config.json</c> or <c>.packageguard/config.json</c> files starting from the solution directory."
+          },
+          {
+            "name": "Interactive",
+            "type": "bool",
+            "format": "--restore-interactive",
+            "help": "Enables interactive mode for <c>dotnet restore</c>. Enabled by default."
+          },
+          {
+            "name": "IgnoreViolations",
+            "type": "bool",
+            "format": "--ignore-violations",
+            "help": "Don't fail the analysis if any violations are found."
+          },
+          {
+            "name": "ForceRestore",
+            "type": "bool",
+            "format": "--force-restore",
+            "help": "Force restoring the NuGet dependencies, even if the lockfile is up-to-date."
+          },
+          {
+            "name": "SkipRestore",
+            "type": "bool",
+            "format": "--skip-restore",
+            "help": "Prevent the restore operation from running, even if the lock file is missing or out-of-date."
+          },
+          {
+            "name": "GitHubApiKey",
+            "type": "string",
+            "format": "--github-api-key {value}",
+            "secret": true,
+            "help": "GitHub API key to use for fetching package licenses. If not specified, you may run into GitHub's rate limiting issues."
+          },
+          {
+            "name": "UseCaching",
+            "type": "bool",
+            "format": "--use-caching",
+            "help": "Maintains a cache of the package information to speed up future analysis."
+          },
+          {
+            "name": "CacheFilePath",
+            "type": "string",
+            "format": "--cache-file-path {value}",
+            "help": "Overrides the file path where analysis data is cached. Defaults to a <c>.packageguard/cache.bin</c> file relative to the working directory."
+          },
+          {
+            "name": "RefreshRiskCache",
+            "type": "bool",
+            "format": "--refresh-risk-cache",
+            "help": "Force <c>--report-risk</c> to rebuild risk-related package data instead of reusing cached risk entries."
+          },
+          {
+            "name": "RiskCacheMaxAgeHours",
+            "type": "int",
+            "format": "--risk-cache-max-age-hours {value}",
+            "help": "Maximum age in hours for cached risk-related package data before <c>--report-risk</c> refreshes it. Defaults to <c>24</c>."
+          },
+          {
+            "name": "ScanNuGet",
+            "type": "bool",
+            "format": "--nuget",
+            "help": "Explicitly enable scanning for <c>.csproj</c>, <c>.sln</c> or <c>.slnx</c> files. Enabled by default."
+          },
+          {
+            "name": "NpmPackageManager",
+            "type": "NpmPackageManager",
+            "format": "--npm {value}",
+            "help": "Explicitly specify the package manager to use (<c>Npm</c>, <c>Yarn</c>, <c>Pnpm</c>), or <c>None</c> to disable npm scanning entirely. If not specified, it is detected automatically."
+          },
+          {
+            "name": "NpmExePath",
+            "type": "string",
+            "format": "--npm-exe-path {value}",
+            "help": "The path to the npm, yarn or pnpm executable. If not specified, the system PATH is used."
+          },
+          {
+            "name": "ReportRisk",
+            "type": "bool",
+            "format": "--report-risk",
+            "help": "Show a colored risk summary in the console and generate detailed HTML/SARIF risk reports."
+          },
+          {
+            "name": "Verbose",
+            "type": "bool",
+            "format": "--verbose",
+            "help": "Enable verbose (debug-level) logging output. Combine with <c>--report-risk</c> to see individual HTTP calls to GitHub, OSV, and npm registries."
+          },
+          {
+            "name": "Sbom",
+            "type": "SbomFormat",
+            "format": "--sbom {value}",
+            "help": "Generate a Software Bill of Materials for the resolved dependency graph, in the given format. Requires <c>--sbom-output</c>."
+          },
+          {
+            "name": "SbomOutput",
+            "type": "string",
+            "format": "--sbom-output {value}",
+            "help": "The output file path for the generated SBOM. Required when <c>--sbom</c> is specified."
+          }
+        ]
+      }
+    }
+  ],
+  "enumerations": [
+    {
+      "name": "NpmPackageManager",
+      "values": [
+        "None",
+        "Npm",
+        "Yarn",
+        "Pnpm"
+      ]
+    },
+    {
+      "name": "SbomFormat",
+      "values": [
+        "cyclonedx",
+        "spdx"
+      ]
+    }
+  ]
+}

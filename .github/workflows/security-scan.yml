@@ -9,15 +9,15 @@
 #
 #     - To trigger manual generation invoke:
 #
-#         fallout --generate-configuration GitHubActions_build --host GitHubActions
+#         fallout --generate-configuration GitHubActions_security-scan --host GitHubActions
 #
 # </auto-generated>
 # ------------------------------------------------------------------------------
 
-name: build
+name: security-scan
 
 on:
-  pull_request:
+  push:
     branches:
       - develop
       - main
@@ -27,6 +27,10 @@ on:
       - 'docs/**'
       - '.assets/**'
       - '**/*.md'
+
+permissions:
+  security-events: write
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -40,8 +44,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          ref: ${{ github.head_ref }}
       - name: 'Cache: .fallout/temp, ~/.nuget/packages'
         uses: actions/cache@v6
         with:
@@ -55,7 +57,11 @@ jobs:
           global-json-file: global.json
       - name: 'Restore: dotnet tools'
         run: dotnet tool restore
-      - name: 'Run: VerifyGeneratedTools, Test, Pack, PackageGuard'
-        run: dotnet fallout VerifyGeneratedTools Test Pack PackageGuard
+      - name: 'Run: PackageGuard'
+        run: dotnet fallout PackageGuard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Upload risk-report SARIF to GitHub code scanning'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: output/packageguard/risk-report.sarif
