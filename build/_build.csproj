@@ -58,6 +58,7 @@
          Build.cs as the canonical version source. Replaces GitVersion.Tool (#81). Direct
          dependency because _build.csproj turns off central package management. -->
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115" PrivateAssets="All" />
+    <PackageDownload Include="PackageGuard" Version="[2.4.0]" />
     <PackageDownload Include="ReportGenerator" Version="[5.2.0]" />
     <!-- Used by Fallout.Tooling.Tests' ToolTasksToolPathTest as a sample package
          for tool-path resolution smoke tests. Not used for running our own tests. -->

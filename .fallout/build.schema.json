@@ -34,6 +34,7 @@
         "GenerateTools",
         "Install",
         "Pack",
+        "PackageGuard",
         "Publish",
         "References",
         "ReportCoverage",
