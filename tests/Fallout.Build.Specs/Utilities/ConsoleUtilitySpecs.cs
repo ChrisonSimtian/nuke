@@ -1,3 +1,4 @@
+using Fallout.Common.Specs;
 using Fallout.Common.Utilities;
 using Xunit;
 using System;
@@ -8,6 +9,7 @@ using FluentAssertions;
 
 namespace Fallout.Build.Tests.Utilities;
 
+[Collection(ProcessGlobalStateCollection.Name)]
 public class ConsoleUtilitySpecs
 {
     private class MockConsole : IConsole
