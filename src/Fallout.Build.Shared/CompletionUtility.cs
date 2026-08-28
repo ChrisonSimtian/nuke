@@ -28,10 +28,7 @@ public static class CompletionUtility
         var rootElement = schema.RootElement;
         var definitions = rootElement.GetProperty("definitions").EnumerateObject().ToDictionary(x => x.Name, x => x);
 
-        var parameterProperties = rootElement.GetProperty("definitions").TryGetProperty("FalloutBuild", out var baseSchema)
-            ? baseSchema.GetProperty("properties").EnumerateObject()
-                .Concat(rootElement.GetProperty("allOf")[0].TryGetProperty("properties", out var properties) ? properties.EnumerateObject() : [])
-            : definitions["build"].Value.GetProperty("properties").EnumerateObject();
+        var parameterProperties = GetParameterProperties(rootElement, definitions);
 
         return parameterProperties
             .Where(filter)
@@ -70,6 +67,34 @@ public static class CompletionUtility
 
             throw new NotSupportedException();
         }
+    }
+
+    private static IEnumerable<JsonProperty> GetParameterProperties(JsonElement rootElement,
+        Dictionary<string, JsonProperty> definitions)
+    {
+        if (!TryGetSchema(rootElement, "FalloutBuild", out var baseSchema) &&
+            // Backward compatibility with NukeBuild projects not yet migrated
+            !TryGetSchema(rootElement, "NukeBuild", out baseSchema))
+        {
+            if (!definitions.TryGetValue("build", out var buildProperties))
+            {
+                // legacy build properties not found !
+                return [];
+            }
+            return buildProperties.Value.GetProperty("properties").EnumerateObject();
+        }
+
+        return baseSchema.GetProperty("properties").EnumerateObject()
+            .Concat(rootElement.GetProperty("allOf")[0].TryGetProperty("properties", out var properties)
+                ? properties.EnumerateObject()
+                : []);
+    }
+
+    private static bool TryGetSchema(JsonElement rootElement, string buildPropertyName, out JsonElement baseSchema)
+    {
+        return rootElement
+            .GetProperty("definitions")
+            .TryGetProperty(buildPropertyName, out baseSchema);
     }
 
     // ReSharper disable once CognitiveComplexity
