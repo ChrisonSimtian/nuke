@@ -486,6 +486,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
         const string input = """
                              <Project Sdk="Microsoft.NET.Sdk">
                                <PropertyGroup>
+                                 <TargetFramework>net10.0</TargetFramework>
                                </PropertyGroup>
                                <ItemGroup>
                                </ItemGroup>
@@ -502,6 +503,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
         buildCsproj.Should().Be("""
                                 <Project Sdk="Microsoft.NET.Sdk">
                                   <PropertyGroup>
+                                    <TargetFramework>net10.0</TargetFramework>
                                   </PropertyGroup>
                                   <ItemGroup>
 
@@ -546,5 +548,47 @@ public class RewriteCsprojsStepSpecs : IDisposable
                                   </ItemGroup>
                                 </Project>
                                 """);
+    }
+
+    [Fact]
+    public async Task Does_not_add_nuget_framework_pin_to_a_non_build_csproj()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <TargetFramework>net10.0</TargetFramework>
+                               </PropertyGroup>
+                               <ItemGroup>
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        (tempDirectory / "Lib.csproj").WriteAllText(input, eofLineBreak: false);
+
+        context.FalloutVersion = "10.4.2";
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        (tempDirectory / "Lib.csproj").ReadAllText().Should().Be(input);
+    }
+
+    [Fact]
+    public async Task Does_not_add_nuget_framework_pin_when_the_build_project_targets_netframework()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <TargetFramework>net48</TargetFramework>
+                               </PropertyGroup>
+                               <ItemGroup>
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+
+        context.FalloutVersion = "10.4.2";
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        (tempDirectory / "build" / "_build.csproj").ReadAllText().Should().Be(input);
     }
 }

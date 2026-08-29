@@ -46,4 +46,21 @@ internal static class TargetFrameworkMonikers
         int major = int.Parse(match.Groups["major"].Value, CultureInfo.InvariantCulture);
         return major < minimumMajor;
     }
+
+    /// <summary>
+    /// Returns <c>true</c> for modern .NET monikers (<c>net5.0</c> and later).
+    /// .NET Framework (<c>net48</c>, <c>net472</c>) and .NET Standard are <c>false</c>.
+    /// </summary>
+    /// <param name="moniker">A single target framework moniker, e.g. <c>net10.0</c> or <c>net48</c>.</param>
+    public static bool TargetsModernDotNet(string moniker)
+    {
+        Match match = modernMonikerPattern.Match(moniker.Trim());
+        if (!match.Success)
+        {
+            return false;
+        }
+
+        int major = int.Parse(match.Groups["major"].Value, CultureInfo.InvariantCulture);
+        return major >= 5;
+    }
 }
