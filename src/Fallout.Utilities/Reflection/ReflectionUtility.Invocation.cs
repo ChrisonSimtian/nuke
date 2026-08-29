@@ -10,7 +10,7 @@ public static partial class ReflectionUtility
 {
     public static T CreateInstance<T>(this Type type, params object[] args)
     {
-        return (T) type.CreateInstance(args);
+        return (T)type.CreateInstance(args);
     }
 
     public static object CreateInstance(this Type type, params object[] args)
@@ -20,7 +20,7 @@ public static partial class ReflectionUtility
 
     public static T GetValue<T>(this MemberInfo member, object obj = null, object[] args = null)
     {
-        return (T) GetValue(member, obj, args);
+        return (T)member.GetValue(obj, args);
     }
 
     public static object GetValue(this MemberInfo member, object obj = null, object[] args = null)
@@ -39,15 +39,16 @@ public static partial class ReflectionUtility
         Assert.True(member is PropertyInfo or MethodInfo);
         var method = member is PropertyInfo property
             ? property.GetMethod.NotNull()
-            : (MethodInfo) member;
+            : (MethodInfo)member;
 
         var funcType = Expression.GetFuncType(method.GetParameters().Select(x => x.ParameterType)
             .Concat(method.ReturnType).ToArray());
+
         var functionPointer = method.NotNull("method != null").MethodHandle.GetFunctionPointer();
-        var nonVirtualDelegate = (Delegate) Activator.CreateInstance(funcType, obj, functionPointer)
+        var nonVirtualDelegate = (Delegate)Activator.CreateInstance(funcType, obj, functionPointer)
             .NotNull("nonVirtualDelegate != null");
 
-        return (TResult) nonVirtualDelegate.DynamicInvoke(arguments);
+        return (TResult)nonVirtualDelegate.DynamicInvoke(arguments);
 
         // var method = (MethodInfo) func.GetMemberInfo();
         //
@@ -115,7 +116,7 @@ public static partial class ReflectionUtility
         BindingFlags? bindingFlags = null,
         params object[] args)
     {
-        return (T) type.InvokeMember(memberName, target, bindingFlags, args);
+        return (T)type.InvokeMember(memberName, target, bindingFlags, args);
     }
 
     public static void DynamicInvokeUnwrap(this Delegate @delegate, params object[] args)

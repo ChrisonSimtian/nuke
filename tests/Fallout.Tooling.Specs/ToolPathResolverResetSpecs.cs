@@ -1,7 +1,7 @@
 using System;
-using FluentAssertions;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;

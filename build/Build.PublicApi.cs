@@ -55,16 +55,24 @@ partial class Build
                 bool DefaultFilter(MemberInfo member)
                 {
                     if (member is PropertyInfo)
+                    {
                         return false;
+                    }
 
                     if (member is Type && !member.IsPublic())
+                    {
                         return false;
+                    }
 
-                    if (!(member.IsPublic() || member.IsFamily() && !member.DeclaringType.NotNull().IsSealed))
+                    if (!(member.IsPublic() || (member.IsFamily() && !member.DeclaringType.NotNull().IsSealed)))
+                    {
                         return false;
+                    }
 
                     if (member is FieldInfo { IsSpecialName: true })
+                    {
                         return false;
+                    }
 
                     return true;
                 }
@@ -78,7 +86,9 @@ partial class Build
                     .ThenBy(x => x.Name);
 
                 foreach (var member in members)
+                {
                     builder.AppendLine($"- {member.GetDisplayText()}");
+                }
 
                 builder.AppendLine();
             }

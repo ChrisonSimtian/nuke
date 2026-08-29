@@ -44,20 +44,20 @@ public sealed class SolutionPropertyBag : IReadOnlyDictionary<string, string>
 
     internal SolutionPropertyBag(string id, PropertiesScope scope, int capacity)
     {
-        this.Id = id;
-        this.Scope = scope;
-        this.propertyNamesInOrder = new List<string>(capacity);
-        this.properties = new PropertyBag(capacity);
+        Id = id;
+        Scope = scope;
+        propertyNamesInOrder = new List<string>(capacity);
+        properties = new PropertyBag(capacity);
     }
 
     // Copy constructor.
     internal SolutionPropertyBag(SolutionPropertyBag propertyBag)
     {
         Argument.ThrowIfNull(propertyBag, nameof(propertyBag));
-        this.Id = propertyBag.Id;
-        this.Scope = propertyBag.Scope;
-        this.propertyNamesInOrder = new List<string>(propertyBag.propertyNamesInOrder);
-        this.properties = new PropertyBag(propertyBag.properties);
+        Id = propertyBag.Id;
+        Scope = propertyBag.Scope;
+        propertyNamesInOrder = new List<string>(propertyBag.propertyNamesInOrder);
+        properties = new PropertyBag(propertyBag.properties);
     }
 
     /// <summary>
@@ -71,21 +71,21 @@ public sealed class SolutionPropertyBag : IReadOnlyDictionary<string, string>
     public PropertiesScope Scope { get; }
 
     /// <inheritdoc/>
-    public int Count => this.propertyNamesInOrder.Count;
+    public int Count => propertyNamesInOrder.Count;
 
     /// <summary>
     /// Gets a list of property names in the order they were declared.
     /// </summary>
-    public IReadOnlyList<string> PropertyNames => this.propertyNamesInOrder;
+    public IReadOnlyList<string> PropertyNames => propertyNamesInOrder;
 
     /// <inheritdoc/>
-    public IEnumerable<string> Keys => this.PropertyNames;
+    public IEnumerable<string> Keys => PropertyNames;
 
     /// <inheritdoc/>
-    public IEnumerable<string> Values => this.PropertyNames.Select(x => this[x]);
+    public IEnumerable<string> Values => PropertyNames.Select(x => this[x]);
 
     /// <inheritdoc/>
-    public string this[string key] => this.properties[key];
+    public string this[string key] => properties[key];
 
     /// <inheritdoc/>
 #if NETFRAMEWORK || NETSTANDARD
@@ -95,27 +95,27 @@ public sealed class SolutionPropertyBag : IReadOnlyDictionary<string, string>
 #if NETFRAMEWORK || NETSTANDARD
 #nullable restore
 #endif
-        this.properties.TryGetValue(key, out value);
+        properties.TryGetValue(key, out value);
 
     /// <inheritdoc/>
     public bool ContainsKey(string key)
     {
-        return this.properties.ContainsKey(key);
+        return properties.ContainsKey(key);
     }
 
     /// <inheritdoc/>
     public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
     {
-        foreach (string key in this.propertyNamesInOrder)
+        foreach (string key in propertyNamesInOrder)
         {
-            yield return new KeyValuePair<string, string>(key, this.properties[key]);
+            yield return new KeyValuePair<string, string>(key, properties[key]);
         }
     }
 
     /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return this.GetEnumerator();
+        return GetEnumerator();
     }
 
     /// <summary>
@@ -128,13 +128,13 @@ public sealed class SolutionPropertyBag : IReadOnlyDictionary<string, string>
         Argument.ThrowIfNullOrEmpty(name, nameof(name));
         Argument.ThrowIfNull(value, nameof(value));
 
-        if (this.properties.TryAdd(name, value))
+        if (properties.TryAdd(name, value))
         {
-            this.propertyNamesInOrder.Add(name);
+            propertyNamesInOrder.Add(name);
         }
         else
         {
-            this.properties[name] = value;
+            properties[name] = value;
         }
     }
 
@@ -149,15 +149,14 @@ public sealed class SolutionPropertyBag : IReadOnlyDictionary<string, string>
         if (this.properties.Count == 0)
         {
             this.properties = new PropertyBag(properties);
-            this.propertyNamesInOrder = properties.ToList(x => x.Key);
-            return;
+            propertyNamesInOrder = properties.ToList(x => x.Key);
         }
         else
         {
             this.properties.EnsureCapacity(this.properties.Count + properties.Count);
             foreach ((string key, string value) in properties)
             {
-                this.Add(key, value);
+                Add(key, value);
             }
         }
     }
@@ -169,9 +168,9 @@ public sealed class SolutionPropertyBag : IReadOnlyDictionary<string, string>
     /// <returns><see langword="true"/> if the property was found and removed.</returns>
     public bool Remove(string name)
     {
-        if (this.properties.Remove(name))
+        if (properties.Remove(name))
         {
-            _ = this.propertyNamesInOrder.Remove(name);
+            _ = propertyNamesInOrder.Remove(name);
             return true;
         }
 

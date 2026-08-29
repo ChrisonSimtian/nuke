@@ -16,7 +16,7 @@ internal sealed class SlnV12ModelExtension(ISolutionSerializer serializer, SlnV1
     public SlnV12ModelExtension(ISolutionSerializer serializer, SlnV12SerializerSettings settings, string? fullPath)
         : this(serializer, settings)
     {
-        this.SolutionFileFullPath = fullPath;
+        SolutionFileFullPath = fullPath;
     }
 
     /// <inheritdoc/>

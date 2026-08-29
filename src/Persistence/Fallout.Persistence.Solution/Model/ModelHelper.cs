@@ -55,9 +55,9 @@ internal static class ModelHelper
 
     internal static string GetSolutionConfiguration(this ConfigurationRule rule)
     {
-        return rule.SolutionBuildType.IsNullOrEmpty() && rule.SolutionPlatform.IsNullOrEmpty() ?
-            string.Empty :
-            $"{rule.SolutionBuildType.NullIfEmpty() ?? BuildTypeNames.All}|{rule.SolutionPlatform.NullIfEmpty() ?? PlatformNames.All}";
+        return rule.SolutionBuildType.IsNullOrEmpty() && rule.SolutionPlatform.IsNullOrEmpty()
+            ? string.Empty
+            : $"{rule.SolutionBuildType.NullIfEmpty() ?? BuildTypeNames.All}|{rule.SolutionPlatform.NullIfEmpty() ?? PlatformNames.All}";
     }
 
     // Splits the configuration into build type and platform.
@@ -120,11 +120,13 @@ internal static class ModelHelper
 
     internal static ConfigurationRule CreateNoBuildRule()
     {
-        return new ConfigurationRule(BuildDimension.Build, solutionBuildType: string.Empty, solutionPlatform: string.Empty, projectValue: bool.FalseString);
+        return new ConfigurationRule(BuildDimension.Build, solutionBuildType: string.Empty, solutionPlatform: string.Empty,
+            projectValue: bool.FalseString);
     }
 
     internal static ConfigurationRule CreateNoPlatformsRule()
     {
-        return new ConfigurationRule(BuildDimension.Platform, solutionBuildType: string.Empty, solutionPlatform: string.Empty, projectValue: PlatformNames.Missing);
+        return new ConfigurationRule(BuildDimension.Platform, solutionBuildType: string.Empty, solutionPlatform: string.Empty,
+            projectValue: PlatformNames.Missing);
     }
 }

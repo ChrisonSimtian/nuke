@@ -14,37 +14,37 @@ internal sealed partial class XmlProject(SlnxFile root, XmlFolder? xmlParentFold
     XmlContainerWithProperties(root, element, Keyword.Project),
     IItemRefDecorator
 {
-    private ItemRefList<XmlBuildDependency> buildDependencies = new ItemRefList<XmlBuildDependency>(ignoreCase: true);
-    private ItemConfigurationRulesList configurationRules = new ItemConfigurationRulesList();
+    private ItemRefList<XmlBuildDependency> buildDependencies = new(ignoreCase: true);
+    private ItemConfigurationRulesList configurationRules = new();
 
     public Keyword ItemRefAttribute => Keyword.Path;
 
-    internal string Path => this.ItemRef;
+    internal string Path => ItemRef;
 
-    internal StringSpan DefaultDisplayName => PathExtensions.GetStandardDisplayName(PathExtensions.ConvertToModel(this.Path));
+    internal StringSpan DefaultDisplayName => PathExtensions.GetStandardDisplayName(PathExtensions.ConvertToModel(Path));
 
     internal Guid Id
     {
-        get => this.GetXmlAttributeGuid(Keyword.Id);
-        set => this.UpdateXmlAttributeGuid(Keyword.Id, value);
+        get => GetXmlAttributeGuid(Keyword.Id);
+        set => UpdateXmlAttributeGuid(Keyword.Id, value);
     }
 
     internal string? DisplayName
     {
-        get => this.GetXmlAttribute(Keyword.DisplayName);
-        set => this.UpdateXmlAttribute(Keyword.DisplayName, value);
+        get => GetXmlAttribute(Keyword.DisplayName);
+        set => UpdateXmlAttribute(Keyword.DisplayName, value);
     }
 
     internal string? Type
     {
-        get => this.GetXmlAttribute(Keyword.Type);
-        set => this.UpdateXmlAttribute(Keyword.Type, value);
+        get => GetXmlAttribute(Keyword.Type);
+        set => UpdateXmlAttribute(Keyword.Type, value);
     }
 
     internal bool DefaultStartup
     {
-        get => this.GetXmlAttributeBool(Keyword.DefaultStartup, defaultValue: false);
-        set => this.UpdateXmlAttributeBool(Keyword.DefaultStartup, value);
+        get => GetXmlAttributeBool(Keyword.DefaultStartup, defaultValue: false);
+        set => UpdateXmlAttributeBool(Keyword.DefaultStartup, value);
     }
 
     internal XmlFolder? ParentFolder { get; } = xmlParentFolder;
@@ -54,11 +54,11 @@ internal sealed partial class XmlProject(SlnxFile root, XmlFolder? xmlParentFold
     {
         return elementName switch
         {
-            Keyword.BuildDependency => new XmlBuildDependency(this.Root, element),
-            Keyword.BuildType => new XmlConfigurationBuildType(this.Root, element),
-            Keyword.Platform => new XmlConfigurationPlatform(this.Root, element),
-            Keyword.Build => new XmlConfigurationBuild(this.Root, element),
-            Keyword.Deploy => new XmlConfigurationDeploy(this.Root, element),
+            Keyword.BuildDependency => new XmlBuildDependency(Root, element),
+            Keyword.BuildType => new XmlConfigurationBuildType(Root, element),
+            Keyword.Platform => new XmlConfigurationPlatform(Root, element),
+            Keyword.Build => new XmlConfigurationBuild(Root, element),
+            Keyword.Deploy => new XmlConfigurationDeploy(Root, element),
             _ => base.ChildDecoratorFactory(element, elementName),
         };
     }
@@ -69,10 +69,11 @@ internal sealed partial class XmlProject(SlnxFile root, XmlFolder? xmlParentFold
         switch (childDecorator)
         {
             case XmlBuildDependency buildDependency:
-                this.buildDependencies.Add(buildDependency);
+                buildDependencies.Add(buildDependency);
                 break;
+
             case XmlConfiguration configuration:
-                this.configurationRules.Add(configuration);
+                configurationRules.Add(configuration);
                 break;
         }
 
@@ -84,9 +85,10 @@ internal sealed partial class XmlProject(SlnxFile root, XmlFolder? xmlParentFold
     {
         return typeof(TDecorator).Name switch
         {
-            nameof(XmlBuildDependency) => this.configurationRules.FirstOrDefault() ?? this.FindNextDecorator<XmlConfiguration>(),
-            nameof(XmlConfiguration) or nameof(XmlConfigurationBuildType) or nameof(XmlConfigurationPlatform) or nameof(XmlConfigurationBuild) or nameof(XmlConfigurationDeploy) =>
-                this.configurationRules.FindNextDecorator<TDecorator>() ?? this.propertyBags.FirstOrDefault(),
+            nameof(XmlBuildDependency) => configurationRules.FirstOrDefault() ?? FindNextDecorator<XmlConfiguration>(),
+            nameof(XmlConfiguration) or nameof(XmlConfigurationBuildType) or nameof(XmlConfigurationPlatform)
+                or nameof(XmlConfigurationBuild) or nameof(XmlConfigurationDeploy) =>
+                configurationRules.FindNextDecorator<TDecorator>() ?? propertyBags.FirstOrDefault(),
             _ => null,
         };
     }
@@ -98,43 +100,44 @@ internal sealed partial class XmlProject(SlnxFile root, XmlFolder? xmlParentFold
         try
         {
             SolutionFolderModel? parentFolder = null;
-            if (this.ParentFolder is not null)
+            if (ParentFolder is not null)
             {
-                SolutionFolderModel? foundParentFolder = solution.FindFolder(this.ParentFolder.ItemRef);
+                SolutionFolderModel? foundParentFolder = solution.FindFolder(ParentFolder.ItemRef);
                 if (foundParentFolder is not null)
                 {
                     parentFolder = foundParentFolder;
                 }
                 else
                 {
-                    throw SolutionException.Create(string.Format(Errors.InvalidFolderReference_Args1, this.ParentFolder.Name), this, SolutionErrorType.InvalidFolderReference);
+                    throw SolutionException.Create(string.Format(Errors.InvalidFolderReference_Args1, ParentFolder.Name), this,
+                        SolutionErrorType.InvalidFolderReference);
                 }
             }
 
             SolutionProjectModel projectModel = solution.AddProject(
-                filePath: PathExtensions.ConvertToModel(this.Path),
-                projectTypeName: this.Type ?? string.Empty,
+                filePath: PathExtensions.ConvertToModel(Path),
+                projectTypeName: Type ?? string.Empty,
                 folder: parentFolder);
 
-            projectModel.Id = this.Id;
-            projectModel.DisplayName = this.DisplayName;
+            projectModel.Id = Id;
+            projectModel.DisplayName = DisplayName;
 
-            foreach (ConfigurationRule configurationRule in this.configurationRules.ToModel())
+            foreach (ConfigurationRule configurationRule in configurationRules.ToModel())
             {
                 projectModel.AddProjectConfigurationRule(configurationRule);
             }
 
-            foreach (XmlProperties properties in this.propertyBags.GetItems())
+            foreach (XmlProperties properties in propertyBags.GetItems())
             {
                 properties.AddToModel(projectModel);
             }
 
-            if (this.DefaultStartup)
+            if (DefaultStartup)
             {
                 solution.MoveProjectFirst(projectModel);
             }
 
-            this.Root.UserPaths[projectModel.FilePath] = this.Path;
+            Root.UserPaths[projectModel.FilePath] = Path;
 
             return projectModel;
         }
@@ -146,7 +149,7 @@ internal sealed partial class XmlProject(SlnxFile root, XmlFolder? xmlParentFold
 
     internal void AddDependenciesToModel(SolutionModel solution, SolutionProjectModel projectModel)
     {
-        foreach (XmlBuildDependency buildDependency in this.buildDependencies.GetItems())
+        foreach (XmlBuildDependency buildDependency in buildDependencies.GetItems())
         {
             string dependencyItemRef = PathExtensions.ConvertToModel(buildDependency.Project);
             SolutionProjectModel? dependencyProject = solution.FindProject(dependencyItemRef);
@@ -163,7 +166,8 @@ internal sealed partial class XmlProject(SlnxFile root, XmlFolder? xmlParentFold
             }
             else
             {
-                throw SolutionException.Create(string.Format(Errors.InvalidProjectReference_Args1, dependencyItemRef), buildDependency, SolutionErrorType.InvalidProjectReference);
+                throw SolutionException.Create(string.Format(Errors.InvalidProjectReference_Args1, dependencyItemRef),
+                    buildDependency, SolutionErrorType.InvalidProjectReference);
             }
         }
     }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 using Fallout.Cli.Prompts;
 using Fallout.Common;
 using Fallout.Common.IO;
@@ -42,6 +42,7 @@ internal sealed class SecretsCommand : IFalloutCommand
                 GetBuildSchemaFile(rootDirectory.NotNull("No root directory")),
                 filter: x => x.Value.TryGetProperty("default", out _))
             .Select(x => x.Key).ToList();
+
         if (secretParameters.Count == 0)
         {
             Host.Information($"There are no parameters marked with {nameof(SecretAttribute)}");
@@ -76,8 +77,11 @@ internal sealed class SecretsCommand : IFalloutCommand
 
         if (EnvironmentInfo.IsOsx && existingSecrets.Count == 0 && !fromCredentialStore)
         {
-            if (generatedPassword || prompts.PromptForConfirmation($"Save password to keychain? (associated with '{rootDirectory}')"))
+            if (generatedPassword ||
+                prompts.PromptForConfirmation($"Save password to keychain? (associated with '{rootDirectory}')"))
+            {
                 CredentialStore.SavePassword(credentialStoreName, password);
+            }
         }
         else if (fromLegacyCredentialStore)
         {
@@ -103,20 +107,27 @@ internal sealed class SecretsCommand : IFalloutCommand
             else
             {
                 if (choice == SaveAndExit)
+                {
                     SaveSecrets(addedSecrets, password, parametersFile);
+                }
 
                 if (choice == DeletePasswordAndExit)
+                {
                     CredentialStore.DeletePassword(credentialStoreName);
+                }
 
                 if (addedSecrets.Any())
+                {
                     Host.Information("Remember to clear your clipboard!");
+                }
 
                 return 0;
             }
         }
     }
 
-    private static Dictionary<string, string> LoadSecrets(IReadOnlyCollection<string> secretParameters, string password, AbsolutePath parametersFile)
+    private static Dictionary<string, string> LoadSecrets(IReadOnlyCollection<string> secretParameters, string password,
+        AbsolutePath parametersFile)
     {
         var jobject = parametersFile.ReadJsonObject();
         return jobject
@@ -129,7 +140,9 @@ internal sealed class SecretsCommand : IFalloutCommand
         parametersFile.UpdateJsonObject(obj =>
         {
             foreach (var (name, secret) in secrets)
+            {
                 obj[name] = Encrypt(secret, password);
+            }
         });
     }
 }

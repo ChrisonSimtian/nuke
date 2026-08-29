@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 
@@ -9,10 +7,15 @@ namespace Fallout.Common.CI.SpaceAutomation.Configuration;
 public class SpaceAutomationContainer : ConfigurationEntity
 {
     public string Image { get; set; }
+
     public SpaceAutomationResources Resources { get; set; }
+
     public Dictionary<string, string> Imports { get; set; }
+
     public string BuildScript { get; set; }
+
     public string[] InvokedTargets { get; set; }
+
     public bool Submodules { get; set; }
 
     public override void Write(CustomFileWriter writer)
@@ -26,7 +29,9 @@ public class SpaceAutomationContainer : ConfigurationEntity
             {
                 var scriptContent = new List<string>();
                 if (Submodules)
+                {
                     scriptContent.Add("git submodule update --init --recursive");
+                }
 
                 scriptContent.Add($"./{BuildScript} {InvokedTargets.JoinSpace()}");
 

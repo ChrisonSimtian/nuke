@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
@@ -9,11 +8,17 @@ namespace Fallout.Common.CI.GitHubActions.Configuration;
 public class GitHubActionsVcsTrigger : GitHubActionsDetailedTrigger
 {
     public GitHubActionsTrigger Kind { get; set; }
+
     public string[] Branches { get; set; }
+
     public string[] BranchesIgnore { get; set; }
+
     public string[] Tags { get; set; }
+
     public string[] TagsIgnore { get; set; }
+
     public string[] IncludePaths { get; set; }
+
     public string[] ExcludePaths { get; set; }
 
     public override void Write(CustomFileWriter writer)

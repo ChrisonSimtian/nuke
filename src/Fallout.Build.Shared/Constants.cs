@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,7 +13,9 @@ namespace Fallout.Common;
 internal static class Constants
 {
     internal const string FalloutFileName = FalloutDirectoryName;
+
     internal const string FalloutDirectoryName = ".fallout";
+
     // Legacy directory name from the pre-Fallout era. Read-only: lets existing
     // consumer projects keep building until they migrate (manually or via the
     // forthcoming Fallout.Migrate CLI). New setups always use .fallout/.
@@ -60,7 +61,8 @@ internal static class Constants
     internal const string UpstreamNukeRepositoryGit = $"{UpstreamNukeRepository}.git";
 
     internal static AbsolutePath GlobalTemporaryDirectory => Path.GetTempPath();
-    internal static AbsolutePath GlobalFalloutDirectory =>  EnvironmentInfo.SpecialFolder(SpecialFolders.UserProfile) / ".fallout";
+
+    internal static AbsolutePath GlobalFalloutDirectory => EnvironmentInfo.SpecialFolder(SpecialFolders.UserProfile) / ".fallout";
 
     internal static AbsolutePath TryGetRootDirectoryFrom(AbsolutePath startDirectory, bool includeLegacy = true)
     {
@@ -68,9 +70,10 @@ internal static class Constants
             .DescendantsAndSelf(x => x.Parent)
             .FirstOrDefault(x => x.GetDirectories(FalloutDirectoryName).Any() ||
                                  x.GetDirectories(LegacyNukeDirectoryName).Any() ||
-                                 includeLegacy && x.GetFiles(FalloutFileName).Any())
+                                 (includeLegacy && x.GetFiles(FalloutFileName).Any()))
             ?.FullName;
-        return rootDirectory != GlobalFalloutDirectory.Parent ? (AbsolutePath) rootDirectory : null;
+
+        return rootDirectory != GlobalFalloutDirectory.Parent ? (AbsolutePath)rootDirectory : null;
     }
 
     internal static bool IsLegacy(AbsolutePath rootDirectory)
@@ -82,7 +85,10 @@ internal static class Constants
     {
         var newDir = rootDirectory / FalloutDirectoryName;
         if (Directory.Exists(newDir))
+        {
             return newDir;
+        }
+
         var legacyDir = rootDirectory / LegacyNukeDirectoryName;
         return Directory.Exists(legacyDir) ? legacyDir : newDir;
     }
@@ -129,7 +135,8 @@ internal static class Constants
 
     internal static IEnumerable<AbsolutePath> GetParametersProfileFiles(AbsolutePath rootDirectory)
     {
-        return new DirectoryInfo(GetFalloutDirectory(rootDirectory)).GetFiles($"{ParametersFilePrefix}.*.json", SearchOption.TopDirectoryOnly)
+        return new DirectoryInfo(GetFalloutDirectory(rootDirectory))
+            .GetFiles($"{ParametersFilePrefix}.*.json", SearchOption.TopDirectoryOnly)
             .Select(x => (AbsolutePath)x.FullName);
     }
 
@@ -165,6 +172,7 @@ internal static class Constants
 
     internal static string GetProfilePasswordParameterName(string profile)
     {
-        return $"PARAMS_{profile.TrimStart(DefaultProfileName).ToUpperInvariant().Replace(".", "_")}_KEY".Replace("_", string.Empty);
+        return $"PARAMS_{profile.TrimStart(DefaultProfileName).ToUpperInvariant().Replace(".", "_")}_KEY".Replace("_",
+            string.Empty);
     }
 }

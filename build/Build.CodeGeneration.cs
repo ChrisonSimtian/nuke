@@ -1,5 +1,4 @@
-﻿using System;
-using Fallout.Common;
+﻿using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities.Collections;
 using static Fallout.CodeGeneration.CodeGenerator;
@@ -9,6 +8,7 @@ using static Fallout.Common.Tools.Git.GitTasks;
 partial class Build
 {
     AbsolutePath SpecificationsDirectory => RootDirectory / "src" / "Fallout.Common" / "Tools";
+
     AbsolutePath ReferencesDirectory => RootDirectory / "docs" / "cli-tools";
 
     // Hardcoded rather than derived from the locally-resolved git remote (e.g. via
@@ -32,7 +32,8 @@ partial class Build
                 GenerateCode(
                     x,
                     namespaceProvider: x => $"Fallout.Common.Tools.{x.Name}",
-                    sourceFileProvider: x => $"https://github.com/{CanonicalRepositoryIdentifier}/blob/{DevelopBranch}/{RootDirectory.GetUnixRelativePathTo(x.SpecificationFile)}"));
+                    sourceFileProvider: x =>
+                        $"https://github.com/{CanonicalRepositoryIdentifier}/blob/{DevelopBranch}/{RootDirectory.GetUnixRelativePathTo(x.SpecificationFile)}"));
         });
 
     // CI gate: `GenerateTools` only runs when a contributor remembers to invoke it, so a .json

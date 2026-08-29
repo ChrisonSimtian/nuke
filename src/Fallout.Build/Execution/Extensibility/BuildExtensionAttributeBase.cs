@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Fallout.Common.Execution;
 
@@ -13,6 +12,7 @@ public interface IBuildExtension
 public abstract class BuildExtensionAttributeBase : Attribute, IBuildExtension
 {
     public IFalloutBuild Build { get; internal set; }
+
     public virtual float Priority { get; set; }
 }
 

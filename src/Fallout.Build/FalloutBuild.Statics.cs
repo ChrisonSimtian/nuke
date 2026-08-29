@@ -80,23 +80,28 @@ public abstract partial class FalloutBuild
     public static string[] LoadedLocalProfiles { get; }
 
     public static bool IsLocalBuild => !IsServerBuild;
+
     public static bool IsServerBuild => Host is IBuildServer;
 
     private static AbsolutePath GetRootDirectory()
     {
         var parameterValue = ParameterService.GetParameter(() => RootDirectory);
         if (parameterValue != null)
+        {
             return parameterValue;
+        }
 
         if (ParameterService.GetParameter<bool>(() => RootDirectory))
+        {
             return EnvironmentInfo.WorkingDirectory;
+        }
 
         return TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory)
             .NotNull(new[]
-                     {
-                         $"Could not locate '{FalloutDirectoryName}' directory/file while walking up from '{EnvironmentInfo.WorkingDirectory}'.",
-                         "Either create a directory/file to mark the root directory, or add '--root [path]' to the invocation."
-                     }.JoinNewLine());
+            {
+                $"Could not locate '{FalloutDirectoryName}' directory/file while walking up from '{EnvironmentInfo.WorkingDirectory}'.",
+                "Either create a directory/file to mark the root directory, or add '--root [path]' to the invocation."
+            }.JoinNewLine());
     }
 
     private static AbsolutePath GetBuildAssemblyFile()
@@ -109,6 +114,7 @@ public abstract partial class FalloutBuild
                         assemblyName.StartsWith("ReSharperTestRunner") ||
                         assemblyName == "testhost",
                 $"Assembly name was {assemblyName.SingleQuote()}");
+
             return null;
         }
 
@@ -122,7 +128,9 @@ public abstract partial class FalloutBuild
     private static AbsolutePath GetBuildProjectFile(AbsolutePath buildAssemblyDirectory)
     {
         if (buildAssemblyDirectory == null)
+        {
             return null;
+        }
 
         return new DirectoryInfo(buildAssemblyDirectory)
             .DescendantsAndSelf(x => x.Parent)

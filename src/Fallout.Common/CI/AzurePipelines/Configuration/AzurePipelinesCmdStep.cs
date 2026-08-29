@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 
@@ -9,8 +7,11 @@ namespace Fallout.Common.CI.AzurePipelines.Configuration;
 public class AzurePipelinesCmdStep : AzurePipelinesStep
 {
     public string[] InvokedTargets { get; set; }
+
     public string BuildCmdPath { get; set; }
+
     public int? PartitionSize { get; set; }
+
     public Dictionary<string, string> Imports { get; set; }
 
     public override void Write(CustomFileWriter writer)
@@ -21,7 +22,9 @@ public class AzurePipelinesCmdStep : AzurePipelinesStep
 
             var arguments = $"{InvokedTargets.JoinSpace()} --skip";
             if (PartitionSize != null)
+            {
                 arguments += $" --partition $(System.JobPositionInPhase)/{PartitionSize}";
+            }
 
             using (writer.WriteBlock("inputs:"))
             {

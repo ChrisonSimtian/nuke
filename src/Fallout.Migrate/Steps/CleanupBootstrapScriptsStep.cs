@@ -36,7 +36,7 @@ internal partial class CleanupBootstrapScriptsStep : IMigrationStep
         var envVarToCheck = "NUKE_ENTERPRISE_TOKEN";
         if (!content.Contains(envVarToCheck))
         {
-            return new(content, 0);
+            return new RewriteResult(content, 0);
         }
 
         // This is just to preserve the current line ending the user has for this files
@@ -49,7 +49,7 @@ internal partial class CleanupBootstrapScriptsStep : IMigrationStep
 
         // here, we get the index of the line that contains the environment variable check
         var indexOfEnterpriseEnvVarCheck = lines.FindIndex(line => line.Contains(envVarToCheck));
-        
+
         // here, we get the index of the line that ends the if block
         // which is fi on bash and a simple "}" in powershell
         var endOfIfBlock = lines.FindIndex(indexOfEnterpriseEnvVarCheck,
@@ -63,7 +63,7 @@ internal partial class CleanupBootstrapScriptsStep : IMigrationStep
 
         lines.RemoveRange(indexOfEnterpriseEnvVarCheck, endOfIfBlock - indexOfEnterpriseEnvVarCheck + 1);
 
-        return new(string.Join(newline, lines), 1);
+        return new RewriteResult(string.Join(newline, lines), 1);
     }
 
     [GeneratedRegex(@"\r\n|\n|\r")]

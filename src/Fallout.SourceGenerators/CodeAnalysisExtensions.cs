@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
 using Fallout.Common.Utilities.Collections;
+using Microsoft.CodeAnalysis;
 
 namespace Fallout.SourceGenerators;
 

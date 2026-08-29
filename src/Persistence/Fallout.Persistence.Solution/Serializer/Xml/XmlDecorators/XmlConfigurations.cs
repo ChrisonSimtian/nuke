@@ -13,9 +13,9 @@ internal sealed class XmlConfigurations(SlnxFile root, XmlElement element) :
     XmlContainer(root, element, Keyword.Configurations),
     IItemRefDecorator
 {
-    private ItemRefList<XmlBuildType> buildType = new ItemRefList<XmlBuildType>(ignoreCase: true);
-    private ItemRefList<XmlPlatform> platforms = new ItemRefList<XmlPlatform>(ignoreCase: true);
-    private ItemRefList<XmlProjectType> projectTypes = new ItemRefList<XmlProjectType>();
+    private ItemRefList<XmlBuildType> buildType = new(ignoreCase: true);
+    private ItemRefList<XmlPlatform> platforms = new(ignoreCase: true);
+    private ItemRefList<XmlProjectType> projectTypes = new();
 
     public Keyword ItemRefAttribute => Keyword.Configurations;
 
@@ -32,9 +32,9 @@ internal sealed class XmlConfigurations(SlnxFile root, XmlElement element) :
     {
         return elementName switch
         {
-            Keyword.Platform => new XmlPlatform(this.Root, element),
-            Keyword.BuildType => new XmlBuildType(this.Root, element),
-            Keyword.ProjectType => new XmlProjectType(this.Root, element),
+            Keyword.Platform => new XmlPlatform(Root, element),
+            Keyword.BuildType => new XmlBuildType(Root, element),
+            Keyword.ProjectType => new XmlProjectType(Root, element),
             _ => base.ChildDecoratorFactory(element, elementName),
         };
     }
@@ -45,13 +45,15 @@ internal sealed class XmlConfigurations(SlnxFile root, XmlElement element) :
         switch (childDecorator)
         {
             case XmlPlatform platform:
-                this.platforms.Add(platform);
+                platforms.Add(platform);
                 break;
+
             case XmlBuildType buildType:
                 this.buildType.Add(buildType);
                 break;
+
             case XmlProjectType projectType:
-                this.projectTypes.Add(projectType);
+                projectTypes.Add(projectType);
                 break;
         }
 
@@ -63,8 +65,8 @@ internal sealed class XmlConfigurations(SlnxFile root, XmlElement element) :
     {
         return typeof(TDecorator).Name switch
         {
-            nameof(XmlBuildType) => this.platforms.FirstOrDefault() ?? this.FindNextDecorator<XmlPlatform>(),
-            nameof(XmlPlatform) => this.projectTypes.FirstOrDefault(),
+            nameof(XmlBuildType) => platforms.FirstOrDefault() ?? FindNextDecorator<XmlPlatform>(),
+            nameof(XmlPlatform) => projectTypes.FirstOrDefault(),
             nameof(XmlProjectType) => null,
             _ => null,
         };
@@ -74,7 +76,7 @@ internal sealed class XmlConfigurations(SlnxFile root, XmlElement element) :
 
     internal void AddToModel(SolutionModel solution)
     {
-        foreach (XmlPlatform platform in this.platforms.GetItems())
+        foreach (XmlPlatform platform in platforms.GetItems())
         {
             try
             {
@@ -104,17 +106,15 @@ internal sealed class XmlConfigurations(SlnxFile root, XmlElement element) :
     /// </summary>
     internal ProjectTypeTable? GetProjectTypeTable()
     {
-        List<ProjectType> declaredTypes = new List<ProjectType>(this.projectTypes.ItemsCount);
-        foreach (XmlProjectType projectType in this.projectTypes.GetItems())
+        List<ProjectType> declaredTypes = new(projectTypes.ItemsCount);
+        foreach (XmlProjectType projectType in projectTypes.GetItems())
         {
             declaredTypes.Add(projectType.ToModel());
         }
 
         try
         {
-            return declaredTypes.Count > 0 ?
-                new ProjectTypeTable(declaredTypes) :
-                null;
+            return declaredTypes.Count > 0 ? new ProjectTypeTable(declaredTypes) : null;
         }
         catch (SolutionException ex)
         {
@@ -130,21 +130,22 @@ internal sealed class XmlConfigurations(SlnxFile root, XmlElement element) :
         bool modified = false;
 
         // BuildTypes
-        modified |= this.ApplyModelItemsToXml(
+        modified |= ApplyModelItemsToXml(
             itemRefs: modelSolution.IsBuildTypeImplicit() ? null : modelSolution.BuildTypes,
-            decoratorItems: ref this.buildType,
+            decoratorItems: ref buildType,
             decoratorElementName: Keyword.BuildType);
 
         // Platforms
-        modified |= this.ApplyModelItemsToXml(
+        modified |= ApplyModelItemsToXml(
             itemRefs: modelSolution.IsPlatformImplicit() ? null : modelSolution.Platforms,
-            decoratorItems: ref this.platforms,
+            decoratorItems: ref platforms,
             decoratorElementName: Keyword.Platform);
 
         // Project Types
-        modified |= this.ApplyModelItemsToXml(
-            modelItems: modelSolution.ProjectTypes.ToList(type => (ItemRef: XmlProjectType.GetItemRef(type.Name, type.Extension, type.ProjectTypeId), Item: type)),
-            ref this.projectTypes,
+        modified |= ApplyModelItemsToXml(
+            modelItems: modelSolution.ProjectTypes.ToList(type =>
+                (ItemRef: XmlProjectType.GetItemRef(type.Name, type.Extension, type.ProjectTypeId), Item: type)),
+            ref projectTypes,
             Keyword.ProjectType,
             applyModelToXml: static (newProjectTypes, newValue) => newProjectTypes.ApplyModelToXml(newValue));
 

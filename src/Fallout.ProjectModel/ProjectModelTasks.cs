@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Locator;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
+using Microsoft.Build.Construction;
+using Microsoft.Build.Definition;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Locator;
 using Serilog;
-#pragma warning disable CA2255
 
-using Fallout.Common;
+#pragma warning disable CA2255
 
 namespace Fallout.Solutions;
 
@@ -22,7 +23,9 @@ public static class ProjectModelTasks
     public static void Initialize()
     {
         if (!MSBuildLocator.CanRegister)
+        {
             return;
+        }
 
         var msbuildExtensionPath = Environment.GetEnvironmentVariable("MSBuildExtensionsPath");
         var msbuildExePath = Environment.GetEnvironmentVariable("MSBUILD_EXE_PATH");
@@ -65,7 +68,9 @@ public static class ProjectModelTasks
             }
             catch (Exception)
             {
-                Log.Warning($"Attempting second-chance registration of MSBuild after {nameof(MSBuildLocator.RegisterDefaults)} failed");
+                Log.Warning(
+                    $"Attempting second-chance registration of MSBuild after {nameof(MSBuildLocator.RegisterDefaults)} failed");
+
                 RegisterMSBuildFromDotNet();
             }
 
@@ -89,9 +94,9 @@ public static class ProjectModelTasks
         string targetFramework = null)
     {
         var projectCollection = new ProjectCollection();
-        var projectRoot = Microsoft.Build.Construction.ProjectRootElement.Open(projectFile, projectCollection, preserveFormatting: true);
+        var projectRoot = ProjectRootElement.Open(projectFile, projectCollection, preserveFormatting: true);
         var msbuildProject = Microsoft.Build.Evaluation.Project.FromProjectRootElement(projectRoot,
-            new Microsoft.Build.Definition.ProjectOptions
+            new ProjectOptions
             {
                 GlobalProperties = GetProperties(configuration, targetFramework),
                 ToolsVersion = projectCollection.DefaultToolsVersion,
@@ -108,7 +113,9 @@ public static class ProjectModelTasks
             projectCollection.UnloadProject(msbuildProject);
             targetFramework = targetFrameworks.First();
 
-            Log.Warning("Project {Project} has multiple target frameworks {TargetFrameworks}", projectFile, targetFrameworks.JoinCommaSpace());
+            Log.Warning("Project {Project} has multiple target frameworks {TargetFrameworks}", projectFile,
+                targetFrameworks.JoinCommaSpace());
+
             Log.Warning("Evaluating using {TargetFramework} ...", targetFramework);
 
             msbuildProject = new Microsoft.Build.Evaluation.Project(
@@ -125,9 +132,15 @@ public static class ProjectModelTasks
     {
         var properties = new Dictionary<string, string>();
         if (configuration != null)
+        {
             properties.Add("Configuration", configuration);
+        }
+
         if (targetFramework != null)
+        {
             properties.Add("TargetFramework", targetFramework);
+        }
+
         return properties;
     }
 }

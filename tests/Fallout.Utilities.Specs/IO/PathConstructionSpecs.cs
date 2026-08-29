@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Text.Json;
-using FluentAssertions;
 using Fallout.Common.IO;
+using FluentAssertions;
 using Xunit;
 using static Fallout.Common.IO.PathConstruction;
 
@@ -19,8 +19,8 @@ public class PathConstructionSpecs
     [InlineData("/", null)]
     public void TestParent(string path, string expected)
     {
-        ((AbsolutePath) path).Parent.Should().Be((AbsolutePath) expected);
-        ((string) ((AbsolutePath) path).Parent).Should().Be(expected);
+        ((AbsolutePath)path).Parent.Should().Be((AbsolutePath)expected);
+        ((string)((AbsolutePath)path).Parent).Should().Be(expected);
         ((AbsolutePath)path / ..).Should().Be((AbsolutePath)expected);
     }
 
@@ -29,7 +29,7 @@ public class PathConstructionSpecs
     [InlineData("/foo", "/FOO", false)]
     public void TestEquality(string path1, string path2, bool expected)
     {
-        ((AbsolutePath) path1).Equals((AbsolutePath) path2).Should().Be(expected);
+        ((AbsolutePath)path1).Equals((AbsolutePath)path2).Should().Be(expected);
     }
 
     [Theory]
@@ -162,40 +162,130 @@ public class PathConstructionSpecs
     }
 
     [Theory]
-    [InlineData(new object[] { "foo", "bar" }, "foo\\bar", "foo/bar")]
-    [InlineData(new object[] { "./foo", "bar" }, "foo\\bar", "foo/bar")]
-    [InlineData(new object[] { "foo", "..", ".", "", null, "bar", "foo" }, "bar\\foo", "bar/foo")]
-    [InlineData(new object[] { "..", ".", "..", "foo" }, "..\\..\\foo", "../../foo")]
+    [InlineData(new object[]
+    {
+        "foo",
+        "bar"
+    }, "foo\\bar", "foo/bar")]
+    [InlineData(new object[]
+    {
+        "./foo",
+        "bar"
+    }, "foo\\bar", "foo/bar")]
+    [InlineData(new object[]
+    {
+        "foo",
+        "..",
+        ".",
+        "",
+        null,
+        "bar",
+        "foo"
+    }, "bar\\foo", "bar/foo")]
+    [InlineData(new object[]
+    {
+        "..",
+        ".",
+        "..",
+        "foo"
+    }, "..\\..\\foo", "../../foo")]
     public void RelativePath(object[] parts, string expectedWindows, string expectedUnix)
     {
         ParseRelativePath(parts).Should().Be(EnvironmentInfo.IsWin ? expectedWindows : expectedUnix);
     }
 
     [Theory]
-    [InlineData(new object[] { "/bin", "foo", "..", "bar" }, "/bin/bar")]
-    [InlineData(new object[] { "C:", "windows", "foo", "..", "bar" }, "C:\\windows\\bar")]
-    [InlineData(new object[] { "\\\\server", "foo", "..", "bar" }, "\\\\server\\bar")]
+    [InlineData(new object[]
+    {
+        "/bin",
+        "foo",
+        "..",
+        "bar"
+    }, "/bin/bar")]
+    [InlineData(new object[]
+    {
+        "C:",
+        "windows",
+        "foo",
+        "..",
+        "bar"
+    }, "C:\\windows\\bar")]
+    [InlineData(new object[]
+    {
+        "\\\\server",
+        "foo",
+        "..",
+        "bar"
+    }, "\\\\server\\bar")]
     public void RelativePath_AsAbsolute(object[] parts, string expected)
     {
         ParseRelativePath(parts).Should().Be(expected);
     }
 
     [Theory]
-    [InlineData(new object[] { "/bin", "foo", "..", "bar" }, "/bin/bar")]
-    [InlineData(new object[] { "C:", "windows", "foo", "..", "bar" }, "C:\\windows\\bar")]
-    [InlineData(new object[] { "C:" }, "C:\\")]
-    [InlineData(new object[] { "C:\\", "windows" }, "C:\\windows")]
-    [InlineData(new object[] { "\\\\server", "foo", "..", "bar" }, "\\\\server\\bar")]
+    [InlineData(new object[]
+    {
+        "/bin",
+        "foo",
+        "..",
+        "bar"
+    }, "/bin/bar")]
+    [InlineData(new object[]
+    {
+        "C:",
+        "windows",
+        "foo",
+        "..",
+        "bar"
+    }, "C:\\windows\\bar")]
+    [InlineData(new object[]
+    {
+        "C:"
+    }, "C:\\")]
+    [InlineData(new object[]
+    {
+        "C:\\",
+        "windows"
+    }, "C:\\windows")]
+    [InlineData(new object[]
+    {
+        "\\\\server",
+        "foo",
+        "..",
+        "bar"
+    }, "\\\\server\\bar")]
     public void AbsolutePath(object[] parts, string expected)
     {
         ParseAbsolutePath(parts).Should().Be(expected);
     }
 
     [Theory]
-    [InlineData(new object[] { "C:", "", "..", "bar" }, "Cannot normalize 'C:\\..' beyond path root")]
-    [InlineData(new object[] { "/", "", "..", "bar" }, "Cannot normalize '/..' beyond path root")]
-    [InlineData(new object[] { "\\\\server", "", "..", "bar" }, "Cannot normalize '\\\\server\\..' beyond path root")]
-    [InlineData(new object[] { "foo", "bar" }, "Path 'foo' must be rooted")]
+    [InlineData(new object[]
+    {
+        "C:",
+        "",
+        "..",
+        "bar"
+    }, "Cannot normalize 'C:\\..' beyond path root")]
+    [InlineData(new object[]
+    {
+        "/",
+        "",
+        "..",
+        "bar"
+    }, "Cannot normalize '/..' beyond path root")]
+    [InlineData(new object[]
+    {
+        "\\\\server",
+        "",
+        "..",
+        "bar"
+    }, "Cannot normalize '\\\\server\\..' beyond path root")]
+    [InlineData(new object[]
+    {
+        "foo",
+        "bar"
+    }, "Path 'foo' must be rooted")]
     public void AbsolutePath_Throws(object[] parts, string expected)
     {
         Action action = () => ParseAbsolutePath(parts);
@@ -205,19 +295,19 @@ public class PathConstructionSpecs
     [Fact]
     public void RelativePath_Specific()
     {
-        ((string) ((UnixRelativePath) "foo" / "bar")).Should().Be("foo/bar");
-        ((string) ((WinRelativePath) "foo" / "bar")).Should().Be("foo\\bar");
+        ((string)((UnixRelativePath)"foo" / "bar")).Should().Be("foo/bar");
+        ((string)((WinRelativePath)"foo" / "bar")).Should().Be("foo\\bar");
 
-        ((string) (UnixRelativePath) "foo\\bar").Should().Be("foo/bar");
-        ((string) (WinRelativePath) "foo/bar").Should().Be("foo\\bar");
+        ((string)(UnixRelativePath)"foo\\bar").Should().Be("foo/bar");
+        ((string)(WinRelativePath)"foo/bar").Should().Be("foo\\bar");
     }
 
     [Fact]
     public void RelativePath_Parent()
     {
-        ((string) ((UnixRelativePath) "foo/bar/foo" / ..)).Should().Be("foo/bar");
-        ((string) ((WinRelativePath) "foo/bar/foo" / ..)).Should().Be("foo\\bar");
-        ((string) ((RelativePath) "foo/bar" / ..)).Should().Be("foo");
+        ((string)((UnixRelativePath)"foo/bar/foo" / ..)).Should().Be("foo/bar");
+        ((string)((WinRelativePath)"foo/bar/foo" / ..)).Should().Be("foo\\bar");
+        ((string)((RelativePath)"foo/bar" / ..)).Should().Be("foo");
     }
 
     [Fact]
@@ -233,11 +323,11 @@ public class PathConstructionSpecs
 
     private static string ParseRelativePath(object[] parts)
     {
-        return parts.Skip(count: 1).Aggregate((RelativePath) (string) parts[0], (rp, p) => rp / (string) p);
+        return parts.Skip(count: 1).Aggregate((RelativePath)(string)parts[0], (rp, p) => rp / (string)p);
     }
 
     private static string ParseAbsolutePath(object[] parts)
     {
-        return parts.Skip(count: 1).Aggregate((AbsolutePath) (string) parts[0], (rp, p) => rp / (string) p);
+        return parts.Skip(count: 1).Aggregate((AbsolutePath)(string)parts[0], (rp, p) => rp / (string)p);
     }
 }

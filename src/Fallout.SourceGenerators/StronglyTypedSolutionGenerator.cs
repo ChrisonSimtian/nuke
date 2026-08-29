@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Fallout.Common;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using Fallout.Solutions;
+using Microsoft.CodeAnalysis;
 using Scriban;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Fallout.SourceGenerators;
 
@@ -38,7 +34,9 @@ public class StronglyTypedSolutionGenerator : ISourceGenerator
                 .ToList();
 
             if (members.Count == 0)
+            {
                 return;
+            }
 
             var rootDirectory = GetRootDirectoryFrom(context.Compilation);
 
@@ -137,7 +135,9 @@ public class StronglyTypedSolutionGenerator : ISourceGenerator
                                 _ => $"{GetDelimiterChar()}");
 
                         if (Regex.IsMatch(name, @"^[0-9]"))
+                        {
                             return $"{GetDelimiterChar()}{name}";
+                        }
 
                         return name;
                     }

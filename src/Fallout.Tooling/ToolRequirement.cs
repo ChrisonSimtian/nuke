@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common.Tooling;
+﻿namespace Fallout.Common.Tooling;
 
 public interface IRequireTool;
-public interface IRequireToolWithVersion;
 
+public interface IRequireToolWithVersion;
 
 public interface IRequirePathTool : IRequireTool;
 
@@ -14,7 +11,6 @@ public interface IRequireNuGetPackage : IRequireTool, IRequireToolWithVersion;
 public interface IRequireNpmPackage : IRequireTool, IRequireToolWithVersion;
 
 public interface IRequireAptGetPackage : IRequireTool;
-
 
 public class ToolRequirement;
 
@@ -26,12 +22,16 @@ public class PathToolRequirement(string pathExecutable) : ToolRequirement
 public class NuGetPackageRequirement(string packageId, string version = null) : ToolRequirement
 {
     public string PackageId { get; init; } = packageId;
-    public string Version { get; init; } = version ?? NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: false).GetAwaiter().GetResult();
+
+    public string Version { get; init; } = version ??
+                                           NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: false)
+                                               .GetAwaiter().GetResult();
 }
 
 public class NpmPackageRequirement(string packageId, string version = null) : ToolRequirement
 {
     public string PackageId { get; init; } = packageId;
+
     public string Version { get; init; } = version ?? NpmVersionResolver.GetLatestVersion(packageId).GetAwaiter().GetResult();
 }
 

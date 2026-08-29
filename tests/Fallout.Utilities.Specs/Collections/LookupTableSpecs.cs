@@ -1,7 +1,6 @@
 using System;
-using System.Linq;
-using FluentAssertions;
 using Fallout.Common.Utilities.Collections;
+using FluentAssertions;
 using Xunit;
 
 // ReSharper disable ArgumentsStyleLiteral
@@ -24,11 +23,20 @@ public class LookupTableSpecs
         lookupTable.Add("second", value: 5);
         lookupTable.Should().HaveCount(2);
         lookupTable["first"].Should().HaveCount(3);
-        lookupTable["first"].Should().BeEquivalentTo(new[] { 2, 3, 4 });
+        lookupTable["first"].Should().BeEquivalentTo(new[]
+        {
+            2,
+            3,
+            4
+        });
 
         lookupTable.Remove("first", value: 3);
         lookupTable["first"].Should().HaveCount(2);
-        lookupTable["first"].Should().BeEquivalentTo(new[] { 2, 4 });
+        lookupTable["first"].Should().BeEquivalentTo(new[]
+        {
+            2,
+            4
+        });
 
         lookupTable.Remove("first");
         lookupTable["first"].Should().BeEmpty();

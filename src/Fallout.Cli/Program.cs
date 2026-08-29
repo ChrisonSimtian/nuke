@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Fallout.Cli;
 
-internal partial class Program
+internal class Program
 {
     private static async Task<int> Main(string[] args)
     {
@@ -81,10 +81,14 @@ internal partial class Program
         // TODO: copied in FalloutBuild.GetRootDirectory
         AbsolutePath parameterValue = EnvironmentInfo.GetNamedArgument<AbsolutePath>(Constants.RootDirectoryParameterName);
         if (parameterValue != null)
+        {
             return parameterValue;
+        }
 
         if (EnvironmentInfo.GetNamedArgument<bool>(Constants.RootDirectoryParameterName))
+        {
             return EnvironmentInfo.WorkingDirectory;
+        }
 
         return Constants.TryGetRootDirectoryFrom(Directory.GetCurrentDirectory());
     }

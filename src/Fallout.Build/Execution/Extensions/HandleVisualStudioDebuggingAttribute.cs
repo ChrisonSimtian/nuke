@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using Fallout.Common.IO;
 
@@ -16,7 +14,9 @@ internal class HandleVisualStudioDebuggingAttribute : BuildExtensionAttributeBas
     public void OnBuildCreated(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {
         if (!ParameterService.GetParameter<bool>(Constants.VisualStudioDebugParameterName))
+        {
             return;
+        }
 
         VisualStudioDebugFile.WriteAllText(Process.GetCurrentProcess().Id.ToString());
         Assert.True(SpinWait.SpinUntil(() => Debugger.IsAttached, millisecondsTimeout: TimeoutInMilliseconds),

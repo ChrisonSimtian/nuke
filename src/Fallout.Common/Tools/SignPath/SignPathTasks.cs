@@ -29,6 +29,7 @@ public static class SignPathTasks
     }
 
     public static string SignPathApiUrl => "https://app.signpath.io/api/v1";
+
     public static TimeSpan ServiceUnavailableRetryTimeoutInSeconds = TimeSpan.FromSeconds(3);
     public static TimeSpan DefaultHttpClientTimeout = TimeSpan.FromSeconds(15);
     public static TimeSpan UploadAndDownloadRequestTimeout = TimeSpan.FromSeconds(15);
@@ -42,7 +43,8 @@ public static class SignPathTasks
 
     private static string GetSignPathAppVeyorIntegrationUrl(string organizationId, string projectSlug, string signingPolicySlug)
     {
-        return $"{SignPathApiUrl}/{organizationId}/Integrations/AppVeyor?ProjectSlug={projectSlug}&SigningPolicySlug={signingPolicySlug}";
+        return
+            $"{SignPathApiUrl}/{organizationId}/Integrations/AppVeyor?ProjectSlug={projectSlug}&SigningPolicySlug={signingPolicySlug}";
     }
 
     public static async Task<string> GetSigningRequestUrlViaAppVeyor(
@@ -55,18 +57,19 @@ public static class SignPathTasks
         {
             var contentType = "application/json";
             var content = new
-                          {
-                              AppVeyor.Instance.AccountName,
-                              AppVeyor.Instance.ProjectSlug,
-                              AppVeyor.Instance.BuildVersion,
-                              AppVeyor.Instance.BuildId,
-                              AppVeyor.Instance.JobId
-                          };
+            {
+                AppVeyor.Instance.AccountName,
+                AppVeyor.Instance.ProjectSlug,
+                AppVeyor.Instance.BuildVersion,
+                AppVeyor.Instance.BuildId,
+                AppVeyor.Instance.JobId
+            };
 
             using var httpClient = CreateAuthorizedHttpClient(authToken, DefaultHttpClientTimeout);
             var response = await httpClient.PostAsync(
                 GetSignPathAppVeyorIntegrationUrl(organizationId, projectSlug, signingPolicySlug),
                 new StringContent(content.ToJson(JsonExtensions.DefaultSerializerOptions), Encoding.UTF8, contentType));
+
             response.AssertStatusCode(HttpStatusCode.Created);
 
             Log.Information("Signing request created: {Url}", response.Headers.Location.AbsoluteUri.Replace("api/v1", "Web"));
@@ -170,13 +173,13 @@ public static class SignPathTasks
     private static HttpClient CreateAuthorizedHttpClient(string apiToken, TimeSpan timeout)
     {
         return new HttpClient
-               {
-                   Timeout = timeout,
-                   DefaultRequestHeaders =
-                   {
-                       Authorization = new AuthenticationHeaderValue("Bearer", apiToken)
-                   }
-               };
+        {
+            Timeout = timeout,
+            DefaultRequestHeaders =
+            {
+                Authorization = new AuthenticationHeaderValue("Bearer", apiToken)
+            }
+        };
     }
 
     private static HttpResponseMessage SendRequestWithRetry(
@@ -193,12 +196,14 @@ public static class SignPathTasks
             },
             delay: ServiceUnavailableRetryTimeoutInSeconds,
             logAction: Log.Debug);
+
         return response;
     }
 
     private static HttpResponseMessage SendGetRequestWithRetry(HttpClient httpClient, string url)
     {
-        return SendRequestWithRetry(httpClient, () => new HttpRequestMessage(HttpMethod.Get, url), expectedStatusCode: HttpStatusCode.OK);
+        return SendRequestWithRetry(httpClient, () => new HttpRequestMessage(HttpMethod.Get, url),
+            expectedStatusCode: HttpStatusCode.OK);
     }
 
     private static string SubmitVia(
@@ -226,19 +231,23 @@ public static class SignPathTasks
         {
             var content = new MultipartFormDataContent();
             var data = new[]
-                       {
-                           (nameof(artifactConfigurationId), artifactConfigurationId),
-                           (nameof(signingPolicyId), signingPolicyId),
-                           (nameof(projectSlug), projectSlug),
-                           (nameof(artifactConfigurationSlug), artifactConfigurationSlug),
-                           (nameof(signingPolicySlug), signingPolicySlug),
-                           (nameof(description), description)
-                       }
+                {
+                    (nameof(artifactConfigurationId), artifactConfigurationId),
+                    (nameof(signingPolicyId), signingPolicyId),
+                    (nameof(projectSlug), projectSlug),
+                    (nameof(artifactConfigurationSlug), artifactConfigurationSlug),
+                    (nameof(signingPolicySlug), signingPolicySlug),
+                    (nameof(description), description)
+                }
                 .Where(x => x.Item2 != null).ToList();
+
             data.ForEach(x => content.Add(new StringContent(x.Item2), x.Item1));
             content.Add(GetStreamContent(), "Artifact", artifactFile);
 
-            return new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+            return new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = content
+            };
         }
 
         var response = SendRequestWithRetry(httpClient, CreateHttpRequest, HttpStatusCode.Created);
@@ -251,7 +260,8 @@ public static class SignPathTasks
         {
             var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             var jobject = content.GetJsonObject();
-            Assert.Fail($"[{response.StatusCode}] {jobject.GetChildren<JsonValue>("").Select(x => x.GetValue<string>()).JoinNewLine()}");
+            Assert.Fail(
+                $"[{response.StatusCode}] {jobject.GetChildren<JsonValue>("").Select(x => x.GetValue<string>()).JoinNewLine()}");
         }
 
         return response;

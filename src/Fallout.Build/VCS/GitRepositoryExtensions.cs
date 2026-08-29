@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common.Utilities;
+﻿using Fallout.Common.Utilities;
 
 namespace Fallout.Common.Git;
 

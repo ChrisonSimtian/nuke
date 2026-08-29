@@ -1,13 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+using Fallout.Cli.Rewriting.Cake;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
-using Fallout.Cli.Rewriting.Cake;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using static Fallout.Common.Constants;
 using static Fallout.Common.EnvironmentInfo;
 
@@ -28,20 +29,20 @@ internal static class CakeConverter
         var options = new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Script);
         var syntaxTree = CSharpSyntaxTree.ParseText(content, options);
         return new CSharpSyntaxRewriter[]
-               {
-                   new RemoveUsingDirectivesRewriter(),
-                   new RenameFieldIdentifierRewriter(),
-                   new ParameterRewriter(),
-                   new AbsolutePathRewriter(),
-                   new RegularFieldRewriter(),
-                   new TargetDefinitionRewriter(),
-                   new InvocationRewriter(),
-                   new MemberAccessRewriter(),
-                   new IdentifierNameRewriter(),
-                   new ToolInvocationRewriter(),
-                   new ClassRewriter(),
-                   new FormattingRewriter()
-               }.Aggregate(syntaxTree.GetRoot(), (root, rewriter) => rewriter.Visit(root.NormalizeWhitespace(elasticTrivia: true)))
+            {
+                new RemoveUsingDirectivesRewriter(),
+                new RenameFieldIdentifierRewriter(),
+                new ParameterRewriter(),
+                new AbsolutePathRewriter(),
+                new RegularFieldRewriter(),
+                new TargetDefinitionRewriter(),
+                new InvocationRewriter(),
+                new MemberAccessRewriter(),
+                new IdentifierNameRewriter(),
+                new ToolInvocationRewriter(),
+                new ClassRewriter(),
+                new FormattingRewriter()
+            }.Aggregate(syntaxTree.GetRoot(), (root, rewriter) => rewriter.Visit(root.NormalizeWhitespace(elasticTrivia: true)))
             .ToFullString();
     }
 
@@ -57,13 +58,19 @@ internal static class CakeConverter
                 var packageId = match.Groups["packageId"].Value;
                 var packageVersion = match.Groups["version"].Value;
                 if (packageVersion.IsNullOrEmpty())
-                    packageVersion = AsyncHelper.RunSync(() => NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: false));
-                yield return new(packageType, packageId, packageVersion);
+                {
+                    packageVersion = AsyncHelper.RunSync(() =>
+                        NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: false));
+                }
+
+                yield return new ValueTuple<string, string, string>(packageType, packageId, packageVersion);
             }
         }
 
-        return GetPackages(PackageManager.DownloadType, @"#tool ""nuget:\?package=(?'packageId'[\w\d\.]+)(&version=(?'version'[\w\d\.]+))?S*""")
-            .Concat(GetPackages(PackageManager.ReferenceType, @"#addin ""nuget:\?package=(?'packageId'[\w\d\.]+)(&version=(?'version'[\w\d\.]+))?S*"""))
+        return GetPackages(PackageManager.DownloadType,
+                @"#tool ""nuget:\?package=(?'packageId'[\w\d\.]+)(&version=(?'version'[\w\d\.]+))?S*""")
+            .Concat(GetPackages(PackageManager.ReferenceType,
+                @"#addin ""nuget:\?package=(?'packageId'[\w\d\.]+)(&version=(?'version'[\w\d\.]+))?S*"""))
             .Where(x => !x.Id.ContainsOrdinalIgnoreCase("Cake"));
     }
 }

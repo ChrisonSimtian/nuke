@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Fallout.Common.CI;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.CI.GitHubActions.Configuration;
 using Fallout.Common.Execution;
@@ -20,6 +21,7 @@ public class GitHubActionsStepInjectionSpecs
     private sealed class InjectingBuild : ConfigurationGenerationSpecs.TestBuild, IConfigureGitHubActions
     {
         public Action<GitHubActionsStepPipeline> Hook { get; set; }
+
         public void ConfigureSteps(GitHubActionsStepPipeline pipeline) => Hook?.Invoke(pipeline);
     }
 
@@ -28,18 +30,29 @@ public class GitHubActionsStepInjectionSpecs
         Action<TestGitHubActionsAttribute> setup = null,
         ConfigurationGenerationSpecs.TestBuild build = null)
     {
-        build ??= new InjectingBuild { Hook = configure };
+        build ??= new InjectingBuild
+        {
+            Hook = configure
+        };
+
         var relevantTargets = ExecutableTargetFactory.CreateAll(build, x => x.Compile);
 
         var attribute = new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
-                        {
-                            On = new[] { GitHubActionsTrigger.Push },
-                            InvokedTargets = new[] { nameof(ConfigurationGenerationSpecs.TestBuild.Test) }
-                        };
+        {
+            On = new[]
+            {
+                GitHubActionsTrigger.Push
+            },
+            InvokedTargets = new[]
+            {
+                nameof(ConfigurationGenerationSpecs.TestBuild.Test)
+            }
+        };
+
         setup?.Invoke(attribute);
 
         var stream = new MemoryStream();
-        ((ConfigurationAttributeBase)attribute).Build = build;
+        attribute.Build = build;
         attribute.Stream = new StreamWriter(stream, leaveOpen: true);
         attribute.Generate(relevantTargets);
 
@@ -48,7 +61,14 @@ public class GitHubActionsStepInjectionSpecs
     }
 
     private static GitHubActionsCustomStep Marker(string name)
-        => new GitHubActionsCustomStep { Name = name, Run = new[] { "echo " + name } };
+        => new()
+        {
+            Name = name,
+            Run = new[]
+            {
+                "echo " + name
+            }
+        };
 
     [Fact]
     public void Post_checkout_step_lands_after_checkout_before_cache()
@@ -57,6 +77,7 @@ public class GitHubActionsStepInjectionSpecs
 
         yaml.IndexOf("uses: actions/checkout", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("name: 'mark'", StringComparison.Ordinal));
+
         yaml.IndexOf("name: 'mark'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("uses: actions/cache", StringComparison.Ordinal));
     }
@@ -68,6 +89,7 @@ public class GitHubActionsStepInjectionSpecs
 
         yaml.IndexOf("uses: actions/cache", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("name: 'mark'", StringComparison.Ordinal));
+
         yaml.IndexOf("name: 'mark'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("Setup: .NET SDK", StringComparison.Ordinal));
     }
@@ -79,6 +101,7 @@ public class GitHubActionsStepInjectionSpecs
 
         yaml.IndexOf("run: dotnet fallout", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("name: 'mark'", StringComparison.Ordinal));
+
         yaml.IndexOf("name: 'mark'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("Publish:", StringComparison.Ordinal));
     }
@@ -114,12 +137,16 @@ public class GitHubActionsStepInjectionSpecs
         // All four land, in order, anchored to checkout + run block.
         yaml.IndexOf("uses: actions/checkout", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("name: 'post-checkout'", StringComparison.Ordinal));
+
         yaml.IndexOf("name: 'post-checkout'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("name: 'pre-run'", StringComparison.Ordinal));
+
         yaml.IndexOf("name: 'pre-run'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("Setup: .NET SDK", StringComparison.Ordinal));
+
         yaml.IndexOf("run: dotnet fallout", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("name: 'post-run'", StringComparison.Ordinal));
+
         yaml.IndexOf("name: 'post-run'", StringComparison.Ordinal)
             .Should().BeLessThan(yaml.IndexOf("name: 'job-end'", StringComparison.Ordinal));
     }
@@ -146,7 +173,9 @@ public class GitHubActionsStepInjectionSpecs
         var yaml = Render(p =>
         {
             if (p.WorkflowName == "other")
+            {
                 p.Insert(GitHubActionsStepPosition.PostRun, Marker("scoped"));
+            }
         });
 
         yaml.Should().NotContain("name: 'scoped'");
@@ -156,15 +185,22 @@ public class GitHubActionsStepInjectionSpecs
     public void Run_step_without_shell_omits_shell_under_default_shell()
     {
         var yaml = Render(
-            p => p.Insert(GitHubActionsStepPosition.PostRun, new GitHubActionsCustomStep { Name = "noshell", Run = new[] { "echo hi" } }),
+            p => p.Insert(GitHubActionsStepPosition.PostRun, new GitHubActionsCustomStep
+            {
+                Name = "noshell",
+                Run = new[]
+                {
+                    "echo hi"
+                }
+            }),
             setup: a => a.DefaultShell = "pwsh");
 
         // Workflow-level defaults.run.shell is emitted, but the injected run step carries no shell: of its own.
-        yaml.Should().Contain("shell: pwsh");            // the workflow-level defaults block
+        yaml.Should().Contain("shell: pwsh"); // the workflow-level defaults block
         yaml.Should().Contain("name: 'noshell'");
         yaml.Should().Contain("run: echo hi");
         // The only "shell:" occurrence is the workflow-level default (one match).
-        System.Text.RegularExpressions.Regex.Matches(yaml, "shell:").Count.Should().Be(1);
+        Regex.Matches(yaml, "shell:").Count.Should().Be(1);
     }
 
     [Fact]
@@ -183,21 +219,30 @@ public class GitHubActionsStepInjectionSpecs
         var yaml = Render(p =>
         {
             p.Insert(GitHubActionsStepPosition.PostCheckout, new GitHubActionsCustomStep
-                                                             {
-                                                                 Name = "Setup Node",
-                                                                 Uses = "actions/setup-node@v4",
-                                                                 With = new() { ["node-version"] = "20" }
-                                                             });
+            {
+                Name = "Setup Node",
+                Uses = "actions/setup-node@v4",
+                With = new Dictionary<string, string>
+                {
+                    ["node-version"] = "20"
+                }
+            });
+
             p.Insert(GitHubActionsStepPosition.PostRun, new GitHubActionsCustomStep
-                                                        {
-                                                            Name = "Perform CodeQL Analysis",
-                                                            Uses = "github/codeql-action/analyze@v3",
-                                                            If = "github.ref == 'refs/heads/main'"
-                                                        });
+            {
+                Name = "Perform CodeQL Analysis",
+                Uses = "github/codeql-action/analyze@v3",
+                If = "github.ref == 'refs/heads/main'"
+            });
+
             p.Insert(GitHubActionsStepPosition.JobEnd, new GitHubActionsCustomStep
-                                                       {
-                                                           Run = new[] { "echo done", "echo bye" }
-                                                       });
+            {
+                Run = new[]
+                {
+                    "echo done",
+                    "echo bye"
+                }
+            });
         });
 
         return Verifier.Verify(yaml);

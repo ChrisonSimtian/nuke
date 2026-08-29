@@ -13,7 +13,10 @@ public static class WriterExtensions
         where TWrapper : IWriterWrapper
     {
         foreach (var item in enumerable)
+        {
             action(writerWrapper, item);
+        }
+
         return writerWrapper;
     }
 
@@ -24,7 +27,10 @@ public static class WriterExtensions
         where TWrapper : IWriterWrapper
     {
         foreach (var item in enumerable)
+        {
             action(item);
+        }
+
         return writerWrapper;
     }
 
@@ -36,7 +42,10 @@ public static class WriterExtensions
     {
         var list = enumerable.ToList();
         foreach (var item in list)
+        {
             action(item, item.Equals(list.Last()));
+        }
+
         return writerWrapper;
     }
 
@@ -44,7 +53,10 @@ public static class WriterExtensions
         where T : IWriterWrapper
     {
         if (text != null)
+        {
             writerWrapper.Writer.WriteLine(text.Trim());
+        }
+
         return writerWrapper;
     }
 
@@ -58,7 +70,10 @@ public static class WriterExtensions
         where T : IWriterWrapper
     {
         if (condition)
+        {
             writerWrapper.WriteLine(text);
+        }
+
         return writerWrapper;
     }
 
@@ -73,7 +88,10 @@ public static class WriterExtensions
         where T : IWriterWrapper
     {
         if (condition)
+        {
             action(writerWrapper);
+        }
+
         return writerWrapper;
     }
 }

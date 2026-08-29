@@ -16,14 +16,23 @@ namespace Fallout.Common.CI.GitHubActions.Configuration;
 public class GitHubActionsCustomStep : GitHubActionsStep
 {
     public string Name { get; set; }
+
     public string Uses { get; set; }
-    public Dictionary<string, string> With { get; set; } = new Dictionary<string, string>();
-    public Dictionary<string, string> Env { get; set; } = new Dictionary<string, string>();
+
+    public Dictionary<string, string> With { get; set; } = new();
+
+    public Dictionary<string, string> Env { get; set; } = new();
+
     public string If { get; set; }
+
     public string Shell { get; set; }
+
     public string[] Run { get; set; } = new string[0];
+
     public bool? ContinueOnError { get; set; }
+
     public int? TimeoutMinutes { get; set; }
+
     public string Id { get; set; }
 
     public override void Write(CustomFileWriter writer)
@@ -32,15 +41,29 @@ public class GitHubActionsCustomStep : GitHubActionsStep
         var written = false;
 
         if (!Name.IsNullOrWhiteSpace())
-            Scalar("name", Name.SingleQuoteYaml());   // single-quoted so a ':' or apostrophe in the name stays valid YAML
+        {
+            Scalar("name", Name.SingleQuoteYaml()); // single-quoted so a ':' or apostrophe in the name stays valid YAML
+        }
+
         if (!Id.IsNullOrWhiteSpace())
+        {
             Scalar("id", Id);
+        }
+
         if (!Uses.IsNullOrWhiteSpace())
+        {
             Scalar("uses", Uses);
+        }
+
         if ((With?.Count ?? 0) > 0)
+        {
             MapBlock("with", With);
+        }
+
         if ((Env?.Count ?? 0) > 0)
+        {
             MapBlock("env", Env);
+        }
 
         var runCount = Run?.Length ?? 0;
         if (runCount == 1)
@@ -52,17 +75,30 @@ public class GitHubActionsCustomStep : GitHubActionsStep
             writer.WriteLine((written ? "  " : "- ") + "run: |");
             written = true;
             using (writer.Indent())
+            {
                 Run.ForEach(x => writer.WriteLine($"  {x}"));
+            }
         }
 
         if (!Shell.IsNullOrWhiteSpace())
+        {
             Scalar("shell", Shell);
+        }
+
         if (!If.IsNullOrWhiteSpace())
+        {
             Scalar("if", If);
+        }
+
         if (ContinueOnError.HasValue)
+        {
             Scalar("continue-on-error", ContinueOnError.Value ? "true" : "false");
+        }
+
         if (TimeoutMinutes.HasValue)
+        {
             Scalar("timeout-minutes", TimeoutMinutes.Value.ToString(CultureInfo.InvariantCulture));
+        }
 
         return;
 
@@ -78,7 +114,9 @@ public class GitHubActionsCustomStep : GitHubActionsStep
             written = true;
             // Ordinal sort so multi-entry blocks render deterministically (Dictionary order isn't guaranteed).
             using (writer.Indent())
+            {
                 map.OrderBy(x => x.Key, StringComparer.Ordinal).ForEach(x => writer.WriteLine($"  {x.Key}: {x.Value}"));
+            }
         }
     }
 }

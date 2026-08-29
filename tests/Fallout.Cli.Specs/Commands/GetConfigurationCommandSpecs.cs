@@ -1,9 +1,9 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Fallout.Cli.Commands;
 using Fallout.Common.IO;
 using FluentAssertions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Fallout.Cli.Specs.Commands;

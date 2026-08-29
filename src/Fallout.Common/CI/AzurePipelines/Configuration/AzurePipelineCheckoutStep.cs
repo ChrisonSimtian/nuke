@@ -6,8 +6,11 @@ namespace Fallout.Common.CI.AzurePipelines.Configuration;
 public class AzurePipelineCheckoutStep : AzurePipelinesStep
 {
     public bool? InclueSubmodules { get; set; }
+
     public bool? IncludeLargeFileStorage { get; set; }
+
     public int? FetchDepth { get; set; }
+
     public bool? Clean { get; set; }
 
     public override void Write(CustomFileWriter writer)

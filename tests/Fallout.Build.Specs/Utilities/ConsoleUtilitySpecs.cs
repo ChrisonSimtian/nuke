@@ -1,10 +1,10 @@
-using Fallout.Common.Utilities;
-using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Fallout.Build.Utilities;
+using Fallout.Common.Utilities;
 using FluentAssertions;
+using Xunit;
 
 namespace Fallout.Build.Tests.Utilities;
 
@@ -12,13 +12,18 @@ public class ConsoleUtilitySpecs
 {
     private class MockConsole : IConsole
     {
-        public int BufferWidth { get; set; } = 80;
+        public int BufferWidth { get; } = 80;
+
         public int CursorLeft { get; set; }
+
         public int CursorTop { get; set; }
+
         public Queue<ConsoleKeyInfo> Keys { get; } = new();
+
         public void Write(string value, Color? color = null) { }
         public void WriteLine() { }
         public void WriteLine(string value, Color? color = null) { }
+
         public ConsoleKeyInfo ReadKey(bool intercept) => Keys.Count > 0
             ? Keys.Dequeue()
             : new ConsoleKeyInfo('a', ConsoleKey.A, false, false, false);

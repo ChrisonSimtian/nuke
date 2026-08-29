@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Linq;
 using Fallout.Common.CI.AppVeyor;
 
 namespace Fallout.Common.Specs.CI;

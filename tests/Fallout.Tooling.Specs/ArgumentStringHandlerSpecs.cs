@@ -1,6 +1,6 @@
-using FluentAssertions;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
+using FluentAssertions;
 using Xunit;
 
 // ReSharper disable StringLiteralAsInterpolationArgument
@@ -49,10 +49,11 @@ public class ArgumentStringHandlerSpecs
     public void TestAbsolutePathCollection()
     {
         var paths = new AbsolutePath[]
-                    {
-                        "C:\\foo\\bar",
-                        "/foo bar/foo"
-                    };
+        {
+            "C:\\foo\\bar",
+            "/foo bar/foo"
+        };
+
         ArgsToString($"start {paths} end").Should().Be("start C:\\foo\\bar \"/foo bar/foo\" end");
         ArgsToString($"start {paths:sn} end").Should().Be("start C:\\foo\\bar '/foo bar/foo' end");
     }

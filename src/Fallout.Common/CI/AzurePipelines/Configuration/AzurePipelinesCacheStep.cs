@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
-using Fallout.Common.Tooling;
 
 namespace Fallout.Common.CI.AzurePipelines.Configuration;
 
@@ -9,7 +7,9 @@ namespace Fallout.Common.CI.AzurePipelines.Configuration;
 public class AzurePipelinesCacheStep : AzurePipelinesStep
 {
     public AzurePipelinesImage Image { get; set; }
+
     public string[] KeyFiles { get; set; }
+
     public string Path { get; set; }
 
     private string AdjustedPath =>

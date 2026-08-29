@@ -14,17 +14,17 @@ internal ref struct XmlElementAttributes(XmlAttributeCollection? element)
 
     public readonly int Count => element?.Count ?? 0;
 
-    public readonly XmlAttribute Current => element![this.index];
+    public readonly XmlAttribute Current => element![index];
 
-    public readonly XmlElementAttributes GetEnumerator() => new XmlElementAttributes(element);
+    public readonly XmlElementAttributes GetEnumerator() => new(element);
 
     public bool MoveNext()
     {
-        if (element is null || this.index >= element.Count)
+        if (element is null || index >= element.Count)
         {
             return false;
         }
 
-        return ++this.index < element.Count;
+        return ++index < element.Count;
     }
 }

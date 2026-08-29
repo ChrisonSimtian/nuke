@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Linq;
 using Fallout.Common;
 using Fallout.Common.Tools.DotNet;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
@@ -10,6 +8,7 @@ namespace Fallout.Components;
 public interface IGlobalTool : IFalloutBuild
 {
     string GlobalToolPackageName => Path.GetFileNameWithoutExtension(BuildProjectFile);
+
     string GlobalToolVersion => "1.0.0";
 
     Target PackGlobalTool => _ => _

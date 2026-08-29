@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common.Tools.Unity.Logging;
+﻿namespace Fallout.Common.Tools.Unity.Logging;
 
 public enum LogLevel
 {

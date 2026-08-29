@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Fallout.Common.CI.TeamCity;
 
@@ -13,5 +12,6 @@ public class TeamCityTokenAttribute : Attribute
     }
 
     public string Name { get; }
+
     public string Guid { get; }
 }

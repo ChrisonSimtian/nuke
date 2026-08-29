@@ -21,8 +21,13 @@ public interface IOptions
 
     void SetDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, TKey key, TValue value);
     void AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, TKey key, TValue value);
-    void AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, Dictionary<TKey, TValue> value);
-    void AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, ReadOnlyDictionary<TKey, TValue> value);
+
+    void AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider,
+        Dictionary<TKey, TValue> value);
+
+    void AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider,
+        ReadOnlyDictionary<TKey, TValue> value);
+
     void RemoveDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, TKey key);
     void ClearDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider);
 
@@ -88,6 +93,7 @@ public class Options : IOptions
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
             WriteIndented = true,
         };
+
         options.Converters.Add(new TypeConverter());
         options.Converters.Add(LookupTableConverter);
         options.Converters.Add(new EnumerationJsonConverterFactory());
@@ -147,29 +153,34 @@ public class Options : IOptions
 
     #region Dictionary
 
-    private void UsingDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, Action<Dictionary<TKey, TValue>> action)
+    private void UsingDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider,
+        Action<Dictionary<TKey, TValue>> action)
     {
         var dictionary = Get<Dictionary<TKey, TValue>>(provider) ?? new Dictionary<TKey, TValue>();
         action.Invoke(dictionary);
         Set(provider, dictionary);
     }
 
-    void IOptions.SetDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, TKey key, TValue value)
+    void IOptions.SetDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, TKey key,
+        TValue value)
     {
         UsingDictionary(provider, dictionary => dictionary[key] = value);
     }
 
-    void IOptions.AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, TKey key, TValue value)
+    void IOptions.AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, TKey key,
+        TValue value)
     {
         UsingDictionary(provider, dictionary => dictionary.Add(key, value));
     }
 
-    void IOptions.AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, Dictionary<TKey, TValue> value)
+    void IOptions.AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider,
+        Dictionary<TKey, TValue> value)
     {
         UsingDictionary(provider, dictionary => dictionary.AddDictionary(value));
     }
 
-    void IOptions.AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider, ReadOnlyDictionary<TKey, TValue> value)
+    void IOptions.AddDictionary<TKey, TValue>(Expression<Func<IReadOnlyDictionary<TKey, TValue>>> provider,
+        ReadOnlyDictionary<TKey, TValue> value)
     {
         UsingDictionary(provider, dictionary => dictionary.AddDictionary(value));
     }
@@ -188,7 +199,8 @@ public class Options : IOptions
 
     #region Lookup
 
-    private void UsingLookup<TKey, TValue>(Expression<Func<ILookup<TKey, TValue>>> provider, Action<LookupTable<TKey, TValue>> action)
+    private void UsingLookup<TKey, TValue>(Expression<Func<ILookup<TKey, TValue>>> provider,
+        Action<LookupTable<TKey, TValue>> action)
     {
         var lookup = Get<LookupTable<TKey, TValue>>(provider) ?? new LookupTable<TKey, TValue>();
         action.Invoke(lookup);

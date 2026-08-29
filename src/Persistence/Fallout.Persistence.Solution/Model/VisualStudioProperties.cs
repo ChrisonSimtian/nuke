@@ -28,8 +28,8 @@ public readonly struct VisualStudioProperties
     /// </summary>
     public string? OpenWith
     {
-        get => this.GetProperty(nameof(this.OpenWith));
-        set => this.SetProperty(nameof(this.OpenWith), value, string.Empty);
+        get => GetProperty(nameof(OpenWith));
+        set => SetProperty(nameof(OpenWith), value, string.Empty);
     }
 
     /// <summary>
@@ -39,8 +39,8 @@ public readonly struct VisualStudioProperties
     [Obsolete("This setting is not supported.")]
     public bool? HideSolutionNode
     {
-        get => bool.TryParse(this.GetProperty(nameof(this.HideSolutionNode)), out bool hideSolutionNode) ? hideSolutionNode : null;
-        set => this.SetProperty(nameof(this.HideSolutionNode), value == true ? Keywords.XmlTrue : null, Keywords.XmlFalse);
+        get => bool.TryParse(GetProperty(nameof(HideSolutionNode)), out bool hideSolutionNode) ? hideSolutionNode : null;
+        set => SetProperty(nameof(HideSolutionNode), value == true ? Keywords.XmlTrue : null, Keywords.XmlFalse);
     }
 
     /// <summary>
@@ -48,8 +48,8 @@ public readonly struct VisualStudioProperties
     /// </summary>
     public Version? MinimumVersion
     {
-        get => SlnV12Extensions.TryParseVSVersion(this.GetProperty(nameof(this.MinimumVersion)));
-        set => this.SetProperty(nameof(this.MinimumVersion), value?.ToString(), string.Empty);
+        get => SlnV12Extensions.TryParseVSVersion(GetProperty(nameof(MinimumVersion)));
+        set => SetProperty(nameof(MinimumVersion), value?.ToString(), string.Empty);
     }
 
     /// <summary>
@@ -60,8 +60,8 @@ public readonly struct VisualStudioProperties
     /// </remarks>
     public Version? Version
     {
-        get => SlnV12Extensions.TryParseVSVersion(this.GetProperty(nameof(this.Version)));
-        set => this.SetProperty(nameof(this.Version), value?.ToString(), string.Empty);
+        get => SlnV12Extensions.TryParseVSVersion(GetProperty(nameof(Version)));
+        set => SetProperty(nameof(Version), value?.ToString(), string.Empty);
     }
 
     /// <summary>
@@ -69,23 +69,23 @@ public readonly struct VisualStudioProperties
     /// </summary>
     public Guid? SolutionId
     {
-        get => Guid.TryParse(this.GetProperty(nameof(this.SolutionId)), out Guid solutionId) ? solutionId : null;
-        set => this.SetProperty(nameof(this.SolutionId), value == Guid.Empty ? null : value.ToString(), string.Empty);
+        get => Guid.TryParse(GetProperty(nameof(SolutionId)), out Guid solutionId) ? solutionId : null;
+        set => SetProperty(nameof(SolutionId), value == Guid.Empty ? null : value.ToString(), string.Empty);
     }
 
     private string? GetProperty(string propertyName)
     {
-        Argument.ThrowIfNull(this.solution, nameof(this.solution));
-        SolutionPropertyBag? vsProperties = this.solution.FindProperties(SectionName.VisualStudio);
+        Argument.ThrowIfNull(solution, nameof(solution));
+        SolutionPropertyBag? vsProperties = solution.FindProperties(SectionName.VisualStudio);
         return vsProperties is null ? null : vsProperties.TryGetValue(propertyName, out string? value) ? value : null;
     }
 
     private void SetProperty(string propertyName, string? value, string defaultValue)
     {
-        Argument.ThrowIfNull(this.solution, nameof(this.solution));
+        Argument.ThrowIfNull(solution, nameof(solution));
         if (value is null || StringComparer.OrdinalIgnoreCase.Equals(value, defaultValue))
         {
-            SolutionPropertyBag? vsProperties = this.solution.FindProperties(SectionName.VisualStudio);
+            SolutionPropertyBag? vsProperties = solution.FindProperties(SectionName.VisualStudio);
             if (vsProperties is null)
             {
                 return;
@@ -94,12 +94,12 @@ public readonly struct VisualStudioProperties
             _ = vsProperties.Remove(propertyName);
             if (vsProperties.Count == 0)
             {
-                _ = this.solution.RemoveProperties(SectionName.VisualStudio);
+                _ = solution.RemoveProperties(SectionName.VisualStudio);
             }
         }
         else
         {
-            this.solution.AddProperties(SectionName.VisualStudio).Add(propertyName, value);
+            solution.AddProperties(SectionName.VisualStudio).Add(propertyName, value);
         }
     }
 }

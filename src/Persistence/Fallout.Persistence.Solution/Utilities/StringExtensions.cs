@@ -8,27 +8,29 @@ internal static class StringExtensions
     /// <inheritdoc cref="string.IsNullOrEmpty(string)"/>
     internal static bool IsNullOrEmpty([NotNullWhen(returnValue: false)] this string? s) => string.IsNullOrEmpty(s);
 
-    internal static string? NullIfEmpty(this string? str) => IsNullOrEmpty(str) ? null : str;
+    internal static string? NullIfEmpty(this string? str) => str.IsNullOrEmpty() ? null : str;
 
     internal static Guid? NullIfEmpty(this Guid? guid) => guid == Guid.Empty ? null : guid;
 
     internal static Guid? NullIfEmpty(this Guid guid) => guid == Guid.Empty ? null : guid;
 
-    internal static bool EqualsOrdinal(this StringSpan span, StringSpan str) => MemoryExtensions.Equals(span, str, StringComparison.Ordinal);
+    internal static bool EqualsOrdinal(this StringSpan span, StringSpan str) => span.Equals(str, StringComparison.Ordinal);
 
-    internal static bool EqualsOrdinalIgnoreCase(this StringSpan span, StringSpan str) => MemoryExtensions.Equals(span, str, StringComparison.OrdinalIgnoreCase);
+    internal static bool EqualsOrdinalIgnoreCase(this StringSpan span, StringSpan str) =>
+        span.Equals(str, StringComparison.OrdinalIgnoreCase);
 
 #if NETFRAMEWORK || NETSTANDARD
 
-    internal static bool EqualsOrdinal(this StringSpan span, string str) => EqualsOrdinal(span, str.AsSpan());
+    internal static bool EqualsOrdinal(this StringSpan span, string str) => span.EqualsOrdinal(str.AsSpan());
 
-    internal static bool EqualsOrdinalIgnoreCase(this StringSpan span, string str) => EqualsOrdinalIgnoreCase(span, str.AsSpan());
+    internal static bool EqualsOrdinalIgnoreCase(this StringSpan span, string str) => span.EqualsOrdinalIgnoreCase(str.AsSpan());
 
     internal static int IndexOf(this StringSpan span, string str) => span.IndexOf(str.AsSpan());
 
     internal static bool StartsWith(this StringSpan span, string str) => span.StartsWith(str.AsSpan());
 
-    internal static bool StartsWith(this StringSpan span, string str, StringComparison comparisonType) => span.StartsWith(str.AsSpan(), comparisonType);
+    internal static bool StartsWith(this StringSpan span, string str, StringComparison comparisonType) =>
+        span.StartsWith(str.AsSpan(), comparisonType);
 
     internal static bool StartsWith(this string str, char value) => !str.IsNullOrEmpty() && str[0] == value;
 

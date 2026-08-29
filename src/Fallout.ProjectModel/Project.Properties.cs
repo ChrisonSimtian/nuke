@@ -1,7 +1,5 @@
 ﻿using Fallout.Common.Utilities;
 
-using Fallout.Common;
-
 namespace Fallout.Solutions;
 
 public static partial class ProjectExtensions

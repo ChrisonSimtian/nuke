@@ -13,7 +13,9 @@ public static class TemplateUtility
     {
         var index = content.FindIndex(x => x.TrimStart().StartsWith(section)) + 1;
         foreach (var line in lines)
+        {
             content.Insert(index++, line);
+        }
     }
 
     public static ILookup<string, string> ExtractAndRemoveRegions(List<string> content, string beginPrefix, string endPrefix)
@@ -23,7 +25,9 @@ public static class TemplateUtility
         for (var i = 0; i < content.Count; i++)
         {
             if (!content[i].TrimStart().StartsWith(beginPrefix))
+            {
                 continue;
+            }
 
             var regionName = content[i].TrimStart().TrimStart(beginPrefix).TrimStart();
             i++;
@@ -70,26 +74,34 @@ public static class TemplateUtility
         Assert.DirectoryExists(directory);
 
         if (excludeDirectory != null && excludeDirectory(directory))
+        {
             return;
+        }
 
         bool ShouldMove(AbsolutePath file) => tokens?.Keys.Any(x => file.Name.Contains(x)) ?? false;
 
         foreach (var file in directory.GetFiles())
         {
             if (excludeFile != null && excludeFile(file))
+            {
                 continue;
+            }
 
             FillTemplateFile(file, tokens);
 
             if (ShouldMove(file))
+            {
                 file.Rename(file.Name.Replace(tokens), ExistsPolicy.FileOverwriteIfNewer);
+            }
         }
 
         directory.GetDirectories()
             .ForEach(x => FillTemplateDirectoryRecursivelyInternal(x, tokens, excludeDirectory, excludeFile));
 
         if (ShouldMove(directory))
+        {
             directory.Rename(directory.Name.Replace(tokens), ExistsPolicy.MergeAndOverwriteIfNewer);
+        }
     }
 
     public static void FillTemplateFile(
@@ -128,7 +140,9 @@ public static class TemplateUtility
     {
         var commentIndex = line.LastIndexOf("  // ", StringComparison.OrdinalIgnoreCase);
         if (!ShouldIncludeLine(line, commentIndex, tokens))
+        {
             return null;
+        }
 
         return (commentIndex == -1
                 ? line
@@ -139,16 +153,23 @@ public static class TemplateUtility
     private static bool ShouldIncludeLine(string line, int commentIndex, IReadOnlyDictionary<string, string> tokens)
     {
         if (commentIndex == -1)
+        {
             return true;
+        }
 
         var requiredTokensText = line[(commentIndex + 4)..].Replace(" ", string.Empty);
-        var requiredTokens = requiredTokensText.Split(new[] { "||", "&&" }, StringSplitOptions.RemoveEmptyEntries);
+        var requiredTokens = requiredTokensText.Split(new[]
+        {
+            "||",
+            "&&"
+        }, StringSplitOptions.RemoveEmptyEntries);
+
         var orConjunction = requiredTokensText.Contains("||");
         var andConjunction = requiredTokensText.Contains("&&");
         Assert.False(orConjunction && andConjunction, "Conjunctions AND and OR can only be used mutually exclusively");
 
-        return andConjunction && requiredTokens.All(tokens.ContainsKey) ||
-               !andConjunction && requiredTokens.Any(tokens.ContainsKey);
+        return (andConjunction && requiredTokens.All(tokens.ContainsKey)) ||
+               (!andConjunction && requiredTokens.Any(tokens.ContainsKey));
     }
 
     private static void RemoveDoubleEmptyLines(IList<string> lines)

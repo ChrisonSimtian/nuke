@@ -12,7 +12,9 @@ partial class AbsolutePathExtensions
     public static void DeleteFile(this AbsolutePath path)
     {
         if (!path.FileExists())
+        {
             return;
+        }
 
         File.SetAttributes(path, FileAttributes.Normal);
         File.Delete(path);
@@ -24,7 +26,9 @@ partial class AbsolutePathExtensions
     public static void DeleteDirectory(this AbsolutePath path)
     {
         if (!path.DirectoryExists())
+        {
             return;
+        }
 
         Directory.GetFiles(path, "*", SearchOption.AllDirectories).ForEach(x => File.SetAttributes(x, FileAttributes.Normal));
         Directory.Delete(path, recursive: true);

@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
 using Xunit;
 
 namespace Fallout.Migrate.Analyzers.Specs;
@@ -9,86 +11,101 @@ public class NukeMigrationAnalyzerSpecs
     // Without these the compiler emits CS0246 alongside FALLOUT004 and the
     // verifier (rightly) complains about an unexpected extra diagnostic.
     private const string LegacyNukeStub = """
-        namespace Nuke.Common
-        {
-            public class AbsolutePath { }
-            namespace Tools.DotNet
-            {
-                public static class DotNetTasks { public static int X() => 0; }
-            }
-        }
-        """;
+                                          namespace Nuke.Common
+                                          {
+                                              public class AbsolutePath { }
+                                              namespace Tools.DotNet
+                                              {
+                                                  public static class DotNetTasks { public static int X() => 0; }
+                                              }
+                                          }
+                                          """;
 
     [Fact]
     public async Task FlagsUsingNamespaceDirective()
     {
         var source = $$"""
-            using {|FALLOUT004:Nuke.Common|};
-            namespace X { class C { } }
-            {{LegacyNukeStub}}
-            """;
+                       using {|FALLOUT004:Nuke.Common|};
+                       namespace X { class C { } }
+                       {{LegacyNukeStub}}
+                       """;
 
-        await new AnalyzerSpecs { TestCode = source }.RunAsync();
+        await new AnalyzerSpecs
+        {
+            TestCode = source
+        }.RunAsync();
     }
 
     [Fact]
     public async Task FlagsUsingStaticDirective()
     {
         var source = $$"""
-            using static {|FALLOUT004:Nuke.Common.Tools.DotNet.DotNetTasks|};
-            namespace X { class C { } }
-            {{LegacyNukeStub}}
-            """;
+                       using static {|FALLOUT004:Nuke.Common.Tools.DotNet.DotNetTasks|};
+                       namespace X { class C { } }
+                       {{LegacyNukeStub}}
+                       """;
 
-        await new AnalyzerSpecs { TestCode = source }.RunAsync();
+        await new AnalyzerSpecs
+        {
+            TestCode = source
+        }.RunAsync();
     }
 
     [Fact]
     public async Task FlagsFullyQualifiedTypeReference()
     {
         var source = $$"""
-            namespace X
-            {
-                class C
-                {
-                    void M()
-                    {
-                        {|FALLOUT004:Nuke.Common.AbsolutePath|} x = null;
-                    }
-                }
-            }
-            {{LegacyNukeStub}}
-            """;
+                       namespace X
+                       {
+                           class C
+                           {
+                               void M()
+                               {
+                                   {|FALLOUT004:Nuke.Common.AbsolutePath|} x = null;
+                               }
+                           }
+                       }
+                       {{LegacyNukeStub}}
+                       """;
 
-        await new AnalyzerSpecs { TestCode = source }.RunAsync();
+        await new AnalyzerSpecs
+        {
+            TestCode = source
+        }.RunAsync();
     }
 
     [Fact]
     public async Task FlagsBareNukeBuildBaseType()
     {
         const string source = """
-            namespace X
-            {
-                class B : {|FALLOUT004:NukeBuild|} { }
-                class NukeBuild { }
-            }
-            """;
+                              namespace X
+                              {
+                                  class B : {|FALLOUT004:NukeBuild|} { }
+                                  class NukeBuild { }
+                              }
+                              """;
 
-        await new AnalyzerSpecs { TestCode = source }.RunAsync();
+        await new AnalyzerSpecs
+        {
+            TestCode = source
+        }.RunAsync();
     }
 
     [Fact]
     public async Task FlagsBareINukeBuildBaseInterface()
     {
         const string source = """
-            namespace X
-            {
-                interface IFoo : {|FALLOUT004:INukeBuild|} { }
-                interface INukeBuild { }
-            }
-            """;
+                              namespace X
+                              {
+                                  interface IFoo : {|FALLOUT004:INukeBuild|} { }
+                                  interface INukeBuild { }
+                              }
+                              """;
 
-        await new AnalyzerSpecs { TestCode = source }.RunAsync();
+        await new AnalyzerSpecs
+        {
+            TestCode = source
+        }.RunAsync();
     }
 
     [Fact]
@@ -96,15 +113,15 @@ public class NukeMigrationAnalyzerSpecs
     {
         // Drop the Fallout marker reference for this test — the analyzer's guard
         // should short-circuit and produce no diagnostics.
-        var test = new Microsoft.CodeAnalysis.CSharp.Testing.CSharpAnalyzerTest<
+        var test = new CSharpAnalyzerTest<
             NukeMigrationAnalyzer,
-            Microsoft.CodeAnalysis.Testing.DefaultVerifier>
+            DefaultVerifier>
         {
             TestCode = $$"""
-                using Nuke.Common;
-                namespace X { class C { } }
-                {{LegacyNukeStub}}
-                """,
+                         using Nuke.Common;
+                         namespace X { class C { } }
+                         {{LegacyNukeStub}}
+                         """,
         };
 
         // No expected diagnostics: guard should suppress.
@@ -115,19 +132,22 @@ public class NukeMigrationAnalyzerSpecs
     public async Task DoesNotFireOnUnrelatedIdentifiers()
     {
         const string source = """
-            namespace X
-            {
-                class C
-                {
-                    void M()
-                    {
-                        var x = 1;
-                        var y = System.DateTime.Now;
-                    }
-                }
-            }
-            """;
+                              namespace X
+                              {
+                                  class C
+                                  {
+                                      void M()
+                                      {
+                                          var x = 1;
+                                          var y = System.DateTime.Now;
+                                      }
+                                  }
+                              }
+                              """;
 
-        await new AnalyzerSpecs { TestCode = source }.RunAsync();
+        await new AnalyzerSpecs
+        {
+            TestCode = source
+        }.RunAsync();
     }
 }

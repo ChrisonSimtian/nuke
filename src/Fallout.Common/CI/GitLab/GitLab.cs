@@ -35,13 +35,15 @@ public partial class GitLab : Host, IBuildServer
     }
 
     string IBuildServer.Branch => CommitRefName;
+
     string IBuildServer.Commit => CommitSha;
 
     public void BeginSection(string text, bool collapsed = true)
     {
         var sectionId = GetSectionId(text);
         var unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        messageSink($"{SectionStartSequence}section_start:{unixTimestamp}:{sectionId}[collapsed={collapsed.ToString().ToLowerInvariant()}]{SectionResetSequence}{text}");
+        messageSink(
+            $"{SectionStartSequence}section_start:{unixTimestamp}:{sectionId}[collapsed={collapsed.ToString().ToLowerInvariant()}]{SectionResetSequence}{text}");
     }
 
     public void EndSection(string text)
@@ -204,7 +206,8 @@ public partial class GitLab : Host, IBuildServer
     /// The project visibility.
     /// Can be <c>internal</c>, <c>private</c>, or <c>public</c>.
     /// </summary>
-    public GitLabProjectVisibility ProjectVisibility => EnvironmentInfo.GetVariable<GitLabProjectVisibility>("CI_PROJECT_VISIBILITY");
+    public GitLabProjectVisibility ProjectVisibility =>
+        EnvironmentInfo.GetVariable<GitLabProjectVisibility>("CI_PROJECT_VISIBILITY");
 
     /// <summary>
     /// Address of the container registry server, formatted as <c>&lt;host&gt;[:&lt;port&gt;]</c>.
@@ -390,7 +393,8 @@ public partial class GitLab : Host, IBuildServer
     /// <summary>
     /// The direct group image prefix for pulling images through the Dependency Proxy.
     /// </summary>
-    public string DependencyProxyDirectGroupImagePrefix => EnvironmentInfo.GetVariable("CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX");
+    public string DependencyProxyDirectGroupImagePrefix =>
+        EnvironmentInfo.GetVariable("CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX");
 
     /// <summary>
     /// The top-level group image prefix for pulling images through the Dependency Proxy.
@@ -490,14 +494,16 @@ public partial class GitLab : Host, IBuildServer
     /// <a href="https://docs.gitlab.com/ee/update/deprecations.html#old-versions-of-json-web-tokens-are-deprecated">Deprecated in GitLab 15.9</a> and scheduled to be removed in GitLab 17.0.
     /// Use ID tokens instead.
     /// </summary>
-    [Obsolete] public string JobJwt => EnvironmentInfo.GetVariable("CI_JOB_JWT");
+    [Obsolete]
+    public string JobJwt => EnvironmentInfo.GetVariable("CI_JOB_JWT");
 
     /// <summary>
     /// The same value as <c>$CI_JOB_JWT</c>.
     /// <a href="https://docs.gitlab.com/ee/update/deprecations.html#old-versions-of-json-web-tokens-are-deprecated">Deprecated in GitLab 15.9</a> and scheduled to be removed in GitLab 17.0.
     /// Use ID tokens instead.
     /// </summary>
-    [Obsolete] public string JobJwtV1 => EnvironmentInfo.GetVariable("CI_JOB_JWT_V1");
+    [Obsolete]
+    public string JobJwtV1 => EnvironmentInfo.GetVariable("CI_JOB_JWT_V1");
 
     /// <summary>
     /// A newly formatted RS256 JSON web token to increase compatibility.
@@ -507,7 +513,8 @@ public partial class GitLab : Host, IBuildServer
     /// <a href="https://docs.gitlab.com/ee/update/deprecations.html#old-versions-of-json-web-tokens-are-deprecated">Deprecated in GitLab 15.9</a> and scheduled to be removed in GitLab 17.0.
     /// Use ID tokens instead.
     /// </summary>
-    [Obsolete] public string JobJwtV2 => EnvironmentInfo.GetVariable("CI_JOB_JWT_V2");
+    [Obsolete]
+    public string JobJwtV2 => EnvironmentInfo.GetVariable("CI_JOB_JWT_V2");
 
     /// <summary>
     /// <c>$CI_JOB_NAME</c> in lowercase, shortened to 63 bytes, and with everything except <c>0-9</c> and <c>a-z</c> replaced with <c>-</c>.
@@ -806,7 +813,8 @@ public partial class GitLab : Host, IBuildServer
     /// <summary>
     /// <c>true</c> if <c>$CI_MERGE_REQUEST_DESCRIPTION</c> is truncated down to 2700 characters because the description of the merge request is too long.
     /// </summary>
-    public bool MergeRequestDescriptionIsTruncated => EnvironmentInfo.GetVariable<bool>("CI_MERGE_REQUEST_DESCRIPTION_IS_TRUNCATED");
+    public bool MergeRequestDescriptionIsTruncated =>
+        EnvironmentInfo.GetVariable<bool>("CI_MERGE_REQUEST_DESCRIPTION_IS_TRUNCATED");
 
     /// <summary>
     /// The instance-level ID of the merge request.
@@ -861,7 +869,8 @@ public partial class GitLab : Host, IBuildServer
     /// <summary>
     /// <c>true</c> when the source branch of the merge request is protected.
     /// </summary>
-    public bool MergeRequestSourceBranchProtected => EnvironmentInfo.GetVariable<bool>("CI_MERGE_REQUEST_SOURCE_BRANCH_PROTECTED");
+    public bool MergeRequestSourceBranchProtected =>
+        EnvironmentInfo.GetVariable<bool>("CI_MERGE_REQUEST_SOURCE_BRANCH_PROTECTED");
 
     /// <summary>
     /// The HEAD SHA of the source branch of the merge request.
@@ -898,7 +907,8 @@ public partial class GitLab : Host, IBuildServer
     /// <summary>
     /// <c>true</c> when the target branch of the merge request is protected.
     /// </summary>
-    public bool MergeRequestTargetBranchProtected => EnvironmentInfo.GetVariable<bool>("CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED");
+    public bool MergeRequestTargetBranchProtected =>
+        EnvironmentInfo.GetVariable<bool>("CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED");
 
     /// <summary>
     /// The HEAD SHA of the target branch of the merge request.
@@ -920,17 +930,20 @@ public partial class GitLab : Host, IBuildServer
     /// <summary>
     /// The source repository name of the pull request.
     /// </summary>
-    public string ExternalPullRequestSourceRepository => EnvironmentInfo.GetVariable("CI_EXTERNAL_PULL_REQUEST_SOURCE_REPOSITORY");
+    public string ExternalPullRequestSourceRepository =>
+        EnvironmentInfo.GetVariable("CI_EXTERNAL_PULL_REQUEST_SOURCE_REPOSITORY");
 
     /// <summary>
     /// The target repository name of the pull request.
     /// </summary>
-    public string ExternalPullRequestTargetRepository => EnvironmentInfo.GetVariable("CI_EXTERNAL_PULL_REQUEST_TARGET_REPOSITORY");
+    public string ExternalPullRequestTargetRepository =>
+        EnvironmentInfo.GetVariable("CI_EXTERNAL_PULL_REQUEST_TARGET_REPOSITORY");
 
     /// <summary>
     /// The source branch name of the pull request.
     /// </summary>
-    public string ExternalPullRequestSourceBranchName => EnvironmentInfo.GetVariable("CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_NAME");
+    public string ExternalPullRequestSourceBranchName =>
+        EnvironmentInfo.GetVariable("CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_NAME");
 
     /// <summary>
     /// The HEAD SHA of the source branch of the pull request.
@@ -940,7 +953,8 @@ public partial class GitLab : Host, IBuildServer
     /// <summary>
     /// The target branch name of the pull request.
     /// </summary>
-    public string ExternalPullRequestTargetBranchName => EnvironmentInfo.GetVariable("CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME");
+    public string ExternalPullRequestTargetBranchName =>
+        EnvironmentInfo.GetVariable("CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME");
 
     /// <summary>
     /// The HEAD SHA of the target branch of the pull request.

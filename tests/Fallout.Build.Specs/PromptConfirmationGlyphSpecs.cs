@@ -38,7 +38,8 @@ public class PromptConfirmationGlyphSpecs
     [Fact]
     public void An_accepted_choice_is_marked_with_a_check()
     {
-        var console = Prompt(() => ConsoleUtility.PromptForChoice("Pick?", (Value: 1, Description: "first"), (Value: 2, Description: "second")));
+        var console = Prompt(() =>
+            ConsoleUtility.PromptForChoice("Pick?", (Value: 1, Description: "first"), (Value: 2, Description: "second")));
 
         console.LastLine.Should().Be($"{CheckMark}  first");
     }
@@ -91,7 +92,9 @@ public class PromptConfirmationGlyphSpecs
         public string LastLine => Lines.Last(x => !x.IsNullOrWhiteSpace()).TrimEnd();
 
         public int BufferWidth => 80;
+
         public int CursorLeft { get; set; }
+
         public int CursorTop { get; set; }
 
         public void Write(string value, Color? color = null)

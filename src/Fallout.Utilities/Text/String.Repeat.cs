@@ -1,5 +1,4 @@
-﻿
-namespace Fallout.Common.Utilities;
+﻿namespace Fallout.Common.Utilities;
 
 public static partial class StringExtensions
 {

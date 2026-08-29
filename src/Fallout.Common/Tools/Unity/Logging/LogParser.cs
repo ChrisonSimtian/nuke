@@ -14,7 +14,8 @@ internal class LogParser
     private readonly IReadOnlyList<BlockMatcher> blockMatchers =
         new[]
         {
-            new BlockMatcher("Player statistics", "\\*\\*\\*Player size statistics\\*\\*\\*", "Unloading.*", endMatchType: MatchType.Exclusive),
+            new BlockMatcher("Player statistics", "\\*\\*\\*Player size statistics\\*\\*\\*", "Unloading.*",
+                endMatchType: MatchType.Exclusive),
             new BlockMatcher("Lightmap", "---- Lightmapping Start for (.*) ----", "---- Lightmapping End for (.*) ----"),
             new BlockMatcher("Compile", "-----Compiler Commandline Arguments:", "-----EndCompilerOutput---------------"),
             new BlockMatcher("Update", "Updating (.+) - GUID: .*", "\\s*done: hash - .+"),
@@ -61,6 +62,7 @@ internal class LogParser
                     LogLine(message);
                     LogBlockEnd();
                     return;
+
                 case MatchType.Exclusive:
                     LogBlockEnd();
                     break;
@@ -76,6 +78,7 @@ internal class LogParser
                 case MatchType.Inclusive:
                     LogBlockStart(block);
                     break;
+
                 case MatchType.Exclusive:
                     LogLine(message);
                     LogBlockStart(block);

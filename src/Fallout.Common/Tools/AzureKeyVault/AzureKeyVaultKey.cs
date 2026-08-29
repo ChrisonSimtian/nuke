@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
-using Azure.Security.KeyVault.Keys;
+﻿using Azure.Security.KeyVault.Keys;
 
-namespace Fallout.Common.Tools.AzureKeyVault
+namespace Fallout.Common.Tools.AzureKeyVault;
+
+public class AzureKeyVaultKey
 {
-    public class AzureKeyVaultKey
-    {
-        public JsonWebKey Key { get; internal set; }
-        public string Secret { get; internal set; }
-    }
+    public JsonWebKey Key { get; internal set; }
+
+    public string Secret { get; internal set; }
 }

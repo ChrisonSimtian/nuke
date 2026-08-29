@@ -12,30 +12,30 @@ internal ref struct XmlElementSubElements(XmlNode? element, string? filterByName
 {
     private XmlNode? child;
 
-    public readonly XmlElement Current => (object.ReferenceEquals(this.child, element) ? null : this.child as XmlElement)!;
+    public readonly XmlElement Current => (ReferenceEquals(child, element) ? null : child as XmlElement)!;
 
     public bool MoveNext()
     {
         // use element as "sentinel end value", null as before first. (if element is null it is also an end as coincidence).
-        if (object.ReferenceEquals(this.child, element) || element is null)
+        if (ReferenceEquals(child, element) || element is null)
         {
             return false;
         }
 
         do
         {
-            this.child = this.child is null ? element.FirstChild : this.child.NextSibling;
-            if (this.child is XmlElement)
+            child = child is null ? element.FirstChild : child.NextSibling;
+            if (child is XmlElement)
             {
-                if (filterByName is null || this.child.Name == filterByName)
+                if (filterByName is null || child.Name == filterByName)
                 {
                     return true;
                 }
             }
         }
-        while (this.child is not null);
+        while (child is not null);
 
-        this.child = element;
+        child = element;
         return false;
     }
 }

@@ -44,16 +44,38 @@ internal static class EncryptionUtility
     private const int V1KeyLength = 32;
     private const int V1IvLength = 16;
     private const int V1Iterations = 10_000;
-    private static readonly byte[] v1StaticSalt = { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 };
+
+    private static readonly byte[] v1StaticSalt =
+    {
+        0x49,
+        0x76,
+        0x61,
+        0x6e,
+        0x20,
+        0x4d,
+        0x65,
+        0x64,
+        0x76,
+        0x65,
+        0x64,
+        0x65,
+        0x76
+    };
 
     public static string Decrypt(string cipherText, string password, string name)
     {
         try
         {
             if (cipherText.StartsWith(V2Prefix, StringComparison.Ordinal))
+            {
                 return DecryptV2(cipherText[V2Prefix.Length..], password);
+            }
+
             if (cipherText.StartsWith(V1Prefix, StringComparison.Ordinal))
+            {
                 return DecryptV1(cipherText[V1Prefix.Length..], password);
+            }
+
             // Unprefixed ciphertext from very old setups — treat as v1.
             return DecryptV1(cipherText, password);
         }
@@ -79,7 +101,9 @@ internal static class EncryptionUtility
         var ciphertext = new byte[plaintext.Length];
         var tag = new byte[V2TagLength];
         using (var aes = new AesGcm(key, V2TagLength))
+        {
             aes.Encrypt(nonce, plaintext, ciphertext, tag);
+        }
 
         var blob = new byte[V2SaltLength + V2NonceLength + V2TagLength + ciphertext.Length];
         Buffer.BlockCopy(salt, 0, blob, 0, V2SaltLength);
@@ -117,7 +141,9 @@ internal static class EncryptionUtility
 
         var plaintext = new byte[ciphertextLength];
         using (var aes = new AesGcm(key, V2TagLength))
+        {
             aes.Decrypt(nonce, ciphertext, tag, plaintext);
+        }
 
         return Encoding.UTF8.GetString(plaintext);
     }
@@ -127,7 +153,9 @@ internal static class EncryptionUtility
         var ciphertext = Convert.FromBase64String(base64Ciphertext);
         var passwordBytes = Encoding.UTF8.GetBytes(password);
 
-        var keyAndIv = Rfc2898DeriveBytes.Pbkdf2(passwordBytes, v1StaticSalt, V1Iterations, HashAlgorithmName.SHA256, V1KeyLength + V1IvLength);
+        var keyAndIv = Rfc2898DeriveBytes.Pbkdf2(passwordBytes, v1StaticSalt, V1Iterations, HashAlgorithmName.SHA256,
+            V1KeyLength + V1IvLength);
+
         var key = new byte[V1KeyLength];
         var iv = new byte[V1IvLength];
         Buffer.BlockCopy(keyAndIv, 0, key, 0, V1KeyLength);
@@ -138,7 +166,10 @@ internal static class EncryptionUtility
         aes.IV = iv;
         using var memoryStream = new MemoryStream();
         using (var cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Write))
+        {
             cryptoStream.Write(ciphertext, 0, ciphertext.Length);
+        }
+
         return Encoding.UTF8.GetString(memoryStream.ToArray());
     }
 
@@ -153,7 +184,9 @@ internal static class EncryptionUtility
         var plaintext = Encoding.UTF8.GetBytes(clearText);
         var passwordBytes = Encoding.UTF8.GetBytes(password);
 
-        var keyAndIv = Rfc2898DeriveBytes.Pbkdf2(passwordBytes, v1StaticSalt, V1Iterations, HashAlgorithmName.SHA256, V1KeyLength + V1IvLength);
+        var keyAndIv = Rfc2898DeriveBytes.Pbkdf2(passwordBytes, v1StaticSalt, V1Iterations, HashAlgorithmName.SHA256,
+            V1KeyLength + V1IvLength);
+
         var key = new byte[V1KeyLength];
         var iv = new byte[V1IvLength];
         Buffer.BlockCopy(keyAndIv, 0, key, 0, V1KeyLength);
@@ -164,7 +197,9 @@ internal static class EncryptionUtility
         aes.IV = iv;
         using var memoryStream = new MemoryStream();
         using (var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
+        {
             cryptoStream.Write(plaintext, 0, plaintext.Length);
+        }
 
         return V1Prefix + Convert.ToBase64String(memoryStream.ToArray());
     }

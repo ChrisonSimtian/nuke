@@ -15,7 +15,7 @@ namespace Fallout.Persistence.Solution.Utilities;
 internal readonly struct Lictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
     where TKey : notnull
 {
-    private static readonly EntryKeyComparer DefaultComparer = new EntryKeyComparer(Comparer<TKey>.Default);
+    private static readonly EntryKeyComparer DefaultComparer = new(Comparer<TKey>.Default);
 
     private readonly List<KeyValuePair<TKey, TValue>> items;
     private readonly EntryKeyComparer comparer;
@@ -28,18 +28,18 @@ internal readonly struct Lictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TV
     internal Lictionary(int capacity, IComparer<TKey>? comparer = null)
     {
         this.comparer = comparer is null ? DefaultComparer : new EntryKeyComparer(comparer);
-        this.items = new List<KeyValuePair<TKey, TValue>>(capacity);
+        items = new List<KeyValuePair<TKey, TValue>>(capacity);
     }
 
     internal Lictionary(IReadOnlyCollection<KeyValuePair<TKey, TValue>> values, IComparer<TKey>? comparer = null)
     {
         Argument.ThrowIfNull(values, nameof(values));
         this.comparer = comparer is null ? DefaultComparer : new EntryKeyComparer(comparer);
-        this.items = [.. values];
-        this.items.Sort(this.comparer);
+        items = [.. values];
+        items.Sort(this.comparer);
 
         KeyValuePair<TKey, TValue> lastEntry = default;
-        foreach (KeyValuePair<TKey, TValue> entry in this.items)
+        foreach (KeyValuePair<TKey, TValue> entry in items)
         {
             if (this.comparer.Equals(lastEntry, entry))
             {
@@ -54,28 +54,28 @@ internal readonly struct Lictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TV
 
     public IEnumerable<TValue> Values => this.Select(x => x.Value);
 
-    public int Count => this.items.Count;
+    public int Count => items.Count;
 
     public TValue this[TKey key]
     {
-        get => this.TryGetValue(key, out TValue? value) ? value : throw new KeyNotFoundException(nameof(key));
+        get => TryGetValue(key, out TValue? value) ? value : throw new KeyNotFoundException(nameof(key));
         set
         {
-            int index = this.BinarySearch(key);
+            int index = BinarySearch(key);
             if (index >= 0)
             {
-                this.items[index] = new(key, value);
+                items[index] = new KeyValuePair<TKey, TValue>(key, value);
             }
             else
             {
-                this.items.Insert(~index, new(key, value));
+                items.Insert(~index, new KeyValuePair<TKey, TValue>(key, value));
             }
         }
     }
 
-    public TValue this[int index] => this.items[index].Value;
+    public TValue this[int index] => items[index].Value;
 
-    public bool ContainsKey(TKey key) => this.BinarySearch(key) >= 0;
+    public bool ContainsKey(TKey key) => BinarySearch(key) >= 0;
 
 #if NETFRAMEWORK || NETSTANDARD
 #nullable disable warnings
@@ -85,10 +85,10 @@ internal readonly struct Lictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TV
 #nullable restore
 #endif
     {
-        int index = this.BinarySearch(key);
+        int index = BinarySearch(key);
         if (index >= 0)
         {
-            value = this.items[index].Value;
+            value = items[index].Value;
             return true;
         }
         else
@@ -98,15 +98,15 @@ internal readonly struct Lictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TV
         }
     }
 
-    IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => this.items.GetEnumerator();
+    IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => items.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => this.items.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => items.GetEnumerator();
 
-    public List<KeyValuePair<TKey, TValue>>.Enumerator GetEnumerator() => this.items.GetEnumerator();
+    public List<KeyValuePair<TKey, TValue>>.Enumerator GetEnumerator() => items.GetEnumerator();
 
     internal void Add(TKey key, TValue value)
     {
-        if (!this.TryAdd(key, value))
+        if (!TryAdd(key, value))
         {
             throw new ArgumentException(Errors.DuplicateKey, nameof(key));
         }
@@ -114,38 +114,38 @@ internal readonly struct Lictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TV
 
     internal bool TryAdd(TKey key, TValue value)
     {
-        int index = this.BinarySearch(key);
+        int index = BinarySearch(key);
         if (index >= 0)
         {
             return false;
         }
         else
         {
-            this.items.Insert(~index, new KeyValuePair<TKey, TValue>(key, value));
+            items.Insert(~index, new KeyValuePair<TKey, TValue>(key, value));
             return true;
         }
     }
 
     internal bool Remove(TKey key)
     {
-        int index = this.BinarySearch(key);
+        int index = BinarySearch(key);
         if (index >= 0)
         {
-            this.items.RemoveAt(index);
+            items.RemoveAt(index);
             return true;
         }
 
         return false;
     }
 
-    internal void Clear() => this.items.Clear();
+    internal void Clear() => items.Clear();
 
     internal bool TryFindNext(TKey key, [MaybeNullWhen(false)] out TValue? value)
     {
-        int index = ~this.BinarySearch(key);
-        if (index >= 0 && index < this.items.Count)
+        int index = ~BinarySearch(key);
+        if (index >= 0 && index < items.Count)
         {
-            value = this.items[index].Value;
+            value = items[index].Value;
             return true;
         }
         else
@@ -158,9 +158,9 @@ internal readonly struct Lictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TV
     internal void EnsureCapacity(int capacity)
     {
 #if NETFRAMEWORK || NETSTANDARD
-        if (capacity > this.items.Capacity)
+        if (capacity > items.Capacity)
         {
-            this.items.Capacity = capacity;
+            items.Capacity = capacity;
         }
 #else
         _ = this.items.EnsureCapacity(capacity);
@@ -170,7 +170,7 @@ internal readonly struct Lictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TV
     private int BinarySearch(TKey key)
     {
         Argument.ThrowIfNull(key, nameof(key));
-        return this.items.BinarySearch(new(key, default!), this.comparer);
+        return items.BinarySearch(new KeyValuePair<TKey, TValue>(key, default!), comparer);
     }
 
     private sealed class EntryKeyComparer(IComparer<TKey> keyComparer) : IComparer<KeyValuePair<TKey, TValue>>

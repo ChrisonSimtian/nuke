@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common.CI.AzurePipelines;
+﻿namespace Fallout.Common.CI.AzurePipelines;
 
 // https://docs.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops
 public static class AzurePipelinesCachePaths

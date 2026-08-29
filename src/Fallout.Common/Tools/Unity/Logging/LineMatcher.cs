@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Fallout.Common.Tools.Unity.Logging;
 
 internal class LineMatcher
 {
     public string RegexPattern { get; }
+
     public LogLevel LogLevel { get; }
 
     public LineMatcher(string regexPattern, LogLevel logLevel)

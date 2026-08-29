@@ -22,26 +22,29 @@ internal sealed class SlnxFile
         StringTable? stringTable,
         string? fullPath)
     {
-        this.Document = xmlDocument;
-        this.FullPath = fullPath;
-        this.StringTable = stringTable ?? new StringTable().WithSolutionConstants();
+        Document = xmlDocument;
+        FullPath = fullPath;
+        StringTable = stringTable ?? new StringTable().WithSolutionConstants();
 
-        XmlElement? xmlSolution = this.Document.DocumentElement;
+        XmlElement? xmlSolution = Document.DocumentElement;
         if (xmlSolution is not null && Keywords.ToKeyword(xmlSolution.Name) == Keyword.Solution)
         {
-            this.Solution = new XmlSolution(this, xmlSolution);
-            this.Solution.UpdateFromXml();
+            Solution = new XmlSolution(this, xmlSolution);
+            Solution.UpdateFromXml();
 
             // This is a model part, but needs to be calculated before it can properly turn into a model.
             // These are used to calculate the actual project types from a project's Type attribute.
-            this.ProjectTypes = this.Solution.GetProjectTypeTable();
+            ProjectTypes = Solution.GetProjectTypeTable();
         }
         else
         {
-            throw new SolutionException(Errors.NotSolution, SolutionErrorType.NotSolution) { File = this.FullPath };
+            throw new SolutionException(Errors.NotSolution, SolutionErrorType.NotSolution)
+            {
+                File = FullPath
+            };
         }
 
-        this.SerializationSettings = this.GetDefaultSerializationSettings(serializationSettings);
+        SerializationSettings = GetDefaultSerializationSettings(serializationSettings);
     }
 
     internal string? FullPath { get; }
@@ -60,15 +63,19 @@ internal sealed class SlnxFile
     internal ProjectTypeTable ProjectTypes { get; private set; }
 
     // Keep track of user project and file paths to preserve the user's path separators.
-    internal Dictionary<string, string> UserPaths { get; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    internal Dictionary<string, string> UserPaths { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     internal bool Tarnished { get; private set; }
 
     internal SolutionModel ToModel()
     {
-        this.UserPaths.Clear();
-        SolutionModel model = this.Solution?.ToModel() ?? new SolutionModel() { StringTable = this.StringTable };
-        model.SerializerExtension = new SlnXmlModelExtension(SolutionSerializers.SlnXml, this.SerializationSettings, root: this);
+        UserPaths.Clear();
+        SolutionModel model = Solution?.ToModel() ?? new SolutionModel
+        {
+            StringTable = StringTable
+        };
+
+        model.SerializerExtension = new SlnXmlModelExtension(SolutionSerializers.SlnXml, SerializationSettings, root: this);
         return model;
     }
 
@@ -77,9 +84,9 @@ internal sealed class SlnxFile
     /// </summary>
     internal string ConvertToUserPath(string projectPath)
     {
-        return this.UserPaths.TryGetValue(projectPath, out string? userProjectPath) ?
-            userProjectPath :
-            PathExtensions.ConvertModelToForwardSlashPath(projectPath);
+        return UserPaths.TryGetValue(projectPath, out string? userProjectPath)
+            ? userProjectPath
+            : PathExtensions.ConvertModelToForwardSlashPath(projectPath);
     }
 
     /// <summary>
@@ -90,26 +97,26 @@ internal sealed class SlnxFile
     /// </returns>
     internal bool ApplyModel(SolutionModel model)
     {
-        this.ProjectTypes = model.ProjectTypeTable;
+        ProjectTypes = model.ProjectTypeTable;
 
         bool modified = false;
-        if (this.Solution is null)
+        if (Solution is null)
         {
             // Make the solution element the root element of the document.
-            XmlElement xmlSolution = this.Document.CreateElement(Keyword.Solution.ToXmlString());
-            _ = this.Document.AppendChild(xmlSolution);
-            this.Solution = new XmlSolution(this, xmlSolution);
-            this.Solution.UpdateFromXml();
+            XmlElement xmlSolution = Document.CreateElement(Keyword.Solution.ToXmlString());
+            _ = Document.AppendChild(xmlSolution);
+            Solution = new XmlSolution(this, xmlSolution);
+            Solution.UpdateFromXml();
             modified = true;
         }
 
-        modified |= this.Solution.ApplyModelToXml(model);
+        modified |= Solution.ApplyModelToXml(model);
         return modified;
     }
 
     internal string ToXmlString()
     {
-        return this.Document.OuterXml;
+        return Document.OuterXml;
     }
 
     // Fill out default values.
@@ -118,8 +125,8 @@ internal sealed class SlnxFile
         string newLineChars = Environment.NewLine;
         string newIndentChars = "  ";
         if ((inputSettings.IndentChars is null || inputSettings.NewLine is null) &&
-            this.Solution is not null &&
-            this.Solution.TryGetFormatting(out StringSpan newLine, out StringSpan indent))
+            Solution is not null &&
+            Solution.TryGetFormatting(out StringSpan newLine, out StringSpan indent))
         {
             newLineChars = newLine.ToString();
             newIndentChars = indent.ToString();
@@ -127,7 +134,7 @@ internal sealed class SlnxFile
 
         return inputSettings with
         {
-            PreserveWhitespace = inputSettings.PreserveWhitespace ?? this.Document.PreserveWhitespace,
+            PreserveWhitespace = inputSettings.PreserveWhitespace ?? Document.PreserveWhitespace,
             IndentChars = inputSettings.IndentChars ?? newIndentChars,
             NewLine = inputSettings.NewLine ?? newLineChars,
         };

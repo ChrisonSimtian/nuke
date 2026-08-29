@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Basic.Reference.Assemblies;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -20,46 +22,52 @@ public class TransitionShimGeneratorSpecs
     public Task EmitsShimsForEachKindAndSkipsHardTier()
     {
         var canonical = CompileCanonicalAssembly("""
-            namespace Fallout.Common
-            {
-                // Easy tier
-                public class Regular { public Regular(string a) {} public Regular() {} }
-                public abstract class Abstr { protected Abstr() {} }
-                public interface IFoo { }
-                [System.AttributeUsage(System.AttributeTargets.Class)]
-                public class MyAttr : System.Attribute { public MyAttr(int n) {} }
-                public class Generic<T> where T : class { public Generic(T item) {} }
-                public class WithNested
-                {
-                    public WithNested() {}
-                    public class Nested { public Nested() {} }
-                }
+                                                 namespace Fallout.Common
+                                                 {
+                                                     // Easy tier
+                                                     public class Regular { public Regular(string a) {} public Regular() {} }
+                                                     public abstract class Abstr { protected Abstr() {} }
+                                                     public interface IFoo { }
+                                                     [System.AttributeUsage(System.AttributeTargets.Class)]
+                                                     public class MyAttr : System.Attribute { public MyAttr(int n) {} }
+                                                     public class Generic<T> where T : class { public Generic(T item) {} }
+                                                     public class WithNested
+                                                     {
+                                                         public WithNested() {}
+                                                         public class Nested { public Nested() {} }
+                                                     }
 
-                // Hard tier — sealed-class still skipped (deferred to session 2b)
-                public sealed class SealedThing { public SealedThing() {} }
-                public enum MyEnum { A, B }
-                public class PrivateCtorOnly { private PrivateCtorOnly(string x) {} }
+                                                     // Hard tier — sealed-class still skipped (deferred to session 2b)
+                                                     public sealed class SealedThing { public SealedThing() {} }
+                                                     public enum MyEnum { A, B }
+                                                     public class PrivateCtorOnly { private PrivateCtorOnly(string x) {} }
 
-                // Static-class with the various method shapes that need delegation
-                public static class StaticHelpers
-                {
-                    public static int Plain(int a) { return a; }
-                    public static void VoidReturn(string s) { }
-                    public static T Generic<T>(T input) where T : class { return input; }
-                    public static int WithOptional(int a, int b = 7, string s = "hello") { return a + b; }
-                    public static int Sum(params int[] nums) { return 0; }
-                    public static int TryParse(string s, out int value) { value = 0; return 0; }
-                    public static string AsHex(this byte b) { return b.ToString("x2"); }
-                }
-            }
-            """);
+                                                     // Static-class with the various method shapes that need delegation
+                                                     public static class StaticHelpers
+                                                     {
+                                                         public static int Plain(int a) { return a; }
+                                                         public static void VoidReturn(string s) { }
+                                                         public static T Generic<T>(T input) where T : class { return input; }
+                                                         public static int WithOptional(int a, int b = 7, string s = "hello") { return a + b; }
+                                                         public static int Sum(params int[] nums) { return 0; }
+                                                         public static int TryParse(string s, out int value) { value = 0; return 0; }
+                                                         public static string AsHex(this byte b) { return b.ToString("x2"); }
+                                                     }
+                                                 }
+                                                 """);
 
         var shimCompilation = CSharpCompilation.Create("Nuke.TestShim",
-            new[] { CSharpSyntaxTree.ParseText("""
-                [assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder("Fallout.Common", "Nuke.Common")]
-                """) },
-            Basic.Reference.Assemblies.NetStandard20.References.All
-                .Concat(new[] { canonical }),
+            new[]
+            {
+                CSharpSyntaxTree.ParseText("""
+                                           [assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder("Fallout.Common", "Nuke.Common")]
+                                           """)
+            },
+            NetStandard20.References.All
+                .Concat(new[]
+                {
+                    canonical
+                }),
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
         var driver = CSharpGeneratorDriver.Create(new TransitionShimGenerator());
@@ -75,29 +83,32 @@ public class TransitionShimGeneratorSpecs
     public void SkipsCanonicalTypesAlreadyHandBridgedByConsumer()
     {
         var canonical = CompileCanonicalAssembly("""
-            namespace Fallout.Common
-            {
-                public sealed class HandBridgedSealed { public HandBridgedSealed() {} }
-                public class HandBridgedRegular { public HandBridgedRegular() {} }
-            }
-            """);
+                                                 namespace Fallout.Common
+                                                 {
+                                                     public sealed class HandBridgedSealed { public HandBridgedSealed() {} }
+                                                     public class HandBridgedRegular { public HandBridgedRegular() {} }
+                                                 }
+                                                 """);
 
         var shimCompilation = CSharpCompilation.Create("Nuke.HandBridged",
             new[]
             {
                 CSharpSyntaxTree.ParseText("""
-                    [assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder("Fallout.Common", "Nuke.Common")]
-                    """),
+                                           [assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder("Fallout.Common", "Nuke.Common")]
+                                           """),
                 CSharpSyntaxTree.ParseText("""
-                    namespace Nuke.Common
-                    {
-                        public static class HandBridgedSealed { }
-                        public static class HandBridgedRegular { }
-                    }
-                    """),
+                                           namespace Nuke.Common
+                                           {
+                                               public static class HandBridgedSealed { }
+                                               public static class HandBridgedRegular { }
+                                           }
+                                           """),
             },
-            Basic.Reference.Assemblies.NetStandard20.References.All
-                .Concat(new[] { canonical }),
+            NetStandard20.References.All
+                .Concat(new[]
+                {
+                    canonical
+                }),
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
         var driver = CSharpGeneratorDriver.Create(new TransitionShimGenerator());
@@ -105,7 +116,7 @@ public class TransitionShimGeneratorSpecs
 
         // No source emitted for the hand-bridged canonical types.
         result.GeneratedTrees
-            .Where(t => !t.FilePath.EndsWith("ShimAllPublicTypesUnderAttribute.g.cs", System.StringComparison.Ordinal))
+            .Where(t => !t.FilePath.EndsWith("ShimAllPublicTypesUnderAttribute.g.cs", StringComparison.Ordinal))
             .Should().BeEmpty();
 
         // And no SHIM001 diagnostic for either hand-bridged type — the sealed
@@ -117,16 +128,22 @@ public class TransitionShimGeneratorSpecs
     public void EmitsNothingWhenNoMarkerAttributePresent()
     {
         var canonical = CompileCanonicalAssembly("""
-            namespace Fallout.Common
-            {
-                public class Whatever { public Whatever() {} }
-            }
-            """);
+                                                 namespace Fallout.Common
+                                                 {
+                                                     public class Whatever { public Whatever() {} }
+                                                 }
+                                                 """);
 
         var shimCompilation = CSharpCompilation.Create("Nuke.NoMarker",
-            new[] { CSharpSyntaxTree.ParseText("// no marker") },
-            Basic.Reference.Assemblies.NetStandard20.References.All
-                .Concat(new[] { canonical }),
+            new[]
+            {
+                CSharpSyntaxTree.ParseText("// no marker")
+            },
+            NetStandard20.References.All
+                .Concat(new[]
+                {
+                    canonical
+                }),
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
         var driver = CSharpGeneratorDriver.Create(new TransitionShimGenerator());
@@ -134,15 +151,18 @@ public class TransitionShimGeneratorSpecs
 
         // The post-init attribute definition is the only output expected.
         result.GeneratedTrees
-            .Where(t => !t.FilePath.EndsWith("ShimAllPublicTypesUnderAttribute.g.cs", System.StringComparison.Ordinal))
+            .Where(t => !t.FilePath.EndsWith("ShimAllPublicTypesUnderAttribute.g.cs", StringComparison.Ordinal))
             .Should().BeEmpty();
     }
 
     private static MetadataReference CompileCanonicalAssembly(string source)
     {
         var compilation = CSharpCompilation.Create("Fallout.TestCanonical",
-            new[] { CSharpSyntaxTree.ParseText(source) },
-            Basic.Reference.Assemblies.NetStandard20.References.All,
+            new[]
+            {
+                CSharpSyntaxTree.ParseText(source)
+            },
+            NetStandard20.References.All,
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
         var stream = new MemoryStream();
@@ -150,6 +170,7 @@ public class TransitionShimGeneratorSpecs
         emit.Success.Should().BeTrue(
             because: "canonical test compilation should compile: {0}",
             string.Join("; ", emit.Diagnostics.Select(d => d.GetMessage())));
+
         stream.Position = 0;
         return MetadataReference.CreateFromStream(stream);
     }

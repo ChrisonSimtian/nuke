@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Fallout.Common;
 using Fallout.Common.Git;
@@ -21,7 +20,7 @@ internal sealed class TriggerCommand : IFalloutCommand
     private static int Execute(string[] args, AbsolutePath rootDirectory)
     {
         var repository = GitRepository.FromLocalDirectory(rootDirectory.NotNull()).NotNull("No Git repository");
-        Assert.NotNull(repository.Branch, "Git repository must not be detached");
+        repository.Branch.NotNull("Git repository must not be detached");
         Assert.NotEmpty(args);
 
         try

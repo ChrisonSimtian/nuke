@@ -1,9 +1,8 @@
-using System;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Fallout.Common;
 using Fallout.Common.Utilities.Collections;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Fallout.Cli.Rewriting.Cake;
@@ -12,7 +11,7 @@ internal class TargetDefinitionRewriter : SafeSyntaxRewriter
 {
     public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
     {
-        node = (InvocationExpressionSyntax) base.VisitInvocationExpression(node).NotNull();
+        node = (InvocationExpressionSyntax)base.VisitInvocationExpression(node).NotNull();
 
         if (node.Expression is IdentifierNameSyntax identifierName &&
             identifierName.Identifier.Text == "Task")
@@ -71,10 +70,12 @@ internal class TargetDefinitionRewriter : SafeSyntaxRewriter
 
     public override SyntaxNode VisitGlobalStatement(GlobalStatementSyntax node)
     {
-        var reducedNode = (GlobalStatementSyntax) base.VisitGlobalStatement(node).NotNull();
+        var reducedNode = (GlobalStatementSyntax)base.VisitGlobalStatement(node).NotNull();
 
         if (node.Statement is not ExpressionStatementSyntax expressionStatement)
+        {
             return reducedNode;
+        }
 
         var innerInvocationExpression = (expressionStatement.Expression as InvocationExpressionSyntax)
             .Descendants(x => (x.Expression as MemberAccessExpressionSyntax)?.Expression as InvocationExpressionSyntax)
@@ -85,7 +86,8 @@ internal class TargetDefinitionRewriter : SafeSyntaxRewriter
             var name = innerInvocationExpression.GetSingleArgument<LiteralExpressionSyntax>()
                 .GetConstantValue<string>()
                 .Replace("-", "_");
-            var expression = ((ExpressionStatementSyntax) reducedNode.Statement).Expression;
+
+            var expression = ((ExpressionStatementSyntax)reducedNode.Statement).Expression;
             return PropertyDeclaration(ParseTypeName(nameof(Target)), name)
                 .WithExpressionBody(ArrowExpressionClause(expression))
                 .WithSemicolonToken(expressionStatement.SemicolonToken);

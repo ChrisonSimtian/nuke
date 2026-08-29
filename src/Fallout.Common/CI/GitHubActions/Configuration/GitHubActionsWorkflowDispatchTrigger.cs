@@ -41,14 +41,22 @@ public class GitHubActionsWorkflowDispatchTrigger : GitHubActionsDetailedTrigger
                 writer.WriteLine($"description: {description.DoubleQuote()}");
                 writer.WriteLine($"required: {input.Required.ToString().ToLowerInvariant()}");
                 if (input.Type != GitHubActionsInputType.String)
+                {
                     writer.WriteLine($"type: {input.Type.GetValue()}");
+                }
+
                 if (input.Default != null)
+                {
                     writer.WriteLine($"default: {input.Default}");
+                }
+
                 if (input.Type == GitHubActionsInputType.Choice)
                 {
                     writer.WriteLine("options:");
                     using (writer.Indent())
+                    {
                         input.Options.ForEach(x => writer.WriteLine($"- {x.DoubleQuote()}"));
+                    }
                 }
             }
         }
@@ -60,12 +68,27 @@ public class GitHubActionsWorkflowDispatchTrigger : GitHubActionsDetailedTrigger
     {
 #pragma warning disable FALLOUTOBS001 // deliberate bridge for the obsolete legacy arrays
         foreach (var input in OptionalInputs)
-            yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = false };
+        {
+            yield return new GitHubActionsWorkflowDispatchInput
+            {
+                Name = input,
+                Required = false
+            };
+        }
+
         foreach (var input in RequiredInputs)
-            yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = true };
+        {
+            yield return new GitHubActionsWorkflowDispatchInput
+            {
+                Name = input,
+                Required = true
+            };
+        }
 #pragma warning restore FALLOUTOBS001
 
         foreach (var input in Inputs)
+        {
             yield return input;
+        }
     }
 }

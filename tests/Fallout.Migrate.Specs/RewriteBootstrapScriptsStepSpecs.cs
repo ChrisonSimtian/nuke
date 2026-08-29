@@ -55,8 +55,8 @@ public class RewriteBootstrapScriptsStepSpecs : IDisposable
     public async Task Legacy_nuke_env_vars_are_renamed_to_their_fallout_equivalents()
     {
         (tempDirectory / "build.ps1").WriteAllText("""
-                                                    $env:NUKE_GLOBAL_TOOL_VERSION = "10.0"
-                                                    """, eofLineBreak: false);
+                                                   $env:NUKE_GLOBAL_TOOL_VERSION = "10.0"
+                                                   """, eofLineBreak: false);
 
         await new RewriteBootstrapScriptsStep().ExecuteAsync(context, summary);
 
@@ -66,9 +66,9 @@ public class RewriteBootstrapScriptsStepSpecs : IDisposable
     }
 
     [Theory]
-    [InlineData("build.sh", "export NUKE_TELEMETRY_OPTOUT=1")]         // build.sh
+    [InlineData("build.sh", "export NUKE_TELEMETRY_OPTOUT=1")] // build.sh
     [InlineData("build.ps1", """$env:NUKE_TELEMETRY_OPTOUT = "1" """)] // build.ps1
-    [InlineData("build.cmd", "set NUKE_TELEMETRY_OPTOUT=1")]           // build.cmd
+    [InlineData("build.cmd", "set NUKE_TELEMETRY_OPTOUT=1")] // build.cmd
     public async Task Telemetry_opt_out_line_is_stripped_entirely(string fileName, string optOutLine)
     {
         // Telemetry was removed from Fallout (ADR-0010) — the opt-out is dropped, not renamed
@@ -79,6 +79,7 @@ public class RewriteBootstrapScriptsStepSpecs : IDisposable
                      {optOutLine}
                      dotnet nuke "$@"
                      """;
+
         (tempDirectory / fileName).WriteAllText(input, eofLineBreak: false);
 
         await new RewriteBootstrapScriptsStep().ExecuteAsync(context, summary);
@@ -104,16 +105,16 @@ public class RewriteBootstrapScriptsStepSpecs : IDisposable
     public async Task Removes_Nuke_enterprise_unix_bootstrapper_leftovers()
     {
         (tempDirectory / "build.sh").WriteAllText("""
-                                                   echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)"
+                                                  echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)"
 
-                                                   if [[ ! -z ${NUKE_ENTERPRISE_TOKEN+x} && "$NUKE_ENTERPRISE_TOKEN" != "" ]]; then
-                                                       "$DOTNET_EXE" nuget remove source "nuke-enterprise" &>/dev/null || true
-                                                       "$DOTNET_EXE" nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password "$NUKE_ENTERPRISE_TOKEN" --store-password-in-clear-text &>/dev/null || true
-                                                   fi
+                                                  if [[ ! -z ${NUKE_ENTERPRISE_TOKEN+x} && "$NUKE_ENTERPRISE_TOKEN" != "" ]]; then
+                                                      "$DOTNET_EXE" nuget remove source "nuke-enterprise" &>/dev/null || true
+                                                      "$DOTNET_EXE" nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password "$NUKE_ENTERPRISE_TOKEN" --store-password-in-clear-text &>/dev/null || true
+                                                  fi
 
-                                                   "$DOTNET_EXE" build "$BUILD_PROJECT_FILE" /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet
-                                                   "$DOTNET_EXE" run --project "$BUILD_PROJECT_FILE" --no-build -- "$@"
-                                                   """, eofLineBreak: false);
+                                                  "$DOTNET_EXE" build "$BUILD_PROJECT_FILE" /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet
+                                                  "$DOTNET_EXE" run --project "$BUILD_PROJECT_FILE" --no-build -- "$@"
+                                                  """, eofLineBreak: false);
 
         await new CleanupBootstrapScriptsStep().ExecuteAsync(context, summary);
 
@@ -149,16 +150,16 @@ public class RewriteBootstrapScriptsStepSpecs : IDisposable
     public async Task Removes_Nuke_enterprise_windows_bootstrapper_leftovers()
     {
         (tempDirectory / "build.ps1").WriteAllText("""
-                                                  Write-Output "Microsoft (R) .NET SDK version $(& $env:DOTNET_EXE --version)"
+                                                   Write-Output "Microsoft (R) .NET SDK version $(& $env:DOTNET_EXE --version)"
 
-                                                  if (Test-Path env:NUKE_ENTERPRISE_TOKEN) {
-                                                      & $env:DOTNET_EXE nuget remove source "nuke-enterprise" > $null
-                                                      & $env:DOTNET_EXE nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password $env:NUKE_ENTERPRISE_TOKEN > $null
-                                                  }
+                                                   if (Test-Path env:NUKE_ENTERPRISE_TOKEN) {
+                                                       & $env:DOTNET_EXE nuget remove source "nuke-enterprise" > $null
+                                                       & $env:DOTNET_EXE nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password $env:NUKE_ENTERPRISE_TOKEN > $null
+                                                   }
 
-                                                  ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet }
-                                                  ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile --no-build -- $BuildArguments }
-                                                  """, eofLineBreak: false);
+                                                   ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet }
+                                                   ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile --no-build -- $BuildArguments }
+                                                   """, eofLineBreak: false);
 
         await new CleanupBootstrapScriptsStep().ExecuteAsync(context, summary);
 

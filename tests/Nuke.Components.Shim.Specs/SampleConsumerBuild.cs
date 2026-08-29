@@ -5,10 +5,9 @@
 // they'll see CS0618 warnings pointing at the renamed IHas* form, but no hard
 // breakage. This file exercises every alias to lock the contract in.
 
-#pragma warning disable CS0618  // IHaz* are intentionally obsolete; exercising them is the point.
+#pragma warning disable CS0618 // IHaz* are intentionally obsolete; exercising them is the point.
 
 using Nuke.Common;
-using Nuke.Components;
 
 namespace Nuke.Components.Shim.Specs;
 
@@ -17,14 +16,14 @@ namespace Nuke.Components.Shim.Specs;
 // inheritance chain (IHaz* → IHas* → IFalloutBuild) resolves.
 public abstract class SampleConsumerBuildWithIHazAliases
     : NukeBuild,
-      IHazArtifacts,
-      IHazChangelog,
-      IHazConfiguration,
-      IHazGitRepository,
-      IHazGitVersion,
-      IHazNerdbankGitVersioning,
-      IHazReports,
-      IHazSolution,
-      IHazTwitterCredentials
+        IHazArtifacts,
+        IHazChangelog,
+        IHazConfiguration,
+        IHazGitRepository,
+        IHazGitVersion,
+        IHazNerdbankGitVersioning,
+        IHazReports,
+        IHazSolution,
+        IHazTwitterCredentials
 {
 }

@@ -27,7 +27,7 @@ internal sealed class SpectreConsolePrompts : IConsolePrompts
     public void ClearPreviousLine()
     {
         AnsiConsole.Cursor.MoveUp();
-        System.Console.WriteLine(' '.Repeat(System.Console.WindowWidth));
+        Console.WriteLine(' '.Repeat(Console.WindowWidth));
         AnsiConsole.Cursor.MoveUp();
     }
 
@@ -62,6 +62,7 @@ internal sealed class SpectreConsolePrompts : IConsolePrompts
                 .HighlightStyle(new Style(Color.Turquoise2))
                 .UseConverter(x => choices.Single(y => Equals(x, y.Value)).Description)
                 .AddChoices(choices.Select(x => x.Value)));
+
         return choice;
     }
 

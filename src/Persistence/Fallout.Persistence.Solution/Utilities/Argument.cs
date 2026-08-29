@@ -33,15 +33,16 @@ internal static class Argument
     internal static void Throw(string? paramName) => throw new ArgumentNullException(paramName);
 
 #else
-
     /// <inheritdoc cref="ArgumentNullException.ThrowIfNull(object?, string?)"/>
-    internal static void ThrowIfNull([NotNull] object? argument, [System.Runtime.CompilerServices.CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    internal static void ThrowIfNull([NotNull] object? argument, [System.Runtime.CompilerServices.CallerArgumentExpression(nameof(argument))] string? paramName
+ = null)
     {
         ArgumentNullException.ThrowIfNull(argument, paramName);
     }
 
     /// <inheritdoc cref="ArgumentException.ThrowIfNullOrEmpty(string?, string?)"/>
-    internal static void ThrowIfNullOrEmpty([NotNull] string? argument, [System.Runtime.CompilerServices.CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    internal static void ThrowIfNullOrEmpty([NotNull] string? argument, [System.Runtime.CompilerServices.CallerArgumentExpression(nameof(argument))] string? paramName
+ = null)
     {
         ArgumentException.ThrowIfNullOrEmpty(argument, paramName);
     }

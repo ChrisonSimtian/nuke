@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Fallout.Common.Utilities;
-using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Fallout.Common.Execution.Theming;
@@ -9,25 +8,71 @@ namespace Fallout.Common.Execution.Theming;
 public class SystemConsoleHostTheme : SystemConsoleTheme, IHostTheme
 {
     public static IHostTheme DefaultSystemColorTheme => new SystemConsoleHostTheme(
-        new SystemConsoleThemeStyle { Foreground = ConsoleColor.Green },
+        new SystemConsoleThemeStyle
+        {
+            Foreground = ConsoleColor.Green
+        },
         new Dictionary<ConsoleThemeStyle, SystemConsoleThemeStyle>
         {
             [ConsoleThemeStyle.Text] = new(),
-            [ConsoleThemeStyle.SecondaryText] = new() { Foreground = ConsoleColor.Gray },
-            [ConsoleThemeStyle.TertiaryText] = new() { Foreground = ConsoleColor.Gray },
-            [ConsoleThemeStyle.Name] = new() { Foreground = ConsoleColor.Blue },
-            [ConsoleThemeStyle.Invalid] = new() { Foreground = ConsoleColor.DarkRed },
-            [ConsoleThemeStyle.Null] = new() { Foreground = ConsoleColor.Magenta },
-            [ConsoleThemeStyle.String] = new() { Foreground = ConsoleColor.Magenta },
-            [ConsoleThemeStyle.Number] = new() { Foreground = ConsoleColor.Magenta },
-            [ConsoleThemeStyle.Boolean] = new() { Foreground = ConsoleColor.Magenta },
-            [ConsoleThemeStyle.Scalar] = new() { Foreground = ConsoleColor.Magenta },
-            [ConsoleThemeStyle.LevelVerbose] = new() { Foreground = ConsoleColor.Gray },
+            [ConsoleThemeStyle.SecondaryText] = new()
+            {
+                Foreground = ConsoleColor.Gray
+            },
+            [ConsoleThemeStyle.TertiaryText] = new()
+            {
+                Foreground = ConsoleColor.Gray
+            },
+            [ConsoleThemeStyle.Name] = new()
+            {
+                Foreground = ConsoleColor.Blue
+            },
+            [ConsoleThemeStyle.Invalid] = new()
+            {
+                Foreground = ConsoleColor.DarkRed
+            },
+            [ConsoleThemeStyle.Null] = new()
+            {
+                Foreground = ConsoleColor.Magenta
+            },
+            [ConsoleThemeStyle.String] = new()
+            {
+                Foreground = ConsoleColor.Magenta
+            },
+            [ConsoleThemeStyle.Number] = new()
+            {
+                Foreground = ConsoleColor.Magenta
+            },
+            [ConsoleThemeStyle.Boolean] = new()
+            {
+                Foreground = ConsoleColor.Magenta
+            },
+            [ConsoleThemeStyle.Scalar] = new()
+            {
+                Foreground = ConsoleColor.Magenta
+            },
+            [ConsoleThemeStyle.LevelVerbose] = new()
+            {
+                Foreground = ConsoleColor.Gray
+            },
             [ConsoleThemeStyle.LevelDebug] = new(),
-            [ConsoleThemeStyle.LevelInformation] = new() { Foreground = ConsoleColor.Cyan },
-            [ConsoleThemeStyle.LevelWarning] = new() { Foreground = ConsoleColor.Yellow },
-            [ConsoleThemeStyle.LevelError] = new() { Foreground = ConsoleColor.Red },
-            [ConsoleThemeStyle.LevelFatal] = new() { Foreground = ConsoleColor.White, Background = ConsoleColor.Red }
+            [ConsoleThemeStyle.LevelInformation] = new()
+            {
+                Foreground = ConsoleColor.Cyan
+            },
+            [ConsoleThemeStyle.LevelWarning] = new()
+            {
+                Foreground = ConsoleColor.Yellow
+            },
+            [ConsoleThemeStyle.LevelError] = new()
+            {
+                Foreground = ConsoleColor.Red
+            },
+            [ConsoleThemeStyle.LevelFatal] = new()
+            {
+                Foreground = ConsoleColor.White,
+                Background = ConsoleColor.Red
+            }
         });
 
     private readonly SystemConsoleThemeStyle successStyle;

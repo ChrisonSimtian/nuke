@@ -14,15 +14,15 @@ internal sealed partial class SolutionConfigurationMap
     internal List<ConfigurationRule>? CreateProjectRules(SolutionProjectModel projectModel)
     {
         // If this project doesn't have any mappings, then we can't create any rules for it.
-        if (!this.perProjectCurrent.TryGetValue(projectModel, out SolutionToProjectMappings currentMatrix))
+        if (!perProjectCurrent.TryGetValue(projectModel, out SolutionToProjectMappings currentMatrix))
         {
             return null;
         }
 
         // What a project would look like with the default configuration rules.
-        SolutionToProjectMappings expectedMatrix = new SolutionToProjectMappings(this, projectModel, out bool _);
+        SolutionToProjectMappings expectedMatrix = new(this, projectModel, out bool _);
 
-        return this.CreateRules(in expectedMatrix, in currentMatrix);
+        return CreateRules(in expectedMatrix, in currentMatrix);
     }
 
     /// <summary>
@@ -34,10 +34,10 @@ internal sealed partial class SolutionConfigurationMap
     private void ApplyRules(in SolutionToProjectMappings projectMappings, scoped in ScopedRules scopedRules)
     {
         int iBuildTypeBegin = scopedRules.BuildTypeIndex == ScopedRules.All ? 0 : scopedRules.BuildTypeIndex;
-        int iBuildTypeEnd = scopedRules.BuildTypeIndex == ScopedRules.All ? this.BuildTypesCount : scopedRules.BuildTypeIndex + 1;
+        int iBuildTypeEnd = scopedRules.BuildTypeIndex == ScopedRules.All ? BuildTypesCount : scopedRules.BuildTypeIndex + 1;
 
         int iPlatformBegin = scopedRules.PlatformIndex == ScopedRules.All ? 0 : scopedRules.PlatformIndex;
-        int iPlatformEnd = scopedRules.PlatformIndex == ScopedRules.All ? this.PlatformsCount : scopedRules.PlatformIndex + 1;
+        int iPlatformEnd = scopedRules.PlatformIndex == ScopedRules.All ? PlatformsCount : scopedRules.PlatformIndex + 1;
 
         for (int iBuildType = iBuildTypeBegin; iBuildType < iBuildTypeEnd; iBuildType++)
         {
@@ -48,13 +48,17 @@ internal sealed partial class SolutionConfigurationMap
                     continue;
                 }
 
-                SolutionConfigIndex idx = this.ToIndex(iBuildType, iPlatform);
+                SolutionConfigIndex idx = ToIndex(iBuildType, iPlatform);
                 ProjectConfigMapping mapping = projectMappings[idx];
                 string solutionBuildType = idx.BuildType(this);
                 string solutionPlatform = idx.Platform(this);
 
-                string projectBuildType = scopedRules.Rules.GetProjectBuildType(solutionBuildType, solutionPlatform) ?? mapping.BuildType;
-                string projectPlatform = scopedRules.Rules.GetProjectPlatform(solutionBuildType, solutionPlatform) ?? mapping.Platform;
+                string projectBuildType = scopedRules.Rules.GetProjectBuildType(solutionBuildType, solutionPlatform) ??
+                                          mapping.BuildType;
+
+                string projectPlatform = scopedRules.Rules.GetProjectPlatform(solutionBuildType, solutionPlatform) ??
+                                         mapping.Platform;
+
                 bool build = scopedRules.Rules.GetIsBuildable(solutionBuildType, solutionPlatform) ?? mapping.Build;
                 bool deploy = scopedRules.Rules.GetIsDeployable(solutionBuildType, solutionPlatform) ?? mapping.Deploy;
 
@@ -77,7 +81,7 @@ internal sealed partial class SolutionConfigurationMap
         // build type difference
 
         // Create rules when mappings are the same for all dimensions in the project. (e.g. Build => false)
-        bool hasRemainingDiffs = this.CreateProjectGlobalRules(
+        bool hasRemainingDiffs = CreateProjectGlobalRules(
             in expectedMatrix,
             in currentMatrix,
             out ProjectDiffTracker[] perPlatform,
@@ -91,7 +95,7 @@ internal sealed partial class SolutionConfigurationMap
 
         // Create rules when mappings are the same for all build types. (e.g. AnyCPU => arm64)
         bool addedRules = false;
-        for (int iPlatform = 0; iPlatform < this.PlatformsCount; iPlatform++)
+        for (int iPlatform = 0; iPlatform < PlatformsCount; iPlatform++)
         {
             // emit all *|plat = xxx|yyy|....
             ref ProjectDiffTracker projectDiffTracker = ref perPlatform[iPlatform];
@@ -99,7 +103,9 @@ internal sealed partial class SolutionConfigurationMap
             {
                 addedRules = true;
 
-                ConfigurationRule[] platformRules = this.CreateDimensionRules(in expectedMatrix, ref projectDiffTracker, ScopedRules.All, iPlatform);
+                ConfigurationRule[] platformRules =
+                    CreateDimensionRules(in expectedMatrix, ref projectDiffTracker, ScopedRules.All, iPlatform);
+
                 allRules ??= [];
                 allRules.AddRange(platformRules);
             }
@@ -109,11 +115,11 @@ internal sealed partial class SolutionConfigurationMap
         {
             ProjectDiffTracker.ClearDiffs(perBuildType);
 
-            for (int iBuildType = 0; iBuildType < this.BuildTypesCount; iBuildType++)
+            for (int iBuildType = 0; iBuildType < BuildTypesCount; iBuildType++)
             {
-                for (int iPlatform = 0; iPlatform < this.PlatformsCount; iPlatform++)
+                for (int iPlatform = 0; iPlatform < PlatformsCount; iPlatform++)
                 {
-                    SolutionConfigIndex index = this.ToIndex(iBuildType, iPlatform);
+                    SolutionConfigIndex index = ToIndex(iBuildType, iPlatform);
                     ProjectConfigMapping expectedMapping = expectedMatrix[index];
                     ProjectConfigMapping currentMapping = currentMatrix[index];
                     perBuildType[iBuildType].ObserveValue(in expectedMapping, in currentMapping);
@@ -123,13 +129,15 @@ internal sealed partial class SolutionConfigurationMap
 
         // Create rules when mappings are the same for all platforms.
         bool hasSingleChanges = false;
-        for (int iBuildType = 0; iBuildType < this.BuildTypesCount; iBuildType++)
+        for (int iBuildType = 0; iBuildType < BuildTypesCount; iBuildType++)
         {
             // emit all cfg|* = xxx|yyy|....
             ref ProjectDiffTracker projectDiffTracker = ref perBuildType[iBuildType];
             if (projectDiffTracker.HasSame)
             {
-                ConfigurationRule[] buildTypeRules = this.CreateDimensionRules(in expectedMatrix, ref projectDiffTracker, iBuildType, ScopedRules.All);
+                ConfigurationRule[] buildTypeRules =
+                    CreateDimensionRules(in expectedMatrix, ref projectDiffTracker, iBuildType, ScopedRules.All);
+
                 allRules ??= [];
                 allRules.AddRange(buildTypeRules);
             }
@@ -145,11 +153,11 @@ internal sealed partial class SolutionConfigurationMap
             // collapse to "*|foo = *|majority" + "specifig|foo = specific|different" instead of expand all.
             // OPINION: This may add complexity and remove the predictability of the rules, we would then
             // need to keep track of rules instead of being able to always regenerate them.
-            for (int iBuildType = 0; iBuildType < this.BuildTypesCount; iBuildType++)
+            for (int iBuildType = 0; iBuildType < BuildTypesCount; iBuildType++)
             {
-                for (int iPlatform = 0; iPlatform < this.PlatformsCount; iPlatform++)
+                for (int iPlatform = 0; iPlatform < PlatformsCount; iPlatform++)
                 {
-                    SolutionConfigIndex index = this.ToIndex(iBuildType, iPlatform);
+                    SolutionConfigIndex index = ToIndex(iBuildType, iPlatform);
                     ProjectConfigMapping expectedMapping = expectedMatrix[index];
                     ProjectConfigMapping currentMapping = currentMatrix[index];
                     if (expectedMapping.IsSame(in currentMapping))
@@ -157,29 +165,34 @@ internal sealed partial class SolutionConfigurationMap
                         continue;
                     }
 
-                    ListBuilderStruct<ConfigurationRule> newRules = new ListBuilderStruct<ConfigurationRule>();
+                    ListBuilderStruct<ConfigurationRule> newRules = new();
 
                     string solutionBuildType = index.BuildType(this);
                     string solutionPlatform = index.Platform(this);
 
                     if (!StringComparer.Ordinal.Equals(currentMapping.BuildType, expectedMapping.BuildType))
                     {
-                        newRules.Add(new ConfigurationRule(BuildDimension.BuildType, solutionBuildType, solutionPlatform, currentMapping.BuildType));
+                        newRules.Add(new ConfigurationRule(BuildDimension.BuildType, solutionBuildType, solutionPlatform,
+                            currentMapping.BuildType));
                     }
 
-                    if (!StringComparer.Ordinal.Equals(PlatformNames.Canonical(currentMapping.Platform), PlatformNames.Canonical(expectedMapping.Platform)))
+                    if (!StringComparer.Ordinal.Equals(PlatformNames.Canonical(currentMapping.Platform),
+                            PlatformNames.Canonical(expectedMapping.Platform)))
                     {
-                        newRules.Add(new ConfigurationRule(BuildDimension.Platform, solutionBuildType, solutionPlatform, currentMapping.Platform));
+                        newRules.Add(new ConfigurationRule(BuildDimension.Platform, solutionBuildType, solutionPlatform,
+                            currentMapping.Platform));
                     }
 
                     if (currentMapping.Build != expectedMapping.Build)
                     {
-                        newRules.Add(new ConfigurationRule(BuildDimension.Build, solutionBuildType, solutionPlatform, currentMapping.Build.ToString()));
+                        newRules.Add(new ConfigurationRule(BuildDimension.Build, solutionBuildType, solutionPlatform,
+                            currentMapping.Build.ToString()));
                     }
 
                     if (currentMapping.Deploy != expectedMapping.Deploy)
                     {
-                        newRules.Add(new ConfigurationRule(BuildDimension.Deploy, solutionBuildType, solutionPlatform, currentMapping.Deploy.ToString()));
+                        newRules.Add(new ConfigurationRule(BuildDimension.Deploy, solutionBuildType, solutionPlatform,
+                            currentMapping.Deploy.ToString()));
                     }
 
                     if (newRules.Count != 0)
@@ -191,7 +204,7 @@ internal sealed partial class SolutionConfigurationMap
                         }
 
                         // no need to update expected, but it is easier for debuging purposes.
-                        this.ApplyRules(in expectedMatrix, new ScopedRules(iBuildType, iPlatform, newRules.ToArray()));
+                        ApplyRules(in expectedMatrix, new ScopedRules(iBuildType, iPlatform, newRules.ToArray()));
                     }
                 }
             }
@@ -209,21 +222,21 @@ internal sealed partial class SolutionConfigurationMap
         out List<ConfigurationRule>? rules)
     {
         rules = null;
-        perPlatform = new ProjectDiffTracker[this.PlatformsCount];
-        perBuildType = new ProjectDiffTracker[this.BuildTypesCount];
+        perPlatform = new ProjectDiffTracker[PlatformsCount];
+        perBuildType = new ProjectDiffTracker[BuildTypesCount];
 
         // Looks for any mappings that always differer the same way in this project.
-        ProjectDiffTracker global = new ProjectDiffTracker();
+        ProjectDiffTracker global = new();
 
         // Looks for any mappings that are always the same in this project.
-        ProjectDiffTracker unique = new ProjectDiffTracker();
+        ProjectDiffTracker unique = new();
 
         // Try to create a rule that applies to all build types and platforms.
-        for (int iBuildType = 0; iBuildType < this.BuildTypesCount; iBuildType++)
+        for (int iBuildType = 0; iBuildType < BuildTypesCount; iBuildType++)
         {
-            for (int iPlatform = 0; iPlatform < this.PlatformsCount; iPlatform++)
+            for (int iPlatform = 0; iPlatform < PlatformsCount; iPlatform++)
             {
-                SolutionConfigIndex index = this.ToIndex(iBuildType, iPlatform);
+                SolutionConfigIndex index = ToIndex(iBuildType, iPlatform);
                 ProjectConfigMapping expectedMapping = expectedMatrix[index];
                 ProjectConfigMapping currentMapping = currentMatrix[index];
                 perPlatform[iPlatform].ObserveValue(in expectedMapping, in currentMapping);
@@ -275,7 +288,7 @@ internal sealed partial class SolutionConfigurationMap
 
         if (!rules.IsNullOrEmpty())
         {
-            this.ApplyRules(in expectedMatrix, new ScopedRules(ScopedRules.All, ScopedRules.All, rules));
+            ApplyRules(in expectedMatrix, new ScopedRules(ScopedRules.All, ScopedRules.All, rules));
         }
 
         // easy case = all is the same as expected;
@@ -289,22 +302,26 @@ internal sealed partial class SolutionConfigurationMap
         int iBuildType,
         int iPlatform)
     {
-        string solutionBuildType = iBuildType == ScopedRules.All ? string.Empty : this.solutionModel.BuildTypes[iBuildType];
-        string solutionPlatform = iPlatform == ScopedRules.All ? string.Empty : this.solutionModel.Platforms[iPlatform];
+        string solutionBuildType = iBuildType == ScopedRules.All ? string.Empty : solutionModel.BuildTypes[iBuildType];
+        string solutionPlatform = iPlatform == ScopedRules.All ? string.Empty : solutionModel.Platforms[iPlatform];
 
-        ListBuilderStruct<ConfigurationRule> rulesBuilder = new ListBuilderStruct<ConfigurationRule>();
+        ListBuilderStruct<ConfigurationRule> rulesBuilder = new();
 
         // Create Build rule.
         if (projectDiffTracker.BuildTracker.TryGetSame(out bool buildable))
         {
-            rulesBuilder.Add(new ConfigurationRule(BuildDimension.Build, solutionBuildType, solutionPlatform, buildable.ToString()));
+            rulesBuilder.Add(new ConfigurationRule(BuildDimension.Build, solutionBuildType, solutionPlatform,
+                buildable.ToString()));
+
             projectDiffTracker.BuildTracker.ClearDifferences();
         }
 
         // Create Deploy rule.
         if (projectDiffTracker.DeployTracker.TryGetSame(out bool deployable))
         {
-            rulesBuilder.Add(new ConfigurationRule(BuildDimension.Deploy, solutionBuildType, solutionPlatform, deployable.ToString()));
+            rulesBuilder.Add(new ConfigurationRule(BuildDimension.Deploy, solutionBuildType, solutionPlatform,
+                deployable.ToString()));
+
             projectDiffTracker.DeployTracker.ClearDifferences();
         }
 
@@ -325,7 +342,7 @@ internal sealed partial class SolutionConfigurationMap
         ConfigurationRule[] rules = rulesBuilder.ToArray();
         if (rules.Length != 0)
         {
-            this.ApplyRules(in expectedMatrix, new ScopedRules(iBuildType, iPlatform, rules));
+            ApplyRules(in expectedMatrix, new ScopedRules(iBuildType, iPlatform, rules));
         }
 
         return rules;
@@ -340,6 +357,6 @@ internal sealed partial class SolutionConfigurationMap
         internal readonly int BuildTypeIndex = buildTypeIndex;
         internal readonly int PlatformIndex = platformIndex;
 
-        internal readonly ConfigurationRuleFollower Rules = new ConfigurationRuleFollower(rules);
+        internal readonly ConfigurationRuleFollower Rules = new(rules);
     }
 }

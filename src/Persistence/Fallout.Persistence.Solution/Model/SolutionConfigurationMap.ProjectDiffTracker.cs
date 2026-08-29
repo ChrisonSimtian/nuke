@@ -14,9 +14,11 @@ internal sealed partial class SolutionConfigurationMap
         internal DimensionDiffTracker<bool> BuildTracker;
         internal DimensionDiffTracker<bool> DeployTracker;
 
-        internal readonly bool HasDifferences => this.BuildTypeTracker.HasDifferences || this.PlatformTracker.HasDifferences || this.BuildTracker.HasDifferences || this.DeployTracker.HasDifferences;
+        internal readonly bool HasDifferences => BuildTypeTracker.HasDifferences || PlatformTracker.HasDifferences ||
+                                                 BuildTracker.HasDifferences || DeployTracker.HasDifferences;
 
-        internal readonly bool HasSame => this.BuildTypeTracker.SameDifference || this.PlatformTracker.SameDifference || this.BuildTracker.SameDifference || this.DeployTracker.SameDifference;
+        internal readonly bool HasSame => BuildTypeTracker.SameDifference || PlatformTracker.SameDifference ||
+                                          BuildTracker.SameDifference || DeployTracker.SameDifference;
 
         // The ProjectDiffTracker is a struct, so this passes the array to
         // make sure this actually clears the diffs and a boxed copy.
@@ -42,36 +44,41 @@ internal sealed partial class SolutionConfigurationMap
 
         internal void ObserveDifferentValue(in ProjectConfigMapping currentMapping)
         {
-            this.BuildTypeTracker.ObserveDifferentValue(currentMapping.BuildType);
-            this.PlatformTracker.ObserveDifferentValue(PlatformNames.Canonical(currentMapping.Platform));
-            this.BuildTracker.ObserveDifferentValue(currentMapping.Build);
-            this.DeployTracker.ObserveDifferentValue(currentMapping.Deploy);
+            BuildTypeTracker.ObserveDifferentValue(currentMapping.BuildType);
+            PlatformTracker.ObserveDifferentValue(PlatformNames.Canonical(currentMapping.Platform));
+            BuildTracker.ObserveDifferentValue(currentMapping.Build);
+            DeployTracker.ObserveDifferentValue(currentMapping.Deploy);
         }
 
         internal void ObserveValue(in ProjectConfigMapping expectedMapping, in ProjectConfigMapping currentMapping)
         {
-            this.BuildTypeTracker.ObserveValue(expectedMapping.BuildType, currentMapping.BuildType);
-            this.PlatformTracker.ObserveValue(PlatformNames.Canonical(expectedMapping.Platform), PlatformNames.Canonical(currentMapping.Platform));
-            this.BuildTracker.ObserveValue(expectedMapping.Build, currentMapping.Build);
-            this.DeployTracker.ObserveValue(expectedMapping.Deploy, currentMapping.Deploy);
+            BuildTypeTracker.ObserveValue(expectedMapping.BuildType, currentMapping.BuildType);
+            PlatformTracker.ObserveValue(PlatformNames.Canonical(expectedMapping.Platform),
+                PlatformNames.Canonical(currentMapping.Platform));
+
+            BuildTracker.ObserveValue(expectedMapping.Build, currentMapping.Build);
+            DeployTracker.ObserveValue(expectedMapping.Deploy, currentMapping.Deploy);
         }
 
         internal void ClearDiffs()
         {
-            this.BuildTypeTracker.ClearDifferences();
-            this.PlatformTracker.ClearDifferences();
-            this.BuildTracker.ClearDifferences();
-            this.DeployTracker.ClearDifferences();
+            BuildTypeTracker.ClearDifferences();
+            PlatformTracker.ClearDifferences();
+            BuildTracker.ClearDifferences();
+            DeployTracker.ClearDifferences();
         }
 
         internal void ClearDiffs(BuildDimension dimension)
         {
             switch (dimension)
             {
-                case BuildDimension.BuildType: this.BuildTypeTracker.ClearDifferences(); break;
-                case BuildDimension.Platform: this.PlatformTracker.ClearDifferences(); break;
-                case BuildDimension.Build: this.BuildTracker.ClearDifferences(); break;
-                case BuildDimension.Deploy: this.DeployTracker.ClearDifferences(); break;
+                case BuildDimension.BuildType: BuildTypeTracker.ClearDifferences(); break;
+
+                case BuildDimension.Platform: PlatformTracker.ClearDifferences(); break;
+
+                case BuildDimension.Build: BuildTracker.ClearDifferences(); break;
+
+                case BuildDimension.Deploy: DeployTracker.ClearDifferences(); break;
             }
         }
     }

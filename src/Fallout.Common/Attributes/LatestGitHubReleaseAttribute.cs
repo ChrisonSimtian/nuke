@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using NuGet.Versioning;
 using Fallout.Common.Git;
 using Fallout.Common.Tools.GitHub;
 using Fallout.Common.Utilities;
 using Fallout.Common.ValueInjection;
+using NuGet.Versioning;
 
 namespace Fallout.Common.Tooling;
 
@@ -20,6 +19,7 @@ public class LatestGitHubReleaseAttribute : ValueInjectionAttributeBase
     }
 
     public bool IncludePrerelease { get; set; }
+
     public bool UseTagName { get; set; }
 
     public string Pattern { get; set; } = @"v?(?<version>\d+\.\d+(?:\.\d+)?(?:\.\d+)?(?:-\w+)?)";
@@ -29,6 +29,7 @@ public class LatestGitHubReleaseAttribute : ValueInjectionAttributeBase
         var repository = GitRepository.FromUrl($"https://github.com/{identifier}");
         var releases = GitHubTasks.GitHubClient.Repository.Release
             .GetAll(repository.GetGitHubOwner(), repository.GetGitHubName()).GetAwaiter().GetResult();
+
         var versions = releases
             .Select(x => Regex.Match((!UseTagName ? x.Name : x.TagName).NotNullOrWhiteSpace(), Pattern))
             .Select(x => x.Groups["version"].Value)
@@ -36,7 +37,9 @@ public class LatestGitHubReleaseAttribute : ValueInjectionAttributeBase
             .OrderByDescending(x => x);
 
         if (member.GetMemberType() == typeof(NuGetVersion[]))
+        {
             return versions.ToArray();
+        }
 
         var latestVersion = versions.FirstOrDefault(x => !x.IsPrerelease || IncludePrerelease);
         return member.GetMemberType() == typeof(NuGetVersion)

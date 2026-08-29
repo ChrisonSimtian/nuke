@@ -17,7 +17,10 @@ internal interface IBuildScaffolder
 {
     void WriteBuildScripts(AbsolutePath scriptDirectory, AbsolutePath rootDirectory);
     void WriteConfigurationFile(AbsolutePath rootDirectory, AbsolutePath solutionFile);
-    void UpdateSolutionFileContent(List<string> content, string buildProjectFileRelative, string buildProjectGuid, string buildProjectName);
+
+    void UpdateSolutionFileContent(List<string> content, string buildProjectFileRelative, string buildProjectGuid,
+        string buildProjectName);
+
     void UpdateSolutionXmlFileContent(XDocument content, string buildProjectFileRelative);
     string[] GetTemplate(string templateName);
 }
@@ -80,22 +83,35 @@ internal sealed class BuildScaffolder : IBuildScaffolder
         void MakeExecutable(AbsolutePath scriptFile)
         {
             if (rootDirectory.ContainsDirectory(".git"))
+            {
                 StartProcess("git", $"update-index --add --chmod=+x {scriptFile}", logInvocation: false, logOutput: false);
+            }
 
             if (rootDirectory.ContainsDirectory(".svn"))
+            {
                 StartProcess("svn", $"propset svn:executable on {scriptFile}", logInvocation: false, logOutput: false);
+            }
 
             if (IsUnix)
+            {
                 StartProcess("chmod", $"+x {scriptFile}", logInvocation: false, logOutput: false);
+            }
         }
     }
 
     public void WriteConfigurationFile(AbsolutePath rootDirectory, AbsolutePath solutionFile)
     {
         var parametersFile = GetDefaultParametersFile(rootDirectory);
-        var dictionary = new Dictionary<string, string> { ["$schema"] = BuildSchemaFileName };
+        var dictionary = new Dictionary<string, string>
+        {
+            ["$schema"] = BuildSchemaFileName
+        };
+
         if (solutionFile != null)
+        {
             dictionary["Solution"] = rootDirectory.GetUnixRelativePathTo(solutionFile).ToString();
+        }
+
         parametersFile.WriteJson(dictionary, JsonExtensions.DefaultSerializerOptions);
     }
 
@@ -106,7 +122,9 @@ internal sealed class BuildScaffolder : IBuildScaffolder
         string buildProjectName)
     {
         if (content.Any(x => x.Contains(buildProjectFileRelative)))
+        {
             return;
+        }
 
         var globalIndex = content.IndexOf("Global");
         Assert.True(globalIndex != -1, "Could not find a 'Global' section in solution file");
@@ -138,6 +156,7 @@ internal sealed class BuildScaffolder : IBuildScaffolder
 
         content.Insert(globalIndex,
             $"Project(\"{{{PROJECT_KIND}}}\") = \"{buildProjectName}\", \"{buildProjectFileRelative}\", \"{{{buildProjectGuid}}}\"");
+
         content.Insert(globalIndex + 1,
             "EndProject");
     }

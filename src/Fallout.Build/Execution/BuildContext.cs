@@ -59,7 +59,9 @@ internal sealed class BuildContext : IDisposable
         // The rest is shared process-wide state, so only the context that is still Current may reset
         // it — a superseded scope disposing out of order must not clobber the newer run.
         if (!ReferenceEquals(currentInstance.Value, this))
+        {
             return;
+        }
 
         Logging.InMemorySink.Instance.Clear();
         ValueInjectionUtility.ClearCache();

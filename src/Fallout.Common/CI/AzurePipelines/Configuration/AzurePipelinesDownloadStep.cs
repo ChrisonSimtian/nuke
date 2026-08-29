@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common.Utilities;
+﻿using Fallout.Common.Utilities;
 
 namespace Fallout.Common.CI.AzurePipelines.Configuration;
 
 public class AzurePipelinesDownloadStep : AzurePipelinesStep
 {
     public string ArtifactName { get; set; }
+
     public string DownloadPath { get; set; }
 
     public override void Write(CustomFileWriter writer)

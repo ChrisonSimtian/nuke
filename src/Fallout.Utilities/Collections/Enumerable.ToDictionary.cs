@@ -41,9 +41,13 @@ public static partial class EnumerableExtensions
         var groups = enumerable.ToLookup(keySelector.Invoke, valueSelector.Invoke);
         Assert.True(
             groups.All(x => x.Count() == 1),
-            new[] { $"{duplicationMessage.TrimEnd(":")}:" }
+            new[]
+                {
+                    $"{duplicationMessage.TrimEnd(":")}:"
+                }
                 .Concat(groups.Where(x => x.Count() > 1).Select(x => $" - {x.Key}"))
                 .JoinNewLine());
+
         return groups.ToDictionary(x => x.Key, x => x.Single());
     }
 }

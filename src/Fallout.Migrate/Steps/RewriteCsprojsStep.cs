@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -152,10 +153,13 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
         var (variablesToBump, ambiguousVariables) =
             ClassifyPackageReferenceVariables(content, falloutVersionVariable);
 
-        (content, int redirectEdits) = RedirectAmbiguousVariablesToFalloutVersion(content, ambiguousVariables, falloutVersionVariable);
+        (content, int redirectEdits) =
+            RedirectAmbiguousVariablesToFalloutVersion(content, ambiguousVariables, falloutVersionVariable);
+
         edits += redirectEdits;
 
-        content = EnsureFalloutVersionPropertyExists(content, ambiguousVariables, falloutVersionVariable, falloutVersion, ref edits);
+        content = EnsureFalloutVersionPropertyExists(content, ambiguousVariables, falloutVersionVariable, falloutVersion,
+            ref edits);
 
         (content, int bumpEdits) = BumpVariableProperties(content, variablesToBump, falloutVersion);
         edits += bumpEdits;
@@ -173,7 +177,11 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
             .Select(m => m.Groups["variable"].Value)
             .ToHashSet();
 
-        var variablesToBump = new HashSet<string> { falloutVersionVariable };
+        var variablesToBump = new HashSet<string>
+        {
+            falloutVersionVariable
+        };
+
         var ambiguousVariables = new HashSet<string>();
 
         foreach (var variable in falloutPackageReferenceVariablePattern.Matches(content)
@@ -197,6 +205,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
             // unchanged while just swapping the variable reference.
             var redirectPattern = new Regex(
                 $@"(<PackageReference\s+Include=""Fallout\.[^""]+""[^>]*?Version="")\$\({Regex.Escape(variable)}\)");
+
             content = redirectPattern.Replace(content, m =>
             {
                 edits++;
@@ -215,7 +224,7 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
             return content;
         }
 
-        var propertyGroupIndex = content.IndexOf("<PropertyGroup>", System.StringComparison.Ordinal);
+        var propertyGroupIndex = content.IndexOf("<PropertyGroup>", StringComparison.Ordinal);
         if (propertyGroupIndex >= 0)
         {
             edits++;
@@ -227,10 +236,11 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
         // No PropertyGroup exists at all (e.g. a project relying solely on Directory.Build.props
         // for properties) — synthesize one right after the opening <Project> tag so the newly
         // introduced $(FalloutVersion) reference has somewhere to resolve from.
-        var projectTagStart = content.IndexOf("<Project", System.StringComparison.Ordinal);
+        var projectTagStart = content.IndexOf("<Project", StringComparison.Ordinal);
         var projectTagEnd = projectTagStart >= 0
             ? content.IndexOf('>', projectTagStart)
             : -1;
+
         if (projectTagEnd < 0)
         {
             return content;
@@ -242,7 +252,8 @@ internal sealed class RewriteCsprojsStep : IMigrationStep
             $"\n  <PropertyGroup>\n    <{falloutVersionVariable}>{falloutVersion}</{falloutVersionVariable}>\n  </PropertyGroup>");
     }
 
-    private static (string content, int edits) BumpVariableProperties(string content, HashSet<string> variablesToBump, string falloutVersion)
+    private static (string content, int edits) BumpVariableProperties(string content, HashSet<string> variablesToBump,
+        string falloutVersion)
     {
         var edits = 0;
 

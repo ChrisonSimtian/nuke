@@ -1,17 +1,31 @@
 using System;
 using System.Linq;
-using FluentAssertions;
 using Fallout.Common.Execution;
 using Fallout.Common.Utilities.Collections;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs.Execution;
 
 public class BuildExecutorSpecs
 {
-    private ExecutableTarget A = new() { Name = nameof(A), Status = ExecutionStatus.Scheduled };
-    private ExecutableTarget B = new() { Name = nameof(B), Status = ExecutionStatus.Scheduled };
-    private ExecutableTarget C = new() { Name = nameof(C), Status = ExecutionStatus.Scheduled };
+    private readonly ExecutableTarget A = new()
+    {
+        Name = nameof(A),
+        Status = ExecutionStatus.Scheduled
+    };
+
+    private readonly ExecutableTarget B = new()
+    {
+        Name = nameof(B),
+        Status = ExecutionStatus.Scheduled
+    };
+
+    private readonly ExecutableTarget C = new()
+    {
+        Name = nameof(C),
+        Status = ExecutionStatus.Scheduled
+    };
 
     public BuildExecutorSpecs()
     {
@@ -34,7 +48,11 @@ public class BuildExecutorSpecs
     [Fact]
     public void TestParameterSkipped()
     {
-        ExecuteBuild(skippedTargets: new[] { A });
+        ExecuteBuild(skippedTargets: new[]
+        {
+            A
+        });
+
         AssertSucceeded(B, C);
         AssertSkipped(A);
         A.Skipped.Should().Be("via parameter");
@@ -64,7 +82,11 @@ public class BuildExecutorSpecs
     public void TestParameterSkipped_DependencyBehavior_Skip()
     {
         B.DependencyBehavior = DependencyBehavior.Skip;
-        ExecuteBuild(skippedTargets: new[] { B });
+        ExecuteBuild(skippedTargets: new[]
+        {
+            B
+        });
+
         AssertSucceeded(C);
         AssertSkipped(A, B);
         A.Skipped.Should().Be("because of B");
@@ -193,8 +215,20 @@ public class BuildExecutorSpecs
         static string[] SelectNames(ExecutableTarget[] targets) => targets?.Select(x => x.Name).ToArray();
 
         var build = new TestBuild();
-        build.ExecutableTargets = new[] { A, B, C };
-        build.ExecutionPlan = new[] { A, B, C };
+        build.ExecutableTargets = new[]
+        {
+            A,
+            B,
+            C
+        };
+
+        build.ExecutionPlan = new[]
+        {
+            A,
+            B,
+            C
+        };
+
         BuildExecutor.Execute(build, SelectNames(skippedTargets));
     }
 

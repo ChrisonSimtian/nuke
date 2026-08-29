@@ -6,7 +6,7 @@ namespace Fallout.Common.Utilities.Collections;
 
 partial class EnumerableExtensions
 {
-    private static readonly Random randomNumberGenerator = new Random();
+    private static readonly Random randomNumberGenerator = new();
 
     public static T Random<T>(this IEnumerable<T> collection)
     {
@@ -18,7 +18,8 @@ partial class EnumerableExtensions
     {
         var list = collection.ToList();
         var count = list.Count;
-        while (count > 1) {
+        while (count > 1)
+        {
             count--;
             var k = randomNumberGenerator.Next(count + 1);
             (list[k], list[count]) = (list[count], list[k]);

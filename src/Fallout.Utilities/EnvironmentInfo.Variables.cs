@@ -53,7 +53,9 @@ public static partial class EnvironmentInfo
     {
         var value = GetVariable(name);
         if (value == null)
+        {
             return default;
+        }
 
         return (T)ReflectionUtility.Convert(value, typeof(T), separator, booleanDefault: false);
     }
@@ -90,7 +92,8 @@ public static partial class EnvironmentInfo
         string ExpandUnixEnvironmentVariables()
             => value
                 .ReplaceRegex("^~", _ => Environment.GetEnvironmentVariable("HOME"))
-                .ReplaceRegex(@"\$([a-z_][a-z0-9_]*)", x => Environment.GetEnvironmentVariable(x.Groups[1].Value), RegexOptions.IgnoreCase);
+                .ReplaceRegex(@"\$([a-z_][a-z0-9_]*)", x => Environment.GetEnvironmentVariable(x.Groups[1].Value),
+                    RegexOptions.IgnoreCase);
 
         return IsWin
             ? Environment.ExpandEnvironmentVariables(value)

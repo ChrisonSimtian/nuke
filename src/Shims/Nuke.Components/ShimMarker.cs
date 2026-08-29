@@ -3,6 +3,8 @@
 // "Nuke.Components" namespace. The bulk of this assembly is the component
 // interface family (ICompile, IRestore, IPack, ITest, IPublish, IHas*).
 
-[assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder(
+using Fallout.Migrate.Shims;
+
+[assembly: ShimAllPublicTypesUnder(
     fromNamespacePrefix: "Fallout.Components",
     toNamespacePrefix: "Nuke.Components")]

@@ -29,7 +29,10 @@ public sealed class PublishTarget
     public string? ApiKey { get; init; }
 
     /// <summary>Package-name globs (<c>*</c>, <c>?</c>) this target accepts. Default: everything.</summary>
-    public IReadOnlyList<string> IncludePackages { get; init; } = new[] { "*" };
+    public IReadOnlyList<string> IncludePackages { get; init; } = new[]
+    {
+        "*"
+    };
 
     /// <summary>Package-name globs this target rejects. Exclusion wins over inclusion.</summary>
     public IReadOnlyList<string> ExcludePackages { get; init; } = Array.Empty<string>();

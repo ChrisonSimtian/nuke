@@ -2,7 +2,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using Fallout.Common.Utilities;
 
 namespace Fallout.Common.Tooling;
 
@@ -17,6 +16,7 @@ public static class NuGetVersionResolver
             var url = includeUnlisted
                 ? $"https://api.nuget.org/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json"
                 : $"https://api-v2v3search-0.nuget.org/query?q=packageid:{packageId}&prerelease={includePrereleases}";
+
             var jsonString = await client.GetStringAsync(url);
             var jsonObject = JsonNode.Parse(jsonString)?.AsObject().NotNull();
 
@@ -24,6 +24,7 @@ public static class NuGetVersionResolver
             {
                 var versions = jsonObject!.First().Value.NotNull().AsArray()
                     .Select(x => x!.GetValue<string>());
+
                 return versions.Last(x => includePrereleases || !x.Contains("-"));
             }
 

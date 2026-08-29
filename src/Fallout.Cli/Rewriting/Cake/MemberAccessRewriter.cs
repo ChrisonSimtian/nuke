@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using Fallout.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Fallout.Common;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Fallout.Cli.Rewriting.Cake;
@@ -18,7 +16,7 @@ internal class MemberAccessRewriter : SafeSyntaxRewriter
 
     public override SyntaxNode VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
     {
-        node = (MemberAccessExpressionSyntax) base.VisitMemberAccessExpression(node).NotNull();
+        node = (MemberAccessExpressionSyntax)base.VisitMemberAccessExpression(node).NotNull();
         return node.Expression is not IdentifierNameSyntax identifierNameSyntax ||
                !Replacements.TryGetValue(identifierNameSyntax.Identifier.Text, out var newName)
             ? node

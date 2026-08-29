@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using System.Linq;
-using FluentAssertions;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
@@ -159,7 +159,8 @@ public class GitRepositoryWorktreeSpecs
         // on a named branch. A tag-triggered release build checks out a detached HEAD, where
         // GitRepository.Branch is null; deriving the base ref from it previously produced an
         // invalid `git worktree add` invocation and failed the release pack.
-        ProcessTasks.StartProcess("git", $"worktree add -b {uniqueBranchName} {worktreePath} HEAD", workingDirectory: Directory.GetCurrentDirectory())
+        ProcessTasks.StartProcess("git", $"worktree add -b {uniqueBranchName} {worktreePath} HEAD",
+                workingDirectory: Directory.GetCurrentDirectory())
             .AssertZeroExitCode();
 
         return worktreePath;
@@ -168,7 +169,9 @@ public class GitRepositoryWorktreeSpecs
     private static void CleanupWorktree(AbsolutePath worktreePath)
     {
         if (!worktreePath.DirectoryExists())
+        {
             return;
+        }
 
         try
         {
@@ -185,7 +188,9 @@ public class GitRepositoryWorktreeSpecs
     private static void CleanupTemporaryDirectory(AbsolutePath tempDir)
     {
         if (!tempDir.DirectoryExists())
+        {
             return;
+        }
 
         try
         {
@@ -197,7 +202,8 @@ public class GitRepositoryWorktreeSpecs
         }
     }
 
-    private static void AssertWorktreeRepository(GitRepository worktreeRepo, GitRepository mainRepo, AbsolutePath expectedWorktreePath)
+    private static void AssertWorktreeRepository(GitRepository worktreeRepo, GitRepository mainRepo,
+        AbsolutePath expectedWorktreePath)
     {
         worktreeRepo.Endpoint.Should().Be(mainRepo.Endpoint);
         worktreeRepo.Identifier.Should().Be(mainRepo.Identifier);

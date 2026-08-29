@@ -5,8 +5,10 @@
 // users upgrading across the SolutionModel → Solution / Fallout.Solutions rename.
 
 using Fallout.Common;
-using Fallout.Common.IO;
-using Fallout.Common.ProjectModel;  // the interim namespace, now served by the transition shim
+using Fallout.Common.ProjectModel;
+using Serilog;
+
+// the interim namespace, now served by the transition shim
 
 internal class Build : FalloutBuild
 {
@@ -18,7 +20,7 @@ internal class Build : FalloutBuild
     private Target Default => _ => _
         .Executes(() =>
         {
-            Serilog.Log.Information("hello from fallout consumer (Fallout.Common.ProjectModel shim)");
-            Serilog.Log.Information("solution name: {Name}", Solution?.Name ?? "<unbound>");
+            Log.Information("hello from fallout consumer (Fallout.Common.ProjectModel shim)");
+            Log.Information("solution name: {Name}", Solution?.Name ?? "<unbound>");
         });
 }

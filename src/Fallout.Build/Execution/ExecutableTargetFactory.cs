@@ -29,32 +29,33 @@ internal static class ExecutableTargetFactory
                 .Select(x => x.GetProperty(property.Name))
                 .Where(x => x != null && x.DeclaringType == x.ReflectedType)
                 .Reverse().ToList();
+
             var definition = new TargetDefinition(property, build, new Stack<PropertyInfo>(baseMembers));
 
-            var factory = (Delegate) property.GetValue(build);
+            var factory = (Delegate)property.GetValue(build);
             factory.DynamicInvokeUnwrap(definition);
 
             return new ExecutableTarget
-                   {
-                       Name = definition.Name,
-                       Member = property,
-                       Definition = definition,
-                       Intercept = definition.Intercept,
-                       Description = definition.Description,
-                       Factory = factory,
-                       IsDefault = defaultTargets.Contains(factory),
-                       DynamicConditions = definition.DynamicConditions,
-                       StaticConditions = definition.StaticConditions,
-                       DependencyBehavior = definition.DependencyBehavior,
-                       ProceedAfterFailure = definition.IsProceedAfterFailure,
-                       AssuredAfterFailure = definition.IsAssuredAfterFailure || factory is Cleanup,
-                       DelegateRequirements = definition.DelegateRequirements,
-                       ToolRequirements = definition.ToolRequirements,
-                       Actions = definition.Actions,
-                       Listed = !definition.IsInternal,
-                       PartitionSize = definition.PartitionSize,
-                       ArtifactProducts = definition.ArtifactProducts
-                   };
+            {
+                Name = definition.Name,
+                Member = property,
+                Definition = definition,
+                Intercept = definition.Intercept,
+                Description = definition.Description,
+                Factory = factory,
+                IsDefault = defaultTargets.Contains(factory),
+                DynamicConditions = definition.DynamicConditions,
+                StaticConditions = definition.StaticConditions,
+                DependencyBehavior = definition.DependencyBehavior,
+                ProceedAfterFailure = definition.IsProceedAfterFailure,
+                AssuredAfterFailure = definition.IsAssuredAfterFailure || factory is Cleanup,
+                DelegateRequirements = definition.DelegateRequirements,
+                ToolRequirements = definition.ToolRequirements,
+                Actions = definition.Actions,
+                Listed = !definition.IsInternal,
+                PartitionSize = definition.PartitionSize,
+                ArtifactProducts = definition.ArtifactProducts
+            };
         }
 
         var executables = targetProperties.Select(Create).ToList();
@@ -70,13 +71,17 @@ internal static class ExecutableTargetFactory
             Func<TargetDefinition, IReadOnlyList<Delegate>> indirectDependenciesSelector)
         {
             foreach (var factoryDependency in directDependenciesSelector(executable.Definition))
+            {
                 yield return executables.Single(x => x.Factory == factoryDependency);
+            }
 
             foreach (var otherExecutables in executables.Where(x => x != executable))
             {
                 var otherDependencies = indirectDependenciesSelector(otherExecutables.Definition);
                 if (otherDependencies.Any(x => x == executable.Factory))
+                {
                     yield return otherExecutables;
+                }
             }
         }
 
@@ -97,6 +102,7 @@ internal static class ExecutableTargetFactory
             var cleanup = executables
                 .Where(x => x.Factory is Cleanup)
                 .Single(x => x.Member.DeclaringType == executable.Member.DeclaringType);
+
             executable.Triggers.Add(cleanup);
             cleanup.TriggerDependencies.Add(executable);
         }
@@ -105,7 +111,10 @@ internal static class ExecutableTargetFactory
         {
             var dependency = executables.Single(x => x.Factory.Equals(artifactDependency.Key));
             foreach (var artifacts in artifactDependency)
-                executable.ArtifactDependencies.AddRange(dependency, artifacts.Length > 0 ? artifacts : dependency.ArtifactProducts);
+            {
+                executable.ArtifactDependencies.AddRange(dependency,
+                    artifacts.Length > 0 ? artifacts : dependency.ArtifactProducts);
+            }
         }
     }
 
@@ -113,7 +122,12 @@ internal static class ExecutableTargetFactory
     {
         // TODO: static targets?
         return buildType.GetAllMembers(
-            x => x is PropertyInfo property && new[] { typeof(Target), typeof(Setup), typeof(Cleanup) }.Contains(property.PropertyType),
+            x => x is PropertyInfo property && new[]
+            {
+                typeof(Target),
+                typeof(Setup),
+                typeof(Cleanup)
+            }.Contains(property.PropertyType),
             bindingFlags: ReflectionUtility.Instance,
             allowAmbiguity: false,
             filterQuasiOverridden: true).Cast<PropertyInfo>();

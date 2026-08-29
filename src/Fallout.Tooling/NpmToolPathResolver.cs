@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common.IO;
+﻿using Fallout.Common.IO;
 
 namespace Fallout.Common.Tooling;
 

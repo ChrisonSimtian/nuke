@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.AzurePipelines;
 
 public static class AzurePipelines
 {
-    public static global::Fallout.Common.CI.AzurePipelines.AzurePipelines Instance
-        => global::Fallout.Common.CI.AzurePipelines.AzurePipelines.Instance;
+    public static Fallout.Common.CI.AzurePipelines.AzurePipelines Instance
+        => Fallout.Common.CI.AzurePipelines.AzurePipelines.Instance;
 }

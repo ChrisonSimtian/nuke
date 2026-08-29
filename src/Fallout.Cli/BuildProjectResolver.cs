@@ -17,7 +17,7 @@ internal static class BuildProjectResolver
 
     public static AbsolutePath Resolve(AbsolutePath rootDirectory)
     {
-        Assert.NotNull(rootDirectory);
+        rootDirectory.NotNull();
 
         var parametersFile = GetDefaultParametersFile(rootDirectory);
         if (File.Exists(parametersFile))
@@ -28,8 +28,10 @@ internal static class BuildProjectResolver
                 var configuredPath = Path.IsPathRooted(configured)
                     ? (AbsolutePath)configured
                     : rootDirectory / configured;
+
                 Assert.True(File.Exists(configuredPath),
                     $"BuildProjectFile '{configured}' from '{parametersFile}' does not exist (resolved as '{configuredPath}').");
+
                 return configuredPath;
             }
         }
@@ -38,6 +40,7 @@ internal static class BuildProjectResolver
         Assert.True(File.Exists(defaultPath),
             $"Could not locate build project. Looked for '{defaultPath}' (convention) and 'BuildProjectFile' is not set in '{parametersFile}'. " +
             $"Run 'fallout :setup' to scaffold a build, or set 'BuildProjectFile' in '{parametersFile}'.");
+
         return defaultPath;
     }
 }

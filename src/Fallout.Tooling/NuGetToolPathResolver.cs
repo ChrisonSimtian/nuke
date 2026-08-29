@@ -25,14 +25,23 @@ public static class NuGetToolPathResolver
         PaketPackagesConfigFile = null;
     }
 
-    public static string GetPackageExecutable(string packageId, string packageExecutable, string version = null, string framework = null)
+    public static string GetPackageExecutable(string packageId, string packageExecutable, string version = null,
+        string framework = null)
     {
         Assert.True(packageId != null && packageExecutable != null);
 
-        var packageDirectory = GetPackageDirectory(packageId.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries), version);
-        var packageExecutables = packageExecutable.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+        var packageDirectory = GetPackageDirectory(packageId.Split(new[]
+        {
+            '|'
+        }, StringSplitOptions.RemoveEmptyEntries), version);
+
+        var packageExecutables = packageExecutable.Split(new[]
+        {
+            '|'
+        }, StringSplitOptions.RemoveEmptyEntries);
 #if !NETSTANDARD2_0
-            var enumerationOptions = new EnumerationOptions { RecurseSubdirectories = true, MatchCasing = MatchCasing.CaseInsensitive };
+            var enumerationOptions = new EnumerationOptions { RecurseSubdirectories = true, MatchCasing =
+ MatchCasing.CaseInsensitive };
 #endif
         var packageExecutablePaths = packageExecutables
 #if !NETSTANDARD2_0
@@ -45,8 +54,11 @@ public static class NuGetToolPathResolver
 
         Assert.NotEmpty(packageExecutablePaths,
             $"Could not find {packageExecutables.Select(x => x.SingleQuote()).JoinCommaOr()} inside '{packageDirectory}'");
+
         if (packageExecutablePaths.Count == 1 && framework == null)
+        {
             return packageExecutablePaths.Single();
+        }
 
         static string GetFramework(string file)
         {
@@ -68,16 +80,20 @@ public static class NuGetToolPathResolver
 
         Assert.True(frameworks.Count > 0);
         if (frameworks.Count == 1)
+        {
             return GetPackageExecutable(frameworks.Single());
+        }
 
         framework ??= (Assembly.GetEntryAssembly()?.GetCustomAttribute<TargetFrameworkAttribute>()
             ?.FrameworkDisplayName?.Replace(".NET ", "net")).NotNull();
+
         var sortedFrameworks = frameworks.Select(x => x.Key)
             .OrderBy(x => x == framework)
             .ThenBy(x => x.Contains("."))
             .ThenBy(x => !x.StartsWith("netcore"))
             .ThenBy(x => x)
             .Reverse();
+
         return GetPackageExecutable(frameworks[sortedFrameworks.First()]);
     }
 
@@ -131,7 +147,9 @@ public static class NuGetToolPathResolver
         catch (Exception exception)
         {
             if (NuGetPackagesConfigFile != null && !NuGetPackagesConfigFile.EndsWithOrdinalIgnoreCase(".csproj"))
+            {
                 throw;
+            }
 
             var packageCombinations =
                 from packageId in packageIds
@@ -140,7 +158,8 @@ public static class NuGetToolPathResolver
                     {
                         NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: false).GetAwaiter().GetResult(),
                         NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: true).GetAwaiter().GetResult(),
-                        NuGetPackageResolver.GetGlobalInstalledPackage(packageId, version: null, packagesConfigFile: null)?.Version.ToString()
+                        NuGetPackageResolver.GetGlobalInstalledPackage(packageId, version: null, packagesConfigFile: null)
+                            ?.Version.ToString()
                     }
                 where packageVersion != null
                 select (Id: packageId, Version: packageVersion);
@@ -153,6 +172,7 @@ public static class NuGetToolPathResolver
                     }.Concat(packageCombinations.Distinct().Select(x => $"  - fallout :add-package {x.Id} --version {x.Version}"))
                     .JoinNewLine(),
                 exception);
+
             throw new Exception("Not reachable");
         }
     }

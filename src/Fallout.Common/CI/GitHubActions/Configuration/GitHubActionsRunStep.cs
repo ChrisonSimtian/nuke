@@ -20,6 +20,7 @@ public class GitHubActionsRunStep : GitHubActionsStep
     } = GitHubActionsDefaults.SetupDotNetAction;
 
     public string[] InvokedTargets { get; set; }
+
     public Dictionary<string, string> Imports { get; set; }
 
     public override void Write(CustomFileWriter writer)

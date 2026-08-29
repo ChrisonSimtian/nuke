@@ -5,10 +5,8 @@
 // users from silent breakage.
 
 using Nuke.Common;
-using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Components;
-
+using Serilog;
 // The shim generator skips delegates by C# language limitation (see SHIM002 —
 // can't subclass a delegate cross-assembly). `Target` is a delegate in
 // Fallout.Common, so NUKE-era code referencing `Target` needs either
@@ -26,7 +24,7 @@ internal class Build : NukeBuild
     private Target Default => _ => _
         .Executes(() =>
         {
-            Serilog.Log.Information("hello from nuke consumer (via shim)");
-            Serilog.Log.Information("solution name: {Name}", Solution?.Name ?? "<unbound>");
+            Log.Information("hello from nuke consumer (via shim)");
+            Log.Information("solution name: {Name}", Solution?.Name ?? "<unbound>");
         });
 }

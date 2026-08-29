@@ -12,11 +12,11 @@ namespace Nuke.Common.Utilities;
 public static class DelegateDisposable
 {
     public static IDisposable CreateBracket(Action setup = null, Action cleanup = null)
-        => global::Fallout.Common.Utilities.DelegateDisposable.CreateBracket(setup, cleanup);
+        => Fallout.Common.Utilities.DelegateDisposable.CreateBracket(setup, cleanup);
 
     public static IDisposable CreateBracket<T>(Func<T> setup, Action<T> cleanup)
-        => global::Fallout.Common.Utilities.DelegateDisposable.CreateBracket(setup, cleanup);
+        => Fallout.Common.Utilities.DelegateDisposable.CreateBracket(setup, cleanup);
 
     public static IDisposable SetAndRestore<T>(Expression<Func<T>> memberProvider, T value)
-        => global::Fallout.Common.Utilities.DelegateDisposable.SetAndRestore(memberProvider, value);
+        => Fallout.Common.Utilities.DelegateDisposable.SetAndRestore(memberProvider, value);
 }

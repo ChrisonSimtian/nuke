@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 
@@ -21,7 +20,9 @@ public class GitHubActionsCacheStep : GitHubActionsStep
     } = GitHubActionsDefaults.CacheAction;
 
     public string[] IncludePatterns { get; set; }
+
     public string[] ExcludePatterns { get; set; }
+
     public string[] KeyFiles { get; set; }
 
     public override void Write(CustomFileWriter writer)
@@ -36,7 +37,8 @@ public class GitHubActionsCacheStep : GitHubActionsStep
                 writer.WriteLine("path: |");
                 IncludePatterns.ForEach(x => writer.WriteLine($"  {x}"));
                 ExcludePatterns.ForEach(x => writer.WriteLine($"  !{x}"));
-                writer.WriteLine($"key: ${{{{ runner.os }}}}-${{{{ hashFiles({KeyFiles.Select(x => x.SingleQuoteYaml()).JoinCommaSpace()}) }}}}");
+                writer.WriteLine(
+                    $"key: ${{{{ runner.os }}}}-${{{{ hashFiles({KeyFiles.Select(x => x.SingleQuoteYaml()).JoinCommaSpace()}) }}}}");
             }
         }
     }

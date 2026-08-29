@@ -171,7 +171,11 @@ internal sealed class ResolveFalloutVersionStep : IMigrationStep
     /// <returns>A configured <see cref="HttpClient"/>.</returns>
     private static HttpClient CreateHttpClient()
     {
-        HttpClient client = new() { Timeout = TimeSpan.FromSeconds(3) };
+        HttpClient client = new()
+        {
+            Timeout = TimeSpan.FromSeconds(3)
+        };
+
         client.DefaultRequestHeaders.UserAgent.ParseAdd("fallout-migrate");
 
         return client;

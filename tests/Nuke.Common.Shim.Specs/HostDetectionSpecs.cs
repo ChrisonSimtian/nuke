@@ -17,19 +17,20 @@ public class HostDetectionSpecs
     public void FalloutBuildHost_Resolves_DespiteConventionLessShimHostSubclass()
     {
         // Force the Nuke.Common shim assembly to load so detection sees its types.
-        var shimAssembly = typeof(global::Nuke.Common.NukeBuild).Assembly;
+        var shimAssembly = typeof(NukeBuild).Assembly;
 
         // Precondition: the shim really does emit a public, convention-less Host subclass.
         // Without one, this regression test has no teeth.
         var offenders = shimAssembly.GetTypes()
-            .Where(t => t.IsPublic && t.IsSubclassOf(typeof(global::Fallout.Common.Host)))
+            .Where(t => t.IsPublic && t.IsSubclassOf(typeof(Fallout.Common.Host)))
             .Where(t => t.GetProperty($"IsRunning{t.Name}", BindingFlags.Public | BindingFlags.Static) is null)
             .ToList();
+
         offenders.Should().NotBeEmpty();
 
         // Touching FalloutBuild runs its static ctor -> Host.Default, scanning every public
         // Host subclass. Resolving the property (not throwing) is the assertion.
-        var host = global::Fallout.Common.FalloutBuild.Host;
+        var host = Fallout.Common.FalloutBuild.Host;
         host.Should().NotBeNull();
     }
 }

@@ -40,7 +40,8 @@ public static partial class HttpResponseExtensions
         return JsonNode.Parse(await inspector.GetBodyAsync(), nodeOptions: options)?.AsObject();
     }
 
-    public static async Task WriteToFile(this HttpResponseInspector inspector, AbsolutePath path, FileMode mode = FileMode.CreateNew)
+    public static async Task WriteToFile(this HttpResponseInspector inspector, AbsolutePath path,
+        FileMode mode = FileMode.CreateNew)
     {
         using var fileStream = File.Open(path, mode);
         await inspector.Response.Content.CopyToAsync(fileStream);

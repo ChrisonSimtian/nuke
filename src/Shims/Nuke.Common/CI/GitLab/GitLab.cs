@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.GitLab;
 
 public static class GitLab
 {
-    public static global::Fallout.Common.CI.GitLab.GitLab Instance
-        => global::Fallout.Common.CI.GitLab.GitLab.Instance;
+    public static Fallout.Common.CI.GitLab.GitLab Instance
+        => Fallout.Common.CI.GitLab.GitLab.Instance;
 }

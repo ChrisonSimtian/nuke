@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace Fallout.Common.CI.Bitrise;
 
@@ -26,22 +25,41 @@ public class Bitrise : Host, IBuildServer
     }
 
     string IBuildServer.Branch => GitBranch;
+
     string IBuildServer.Commit => GitCommit;
 
     public string BuildUrl => EnvironmentInfo.GetVariable("BITRISE_BUILD_URL");
+
     public long BuildNumber => EnvironmentInfo.GetVariable<long>("BITRISE_BUILD_NUMBER");
+
     public string AppTitle => EnvironmentInfo.GetVariable("BITRISE_APP_TITLE");
+
     public string AppUrl => EnvironmentInfo.GetVariable("BITRISE_APP_URL");
-    [NoConvert] public string AppSlug => EnvironmentInfo.GetVariable("BITRISE_APP_SLUG");
-    [NoConvert] public string BuildSlug => EnvironmentInfo.GetVariable("BITRISE_BUILD_SLUG");
-    public DateTime BuildTriggerTimestamp => ConvertUnixTimestamp(EnvironmentInfo.GetVariable<long>("BITRISE_BUILD_TRIGGER_TIMESTAMP"));
+
+    [NoConvert]
+    public string AppSlug => EnvironmentInfo.GetVariable("BITRISE_APP_SLUG");
+
+    [NoConvert]
+    public string BuildSlug => EnvironmentInfo.GetVariable("BITRISE_BUILD_SLUG");
+
+    public DateTime BuildTriggerTimestamp =>
+        ConvertUnixTimestamp(EnvironmentInfo.GetVariable<long>("BITRISE_BUILD_TRIGGER_TIMESTAMP"));
+
     public string RepositoryUrl => EnvironmentInfo.GetVariable("GIT_REPOSITORY_URL");
+
     public string GitBranch => EnvironmentInfo.GetVariable("BITRISE_GIT_BRANCH");
+
     public string GitTag => EnvironmentInfo.GetVariable("BITRISE_GIT_TAG");
+
     public string GitCommit => EnvironmentInfo.GetVariable("BITRISE_GIT_COMMIT");
+
     public string GitMessage => EnvironmentInfo.GetVariable("BITRISE_GIT_MESSAGE");
+
     public long? PullRequest => EnvironmentInfo.GetVariable<long?>("BITRISE_PULL_REQUEST");
+
     public string ProvisionUrl => EnvironmentInfo.GetVariable("BITRISE_PROVISION_URL");
+
     public string CertificateUrl => EnvironmentInfo.GetVariable("BITRISE_CERTIFICATE_URL");
+
     public string CertificatePassphrase => EnvironmentInfo.GetVariable("BITRISE_CERTIFICATE_PASSPHRASE");
 }

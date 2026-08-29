@@ -46,12 +46,12 @@ partial class ToolTasks
         }
         catch (Exception exception)
         {
-            throw new Exception($"Cannot parse {typeof(TResult).Name} from output:".Concat(output.Select(x => x.Text)).JoinNewLine(), exception);
+            throw new Exception(
+                $"Cannot parse {typeof(TResult).Name} from output:".Concat(output.Select(x => x.Text)).JoinNewLine(), exception);
         }
     }
 
 #if NET6_0_OR_GREATER
-
     protected IReadOnlyCollection<Output> Run(
         ArgumentStringHandler arguments,
         string workingDirectory = null,
@@ -107,6 +107,7 @@ partial class ToolTasks
         var applicableTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
             .Where(x => x.IsAssignableTo(typeof(T)))
             .OrderByDescending(x => x.Descendants(x => x.BaseType).Count());
+
         var mostDerivedType = applicableTypes.First();
         return mostDerivedType.CreateInstance<T>();
     }

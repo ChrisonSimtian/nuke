@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Fallout.Common.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Fallout.Common.Utilities;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Fallout.Cli.Rewriting.Cake;
@@ -15,7 +14,9 @@ internal class RenameFieldIdentifierRewriter : SafeSyntaxRewriter
     public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
     {
         if (node.Parent is not CompilationUnitSyntax or ClassDeclarationSyntax)
+        {
             return node;
+        }
 
         string CreateRename(string name)
             => renames[name] = name.Capitalize().ReplaceKnownWords();

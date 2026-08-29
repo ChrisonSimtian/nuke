@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using System.Reflection;
-using Fallout.Common.Execution;
 using Fallout.Common.ValueInjection;
 using FluentAssertions;
 using Xunit;
@@ -38,7 +36,12 @@ public class DuplicateParameterSpecs
     public void Parameters_that_do_not_collide_are_all_kept()
     {
         GetDashedNames<BuildShadowingAnInterfaceParameter>()
-            .Should().Contain(new[] { "api-key", "only-on-the-interface", "only-on-the-build" });
+            .Should().Contain(new[]
+            {
+                "api-key",
+                "only-on-the-interface",
+                "only-on-the-build"
+            });
     }
 
     [Fact]

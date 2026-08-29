@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fallout.Common.Tools.CorFlags;
+﻿namespace Fallout.Common.Tools.CorFlags;
 
 partial class CorFlagsSettings
 {

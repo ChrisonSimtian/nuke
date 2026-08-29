@@ -47,7 +47,9 @@ public class LookupTable<TKey, TValue>(Dictionary<TKey, List<TValue>> dictionary
     {
         var list = (lookupDictionary[key] = lookupDictionary.GetValueOrDefault(key, new List<TValue>())).NotNull();
         foreach (var value in values)
+        {
             list.Add(value);
+        }
     }
 
     public void Remove(TKey key)

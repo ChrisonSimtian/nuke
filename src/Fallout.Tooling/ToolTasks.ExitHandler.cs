@@ -1,17 +1,21 @@
 ﻿using System;
-using System.Linq;
 
 namespace Fallout.Common.Tooling;
 
 public abstract partial class ToolTasks
 {
-    private Action<ToolOptions, IProcess> GetExitHandlerInternal(ToolOptions options = null, Func<IProcess, object> exitHandler = null)
+    private Action<ToolOptions, IProcess> GetExitHandlerInternal(ToolOptions options = null,
+        Func<IProcess, object> exitHandler = null)
     {
         if (options is { ProcessExitHandling: false })
+        {
             return (_, _) => { };
+        }
 
         if (exitHandler != null)
+        {
             return (_, p) => exitHandler.Invoke(p);
+        }
 
         return options?.ProcessExitHandler != null
             ? (o, p) => options.ProcessExitHandler.Invoke(o, p)

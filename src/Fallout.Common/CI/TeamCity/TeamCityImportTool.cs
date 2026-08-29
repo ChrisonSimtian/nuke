@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common.CI.TeamCity;
+﻿namespace Fallout.Common.CI.TeamCity;
 
 public enum TeamCityImportTool
 {

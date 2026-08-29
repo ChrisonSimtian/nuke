@@ -32,7 +32,7 @@ public static class XmlExtensions
         var document = XDocument.Parse(content, options);
 
         using var reader = document.Root.NotNull().CreateReader();
-        return (T) serializer.Deserialize(reader);
+        return (T)serializer.Deserialize(reader);
     }
 
     /// <summary>

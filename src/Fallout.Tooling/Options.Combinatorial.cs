@@ -36,13 +36,15 @@ partial class OptionsExtensions
         return values.Select(x => configurator(options, x)).ToArray();
     }
 
-    public static T[] CombineWith<T, TValue>(this IEnumerable<T> options, IEnumerable<TValue> values, Func<T, TValue, T> configurator)
+    public static T[] CombineWith<T, TValue>(this IEnumerable<T> options, IEnumerable<TValue> values,
+        Func<T, TValue, T> configurator)
         where T : Options
     {
         return options.SelectMany(x => values.Select(y => configurator(x, y))).ToArray();
     }
 
-    public static T[] CombineWith<T, TValue>(this T options, IEnumerable<TValue> values, Func<T, TValue, IEnumerable<T>> configurator)
+    public static T[] CombineWith<T, TValue>(this T options, IEnumerable<TValue> values,
+        Func<T, TValue, IEnumerable<T>> configurator)
         where T : Options
     {
         return values.SelectMany(x => configurator(options, x)).ToArray();

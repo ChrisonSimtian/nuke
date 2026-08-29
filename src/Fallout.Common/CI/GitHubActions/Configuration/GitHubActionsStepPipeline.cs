@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Fallout.Common.Utilities;
 
 namespace Fallout.Common.CI.GitHubActions.Configuration;
 
@@ -11,10 +10,10 @@ namespace Fallout.Common.CI.GitHubActions.Configuration;
 /// </summary>
 public class GitHubActionsStepPipeline
 {
-    private readonly Dictionary<GitHubActionsStepPosition, List<GitHubActionsCustomStep>> inserts =
-        new Dictionary<GitHubActionsStepPosition, List<GitHubActionsCustomStep>>();
+    private readonly Dictionary<GitHubActionsStepPosition, List<GitHubActionsCustomStep>> inserts = new();
 
-    internal GitHubActionsStepPipeline(string workflowName, GitHubActionsImage image, IReadOnlyList<GitHubActionsStep> builtInSteps)
+    internal GitHubActionsStepPipeline(string workflowName, GitHubActionsImage image,
+        IReadOnlyList<GitHubActionsStep> builtInSteps)
     {
         WorkflowName = workflowName;
         Image = image;
@@ -33,22 +32,27 @@ public class GitHubActionsStepPipeline
     /// <summary>Insert one custom step at <paramref name="position"/>. Multiple inserts at one position render in call order.</summary>
     public void Insert(GitHubActionsStepPosition position, GitHubActionsCustomStep step)
     {
-        Assert.NotNull(step);
+        step.NotNull();
         if (!inserts.TryGetValue(position, out var list))
+        {
             inserts[position] = list = new List<GitHubActionsCustomStep>();
+        }
+
         list.Add(step);
     }
 
     /// <summary>Insert several custom steps at <paramref name="position"/>, in enumeration order.</summary>
     public void Insert(GitHubActionsStepPosition position, IEnumerable<GitHubActionsCustomStep> steps)
     {
-        Assert.NotNull(steps);
+        steps.NotNull();
         foreach (var step in steps)
+        {
             Insert(position, step);
+        }
     }
 
     internal IReadOnlyList<GitHubActionsCustomStep> GetInserts(GitHubActionsStepPosition position)
-        => inserts.TryGetValue(position, out var list) ? list : (IReadOnlyList<GitHubActionsCustomStep>)new GitHubActionsCustomStep[0];
+        => inserts.TryGetValue(position, out var list) ? list : new GitHubActionsCustomStep[0];
 
     internal IEnumerable<GitHubActionsCustomStep> AllInserts => inserts.Values.SelectMany(x => x);
 }

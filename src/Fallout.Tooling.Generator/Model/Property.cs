@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Fallout.CodeGeneration.Model;
@@ -10,7 +9,8 @@ namespace Fallout.CodeGeneration.Model;
 [Serializable]
 public class Property : IDeprecatable
 {
-    [NonSerialized] private DataClass dataClass;
+    [NonSerialized]
+    private DataClass dataClass;
 
     [JsonIgnore]
     public DataClass DataClass
@@ -62,6 +62,7 @@ public class Property : IDeprecatable
     public bool? Secret { get; set; }
 
     public string Formatter { get; set; }
+
     public int? Position { get; set; }
 
     [Description("Custom implementation of value presentation.")]

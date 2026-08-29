@@ -15,7 +15,7 @@ partial class OctoVersionTasks
             Assert.FileExists(getVersion.OutputJsonFile);
             try
             {
-                var file = (AbsolutePath) getVersion.OutputJsonFile;
+                var file = (AbsolutePath)getVersion.OutputJsonFile;
                 // STJ deserializes records natively via constructor binding, so
                 // the AllWritableContractResolver workaround Newtonsoft needed
                 // is no longer required.
@@ -23,7 +23,8 @@ partial class OctoVersionTasks
             }
             catch (Exception exception)
             {
-                throw new Exception($"Cannot parse {nameof(OctoVersion)} output from {getVersion.OutputJsonFile.SingleQuote()}.", exception);
+                throw new Exception($"Cannot parse {nameof(OctoVersion)} output from {getVersion.OutputJsonFile.SingleQuote()}.",
+                    exception);
             }
         }
 

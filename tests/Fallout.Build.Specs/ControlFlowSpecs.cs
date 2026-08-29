@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -18,7 +17,9 @@ public class ControlFlowSpecs
         {
             executions++;
             if (executions != 2)
+            {
                 throw new Exception(executions.ToString());
+            }
         }
 
         ControlFlow.ExecuteWithRetry(OnSecondExecution);

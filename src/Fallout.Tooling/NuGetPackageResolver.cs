@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using System.Xml.Linq;
-using NuGet.Packaging;
-using NuGet.Versioning;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using NuGet.Packaging;
+using NuGet.Versioning;
 
 namespace Fallout.Common.Tooling;
 
@@ -48,10 +48,11 @@ public static class NuGetPackageResolver
         var assetsObject = JsonNode.Parse(assetsContent).NotNull().AsObject();
 
         // ReSharper disable HeapView.BoxingAllocation
-        var firstFramework = assetsObject["project"].NotNull()["frameworks"].NotNull().AsObject().First().Value.NotNull().AsObject();
+        var firstFramework = assetsObject["project"].NotNull()["frameworks"].NotNull().AsObject().First().Value.NotNull()
+            .AsObject();
 
         var directPackageReferences =
-            (firstFramework["dependencies"]?.AsObject().Select(x => x.Key).ToList())
+            firstFramework["dependencies"]?.AsObject().Select(x => x.Key).ToList()
             ?? new List<string>();
 
         var packageReferences =
@@ -67,12 +68,12 @@ public static class NuGetPackageResolver
                 .ToList();
 
         var packageDownloads =
-            (firstFramework["downloadDependencies"]?.AsArray()
+            firstFramework["downloadDependencies"]?.AsArray()
                 .Select(x => x.NotNull().AsObject())
                 .Select(x => (
                     PackageId: x["name"].NotNull().GetValue<string>(),
                     Version: x["version"].NotNull().GetValue<string>().Trim('[', ']').Split(',').First().Trim()
-                )).ToList())
+                )).ToList()
             ?? new List<(string, string)>();
         // ReSharper restore HeapView.BoxingAllocation
 
@@ -117,7 +118,9 @@ public static class NuGetPackageResolver
             {
                 var package = GetGlobalInstalledPackage(packageId, version, packagesConfigFile);
                 if (package == null)
+                {
                     continue;
+                }
 
                 installedPackages.Add(package);
                 yield return package;
@@ -134,7 +137,9 @@ public static class NuGetPackageResolver
                 foreach (var dependentPackage in GetDependentPackages(packageToCheck, packagesConfigFile))
                 {
                     if (installedPackages.Contains(dependentPackage))
+                    {
                         continue;
+                    }
 
                     installedPackages.Add(dependentPackage);
                     packagesToCheck.Enqueue(dependentPackage);
@@ -145,13 +150,18 @@ public static class NuGetPackageResolver
         }
     }
 
-    private static IEnumerable<InstalledPackage> GetDependentPackages(InstalledPackage packageToCheck, AbsolutePath packagesConfigFile)
+    private static IEnumerable<InstalledPackage> GetDependentPackages(InstalledPackage packageToCheck,
+        AbsolutePath packagesConfigFile)
     {
         return packageToCheck.Metadata.GetDependencyGroups()
             .SelectMany(x => x.Packages)
             .Select(x => GetGlobalInstalledPackage(x.Id, x.VersionRange, packagesConfigFile))
             .WhereNotNull()
-            .Distinct(x => new { x.Id, x.Version });
+            .Distinct(x => new
+            {
+                x.Id,
+                x.Version
+            });
     }
 
     public static InstalledPackage GetGlobalInstalledPackage(
@@ -163,7 +173,9 @@ public static class NuGetPackageResolver
             !version.Contains("*") &&
             !version.StartsWith("[") &&
             !version.EndsWith("]"))
+        {
             version = $"[{version}]";
+        }
 
         VersionRange.TryParse(version, out var versionRange);
         return GetGlobalInstalledPackage(packageId, versionRange, packagesConfigFile);
@@ -180,7 +192,9 @@ public static class NuGetPackageResolver
         packageId = packageId.ToLowerInvariant();
         var packagesDirectory = GetPackagesDirectory(packagesConfigFile);
         if (packagesDirectory == null)
+        {
             return null;
+        }
 
         var packagesDirectoryInfo = new DirectoryInfo(packagesDirectory);
         var packages = packagesDirectoryInfo
@@ -203,7 +217,8 @@ public static class NuGetPackageResolver
 
         return versionRange == null
             ? candidatePackages.FirstOrDefault()
-            : candidatePackages.SingleOrDefault(x => x.Version == versionRange.FindBestMatch(candidatePackages.Select(y => y.Version)));
+            : candidatePackages.SingleOrDefault(x =>
+                x.Version == versionRange.FindBestMatch(candidatePackages.Select(y => y.Version)));
     }
 
     public static string GetPackagesConfigFile(string projectDirectory)
@@ -212,6 +227,7 @@ public static class NuGetPackageResolver
         var packagesConfigFile = projectDirectoryInfo.GetFiles("packages.config").SingleOrDefault()
                                  ?? projectDirectoryInfo.GetFiles("*.csproj")
                                      .SingleOrDefaultOrError($"Directory '{projectDirectory}' contains multiple project files.");
+
         return packagesConfigFile?.FullName;
     }
 
@@ -224,10 +240,11 @@ public static class NuGetPackageResolver
         string TryGetGlobalDirectoryFromConfig()
             => GetConfigFiles(packagesConfigFile)
                 .Select(x => new
-                             {
-                                 File = x,
-                                 Setting = XDocument.Load(x).XPathSelectAttributeValues(".//add[@key='globalPackagesFolder']/@value").SingleOrDefault()
-                             })
+                {
+                    File = x,
+                    Setting = XDocument.Load(x).XPathSelectAttributeValues(".//add[@key='globalPackagesFolder']/@value")
+                        .SingleOrDefault()
+                })
                 .Where(x => x.Setting != null)
                 .Select(x => Path.IsPathRooted(x.Setting)
                     ? x.Setting
@@ -255,6 +272,7 @@ public static class NuGetPackageResolver
                                 TryGetGlobalDirectoryFromConfig() ??
                                 TryGetDefaultGlobalDirectory() ??
                                 TryGetLocalDirectory();
+
         return packagesDirectory != null && Directory.Exists(packagesDirectory)
             ? packagesDirectory
             : null;
@@ -275,7 +293,9 @@ public static class NuGetPackageResolver
         var directories = new List<AbsolutePath>();
 
         if (packagesConfigFile != null)
+        {
             directories.AddRange(packagesConfigFile.Descendants(x => x.Parent));
+        }
 
         if (EnvironmentInfo.IsWin)
         {
@@ -290,15 +310,23 @@ public static class NuGetPackageResolver
 
             var dataHomeDirectoy = EnvironmentInfo.GetVariable("XDG_DATA_HOME");
             if (!string.IsNullOrEmpty(dataHomeDirectoy))
+            {
                 directories.Add(dataHomeDirectoy);
+            }
             else
                 // TODO: /usr/local/share
+            {
                 directories.Add(EnvironmentInfo.SpecialFolder(SpecialFolders.UserProfile).NotNull() / ".local" / "share");
+            }
         }
 
         return directories
             .WhereDirectoryExists()
-            .SelectMany(x => new[] { x / "nuget.config", x / "NuGet.config" })
+            .SelectMany(x => new[]
+            {
+                x / "nuget.config",
+                x / "NuGet.config"
+            })
             // TODO: Add AbsolutePathComparer
             .Select(x => x.ToString())
             .Distinct(EnvironmentInfo.IsLinux ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase)
@@ -315,13 +343,25 @@ public static class NuGetPackageResolver
             public bool Equals(InstalledPackage x, InstalledPackage y)
             {
                 if (ReferenceEquals(x, y))
+                {
                     return true;
+                }
+
                 if (ReferenceEquals(x, objB: null))
+                {
                     return false;
+                }
+
                 if (ReferenceEquals(y, objB: null))
+                {
                     return false;
+                }
+
                 if (x.GetType() != y.GetType())
+                {
                     return false;
+                }
+
                 return Equals(x.Id, y.Id) && Equals(x.Version, y.Version);
             }
 
@@ -346,9 +386,13 @@ public static class NuGetPackageResolver
         }
 
         public AbsolutePath File { get; }
+
         public AbsolutePath Directory => File.Parent.NotNull();
+
         public NuspecReader Metadata => metadata.Value;
+
         public string Id => Metadata.GetIdentity().Id;
+
         public NuGetVersion Version => Metadata.GetIdentity().Version;
 
         public override string ToString()

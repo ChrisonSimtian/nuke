@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Fallout.Common.Tools.Unity.Logging;
 
@@ -21,9 +19,13 @@ internal class BlockMatcher
     }
 
     public string Name { get; }
+
     public string Beginning { get; }
+
     public string End { get; }
+
     public MatchType BeginMatchType { get; }
+
     public MatchType EndMatchType { get; }
 
     public MatchType MatchesEnd(string message)
@@ -42,7 +44,10 @@ internal class BlockMatcher
     {
         var name = Name;
         if (match.Groups.Count > 0)
+        {
             name += ": " + match.Groups[groupnum: 0];
+        }
+
         return new MatchedBlock(this, name, BeginMatchType);
     }
 }

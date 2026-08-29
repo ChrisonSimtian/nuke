@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 
@@ -21,6 +19,7 @@ public class TeamCityConfiguration : ConfigurationEntity
         };
 
     public string Version { get; set; }
+
     public TeamCityProject Project { get; set; }
 
     public override void Write(CustomFileWriter writer)

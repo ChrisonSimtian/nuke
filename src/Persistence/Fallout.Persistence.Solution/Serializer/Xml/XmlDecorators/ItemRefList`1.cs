@@ -18,7 +18,7 @@ namespace Fallout.Persistence.Solution.Serializer.Xml.XmlDecorators;
 internal readonly struct ItemRefList<T>(bool ignoreCase)
     where T : XmlDecorator, IItemRefDecorator
 {
-    private readonly Lictionary<string, T> items = new Lictionary<string, T>(0, ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+    private readonly Lictionary<string, T> items = new(0, ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
 
     public ItemRefList()
         : this(ignoreCase: false)
@@ -27,36 +27,38 @@ internal readonly struct ItemRefList<T>(bool ignoreCase)
 
     internal readonly bool IgnoreCase { get; } = ignoreCase;
 
-    internal readonly int ItemsCount => this.items.Count;
+    internal readonly int ItemsCount => items.Count;
 
     internal readonly void Add(T item)
     {
         // Missing Name attribute.
         if (!item.IsValid() || item.ItemRef is null)
         {
-            throw SolutionException.Create(string.Format(Errors.InvalidItemRef_Args2, item.ItemRefAttribute, item.ElementName), item, SolutionErrorType.InvalidItemRef);
+            throw SolutionException.Create(string.Format(Errors.InvalidItemRef_Args2, item.ItemRefAttribute, item.ElementName),
+                item, SolutionErrorType.InvalidItemRef);
         }
         else
         {
-            if (!this.items.TryAdd(item.ItemRef, item))
+            if (!items.TryAdd(item.ItemRef, item))
             {
                 // Duplicate Name attribute.
-                throw SolutionException.Create(string.Format(Errors.DuplicateItemRef_Args2, item.ItemRef, item.ElementName), item, SolutionErrorType.DuplicateItemRef);
+                throw SolutionException.Create(string.Format(Errors.DuplicateItemRef_Args2, item.ItemRef, item.ElementName), item,
+                    SolutionErrorType.DuplicateItemRef);
             }
         }
     }
 
-    internal readonly T? FirstOrDefault() => this.items.Count > 0 ? this.items[0] : null;
+    internal readonly T? FirstOrDefault() => items.Count > 0 ? items[0] : null;
 
     // Finds the item that would be immediately after the given item ref.
     internal readonly bool TryFindNext(string itemRef, out T? item)
     {
-        return this.items.TryFindNext(itemRef, out item);
+        return items.TryFindNext(itemRef, out item);
     }
 
     internal readonly void Remove(T item)
     {
-        _ = this.items.Remove(item.ItemRef);
+        _ = items.Remove(item.ItemRef);
     }
 
     internal readonly EnumForwarder GetItems()
@@ -66,7 +68,7 @@ internal readonly struct ItemRefList<T>(bool ignoreCase)
 
     internal ref struct EnumForwarder(ItemRefList<T> me)
     {
-        public readonly ItemsEnumerator GetEnumerator() => new ItemsEnumerator(me.items.GetEnumerator());
+        public readonly ItemsEnumerator GetEnumerator() => new(me.items.GetEnumerator());
     }
 
     internal ref struct ItemsEnumerator(List<KeyValuePair<string, T>>.Enumerator enumerator)
@@ -78,14 +80,14 @@ internal readonly struct ItemRefList<T>(bool ignoreCase)
 
     private sealed class OrdinalComparer : IComparer<T>
     {
-        internal static readonly OrdinalComparer Instance = new OrdinalComparer();
+        internal static readonly OrdinalComparer Instance = new();
 
         public int Compare(T? x, T? y) => StringComparer.Ordinal.Compare(x?.ItemRef, y?.ItemRef);
     }
 
     private sealed class OrdinalIgnoreCaseComparer : IComparer<T>
     {
-        internal static readonly OrdinalIgnoreCaseComparer Instance = new OrdinalIgnoreCaseComparer();
+        internal static readonly OrdinalIgnoreCaseComparer Instance = new();
 
         public int Compare(T? x, T? y) => StringComparer.OrdinalIgnoreCase.Compare(x?.ItemRef, y?.ItemRef);
     }

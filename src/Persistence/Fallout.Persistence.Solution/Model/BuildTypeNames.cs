@@ -26,6 +26,7 @@ internal static class BuildTypeNames
             Release => Release,
             _ => null,
         };
+
         return value is not null;
     }
 }

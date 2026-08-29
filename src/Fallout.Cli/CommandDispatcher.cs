@@ -7,7 +7,6 @@ using Fallout.Cli.Prompts;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
-using Fallout.Common.Utilities.Collections;
 
 namespace Fallout.Cli;
 
@@ -48,7 +47,7 @@ internal sealed class CommandDispatcher
         if (rootDirectory == null)
         {
             return prompts.PromptForConfirmation(
-                    $"Could not find {Constants.FalloutDirectoryName} directory/file. Do you want to setup a build?")
+                $"Could not find {Constants.FalloutDirectoryName} directory/file. Do you want to setup a build?")
                 ? await GetRequired("setup").ExecuteAsync(Array.Empty<string>(), rootDirectory: null, buildScript: null)
                 : 0;
         }
@@ -61,7 +60,10 @@ internal sealed class CommandDispatcher
     private IFalloutCommand Resolve(string token)
     {
         return commands.SingleOrDefault(x => Normalize(x.Name).EqualsOrdinalIgnoreCase(Normalize(token)))
-            .NotNull(new[] { $"Command '{token}' is not supported, available commands are:" }
+            .NotNull(new[]
+                {
+                    $"Command '{token}' is not supported, available commands are:"
+                }
                 .Concat(commands.Select(x => $"  - {x.Name}").OrderBy(x => x)).JoinNewLine());
     }
 

@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Basic.Reference.Assemblies;
+using Fallout.Common;
+using Fallout.Solutions;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Fallout.Common;
-using Fallout.Solutions;
 using VerifyXunit;
 using Xunit;
 
@@ -71,7 +72,9 @@ public class StronglyTypedSolutionGeneratorSpecs
         var result = driver.RunGenerators(inputCompilation).GetRunResult();
 
         if (!result.Diagnostics.IsEmpty)
+        {
             throw new Exception(string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.GetMessage())));
+        }
 
         result.GeneratedTrees.Should().BeEmpty();
     }
@@ -96,7 +99,9 @@ public class StronglyTypedSolutionGeneratorSpecs
         var result = driver.RunGenerators(inputCompilation).GetRunResult();
 
         if (!result.Diagnostics.IsEmpty)
+        {
             throw new Exception(string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.GetMessage())));
+        }
 
         result.GeneratedTrees.Should().BeEmpty();
     }
@@ -121,7 +126,9 @@ public class StronglyTypedSolutionGeneratorSpecs
         var result = driver.RunGenerators(inputCompilation).GetRunResult();
 
         if (!result.Diagnostics.IsEmpty)
+        {
             throw new Exception(string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.GetMessage())));
+        }
 
         result.GeneratedTrees.Should().BeEmpty();
     }
@@ -146,7 +153,9 @@ public class StronglyTypedSolutionGeneratorSpecs
         var result = driver.RunGenerators(inputCompilation).GetRunResult();
 
         if (!result.Diagnostics.IsEmpty)
+        {
             throw new Exception(string.Join(Environment.NewLine, result.Diagnostics.Select(x => x.GetMessage())));
+        }
 
         result.GeneratedTrees.Should().BeEmpty();
     }
@@ -158,7 +167,7 @@ public class StronglyTypedSolutionGeneratorSpecs
             {
                 CSharpSyntaxTree.ParseText(source)
             },
-            Basic.Reference.Assemblies.NetStandard20.References.All
+            NetStandard20.References.All
                 .Concat(new[]
                     {
                         typeof(FalloutBuild),

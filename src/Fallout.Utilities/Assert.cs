@@ -31,7 +31,9 @@ public static class Assert
         string argumentExpression = null)
     {
         if (!condition)
+        {
             throw new ArgumentException(message ?? "Expected condition to be true", message == null ? argumentExpression : null);
+        }
     }
 
     /// <summary>
@@ -44,7 +46,9 @@ public static class Assert
         string argumentExpression = null)
     {
         if (condition)
+        {
             throw new ArgumentException(message ?? "Expected condition to be false", message == null ? argumentExpression : null);
+        }
     }
 
     /// <summary>
@@ -53,8 +57,7 @@ public static class Assert
     public static T NotNull<T>(
         this T obj,
         string message = null,
-        [CallerArgumentExpression("obj")]
-        string argumentExpression = null)
+        [CallerArgumentExpression("obj")] string argumentExpression = null)
         where T : class
     {
         if (obj == null)
@@ -73,8 +76,7 @@ public static class Assert
     public static T? NotNull<T>(
         this T? obj,
         string message = null,
-        [CallerArgumentExpression("obj")]
-        string argumentExpression = null)
+        [CallerArgumentExpression("obj")] string argumentExpression = null)
         where T : struct
     {
         if (obj == null)
@@ -93,11 +95,14 @@ public static class Assert
     public static string NotNullOrEmpty(
         this string str,
         string message = null,
-        [CallerArgumentExpression("str")]
-        string argumentExpression = null)
+        [CallerArgumentExpression("str")] string argumentExpression = null)
     {
         if (string.IsNullOrEmpty(str))
-            throw new ArgumentException(message ?? "Expected string to be not null or empty", message == null ? argumentExpression : null);
+        {
+            throw new ArgumentException(message ?? "Expected string to be not null or empty",
+                message == null ? argumentExpression : null);
+        }
+
         return str;
     }
 
@@ -107,11 +112,14 @@ public static class Assert
     public static string NotNullOrWhiteSpace(
         this string str,
         string message = null,
-        [CallerArgumentExpression("str")]
-        string argumentExpression = null)
+        [CallerArgumentExpression("str")] string argumentExpression = null)
     {
         if (string.IsNullOrWhiteSpace(str))
-            throw new ArgumentException(message ?? "Expected string to be not null or whitespace", message == null ? argumentExpression : null);
+        {
+            throw new ArgumentException(message ?? "Expected string to be not null or whitespace",
+                message == null ? argumentExpression : null);
+        }
+
         return str;
     }
 
@@ -125,7 +133,10 @@ public static class Assert
         string argumentExpression = null)
     {
         if (collection.NotNull(argumentExpression: argumentExpression).Count == 0)
-            throw new ArgumentException(message ?? "Expected collection to be not empty", message == null ? argumentExpression : null);
+        {
+            throw new ArgumentException(message ?? "Expected collection to be not empty",
+                message == null ? argumentExpression : null);
+        }
     }
 
     /// <summary>
@@ -138,7 +149,10 @@ public static class Assert
         string argumentExpression = null)
     {
         if (collection.NotNull(argumentExpression: argumentExpression).Count > 0)
-            throw new ArgumentException(message ?? "Expected collection to be empty", message == null ? argumentExpression : null);
+        {
+            throw new ArgumentException(message ?? "Expected collection to be empty",
+                message == null ? argumentExpression : null);
+        }
     }
 
     /// <summary>
@@ -152,7 +166,10 @@ public static class Assert
         string argumentExpression = null)
     {
         if (collection.NotNull(argumentExpression: argumentExpression).Count != length)
-            throw new ArgumentException(message ?? $"Expected collection to have length of {length}", message == null ? argumentExpression : null);
+        {
+            throw new ArgumentException(message ?? $"Expected collection to have length of {length}",
+                message == null ? argumentExpression : null);
+        }
     }
 
     /// <summary>
@@ -170,18 +187,26 @@ public static class Assert
     /// <summary>
     /// Asserts that the file exists with an optional exception message. If no message is provided, the argument expression is used.
     /// </summary>
-    public static void FileExists(string path, string message = null, [CallerArgumentExpression("path")] string argumentExpression = null)
+    public static void FileExists(string path, string message = null,
+        [CallerArgumentExpression("path")] string argumentExpression = null)
     {
         if (!File.Exists(path.NotNull(argumentExpression)))
-            throw new ArgumentException(message ?? $"Expected file to exist: {path}", message == null ? argumentExpression : null);
+        {
+            throw new ArgumentException(message ?? $"Expected file to exist: {path}",
+                message == null ? argumentExpression : null);
+        }
     }
 
     /// <summary>
     /// Asserts that the directory exists with an optional exception message. If no message is provided, the argument expression is used.
     /// </summary>
-    public static void DirectoryExists(string path, string message = null, [CallerArgumentExpression("path")] string argumentExpression = null)
+    public static void DirectoryExists(string path, string message = null,
+        [CallerArgumentExpression("path")] string argumentExpression = null)
     {
         if (!Directory.Exists(path.NotNull(argumentExpression)))
-            throw new ArgumentException(message ?? $"Expected directory to exist: {path}", message == null ? argumentExpression : null);
+        {
+            throw new ArgumentException(message ?? $"Expected directory to exist: {path}",
+                message == null ? argumentExpression : null);
+        }
     }
 }

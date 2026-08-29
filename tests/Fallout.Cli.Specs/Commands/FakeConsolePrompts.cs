@@ -31,12 +31,16 @@ internal sealed class FakeConsolePrompts : IConsolePrompts
     public void ConfirmExecution(string title, Action action)
     {
         if (InvokeConfirmedActions)
+        {
             action();
+        }
     }
 
     public async Task ConfirmExecutionAsync(string title, Func<Task> action)
     {
         if (InvokeConfirmedActions)
+        {
             await action();
+        }
     }
 }

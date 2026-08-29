@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using Fallout.Common.CI.AppVeyor;
 using Fallout.Common.CI.AzurePipelines;
@@ -126,8 +125,10 @@ public class OctoVersionAttribute : ValueInjectionAttributeBase
 
         Assert.False(autoDetectBranch.HasValue && autoDetectBranch.Value && !branch.IsNullOrEmpty(),
             $"Branch cannot be specified via {nameof(Branch)} or {nameof(BranchMember)} properties when {nameof(AutoDetectBranch)} is enabled");
-        Assert.True(autoDetectBranch.HasValue && autoDetectBranch.Value || !branch.IsNullOrEmpty(),
+
+        Assert.True((autoDetectBranch.HasValue && autoDetectBranch.Value) || !branch.IsNullOrEmpty(),
             $"Branch must either be provided via {nameof(Branch)} or {nameof(BranchMember)} properties, or {nameof(AutoDetectBranch)} must be enabled");
+
         branch ??= GitRepository.FromLocalDirectory(Build.RootDirectory).Branch;
 
         var outputFile = FalloutBuild.TemporaryDirectory / $"octoversion.{Guid.NewGuid()}.json";
@@ -144,6 +145,7 @@ public class OctoVersionAttribute : ValueInjectionAttributeBase
                 .SetMinor(minorVersion)
                 .SetPatch(patchVersion))
             .Result;
+
         outputFile.DeleteFile();
 
         if (UpdateBuildNumber)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -18,7 +17,10 @@ public class MSBuildProject : DynamicObject
     }
 
     public bool IsSdkProject { get; }
+
     public bool IsLegacyProject => !IsSdkProject;
+
     public IReadOnlyDictionary<string, string> Properties { get; }
+
     public ILookup<string, string> ItemGroups { get; }
 }

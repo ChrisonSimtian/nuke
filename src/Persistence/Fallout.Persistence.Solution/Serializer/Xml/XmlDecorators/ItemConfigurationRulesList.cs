@@ -25,17 +25,21 @@ internal struct ItemConfigurationRulesList
         switch (configuration)
         {
             case XmlConfigurationBuildType buildType:
-                this.buildTypeRules.Add(buildType);
+                buildTypeRules.Add(buildType);
                 break;
+
             case XmlConfigurationPlatform platform:
-                this.platformRules.Add(platform);
+                platformRules.Add(platform);
                 break;
+
             case XmlConfigurationBuild build:
-                this.buildRules.Add(build);
+                buildRules.Add(build);
                 break;
+
             case XmlConfigurationDeploy deploy:
-                this.deployRules.Add(deploy);
+                deployRules.Add(deploy);
                 break;
+
             default:
                 throw new InvalidOperationException();
         }
@@ -45,9 +49,10 @@ internal struct ItemConfigurationRulesList
     {
         return typeof(TDecorator).Name switch
         {
-            nameof(XmlConfigurationBuildType) or nameof(XmlConfiguration) => this.platformRules.FirstOrDefault() ?? this.FindNextDecorator<XmlConfigurationPlatform>(),
-            nameof(XmlConfigurationPlatform) => this.buildRules.FirstOrDefault() ?? this.FindNextDecorator<XmlConfigurationBuild>(),
-            nameof(XmlConfigurationBuild) => this.deployRules.FirstOrDefault(),
+            nameof(XmlConfigurationBuildType) or nameof(XmlConfiguration) => platformRules.FirstOrDefault() ??
+                                                                             FindNextDecorator<XmlConfigurationPlatform>(),
+            nameof(XmlConfigurationPlatform) => buildRules.FirstOrDefault() ?? FindNextDecorator<XmlConfigurationBuild>(),
+            nameof(XmlConfigurationBuild) => deployRules.FirstOrDefault(),
             nameof(XmlConfigurationDeploy) => null,
             _ => null,
         };
@@ -55,7 +60,8 @@ internal struct ItemConfigurationRulesList
 
     internal readonly XmlDecorator? FirstOrDefault()
     {
-        return this.buildTypeRules.FirstOrDefault() ?? this.platformRules.FirstOrDefault() ?? this.buildRules.FirstOrDefault() ?? (XmlDecorator?)this.deployRules.FirstOrDefault();
+        return buildTypeRules.FirstOrDefault() ?? platformRules.FirstOrDefault() ??
+            buildRules.FirstOrDefault() ?? (XmlDecorator?)deployRules.FirstOrDefault();
     }
 
     internal bool ApplyModelToXml(XmlContainer xmlContainer, IReadOnlyList<ConfigurationRule>? configurationRules)
@@ -63,13 +69,18 @@ internal struct ItemConfigurationRulesList
         bool modified = false;
 
         configurationRules ??= [];
-        modified |= ApplyModelToXml(xmlContainer, configurationRules, BuildDimension.BuildType, Keyword.BuildType, ref this.buildTypeRules);
-        modified |= ApplyModelToXml(xmlContainer, configurationRules, BuildDimension.Platform, Keyword.Platform, ref this.platformRules);
-        modified |= ApplyModelToXml(xmlContainer, configurationRules, BuildDimension.Build, Keyword.Build, ref this.buildRules);
-        modified |= ApplyModelToXml(xmlContainer, configurationRules, BuildDimension.Deploy, Keyword.Deploy, ref this.deployRules);
+        modified |= ApplyModelToXml(xmlContainer, configurationRules, BuildDimension.BuildType, Keyword.BuildType,
+            ref buildTypeRules);
+
+        modified |= ApplyModelToXml(xmlContainer, configurationRules, BuildDimension.Platform, Keyword.Platform,
+            ref platformRules);
+
+        modified |= ApplyModelToXml(xmlContainer, configurationRules, BuildDimension.Build, Keyword.Build, ref buildRules);
+        modified |= ApplyModelToXml(xmlContainer, configurationRules, BuildDimension.Deploy, Keyword.Deploy, ref deployRules);
         return modified;
 
-        static bool ApplyModelToXml<T>(XmlContainer xmlContainer, IReadOnlyList<ConfigurationRule> configurationRules, BuildDimension dimension, Keyword dimensionElementName, ref ItemRefList<T> configurations)
+        static bool ApplyModelToXml<T>(XmlContainer xmlContainer, IReadOnlyList<ConfigurationRule> configurationRules,
+            BuildDimension dimension, Keyword dimensionElementName, ref ItemRefList<T> configurations)
             where T : XmlConfiguration
         {
             List<(string ItemRef, ConfigurationRule Item)> dimensionRules = configurationRules.WhereToList(
@@ -81,34 +92,35 @@ internal struct ItemConfigurationRulesList
                 modelItems: dimensionRules,
                 decoratorItems: ref configurations,
                 decoratorElementName: dimensionElementName,
-                applyModelToXml: static (newConfiguration, modelConfiguration) => newConfiguration.ApplyModelToXml(modelConfiguration));
+                applyModelToXml: static (newConfiguration, modelConfiguration) =>
+                    newConfiguration.ApplyModelToXml(modelConfiguration));
         }
     }
 
     internal readonly List<ConfigurationRule> ToModel()
     {
-        List<ConfigurationRule> rules = new List<ConfigurationRule>(
-            this.buildTypeRules.ItemsCount +
-            this.platformRules.ItemsCount +
-            this.buildRules.ItemsCount +
-            this.deployRules.ItemsCount);
+        List<ConfigurationRule> rules = new(
+            buildTypeRules.ItemsCount +
+            platformRules.ItemsCount +
+            buildRules.ItemsCount +
+            deployRules.ItemsCount);
 
-        foreach (XmlConfiguration configuration in this.buildTypeRules.GetItems())
+        foreach (XmlConfiguration configuration in buildTypeRules.GetItems())
         {
             AddRule(rules, configuration);
         }
 
-        foreach (XmlConfiguration configuration in this.platformRules.GetItems())
+        foreach (XmlConfiguration configuration in platformRules.GetItems())
         {
             AddRule(rules, configuration);
         }
 
-        foreach (XmlConfiguration configuration in this.buildRules.GetItems())
+        foreach (XmlConfiguration configuration in buildRules.GetItems())
         {
             AddRule(rules, configuration);
         }
 
-        foreach (XmlConfiguration configuration in this.deployRules.GetItems())
+        foreach (XmlConfiguration configuration in deployRules.GetItems())
         {
             AddRule(rules, configuration);
         }

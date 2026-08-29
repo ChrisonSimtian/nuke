@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-
 namespace Fallout.Common.Utilities;
 
 public static partial class StringExtensions
@@ -49,7 +46,7 @@ public static partial class StringExtensions
     /// </summary>
     public static string TrimMatchingDoubleQuotes(this string str)
     {
-        return TrimMatchingQuotes(str, quote: '"');
+        return str.TrimMatchingQuotes(quote: '"');
     }
 
     /// <summary>
@@ -57,16 +54,20 @@ public static partial class StringExtensions
     /// </summary>
     public static string TrimMatchingSingleQuotes(this string str)
     {
-        return TrimMatchingQuotes(str, quote: '\'');
+        return str.TrimMatchingQuotes(quote: '\'');
     }
 
     internal static string TrimMatchingQuotes(this string str, char quote)
     {
         if (str.Length < 2)
+        {
             return str;
+        }
 
         if (str[index: 0] != quote || str[str.Length - 1] != quote)
+        {
             return str;
+        }
 
         return str.Substring(startIndex: 1, str.Length - 2);
     }

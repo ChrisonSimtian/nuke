@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace Fallout.Common.Utilities;
 
-public static partial class XElementExtensions
+public static class XElementExtensions
 {
     public static string GetAttributeValue(this XElement element, string name)
     {

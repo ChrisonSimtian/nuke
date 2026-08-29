@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -59,7 +58,11 @@ public static class HttpTasks
         Configure<HttpClient> clientConfigurator = null,
         Action<HttpRequestHeaders> headerConfigurator = null)
     {
-        var httpClient = new HttpClient { Timeout = DefaultTimeout };
+        var httpClient = new HttpClient
+        {
+            Timeout = DefaultTimeout
+        };
+
         clientConfigurator?.Invoke(httpClient);
         headerConfigurator?.Invoke(httpClient.DefaultRequestHeaders);
         return httpClient;

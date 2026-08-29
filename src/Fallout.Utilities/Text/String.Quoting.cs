@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 
 namespace Fallout.Common.Utilities;
@@ -19,13 +18,19 @@ public static partial class StringExtensions
     public static string DoubleQuoteIfNeeded(this string str, params char?[] disallowed)
     {
         if (string.IsNullOrWhiteSpace(str))
+        {
             return string.Empty;
+        }
 
         if (str.IsDoubleQuoted())
+        {
             return str;
+        }
 
         if (!str.Contains(disallowed))
+        {
             return str;
+        }
 
         return str.DoubleQuote();
     }
@@ -52,13 +57,19 @@ public static partial class StringExtensions
     public static string SingleQuoteIfNeeded(this string str, params char?[] disallowed)
     {
         if (string.IsNullOrWhiteSpace(str))
+        {
             return string.Empty;
+        }
 
         if (str.IsSingleQuoted())
+        {
             return str;
+        }
 
         if (!str.Contains(disallowed))
+        {
             return str;
+        }
 
         return str.SingleQuote();
     }

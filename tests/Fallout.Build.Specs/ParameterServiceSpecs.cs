@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
 using Fallout.Common.IO;
-using Fallout.Common.Utilities.Collections;
+using FluentAssertions;
 using Xunit;
 using static Fallout.Common.Utilities.ReflectionUtility;
 
@@ -11,7 +9,8 @@ namespace Fallout.Common.Specs;
 
 public class ParameterServiceSpecs
 {
-    private ParameterService GetService(string[] commandLineArguments = null, IDictionary<string, string> environmentVariables = null)
+    private ParameterService GetService(string[] commandLineArguments = null,
+        IDictionary<string, string> environmentVariables = null)
     {
         commandLineArguments ??= new string[0];
         environmentVariables ??= new Dictionary<string, string>();
@@ -43,7 +42,11 @@ public class ParameterServiceSpecs
     [InlineData("switch3", typeof(bool), false)]
     [InlineData("switch4", typeof(bool), false)]
     [InlineData("switch5", typeof(bool), true)]
-    [InlineData("array1", typeof(string[]), new[] { "element1", "element2" })]
+    [InlineData("array1", typeof(string[]), new[]
+    {
+        "element1",
+        "element2"
+    })]
     [InlineData("array2", typeof(string[]), new string[0])]
     [InlineData("array3", typeof(string[]), null)]
     [InlineData("notsupplied1", typeof(bool), false)]
@@ -68,6 +71,7 @@ public class ParameterServiceSpecs
                 { "array1", "element1+element2" },
                 { "array2", "" },
             });
+
         service.GetParameter(parameter, destinationType, separator: '+').Should().BeEquivalentTo(expectedValue);
     }
 
@@ -75,14 +79,14 @@ public class ParameterServiceSpecs
     public void TestExpression()
     {
         var service = GetService(
-            [
-                "--string",
-                "--set",
-                "1",
-                "2",
-                "3",
-                "--interface-param"
-            ]);
+        [
+            "--string",
+            "--set",
+            "1",
+            "2",
+            "3",
+            "--interface-param"
+        ]);
 
         var build = new TestBuild();
 
@@ -93,9 +97,15 @@ public class ParameterServiceSpecs
             .Should().BeOfType<bool>().Subject.Should().BeTrue();
 
         ParameterService.GetFromMemberInfo(GetMemberInfo(() => build.Set), destinationType: null, service.GetParameter)
-            .Should().BeOfType<int[]>().Subject.Should().BeEquivalentTo(new[] { 1, 2, 3 });
+            .Should().BeOfType<int[]>().Subject.Should().BeEquivalentTo(new[]
+            {
+                1,
+                2,
+                3
+            });
 
-        ParameterService.GetFromMemberInfo(GetMemberInfo(() => ((ITestComponent)build).Param), destinationType: null, service.GetParameter)
+        ParameterService.GetFromMemberInfo(GetMemberInfo(() => ((ITestComponent)build).Param), destinationType: null,
+                service.GetParameter)
             .Should().BeOfType<bool>().Subject.Should().BeTrue();
     }
 
@@ -111,8 +121,10 @@ public class ParameterServiceSpecs
             (nameof(Verbosity.Quiet), Verbosity.Quiet),
             (nameof(Verbosity.Verbose), Verbosity.Verbose),
         };
+
         ParameterService.GetParameterValueSet(GetMemberInfo(() => FalloutBuild.Verbosity), instance: null)
             .Should().BeEquivalentTo(verbosities);
+
         ParameterService.GetParameterValueSet(GetMemberInfo(() => build.Verbosities), instance: null)
             .Should().BeEquivalentTo(verbosities);
     }
@@ -123,7 +135,11 @@ public class ParameterServiceSpecs
         var emptyArguments = new ArgumentParser(string.Empty);
         var emptyEnvironmentVariables = new Dictionary<string, string>();
 
-        var environmentVariables = new Dictionary<string, string> { ["string"] = "environmentVariables" };
+        var environmentVariables = new Dictionary<string, string>
+        {
+            ["string"] = "environmentVariables"
+        };
+
         var commandLineArguments = new ArgumentParser("--string commandLine");
         var parameterFileArguments = new Func<string, Type, object>((_, _) => "parameterFile");
         var commitMessageArguments = new ArgumentParser("--string commitMessage");
@@ -132,9 +148,14 @@ public class ParameterServiceSpecs
         {
             ArgumentsFromFilesService = parameterFileArguments
         };
+
         service.GetParameter("string", typeof(string), separator: null).Should().Be("parameterFile");
 
-        service = new ParameterService(() => emptyArguments, () => environmentVariables) { ArgumentsFromFilesService = parameterFileArguments };
+        service = new ParameterService(() => emptyArguments, () => environmentVariables)
+        {
+            ArgumentsFromFilesService = parameterFileArguments
+        };
+
         service.GetParameter("string", typeof(string), separator: null).Should().Be("environmentVariables");
 
         service = new ParameterService(() => commandLineArguments, () => environmentVariables);
@@ -145,21 +166,28 @@ public class ParameterServiceSpecs
             ArgumentsFromFilesService = parameterFileArguments,
             ArgumentsFromCommitMessageService = commitMessageArguments
         };
+
         service.GetParameter("string", typeof(string), separator: null).Should().Be("commitMessage");
     }
 
 #pragma warning disable CS0649
     private class TestBuild : FalloutBuild, ITestComponent
     {
-        [Parameter] public string String;
-        [Parameter] public int[] Set;
-        [Parameter] public Verbosity[] Verbosities;
+        [Parameter]
+        public string String;
+
+        [Parameter]
+        public int[] Set;
+
+        [Parameter]
+        public Verbosity[] Verbosities;
     }
 
     [ParameterPrefix("Interface")]
     private interface ITestComponent : IFalloutBuild
     {
-        [Parameter] bool Param => TryGetValue<bool?>(() => Param) ?? false;
+        [Parameter]
+        bool Param => TryGetValue<bool?>(() => Param) ?? false;
     }
 #pragma warning restore CS0649
 }

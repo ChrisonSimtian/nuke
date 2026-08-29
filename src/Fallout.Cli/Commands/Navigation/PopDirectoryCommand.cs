@@ -1,6 +1,6 @@
 using System;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 using Fallout.Common.IO;
 
 namespace Fallout.Cli.Commands.Navigation;

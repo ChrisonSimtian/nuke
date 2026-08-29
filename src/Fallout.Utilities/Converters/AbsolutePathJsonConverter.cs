@@ -17,9 +17,11 @@ public sealed class AbsolutePathJsonConverter : JsonConverter<AbsolutePath>
     {
         var value = reader.GetString();
         if (value != null)
+        {
             return HasPathRoot(value)
                 ? AbsolutePath.Create(value)
                 : EnvironmentInfo.WorkingDirectory / value;
+        }
 
         return null;
     }

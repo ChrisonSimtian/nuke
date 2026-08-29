@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -27,11 +26,11 @@ internal class FileWatcher
     {
         logResetEvent = new AutoResetEvent(initialState: false);
         fileSystemWatcher = new FileSystemWatcher(Path.GetPathRoot(file).NotNull())
-                             {
-                                 Filter = Path.GetFileName(file),
-                                 EnableRaisingEvents = true,
-                                 NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
-                             };
+        {
+            Filter = Path.GetFileName(file),
+            EnableRaisingEvents = true,
+            NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite
+        };
 
         fileSystemWatcher.Changed += (_, _) => logResetEvent.Set();
 
@@ -49,9 +48,13 @@ internal class FileWatcher
         while (logReaderThread != null)
         {
             if (!logReaderThread.IsAlive)
+            {
                 logReaderThread = null;
+            }
             else
+            {
                 Thread.Sleep(millisecondsTimeout: 100);
+            }
         }
     }
 
@@ -61,7 +64,10 @@ internal class FileWatcher
         while (!File.Exists(file))
         {
             if (cancellationTokenSource.IsCancellationRequested)
+            {
                 return;
+            }
+
             logResetEvent.WaitOne(millisecondsTimeout: 100);
         }
 
@@ -81,11 +87,16 @@ internal class FileWatcher
                     currentLine = "";
                 }
                 else
+                {
                     currentLine += currentChar;
+                }
             }
 
             if (cancellationTokenSource.IsCancellationRequested)
+            {
                 break;
+            }
+
             logResetEvent.WaitOne(millisecondsTimeout: 100);
         }
     }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Fallout.Common.Execution;
 using FluentAssertions;
 using Serilog;
@@ -150,7 +149,10 @@ public class VerbosityLevelMappingSpecs
         {
             var data = new TheoryData<LogEventLevel>();
             foreach (var level in Enum.GetValues<LogEventLevel>())
+            {
                 data.Add(level);
+            }
+
             return data;
         }
     }
@@ -183,7 +185,9 @@ public class VerbosityLevelMappingSpecs
             .CreateLogger();
 
         foreach (var level in Enum.GetValues<LogEventLevel>())
+        {
             logger.Write(level, "a {Level} line", level);
+        }
 
         return sink.Levels.ToArray();
     }

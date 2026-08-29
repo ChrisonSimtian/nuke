@@ -1,6 +1,6 @@
 using System.Reflection;
-using FluentAssertions;
 using Fallout.Common.ValueInjection;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;

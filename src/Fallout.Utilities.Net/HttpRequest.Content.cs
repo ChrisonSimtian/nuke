@@ -40,7 +40,8 @@ public static partial class HttpRequestExtensions
     /// <summary>
     /// Sets the dictionary as content via <see cref="FormUrlEncodedContent"/>.
     /// </summary>
-    public static HttpRequestBuilder WithFormUrlEncodedContent(this HttpRequestBuilder builder, IDictionary<string, string> dictionary)
+    public static HttpRequestBuilder WithFormUrlEncodedContent(this HttpRequestBuilder builder,
+        IDictionary<string, string> dictionary)
     {
         builder.Request.Content = new FormUrlEncodedContent(dictionary);
         return builder;
@@ -78,7 +79,9 @@ public static partial class HttpRequestExtensions
     {
         var streamContent = new StreamContent(content);
         if (mediaType != null)
+        {
             streamContent.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
+        }
 
         data.Add(streamContent, name, filename);
         return data;

@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
 using static Fallout.Common.IO.PathConstruction;
 
 namespace Fallout.Common.IO;
@@ -24,7 +23,9 @@ public class RelativePath
     public static explicit operator RelativePath(string path)
     {
         if (path is null)
+        {
             return null;
+        }
 
         return new RelativePath(NormalizePath(path));
     }
@@ -47,7 +48,7 @@ public class RelativePath
     public static RelativePath operator /(RelativePath left, string right)
     {
         var separator = left.NotNull().separator;
-        return new RelativePath(NormalizePath(Combine(left, (RelativePath) right, separator), separator), separator);
+        return new RelativePath(NormalizePath(Combine(left, (RelativePath)right, separator), separator), separator);
     }
 
     public static RelativePath operator +(RelativePath left, string right)

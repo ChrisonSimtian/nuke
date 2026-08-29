@@ -31,50 +31,51 @@ public sealed class SolutionFolderModel : SolutionItemModel
     internal SolutionFolderModel(SolutionModel solutionModel, SolutionFolderModel folderModel)
         : base(solutionModel, folderModel.BeSolutionItemModel)
     {
-        this.name = folderModel.name;
+        name = folderModel.name;
         if (folderModel.Files is not null)
         {
-            this.files = [.. folderModel.Files];
+            files = [.. folderModel.Files];
         }
     }
 
     /// <summary>
     /// Gets the files in this solution folder.
     /// </summary>
-    public IReadOnlyList<string>? Files => this.files;
+    public IReadOnlyList<string>? Files => files;
 
     /// <summary>
     /// Gets or sets the name of the solution folder.
     /// </summary>
     public string Name
     {
-        get => this.name;
+        get => name;
         set
         {
             Argument.ThrowIfNullOrEmpty(value, nameof(value));
             SolutionModel.ValidateName(value.AsSpan());
 
-            if (this.name == value)
+            if (name == value)
             {
                 return;
             }
 
-            string testName = $"{this.Parent?.ItemRef ?? "/"}{value}/";
-            if (this.Solution.FindFolder(testName) is not null)
+            string testName = $"{Parent?.ItemRef ?? "/"}{value}/";
+            if (Solution.FindFolder(testName) is not null)
             {
-                throw new SolutionArgumentException(string.Format(Errors.DuplicateItemRef_Args2, testName, "Folder"), nameof(value), SolutionErrorType.DuplicateItemRef);
+                throw new SolutionArgumentException(string.Format(Errors.DuplicateItemRef_Args2, testName, "Folder"),
+                    nameof(value), SolutionErrorType.DuplicateItemRef);
             }
 
-            string oldName = this.name;
+            string oldName = name;
             try
             {
-                this.name = value;
-                this.OnItemRefChanged();
+                name = value;
+                OnItemRefChanged();
             }
             catch (Exception)
             {
                 // On error revert the name.
-                this.name = oldName;
+                name = oldName;
                 throw;
             }
         }
@@ -83,10 +84,10 @@ public sealed class SolutionFolderModel : SolutionItemModel
     /// <summary>
     /// Gets a unique reference to this folder in the solution.
     /// </summary>
-    public string Path => this.ItemRef;
+    public string Path => ItemRef;
 
     /// <inheritdoc/>
-    public override string ActualDisplayName => this.Name;
+    public override string ActualDisplayName => Name;
 
     /// <inheritdoc/>
     public override Guid TypeId => ProjectTypeTable.SolutionFolder;
@@ -96,26 +97,26 @@ public sealed class SolutionFolderModel : SolutionItemModel
     {
         get
         {
-            if (this.itemRef is not null)
+            if (itemRef is not null)
             {
-                return this.itemRef;
+                return itemRef;
             }
 
-            if (this.Parent is not null)
+            if (Parent is not null)
             {
-                this.itemRef = CycleBreaker;
-                string parentRef = this.Parent.ItemRef;
-                if (!object.ReferenceEquals(parentRef, CycleBreaker))
+                itemRef = CycleBreaker;
+                string parentRef = Parent.ItemRef;
+                if (!ReferenceEquals(parentRef, CycleBreaker))
                 {
-                    this.itemRef = $"{parentRef}{this.Name}/";
-                    return this.itemRef;
+                    itemRef = $"{parentRef}{Name}/";
+                    return itemRef;
                 }
             }
 
             // no parent, or part of cycle move it on top.
             // potential duplicates in this case will be ignored/merged on save.
-            this.itemRef = $"/{this.Name}/";
-            return this.itemRef;
+            itemRef = $"/{Name}/";
+            return itemRef;
         }
     }
 
@@ -125,11 +126,11 @@ public sealed class SolutionFolderModel : SolutionItemModel
     /// <param name="file">The file to add.</param>
     public void AddFile(string file)
     {
-        this.files ??= [];
+        files ??= [];
 
-        if (!this.files.Contains(file))
+        if (!files.Contains(file))
         {
-            this.files.Add(file);
+            files.Add(file);
         }
     }
 
@@ -140,16 +141,16 @@ public sealed class SolutionFolderModel : SolutionItemModel
     /// <returns><see langword="true"/> if the item was found and removed.</returns>
     public bool RemoveFile(string file)
     {
-        return this.files is not null && this.files.Remove(file);
+        return files is not null && files.Remove(file);
     }
 
     internal override void OnItemRefChanged()
     {
         base.OnItemRefChanged();
-        this.itemRef = null;
+        itemRef = null;
 
         // Recursively update all children.
-        foreach (SolutionItemModel item in this.Solution.SolutionItems)
+        foreach (SolutionItemModel item in Solution.SolutionItems)
         {
             if (ReferenceEquals(item.Parent, this))
             {
@@ -160,13 +161,13 @@ public sealed class SolutionFolderModel : SolutionItemModel
 
     private protected override Guid GetDefaultId()
     {
-        Guid parentId = this.Parent is null ? Guid.Empty : this.Parent.Id;
-        return DefaultIdGenerator.CreateIdFrom(parentId, this.Name);
+        Guid parentId = Parent is null ? Guid.Empty : Parent.Id;
+        return DefaultIdGenerator.CreateIdFrom(parentId, Name);
     }
 
     private protected override void OnParentChanged()
     {
         base.OnParentChanged();
-        this.OnItemRefChanged();
+        OnItemRefChanged();
     }
 }

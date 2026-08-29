@@ -27,8 +27,10 @@ partial class UnityTasks
     {
         var unityOptions = options as UnityOptionsBase;
         var programFiles = EnvironmentInfo.IsWin
-            ? EnvironmentInfo.SpecialFolder(EnvironmentInfo.Is32Bit ? SpecialFolders.ProgramFilesX86 : SpecialFolders.ProgramFiles)
+            ? EnvironmentInfo.SpecialFolder(
+                EnvironmentInfo.Is32Bit ? SpecialFolders.ProgramFilesX86 : SpecialFolders.ProgramFiles)
             : null;
+
         return unityOptions?.HubVersion ?? GetEditorVersionFromProject() switch
         {
             { } version => EnvironmentInfo.Platform switch
@@ -48,7 +50,9 @@ partial class UnityTasks
         string GetEditorVersionFromProject()
         {
             if (options is not UnitySettings projectOptions)
+            {
                 return null;
+            }
 
             var projectVersionFile = (AbsolutePath)projectOptions.ProjectPath / "ProjectSettings" / "ProjectVersion.txt";
             var properties = projectVersionFile.ReadYaml<Dictionary<string, string>>();
@@ -74,7 +78,7 @@ partial class UnityTasks
     {
         try
         {
-            return base.Run<T>(options);
+            return base.Run(options);
         }
         catch (Exception)
         {
@@ -90,7 +94,9 @@ partial class UnityTasks
         {
             AssertWatcherStopped();
             if (p.ExitCode == 0)
+            {
                 return null;
+            }
 
             var message = new StringBuilder()
                 .AppendLine($"Process '{Path.GetFileName(p.FileName)}' exited with code {p.ExitCode}. Verify the invocation.")
@@ -98,9 +104,13 @@ partial class UnityTasks
                 .ToString();
 
             if (unityOptions?.StableExitCodes.Any(x => x == p.ExitCode) ?? false)
+            {
                 Log.Warning(message);
+            }
             else
+            {
                 Assert.Fail(message);
+            }
 
             return null;
         };

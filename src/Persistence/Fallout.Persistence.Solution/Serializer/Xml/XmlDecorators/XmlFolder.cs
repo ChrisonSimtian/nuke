@@ -15,22 +15,22 @@ internal sealed class XmlFolder(SlnxFile root, XmlSolution xmlSolution, XmlEleme
     IItemRefDecorator
 {
     private readonly XmlSolution xmlSolution = xmlSolution;
-    private ItemRefList<XmlFile> files = new ItemRefList<XmlFile>(ignoreCase: true);
-    private ItemRefList<XmlProject> folderProjects = new ItemRefList<XmlProject>(ignoreCase: true);
+    private ItemRefList<XmlFile> files = new(ignoreCase: true);
+    private ItemRefList<XmlProject> folderProjects = new(ignoreCase: true);
 
     public Keyword ItemRefAttribute => Keyword.Name;
 
-    internal string Name => this.ItemRef;
+    internal string Name => ItemRef;
 
     internal Guid Id
     {
-        get => this.GetXmlAttributeGuid(Keyword.Id);
-        set => this.UpdateXmlAttributeGuid(Keyword.Id, value);
+        get => GetXmlAttributeGuid(Keyword.Id);
+        set => UpdateXmlAttributeGuid(Keyword.Id, value);
     }
 
 #if DEBUG
 
-    internal override string DebugDisplay => $"{base.DebugDisplay} FolderProjects={this.folderProjects} Files={this.files}";
+    internal override string DebugDisplay => $"{base.DebugDisplay} FolderProjects={folderProjects} Files={files}";
 
 #endif
 
@@ -40,8 +40,8 @@ internal sealed class XmlFolder(SlnxFile root, XmlSolution xmlSolution, XmlEleme
         return elementName switch
         {
             // Forward project handling to the solution decorator.
-            Keyword.Project => this.xmlSolution.CreateProjectDecorator(element, xmlParentFolder: this),
-            Keyword.File => new XmlFile(this.Root, element),
+            Keyword.Project => xmlSolution.CreateProjectDecorator(element, xmlParentFolder: this),
+            Keyword.File => new XmlFile(Root, element),
             _ => base.ChildDecoratorFactory(element, elementName),
         };
     }
@@ -52,10 +52,11 @@ internal sealed class XmlFolder(SlnxFile root, XmlSolution xmlSolution, XmlEleme
         switch (childDecorator)
         {
             case XmlFile file:
-                this.files.Add(file);
+                files.Add(file);
                 break;
+
             case XmlProject project:
-                this.folderProjects.Add(project);
+                folderProjects.Add(project);
                 break;
         }
 
@@ -67,34 +68,35 @@ internal sealed class XmlFolder(SlnxFile root, XmlSolution xmlSolution, XmlEleme
     {
         return typeof(TDecorator).Name switch
         {
-            nameof(XmlFile) => this.folderProjects.FirstOrDefault() ?? this.FindNextDecorator<XmlProject>(),
-            nameof(XmlProject) => this.propertyBags.FirstOrDefault(),
+            nameof(XmlFile) => folderProjects.FirstOrDefault() ?? FindNextDecorator<XmlProject>(),
+            nameof(XmlProject) => propertyBags.FirstOrDefault(),
             _ => null,
         };
     }
 
     #region Deserialize model
 
-    internal void AddToModel(SolutionModel solutionModel, List<(XmlProject XmlProject, SolutionProjectModel ModelProject)> newProjects)
+    internal void AddToModel(SolutionModel solutionModel,
+        List<(XmlProject XmlProject, SolutionProjectModel ModelProject)> newProjects)
     {
         try
         {
-            SolutionFolderModel folderModel = solutionModel.AddFolder(this.Name);
-            folderModel.Id = this.Id;
+            SolutionFolderModel folderModel = solutionModel.AddFolder(Name);
+            folderModel.Id = Id;
 
-            foreach (XmlFile file in this.files.GetItems())
+            foreach (XmlFile file in files.GetItems())
             {
                 string modelPath = PathExtensions.ConvertToModel(file.Path);
                 folderModel.AddFile(modelPath);
-                this.Root.UserPaths[modelPath] = file.Path;
+                Root.UserPaths[modelPath] = file.Path;
             }
 
-            foreach (XmlProperties properties in this.propertyBags.GetItems())
+            foreach (XmlProperties properties in propertyBags.GetItems())
             {
                 properties.AddToModel(folderModel);
             }
 
-            foreach (XmlProject project in this.folderProjects.GetItems())
+            foreach (XmlProject project in folderProjects.GetItems())
             {
                 newProjects.Add((project, project.AddToModel(solutionModel)));
             }
@@ -115,31 +117,32 @@ internal sealed class XmlFolder(SlnxFile root, XmlSolution xmlSolution, XmlEleme
 
         // Attributes
         Guid id = modelFolder.IsDefaultId ? Guid.Empty : modelFolder.Id;
-        if (this.Id != id)
+        if (Id != id)
         {
-            this.Id = id;
+            Id = id;
             modified = true;
         }
 
         // Files
-        modified |= this.ApplyModelItemsToXml(
-            itemRefs: modelFolder.Files?.ToList(this.Root.ConvertToUserPath),
-            decoratorItems: ref this.files,
+        modified |= ApplyModelItemsToXml(
+            itemRefs: modelFolder.Files?.ToList(Root.ConvertToUserPath),
+            decoratorItems: ref files,
             decoratorElementName: Keyword.File);
 
         // Projects
         List<(string ItemRef, SolutionProjectModel Item)> projectsInFolder = modelSolution.SolutionProjects.WhereToList(
             (project, solutionFolderModel) => ReferenceEquals(project.Parent, solutionFolderModel),
-            (project, _) => (ItemRef: this.Root.ConvertToUserPath(project.ItemRef), Item: project),
+            (project, _) => (ItemRef: Root.ConvertToUserPath(project.ItemRef), Item: project),
             modelFolder);
-        modified |= this.ApplyModelItemsToXml(
+
+        modified |= ApplyModelItemsToXml(
             modelItems: projectsInFolder,
-            ref this.folderProjects,
+            ref folderProjects,
             Keyword.Project,
             applyModelToXml: static (newProject, modelProject) => newProject.ApplyModelToXml(modelProject));
 
         // Properties
-        modified |= this.ApplyModelToXml(modelFolder.Properties);
+        modified |= ApplyModelToXml(modelFolder.Properties);
 
         return modified;
     }

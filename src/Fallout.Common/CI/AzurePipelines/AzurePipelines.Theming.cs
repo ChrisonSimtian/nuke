@@ -50,7 +50,9 @@ public partial class AzurePipelines
     protected internal override bool FilterMessage(string message)
     {
         if (!message.ContainsOrdinalIgnoreCase("##vso["))
+        {
             return false;
+        }
 
         Console.WriteLine(message);
         return true;

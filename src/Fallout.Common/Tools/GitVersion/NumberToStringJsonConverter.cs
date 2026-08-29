@@ -22,7 +22,9 @@ internal sealed class NumberToStringJsonConverter : JsonConverter<string>
         return reader.TokenType switch
         {
             JsonTokenType.String => reader.GetString(),
-            JsonTokenType.Number => reader.TryGetInt64(out var l) ? l.ToString() : reader.GetDouble().ToString(CultureInfo.InvariantCulture),
+            JsonTokenType.Number => reader.TryGetInt64(out var l)
+                ? l.ToString()
+                : reader.GetDouble().ToString(CultureInfo.InvariantCulture),
             JsonTokenType.Null => null,
             _ => throw new JsonException($"Unexpected token type {reader.TokenType} when deserializing string.")
         };

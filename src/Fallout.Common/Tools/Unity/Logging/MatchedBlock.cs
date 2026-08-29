@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common.Tools.Unity.Logging;
+﻿namespace Fallout.Common.Tools.Unity.Logging;
 
 internal class MatchedBlock
 {
     public BlockMatcher BlockMatcher { get; }
+
     public string Name { get; }
+
     public MatchType MatchType { get; }
 
     public MatchedBlock(BlockMatcher blockMatcher, string name, MatchType matchType)

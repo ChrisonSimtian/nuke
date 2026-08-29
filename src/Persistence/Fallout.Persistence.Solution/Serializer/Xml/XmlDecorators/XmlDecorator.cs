@@ -20,12 +20,13 @@ internal abstract partial class XmlDecorator
 
     private protected XmlDecorator(SlnxFile root, XmlElement element, Keyword elementName)
     {
-        this.Root = root;
-        this.XmlElement = element;
-        this.ElementName = elementName;
-        if (this.ElementName != Keywords.ToKeyword(element.Name))
+        Root = root;
+        XmlElement = element;
+        ElementName = elementName;
+        if (ElementName != Keywords.ToKeyword(element.Name))
         {
-            throw new SolutionArgumentException($"Expected element name {this.ElementName}, but got {element.Name}", SolutionErrorType.InvalidXmlDecoratorElementName);
+            throw new SolutionArgumentException($"Expected element name {ElementName}, but got {element.Name}",
+                SolutionErrorType.InvalidXmlDecoratorElementName);
         }
     }
 
@@ -34,13 +35,13 @@ internal abstract partial class XmlDecorator
     /// </summary>
     public string ItemRef
     {
-        get => this.itemRef ??= this.RawItemRef;
+        get => itemRef ??= RawItemRef;
         set
         {
             if (this is IItemRefDecorator)
             {
-                this.RawItemRef = value;
-                this.itemRef = value;
+                RawItemRef = value;
+                itemRef = value;
             }
         }
     }
@@ -61,9 +62,11 @@ internal abstract partial class XmlDecorator
 
 #if DEBUG
 
-    internal string DebugItemRef => this is IItemRefDecorator itemRefDecorator ? $"({itemRefDecorator.ItemRefAttribute}={this.ItemRef})" : string.Empty;
+    internal string DebugItemRef => this is IItemRefDecorator itemRefDecorator
+        ? $"({itemRefDecorator.ItemRefAttribute}={ItemRef})"
+        : string.Empty;
 
-    internal virtual string DebugDisplay => $"{this.ElementName} {this.DebugItemRef}";
+    internal virtual string DebugDisplay => $"{ElementName} {DebugItemRef}";
 
 #endif
 
@@ -79,14 +82,14 @@ internal abstract partial class XmlDecorator
     /// </summary>
     private protected virtual string RawItemRef
     {
-        get => this is IItemRefDecorator itemRefDecorator ?
-            this.GetXmlAttribute(itemRefDecorator.ItemRefAttribute) ?? string.Empty :
-            string.Empty;
+        get => this is IItemRefDecorator itemRefDecorator
+            ? GetXmlAttribute(itemRefDecorator.ItemRefAttribute) ?? string.Empty
+            : string.Empty;
         set
         {
             if (this is IItemRefDecorator itemRefDecorator)
             {
-                this.UpdateXmlAttribute(itemRefDecorator.ItemRefAttribute, value);
+                UpdateXmlAttribute(itemRefDecorator.ItemRefAttribute, value);
             }
         }
     }
@@ -95,12 +98,12 @@ internal abstract partial class XmlDecorator
 
     internal virtual bool IsValid()
     {
-        if (this.IsSingleton)
+        if (IsSingleton)
         {
-            return this.ItemRef.IsNullOrEmpty();
+            return ItemRef.IsNullOrEmpty();
         }
 
-        return this.AllowEmptyItemRef || !string.IsNullOrWhiteSpace(this.ItemRef);
+        return AllowEmptyItemRef || !string.IsNullOrWhiteSpace(ItemRef);
     }
 
     #region Update decorator from XML
@@ -111,7 +114,7 @@ internal abstract partial class XmlDecorator
     /// </summary>
     internal virtual void UpdateFromXml()
     {
-        _ = this.ItemRef;
+        _ = ItemRef;
     }
 
     #endregion
@@ -119,29 +122,29 @@ internal abstract partial class XmlDecorator
     #region Attribute Helpers
 
     internal Guid GetXmlAttributeGuid(Keyword keyword, Guid defaultValue = default) =>
-        Guid.TryParse(this.GetXmlAttribute(keyword), out Guid guid) ? guid : defaultValue;
+        Guid.TryParse(GetXmlAttribute(keyword), out Guid guid) ? guid : defaultValue;
 
     internal void UpdateXmlAttributeGuid(Keyword keyword, Guid value) =>
-        this.UpdateXmlAttribute(keyword, isDefault: value == Guid.Empty, value, guid => guid.ToString());
+        UpdateXmlAttribute(keyword, isDefault: value == Guid.Empty, value, guid => guid.ToString());
 
     internal bool GetXmlAttributeBool(Keyword keyword, bool defaultValue = false) =>
-        bool.TryParse(this.GetXmlAttribute(keyword), out bool boolValue) ? boolValue : defaultValue;
+        bool.TryParse(GetXmlAttribute(keyword), out bool boolValue) ? boolValue : defaultValue;
 
     // Note: The XML schema for boolean only allows lowercase "true" or "false".
     internal void UpdateXmlAttributeBool(Keyword keyword, bool value, bool defaultValue = false) =>
-        this.UpdateXmlAttribute(keyword, isDefault: value == defaultValue, value, b => b.ToXmlBool());
+        UpdateXmlAttribute(keyword, isDefault: value == defaultValue, value, b => b.ToXmlBool());
 
     internal void UpdateXmlAttribute(Keyword keyword, string? value) =>
-        this.UpdateXmlAttribute(keyword, isDefault: value.IsNullOrEmpty(), value, str => str ?? string.Empty);
+        UpdateXmlAttribute(keyword, isDefault: value.IsNullOrEmpty(), value, str => str ?? string.Empty);
 
     #endregion
 
     #region Helper methods
 
     [return: NotNullIfNotNull(nameof(str))]
-    private protected string? GetTableString(string? str) => this.Root.StringTable.GetString(str);
+    private protected string? GetTableString(string? str) => Root.StringTable.GetString(str);
 
-    private protected string GetTableString(StringSpan str) => this.Root.StringTable.GetString(str);
+    private protected string GetTableString(StringSpan str) => Root.StringTable.GetString(str);
 
     #endregion
 }

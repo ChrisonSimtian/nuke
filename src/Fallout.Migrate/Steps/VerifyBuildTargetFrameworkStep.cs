@@ -40,8 +40,10 @@ internal sealed class VerifyBuildTargetFrameworkStep : IMigrationStep
                 .ToArray();
 
             string[] outdated = monikers
-                .Where(moniker => TargetFrameworkMonikers.IsOlderThanMinimumSupported(moniker, BumpDotNetVersionStep.MinimumSupportedMajor))
+                .Where(moniker =>
+                    TargetFrameworkMonikers.IsOlderThanMinimumSupported(moniker, BumpDotNetVersionStep.MinimumSupportedMajor))
                 .ToArray();
+
             if (outdated.Length == 0)
             {
                 continue;

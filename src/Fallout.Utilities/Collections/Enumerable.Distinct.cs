@@ -9,7 +9,8 @@ public static partial class EnumerableExtensions
     /// <summary>
     /// Filters a collection to distinct/unique elements.
     /// </summary>
-    public static IEnumerable<TSource> Distinct<TSource, TValue>(this IEnumerable<TSource> enumerable, Func<TSource, TValue> selector)
+    public static IEnumerable<TSource> Distinct<TSource, TValue>(this IEnumerable<TSource> enumerable,
+        Func<TSource, TValue> selector)
     {
         return enumerable.Distinct(new DelegateEqualityComparer<TSource, TValue>(selector));
     }
@@ -26,13 +27,25 @@ public static partial class EnumerableExtensions
         public bool Equals(TSource x, TSource y)
         {
             if (ReferenceEquals(x, y))
+            {
                 return true;
+            }
+
             if (ReferenceEquals(x, objB: null))
+            {
                 return false;
+            }
+
             if (ReferenceEquals(y, objB: null))
+            {
                 return false;
+            }
+
             if (x.GetType() != y.GetType())
+            {
                 return false;
+            }
+
             return Equals(selector(x), selector(y));
         }
 

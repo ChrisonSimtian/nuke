@@ -31,7 +31,9 @@ internal static class GitHubActionsActionReference
     public static string Resolve(string defaultAction, string value, string origin)
     {
         if (value.IsNullOrWhiteSpace())
+        {
             return defaultAction;
+        }
 
         Assert.True(value.All(x => !char.IsControl(x)),
             $"{origin}: action reference '{value}' must be a single line without control characters");
@@ -66,7 +68,9 @@ internal static class GitHubActionsActionReference
         // 'releases/v1' is a branch rather than an owner/repo.
         var isExplicitBareRef = reference.StartsWith("@", StringComparison.Ordinal);
         if (isExplicitBareRef)
+        {
             reference = reference.Substring(startIndex: 1);
+        }
 
         var separatorIndex = reference.IndexOf('@');
         if (!isExplicitBareRef && separatorIndex >= 0)
@@ -76,6 +80,7 @@ internal static class GitHubActionsActionReference
 
             Assert.True(name.Contains('/'),
                 $"{origin}: action reference '{reference}' must name the action as 'owner/repo@ref'");
+
             Assert.True(!gitReference.IsNullOrWhiteSpace() && !gitReference.Contains('@'),
                 $"{origin}: action reference '{reference}' must name exactly one version or commit after the '@'");
 
@@ -84,6 +89,7 @@ internal static class GitHubActionsActionReference
 
         Assert.True(!reference.IsNullOrWhiteSpace() && !reference.Contains('@'),
             $"{origin}: action reference '{reference}' must name exactly one version or commit");
+
         Assert.True(isExplicitBareRef || !reference.Contains('/'),
             $"{origin}: action reference '{reference}' is ambiguous — write 'owner/repo@ref' for a complete " +
             $"reference, or '@{reference}' to use it as a ref on '{GetActionName(defaultAction)}'");
@@ -109,7 +115,9 @@ internal static class GitHubActionsActionReference
     private static (string Reference, string Comment) SplitComment(string value)
     {
         if (value.StartsWith("#", StringComparison.Ordinal))
+        {
             return (string.Empty, value);
+        }
 
         var commentIndex = value.IndexOf(" #", StringComparison.Ordinal);
         return commentIndex < 0

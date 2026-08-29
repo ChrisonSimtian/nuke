@@ -42,6 +42,7 @@ internal static class SlnxFixtureBuilder
                 {
                     AppendProject(sb, p, indent: "    ");
                 }
+
                 sb.AppendLine("  </Folder>");
             }
         }

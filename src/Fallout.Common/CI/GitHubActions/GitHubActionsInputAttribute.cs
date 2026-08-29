@@ -25,10 +25,16 @@ public class GitHubActionsInputAttribute : Attribute
     }
 
     public string Name { get; }
+
     public GitHubActionsInputType Type { get; set; } = GitHubActionsInputType.String;
+
     public bool Required { get; set; }
+
     public string Default { get; set; }
+
     public string[] Options { get; set; } = new string[0];
+
     public string Description { get; set; }
+
     public string[] Workflows { get; set; } = new string[0];
 }

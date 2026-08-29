@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Fallout.Common.Utilities.Collections;
@@ -20,7 +19,9 @@ partial class AbsolutePathExtensions
         Assert.True(depth >= 0);
 
         if (depth == 0)
+        {
             return Enumerable.Empty<AbsolutePath>();
+        }
 
         var files = Directory.EnumerateFiles(path, pattern, SearchOption.TopDirectoryOnly)
             .Where(x => (File.GetAttributes(x) & attributes) == attributes)
@@ -41,7 +42,11 @@ partial class AbsolutePathExtensions
     {
         Assert.True(depth >= 0);
 
-        var paths = new string[] { path };
+        var paths = new string[]
+        {
+            path
+        };
+
         while (!paths.IsEmpty() && depth > 0)
         {
             var matchingDirectories = paths
@@ -51,7 +56,9 @@ partial class AbsolutePathExtensions
                 .Select(AbsolutePath.Create).ToList();
 
             foreach (var matchingDirectory in matchingDirectories)
+            {
                 yield return matchingDirectory;
+            }
 
             depth--;
             paths = paths.SelectMany(x => Directory.GetDirectories(x, "*", SearchOption.TopDirectoryOnly)).ToArray();

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 
@@ -8,11 +7,17 @@ namespace Fallout.Common.CI.SpaceAutomation.Configuration;
 public class SpaceAutomationPushTrigger : SpaceAutomationTrigger
 {
     public bool? OnPush { get; set; }
+
     public string[] OnPushBranchIncludes { get; set; }
+
     public string[] OnPushBranchExcludes { get; set; }
+
     public string[] OnPushBranchRegexIncludes { get; set; }
+
     public string[] OnPushBranchRegexExcludes { get; set; }
+
     public string[] OnPushPathIncludes { get; set; }
+
     public string[] OnPushPathExcludes { get; set; }
 
     public override void Write(CustomFileWriter writer)
@@ -36,7 +41,9 @@ public class SpaceAutomationPushTrigger : SpaceAutomationTrigger
             using (writer.WriteBlock("gitPush"))
             {
                 if (OnPush != null)
+                {
                     writer.WriteLine($"enabled = {OnPush.ToString().ToLowerInvariant()}");
+                }
 
                 if (HasBranchFilter())
                 {

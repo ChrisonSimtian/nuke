@@ -11,16 +11,22 @@
 // a Fallout-side entry-point grace shim (#257 mitigation) — without this
 // exclusion, Rule 1 and the Fallout.Solutions rule would both emit
 // Nuke.Common.ProjectModel.Solution, colliding (CS0263/CS0111).
-[assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder(
+
+using Fallout.Migrate.Shims;
+
+[assembly: ShimAllPublicTypesUnder(
     fromNamespacePrefix: "Fallout.Common",
     toNamespacePrefix: "Nuke.Common",
-    ExceptNamespacePrefixes = new[] { "Fallout.Common.ProjectModel" })]
+    ExceptNamespacePrefixes = new[]
+    {
+        "Fallout.Common.ProjectModel"
+    })]
 
 // The solution-handling types moved from Fallout.Common.ProjectModel to the
 // dedicated Fallout.Solutions namespace in v11 (see #248 and the broader
 // onion-layering work). For NUKE-era consumers, mirror them into the legacy
 // Nuke.Common.ProjectModel namespace so existing `using Nuke.Common.ProjectModel;`
 // + `[Solution] readonly Solution Solution;` keep compiling.
-[assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder(
+[assembly: ShimAllPublicTypesUnder(
     fromNamespacePrefix: "Fallout.Solutions",
     toNamespacePrefix: "Nuke.Common.ProjectModel")]

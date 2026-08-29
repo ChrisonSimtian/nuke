@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Fallout.Common;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using Fallout.Common;
 #if NETCOREAPP
 using System.Runtime.Loader;
 using Fallout.Common.Utilities;
@@ -18,7 +18,8 @@ public abstract class ContextAwareTask : Task
 
     private const string Subcategory = "Build";
 
-    protected virtual string ManagedDllDirectory => Path.GetDirectoryName(new Uri(GetType().GetTypeInfo().Assembly.Location).LocalPath);
+    protected virtual string ManagedDllDirectory =>
+        Path.GetDirectoryName(new Uri(GetType().GetTypeInfo().Assembly.Location).LocalPath);
 
     protected virtual string UnmanagedDllDirectory => null;
 
@@ -37,10 +38,15 @@ public abstract class ContextAwareTask : Task
             from outerProperty in outerProperties.Values
             where outerProperty.SetMethod != null && outerProperty.GetMethod != null
             let innerProperty = innerProperties[outerProperty.Name]
-            select new { outerProperty, innerProperty };
+            select new
+            {
+                outerProperty,
+                innerProperty
+            };
 
         var propertiesMap = propertiesDiscovery.ToArray();
-        var outputPropertiesMap = propertiesMap.Where(pair => pair.outerProperty.GetCustomAttribute<OutputAttribute>() != null).ToArray();
+        var outputPropertiesMap = propertiesMap.Where(pair => pair.outerProperty.GetCustomAttribute<OutputAttribute>() != null)
+            .ToArray();
 
         foreach (var propertyPair in propertiesMap)
         {
@@ -51,7 +57,9 @@ public abstract class ContextAwareTask : Task
         var result = innerTaskType.InvokeMember<bool>(nameof(ExecuteInner), innerTask);
 
         foreach (var propertyPair in outputPropertiesMap)
+        {
             propertyPair.outerProperty.SetValue(this, propertyPair.innerProperty.GetValue(innerTask));
+        }
 
         return result;
 #else

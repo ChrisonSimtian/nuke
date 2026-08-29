@@ -23,13 +23,17 @@ public sealed class NukeMigrationCodeFix : CodeFixProvider
     {
         var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
         if (root is null)
+        {
             return;
+        }
 
         foreach (var diagnostic in context.Diagnostics)
         {
             var node = root.FindNode(diagnostic.Location.SourceSpan, getInnermostNodeForTie: true);
             if (node is null)
+            {
                 continue;
+            }
 
             context.RegisterCodeFix(
                 CodeAction.Create(
@@ -40,11 +44,14 @@ public sealed class NukeMigrationCodeFix : CodeFixProvider
         }
     }
 
-    private static async Task<Document> ApplyFixAsync(Document document, SyntaxNode offendingNode, CancellationToken cancellationToken)
+    private static async Task<Document> ApplyFixAsync(Document document, SyntaxNode offendingNode,
+        CancellationToken cancellationToken)
     {
         var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
         if (root is null)
+        {
             return document;
+        }
 
         var rewriter = new NukeToFalloutRewriter();
         var rewritten = rewriter.Visit(offendingNode);
@@ -65,7 +72,9 @@ public sealed class NukeMigrationCodeFix : CodeFixProvider
             };
 
             if (replacement is null)
+            {
                 return base.VisitIdentifierName(node);
+            }
 
             return node.WithIdentifier(SyntaxFactory.Identifier(
                 node.Identifier.LeadingTrivia,

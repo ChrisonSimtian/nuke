@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Fallout.Common.CI.Bitbucket;
 
@@ -20,6 +18,7 @@ public class Bitbucket : Host, IBuildServer
     }
 
     string IBuildServer.Branch => Branch;
+
     string IBuildServer.Commit => Commit;
 
     /// <summary>

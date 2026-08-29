@@ -31,60 +31,109 @@ public partial class AzurePipelines : Host, IBuildServer
     }
 
     string IBuildServer.Branch => SourceBranch;
+
     string IBuildServer.Commit => SourceVersion;
 
     public string AgentBuildDirectory => EnvironmentInfo.GetVariable("AGENT_BUILDDIRECTORY");
+
     public string AgentHomeDirectory => EnvironmentInfo.GetVariable("AGENT_HOMEDIRECTORY");
+
     public long AgentId => EnvironmentInfo.GetVariable<long>("AGENT_ID");
+
     public AzurePipelinesJobStatus AgentJobStatus => EnvironmentInfo.GetVariable<AzurePipelinesJobStatus>("AGENT_JOBSTATUS");
+
     public string AgentMachineName => EnvironmentInfo.GetVariable("AGENT_MACHINENAME");
+
     public string AgentName => EnvironmentInfo.GetVariable("AGENT_NAME");
+
     public string AgentWorkFolder => EnvironmentInfo.GetVariable("AGENT_WORKFOLDER");
+
     public string ArtifactStagingDirectory => EnvironmentInfo.GetVariable("BUILD_ARTIFACTSTAGINGDIRECTORY");
+
     public long BuildId => EnvironmentInfo.GetVariable<long>("BUILD_BUILDID");
-    [NoConvert] public string BuildNumber => EnvironmentInfo.GetVariable("BUILD_BUILDNUMBER");
+
+    [NoConvert]
+    public string BuildNumber => EnvironmentInfo.GetVariable("BUILD_BUILDNUMBER");
+
     public string BuildUri => EnvironmentInfo.GetVariable("BUILD_BUILDURI");
+
     public string BinariesDirectory => EnvironmentInfo.GetVariable("BUILD_BINARIESDIRECTORY");
+
     public string DefinitionName => EnvironmentInfo.GetVariable("BUILD_DEFINITIONNAME");
+
     public long DefinitionVersion => EnvironmentInfo.GetVariable<long>("BUILD_DEFINITIONVERSION");
+
     public string QueuedBy => EnvironmentInfo.GetVariable("BUILD_QUEUEDBY");
+
     public Guid QueuedById => EnvironmentInfo.GetVariable<Guid>("BUILD_QUEUEDBYID");
+
     public AzurePipelinesBuildReason BuildReason => EnvironmentInfo.GetVariable<AzurePipelinesBuildReason>("BUILD_REASON");
+
     public bool RepositoryClean => EnvironmentInfo.GetVariable<bool>("BUILD_REPOSITORY_CLEAN");
+
     public string RepositoryLocalPath => EnvironmentInfo.GetVariable("BUILD_REPOSITORY_LOCALPATH");
+
     public string RepositoryName => EnvironmentInfo.GetVariable("BUILD_REPOSITORY_NAME");
 
     public AzurePipelinesRepositoryType RepositoryProvider =>
         EnvironmentInfo.GetVariable<AzurePipelinesRepositoryType>("BUILD_REPOSITORY_PROVIDER");
 
     public string RepositoryTfvcWorkspace => EnvironmentInfo.GetVariable("BUILD_REPOSITORY_TFVC_WORKSPACE");
+
     public string RepositoryUri => EnvironmentInfo.GetVariable("BUILD_REPOSITORY_URI");
+
     public string RequestedFor => EnvironmentInfo.GetVariable("BUILD_REQUESTEDFOR");
+
     public string RequestedForEmail => EnvironmentInfo.GetVariable("BUILD_REQUESTEDFOREMAIL");
+
     public Guid RequestedForId => EnvironmentInfo.GetVariable<Guid>("BUILD_REQUESTEDFORID");
+
     public string SourceBranch => EnvironmentInfo.GetVariable("BUILD_SOURCEBRANCH");
+
     public string SourceBranchName => EnvironmentInfo.GetVariable("BUILD_SOURCEBRANCHNAME");
+
     public string SourceDirectory => EnvironmentInfo.GetVariable("BUILD_SOURCESDIRECTORY");
+
     public string SourceVersion => EnvironmentInfo.GetVariable("BUILD_SOURCEVERSION");
+
     public string StagingDirectory => EnvironmentInfo.GetVariable("BUILD_STAGINGDIRECTORY");
+
     public bool RepositoryGitSubmoduleCheckout => EnvironmentInfo.GetVariable<bool>("BUILD_REPOSITORY_GIT_SUBMODULECHECKOUT");
+
     public string SourceTfvcShelveset => EnvironmentInfo.GetVariable("BUILD_SOURCETFVCSHELVESET");
+
     public string TestResultsDirectory => EnvironmentInfo.GetVariable("COMMON_TESTRESULTSDIRECTORY");
+
     public string AccessToken => EnvironmentInfo.GetVariable("SYSTEM_ACCESSTOKEN");
+
     public Guid CollectionId => EnvironmentInfo.GetVariable<Guid>("SYSTEM_COLLECTIONID");
+
     public string DefaultWorkingDirectory => EnvironmentInfo.GetVariable("SYSTEM_DEFAULTWORKINGDIRECTORY");
+
     public long DefinitionId => EnvironmentInfo.GetVariable<long>("SYSTEM_DEFINITIONID");
+
     public long? PullRequestId => EnvironmentInfo.GetVariable<long?>("SYSTEM_PULLREQUEST_PULLREQUESTID");
+
     public string PullRequestSourceBranch => EnvironmentInfo.GetVariable("SYSTEM_PULLREQUEST_SOURCEBRANCH");
+
     public string PullRequestTargetBranch => EnvironmentInfo.GetVariable("SYSTEM_PULLREQUEST_TARGETBRANCH");
+
     public string StageName => EnvironmentInfo.GetVariable("SYSTEM_STAGENAME");
+
     public string StageDisplayName => EnvironmentInfo.GetVariable("SYSTEM_STAGEDISPLAYNAME");
+
     public string TeamFoundationCollectionUri => EnvironmentInfo.GetVariable("SYSTEM_TEAMFOUNDATIONCOLLECTIONURI");
+
     public string TeamProject => EnvironmentInfo.GetVariable("SYSTEM_TEAMPROJECT");
+
     public Guid TeamProjectId => EnvironmentInfo.GetVariable<Guid>("SYSTEM_TEAMPROJECTID");
+
     public string JobDisplayName => EnvironmentInfo.GetVariable("SYSTEM_JOBDISPLAYNAME");
+
     public Guid JobId => EnvironmentInfo.GetVariable<Guid>("SYSTEM_JOBID");
+
     public Guid TaskInstanceId => EnvironmentInfo.GetVariable<Guid>("SYSTEM_TASKINSTANCEID");
+
     public string PhaseName => EnvironmentInfo.GetVariable("SYSTEM_PHASENAME");
 
     public void Group(string group)

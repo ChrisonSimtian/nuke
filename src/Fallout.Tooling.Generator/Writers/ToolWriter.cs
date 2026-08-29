@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using Fallout.CodeGeneration.Model;
 using Fallout.Common.Utilities;
 
@@ -18,6 +17,7 @@ public class ToolWriter : IDisposable, IWriter, IWriterWrapper
     }
 
     public Tool Tool { get; }
+
     public IWriter Writer => this;
 
     public void Dispose()

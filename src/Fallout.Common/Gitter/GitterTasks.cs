@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Fallout.Common.Utilities.Net;
 
@@ -15,7 +13,7 @@ namespace Fallout.Common.Gitter;
 
 public static class GitterTasks
 {
-    private static HttpClient client = new();
+    private static readonly HttpClient client = new();
 
     public static void SendGitterMessage(string message, string roomId, string token)
     {

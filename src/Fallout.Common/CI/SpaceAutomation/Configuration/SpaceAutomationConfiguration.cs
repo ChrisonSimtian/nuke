@@ -7,10 +7,15 @@ namespace Fallout.Common.CI.SpaceAutomation.Configuration;
 public class SpaceAutomationConfiguration : ConfigurationEntity
 {
     public string Name { get; set; }
+
     public string VolumeSize { get; set; }
+
     public string[] RefSpec { get; set; }
+
     public SpaceAutomationContainer Container { get; set; }
+
     public SpaceAutomationTrigger[] Triggers { get; set; }
+
     public int? TimeoutInMinutes { get; set; }
 
     public override void Write(CustomFileWriter writer)

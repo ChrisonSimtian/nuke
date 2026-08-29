@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -41,7 +40,11 @@ public class ConfigurationGenerationSpecs
 
     public static IEnumerable<object[]> GetAttributes()
     {
-        return TestBuild.GetAttributes().Select(x => new object[] { x.TestName, x.Generator });
+        return TestBuild.GetAttributes().Select(x => new object[]
+        {
+            x.TestName,
+            x.Generator
+        });
     }
 
     [AppVeyorSecret("GitHubToken", "encrypted-yaml")]
@@ -57,13 +60,36 @@ public class ConfigurationGenerationSpecs
                 {
                     Description = "description",
                     Version = "1.3.3.7",
-                    NonEntryTargets = new[] { nameof(Clean) },
-                    VcsTriggeredTargets = new[] { nameof(Test), nameof(Pack) },
-                    ManuallyTriggeredTargets = new[] { nameof(Publish) },
-                    NightlyTriggeredTargets = new[] { nameof(Publish) },
-                    NightlyTriggerBranchFilters = new[] { "nightly_branch_filter" },
-                    VcsTriggerBranchFilters = new[] { "vcs_branch_filter" },
-                    ImportSecrets = new[] { "GitHubToken", "ManualToken" }
+                    NonEntryTargets = new[]
+                    {
+                        nameof(Clean)
+                    },
+                    VcsTriggeredTargets = new[]
+                    {
+                        nameof(Test),
+                        nameof(Pack)
+                    },
+                    ManuallyTriggeredTargets = new[]
+                    {
+                        nameof(Publish)
+                    },
+                    NightlyTriggeredTargets = new[]
+                    {
+                        nameof(Publish)
+                    },
+                    NightlyTriggerBranchFilters = new[]
+                    {
+                        "nightly_branch_filter"
+                    },
+                    VcsTriggerBranchFilters = new[]
+                    {
+                        "vcs_branch_filter"
+                    },
+                    ImportSecrets = new[]
+                    {
+                        "GitHubToken",
+                        "ManualToken"
+                    }
                 }
             );
 
@@ -74,19 +100,52 @@ public class ConfigurationGenerationSpecs
                     AzurePipelinesImage.Ubuntu2204,
                     AzurePipelinesImage.Windows2019)
                 {
-                    NonEntryTargets = new[] { nameof(Clean) },
-                    InvokedTargets = new[] { nameof(Test) },
-                    ExcludedTargets = new[] { nameof(Pack) },
+                    NonEntryTargets = new[]
+                    {
+                        nameof(Clean)
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
+                    ExcludedTargets = new[]
+                    {
+                        nameof(Pack)
+                    },
                     EnableAccessToken = true,
-                    ImportVariableGroups = new[] { "variable-group-1" },
-                    ImportSecrets = new[] { nameof(ApiKey) },
+                    ImportVariableGroups = new[]
+                    {
+                        "variable-group-1"
+                    },
+                    ImportSecrets = new[]
+                    {
+                        nameof(ApiKey)
+                    },
                     TriggerBatch = true,
-                    TriggerBranchesInclude = new[] { "included_branch" },
-                    TriggerBranchesExclude = new[] { "excluded_branch" },
-                    TriggerPathsInclude = new[] { "included_path" },
-                    TriggerPathsExclude = new[] { "excluded_path" },
-                    TriggerTagsInclude = new[] { "included_tags" },
-                    TriggerTagsExclude = new[] { "excluded_tags" },
+                    TriggerBranchesInclude = new[]
+                    {
+                        "included_branch"
+                    },
+                    TriggerBranchesExclude = new[]
+                    {
+                        "excluded_branch"
+                    },
+                    TriggerPathsInclude = new[]
+                    {
+                        "included_path"
+                    },
+                    TriggerPathsExclude = new[]
+                    {
+                        "excluded_path"
+                    },
+                    TriggerTagsInclude = new[]
+                    {
+                        "included_tags"
+                    },
+                    TriggerTagsExclude = new[]
+                    {
+                        "excluded_tags"
+                    },
                     Submodules = true,
                     LargeFileStorage = false,
                     Clean = true,
@@ -101,13 +160,25 @@ public class ConfigurationGenerationSpecs
                     AppVeyorImage.UbuntuLatest,
                     AppVeyorImage.VisualStudio2022)
                 {
-                    InvokedTargets = new[] { nameof(Test) },
-                    BranchesOnly = new[] { "only_branch" },
-                    BranchesExcept = new[] { "except_branch" },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
+                    BranchesOnly = new[]
+                    {
+                        "only_branch"
+                    },
+                    BranchesExcept = new[]
+                    {
+                        "except_branch"
+                    },
                     SkipTags = true,
                     SkipBranchesWithPullRequest = true,
                     Submodules = true,
-                    Secrets = new[] { "GitHubToken" }
+                    Secrets = new[]
+                    {
+                        "GitHubToken"
+                    }
                 }
             );
 
@@ -119,12 +190,28 @@ public class ConfigurationGenerationSpecs
                     GitHubActionsImage.UbuntuLatest,
                     GitHubActionsImage.WindowsLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push, GitHubActionsTrigger.PullRequest },
-                    InvokedTargets = new[] { nameof(Test) },
-                    ImportSecrets = new[] { nameof(ApiKey) },
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push,
+                        GitHubActionsTrigger.PullRequest
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
+                    ImportSecrets = new[]
+                    {
+                        nameof(ApiKey)
+                    },
                     EnableGitHubToken = true,
-                    WritePermissions = new[] { GitHubActionsPermissions.Contents },
-                    ReadPermissions = new[] { GitHubActionsPermissions.Actions }
+                    WritePermissions = new[]
+                    {
+                        GitHubActionsPermissions.Contents
+                    },
+                    ReadPermissions = new[]
+                    {
+                        GitHubActionsPermissions.Actions
+                    }
                 }
             );
 
@@ -136,19 +223,52 @@ public class ConfigurationGenerationSpecs
                     GitHubActionsImage.UbuntuLatest,
                     GitHubActionsImage.WindowsLatest)
                 {
-                    InvokedTargets = new[] { nameof(Test) },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
                     OnCronSchedule = "* 0 * * *",
-                    OnPushBranches = new[] { "push_branch" },
-                    OnPushTags = new[] { "push_tag/*" },
-                    OnPushIncludePaths = new[] { "push_include_path" },
-                    OnPushExcludePaths = new[] { "push_exclude_path" },
-                    OnPullRequestBranches = new[] { "pull_request_branch" },
-                    OnPullRequestTags = new[] { "pull_request_tag" },
-                    OnPullRequestIncludePaths = new[] { "pull_request_include_path" },
-                    OnPullRequestExcludePaths = new[] { "pull_request_exclude_path/**" },
+                    OnPushBranches = new[]
+                    {
+                        "push_branch"
+                    },
+                    OnPushTags = new[]
+                    {
+                        "push_tag/*"
+                    },
+                    OnPushIncludePaths = new[]
+                    {
+                        "push_include_path"
+                    },
+                    OnPushExcludePaths = new[]
+                    {
+                        "push_exclude_path"
+                    },
+                    OnPullRequestBranches = new[]
+                    {
+                        "pull_request_branch"
+                    },
+                    OnPullRequestTags = new[]
+                    {
+                        "pull_request_tag"
+                    },
+                    OnPullRequestIncludePaths = new[]
+                    {
+                        "pull_request_include_path"
+                    },
+                    OnPullRequestExcludePaths = new[]
+                    {
+                        "pull_request_exclude_path/**"
+                    },
 #pragma warning disable FALLOUTOBS001 // regression guard: the obsolete legacy path must still emit correctly
-                    OnWorkflowDispatchOptionalInputs = new[] { "OptionalInput" },
-                    OnWorkflowDispatchRequiredInputs = new[] { "RequiredInput" },
+                    OnWorkflowDispatchOptionalInputs = new[]
+                    {
+                        "OptionalInput"
+                    },
+                    OnWorkflowDispatchRequiredInputs = new[]
+                    {
+                        "RequiredInput"
+                    },
 #pragma warning restore FALLOUTOBS001
                     PublishCondition = "success() || failure()",
                     Submodules = GitHubActionsSubmodules.Recursive,
@@ -175,8 +295,14 @@ public class ConfigurationGenerationSpecs
                 "checkout-ref",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    InvokedTargets = new[] { nameof(Test) },
-                    OnPullRequestBranches = new[] { "main" },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
+                    OnPullRequestBranches = new[]
+                    {
+                        "main"
+                    },
                     CheckoutRef = "${{ github.head_ref }}"
                 }
             );
@@ -186,15 +312,22 @@ public class ConfigurationGenerationSpecs
                 "env-block",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push, GitHubActionsTrigger.PullRequest },
-                    InvokedTargets = new[] { nameof(Test) },
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push,
+                        GitHubActionsTrigger.PullRequest
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
                     Env = new[]
-                          {
-                              "DOTNET_CLI_TELEMETRY_OPTOUT: 1",
-                              "DOTNET_NOLOGO: true",
-                              "NUGET_XMLDOC_MODE: skip",
-                              "Configuration: Release"
-                          }
+                    {
+                        "DOTNET_CLI_TELEMETRY_OPTOUT: 1",
+                        "DOTNET_NOLOGO: true",
+                        "NUGET_XMLDOC_MODE: skip",
+                        "Configuration: Release"
+                    }
                 }
             );
 
@@ -205,11 +338,27 @@ public class ConfigurationGenerationSpecs
                 "env-block-with-permissions",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push },
-                    InvokedTargets = new[] { nameof(Test) },
-                    Env = new[] { "DOTNET_NOLOGO: true", "Configuration: Release" },
-                    WritePermissions = new[] { GitHubActionsPermissions.Contents },
-                    ReadPermissions = new[] { GitHubActionsPermissions.Actions },
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
+                    Env = new[]
+                    {
+                        "DOTNET_NOLOGO: true",
+                        "Configuration: Release"
+                    },
+                    WritePermissions = new[]
+                    {
+                        GitHubActionsPermissions.Contents
+                    },
+                    ReadPermissions = new[]
+                    {
+                        GitHubActionsPermissions.Actions
+                    },
                     ConcurrencyCancelInProgress = true
                 }
             );
@@ -221,15 +370,21 @@ public class ConfigurationGenerationSpecs
                 "checkout-with",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push },
-                    InvokedTargets = new[] { nameof(Test) },
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
                     FetchDepth = 0,
                     CheckoutWith = new[]
-                                   {
-                                       "token: ${{ secrets.CI_PAT }}",
-                                       "path: src",
-                                       "persist-credentials: false"
-                                   }
+                    {
+                        "token: ${{ secrets.CI_PAT }}",
+                        "path: src",
+                        "persist-credentials: false"
+                    }
                 }
             );
 
@@ -239,9 +394,18 @@ public class ConfigurationGenerationSpecs
                 "checkout-with-only",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push },
-                    InvokedTargets = new[] { nameof(Test) },
-                    CheckoutWith = new[] { "path: src" }
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
+                    CheckoutWith = new[]
+                    {
+                        "path: src"
+                    }
                 }
             );
 
@@ -252,14 +416,20 @@ public class ConfigurationGenerationSpecs
                 "checkout-with-sparse",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push },
-                    InvokedTargets = new[] { nameof(Test) },
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
                     CheckoutWith = new[]
-                                   {
-                                       "sparse-checkout: |",
-                                       "  src",
-                                       "  build"
-                                   }
+                    {
+                        "sparse-checkout: |",
+                        "  src",
+                        "  build"
+                    }
                 }
             );
 
@@ -271,15 +441,39 @@ public class ConfigurationGenerationSpecs
                 "dispatch-typed-inputs",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    InvokedTargets = new[] { nameof(Test) },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
                     Inputs = new[]
-                             {
-                                 new GitHubActionsInputAttribute("Plain"),
-                                 new GitHubActionsInputAttribute("Verbose") { Type = GitHubActionsInputType.Boolean, Default = "false" },
-                                 new GitHubActionsInputAttribute("Retries") { Type = GitHubActionsInputType.Number, Default = "3" },
-                                 new GitHubActionsInputAttribute("Channel") { Type = GitHubActionsInputType.Choice, Options = new[] { "alpha", "beta", "stable" }, Default = "beta" },
-                                 new GitHubActionsInputAttribute("Target") { Type = GitHubActionsInputType.Environment }
-                             }
+                    {
+                        new GitHubActionsInputAttribute("Plain"),
+                        new GitHubActionsInputAttribute("Verbose")
+                        {
+                            Type = GitHubActionsInputType.Boolean,
+                            Default = "false"
+                        },
+                        new GitHubActionsInputAttribute("Retries")
+                        {
+                            Type = GitHubActionsInputType.Number,
+                            Default = "3"
+                        },
+                        new GitHubActionsInputAttribute("Channel")
+                        {
+                            Type = GitHubActionsInputType.Choice,
+                            Options = new[]
+                            {
+                                "alpha",
+                                "beta",
+                                "stable"
+                            },
+                            Default = "beta"
+                        },
+                        new GitHubActionsInputAttribute("Target")
+                        {
+                            Type = GitHubActionsInputType.Environment
+                        }
+                    }
                 }
             );
 
@@ -290,13 +484,32 @@ public class ConfigurationGenerationSpecs
                 "dispatch-input-scoping",
                 new TestGitHubActionsAttribute("publish", GitHubActionsImage.UbuntuLatest)
                 {
-                    InvokedTargets = new[] { nameof(Test) },
-                    WorkflowNames = new[] { "publish", "build" },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
+                    WorkflowNames = new[]
+                    {
+                        "publish",
+                        "build"
+                    },
                     Inputs = new[]
-                             {
-                                 new GitHubActionsInputAttribute("ForPublishOnly") { Workflows = new[] { "publish" } },
-                                 new GitHubActionsInputAttribute("ForOtherWorkflow") { Workflows = new[] { "build" } }
-                             }
+                    {
+                        new GitHubActionsInputAttribute("ForPublishOnly")
+                        {
+                            Workflows = new[]
+                            {
+                                "publish"
+                            }
+                        },
+                        new GitHubActionsInputAttribute("ForOtherWorkflow")
+                        {
+                            Workflows = new[]
+                            {
+                                "build"
+                            }
+                        }
+                    }
                 }
             );
 
@@ -307,15 +520,28 @@ public class ConfigurationGenerationSpecs
                 "dispatch-legacy-plus-typed",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    InvokedTargets = new[] { nameof(Test) },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
 #pragma warning disable FALLOUTOBS001 // regression guard: the obsolete legacy path must still emit correctly
-                    OnWorkflowDispatchOptionalInputs = new[] { "LegacyOptional" },
-                    OnWorkflowDispatchRequiredInputs = new[] { "LegacyRequired" },
+                    OnWorkflowDispatchOptionalInputs = new[]
+                    {
+                        "LegacyOptional"
+                    },
+                    OnWorkflowDispatchRequiredInputs = new[]
+                    {
+                        "LegacyRequired"
+                    },
 #pragma warning restore FALLOUTOBS001
                     Inputs = new[]
-                             {
-                                 new GitHubActionsInputAttribute("TypedFlag") { Type = GitHubActionsInputType.Boolean, Default = "true" }
-                             }
+                    {
+                        new GitHubActionsInputAttribute("TypedFlag")
+                        {
+                            Type = GitHubActionsInputType.Boolean,
+                            Default = "true"
+                        }
+                    }
                 }
             );
 
@@ -324,9 +550,20 @@ public class ConfigurationGenerationSpecs
                 "runs-on-labels",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push },
-                    InvokedTargets = new[] { nameof(Test) },
-                    RunsOnLabels = new[] { "self-hosted", "linux", "x64" }
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
+                    RunsOnLabels = new[]
+                    {
+                        "self-hosted",
+                        "linux",
+                        "x64"
+                    }
                 }
             );
 
@@ -335,8 +572,14 @@ public class ConfigurationGenerationSpecs
                 "default-shell",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push },
-                    InvokedTargets = new[] { nameof(Test) },
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
                     DefaultShell = "pwsh"
                 }
             );
@@ -348,11 +591,23 @@ public class ConfigurationGenerationSpecs
                 "default-shell-with-permissions",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push },
-                    InvokedTargets = new[] { nameof(Test) },
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
                     DefaultShell = "pwsh",
-                    WritePermissions = new[] { GitHubActionsPermissions.Contents },
-                    ReadPermissions = new[] { GitHubActionsPermissions.Actions },
+                    WritePermissions = new[]
+                    {
+                        GitHubActionsPermissions.Contents
+                    },
+                    ReadPermissions = new[]
+                    {
+                        GitHubActionsPermissions.Actions
+                    },
                     ConcurrencyCancelInProgress = true
                 }
             );
@@ -365,8 +620,14 @@ public class ConfigurationGenerationSpecs
                 "action-overrides",
                 new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
                 {
-                    On = new[] { GitHubActionsTrigger.Push },
-                    InvokedTargets = new[] { nameof(Pack) },
+                    On = new[]
+                    {
+                        GitHubActionsTrigger.Push
+                    },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Pack)
+                    },
                     CheckoutAction = "v8",
                     SetupDotNetAction = "actions/setup-dotnet@v7",
                     CacheAction = "0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.4",
@@ -379,19 +640,43 @@ public class ConfigurationGenerationSpecs
                 null,
                 new TestSpaceAutomationAttribute("Name", "mcr.microsoft.com/dotnet/sdk:5.0")
                 {
-                    InvokedTargets = new[] { nameof(Test) },
+                    InvokedTargets = new[]
+                    {
+                        nameof(Test)
+                    },
                     VolumeSize = "10.gb",
                     ResourcesCpu = "1.cpu",
                     ResourcesMemory = "2000.mb",
                     OnPush = true,
-                    OnPushBranchIncludes = new[] { "refs/heads/include" },
-                    OnPushBranchExcludes = new[] { "refs/heads/exclude" },
-                    OnPushBranchRegexIncludes = new[] { @"\binclude\b" },
-                    OnPushBranchRegexExcludes = new[] { @"\bexclude\b" },
-                    OnPushPathIncludes = new[] { "include-path" },
-                    OnPushPathExcludes = new[] { "exclude-path" },
+                    OnPushBranchIncludes = new[]
+                    {
+                        "refs/heads/include"
+                    },
+                    OnPushBranchExcludes = new[]
+                    {
+                        "refs/heads/exclude"
+                    },
+                    OnPushBranchRegexIncludes = new[]
+                    {
+                        @"\binclude\b"
+                    },
+                    OnPushBranchRegexExcludes = new[]
+                    {
+                        @"\bexclude\b"
+                    },
+                    OnPushPathIncludes = new[]
+                    {
+                        "include-path"
+                    },
+                    OnPushPathExcludes = new[]
+                    {
+                        "exclude-path"
+                    },
                     OnCronSchedule = "* 0 * * *",
-                    ImportSecrets = new[] { "GitHubToken" },
+                    ImportSecrets = new[]
+                    {
+                        "GitHubToken"
+                    },
                     TimeoutInMinutes = 15
                 }
             );
@@ -402,7 +687,8 @@ public class ConfigurationGenerationSpecs
         public Target Clean => _ => _
             .Before(Restore);
 
-        [Parameter] public readonly bool IgnoreFailedSources;
+        [Parameter]
+        public readonly bool IgnoreFailedSources;
 
         public Target Restore => _ => _
             .Produces(SourceDirectory / "*/obj/**");
@@ -410,9 +696,26 @@ public class ConfigurationGenerationSpecs
         [Parameter("Configuration for compilation")]
         public readonly Configuration Configuration = Configuration.Debug;
 
-        [Parameter] public readonly string[] StringArray = new[] { "first", "second" };
-        [Parameter] public readonly int[] IntegerArray = new[] { 1, 2 };
-        [Parameter] public readonly Configuration[] ConfigurationArray = new[] { Configuration.Debug, Configuration.Release };
+        [Parameter]
+        public readonly string[] StringArray = new[]
+        {
+            "first",
+            "second"
+        };
+
+        [Parameter]
+        public readonly int[] IntegerArray = new[]
+        {
+            1,
+            2
+        };
+
+        [Parameter]
+        public readonly Configuration[] ConfigurationArray = new[]
+        {
+            Configuration.Debug,
+            Configuration.Release
+        };
 
         public AbsolutePath OutputDirectory => RootDirectory / "output";
 
@@ -443,7 +746,9 @@ public class ConfigurationGenerationSpecs
             .Consumes(Test)
             .Produces(CoverageReportArchive);
 
-        [Parameter("NuGet Api Key")] [Secret] public readonly string ApiKey;
+        [Parameter("NuGet Api Key")]
+        [Secret]
+        public readonly string ApiKey;
 
         [Parameter("NuGet Source for Packages")]
         public readonly string Source = "https://api.nuget.org/v3/index.json";
@@ -461,8 +766,15 @@ public class ConfigurationGenerationSpecs
     [TypeConverter(typeof(TypeConverter<Configuration>))]
     public class Configuration : Enumeration
     {
-        public static Configuration Debug = new() { Value = nameof(Debug) };
-        public static Configuration Release = new() { Value = nameof(Release) };
+        public static Configuration Debug = new()
+        {
+            Value = nameof(Debug)
+        };
+
+        public static Configuration Release = new()
+        {
+            Value = nameof(Release)
+        };
 
         public static implicit operator string(Configuration configuration)
         {

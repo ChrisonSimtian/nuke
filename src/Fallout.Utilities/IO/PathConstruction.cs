@@ -37,17 +37,17 @@ public static class PathConstruction
 {
     public static WinRelativePath GetWinRelativePath(string basePath, string destinationPath)
     {
-        return (WinRelativePath) GetRelativePath(basePath, destinationPath);
+        return (WinRelativePath)GetRelativePath(basePath, destinationPath);
     }
 
     public static UnixRelativePath GetUnixRelativePath(string basePath, string destinationPath)
     {
-        return (UnixRelativePath) GetRelativePath(basePath, destinationPath);
+        return (UnixRelativePath)GetRelativePath(basePath, destinationPath);
     }
 
     public static RelativePath GetRelativePathTo(this AbsolutePath basePath, string destinationPath)
     {
-        return (RelativePath) GetRelativePath(basePath, destinationPath);
+        return (RelativePath)GetRelativePath(basePath, destinationPath);
     }
 
     public static WinRelativePath GetWinRelativePathTo(this AbsolutePath basePath, string destinationPath)
@@ -62,12 +62,12 @@ public static class PathConstruction
 
     public static WinRelativePath ToWinRelativePath(this RelativePath path)
     {
-        return (WinRelativePath) (string) path;
+        return (WinRelativePath)(string)path;
     }
 
     public static UnixRelativePath ToUnixRelativePath(this RelativePath path)
     {
-        return (UnixRelativePath) (string) path;
+        return (UnixRelativePath)(string)path;
     }
 
     public static bool Contains(this AbsolutePath basePath, string destinationPath)
@@ -86,11 +86,23 @@ public static class PathConstruction
         Assert.True(separator == GetSeparator(destinationPath), "Separators do not match");
         Assert.True(!IsWinRoot(basePath) || Path.GetPathRoot(basePath) == Path.GetPathRoot(destinationPath), "Root must be same");
 
-        var baseParts = basePath.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
-        var destinationParts = destinationPath.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+        var baseParts = basePath.Split(new[]
+        {
+            separator
+        }, StringSplitOptions.RemoveEmptyEntries);
 
-        var sameParts = baseParts.Zip(destinationParts, (a, b) => new { Base = a, Destination = b })
+        var destinationParts = destinationPath.Split(new[]
+        {
+            separator
+        }, StringSplitOptions.RemoveEmptyEntries);
+
+        var sameParts = baseParts.Zip(destinationParts, (a, b) => new
+            {
+                Base = a,
+                Destination = b
+            })
             .TakeWhile(x => x.Base.EqualsOrdinalIgnoreCase(x.Destination)).Count();
+
         return Enumerable.Repeat("..", baseParts.Length - sameParts).ToList()
             .Concat(destinationParts.Skip(sameParts).ToList()).Join(separator);
     }
@@ -107,7 +119,12 @@ public static class PathConstruction
     internal const char UncSeparator = '\\';
     internal const char UnixSeparator = '/';
 
-    internal static readonly char[] AllSeparators = { WinSeparator, UncSeparator, UnixSeparator };
+    internal static readonly char[] AllSeparators =
+    {
+        WinSeparator,
+        UncSeparator,
+        UnixSeparator
+    };
 
     private static bool IsSameDirectory(string pathPart)
         => pathPart?.Length == 1 &&
@@ -144,13 +161,19 @@ public static class PathConstruction
     public static string GetPathRoot(string path)
     {
         if (path == null)
+        {
             return null;
+        }
 
         if (HasUnixRoot(path))
+        {
             return GetHeadPart(path, count: 1);
+        }
 
         if (HasWinRoot(path))
+        {
             return GetHeadPart(path, count: 2);
+        }
 
         if (HasUncRoot(path))
         {
@@ -170,19 +193,32 @@ public static class PathConstruction
         Assert.False(HasPathRoot(right), "Second path must not be rooted");
 
         if (string.IsNullOrWhiteSpace(left))
+        {
             return right;
+        }
+
         if (string.IsNullOrWhiteSpace(right))
+        {
             return !IsWinRoot(left) ? left : $@"{left}\";
+        }
 
         AssertSeparatorChoice(left, separator);
         separator ??= GetSeparator(left);
 
         if (IsWinRoot(left))
+        {
             return $@"{left}\{right}";
+        }
+
         if (IsUnixRoot(left))
+        {
             return $"{left}{right}";
+        }
+
         if (IsUncRoot(left))
+        {
             return $@"{left}\{right}";
+        }
 
         return $"{left}{separator}{right}";
     }
@@ -234,13 +270,19 @@ public static class PathConstruction
         if (root != null)
         {
             if (IsWinRoot(root))
+            {
                 return WinSeparator;
+            }
 
             if (IsUncRoot(root))
+            {
                 return UncSeparator;
+            }
 
             if (IsUnixRoot(root))
+            {
                 return UnixSeparator;
+            }
         }
 
         return Path.DirectorySeparatorChar;
@@ -249,21 +291,32 @@ public static class PathConstruction
     private static void AssertSeparatorChoice(string path, char? separator)
     {
         if (separator == null)
+        {
             return;
+        }
 
         var root = GetPathRoot(path);
         if (root == null)
+        {
             return;
+        }
 
-        Assert.True(!IsWinRoot(root) || separator == WinSeparator, $"For Windows-rooted paths the separator must be '{WinSeparator}'");
-        Assert.True(!IsUncRoot(root) || separator == UncSeparator, $"For UNC-rooted paths the separator must be '{UncSeparator}'");
-        Assert.True(!IsUnixRoot(root) || separator == UnixSeparator, $"For Unix-rooted paths the separator must be '{UnixSeparator}'");
+        Assert.True(!IsWinRoot(root) || separator == WinSeparator,
+            $"For Windows-rooted paths the separator must be '{WinSeparator}'");
+
+        Assert.True(!IsUncRoot(root) || separator == UncSeparator,
+            $"For UNC-rooted paths the separator must be '{UncSeparator}'");
+
+        Assert.True(!IsUnixRoot(root) || separator == UnixSeparator,
+            $"For Unix-rooted paths the separator must be '{UnixSeparator}'");
     }
 
     private static string Trim(string path)
     {
         if (path == null)
+        {
             return null;
+        }
 
         return IsUnixRoot(path) // TODO: "//" ?
             ? path

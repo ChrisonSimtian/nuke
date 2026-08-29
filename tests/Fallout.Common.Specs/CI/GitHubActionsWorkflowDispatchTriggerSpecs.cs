@@ -29,10 +29,16 @@ public class GitHubActionsWorkflowDispatchTriggerSpecs
     {
 #pragma warning disable FALLOUTOBS001 // exercising the restored obsolete trigger API on purpose
         var yaml = Render(new GitHubActionsWorkflowDispatchTrigger
-                          {
-                              OptionalInputs = new[] { "Opt" },
-                              RequiredInputs = new[] { "Req" }
-                          });
+        {
+            OptionalInputs = new[]
+            {
+                "Opt"
+            },
+            RequiredInputs = new[]
+            {
+                "Req"
+            }
+        });
 #pragma warning restore FALLOUTOBS001
 
         yaml.Should().Contain("Opt:").And.Contain("required: false");
@@ -46,14 +52,21 @@ public class GitHubActionsWorkflowDispatchTriggerSpecs
     {
 #pragma warning disable FALLOUTOBS001
         var yaml = Render(new GitHubActionsWorkflowDispatchTrigger
-                          {
-                              OptionalInputs = new[] { "Legacy" },
-                              Inputs = new[]
-                                       {
-                                           new GitHubActionsWorkflowDispatchInput
-                                           { Name = "Typed", Type = GitHubActionsInputType.Boolean, Default = "true" }
-                                       }
-                          });
+        {
+            OptionalInputs = new[]
+            {
+                "Legacy"
+            },
+            Inputs = new[]
+            {
+                new GitHubActionsWorkflowDispatchInput
+                {
+                    Name = "Typed",
+                    Type = GitHubActionsInputType.Boolean,
+                    Default = "true"
+                }
+            }
+        });
 #pragma warning restore FALLOUTOBS001
 
         yaml.IndexOf("Legacy:", StringComparison.Ordinal)
@@ -67,20 +80,34 @@ public class GitHubActionsWorkflowDispatchTriggerSpecs
     {
 #pragma warning disable FALLOUTOBS001
         var legacy = Render(new GitHubActionsWorkflowDispatchTrigger
-                            {
-                                OptionalInputs = new[] { "Opt" },
-                                RequiredInputs = new[] { "Req" }
-                            });
+        {
+            OptionalInputs = new[]
+            {
+                "Opt"
+            },
+            RequiredInputs = new[]
+            {
+                "Req"
+            }
+        });
 #pragma warning restore FALLOUTOBS001
 
         var typed = Render(new GitHubActionsWorkflowDispatchTrigger
-                           {
-                               Inputs = new[]
-                                        {
-                                            new GitHubActionsWorkflowDispatchInput { Name = "Opt", Required = false },
-                                            new GitHubActionsWorkflowDispatchInput { Name = "Req", Required = true }
-                                        }
-                           });
+        {
+            Inputs = new[]
+            {
+                new GitHubActionsWorkflowDispatchInput
+                {
+                    Name = "Opt",
+                    Required = false
+                },
+                new GitHubActionsWorkflowDispatchInput
+                {
+                    Name = "Req",
+                    Required = true
+                }
+            }
+        });
 
         typed.Should().Be(legacy);
     }

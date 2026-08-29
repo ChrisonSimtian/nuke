@@ -99,6 +99,7 @@ public class BlockBannerGeometrySpecs
         // leak a live console-writing host into the rest of the collection.
         var instanceProperty = typeof(Host).GetProperty("Instance", ReflectionUtility.Static)
             .NotNull("typeof(Host).GetProperty(\"Instance\") != null");
+
         var originalInstance = instanceProperty.GetValue(obj: null);
 
         using var writer = new StringWriter();

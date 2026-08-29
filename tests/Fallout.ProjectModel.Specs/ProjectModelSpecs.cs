@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using FluentAssertions;
 using Fallout.Common.IO;
 using Fallout.Solutions;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;

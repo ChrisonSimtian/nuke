@@ -109,7 +109,8 @@ public static partial class StringExtensions
     {
         ICollection<string> valuesList = values.ToList();
         return valuesList.Count >= 2
-            ? valuesList.Reverse().Skip(1).Reverse().JoinCommaSpace() + $"{(valuesList.Count > 2 ? "," : string.Empty)} or " + valuesList.Last()
+            ? valuesList.Reverse().Skip(1).Reverse().JoinCommaSpace() + $"{(valuesList.Count > 2 ? "," : string.Empty)} or " +
+              valuesList.Last()
             : valuesList.JoinCommaSpace();
     }
 
@@ -120,7 +121,8 @@ public static partial class StringExtensions
     {
         ICollection<string> valuesList = values.ToList();
         return valuesList.Count >= 2
-            ? valuesList.Reverse().Skip(1).Reverse().JoinCommaSpace() + $"{(valuesList.Count > 2 ? "," : string.Empty)} and " + valuesList.Last()
+            ? valuesList.Reverse().Skip(1).Reverse().JoinCommaSpace() + $"{(valuesList.Count > 2 ? "," : string.Empty)} and " +
+              valuesList.Last()
             : valuesList.JoinCommaSpace();
     }
 
@@ -134,6 +136,7 @@ public static partial class StringExtensions
             : platformFamily.Value == PlatformFamily.Windows
                 ? "\r\n"
                 : "\n";
+
         return values.Join(newLine);
     }
 
@@ -147,6 +150,7 @@ public static partial class StringExtensions
             : platformFamily.Value == PlatformFamily.Windows
                 ? "\r\n"
                 : "\n";
+
         return values.Join(newLine + newLine);
     }
 }

@@ -14,6 +14,7 @@ namespace Fallout.Common;
 public abstract partial class FalloutBuild
 {
     private IReadOnlyCollection<IBuildExtension> BuildExtensions { get; }
+
     IReadOnlyCollection<IBuildExtension> IFalloutBuild.BuildExtensions => BuildExtensions;
 
     protected FalloutBuild()
@@ -30,7 +31,8 @@ public abstract partial class FalloutBuild
     {
         BuildExtensions
             .OfType<TExtension>()
-            .ForEachLazy(x => Log.Verbose("{Type}.{Method} ({Priority})", x.GetType().Name.TrimEnd(nameof(Attribute)), action.GetMemberInfo().Name, x.Priority))
+            .ForEachLazy(x => Log.Verbose("{Type}.{Method} ({Priority})", x.GetType().Name.TrimEnd(nameof(Attribute)),
+                action.GetMemberInfo().Name, x.Priority))
             .ForEach(action.Compile());
     }
 

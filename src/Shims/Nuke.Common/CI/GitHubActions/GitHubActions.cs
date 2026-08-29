@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.GitHubActions;
 
 public static class GitHubActions
 {
-    public static global::Fallout.Common.CI.GitHubActions.GitHubActions Instance
-        => global::Fallout.Common.CI.GitHubActions.GitHubActions.Instance;
+    public static Fallout.Common.CI.GitHubActions.GitHubActions Instance
+        => Fallout.Common.CI.GitHubActions.GitHubActions.Instance;
 }

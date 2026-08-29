@@ -7,7 +7,7 @@ namespace Fallout.Persistence.Solution.Serializer.Xml;
 
 internal static class XmlDomUtilities
 {
-    public static XmlElementAttributes Attributes(this XmlElement? element) => new XmlElementAttributes(element?.Attributes);
+    public static XmlElementAttributes Attributes(this XmlElement? element) => new(element?.Attributes);
 
-    public static XmlElementSubElementsEnumerable ChildElements(this XmlNode? element) => new XmlElementSubElementsEnumerable(element, filterByName: null);
+    public static XmlElementSubElementsEnumerable ChildElements(this XmlNode? element) => new(element, filterByName: null);
 }

@@ -155,7 +155,9 @@ public static class XmlTasks
             {
                 xmlNamespaceManager = new XmlNamespaceManager(reader.NameTable);
                 foreach (var (prefix, uri) in namespaces)
+                {
                     xmlNamespaceManager.AddNamespace(prefix, uri);
+                }
             }
         }
 

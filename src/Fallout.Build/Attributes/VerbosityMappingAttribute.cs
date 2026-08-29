@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Fallout.Common.Execution;
 using Fallout.Common.Utilities.Collections;
 
@@ -16,9 +15,13 @@ public class VerbosityMappingAttribute : BuildExtensionAttributeBase, IOnBuildIn
     }
 
     public string Quiet { get; set; }
+
     public string Minimal { get; set; }
+
     public string Information { get; set; }
+
     public string Normal { get; set; }
+
     public string Verbose { get; set; }
 
     public void OnBuildInitialized(
@@ -32,15 +35,29 @@ public class VerbosityMappingAttribute : BuildExtensionAttributeBase, IOnBuildIn
                 .GetValue(obj: null);
 
         if (Quiet != null)
+        {
             VerbosityMapping.Mappings.Add(targetType, (Verbosity.Quiet, GetMappedValue(Quiet)));
+        }
+
         if (Minimal != null)
+        {
             VerbosityMapping.Mappings.Add(targetType, (Verbosity.Minimal, GetMappedValue(Minimal)));
+        }
+
         if (Information != null)
+        {
             VerbosityMapping.Mappings.Add(targetType, (Verbosity.Information, GetMappedValue(Information)));
+        }
+
         if (Normal != null)
+        {
             VerbosityMapping.Mappings.Add(targetType, (Verbosity.Normal, GetMappedValue(Normal)));
+        }
+
         if (Verbose != null)
+        {
             VerbosityMapping.Mappings.Add(targetType, (Verbosity.Verbose, GetMappedValue(Verbose)));
+        }
     }
 }
 
@@ -53,13 +70,17 @@ internal static class VerbosityMapping
         foreach (var property in options.GetType().GetProperties())
         {
             if (!Mappings.Contains(property.PropertyType))
+            {
                 continue;
+            }
 
             var mappings = Mappings[property.PropertyType];
             foreach (var (verbosity, mappedVerbosity) in mappings)
             {
                 if (verbosity == FalloutBuild.Verbosity)
+                {
                     options.Set(property.Name, mappedVerbosity);
+                }
             }
         }
     }

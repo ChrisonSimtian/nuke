@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Fallout.Common.Utilities;
 using static Fallout.Common.Constants;
 
@@ -22,7 +21,9 @@ internal class UpdateNotificationAttribute : BuildExtensionAttributeBase, IOnBui
     public void OnBuildFinished()
     {
         if (Build.IsServerBuild && ShouldNotify)
+        {
             Notify();
+        }
     }
 
     private bool ShouldNotify => !Directory.Exists(GetFalloutDirectory(Build.RootDirectory)) &&

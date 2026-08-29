@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Fallout.Common.IO;
@@ -24,7 +23,9 @@ internal static class ToolRequirementService
     private static void InstallNuGetPackages(IReadOnlyCollection<NuGetPackageRequirement> requirements, IFalloutBuild build)
     {
         if (requirements.Count == 0)
+        {
             return;
+        }
 
         var projectFile = build.TemporaryDirectory / "nuget.csproj";
         NuGetToolPathResolver.NuGetPackagesConfigFile = projectFile;
@@ -34,23 +35,25 @@ internal static class ToolRequirementService
         var groupedPackages = packages.GroupBy(x => x.PackageId, x => $"[{x.Version}]");
 
         var content = $"""
-                <Project Sdk="Microsoft.NET.Sdk">
+                       <Project Sdk="Microsoft.NET.Sdk">
 
-                  <PropertyGroup>
-                    <TargetFramework>net10.0</TargetFramework>
-                  </PropertyGroup>
+                         <PropertyGroup>
+                           <TargetFramework>net10.0</TargetFramework>
+                         </PropertyGroup>
 
-                  <Import Project="{build.BuildProjectFile}" />
+                         <Import Project="{build.BuildProjectFile}" />
 
-                  <ItemGroup>
-                {groupedPackages.Select(x => $"""    <PackageDownload Include="{x.Key}" Version="{x.JoinSemicolon()}" Exclude="@(PackageDownload)" />""").JoinNewLine()}
-                  </ItemGroup>
+                         <ItemGroup>
+                       {groupedPackages.Select(x => $"""    <PackageDownload Include="{x.Key}" Version="{x.JoinSemicolon()}" Exclude="@(PackageDownload)" />""").JoinNewLine()}
+                         </ItemGroup>
 
-                </Project>
-                """;
+                       </Project>
+                       """;
 
         if (projectFile.Exists() && projectFile.ReadAllText().StartsWith(content))
+        {
             return;
+        }
 
         Log.Information("Installing NuGet packages...");
         packages.ForEach(x => Log.Verbose("Installing {Id} ({Version})...", x.PackageId, x.Version));
@@ -63,7 +66,9 @@ internal static class ToolRequirementService
     private static void InstallNpmPackages(IReadOnlyCollection<NpmPackageRequirement> requirements, IFalloutBuild build)
     {
         if (requirements.Count == 0)
+        {
             return;
+        }
 
         var packageJsonFile = build.TemporaryDirectory / "package.json";
         NpmToolPathResolver.NpmPackageJsonFile = packageJsonFile;
@@ -71,15 +76,17 @@ internal static class ToolRequirementService
         var packages = requirements.OrderBy(x => x.PackageId).ToList();
 
         var content = $$"""
-                {
-                  "dependencies": {
-                {{packages.Select(x => $"""    "{x.PackageId}": "{x.Version}",""").JoinNewLine().TrimEnd(',')}}
-                  }
-                }
-                """;
+                        {
+                          "dependencies": {
+                        {{packages.Select(x => $"""    "{x.PackageId}": "{x.Version}",""").JoinNewLine().TrimEnd(',')}}
+                          }
+                        }
+                        """;
 
         if (packageJsonFile.Exists() && packageJsonFile.ReadAllText().StartsWith(content))
+        {
             return;
+        }
 
         Log.Information("Installing NPM packages...");
         packages.ForEach(x => Log.Verbose("Installing {Id} ({Version})...", x.PackageId, x.Version));
@@ -92,7 +99,9 @@ internal static class ToolRequirementService
     private static void InstallAptGetPackages(IReadOnlyCollection<AptGetPackageRequirement> requirements, IFalloutBuild build)
     {
         if (requirements.Count == 0)
+        {
             return;
+        }
 
         var packages = requirements.OrderBy(x => x.PackageId).ToList();
         Assert.True(EnvironmentInfo.IsLinux, "AptGet is only available on Linux");
@@ -100,13 +109,15 @@ internal static class ToolRequirementService
         var installScript = build.TemporaryDirectory / "apt-get.sh";
 
         var content = $"""
-                apt-get update
-                apt-get install -y \
-                {packages.Select(x => $"  {x.PackageId} \\").JoinNewLine().TrimEnd("\\")}
-                """;
+                       apt-get update
+                       apt-get install -y \
+                       {packages.Select(x => $"  {x.PackageId} \\").JoinNewLine().TrimEnd("\\")}
+                       """;
 
         if (installScript.Exists() && installScript.ReadAllText().StartsWith(content))
+        {
             return;
+        }
 
         Log.Information("Installing AptGet packages...");
         packages.ForEach(x => Log.Verbose("Installing {Id}...", x.PackageId));

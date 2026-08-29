@@ -19,7 +19,11 @@ public static class ProcessTasks
     public static bool LogWorkingDirectory = true;
     public static string DefaultWorkingDirectory = EnvironmentInfo.WorkingDirectory;
 
-    private static readonly char[] pathSeparators = { EnvironmentInfo.IsWin ? ';' : ':' };
+    private static readonly char[] pathSeparators =
+    {
+        EnvironmentInfo.IsWin ? ';' : ':'
+    };
+
     private static readonly object syncLock = new();
 
     public static IProcess StartShell(
@@ -46,7 +50,6 @@ public static class ProcessTasks
     }
 
 #if NET6_0_OR_GREATER
-
         public static IProcess StartProcess(
             string toolPath,
             ArgumentStringHandler arguments,
@@ -82,9 +85,11 @@ public static class ProcessTasks
         Action<OutputType, string> logger = null,
         Func<string, string> outputFilter = null)
     {
-        Assert.NotNull(toolPath);
+        toolPath.NotNull();
         if (!Path.IsPathRooted(toolPath) && !toolPath.Contains(Path.DirectorySeparatorChar))
+        {
             toolPath = ToolPathResolver.GetPathExecutable(toolPath);
+        }
 
         var toolPathOverride = GetToolPathOverride(toolPath);
         if (!string.IsNullOrEmpty(toolPathOverride))
@@ -117,7 +122,9 @@ public static class ProcessTasks
         if (EnvironmentInfo.IsUnix &&
             toolPath.EndsWithOrdinalIgnoreCase(".exe") &&
             !EnvironmentInfo.IsWsl)
+        {
             return ToolPathResolver.GetPathExecutable("mono");
+        }
 
         return null;
     }
@@ -137,30 +144,36 @@ public static class ProcessTasks
         Assert.DirectoryExists(workingDirectory);
 
         var startInfo = new ProcessStartInfo
-                        {
-                            FileName = toolPath,
-                            Arguments = arguments ,
-                            WorkingDirectory = workingDirectory,
-                            RedirectStandardOutput = true,
-                            RedirectStandardError = true,
-                            UseShellExecute = false,
-                            StandardErrorEncoding = Encoding.UTF8,
-                            StandardOutputEncoding = Encoding.UTF8
-                        };
+        {
+            FileName = toolPath,
+            Arguments = arguments,
+            WorkingDirectory = workingDirectory,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            StandardErrorEncoding = Encoding.UTF8,
+            StandardOutputEncoding = Encoding.UTF8
+        };
 
         if (environmentVariables != null)
         {
             startInfo.Environment.Clear();
             foreach (var (key, value) in environmentVariables)
+            {
                 startInfo.Environment[key] = value;
+            }
         }
 
         if (logInvocation)
+        {
             LogInvocation(startInfo, outputFilter);
+        }
 
         var process = Process.Start(startInfo);
         if (process == null)
+        {
             return null;
+        }
 
         var output = GetOutputCollection(process, logger, outputFilter);
         return new Process2(process, outputFilter, timeout, output);
@@ -171,7 +184,8 @@ public static class ProcessTasks
         lock (syncLock)
         {
             // TODO: logging additional
-            Log.Information("> {ToolPath} {Arguments}", startInfo.FileName.DoubleQuoteIfNeeded(), outputFilter(startInfo.Arguments));
+            Log.Information("> {ToolPath} {Arguments}", startInfo.FileName.DoubleQuoteIfNeeded(),
+                outputFilter(startInfo.Arguments));
 
             if (LogWorkingDirectory)
             {
@@ -198,19 +212,34 @@ public static class ProcessTasks
         process.OutputDataReceived += (_, e) =>
         {
             if (e.Data == null)
+            {
                 return;
+            }
 
             var filteredOutput = outputFilter(e.Data);
-            output.Add(new Output { Text = filteredOutput, Type = OutputType.Std });
+            output.Add(new Output
+            {
+                Text = filteredOutput,
+                Type = OutputType.Std
+            });
+
             logger?.Invoke(OutputType.Std, filteredOutput);
         };
+
         process.ErrorDataReceived += (_, e) =>
         {
             if (e.Data == null)
+            {
                 return;
+            }
 
             var filteredOutput = outputFilter(e.Data);
-            output.Add(new Output { Text = filteredOutput, Type = OutputType.Err });
+            output.Add(new Output
+            {
+                Text = filteredOutput,
+                Type = OutputType.Err
+            });
+
             logger?.Invoke(OutputType.Err, filteredOutput);
         };
 
@@ -223,9 +252,13 @@ public static class ProcessTasks
     public static void DefaultLogger(OutputType type, string output)
     {
         if (type == OutputType.Std)
+        {
             Log.Debug(output);
+        }
         else
+        {
             Log.Error(output);
+        }
     }
 
     public static void PrintEnvironmentVariables()
@@ -241,7 +274,10 @@ public static class ProcessTasks
             var padding = values.Length.ToString().Length;
 
             return values.Length == 1
-                ? new[] { (pair.Key, values.Single()) }
+                ? new[]
+                {
+                    (pair.Key, values.Single())
+                }
                 : values.Select((x, i) => ($"{pair.Key}[{i.ToString().PadLeft(padding, paddingChar: '0')}]", x));
         }
 

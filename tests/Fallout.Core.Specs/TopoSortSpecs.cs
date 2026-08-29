@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Fallout.Core.Planning;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Core.Specs;
@@ -23,8 +23,23 @@ public class TopoSortSpecs
     {
         // C depends on B depends on A.
         var plan = Order(
-            new[] { "A", "B", "C" },
-            new Dictionary<string, string[]> { ["B"] = new[] { "A" }, ["C"] = new[] { "B" } });
+            new[]
+            {
+                "A",
+                "B",
+                "C"
+            },
+            new Dictionary<string, string[]>
+            {
+                ["B"] = new[]
+                {
+                    "A"
+                },
+                ["C"] = new[]
+                {
+                    "B"
+                }
+            });
 
         plan.HasCycles.Should().BeFalse();
         // Roots (nothing depends on them) come first; a node always precedes its dependencies.
@@ -35,21 +50,44 @@ public class TopoSortSpecs
     public void Detects_a_cycle()
     {
         var plan = Order(
-            new[] { "A", "B" },
-            new Dictionary<string, string[]> { ["A"] = new[] { "B" }, ["B"] = new[] { "A" } });
+            new[]
+            {
+                "A",
+                "B"
+            },
+            new Dictionary<string, string[]>
+            {
+                ["A"] = new[]
+                {
+                    "B"
+                },
+                ["B"] = new[]
+                {
+                    "A"
+                }
+            });
 
         plan.HasCycles.Should().BeTrue();
         plan.Ordered.Should().BeEmpty();
         plan.Cycles.Should().ContainSingle()
-            .Which.Should().BeEquivalentTo(new[] { "A", "B" });
+            .Which.Should().BeEquivalentTo("A", "B");
     }
 
     [Fact]
     public void Ignores_edges_to_unknown_nodes()
     {
         var plan = Order(
-            new[] { "A" },
-            new Dictionary<string, string[]> { ["A"] = new[] { "ghost" } });
+            new[]
+            {
+                "A"
+            },
+            new Dictionary<string, string[]>
+            {
+                ["A"] = new[]
+                {
+                    "ghost"
+                }
+            });
 
         plan.HasCycles.Should().BeFalse();
         plan.Ordered.Should().Equal("A");
@@ -60,22 +98,30 @@ public class TopoSortSpecs
     {
         // Two independent roots, no ordering between them.
         var plan = Order(
-            new[] { "A", "B" },
+            new[]
+            {
+                "A",
+                "B"
+            },
             new Dictionary<string, string[]>(),
             strict: true);
 
         plan.IsAmbiguous.Should().BeTrue();
-        plan.AmbiguousStep.Should().BeEquivalentTo(new[] { "A", "B" });
+        plan.AmbiguousStep.Should().BeEquivalentTo("A", "B");
     }
 
     [Fact]
     public void Non_strict_mode_never_flags_ambiguity()
     {
         var plan = Order(
-            new[] { "A", "B" },
+            new[]
+            {
+                "A",
+                "B"
+            },
             new Dictionary<string, string[]>());
 
         plan.IsAmbiguous.Should().BeFalse();
-        plan.Ordered.Should().BeEquivalentTo(new[] { "A", "B" });
+        plan.Ordered.Should().BeEquivalentTo("A", "B");
     }
 }

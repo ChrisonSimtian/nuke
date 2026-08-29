@@ -1,9 +1,7 @@
-using System;
-using System.Linq;
-using FluentAssertions;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
 using Fallout.Common.Tools.GitHub;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
@@ -17,13 +15,17 @@ public class GitHubTasksSpecs
     {
         var repository = GitRepository.FromLocalDirectory(RootDirectory).NotNull();
         if (!repository.IsGitHubRepository())
+        {
             return;
+        }
 
         // The URL helpers below are branch-based (GetGitHubDownloadUrl asserts Branch != null).
         // A tag-triggered release build checks out a detached HEAD, which has no branch, so
         // there is nothing meaningful to assert here.
         if (repository.Branch is null)
+        {
             return;
+        }
 
         var rawUrl = $"https://raw.githubusercontent.com/{repository.Identifier}/{repository.Branch}";
         var blobUrl = $"https://github.com/{repository.Identifier}/blob/{repository.Branch}";

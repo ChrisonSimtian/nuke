@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Fallout.Common.ChangeLog;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
-using Fallout.Common.Tools.GitHub;
+using FluentAssertions;
 using VerifyXunit;
 using Xunit;
 
@@ -18,7 +17,8 @@ public class ChangelogTasksSpecs
 {
     private static AbsolutePath RootDirectory => Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
 
-    private static AbsolutePath PathToChangelogReferenceFiles => RootDirectory / "tests" / "Fallout.Common.Specs" / "ChangelogReferenceFiles";
+    private static AbsolutePath PathToChangelogReferenceFiles =>
+        RootDirectory / "tests" / "Fallout.Common.Specs" / "ChangelogReferenceFiles";
 
     [Theory]
     [MemberData(nameof(AllChangelogReference_1_0_0_Files))]
@@ -110,9 +110,15 @@ public class ChangelogTasksSpecs
 
     public static IEnumerable<object[]> AllChangelogReference_1_0_0_Files
     {
-        get => PathToChangelogReferenceFiles.GlobFiles("changelog_reference_1.0.0*.md").Select(x => new object[] { x });
+        get => PathToChangelogReferenceFiles.GlobFiles("changelog_reference_1.0.0*.md").Select(x => new object[]
+        {
+            x
+        });
     }
 
     public static IEnumerable<object[]> AllChangelogReference_NUKE_Files
-        => PathToChangelogReferenceFiles.GlobFiles("changelog_reference_NUKE*.md").Select(x => new object[] { x });
+        => PathToChangelogReferenceFiles.GlobFiles("changelog_reference_NUKE*.md").Select(x => new object[]
+        {
+            x
+        });
 }

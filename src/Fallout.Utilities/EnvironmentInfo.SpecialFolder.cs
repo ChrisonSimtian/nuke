@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 
@@ -25,7 +24,9 @@ partial class EnvironmentInfo
 
         // https://github.com/nuke-build/nuke/pull/825#discussion_r848954724
         if (path.IsNullOrEmpty() && folder == SpecialFolders.UserProfile)
+        {
             path = Environment.GetEnvironmentVariable("USERPROFILE");
+        }
 
         return path;
     }

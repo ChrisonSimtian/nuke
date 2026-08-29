@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using Fallout.Common.Utilities.Collections;
 using ICSharpCode.SharpZipLib.BZip2;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
-using Fallout.Common.Utilities.Collections;
+using ZipFile = ICSharpCode.SharpZipLib.Zip.ZipFile;
 
 namespace Fallout.Common.IO;
 
@@ -16,25 +17,41 @@ public static class CompressionExtensions
     public static void CompressTo(this AbsolutePath directory, AbsolutePath archiveFile, Func<AbsolutePath, bool> filter = null)
     {
         if (archiveFile.HasExtension(".zip"))
+        {
             directory.ZipTo(archiveFile, filter);
+        }
         else if (archiveFile.HasExtension(".tar.gz", ".tgz"))
+        {
             directory.TarGZipTo(archiveFile, filter);
+        }
         else if (archiveFile.HasExtension(".tar.bz2", ".tbz2", ".tbz"))
+        {
             directory.TarBZip2To(archiveFile, filter);
+        }
         else
+        {
             Assert.Fail($"Unknown archive extension for archive '{Path.GetFileName(archiveFile)}'");
+        }
     }
 
     public static void UncompressTo(this AbsolutePath archiveFile, AbsolutePath directory)
     {
         if (archiveFile.HasExtension(".zip"))
+        {
             archiveFile.UnZipTo(directory);
+        }
         else if (archiveFile.HasExtension(".tar.gz", ".tgz"))
+        {
             archiveFile.UnTarGZipTo(directory);
+        }
         else if (archiveFile.HasExtension(".tar.bz2", ".tbz2", ".tbz"))
+        {
             archiveFile.UnTarBZip2To(directory);
+        }
         else
+        {
             Assert.Fail($"Unknown archive extension for archive '{Path.GetFileName(archiveFile)}'");
+        }
     }
 
     public static void ZipTo(
@@ -65,7 +82,7 @@ public static class CompressionExtensions
     public static void UnZipTo(this AbsolutePath archiveFile, AbsolutePath directory)
     {
         using var fileStream = File.OpenRead(archiveFile);
-        using var zipFile = new ICSharpCode.SharpZipLib.Zip.ZipFile(fileStream);
+        using var zipFile = new ZipFile(fileStream);
 
         var entries = zipFile.Cast<ZipEntry>().Where(x => !x.IsDirectory);
 

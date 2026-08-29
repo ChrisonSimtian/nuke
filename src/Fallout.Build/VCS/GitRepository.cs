@@ -48,7 +48,8 @@ public class GitRepository
         var commit = GetCommitFromCI() ?? GetCommitFromHead(metadata.GitDirectory, head);
         var tags = GetTagsFromCommit(metadata.GitDirectory, commit);
         var (remoteName, remoteBranch) = GetRemoteNameAndBranch(metadata.GitDirectory, branch);
-        var (protocol, endpoint, identifier) = GetRemoteConnectionFromConfig(metadata.GitDirectory, remoteName ?? FallbackRemoteName);
+        var (protocol, endpoint, identifier) =
+            GetRemoteConnectionFromConfig(metadata.GitDirectory, remoteName ?? FallbackRemoteName);
 
         return new GitRepository(
             protocol,
@@ -99,7 +100,9 @@ public class GitRepository
         try
         {
             // Get all information in one call
-            var process = ProcessTasks.StartProcess("git", "rev-parse --show-toplevel --git-common-dir --symbolic-full-name HEAD", workingDirectory: directory, logOutput: false);
+            var process = ProcessTasks.StartProcess("git", "rev-parse --show-toplevel --git-common-dir --symbolic-full-name HEAD",
+                workingDirectory: directory, logOutput: false);
+
             process.AssertZeroExitCode();
 
             var lines = process.Output
@@ -109,7 +112,8 @@ public class GitRepository
 
             if (lines.Length < 3)
             {
-                throw new InvalidOperationException($"Expected 3 lines from 'git rev-parse --show-toplevel --git-common-dir --symbolic-full-name HEAD' but got {lines.Length} lines: [{string.Join(", ", lines.Select(l => $"'{l}'"))}]");
+                throw new InvalidOperationException(
+                    $"Expected 3 lines from 'git rev-parse --show-toplevel --git-common-dir --symbolic-full-name HEAD' but got {lines.Length} lines: [{string.Join(", ", lines.Select(l => $"'{l}'"))}]");
             }
 
             var rootDirectory = lines[0].Trim();
@@ -120,7 +124,9 @@ public class GitRepository
             // In this case, get the actual commit SHA
             if (head == "HEAD")
             {
-                var commitProcess = ProcessTasks.StartProcess("git", "rev-parse HEAD", workingDirectory: directory, logOutput: false);
+                var commitProcess =
+                    ProcessTasks.StartProcess("git", "rev-parse HEAD", workingDirectory: directory, logOutput: false);
+
                 commitProcess.AssertZeroExitCode();
 
                 head = commitProcess.Output
@@ -140,18 +146,24 @@ public class GitRepository
     private static (string Name, string Branch) GetRemoteNameAndBranch(AbsolutePath gitDirectory, string branch)
     {
         if (branch == null)
+        {
             return (null, null);
+        }
 
         var configFile = gitDirectory / "config";
         if (!configFile.Exists())
         {
             var commonDir = GetGitCommonDirectory(gitDirectory);
             if (commonDir != null)
+            {
                 configFile = commonDir / "config";
+            }
         }
 
         if (!configFile.Exists())
+        {
             return (null, null);
+        }
 
         var configFileContent = configFile.ReadAllLines();
 
@@ -184,21 +196,29 @@ public class GitRepository
     internal static string GetCommitFromHead(AbsolutePath gitDirectory, string head)
     {
         if (head == null)
+        {
             return null;
+        }
 
         if (!head.StartsWith("refs/heads/"))
+        {
             return head;
+        }
 
         var headRefFile = gitDirectory / head;
         if (headRefFile.Exists())
+        {
             return headRefFile.ReadAllLines().First();
+        }
 
         var commonDir = GetGitCommonDirectory(gitDirectory);
         if (commonDir != null)
         {
             headRefFile = commonDir / head;
             if (headRefFile.Exists())
+            {
                 return headRefFile.ReadAllLines().First();
+            }
         }
 
         var commit = GetPackedRefs(gitDirectory)
@@ -232,7 +252,9 @@ public class GitRepository
     private static IReadOnlyCollection<string> GetTagsFromCommit(AbsolutePath gitDirectory, string commit)
     {
         if (commit == null)
+        {
             return Array.Empty<string>();
+        }
 
         var commonDir = GetGitCommonDirectory(gitDirectory);
 
@@ -268,7 +290,9 @@ public class GitRepository
     {
         var packedRefsFile = gitDirectory / "packed-refs";
         if (!packedRefsFile.Exists())
+        {
             return Array.Empty<(string Commit, string Reference)>();
+        }
 
         return packedRefsFile.ReadAllLines()
             .Where(x => !x.StartsWith("#") && !x.StartsWith("^"))
@@ -280,12 +304,14 @@ public class GitRepository
     {
         var regex = new Regex(
             @"^(?'protocol'\w+)?(\:\/\/)?(?>(?'user'.*)@)?(?'endpoint'[^\/:]+)(?>\:(?'port'\d+))?[\/:](?'identifier'.*?)\/?(?>\.git)?$");
+
         var match = regex.Match(url.NotNull().Trim());
 
         Assert.True(match.Success, $"Url '{url}' could not be parsed.");
         var protocol = match.Groups["protocol"].Value.EqualsOrdinalIgnoreCase(GitProtocol.Https.ToString())
             ? GitProtocol.Https
             : GitProtocol.Ssh;
+
         return (protocol, match.Groups["endpoint"].Value, match.Groups["identifier"].Value);
     }
 
@@ -298,11 +324,15 @@ public class GitRepository
         {
             var commonDir = GetGitCommonDirectory(gitDirectory);
             if (commonDir != null)
+            {
                 configFile = commonDir / "config";
+            }
         }
 
         if (!configFile.Exists())
+        {
             return (null, null, null);
+        }
 
         var configFileContent = configFile.ReadAllLines();
         var url = configFileContent
@@ -315,7 +345,9 @@ public class GitRepository
             .Trim();
 
         if (url == null)
+        {
             return (null, null, null);
+        }
 
         return GetRemoteConnectionFromUrl(url);
     }
@@ -324,7 +356,9 @@ public class GitRepository
     {
         var commondirFile = gitDirectory / "commondir";
         if (!commondirFile.Exists())
+        {
             return null;
+        }
 
         var path = commondirFile.ReadAllText().Trim();
         return Path.IsPathRooted(path) ? path : gitDirectory / path;
@@ -355,19 +389,19 @@ public class GitRepository
     }
 
     /// <summary>Default protocol for the repository.</summary>
-    public GitProtocol? Protocol { get; private set; }
+    public GitProtocol? Protocol { get; }
 
     /// <summary>Endpoint for the repository. For instance <em>github.com</em>.</summary>
-    public string Endpoint { get; private set; }
+    public string Endpoint { get; }
 
     /// <summary>Identifier of the repository.</summary>
-    public string Identifier { get; private set; }
+    public string Identifier { get; }
 
     /// <summary>Local path from which the repository was parsed.</summary>
-    public AbsolutePath LocalDirectory { get; private set; }
+    public AbsolutePath LocalDirectory { get; }
 
     /// <summary>Current head; <c>null</c> if parsed from URL.</summary>
-    public string Head { get; private set; }
+    public string Head { get; }
 
     /// <summary>Current commit; <c>null</c> if parsed from URL.</summary>
     public string Commit { get; }

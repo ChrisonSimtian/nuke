@@ -19,14 +19,14 @@ internal abstract class XmlConfiguration(SlnxFile root, XmlElement element, Keyw
 
     internal string Solution
     {
-        get => this.GetXmlAttribute(Keyword.Solution) ?? string.Empty;
-        set => this.UpdateXmlAttribute(Keyword.Solution, value);
+        get => GetXmlAttribute(Keyword.Solution) ?? string.Empty;
+        set => UpdateXmlAttribute(Keyword.Solution, value);
     }
 
     internal string Project
     {
-        get => this.GetXmlAttribute(Keyword.Project) ?? string.Empty;
-        set => this.UpdateXmlAttribute(Keyword.Project, value);
+        get => GetXmlAttribute(Keyword.Project) ?? string.Empty;
+        set => UpdateXmlAttribute(Keyword.Project, value);
     }
 
     private protected override bool AllowEmptyItemRef => true;
@@ -35,11 +35,11 @@ internal abstract class XmlConfiguration(SlnxFile root, XmlElement element, Keyw
 
     internal ConfigurationRule? ToModel()
     {
-        BuildDimension dimension = this.Dimension;
+        BuildDimension dimension = Dimension;
 
         // Set default value for build rule to 'true' and deploy rule to 'false'.
         string projectValue =
-            this.Project.NullIfEmpty() ??
+            Project.NullIfEmpty() ??
             dimension switch
             {
                 BuildDimension.Build or BuildDimension.Deploy => bool.TrueString,
@@ -51,10 +51,12 @@ internal abstract class XmlConfiguration(SlnxFile root, XmlElement element, Keyw
             throw SolutionException.Create(Errors.MissingProjectValue, this, SolutionErrorType.MissingProjectValue);
         }
 
-        if (!ModelHelper.TrySplitFullConfiguration(this.Root.StringTable, this.Solution, out string? solutionBuildType, out string? solutionPlatform) &&
-            !this.Solution.IsNullOrEmpty())
+        if (!ModelHelper.TrySplitFullConfiguration(Root.StringTable, Solution, out string? solutionBuildType,
+                out string? solutionPlatform) &&
+            !Solution.IsNullOrEmpty())
         {
-            throw SolutionException.Create(string.Format(Errors.InvalidConfiguration_Args1, this.Solution), this, SolutionErrorType.InvalidConfiguration);
+            throw SolutionException.Create(string.Format(Errors.InvalidConfiguration_Args1, Solution), this,
+                SolutionErrorType.InvalidConfiguration);
         }
 
         if (solutionBuildType is BuildTypeNames.All or null)
@@ -72,7 +74,7 @@ internal abstract class XmlConfiguration(SlnxFile root, XmlElement element, Keyw
             dimension,
             solutionBuildType: solutionBuildType,
             solutionPlatform: solutionPlatform,
-            projectValue: this.GetTableString(projectValue));
+            projectValue: GetTableString(projectValue));
     }
 
     #endregion
@@ -83,16 +85,18 @@ internal abstract class XmlConfiguration(SlnxFile root, XmlElement element, Keyw
         string value = configurationRule.Dimension switch
         {
             // For build or deploy the default value is 'true'. Use lowercase 'false' to match the XML boolean.
-            BuildDimension.Build or BuildDimension.Deploy => bool.Parse(configurationRule.ProjectValue) ? string.Empty : Keywords.XmlFalse,
+            BuildDimension.Build or BuildDimension.Deploy => bool.Parse(configurationRule.ProjectValue)
+                ? string.Empty
+                : Keywords.XmlFalse,
             _ => configurationRule.ProjectValue,
         };
 
-        if (StringComparer.Ordinal.Equals(this.Project, value))
+        if (StringComparer.Ordinal.Equals(Project, value))
         {
             return false;
         }
 
-        this.Project = value;
+        Project = value;
         return true;
     }
 }

@@ -27,8 +27,14 @@ public class PublishPackageRouterSpecs
         {
             Name = "nuget.org",
             Source = "https://api.nuget.org/v3/index.json",
-            IncludePackages = new[] { "Fallout.*" },
-            ExcludePackages = new[] { "Nuke.*" },
+            IncludePackages = new[]
+            {
+                "Fallout.*"
+            },
+            ExcludePackages = new[]
+            {
+                "Nuke.*"
+            },
         };
 
         nugetOrg.Accepts("Fallout.Common.2026.1.0").Should().BeTrue();
@@ -42,8 +48,14 @@ public class PublishPackageRouterSpecs
         {
             Name = "t",
             Source = "s",
-            IncludePackages = new[] { "*" },
-            ExcludePackages = new[] { "Nuke.*" },
+            IncludePackages = new[]
+            {
+                "*"
+            },
+            ExcludePackages = new[]
+            {
+                "Nuke.*"
+            },
         };
 
         target.Accepts("Fallout.Common").Should().BeTrue();
@@ -54,8 +66,17 @@ public class PublishPackageRouterSpecs
     public void Default_target_accepts_everything()
     {
         // The real github-packages routing: everything, including the Nuke.* shims.
-        var ghPackages = new PublishTarget { Name = "github-packages", Source = "s" };
-        var all = new[] { "Fallout.Common.1.0.0", "Nuke.Common.1.0.0" };
+        var ghPackages = new PublishTarget
+        {
+            Name = "github-packages",
+            Source = "s"
+        };
+
+        var all = new[]
+        {
+            "Fallout.Common.1.0.0",
+            "Nuke.Common.1.0.0"
+        };
 
         PublishPackageRouter.Route(ghPackages, all).Should().BeEquivalentTo(all);
     }

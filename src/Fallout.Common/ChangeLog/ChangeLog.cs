@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using NuGet.Versioning;
 using Fallout.Common.IO;
+using NuGet.Versioning;
 
 namespace Fallout.Common.ChangeLog;
 

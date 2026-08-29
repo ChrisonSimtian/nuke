@@ -18,7 +18,9 @@ partial class NerdbankGitVersioningTasks
         }
         catch (Exception exception)
         {
-            throw new Exception($"Cannot parse {nameof(NerdbankGitVersioning)} output:".Concat(output.Select(x => x.Text)).JoinNewLine(), exception);
+            throw new Exception(
+                $"Cannot parse {nameof(NerdbankGitVersioning)} output:".Concat(output.Select(x => x.Text)).JoinNewLine(),
+                exception);
         }
     }
 }

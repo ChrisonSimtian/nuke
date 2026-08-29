@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Fallout.Common.CI.TravisCI;
 
@@ -19,9 +17,11 @@ public partial class TravisCI : Host, IBuildServer
     }
 
     string IBuildServer.Branch => Branch;
+
     string IBuildServer.Commit => Commit;
 
     public bool Ci => EnvironmentInfo.GetVariable<bool>("CI");
+
     public bool ContinousIntegration => EnvironmentInfo.GetVariable<bool>("CONTINUOUS_INTEGRATION");
 
     /// <summary>
@@ -79,7 +79,8 @@ public partial class TravisCI : Host, IBuildServer
     /// <summary>
     /// The number of the current job (for example, “4.1”).
     /// </summary>
-    [NoConvert] public string JobNumber => EnvironmentInfo.GetVariable("TRAVIS_JOB_NUMBER");
+    [NoConvert]
+    public string JobNumber => EnvironmentInfo.GetVariable("TRAVIS_JOB_NUMBER");
 
     /// <summary>
     /// On multi-OS builds, this value indicates the platform the job is running on. Values are <c>linux</c> and <c>osx</c> currently, to be extended in the future.
@@ -89,7 +90,8 @@ public partial class TravisCI : Host, IBuildServer
     /// <summary>
     /// <c>TRAVIS_PULL_REQUEST</c> is set to the pull request number if the current job is a pull request build, or <c>false</c> if it’s not.
     /// </summary>
-    [NoConvert] public string PullRequest => EnvironmentInfo.GetVariable("TRAVIS_PULL_REQUEST");
+    [NoConvert]
+    public string PullRequest => EnvironmentInfo.GetVariable("TRAVIS_PULL_REQUEST");
 
     /// <summary>
     /// If the current job is a pull request, the name of the branch from which the PR originated.
@@ -130,21 +132,38 @@ public partial class TravisCI : Host, IBuildServer
     public string Tag => EnvironmentInfo.GetVariable("TRAVIS_TAG");
 
     public string DartVersion => EnvironmentInfo.GetVariable("TRAVIS_DARTVersion");
+
     public string GoVersion => EnvironmentInfo.GetVariable("TRAVIS_GOVersion");
+
     public string HaxeVersion => EnvironmentInfo.GetVariable("TRAVIS_HAXEVersion");
+
     public string JdkVersion => EnvironmentInfo.GetVariable("TRAVIS_JDKVersion");
+
     public string JuliaVersion => EnvironmentInfo.GetVariable("TRAVIS_JULIAVersion");
+
     public string NodeVersion => EnvironmentInfo.GetVariable("TRAVIS_NODEVersion");
+
     public string OtpRelease => EnvironmentInfo.GetVariable("TRAVIS_OTP_RELEASE");
+
     public string PerlVersion => EnvironmentInfo.GetVariable("TRAVIS_PERLVersion");
+
     public string PhpVersion => EnvironmentInfo.GetVariable("TRAVIS_PHPVersion");
+
     public string PythonVersion => EnvironmentInfo.GetVariable("TRAVIS_PYTHONVersion");
+
     public string RVersion => EnvironmentInfo.GetVariable("TRAVIS_RVersion");
+
     public string RubyVersion => EnvironmentInfo.GetVariable("TRAVIS_RUBYVersion");
+
     public string RustVersion => EnvironmentInfo.GetVariable("TRAVIS_RUSTVersion");
+
     public string ScalaVersion => EnvironmentInfo.GetVariable("TRAVIS_SCALAVersion");
+
     public string XCodeSdk => EnvironmentInfo.GetVariable("TRAVIS_XCODE_SDK");
+
     public string XCodeScheme => EnvironmentInfo.GetVariable("TRAVIS_XCODE_SCHEME");
+
     public string XCodeProject => EnvironmentInfo.GetVariable("TRAVIS_XCODE_PROJECT");
+
     public string XCodeWorkspace => EnvironmentInfo.GetVariable("TRAVIS_XCODE_WORKSPACE");
 }

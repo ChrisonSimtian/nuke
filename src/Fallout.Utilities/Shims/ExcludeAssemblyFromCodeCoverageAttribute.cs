@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿// ReSharper disable once CheckNamespace
 
-// ReSharper disable once CheckNamespace
 namespace System.Diagnostics.CodeAnalysis;
 
 [AttributeUsage(AttributeTargets.Assembly)]

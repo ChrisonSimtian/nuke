@@ -16,15 +16,22 @@ public class XmlElementBuilder(string name)
         if (attribute == null)
         {
             if (value != null)
+            {
                 element.Add(new XAttribute(name, value));
+            }
         }
         else
         {
             if (value == null)
+            {
                 attribute.Remove();
+            }
             else
+            {
                 attribute.SetValue(value);
+            }
         }
+
         return this;
     }
 

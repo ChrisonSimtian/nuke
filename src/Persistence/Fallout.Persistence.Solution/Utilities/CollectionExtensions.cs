@@ -40,9 +40,10 @@ internal static class CollectionExtensions
         return collection is null || collection.Count == 0;
     }
 
-    internal static ReadOnlyListStructEnumerable<T> GetStructEnumerable<T>(this IReadOnlyList<T>? list) => new ReadOnlyListStructEnumerable<T>(list);
+    internal static ReadOnlyListStructEnumerable<T> GetStructEnumerable<T>(this IReadOnlyList<T>? list) => new(list);
 
-    internal static ReadOnlyListStructReverseEnumerable<T> GetStructReverseEnumerable<T>(this IReadOnlyList<T>? list) => new ReadOnlyListStructReverseEnumerable<T>(list);
+    internal static ReadOnlyListStructReverseEnumerable<T> GetStructReverseEnumerable<T>(this IReadOnlyList<T>? list) =>
+        new(list);
 
     /// <summary>
     /// Creates an array from a <see cref="IReadOnlyCollection{T}"/> with a selector to transform the items.
@@ -52,9 +53,10 @@ internal static class CollectionExtensions
     /// <param name="collection">The input collection.</param>
     /// <param name="selector">A way to convert TSource to TResult.</param>
     /// <returns>An array of the new items.</returns>
-    internal static List<TResult> ToList<TSource, TResult>(this IReadOnlyCollection<TSource> collection, Func<TSource, TResult> selector)
+    internal static List<TResult> ToList<TSource, TResult>(this IReadOnlyCollection<TSource> collection,
+        Func<TSource, TResult> selector)
     {
-        List<TResult> list = new List<TResult>(collection.Count);
+        List<TResult> list = new(collection.Count);
         foreach (TSource item in collection)
         {
             list.Add(selector(item));
@@ -80,7 +82,7 @@ internal static class CollectionExtensions
         Func<TSource, TState, TResult> selector,
         TState state)
     {
-        List<TResult> list = new List<TResult>(collection.Count);
+        List<TResult> list = new(collection.Count);
         foreach (TSource item in collection)
         {
             if (predicate(item, state))

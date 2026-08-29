@@ -10,7 +10,10 @@ public static partial class DictionaryExtensions
         Dictionary<TKey, TValue> otherDictionary)
     {
         foreach (var (key, value) in otherDictionary)
+        {
             dictionary.AddPair(key, value);
+        }
+
         return dictionary;
     }
 
@@ -19,7 +22,10 @@ public static partial class DictionaryExtensions
         ReadOnlyDictionary<TKey, TValue> otherDictionary)
     {
         foreach (var (key, value) in otherDictionary)
+        {
             dictionary.AddPair(key, value);
+        }
+
         return dictionary;
     }
 }

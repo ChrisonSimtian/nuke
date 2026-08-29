@@ -8,30 +8,30 @@ namespace Fallout.Persistence.Solution.Serializer.Xml.XmlDecorators;
 /// <summary>
 /// Child of a Properties node that represents a property name/value pair.
 /// </summary>
-internal sealed partial class XmlProperty(SlnxFile root, XmlElement element) :
+internal sealed class XmlProperty(SlnxFile root, XmlElement element) :
     XmlDecorator(root, element, Keyword.Property),
     IItemRefDecorator
 {
     public Keyword ItemRefAttribute => Keyword.Name;
 
-    internal string Name => this.ItemRef;
+    internal string Name => ItemRef;
 
     internal string Value
     {
-        get => this.GetXmlAttribute(Keyword.Value) ?? string.Empty;
-        set => this.UpdateXmlAttribute(Keyword.Value, value);
+        get => GetXmlAttribute(Keyword.Value) ?? string.Empty;
+        set => UpdateXmlAttribute(Keyword.Value, value);
     }
 
     // Update the Xml DOM with changes from the model.
     internal bool ApplyModelToXml(string newValue)
     {
         // Don't update the value if it is already the same.
-        if (StringComparer.Ordinal.Equals(this.Value, newValue))
+        if (StringComparer.Ordinal.Equals(Value, newValue))
         {
             return false;
         }
 
-        this.Value = newValue;
+        Value = newValue;
         return true;
     }
 }

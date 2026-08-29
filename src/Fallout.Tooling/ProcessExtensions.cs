@@ -25,7 +25,9 @@ public static class ProcessExtensions
         process.AssertWaitForExit();
 
         if (process.ExitCode != 0)
+        {
             throw new ProcessException(process);
+        }
 
         return process;
     }
@@ -33,7 +35,9 @@ public static class ProcessExtensions
     public static IReadOnlyCollection<Output> EnsureOnlyStd(this IReadOnlyCollection<Output> output)
     {
         foreach (var o in output)
+        {
             Assert.True(o.Type == OutputType.Std);
+        }
 
         return output;
     }

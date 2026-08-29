@@ -34,36 +34,59 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         params GitHubActionsImage[] images)
     {
         this.name = NormalizeWorkflowName(name);
-        this.images = new[] { image }.Concat(images).ToArray();
+        this.images = new[]
+        {
+            image
+        }.Concat(images).ToArray();
     }
 
     public override string IdPostfix => name;
+
     public override Type HostType => typeof(GitHubActions);
+
     public override AbsolutePath ConfigurationFile => Build.RootDirectory / ".github" / "workflows" / $"{name}.yml";
-    public override IEnumerable<AbsolutePath> GeneratedFiles => new[] { ConfigurationFile };
+
+    public override IEnumerable<AbsolutePath> GeneratedFiles => new[]
+    {
+        ConfigurationFile
+    };
 
     public override IEnumerable<string> RelevantTargetNames => InvokedTargets;
+
     public override IEnumerable<string> IrrelevantTargetNames => new string[0];
 
     public GitHubActionsTrigger[] On { get; set; } = new GitHubActionsTrigger[0];
+
     public string[] OnPushBranches { get; set; } = new string[0];
+
     public string[] OnPushBranchesIgnore { get; set; } = new string[0];
+
     public string[] OnPushTags { get; set; } = new string[0];
+
     public string[] OnPushTagsIgnore { get; set; } = new string[0];
+
     public string[] OnPushIncludePaths { get; set; } = new string[0];
+
     public string[] OnPushExcludePaths { get; set; } = new string[0];
+
     public string[] OnPullRequestBranches { get; set; } = new string[0];
+
     public string[] OnPullRequestTags { get; set; } = new string[0];
+
     public string[] OnPullRequestIncludePaths { get; set; } = new string[0];
+
     public string[] OnPullRequestExcludePaths { get; set; } = new string[0];
+
     [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.",
         DiagnosticId = "FALLOUTOBS001",
         UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
     public string[] OnWorkflowDispatchOptionalInputs { get; set; } = new string[0];
+
     [Obsolete($"Use [{nameof(GitHubActionsInputAttribute)}] instead. Removed in 2027.x.x.",
         DiagnosticId = "FALLOUTOBS001",
         UrlFormat = "https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
     public string[] OnWorkflowDispatchRequiredInputs { get; set; } = new string[0];
+
     public string OnCronSchedule { get; set; }
 
     /// <summary>
@@ -77,26 +100,44 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     public string[] Env { get; set; } = new string[0];
 
     public string[] ImportSecrets { get; set; } = new string[0];
+
     public bool EnableGitHubToken { get; set; }
+
     public GitHubActionsPermissions[] WritePermissions { get; set; } = new GitHubActionsPermissions[0];
+
     public GitHubActionsPermissions[] ReadPermissions { get; set; } = new GitHubActionsPermissions[0];
 
-    public string[] CacheIncludePatterns { get; set; } = { ".fallout/temp", "~/.nuget/packages" };
+    public string[] CacheIncludePatterns { get; set; } =
+    {
+        ".fallout/temp",
+        "~/.nuget/packages"
+    };
+
     public string[] CacheExcludePatterns { get; set; } = new string[0];
-    public string[] CacheKeyFiles { get; set; } = { "**/global.json", "**/*.csproj", "**/Directory.Packages.props" };
+
+    public string[] CacheKeyFiles { get; set; } =
+    {
+        "**/global.json",
+        "**/*.csproj",
+        "**/Directory.Packages.props"
+    };
 
     public bool PublishArtifacts { get; set; } = true;
+
     public string PublishCondition { get; set; }
 
     public int TimeoutMinutes { get; set; }
 
     public string EnvironmentName { get; set; }
+
     public string EnvironmentUrl { get; set; }
 
     public string ConcurrencyGroup { get; set; }
+
     public bool ConcurrencyCancelInProgress { get; set; }
 
     public string JobConcurrencyGroup { get; set; }
+
     public bool JobConcurrencyCancelInProgress { get; set; }
 
     /// <summary>
@@ -230,8 +271,10 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
             var separatorIndex = variable.IndexOf(':');
             Assert.True(separatorIndex > 0,
                 $"'{nameof(Env)}' entry '{variable}' must be in 'KEY: value' form with a non-empty key");
+
             Assert.True(!variable.Substring(startIndex: 0, separatorIndex).Any(char.IsWhiteSpace),
                 $"'{nameof(Env)}' entry '{variable}' has whitespace in its key; expected 'KEY: value'");
+
             Assert.True(separatorIndex == variable.Length - 1 || char.IsWhiteSpace(variable[separatorIndex + 1]),
                 $"'{nameof(Env)}' entry '{variable}' must have a space after the key's colon; expected 'KEY: value'");
         }
@@ -240,25 +283,28 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         ValidateActionReferences();
 
         var configuration = new GitHubActionsConfiguration
-                            {
-                                Name = name,
-                                ShortTriggers = On,
-                                DetailedTriggers = GetTriggers().ToArray(),
-                                Env = Env,
-                                Permissions = WritePermissions.Select(x => (x, "write"))
-                                    .Concat(ReadPermissions.Select(x => (x, "read"))).ToArray(),
-                                ConcurrencyGroup = ConcurrencyGroup,
-                                ConcurrencyCancelInProgress = ConcurrencyCancelInProgress,
-                                DefaultShell = DefaultShell,
-                                Jobs = images.Select(x => GetJobs(x, relevantTargets)).ToArray()
-                            };
+        {
+            Name = name,
+            ShortTriggers = On,
+            DetailedTriggers = GetTriggers().ToArray(),
+            Env = Env,
+            Permissions = WritePermissions.Select(x => (x, "write"))
+                .Concat(ReadPermissions.Select(x => (x, "read"))).ToArray(),
+            ConcurrencyGroup = ConcurrencyGroup,
+            ConcurrencyCancelInProgress = ConcurrencyCancelInProgress,
+            DefaultShell = DefaultShell,
+            Jobs = images.Select(x => GetJobs(x, relevantTargets)).ToArray()
+        };
 
         Assert.True(configuration.ShortTriggers.Length == 0 || configuration.DetailedTriggers.Length == 0,
             $"Workflows can only define either shorthand '{nameof(On)}' or '{nameof(On)}*' triggers");
+
         Assert.True(configuration.ShortTriggers.Length > 0 || configuration.DetailedTriggers.Length > 0,
             $"Workflows must define either shorthand '{nameof(On)}' or '{nameof(On)}*' triggers");
+
         Assert.True(RunsOnLabels.Length == 0 || images.Length == 1,
             $"Cannot use '{nameof(RunsOnLabels)}' with multiple images; labels resolve a single job's runner");
+
         Assert.True(RunsOnLabels.All(x => !x.IsNullOrWhiteSpace()),
             $"'{nameof(RunsOnLabels)}' entries must not be null, empty, or whitespace");
 
@@ -268,49 +314,49 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     protected virtual GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
         return new GitHubActionsJob
-               {
-                   Name = image.GetValue().Replace(".", "_"),
-                   RunsOnLabels = RunsOnLabels,
-                   EnvironmentName = EnvironmentName,
-                   EnvironmentUrl = EnvironmentUrl,
-                   Steps = GetSteps(relevantTargets, image),
-                   Image = image,
-                   TimeoutMinutes = TimeoutMinutes,
-                   ConcurrencyGroup = JobConcurrencyGroup,
-                   ConcurrencyCancelInProgress = JobConcurrencyCancelInProgress
-               };
+        {
+            Name = image.GetValue().Replace(".", "_"),
+            RunsOnLabels = RunsOnLabels,
+            EnvironmentName = EnvironmentName,
+            EnvironmentUrl = EnvironmentUrl,
+            Steps = GetSteps(relevantTargets, image),
+            Image = image,
+            TimeoutMinutes = TimeoutMinutes,
+            ConcurrencyGroup = JobConcurrencyGroup,
+            ConcurrencyCancelInProgress = JobConcurrencyCancelInProgress
+        };
     }
 
     private GitHubActionsStep[] GetSteps(IReadOnlyCollection<ExecutableTarget> relevantTargets, GitHubActionsImage image)
     {
         var checkout = new GitHubActionsCheckoutStep
-                       {
-                           Uses = CheckoutAction,
-                           Submodules = submodules,
-                           Lfs = lfs,
-                           FetchDepth = fetchDepth,
-                           Progress = progress,
-                           Filter = filter,
-                           Ref = reference,
-                           CheckoutWith = CheckoutWith
-                       };
+        {
+            Uses = CheckoutAction,
+            Submodules = submodules,
+            Lfs = lfs,
+            FetchDepth = fetchDepth,
+            Progress = progress,
+            Filter = filter,
+            Ref = reference,
+            CheckoutWith = CheckoutWith
+        };
 
         var cache = CacheKeyFiles.Any()
             ? new GitHubActionsCacheStep
-              {
-                  Uses = CacheAction,
-                  IncludePatterns = CacheIncludePatterns,
-                  ExcludePatterns = CacheExcludePatterns,
-                  KeyFiles = CacheKeyFiles
-              }
+            {
+                Uses = CacheAction,
+                IncludePatterns = CacheIncludePatterns,
+                ExcludePatterns = CacheExcludePatterns,
+                KeyFiles = CacheKeyFiles
+            }
             : null;
 
         var run = new GitHubActionsRunStep
-                  {
-                      SetupDotNetAction = SetupDotNetAction,
-                      InvokedTargets = InvokedTargets,
-                      Imports = GetImports().ToDictionary(x => x.Key, x => x.Value)
-                  };
+        {
+            SetupDotNetAction = SetupDotNetAction,
+            InvokedTargets = InvokedTargets,
+            Imports = GetImports().ToDictionary(x => x.Key, x => x.Value)
+        };
 
         var artifacts = new List<GitHubActionsStep>();
         if (PublishArtifacts)
@@ -319,34 +365,54 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
                 .SelectMany(x => x.ArtifactProducts)
                 .Select(x => (AbsolutePath)x)
                 // TODO: https://github.com/actions/upload-artifact/issues/11
-                .Select(x => x.DescendantsAndSelf(y => y.Parent).FirstOrDefault(y => !y.ToString().ContainsOrdinalIgnoreCase("*")))
+                .Select(x => x.DescendantsAndSelf(y => y.Parent)
+                    .FirstOrDefault(y => !y.ToString().ContainsOrdinalIgnoreCase("*")))
                 .Distinct().ToList();
 
             foreach (var artifact in artifactPaths)
+            {
                 artifacts.Add(new GitHubActionsArtifactStep
-                              {
-                                  Uses = UploadArtifactAction,
-                                  Name = artifact.ToString().TrimStart(artifact.Parent.ToString()).TrimStart('/', '\\'),
-                                  Path = Build.RootDirectory.GetUnixRelativePathTo(artifact),
-                                  Condition = PublishCondition
-                              });
+                {
+                    Uses = UploadArtifactAction,
+                    Name = artifact.ToString().TrimStart(artifact.Parent.ToString()).TrimStart('/', '\\'),
+                    Path = Build.RootDirectory.GetUnixRelativePathTo(artifact),
+                    Condition = PublishCondition
+                });
+            }
         }
 
-        var builtInSteps = new List<GitHubActionsStep> { checkout };
+        var builtInSteps = new List<GitHubActionsStep>
+        {
+            checkout
+        };
+
         if (cache != null)
+        {
             builtInSteps.Add(cache);
+        }
+
         builtInSteps.Add(run);
         builtInSteps.AddRange(artifacts);
 
         var pipeline = new GitHubActionsStepPipeline(name, image, builtInSteps.AsReadOnly());
         if (Build is IConfigureGitHubActions configure)
+        {
             configure.ConfigureSteps(pipeline);
+        }
+
         ValidateCustomSteps(pipeline);
 
-        var steps = new List<GitHubActionsStep> { checkout };
+        var steps = new List<GitHubActionsStep>
+        {
+            checkout
+        };
+
         steps.AddRange(pipeline.GetInserts(GitHubActionsStepPosition.PostCheckout));
         if (cache != null)
+        {
             steps.Add(cache);
+        }
+
         steps.AddRange(pipeline.GetInserts(GitHubActionsStepPosition.PreRun));
         steps.Add(run);
         steps.AddRange(pipeline.GetInserts(GitHubActionsStepPosition.PostRun));
@@ -383,8 +449,10 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
 
             Assert.True(hasUses ^ hasRun,
                 $"Custom step '{id}' in workflow '{name}' must set exactly one of '{nameof(GitHubActionsCustomStep.Uses)}' or '{nameof(GitHubActionsCustomStep.Run)}'");
+
             Assert.True((step.With?.Count ?? 0) == 0 || hasUses,
                 $"Custom step '{id}' in workflow '{name}' sets '{nameof(GitHubActionsCustomStep.With)}' but no '{nameof(GitHubActionsCustomStep.Uses)}'; 'with:' is only valid on a 'uses:' step");
+
             Assert.True(step.Shell.IsNullOrWhiteSpace() || !hasUses,
                 $"Custom step '{id}' in workflow '{name}' sets '{nameof(GitHubActionsCustomStep.Shell)}' on a 'uses:' step; shell applies only to run steps");
 
@@ -404,16 +472,22 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
     protected virtual IEnumerable<(string Key, string Value)> GetImports()
     {
         foreach (var input in GetWorkflowDispatchInputs())
+        {
             yield return (input.Name, $"${{{{ github.event.inputs.{input.Name} }}}}");
+        }
 
         static string GetSecretValue(string secret)
             => $"${{{{ secrets.{secret.SplitCamelHumpsWithKnownWords().JoinUnderscore().ToUpperInvariant()} }}}}";
 
         foreach (var secret in ImportSecrets)
+        {
             yield return (secret, GetSecretValue(secret));
+        }
 
         if (EnableGitHubToken)
+        {
             yield return ("GITHUB_TOKEN", GetSecretValue("GITHUB_TOKEN"));
+        }
     }
 
     protected virtual IEnumerable<GitHubActionsDetailedTrigger> GetTriggers()
@@ -426,19 +500,20 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
             OnPushExcludePaths.Length > 0)
         {
             Assert.True(
-                OnPushBranches.Length == 0 && OnPushTags.Length == 0 || OnPushBranchesIgnore.Length == 0 && OnPushTagsIgnore.Length == 0,
+                (OnPushBranches.Length == 0 && OnPushTags.Length == 0) ||
+                (OnPushBranchesIgnore.Length == 0 && OnPushTagsIgnore.Length == 0),
                 $"Cannot use {nameof(OnPushBranches)}/{nameof(OnPushTags)} and {nameof(OnPushBranchesIgnore)}/{nameof(OnPushTagsIgnore)} in combination");
 
             yield return new GitHubActionsVcsTrigger
-                         {
-                             Kind = GitHubActionsTrigger.Push,
-                             Branches = OnPushBranches,
-                             BranchesIgnore = OnPushBranchesIgnore,
-                             Tags = OnPushTags,
-                             TagsIgnore = OnPushTagsIgnore,
-                             IncludePaths = OnPushIncludePaths,
-                             ExcludePaths = OnPushExcludePaths
-                         };
+            {
+                Kind = GitHubActionsTrigger.Push,
+                Branches = OnPushBranches,
+                BranchesIgnore = OnPushBranchesIgnore,
+                Tags = OnPushTags,
+                TagsIgnore = OnPushTagsIgnore,
+                IncludePaths = OnPushIncludePaths,
+                ExcludePaths = OnPushExcludePaths
+            };
         }
 
         if (OnPullRequestBranches.Length > 0 ||
@@ -447,23 +522,33 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
             OnPullRequestExcludePaths.Length > 0)
         {
             yield return new GitHubActionsVcsTrigger
-                         {
-                             Kind = GitHubActionsTrigger.PullRequest,
-                             Branches = OnPullRequestBranches,
-                             BranchesIgnore = new string[0],
-                             Tags = OnPullRequestTags,
-                             TagsIgnore = new string[0],
-                             IncludePaths = OnPullRequestIncludePaths,
-                             ExcludePaths = OnPullRequestExcludePaths
-                         };
+            {
+                Kind = GitHubActionsTrigger.PullRequest,
+                Branches = OnPullRequestBranches,
+                BranchesIgnore = new string[0],
+                Tags = OnPullRequestTags,
+                TagsIgnore = new string[0],
+                IncludePaths = OnPullRequestIncludePaths,
+                ExcludePaths = OnPullRequestExcludePaths
+            };
         }
 
         var dispatchInputs = GetWorkflowDispatchInputs().ToArray();
         if (dispatchInputs.Length > 0)
-            yield return new GitHubActionsWorkflowDispatchTrigger { Inputs = dispatchInputs };
+        {
+            yield return new GitHubActionsWorkflowDispatchTrigger
+            {
+                Inputs = dispatchInputs
+            };
+        }
 
         if (OnCronSchedule != null)
-            yield return new GitHubActionsScheduledTrigger { Cron = OnCronSchedule };
+        {
+            yield return new GitHubActionsScheduledTrigger
+            {
+                Cron = OnCronSchedule
+            };
+        }
     }
 
     // Workflow names are spaces-to-underscores normalized (see the ctor), so an input's Workflows scope
@@ -483,22 +568,37 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         // legacy arrays first → untyped string inputs, preserving the existing ordering and output
 #pragma warning disable FALLOUTOBS001 // deliberate bridge for the obsolete legacy arrays
         foreach (var input in OnWorkflowDispatchOptionalInputs)
-            yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = false };
+        {
+            yield return new GitHubActionsWorkflowDispatchInput
+            {
+                Name = input,
+                Required = false
+            };
+        }
+
         foreach (var input in OnWorkflowDispatchRequiredInputs)
-            yield return new GitHubActionsWorkflowDispatchInput { Name = input, Required = true };
+        {
+            yield return new GitHubActionsWorkflowDispatchInput
+            {
+                Name = input,
+                Required = true
+            };
+        }
 #pragma warning restore FALLOUTOBS001
 
         foreach (var input in DeclaredInputs.Where(x => x.Workflows.Length == 0 ||
-                     x.Workflows.Select(NormalizeWorkflowName).Contains(name)))
+                                                        x.Workflows.Select(NormalizeWorkflowName).Contains(name)))
+        {
             yield return new GitHubActionsWorkflowDispatchInput
-                         {
-                             Name = input.Name,
-                             Type = input.Type,
-                             Required = input.Required,
-                             Default = input.Default,
-                             Options = input.Options,
-                             Description = input.Description
-                         };
+            {
+                Name = input.Name,
+                Type = input.Type,
+                Required = input.Required,
+                Default = input.Default,
+                Options = input.Options,
+                Description = input.Description
+            };
+        }
     }
 
     private void ValidateWorkflowDispatchInputs()
@@ -508,34 +608,50 @@ public class GitHubActionsAttribute : ConfigurationAttributeBase
         foreach (var input in DeclaredInputs)
         {
             if (input.Type == GitHubActionsInputType.Choice)
+            {
                 Assert.True(input.Options.Length > 0,
                     $"'{input.Name}' is a choice input and requires non-empty '{nameof(GitHubActionsInputAttribute.Options)}'");
+            }
             else
+            {
                 Assert.True(input.Options.Length == 0,
                     $"'{input.Name}' sets '{nameof(GitHubActionsInputAttribute.Options)}' but its type is not '{nameof(GitHubActionsInputType.Choice)}'");
+            }
 
             if (input.Default != null)
             {
                 if (input.Type == GitHubActionsInputType.Choice)
+                {
                     Assert.True(input.Options.Contains(input.Default),
                         $"'{input.Name}' default '{input.Default}' is not one of its options");
+                }
+
                 if (input.Type == GitHubActionsInputType.Number)
+                {
                     Assert.True(double.TryParse(input.Default, NumberStyles.Any, CultureInfo.InvariantCulture, out _),
                         $"'{input.Name}' default '{input.Default}' is not a valid number");
+                }
+
                 if (input.Type == GitHubActionsInputType.Boolean)
+                {
                     Assert.True(input.Default is "true" or "false",
                         $"'{input.Name}' default '{input.Default}' must be 'true' or 'false'");
+                }
             }
 
             foreach (var workflow in input.Workflows)
+            {
                 Assert.True(declaredWorkflows.Contains(NormalizeWorkflowName(workflow)),
                     $"'{input.Name}' targets unknown workflow '{workflow}'");
+            }
         }
 
         var inputs = GetWorkflowDispatchInputs().ToList();
         foreach (var input in inputs)
+        {
             Assert.True(!input.Name.IsNullOrWhiteSpace(),
                 $"workflow_dispatch input names must be non-empty in workflow '{name}'");
+        }
 
         var names = inputs.Select(x => x.Name).ToList();
         Assert.True(names.Count == names.Distinct().Count(),

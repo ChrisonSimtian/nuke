@@ -8,8 +8,8 @@ public static partial class OptionsExtensions
     public static T Modify<T>(this T options, Action<IOptions> modification = null)
         where T : IOptions
     {
-        var json = JsonSerializer.Serialize(options, options.GetType(), Tooling.Options.SerializerOptions);
-        var copy = (T)JsonSerializer.Deserialize(json, options.GetType(), Tooling.Options.SerializerOptions);
+        var json = JsonSerializer.Serialize(options, options.GetType(), Options.SerializerOptions);
+        var copy = (T)JsonSerializer.Deserialize(json, options.GetType(), Options.SerializerOptions);
 
         // TODO OPTIONS: HACK
         if (options is ToolOptions originalOptions && copy is ToolOptions copiedOptions)

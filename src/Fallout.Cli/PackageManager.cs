@@ -1,6 +1,5 @@
 using System.Linq;
 using Fallout.Common;
-using Fallout.Common.Utilities;
 using Fallout.Solutions;
 
 namespace Fallout.Cli;
@@ -23,13 +22,16 @@ internal sealed class PackageManager : IPackageManager
 
         var previousPackage = buildProject.Items.SingleOrDefault(x => x.EvaluatedInclude == packageId);
         if (previousPackage != null)
+        {
             buildProject.RemoveItem(previousPackage);
+        }
 
         var packageDownloadItem = buildProject.AddItem(packageType, packageId).Single();
         packageDownloadItem.Xml.AddMetadata(
             "Version",
             packageType == ReferenceType ? packageVersion : $"[{packageVersion}]",
             expressAsAttribute: true);
+
         buildProject.Save();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common.Utilities;
+﻿using Fallout.Common.Utilities;
 
 namespace Fallout.Common.CI.GitHubActions.Configuration;
 
@@ -19,9 +17,13 @@ public class GitHubActionsCheckoutStep : GitHubActionsStep
     } = GitHubActionsDefaults.CheckoutAction;
 
     public GitHubActionsSubmodules? Submodules { get; set; }
+
     public bool? Lfs { get; set; }
+
     public uint? FetchDepth { get; set; }
+
     public bool? Progress { get; set; }
+
     public string Filter { get; set; }
 
     /// <summary>
@@ -51,15 +53,30 @@ public class GitHubActionsCheckoutStep : GitHubActionsStep
                 using (writer.Indent())
                 {
                     if (Submodules.HasValue)
+                    {
                         writer.WriteLine($"submodules: {Submodules.ToString().ToLowerInvariant()}");
-                    if(Lfs.HasValue)
+                    }
+
+                    if (Lfs.HasValue)
+                    {
                         writer.WriteLine($"lfs: {Lfs.ToString().ToLowerInvariant()}");
+                    }
+
                     if (FetchDepth.HasValue)
+                    {
                         writer.WriteLine($"fetch-depth: {FetchDepth}");
+                    }
+
                     if (Progress.HasValue)
+                    {
                         writer.WriteLine($"progress: {Progress.ToString().ToLowerInvariant()}");
+                    }
+
                     if (!Filter.IsNullOrWhiteSpace())
+                    {
                         writer.WriteLine($"filter: {Filter}");
+                    }
+
                     if (!Ref.IsNullOrWhiteSpace())
                     {
                         // Pin checkout to the source repo of the PR head (or the current repo on
@@ -73,7 +90,9 @@ public class GitHubActionsCheckoutStep : GitHubActionsStep
                     }
 
                     foreach (var line in CheckoutWith)
+                    {
                         writer.WriteLine(line);
+                    }
                 }
             }
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Fallout.CodeGeneration.Model;
 using Fallout.CodeGeneration.Writers;
 using Fallout.Common.Utilities;
@@ -27,7 +26,9 @@ public static class DataClassExtensionGenerator
     private static void WriteMethods(DataClassWriter writer, Property property)
     {
         if (property.CustomImpl)
+        {
             return;
+        }
 
         writer.WriteLine($"#region {property.Name}");
         var access = $"o.{property.Name}";
@@ -145,7 +146,8 @@ public static class DataClassExtensionGenerator
                         property,
                         name: $"Set{property.Name}",
                         additionalParameters: [$"IDictionary<{keyType}, {valueType}> v"],
-                        modification: $"Set(() => {access}, v.ToDictionary(x => x.Key, x => x.Value, {property.GetKeyComparer()}))")
+                        modification:
+                        $"Set(() => {access}, v.ToDictionary(x => x.Key, x => x.Value, {property.GetKeyComparer()}))")
                     // Set item
                     .WriteMethod(
                         property,
@@ -323,13 +325,15 @@ public static class DataClassExtensionGenerator
                         property,
                         name: $"Remove{propertyPlural}",
                         additionalParameters: [$"params {valueType}[] v"],
-                        modification: $"Set(() => {access}, DelegateHelper.RemoveCollection({access}, {keyValue}, v, {separator}))",
+                        modification:
+                        $"Set(() => {access}, DelegateHelper.RemoveCollection({access}, {keyValue}, v, {separator}))",
                         delegateProperty.Help)
                     .WriteMethod(
                         property,
                         name: $"Remove{propertyPlural}",
                         additionalParameters: [$"IEnumerable<{valueType}> v"],
-                        modification: $"Set(() => {access}, DelegateHelper.RemoveCollection({access}, {keyValue}, v, {separator}))",
+                        modification:
+                        $"Set(() => {access}, DelegateHelper.RemoveCollection({access}, {keyValue}, v, {separator}))",
                         delegateProperty.Help)
                     // Clear
                     .WriteMethod(
@@ -352,8 +356,14 @@ public static class DataClassExtensionGenerator
         string modification,
         string help = null)
     {
-        var builder = $"[Builder(Type = typeof({writer.DataClass.Name}), Property = nameof({writer.DataClass.Name}.{property.Name}))]";
-        var parameters = new[] { "this T o" }.Concat(additionalParameters);
+        var builder =
+            $"[Builder(Type = typeof({writer.DataClass.Name}), Property = nameof({writer.DataClass.Name}.{property.Name}))]";
+
+        var parameters = new[]
+        {
+            "this T o"
+        }.Concat(additionalParameters);
+
         var signature = $"public static T {name}<T>({parameters.JoinCommaSpace()}) where T : {writer.DataClass.Name}";
         var implementation = $"o.Modify(b => b.{modification})";
         return writer
@@ -367,6 +377,8 @@ public static class DataClassExtensionGenerator
     private static void CheckPlural(Property property)
     {
         if (property.Name.ToPlural() != property.Name)
+        {
             Log.Warning("Property {Class}.{Property} should be pluralized", property.DataClass.Name, property.Name);
+        }
     }
 }

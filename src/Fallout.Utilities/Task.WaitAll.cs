@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ namespace Fallout.Common.Utilities;
 
 [DebuggerNonUserCode]
 [DebuggerStepThrough]
-public static partial class TaskExtensions
+public static class TaskExtensions
 {
     public static void WaitAll(this IEnumerable<Task> tasks)
     {

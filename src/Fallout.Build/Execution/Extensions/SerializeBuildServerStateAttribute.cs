@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Fallout.Common.Execution;
 
 namespace Fallout.Common.CI;

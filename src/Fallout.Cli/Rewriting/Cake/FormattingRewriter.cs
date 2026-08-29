@@ -1,20 +1,26 @@
 using System;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Fallout.Common;
 using Fallout.Common.Utilities.Collections;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Fallout.Cli.Rewriting.Cake;
 
 internal class FormattingRewriter : SafeSyntaxRewriter
 {
-    private static readonly SyntaxTrivia[] Indent = { Space, Space, Space, Space };
+    private static readonly SyntaxTrivia[] Indent =
+    {
+        Space,
+        Space,
+        Space,
+        Space
+    };
 
     public override SyntaxNode VisitPropertyDeclaration(PropertyDeclarationSyntax node)
     {
-        node = (PropertyDeclarationSyntax) base.VisitPropertyDeclaration(node).NotNull();
+        node = (PropertyDeclarationSyntax)base.VisitPropertyDeclaration(node).NotNull();
 
         return (node.Type as SimpleNameSyntax)?.Identifier.Text == nameof(Target)
             ? node.WithLeadingTrivia(LineFeed.Concat(Indent))
@@ -24,7 +30,9 @@ internal class FormattingRewriter : SafeSyntaxRewriter
     public override SyntaxToken VisitToken(SyntaxToken token)
     {
         if (token.Parent is not MemberAccessExpressionSyntax memberAccessExpression)
+        {
             return token;
+        }
 
         var identifierName = memberAccessExpression.GetIdentifierName();
         if (identifierName == nameof(ITargetDefinition.Executes) ||
@@ -33,10 +41,14 @@ internal class FormattingRewriter : SafeSyntaxRewriter
             identifierName == nameof(ITargetDefinition.OnlyWhenStatic) ||
             identifierName == nameof(ITargetDefinition.OnlyWhenDynamic) ||
             identifierName == nameof(ITargetDefinition.ProceedAfterFailure))
+        {
             return token.WithLeadingTrivia(LineFeed.Concat(Indent).Concat(Indent));
+        }
 
         if (identifierName.StartsWith("Set"))
+        {
             return token.WithLeadingTrivia(LineFeed.Concat(Indent).Concat(Indent).Concat(Indent));
+        }
 
         return token;
     }
@@ -54,7 +66,12 @@ internal class FormattingRewriter : SafeSyntaxRewriter
                 _ => _
                     .WithModifiers(TokenList(node
                         .Modifiers.Select((x, i) => x
-                            .WithLeadingTrivia(i == 0 ? new SyntaxTrivia[0] : new[] { Space })))));
+                            .WithLeadingTrivia(i == 0
+                                ? new SyntaxTrivia[0]
+                                : new[]
+                                {
+                                    Space
+                                })))));
     }
 
     public override SyntaxNode VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)

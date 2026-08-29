@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 
@@ -34,7 +33,9 @@ public partial class AppVeyor : Host, IBuildServer
 
     internal static bool IsRunningAppVeyor => EnvironmentInfo.HasVariable("APPVEYOR");
 
-    private readonly Lazy<Tool> cli = Lazy.Create(() => IsRunningAppVeyor ? ToolResolver.GetEnvironmentOrPathTool("appveyor") : null);
+    private readonly Lazy<Tool> cli =
+        Lazy.Create(() => IsRunningAppVeyor ? ToolResolver.GetEnvironmentOrPathTool("appveyor") : null);
+
     private int messageCount;
 
     internal AppVeyor()
@@ -42,45 +43,81 @@ public partial class AppVeyor : Host, IBuildServer
     }
 
     string IBuildServer.Branch => RepositoryBranch;
+
     string IBuildServer.Commit => RepositoryCommitSha;
 
     public Tool Cli => cli.Value;
 
     public string Url => EnvironmentInfo.GetVariable("APPVEYOR_URL");
+
     public string ApiUrl => EnvironmentInfo.GetVariable("APPVEYOR_API_URL");
+
     public string AccountName => EnvironmentInfo.GetVariable("APPVEYOR_ACCOUNT_NAME");
+
     public int ProjectId => EnvironmentInfo.GetVariable<int>("APPVEYOR_PROJECT_ID");
+
     public string ProjectName => EnvironmentInfo.GetVariable("APPVEYOR_PROJECT_NAME");
+
     public string ProjectSlug => EnvironmentInfo.GetVariable("APPVEYOR_PROJECT_SLUG");
+
     public string BuildFolder => EnvironmentInfo.GetVariable("APPVEYOR_BUILD_FOLDER");
+
     public int BuildId => EnvironmentInfo.GetVariable<int>("APPVEYOR_BUILD_ID");
+
     public int BuildNumber => EnvironmentInfo.GetVariable<int>("APPVEYOR_BUILD_NUMBER");
+
     public string BuildVersion => EnvironmentInfo.GetVariable("APPVEYOR_BUILD_VERSION");
+
     public string BuildWorkerImage => EnvironmentInfo.GetVariable("APPVEYOR_BUILD_WORKER_IMAGE");
+
     public int? PullRequestNumber => EnvironmentInfo.GetVariable<int?>("APPVEYOR_PULL_REQUEST_NUMBER");
+
     public string PullRequestTitle => EnvironmentInfo.GetVariable("APPVEYOR_PULL_REQUEST_TITLE");
+
     public string PullRequestHeadRepositoryName => EnvironmentInfo.GetVariable("APPVEYOR_PULL_REQUEST_HEAD_REPO_NAME");
+
     public string PullRequestHeadRepositoryBranch => EnvironmentInfo.GetVariable("APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH");
+
     public string PullRequestHeadCommit => EnvironmentInfo.GetVariable("APPVEYOR_PULL_REQUEST_HEAD_COMMIT");
+
     public string JobId => EnvironmentInfo.GetVariable("APPVEYOR_JOB_ID");
+
     public string JobName => EnvironmentInfo.GetVariable("APPVEYOR_JOB_NAME");
+
     public int JobNumber => EnvironmentInfo.GetVariable<int>("APPVEYOR_JOB_NUMBER");
+
     public string RepositoryProvider => EnvironmentInfo.GetVariable("APPVEYOR_REPO_PROVIDER");
+
     public string RepositoryScm => EnvironmentInfo.GetVariable("APPVEYOR_REPO_SCM");
+
     public string RepositoryName => EnvironmentInfo.GetVariable("APPVEYOR_REPO_NAME");
+
     public string RepositoryBranch => EnvironmentInfo.GetVariable("APPVEYOR_REPO_BRANCH");
+
     public bool RepositoryTag => EnvironmentInfo.GetVariable<bool>("APPVEYOR_REPO_TAG");
+
     public string RepositoryTagName => EnvironmentInfo.GetVariable("APPVEYOR_REPO_TAG_NAME");
+
     public string RepositoryCommitSha => EnvironmentInfo.GetVariable("APPVEYOR_REPO_COMMIT");
+
     public string RepositoryCommitAuthor => EnvironmentInfo.GetVariable("APPVEYOR_REPO_COMMIT_AUTHOR");
+
     public string RepositoryCommitAuthorEmail => EnvironmentInfo.GetVariable("APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL");
+
     public DateTime RepositoryCommitTimestamp => EnvironmentInfo.GetVariable<DateTime>("APPVEYOR_REPO_COMMIT_TIMESTAMP");
+
     public string RepositoryCommitMessage => EnvironmentInfo.GetVariable("APPVEYOR_REPO_COMMIT_MESSAGE");
+
     public string RepositoryCommitMessageExtended => EnvironmentInfo.GetVariable("APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED");
+
     public bool ScheduledBuild => EnvironmentInfo.GetVariable<bool>("APPVEYOR_SCHEDULED_BUILD");
+
     public bool ForcedBuild => EnvironmentInfo.GetVariable<bool>("APPVEYOR_FORCED_BUILD");
+
     public bool Rebuild => EnvironmentInfo.GetVariable<bool>("APPVEYOR_RE_BUILD");
+
     public string Platform => EnvironmentInfo.GetVariable("PLATFORM");
+
     public string Configuration => EnvironmentInfo.GetVariable("CONFIGURATION");
 
     public void UpdateBuildVersion(string version)

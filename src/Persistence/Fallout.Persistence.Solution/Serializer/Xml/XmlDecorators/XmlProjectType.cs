@@ -14,36 +14,36 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     XmlContainer(root, element, Keyword.ProjectType),
     IItemRefDecorator
 {
-    private ItemConfigurationRulesList configurationRules = new ItemConfigurationRulesList();
+    private ItemConfigurationRulesList configurationRules = new();
 
     public Keyword ItemRefAttribute => Keyword.TypeId;
 
     /// <inheritdoc cref="ProjectType.ProjectTypeId"/>
     internal Guid TypeId
     {
-        get => this.GetXmlAttributeGuid(Keyword.TypeId);
-        set => this.UpdateXmlAttributeGuid(Keyword.TypeId, value);
+        get => GetXmlAttributeGuid(Keyword.TypeId);
+        set => UpdateXmlAttributeGuid(Keyword.TypeId, value);
     }
 
     /// <inheritdoc cref="ProjectType.Name"/>
     internal string? Name
     {
-        get => this.GetXmlAttribute(Keyword.Name);
-        set => this.UpdateXmlAttribute(Keyword.Name, value);
+        get => GetXmlAttribute(Keyword.Name);
+        set => UpdateXmlAttribute(Keyword.Name, value);
     }
 
     /// <inheritdoc cref="ProjectType.Extension"/>
     internal string? Extension
     {
-        get => this.GetXmlAttribute(Keyword.Extension);
-        set => this.UpdateXmlAttribute(Keyword.Extension, value);
+        get => GetXmlAttribute(Keyword.Extension);
+        set => UpdateXmlAttribute(Keyword.Extension, value);
     }
 
     /// <inheritdoc cref="ProjectType.BasedOn"/>
     internal string? BasedOn
     {
-        get => this.GetXmlAttribute(Keyword.BasedOn);
-        set => this.UpdateXmlAttribute(Keyword.BasedOn, value);
+        get => GetXmlAttribute(Keyword.BasedOn);
+        set => UpdateXmlAttribute(Keyword.BasedOn, value);
     }
 
     /// <summary>
@@ -55,8 +55,8 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     /// </remarks>
     internal bool IsBuildable
     {
-        get => this.GetXmlAttributeBool(Keyword.IsBuildable, defaultValue: true);
-        set => this.UpdateXmlAttributeBool(Keyword.IsBuildable, value, defaultValue: true);
+        get => GetXmlAttributeBool(Keyword.IsBuildable, defaultValue: true);
+        set => UpdateXmlAttributeBool(Keyword.IsBuildable, value, defaultValue: true);
     }
 
     /// <summary>
@@ -69,8 +69,8 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     /// </remarks>
     internal bool SupportsPlatform
     {
-        get => this.GetXmlAttributeBool(Keyword.SupportsPlatform, defaultValue: true);
-        set => this.UpdateXmlAttributeBool(Keyword.SupportsPlatform, value, defaultValue: true);
+        get => GetXmlAttributeBool(Keyword.SupportsPlatform, defaultValue: true);
+        set => UpdateXmlAttributeBool(Keyword.SupportsPlatform, value, defaultValue: true);
     }
 
     private protected override bool AllowEmptyItemRef => true;
@@ -81,23 +81,23 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     /// </summary>
     private protected override string RawItemRef
     {
-        get => GetItemRef(this.Name, this.Extension, this.TypeId);
+        get => GetItemRef(Name, Extension, TypeId);
         set
         {
             if (value.IsNullOrEmpty())
             {
-                this.Name = null;
-                this.Extension = null;
-                this.TypeId = Guid.Empty;
+                Name = null;
+                Extension = null;
+                TypeId = Guid.Empty;
             }
             else if (value.EndsWith('⁂'))
             {
-                this.Name = null;
-                this.Extension = value.Substring(0, value.Length - 1);
+                Name = null;
+                Extension = value.Substring(0, value.Length - 1);
             }
             else
             {
-                this.Name = value;
+                Name = value;
             }
         }
     }
@@ -105,9 +105,7 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     internal static string GetItemRef(string? name, string? extension, Guid typeId)
     {
         // Return empty string for default project type ItemRef.
-        return name is null && extension is null && typeId == Guid.Empty ?
-            string.Empty :
-            name ?? $"{extension}⁂";
+        return name is null && extension is null && typeId == Guid.Empty ? string.Empty : name ?? $"{extension}⁂";
     }
 
     /// <inheritdoc/>
@@ -115,10 +113,10 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     {
         return elementName switch
         {
-            Keyword.BuildType => new XmlConfigurationBuildType(this.Root, element),
-            Keyword.Platform => new XmlConfigurationPlatform(this.Root, element),
-            Keyword.Build => new XmlConfigurationBuild(this.Root, element),
-            Keyword.Deploy => new XmlConfigurationDeploy(this.Root, element),
+            Keyword.BuildType => new XmlConfigurationBuildType(Root, element),
+            Keyword.Platform => new XmlConfigurationPlatform(Root, element),
+            Keyword.Build => new XmlConfigurationBuild(Root, element),
+            Keyword.Deploy => new XmlConfigurationDeploy(Root, element),
             _ => base.ChildDecoratorFactory(element, elementName),
         };
     }
@@ -129,7 +127,7 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
         switch (childDecorator)
         {
             case XmlConfiguration configuration:
-                this.configurationRules.Add(configuration);
+                configurationRules.Add(configuration);
                 break;
         }
 
@@ -139,7 +137,7 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     /// <inheritdoc/>
     internal override XmlDecorator? FindNextDecorator<TDecorator>()
     {
-        return this.configurationRules.FindNextDecorator<TDecorator>();
+        return configurationRules.FindNextDecorator<TDecorator>();
     }
 
     internal override bool IsValid()
@@ -150,15 +148,15 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     internal ProjectType ToModel()
     {
         ConfigurationRule[] rules =
-            !this.IsBuildable ? ProjectTypeTable.NoBuildRules :
-            !this.SupportsPlatform ? [ProjectTypeTable.NoPlatformsRule, .. this.configurationRules.ToModel()] :
-            /*default*/ [.. this.configurationRules.ToModel()];
+            !IsBuildable ? ProjectTypeTable.NoBuildRules :
+            !SupportsPlatform ? [ProjectTypeTable.NoPlatformsRule, .. configurationRules.ToModel()] :
+            /*default*/ [.. configurationRules.ToModel()];
 
-        return new ProjectType(this.TypeId, rules)
+        return new ProjectType(TypeId, rules)
         {
-            Name = this.GetTableString(this.Name),
-            Extension = this.Extension,
-            BasedOn = this.BasedOn,
+            Name = GetTableString(Name),
+            Extension = Extension,
+            BasedOn = BasedOn,
         };
     }
 
@@ -166,43 +164,43 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
     internal bool ApplyModelToXml(ProjectType modelProjectType)
     {
         bool modified = false;
-        if (!StringComparer.Ordinal.Equals(this.Name, modelProjectType.Name))
+        if (!StringComparer.Ordinal.Equals(Name, modelProjectType.Name))
         {
-            this.Name = modelProjectType.Name;
+            Name = modelProjectType.Name;
             modified = true;
         }
 
-        if (!StringComparer.Ordinal.Equals(this.Extension, modelProjectType.Extension))
+        if (!StringComparer.Ordinal.Equals(Extension, modelProjectType.Extension))
         {
-            this.Extension = modelProjectType.Extension;
+            Extension = modelProjectType.Extension;
             modified = true;
         }
 
-        if (this.TypeId != modelProjectType.ProjectTypeId)
+        if (TypeId != modelProjectType.ProjectTypeId)
         {
-            this.TypeId = modelProjectType.ProjectTypeId;
+            TypeId = modelProjectType.ProjectTypeId;
             modified = true;
         }
 
-        if (this.BasedOn != modelProjectType.BasedOn)
+        if (BasedOn != modelProjectType.BasedOn)
         {
-            this.BasedOn = modelProjectType.BasedOn;
+            BasedOn = modelProjectType.BasedOn;
             modified = true;
         }
 
-        ConfigurationRuleFollower rules = new ConfigurationRuleFollower(modelProjectType.ConfigurationRules);
+        ConfigurationRuleFollower rules = new(modelProjectType.ConfigurationRules);
         bool isBuildable = rules.GetIsBuildable() ?? true;
         bool supportsPlatform = rules.GetProjectPlatform() != PlatformNames.Missing;
 
-        if (this.IsBuildable != isBuildable)
+        if (IsBuildable != isBuildable)
         {
-            this.IsBuildable = isBuildable;
+            IsBuildable = isBuildable;
             modified = true;
         }
 
-        if (this.SupportsPlatform != supportsPlatform)
+        if (SupportsPlatform != supportsPlatform)
         {
-            this.SupportsPlatform = supportsPlatform;
+            SupportsPlatform = supportsPlatform;
             modified = true;
         }
 
@@ -212,7 +210,7 @@ internal sealed class XmlProjectType(SlnxFile root, XmlElement element) :
             !supportsPlatform ? RemovePlatformRules(modelProjectType.ConfigurationRules) :
             modelProjectType.ConfigurationRules;
 
-        modified |= this.configurationRules.ApplyModelToXml(this, rulesToApply);
+        modified |= configurationRules.ApplyModelToXml(this, rulesToApply);
         return modified;
 
         // Remove any platform rules from the list.

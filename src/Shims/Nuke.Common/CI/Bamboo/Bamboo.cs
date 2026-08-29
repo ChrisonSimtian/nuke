@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.Bamboo;
 
 public static class Bamboo
 {
-    public static global::Fallout.Common.CI.Bamboo.Bamboo Instance
-        => global::Fallout.Common.CI.Bamboo.Bamboo.Instance;
+    public static Fallout.Common.CI.Bamboo.Bamboo Instance
+        => Fallout.Common.CI.Bamboo.Bamboo.Instance;
 }

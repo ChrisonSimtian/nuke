@@ -24,16 +24,32 @@ public class BuildGraphUtilitySpecs
     // A representative graph exercising every emitted field and relation kind.
     private static IReadOnlyCollection<ExecutableTarget> SampleGraph()
     {
-        var restore = new ExecutableTarget { Name = "Restore", Listed = true };
+        var restore = new ExecutableTarget
+        {
+            Name = "Restore",
+            Listed = true
+        };
+
         var compile = new ExecutableTarget
-                      {
-                          Name = "Compile",
-                          Description = "Builds all projects",
-                          Listed = true,
-                          Member = MemberOf(nameof(SampleBuild.Compile)),
-                      };
-        var test = new ExecutableTarget { Name = "Test", Listed = true, IsDefault = true };
-        var publish = new ExecutableTarget { Name = "Publish", Listed = false };
+        {
+            Name = "Compile",
+            Description = "Builds all projects",
+            Listed = true,
+            Member = MemberOf(nameof(SampleBuild.Compile)),
+        };
+
+        var test = new ExecutableTarget
+        {
+            Name = "Test",
+            Listed = true,
+            IsDefault = true
+        };
+
+        var publish = new ExecutableTarget
+        {
+            Name = "Publish",
+            Listed = false
+        };
 
         compile.ExecutionDependencies.Add(restore);
         test.ExecutionDependencies.Add(compile);
@@ -42,7 +58,13 @@ public class BuildGraphUtilitySpecs
         compile.Triggers.Add(publish);
 
         // Deliberately unsorted so the ordinal ordering guarantee is exercised.
-        return new[] { test, publish, compile, restore };
+        return new[]
+        {
+            test,
+            publish,
+            compile,
+            restore
+        };
     }
 
     [Fact]
@@ -86,12 +108,30 @@ public class BuildGraphUtilitySpecs
     [Fact]
     public void Dependency_lists_are_ordered_ordinally()
     {
-        var target = new ExecutableTarget { Name = "Root" };
-        target.ExecutionDependencies.Add(new ExecutableTarget { Name = "Zebra" });
-        target.ExecutionDependencies.Add(new ExecutableTarget { Name = "Alpha" });
-        target.ExecutionDependencies.Add(new ExecutableTarget { Name = "Mango" });
+        var target = new ExecutableTarget
+        {
+            Name = "Root"
+        };
 
-        var model = BuildGraphUtility.GetModel(new[] { target }, SampleVersion).Targets.Single();
+        target.ExecutionDependencies.Add(new ExecutableTarget
+        {
+            Name = "Zebra"
+        });
+
+        target.ExecutionDependencies.Add(new ExecutableTarget
+        {
+            Name = "Alpha"
+        });
+
+        target.ExecutionDependencies.Add(new ExecutableTarget
+        {
+            Name = "Mango"
+        });
+
+        var model = BuildGraphUtility.GetModel(new[]
+        {
+            target
+        }, SampleVersion).Targets.Single();
 
         model.DependsOn.Should().Equal("Alpha", "Mango", "Zebra");
     }
@@ -127,6 +167,7 @@ public class BuildGraphUtilitySpecs
 
         var restore = doc.RootElement.GetProperty("targets").EnumerateArray()
             .Single(x => x.GetProperty("name").GetString() == "Restore");
+
         restore.GetProperty("description").ValueKind.Should().Be(JsonValueKind.Null);
         restore.GetProperty("declaredIn").ValueKind.Should().Be(JsonValueKind.Null);
     }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Fallout.CodeGeneration.Model;
+﻿using Fallout.CodeGeneration.Model;
 
 namespace Fallout.CodeGeneration.Writers;
 
@@ -13,5 +11,6 @@ public class DataClassWriter : IWriterWrapper
     }
 
     public DataClass DataClass { get; }
+
     public IWriter Writer { get; }
 }

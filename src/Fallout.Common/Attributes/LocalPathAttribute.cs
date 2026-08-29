@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Fallout.Common.IO;
 
@@ -44,6 +43,7 @@ public class LocalPathAttribute : ToolInjectionAttributeBase
         var toolPath = PathConstruction.HasPathRoot(absoluteOrRelativePath)
             ? absoluteOrRelativePath
             : Path.Combine(Build.RootDirectory, absoluteOrRelativePath);
+
         return ToolResolver.GetTool(toolPath);
     }
 }

@@ -51,6 +51,7 @@ public static class TwitterTasks
                 { "oauth_token", accessToken },
                 { "oauth_version", "1.0" }
             };
+
         data.AddPair("oauth_signature", GetOAuthSignature(data, Url, consumerSecret, accessTokenSecret));
 
         var authorization = GetOAuthHeader(data);
@@ -65,15 +66,26 @@ public static class TwitterTasks
         Assert.True(response.StatusCode == HttpStatusCode.OK, $"StatusCode != 200 - '{GetErrorFromBody(responseBody)}'");
     }
 
-    private static string GetOAuthSignature(Dictionary<string, string> data, string url, string consumerSecret, string tokenSecret)
+    private static string GetOAuthSignature(Dictionary<string, string> data, string url, string consumerSecret,
+        string tokenSecret)
     {
-        var signature = new[] { "POST", Uri.EscapeDataString(url) }
+        var signature = new[]
+            {
+                "POST",
+                Uri.EscapeDataString(url)
+            }
             .Concat(Uri.EscapeDataString(data
                 .Select(x => $"{Uri.EscapeDataString(x.Key)}={Uri.EscapeDataString(x.Value)}")
                 .OrderBy(x => x)
                 .JoinAmpersand()))
             .JoinAmpersand();
-        var cryptoKey = Encoding.ASCII.GetBytes(new[] { consumerSecret, tokenSecret }.JoinAmpersand());
+
+        var cryptoKey = Encoding.ASCII.GetBytes(new[]
+        {
+            consumerSecret,
+            tokenSecret
+        }.JoinAmpersand());
+
         var cryptoTransform = new HMACSHA1(cryptoKey);
         return Convert.ToBase64String(cryptoTransform.ComputeHash(Encoding.ASCII.GetBytes(signature)));
     }
@@ -93,7 +105,9 @@ public static class TwitterTasks
             var jResponse = JsonNode.Parse(response).NotNull().AsObject();
             var message = jResponse["errors"].NotNull().AsArray()[0].NotNull()["message"]?.GetValue<string>();
             if (!string.IsNullOrEmpty(message))
+            {
                 return message;
+            }
         }
         catch
         {

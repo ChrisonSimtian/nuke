@@ -26,7 +26,8 @@ internal static class CodeAnalysisExtensions
         return node.WithArgumentList(ArgumentList(SeparatedList(expressions.Select(Argument))));
     }
 
-    public static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax node, IEnumerable<ExpressionSyntax> expressions)
+    public static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax node,
+        IEnumerable<ExpressionSyntax> expressions)
     {
         return node.WithArguments(expressions.ToArray());
     }
@@ -65,7 +66,9 @@ internal static class CodeAnalysisExtensions
 
     public static TypeSyntax GetSingleGenericArgumentOrNull(this InvocationExpressionSyntax invocationExpression)
     {
-        return invocationExpression.Expression is GenericNameSyntax genericName ? genericName.TypeArgumentList.Arguments.Single() : null;
+        return invocationExpression.Expression is GenericNameSyntax genericName
+            ? genericName.TypeArgumentList.Arguments.Single()
+            : null;
     }
 
     public static T GetSingleArgument<T>(this InvocationExpressionSyntax invocationExpression)
@@ -82,7 +85,7 @@ internal static class CodeAnalysisExtensions
 
     public static T GetConstantValue<T>(this LiteralExpressionSyntax literalExpression)
     {
-        return (T) literalExpression.Token.Value;
+        return (T)literalExpression.Token.Value;
     }
 
     public static VariableDeclaratorSyntax GetSingleDeclarator(this FieldDeclarationSyntax fieldDeclaration)
@@ -106,13 +109,19 @@ internal static class CodeAnalysisExtensions
 
         if (expression is MemberAccessExpressionSyntax memberAccessExpression &&
             memberAccessExpression.Expression is IdentifierNameSyntax identifierName)
+        {
             return ParseTypeName(identifierName.Identifier.Text);
+        }
 
         if (expression is ObjectCreationExpressionSyntax objectCreationExpression)
+        {
             return objectCreationExpression.Type;
+        }
 
         if (expression is ArrayCreationExpressionSyntax arrayCreationExpression)
+        {
             return arrayCreationExpression.Type;
+        }
 
         return ParseTypeName("object");
     }

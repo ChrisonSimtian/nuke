@@ -18,15 +18,16 @@ internal readonly struct ProjectConfigMapping(string buildType, string platform,
 
     internal bool Deploy { get; init; } = deploy;
 
-    internal readonly bool IsValidBuildType => !string.IsNullOrEmpty(this.BuildType) && this.BuildType != BuildTypeNames.All;
+    internal readonly bool IsValidBuildType => !string.IsNullOrEmpty(BuildType) && BuildType != BuildTypeNames.All;
 
-    internal readonly bool IsValidPlatform => !string.IsNullOrEmpty(this.Platform) && this.Platform != PlatformNames.All;
+    internal readonly bool IsValidPlatform => !string.IsNullOrEmpty(Platform) && Platform != PlatformNames.All;
 
     internal readonly bool IsSame(in ProjectConfigMapping other)
     {
-        return other.Build == this.Build &&
-            other.Deploy == this.Deploy &&
-            StringComparer.Ordinal.Equals(this.BuildType, other.BuildType) &&
-            (this.Platform == other.Platform || StringComparer.Ordinal.Equals(PlatformNames.Canonical(this.Platform), PlatformNames.Canonical(other.Platform)));
+        return other.Build == Build &&
+               other.Deploy == Deploy &&
+               StringComparer.Ordinal.Equals(BuildType, other.BuildType) &&
+               (Platform == other.Platform || StringComparer.Ordinal.Equals(PlatformNames.Canonical(Platform),
+                   PlatformNames.Canonical(other.Platform)));
     }
 }

@@ -9,22 +9,22 @@ namespace Fallout.Persistence.Solution.Serializer.Xml.XmlDecorators;
 /// <summary>
 /// Represents a collection of properties. Can be a child of a Solution, Project or Folder.
 /// </summary>
-internal sealed partial class XmlProperties(SlnxFile root, XmlElement element) :
+internal sealed class XmlProperties(SlnxFile root, XmlElement element) :
     XmlContainer(root, element, Keyword.Properties),
     IItemRefDecorator
 {
-    private ItemRefList<XmlProperty> properties = new ItemRefList<XmlProperty>(ignoreCase: true);
+    private ItemRefList<XmlProperty> properties = new(ignoreCase: true);
 
     public Keyword ItemRefAttribute => Keyword.Name;
 
-    internal string Name => this.ItemRef;
+    internal string Name => ItemRef;
 
     private protected override bool AllowEmptyItemRef => true;
 
     private PropertiesScope Scope
     {
-        get => StringToScope(this.GetXmlAttribute(Keyword.Scope) ?? string.Empty);
-        set => this.UpdateXmlAttribute(Keyword.Scope, isDefault: value == PropertiesScope.PreLoad, value, ScopeToString);
+        get => StringToScope(GetXmlAttribute(Keyword.Scope) ?? string.Empty);
+        set => UpdateXmlAttribute(Keyword.Scope, isDefault: value == PropertiesScope.PreLoad, value, ScopeToString);
     }
 
     /// <inheritdoc/>
@@ -32,7 +32,7 @@ internal sealed partial class XmlProperties(SlnxFile root, XmlElement element) :
     {
         return elementName switch
         {
-            Keyword.Property => new XmlProperty(this.Root, element),
+            Keyword.Property => new XmlProperty(Root, element),
             _ => base.ChildDecoratorFactory(element, elementName),
         };
     }
@@ -43,7 +43,7 @@ internal sealed partial class XmlProperties(SlnxFile root, XmlElement element) :
         switch (childDecorator)
         {
             case XmlProperty property:
-                this.properties.Add(property);
+                properties.Add(property);
                 break;
         }
 
@@ -62,7 +62,7 @@ internal sealed partial class XmlProperties(SlnxFile root, XmlElement element) :
         try
         {
             // Even if there are no properties in this property table, create a model entry so the xml isn't deleted.
-            SolutionPropertyBag propertyBag = model.AddProperties(id: this.Name, scope: this.Scope);
+            SolutionPropertyBag propertyBag = model.AddProperties(id: Name, scope: Scope);
             foreach (XmlProperty properties in this.properties.GetItems())
             {
                 propertyBag.Add(properties.Name, properties.Value);
@@ -82,16 +82,16 @@ internal sealed partial class XmlProperties(SlnxFile root, XmlElement element) :
         bool modified = false;
 
         // Scope
-        if (this.Scope != modelProperties.Scope)
+        if (Scope != modelProperties.Scope)
         {
-            this.Scope = modelProperties.Scope;
+            Scope = modelProperties.Scope;
             modified = true;
         }
 
         // Properties
-        modified |= this.ApplyModelItemsToXml(
+        modified |= ApplyModelItemsToXml(
             modelItems: modelProperties.ToList(property => (ItemRef: property.Key, Item: property.Value)),
-            decoratorItems: ref this.properties,
+            decoratorItems: ref properties,
             decoratorElementName: Keyword.Property,
             applyModelToXml: static (newProperty, newValue) => newProperty.ApplyModelToXml(newValue));
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fallout.Common.Utilities;
@@ -8,12 +7,19 @@ namespace Fallout.Common.CI.TeamCity.Configuration;
 public class TeamCityConfigurationParameter : TeamCityParameter
 {
     public TeamCityParameterType Type { get; set; }
+
     public string Name { get; set; }
+
     public string Description { get; set; }
+
     public TeamCityParameterDisplay Display { get; set; }
+
     public string DefaultValue { get; set; }
+
     public IReadOnlyDictionary<string, object> Options { get; set; }
+
     public bool AllowMultiple { get; set; }
+
     public string ValueSeparator { get; set; }
 
     public override void Write(CustomFileWriter writer)
@@ -25,7 +31,9 @@ public class TeamCityConfigurationParameter : TeamCityParameter
             writer.WriteLine($"label = {Name.DoubleQuote()},");
 
             if (Description != null)
+            {
                 writer.WriteLine($"description = {Description.DoubleQuote()},");
+            }
 
             writer.WriteLine($"value = {DefaultValue.DoubleQuote()},");
 
@@ -48,7 +56,9 @@ public class TeamCityConfigurationParameter : TeamCityParameter
             }
 
             if (Options == null && Type != TeamCityParameterType.Checkbox && Type != TeamCityParameterType.Password)
+            {
                 writer.WriteLine($"allowEmpty = {(Display != TeamCityParameterDisplay.Prompt).ToString().ToLowerInvariant()},");
+            }
 
             writer.WriteLine($"display = ParameterDisplay.{Display.ToString().ToUpperInvariant()})");
         }

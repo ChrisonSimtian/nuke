@@ -15,21 +15,21 @@ internal sealed class LineInfoXmlDocument : XmlDocument
 
     public override XmlElement CreateElement(string? prefix, string localName, string? namespaceURI)
     {
-        return this.xmlLineInfo is not null && this.xmlLineInfo.HasLineInfo() ?
-            new LineInfoXmlElement(prefix, localName, namespaceURI, this, this.xmlLineInfo.LineNumber, this.xmlLineInfo.LinePosition) :
-            new LineInfoXmlElement(prefix, localName, namespaceURI, this);
+        return xmlLineInfo is not null && xmlLineInfo.HasLineInfo()
+            ? new LineInfoXmlElement(prefix, localName, namespaceURI, this, xmlLineInfo.LineNumber, xmlLineInfo.LinePosition)
+            : new LineInfoXmlElement(prefix, localName, namespaceURI, this);
     }
 
     public override void Load(XmlReader reader)
     {
-        this.xmlLineInfo = reader as IXmlLineInfo;
+        xmlLineInfo = reader as IXmlLineInfo;
         try
         {
             base.Load(reader);
         }
         finally
         {
-            this.xmlLineInfo = null;
+            xmlLineInfo = null;
         }
     }
 
@@ -46,9 +46,9 @@ internal sealed class LineInfoXmlDocument : XmlDocument
         internal LineInfoXmlElement(string? prefix, string localName, string? namespaceURI, XmlDocument doc, int line, int column)
             : base(prefix, localName, namespaceURI, doc)
         {
-            this.hasLineInfo = true;
-            this.LineNumber = line;
-            this.LinePosition = column;
+            hasLineInfo = true;
+            LineNumber = line;
+            LinePosition = column;
         }
 
         /// <inheritdoc/>
@@ -58,6 +58,6 @@ internal sealed class LineInfoXmlDocument : XmlDocument
         public int LinePosition { get; }
 
         /// <inheritdoc/>
-        public bool HasLineInfo() => this.hasLineInfo;
+        public bool HasLineInfo() => hasLineInfo;
     }
 }

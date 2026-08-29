@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using FluentAssertions;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities.Collections;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -35,6 +35,7 @@ public class MoveCopySpecs : FileSystemDependentSpecs
         source.WriteAllText("fizzbuzz");
         source.Copy(target, policy: ExistsPolicy.FileOverwrite)
             .Should().Be(target);
+
         target.ReadAllText().Should().Be("fizzbuzz");
     }
 
@@ -72,6 +73,7 @@ public class MoveCopySpecs : FileSystemDependentSpecs
             source / "sub" / "source3.txt",
             source / "sub" / "source4.txt",
         };
+
         sourceFiles.ForEach(x => x.WriteAllText("source"));
 
         var target = TestTempDirectory / "target";
@@ -87,6 +89,7 @@ public class MoveCopySpecs : FileSystemDependentSpecs
 
         new Action(() => source.Copy(target, ExistsPolicy.DirectoryFail))
             .Should().Throw<Exception>().WithMessage("Policy disallows merging directories");
+
         target.GetFiles(depth: int.MaxValue).Should().HaveCount(3);
 
         source.Copy(target, ExistsPolicy.MergeAndSkip);
@@ -107,12 +110,13 @@ public class MoveCopySpecs : FileSystemDependentSpecs
     {
         var source = TestTempDirectory / "source";
         var sourceFiles = new[]
-                          {
-                              source / "source1.txt",
-                              source / "source2.txt",
-                              source / "sub" / "source3.txt",
-                              source / "sub" / "source4.txt",
-                          };
+        {
+            source / "source1.txt",
+            source / "source2.txt",
+            source / "sub" / "source3.txt",
+            source / "sub" / "source4.txt",
+        };
+
         sourceFiles.ForEach(x => x.WriteAllText("source"));
 
         var target = TestTempDirectory / "target";
@@ -126,6 +130,7 @@ public class MoveCopySpecs : FileSystemDependentSpecs
 
         source.Move(target, ExistsPolicy.MergeAndSkip, deleteRemainingFiles: true)
             .Should().Be(target);
+
         source.DirectoryExists().Should().BeFalse();
     }
 }

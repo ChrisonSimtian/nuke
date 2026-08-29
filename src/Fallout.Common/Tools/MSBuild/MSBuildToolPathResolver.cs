@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,7 +8,11 @@ namespace Fallout.Common.Tools.MSBuild;
 
 public static class MSBuildToolPathResolver
 {
-    private static readonly MSBuildPlatform[] platforms = { MSBuildPlatform.x86, MSBuildPlatform.x64 };
+    private static readonly MSBuildPlatform[] platforms =
+    {
+        MSBuildPlatform.x86,
+        MSBuildPlatform.x64
+    };
 
     public static string Resolve(MSBuildVersion? msBuildVersion = null, MSBuildPlatform? msBuildPlatform = null)
     {
@@ -17,7 +20,8 @@ public static class MSBuildToolPathResolver
             .NotNull("Could not find a suitable MSBuild instance.");
     }
 
-    private static IEnumerable<string> ResolveInternal(MSBuildVersion? msBuildVersion = null, MSBuildPlatform? msBuildPlatform = null)
+    private static IEnumerable<string> ResolveInternal(MSBuildVersion? msBuildVersion = null,
+        MSBuildPlatform? msBuildPlatform = null)
     {
         Assert.True(!EnvironmentInfo.IsUnix || msBuildVersion == null);
         Assert.True(!EnvironmentInfo.IsUnix || msBuildPlatform == null);
@@ -25,24 +29,34 @@ public static class MSBuildToolPathResolver
         if (EnvironmentInfo.IsUnix)
         {
             return new[]
-                   {
-                       "/usr/bin/msbuild",
-                       "/usr/local/bin/msbuild",
-                       "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild"
-                   }.Where(File.Exists);
+            {
+                "/usr/bin/msbuild",
+                "/usr/local/bin/msbuild",
+                "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild"
+            }.Where(File.Exists);
         }
 
         var instances = new List<Instance>();
 
         instances.AddRange(
-            from version in new[] { MSBuildVersion.VS2026, MSBuildVersion.VS2022, MSBuildVersion.VS2019, MSBuildVersion.VS2017 }
+            from version in new[]
+            {
+                MSBuildVersion.VS2026,
+                MSBuildVersion.VS2022,
+                MSBuildVersion.VS2019,
+                MSBuildVersion.VS2017
+            }
             from platform in platforms
             from edition in typeof(VisualStudioEdition).GetEnumValues<VisualStudioEdition>()
             let folder = GetProgramFilesFolder(version, edition)
             select GetFromVs2017Instance(version, platform, edition, folder));
 
         instances.AddRange(
-            from version in new[] { MSBuildVersion.VS2015, MSBuildVersion.VS2013 }
+            from version in new[]
+            {
+                MSBuildVersion.VS2015,
+                MSBuildVersion.VS2013
+            }
             from platform in platforms
             select GetVs2013To2015Instance(platform, version));
 
@@ -117,7 +131,6 @@ public static class MSBuildToolPathResolver
         };
     }
 
-
     private static string GetVersionFolder(MSBuildVersion version)
     {
         return version switch
@@ -140,7 +153,9 @@ public static class MSBuildToolPathResolver
         }
 
         public MSBuildPlatform Platform { get; }
+
         public MSBuildVersion Version { get; }
+
         public string ToolPath { get; }
     }
 

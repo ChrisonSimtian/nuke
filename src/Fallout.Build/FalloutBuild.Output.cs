@@ -10,10 +10,14 @@ partial class FalloutBuild
     internal void WriteLogo()
     {
         if (IsInterceptorExecution)
+        {
             return;
+        }
 
         if (IsOutputEnabled(DefaultOutput.Logo))
+        {
             Host.WriteLogo();
+        }
 
         Host.Information($"Fallout Execution Engine {typeof(FalloutBuild).Assembly.GetInformationalText()}");
         Host.Information();
@@ -25,11 +29,15 @@ partial class FalloutBuild
             Host.GetType().GetMethod(nameof(Host.WriteBlock), ReflectionUtility.Instance | BindingFlags.DeclaredOnly) != null;
 
         if (IsInterceptorExecution)
+        {
             return DelegateDisposable.CreateBracket();
+        }
 
-        if (IsOutputEnabled(DefaultOutput.TargetHeader) && !CanCollapse() ||
-            IsOutputEnabled(DefaultOutput.TargetCollapse) && CanCollapse())
+        if ((IsOutputEnabled(DefaultOutput.TargetHeader) && !CanCollapse()) ||
+            (IsOutputEnabled(DefaultOutput.TargetCollapse) && CanCollapse()))
+        {
             return Host.WriteBlock(target);
+        }
 
         return DelegateDisposable.CreateBracket();
     }
@@ -37,28 +45,40 @@ partial class FalloutBuild
     internal void WriteErrorsAndWarnings()
     {
         if (IsInterceptorExecution)
+        {
             return;
+        }
 
         if (IsOutputEnabled(DefaultOutput.ErrorsAndWarnings))
+        {
             Host.WriteErrorsAndWarnings();
+        }
     }
 
     internal void WriteTargetOutcome()
     {
         if (IsInterceptorExecution)
+        {
             return;
+        }
 
         if (IsOutputEnabled(DefaultOutput.TargetOutcome))
+        {
             Host.WriteTargetOutcome(this);
+        }
     }
 
     internal void WriteBuildOutcome()
     {
         if (IsInterceptorExecution)
+        {
             return;
+        }
 
         if (IsOutputEnabled(DefaultOutput.BuildOutcome))
+        {
             Host.WriteBuildOutcome(this);
+        }
     }
 
     private bool IsOutputEnabled(DefaultOutput output)

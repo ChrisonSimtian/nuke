@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Nodes;
-using ICSharpCode.SharpZipLib.Zip;
-using NuGet.Packaging;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
+using ICSharpCode.SharpZipLib.Zip;
+using NuGet.Packaging;
 using Serilog;
 
 namespace Fallout.Common.Execution;
@@ -20,7 +19,9 @@ public class HandleSingleFileExecutionAttribute : BuildExtensionAttributeBase, I
     public void OnBuildCreated(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {
         if (!IsSingleFileExecution)
+        {
             return;
+        }
 
         InstallDotNetRuntime();
         ExtractPackageFiles();
@@ -29,9 +30,13 @@ public class HandleSingleFileExecutionAttribute : BuildExtensionAttributeBase, I
     private static void ExtractPackageFiles()
     {
         var executingAssembly = Assembly.GetEntryAssembly().NotNull();
-        var packageResourceNames = executingAssembly.GetManifestResourceNames().Where(x => x.EndsWithOrdinalIgnoreCase("nupkg")).ToList();
+        var packageResourceNames = executingAssembly.GetManifestResourceNames().Where(x => x.EndsWithOrdinalIgnoreCase("nupkg"))
+            .ToList();
+
         if (!packageResourceNames.Any())
+        {
             return;
+        }
 
         var globalPackagesDirectory = Constants.GlobalFalloutDirectory / "packages";
         Log.Information("Extracting packages to {PackagesDirectory}", globalPackagesDirectory);
@@ -43,7 +48,8 @@ public class HandleSingleFileExecutionAttribute : BuildExtensionAttributeBase, I
             var packageResourceStream = executingAssembly.GetManifestResourceStream(packageResourceName).NotNull();
             var packageArchiveReader = new PackageArchiveReader(packageResourceStream);
             var nuspecReader = packageArchiveReader.NuspecReader;
-            var packageFile = globalPackagesDirectory / nuspecReader.GetId() / nuspecReader.GetVersion().ToString() / packageResourceName;
+            var packageFile = globalPackagesDirectory / nuspecReader.GetId() / nuspecReader.GetVersion().ToString() /
+                              packageResourceName;
 
             packageResourceStream.Seek(offset: 0, SeekOrigin.Begin);
             packageResourceStream.CopyToFile(packageFile);
@@ -97,6 +103,7 @@ public class HandleSingleFileExecutionAttribute : BuildExtensionAttributeBase, I
     private bool IsSingleFileExecution => Assembly.GetEntryAssembly().NotNull().Location == string.Empty;
 
     private string ScriptFileName => EnvironmentInfo.IsWin ? "dotnet-install.ps1" : "dotnet-install.sh";
+
     private AbsolutePath ScriptFile => Constants.GlobalFalloutDirectory / ScriptFileName;
 
     private string GetDotNetRuntimeVersion()

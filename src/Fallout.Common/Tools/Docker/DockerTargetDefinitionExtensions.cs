@@ -26,7 +26,8 @@ public static class DockerTargetDefinitionExtensions
     /// <summary>
     /// Execute this target within a Docker container
     /// </summary>
-    public static ITargetDefinition DockerRun(this ITargetDefinition targetDefinition, Configure<DockerRunTargetSettings> configurator)
+    public static ITargetDefinition DockerRun(this ITargetDefinition targetDefinition,
+        Configure<DockerRunTargetSettings> configurator)
     {
         var definition = (TargetDefinition)targetDefinition;
         var build = definition.Build;
@@ -34,7 +35,9 @@ public static class DockerTargetDefinitionExtensions
         definition.Intercept = () =>
         {
             if (build.IsInterceptorExecution)
+            {
                 return false;
+            }
 
             var settings = configurator.InvokeSafe(new DockerRunTargetSettings());
             settings.DotNetRuntime.NotNull();
@@ -46,7 +49,8 @@ public static class DockerTargetDefinitionExtensions
             bool IsUpToDate() => build.BuildAssemblyDirectory.GlobFiles("*.dll")
                 .Select(x => build.BuildAssemblyDirectory.GetRelativePathTo(x))
                 .All(x => File.Exists(buildAssemblyDirectory / x) &&
-                          File.GetLastWriteTime(buildAssemblyDirectory / x) >= File.GetLastWriteTime(build.BuildAssemblyDirectory / x));
+                          File.GetLastWriteTime(buildAssemblyDirectory / x) >=
+                          File.GetLastWriteTime(build.BuildAssemblyDirectory / x));
 
             if ((!settings.BuildCaching ?? true) || !IsUpToDate())
             {
@@ -73,6 +77,7 @@ public static class DockerTargetDefinitionExtensions
             var (rootDirectory, nugetDirectory) = settings.Platform.StartsWithOrdinalIgnoreCase("win")
                 ? (WindowsRootDirectory, WindowsNuGetDirectory)
                 : (UnixRootDirectory, UnixNuGetDirectory);
+
             var localTempDirectory = build.TemporaryDirectory / "docker" / definition.Name;
             var tempDirectory = rootDirectory / build.RootDirectory.GetRelativePathTo(localTempDirectory);
             var envFile = buildAssemblyDirectory / $".env.{definition.Name}";
@@ -80,6 +85,7 @@ public static class DockerTargetDefinitionExtensions
 
             envFile.WriteAllLines(environmentVariables.Where(x => x.Value != null).Select(x => $"{x.Key}={x.Value}")
                 .Concat(environmentVariables.Where(x => x.Value == null).Select(x => x.Key)));
+
             localTempDirectory.CreateOrCleanDirectory();
 
             if (!settings.Username.IsNullOrEmpty())
@@ -100,16 +106,17 @@ public static class DockerTargetDefinitionExtensions
                     .When(!settings.Rm.HasValue, _ => _
                         .EnableRm())
                     .AddVolume($"{build.RootDirectory}:{rootDirectory}")
-                    .AddVolume($"{NuGetPackageResolver.GetPackagesDirectory(NuGetToolPathResolver.NuGetPackagesConfigFile)}:{nugetDirectory}")
+                    .AddVolume(
+                        $"{NuGetPackageResolver.GetPackagesDirectory(NuGetToolPathResolver.NuGetPackagesConfigFile)}:{nugetDirectory}")
                     .SetPlatform(settings.Platform)
                     .SetWorkdir(rootDirectory)
                     .SetEnvFile(envFile)
                     .SetEntrypoint(rootDirectory / build.RootDirectory.GetRelativePathTo(buildAssembly))
                     .SetArgs(new[]
-                             {
-                                 definition.Target.Name,
-                                 $"--{ParameterService.GetParameterDashedName(Constants.SkippedTargetsParameterName)}"
-                             }.Concat(settings.Args))
+                    {
+                        definition.Target.Name,
+                        $"--{ParameterService.GetParameterDashedName(Constants.SkippedTargetsParameterName)}"
+                    }.Concat(settings.Args))
                     .DisableProcessInvocationLogging()
                     .SetProcessLogger((_, message) =>
                     {
@@ -126,7 +133,9 @@ public static class DockerTargetDefinitionExtensions
             finally
             {
                 if (!settings.KeepEnvFile ?? true)
+                {
                     File.Delete(envFile);
+                }
             }
 
             return true;

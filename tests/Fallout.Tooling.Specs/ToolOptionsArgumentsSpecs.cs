@@ -4,67 +4,116 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using FluentAssertions;
 using Fallout.Common.Tooling;
-using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
 
 public class ToolOptionsArgumentsSpecs
 {
-    [Fact] public void TestBool_Simple() => Assert<BoolToolOptions>(new { Bool = true }, ["/bool:true",]);
-    [Fact] public void TestBool_FlagTrue() => Assert<BoolToolOptions>(new { Flag = true }, ["/flag"]);
-    [Fact] public void TestBool_FlagFalse() => Assert<BoolToolOptions>(new { Flag = false }, []);
+    [Fact]
+    public void TestBool_Simple() => Assert<BoolToolOptions>(new
+    {
+        Bool = true
+    }, ["/bool:true",]);
+
+    [Fact]
+    public void TestBool_FlagTrue() => Assert<BoolToolOptions>(new
+    {
+        Flag = true
+    }, ["/flag"]);
+
+    [Fact]
+    public void TestBool_FlagFalse() => Assert<BoolToolOptions>(new
+    {
+        Flag = false
+    }, []);
 
     private class BoolToolOptions : ToolOptions
     {
-        [Argument(Format = "/bool:{value}")] public bool Bool => Get<bool>(() => Bool);
-        [Argument(Format = "/flag")] public bool? Flag => Get<bool>(() => Flag);
+        [Argument(Format = "/bool:{value}")]
+        public bool Bool => Get<bool>(() => Bool);
+
+        [Argument(Format = "/flag")]
+        public bool? Flag => Get<bool>(() => Flag);
     }
 
-    [Fact] public void TestString_Simple() => Assert<StringToolOptions>(new { String = "value" }, ["--string", "value"]);
-    [Fact] public void TestString_Quoted() => Assert<StringToolOptions>(new { String = "white space" }, ["--string", "\"white space\""]);
+    [Fact]
+    public void TestString_Simple() => Assert<StringToolOptions>(new
+    {
+        String = "value"
+    }, ["--string", "value"]);
+
+    [Fact]
+    public void TestString_Quoted() => Assert<StringToolOptions>(new
+    {
+        String = "white space"
+    }, ["--string", "\"white space\""]);
 
     [Fact]
     public void TestString_Secret()
     {
-        var options = SetInternalOptions<StringToolOptions>(new { Secret = "secret-value" });
+        var options = SetInternalOptions<StringToolOptions>(new
+        {
+            Secret = "secret-value"
+        });
+
         options.GetSecrets().Should().Equal("secret-value");
     }
 
     private class StringToolOptions : ToolOptions
     {
-        [Argument(Format = "--string {value}")] public string String => Get<string>(() => String);
-        [Argument(Format = "--secret {value}", Secret = true)] public string Secret => Get<string>(() => Secret);
+        [Argument(Format = "--string {value}")]
+        public string String => Get<string>(() => String);
+
+        [Argument(Format = "--secret {value}", Secret = true)]
+        public string Secret => Get<string>(() => Secret);
     }
 
-    [Fact] public void TestImplicit() => Assert<ImplicitToolOptions>(new { String = "value" }, ["implicit argument", "--string", "value"]);
+    [Fact]
+    public void TestImplicit() => Assert<ImplicitToolOptions>(new
+    {
+        String = "value"
+    }, ["implicit argument", "--string", "value"]);
 
     [Command(Arguments = "implicit argument")]
     private class ImplicitToolOptions : ToolOptions
     {
-        [Argument(Format = "--string {value}")] public string String => Get<string>(() => String);
+        [Argument(Format = "--string {value}")]
+        public string String => Get<string>(() => String);
     }
 
     [Fact]
     public void TestOrder()
     {
         // ReSharper disable SimilarAnonymousTypeNearby
-        Assert<OrderToolOptions>(new { Flag1 = true, Flag2 = true, }, ["/flag1", "/flag2"]);
-        Assert<OrderToolOptions>(new { Flag2 = true, Flag1 = true, }, ["/flag2", "/flag1"]);
+        Assert<OrderToolOptions>(new
+        {
+            Flag1 = true,
+            Flag2 = true,
+        }, ["/flag1", "/flag2"]);
+
+        Assert<OrderToolOptions>(new
+        {
+            Flag2 = true,
+            Flag1 = true,
+        }, ["/flag2", "/flag1"]);
         // ReSharper restore SimilarAnonymousTypeNearby
     }
 
     private class OrderToolOptions : ToolOptions
     {
-        [Argument(Format = "/flag1")] public bool Flag1 => Get<bool>(() => Flag1);
-        [Argument(Format = "/flag2")] public bool Flag2 => Get<bool>(() => Flag2);
+        [Argument(Format = "/flag1")]
+        public bool Flag1 => Get<bool>(() => Flag1);
+
+        [Argument(Format = "/flag2")]
+        public bool Flag2 => Get<bool>(() => Flag2);
     }
 
-    [Fact] public void TestPosition() => Assert<PositionToolOptions>(
+    [Fact]
+    public void TestPosition() => Assert<PositionToolOptions>(
         new
         {
             SecondToLast = "second-last",
@@ -77,16 +126,39 @@ public class ToolOptionsArgumentsSpecs
 
     private class PositionToolOptions : ToolOptions
     {
-        [Argument(Format = "{value}")] public string Middle => Get<string>(() => Middle);
-        [Argument(Format = "{value}", Position = -1)] public string Last => Get<string>(() => Last);
-        [Argument(Format = "{value}", Position = 1)] public string First => Get<string>(() => First);
-        [Argument(Format = "{value}", Position = 2)] public string Second => Get<string>(() => Second);
-        [Argument(Format = "{value}", Position = -2)] public string SecondToLast => Get<string>(() => SecondToLast);
+        [Argument(Format = "{value}")]
+        public string Middle => Get<string>(() => Middle);
+
+        [Argument(Format = "{value}", Position = -1)]
+        public string Last => Get<string>(() => Last);
+
+        [Argument(Format = "{value}", Position = 1)]
+        public string First => Get<string>(() => First);
+
+        [Argument(Format = "{value}", Position = 2)]
+        public string Second => Get<string>(() => Second);
+
+        [Argument(Format = "{value}", Position = -2)]
+        public string SecondToLast => Get<string>(() => SecondToLast);
     }
 
-    [Fact] public void TestFormatter_Method1() => Assert<FormatToolOptions>(new { Time = DateTime.UnixEpoch.AddHours(1).AddMinutes(15) }, ["01:15"]);
-    [Fact] public void TestFormatter_Method2() => Assert<FormatToolOptions>(new { Date = DateTime.UnixEpoch }, ["01/01/1970"]);
-    [Fact] public void TestFormatter_TypeMethod() => Assert<FormatToolOptions>(new { Minutes = TimeSpan.FromMinutes(10) }, ["10"]);
+    [Fact]
+    public void TestFormatter_Method1() => Assert<FormatToolOptions>(new
+    {
+        Time = DateTime.UnixEpoch.AddHours(1).AddMinutes(15)
+    }, ["01:15"]);
+
+    [Fact]
+    public void TestFormatter_Method2() => Assert<FormatToolOptions>(new
+    {
+        Date = DateTime.UnixEpoch
+    }, ["01/01/1970"]);
+
+    [Fact]
+    public void TestFormatter_TypeMethod() => Assert<FormatToolOptions>(new
+    {
+        Minutes = TimeSpan.FromMinutes(10)
+    }, ["10"]);
 
     private class FormatToolOptions : ToolOptions
     {
@@ -105,60 +177,201 @@ public class ToolOptionsArgumentsSpecs
 
     private static class Formatter
     {
-        public static string FormatMinutes(TimeSpan timespan, PropertyInfo _) => timespan.TotalMinutes.ToString(CultureInfo.InvariantCulture);
+        public static string FormatMinutes(TimeSpan timespan, PropertyInfo _) =>
+            timespan.TotalMinutes.ToString(CultureInfo.InvariantCulture);
     }
 
-    [Fact] public void TestList_Simple() => Assert<ListToolOptions>(new { SimpleList = new[] { "a", "b" } }, ["--param", "a", "--param", "b"]);
-    [Fact] public void TestList_Quoted() => Assert<ListToolOptions>(new { SimpleList = new[] { "white space" } }, ["--param", "\"white space\""]);
-    [Fact] public void TestList_Separator() => Assert<ListToolOptions>(new { SeparatorList = new[] { "a", "b" } }, ["--param", "a+b"]);
-    [Fact] public void TestList_Whitespace() => Assert<ListToolOptions>(new { WhitespaceList = new[] { "a", "b" } }, ["--param", "a", "b"]);
-    [Fact] public void TestList_QuoteMultiple() => Assert<ListToolOptions>(new { QuotedList = new[] { "a", "b" } }, ["--param:\"a b\""]);
-    [Fact] public void TestList_QuoteMultiple_WhitespaceValue() => Assert<ListToolOptions>(new { QuotedList = new[] { "a", "white space" } }, ["--param:\"a \\\"white space\\\"\""]);
-    [Fact] public void TestList_Formatted() => Assert<ListToolOptions>(new { FormattedList = new[] { "true", "false" } }, ["--param=TRUE", "--param=FALSE"]);
+    [Fact]
+    public void TestList_Simple() => Assert<ListToolOptions>(new
+    {
+        SimpleList = new[]
+        {
+            "a",
+            "b"
+        }
+    }, ["--param", "a", "--param", "b"]);
+
+    [Fact]
+    public void TestList_Quoted() => Assert<ListToolOptions>(new
+    {
+        SimpleList = new[]
+        {
+            "white space"
+        }
+    }, ["--param", "\"white space\""]);
+
+    [Fact]
+    public void TestList_Separator() => Assert<ListToolOptions>(new
+    {
+        SeparatorList = new[]
+        {
+            "a",
+            "b"
+        }
+    }, ["--param", "a+b"]);
+
+    [Fact]
+    public void TestList_Whitespace() => Assert<ListToolOptions>(new
+    {
+        WhitespaceList = new[]
+        {
+            "a",
+            "b"
+        }
+    }, ["--param", "a", "b"]);
+
+    [Fact]
+    public void TestList_QuoteMultiple() => Assert<ListToolOptions>(new
+    {
+        QuotedList = new[]
+        {
+            "a",
+            "b"
+        }
+    }, ["--param:\"a b\""]);
+
+    [Fact]
+    public void TestList_QuoteMultiple_WhitespaceValue() => Assert<ListToolOptions>(new
+    {
+        QuotedList = new[]
+        {
+            "a",
+            "white space"
+        }
+    }, ["--param:\"a \\\"white space\\\"\""]);
+
+    [Fact]
+    public void TestList_Formatted() => Assert<ListToolOptions>(new
+    {
+        FormattedList = new[]
+        {
+            "true",
+            "false"
+        }
+    }, ["--param=TRUE", "--param=FALSE"]);
 
     private class ListToolOptions : ToolOptions
     {
-        [Argument(Format = "--param {value}")] public IReadOnlyList<string> SimpleList => Get<List<string>>(() => SimpleList);
-        [Argument(Format = "--param {value}", Separator = "+")] public IReadOnlyList<string> SeparatorList => Get<List<string>>(() => SeparatorList);
-        [Argument(Format = "--param {value}", Separator = " ")] public IReadOnlyList<string> WhitespaceList => Get<List<string>>(() => WhitespaceList);
-        [Argument(Format = "--param:{value}", Separator = " ", QuoteMultiple = true)] public IReadOnlyList<string> QuotedList => Get<List<string>>(() => QuotedList);
-        [Argument(Format = "--param={value}", FormatterMethod = nameof(Format))] public IReadOnlyList<bool> FormattedList => Get<List<bool>>(() => FormattedList);
+        [Argument(Format = "--param {value}")]
+        public IReadOnlyList<string> SimpleList => Get<List<string>>(() => SimpleList);
+
+        [Argument(Format = "--param {value}", Separator = "+")]
+        public IReadOnlyList<string> SeparatorList => Get<List<string>>(() => SeparatorList);
+
+        [Argument(Format = "--param {value}", Separator = " ")]
+        public IReadOnlyList<string> WhitespaceList => Get<List<string>>(() => WhitespaceList);
+
+        [Argument(Format = "--param:{value}", Separator = " ", QuoteMultiple = true)]
+        public IReadOnlyList<string> QuotedList => Get<List<string>>(() => QuotedList);
+
+        [Argument(Format = "--param={value}", FormatterMethod = nameof(Format))]
+        public IReadOnlyList<bool> FormattedList => Get<List<bool>>(() => FormattedList);
 
         private string Format(bool value) => value.ToString().ToUpperInvariant();
     }
 
-    private readonly Dictionary<string, object> _simpleDictionary = new() { ["key1"] = 1, ["key2"] = "foobar" };
+    private readonly Dictionary<string, object> _simpleDictionary = new()
+    {
+        ["key1"] = 1,
+        ["key2"] = "foobar"
+    };
 
-    [Fact] public void TestDictionary_Simple1() => Assert<DictionaryToolOptions>(new { SimpleDictionary = _simpleDictionary }, ["-p", "key1=1", "-p", "key2=foobar"]);
-    [Fact] public void TestDictionary_Simple2() => Assert<DictionaryToolOptions>(new { Simple2Dictionary = _simpleDictionary }, ["-p", "key1", "1", "-p", "key2", "foobar"]);
-    [Fact] public void TestDictionary_Separator() => Assert<DictionaryToolOptions>(new { SeparatorDictionary = _simpleDictionary }, ["/p:key1=1;key2=foobar"]);
-    [Fact] public void TestDictionary_Whitespace() => Assert<DictionaryToolOptions>(new { WhitespaceDictionary = _simpleDictionary }, ["--", "key1=1", "key2=foobar"]);
-    [Fact] public void TestDictionary_Formatted() => Assert<DictionaryToolOptions>(new { FormattedDictionary = _simpleDictionary }, ["/p:key1=1", "/p:key2=FOOBAR"]);
+    [Fact]
+    public void TestDictionary_Simple1() => Assert<DictionaryToolOptions>(new
+    {
+        SimpleDictionary = _simpleDictionary
+    }, ["-p", "key1=1", "-p", "key2=foobar"]);
+
+    [Fact]
+    public void TestDictionary_Simple2() => Assert<DictionaryToolOptions>(new
+    {
+        Simple2Dictionary = _simpleDictionary
+    }, ["-p", "key1", "1", "-p", "key2", "foobar"]);
+
+    [Fact]
+    public void TestDictionary_Separator() => Assert<DictionaryToolOptions>(new
+    {
+        SeparatorDictionary = _simpleDictionary
+    }, ["/p:key1=1;key2=foobar"]);
+
+    [Fact]
+    public void TestDictionary_Whitespace() => Assert<DictionaryToolOptions>(new
+    {
+        WhitespaceDictionary = _simpleDictionary
+    }, ["--", "key1=1", "key2=foobar"]);
+
+    [Fact]
+    public void TestDictionary_Formatted() => Assert<DictionaryToolOptions>(new
+    {
+        FormattedDictionary = _simpleDictionary
+    }, ["/p:key1=1", "/p:key2=FOOBAR"]);
 
     private class DictionaryToolOptions : ToolOptions
     {
-        [Argument(Format = "-p {key}={value}")] public IReadOnlyDictionary<string, object> SimpleDictionary => Get<Dictionary<string, object>>(() => SimpleDictionary);
-        [Argument(Format = "-p {key} {value}")] public IReadOnlyDictionary<string, object> Simple2Dictionary => Get<Dictionary<string, object>>(() => Simple2Dictionary);
-        [Argument(Format = "/p:{key}={value}", Separator = ";")] public IReadOnlyDictionary<string, object> SeparatorDictionary => Get<Dictionary<string, object>>(() => SeparatorDictionary);
-        [Argument(Format = "-- {key}={value}", Separator = " ")] public IReadOnlyDictionary<string, object> WhitespaceDictionary => Get<Dictionary<string, object>>(() => WhitespaceDictionary);
-        [Argument(Format = "/p:{key}={value}", FormatterMethod = nameof(Format))] public IReadOnlyDictionary<string, object> FormattedDictionary => Get<Dictionary<string, object>>(() => FormattedDictionary);
+        [Argument(Format = "-p {key}={value}")]
+        public IReadOnlyDictionary<string, object> SimpleDictionary => Get<Dictionary<string, object>>(() => SimpleDictionary);
+
+        [Argument(Format = "-p {key} {value}")]
+        public IReadOnlyDictionary<string, object> Simple2Dictionary => Get<Dictionary<string, object>>(() => Simple2Dictionary);
+
+        [Argument(Format = "/p:{key}={value}", Separator = ";")]
+        public IReadOnlyDictionary<string, object> SeparatorDictionary =>
+            Get<Dictionary<string, object>>(() => SeparatorDictionary);
+
+        [Argument(Format = "-- {key}={value}", Separator = " ")]
+        public IReadOnlyDictionary<string, object> WhitespaceDictionary =>
+            Get<Dictionary<string, object>>(() => WhitespaceDictionary);
+
+        [Argument(Format = "/p:{key}={value}", FormatterMethod = nameof(Format))]
+        public IReadOnlyDictionary<string, object> FormattedDictionary =>
+            Get<Dictionary<string, object>>(() => FormattedDictionary);
 
         private string Format(object value) => value?.ToString()?.ToUpperInvariant();
     }
 
-    private readonly LookupTable<string, object> _simpleLookupTable = new() { ["key1"] = [1, 2], ["key2"] = [true, false] };
+    private readonly LookupTable<string, object> _simpleLookupTable = new()
+    {
+        ["key1"] = [1, 2],
+        ["key2"] = [true, false]
+    };
 
-    [Fact] public void TestLookup_Simple() => Assert<LookupToolOptions>(new { SimpleLookup = _simpleLookupTable }, ["--param", "key1=1","--param", "key1=2", "--param", "key2=true", "--param", "key2=false"]);
-    [Fact] public void TestLookup_InnerSeparator() => Assert<LookupToolOptions>(new { InnerSeparatorLookup = _simpleLookupTable }, ["--param:key1=1,2", "--param:key2=true,false"]);
-    [Fact] public void TestLookup_Separator() => Assert<LookupToolOptions>(new { SeparatorLookup = _simpleLookupTable }, ["--param:key1=1,2;key2=true,false"]);
-    [Fact] public void TestLookup_Formatted() => Assert<LookupToolOptions>(new { FormattedLookup = _simpleLookupTable }, ["--param", "key1", "1+2", "--param", "key2", "TRUE+FALSE"]);
+    [Fact]
+    public void TestLookup_Simple() => Assert<LookupToolOptions>(new
+    {
+        SimpleLookup = _simpleLookupTable
+    }, ["--param", "key1=1", "--param", "key1=2", "--param", "key2=true", "--param", "key2=false"]);
+
+    [Fact]
+    public void TestLookup_InnerSeparator() => Assert<LookupToolOptions>(new
+    {
+        InnerSeparatorLookup = _simpleLookupTable
+    }, ["--param:key1=1,2", "--param:key2=true,false"]);
+
+    [Fact]
+    public void TestLookup_Separator() => Assert<LookupToolOptions>(new
+    {
+        SeparatorLookup = _simpleLookupTable
+    }, ["--param:key1=1,2;key2=true,false"]);
+
+    [Fact]
+    public void TestLookup_Formatted() => Assert<LookupToolOptions>(new
+    {
+        FormattedLookup = _simpleLookupTable
+    }, ["--param", "key1", "1+2", "--param", "key2", "TRUE+FALSE"]);
 
     private class LookupToolOptions : ToolOptions
     {
-        [Argument(Format = "--param {key}={value}")] public ILookup<string, object> SimpleLookup => Get<LookupTable<string, object>>(() => SimpleLookup);
-        [Argument(Format = "--param:{key}={value}", InnerSeparator = ",")] public ILookup<string, object> InnerSeparatorLookup => Get<LookupTable<string, object>>(() => InnerSeparatorLookup);
-        [Argument(Format = "--param:{key}={value}", Separator = ";", InnerSeparator = ",")] public ILookup<string, object> SeparatorLookup => Get<LookupTable<string, object>>(() => SeparatorLookup);
-        [Argument(Format = "--param {key} {value}", InnerSeparator = "+", FormatterMethod = nameof(Format))] public ILookup<string, object> FormattedLookup => Get<LookupTable<string, object>>(() => FormattedLookup);
+        [Argument(Format = "--param {key}={value}")]
+        public ILookup<string, object> SimpleLookup => Get<LookupTable<string, object>>(() => SimpleLookup);
+
+        [Argument(Format = "--param:{key}={value}", InnerSeparator = ",")]
+        public ILookup<string, object> InnerSeparatorLookup => Get<LookupTable<string, object>>(() => InnerSeparatorLookup);
+
+        [Argument(Format = "--param:{key}={value}", Separator = ";", InnerSeparator = ",")]
+        public ILookup<string, object> SeparatorLookup => Get<LookupTable<string, object>>(() => SeparatorLookup);
+
+        [Argument(Format = "--param {key} {value}", InnerSeparator = "+", FormatterMethod = nameof(Format))]
+        public ILookup<string, object> FormattedLookup => Get<LookupTable<string, object>>(() => FormattedLookup);
 
         private string Format(object value) => value?.ToString()?.ToUpperInvariant();
     }
@@ -168,13 +381,18 @@ public class ToolOptionsArgumentsSpecs
         new
         {
             String = "value",
-            ProcessAdditionalArguments = new[] { "first", "second" }
+            ProcessAdditionalArguments = new[]
+            {
+                "first",
+                "second"
+            }
         },
         arguments: ["--string", "value", "first", "second"]);
 
     private class AdditionalArgumentsToolOptions : ToolOptions
     {
-        [Argument(Format = "--string {value}")] public string String => Get<string>(() => String);
+        [Argument(Format = "--string {value}")]
+        public string String => Get<string>(() => String);
     }
 
     private void Assert<T>(object obj, IEnumerable<string> arguments)

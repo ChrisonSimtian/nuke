@@ -25,7 +25,9 @@ public partial class TeamCity : Host, IBuildServer
     private static IReadOnlyDictionary<string, string> ParseDictionary(AbsolutePath file)
     {
         if (file == null)
+        {
             return null;
+        }
 
         var lines = file.ReadAllLines();
         var dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -38,8 +40,11 @@ public partial class TeamCity : Host, IBuildServer
                     .Replace("\\:", ":")
                     .Replace("\\=", "=")
                     .Replace("\\\\", "\\");
+
                 if (string.IsNullOrWhiteSpace(line) || line[index: 0] == '#')
+                {
                     continue;
+                }
 
                 var index = line.IndexOfRegex(@"[^\.]=") + 1;
                 var key = line[..index].Replace("secure:", string.Empty);
@@ -78,7 +83,7 @@ public partial class TeamCity : Host, IBuildServer
         runnerProperties = Lazy.Create(() => ParseDictionary(SystemProperties?["teamcity.runner.properties.file"]));
         recentlyFailedTests = Lazy.Create(() =>
         {
-            var file = (AbsolutePath) SystemProperties?["teamcity.tests.recentlyFailedTests.file"];
+            var file = (AbsolutePath)SystemProperties?["teamcity.tests.recentlyFailedTests.file"];
             return file.FileExists()
                 ? file.ReadAllLines().ToImmutableList() as IReadOnlyCollection<string>
                 : new string[0];
@@ -86,32 +91,54 @@ public partial class TeamCity : Host, IBuildServer
     }
 
     string IBuildServer.Branch => BranchName;
+
     string IBuildServer.Commit => BuildVcsNumber;
 
     public IReadOnlyDictionary<string, string> ConfigurationProperties => configurationProperties.Value;
+
     public IReadOnlyDictionary<string, string> SystemProperties => systemProperties.Value;
+
     public IReadOnlyDictionary<string, string> RunnerProperties => runnerProperties.Value;
+
     public IReadOnlyCollection<string> RecentlyFailedTests => recentlyFailedTests.Value;
 
     public string BuildConfiguration => SystemProperties?["teamcity.buildConfName"];
+
     public string BuildTypeId => SystemProperties?["teamcity.buildType.id"];
-    [NoConvert] public string BuildNumber => EnvironmentInfo.GetVariable("BUILD_NUMBER");
+
+    [NoConvert]
+    public string BuildNumber => EnvironmentInfo.GetVariable("BUILD_NUMBER");
+
     public string BuildVcsNumber => SystemProperties?["build.vcs.number"];
+
     public string Version => SystemProperties?["teamcity.version"];
+
     public string ProjectName => SystemProperties?["teamcity.projectName"];
+
     public string ServerUrl => ConfigurationProperties?["teamcity.serverUrl"];
+
     public string AuthUserId => SystemProperties["teamcity.auth.userId"];
+
     public string AuthPassword => SystemProperties["teamcity.auth.password"];
+
     public string ProjectId => ConfigurationProperties?["teamcity.project.id"];
+
     public long BuildId => long.Parse(ConfigurationProperties?["teamcity.build.id"] ?? 0.ToString());
+
     public bool IsBuildPersonal => bool.Parse(SystemProperties?.GetValueOrDefault("build.is.personal") ?? bool.FalseString);
+
     public bool IsPullRequest => ConfigurationProperties?.GetValueOrDefault("teamcity.pullRequest.number") != null;
+
     public long? PullRequestNumber => IsPullRequest ? long.Parse(ConfigurationProperties["teamcity.pullRequest.number"]) : null;
+
     public string PullRequestSourceBranch => IsPullRequest ? ConfigurationProperties["teamcity.pullRequest.source.branch"] : null;
+
     public string PullRequestTargetBranch => IsPullRequest ? ConfigurationProperties["teamcity.pullRequest.target.branch"] : null;
+
     public string PullRequestTitle => IsPullRequest ? ConfigurationProperties["teamcity.pullRequest.title"] : null;
 
-    [NoConvert] public string BranchName => ConfigurationProperties?.GetValueOrDefault("teamcity.build.branch")
+    [NoConvert]
+    public string BranchName => ConfigurationProperties?.GetValueOrDefault("teamcity.build.branch")
         .NotNull("Configuration property 'teamcity.build.branch' is null. See https://youtrack.jetbrains.com/issue/TW-62888.");
 
     public void DisableServiceMessages()
@@ -135,6 +162,7 @@ public partial class TeamCity : Host, IBuildServer
         Assert.True(
             type != TeamCityImportType.dotNetCoverage || tool != null,
             $"Importing data of type '{type}' requires to specify the tool");
+
         if (tool == TeamCityImportTool.dotcover &&
             ConfigurationProperties["teamcity.dotCover.home"].EndsWithOrdinalIgnoreCase("bundled"))
         {
@@ -162,9 +190,15 @@ public partial class TeamCity : Host, IBuildServer
     public void SetBuildStatus(string text, bool prepend = false, bool append = false)
     {
         if (prepend)
+        {
             text = $"{text} {{build.status.text}}";
+        }
+
         if (append)
+        {
             text = $"{{build.status.text}} {text}";
+        }
+
         Write("buildStatus", x => x.AddPair("text", text));
     }
 
@@ -275,14 +309,20 @@ public partial class TeamCity : Host, IBuildServer
 
     public void Write(string command, Func<Dictionary<string, object>, Dictionary<string, object>> dictionaryConfigurator)
     {
-        Write(new[] { command }.Concat(dictionaryConfigurator(new Dictionary<string, object>())
+        Write(new[]
+        {
+            command
+        }.Concat(dictionaryConfigurator(new Dictionary<string, object>())
             .Select(x => $"{x.Key}='{Escape(x.Value.ToString())}'")
             .ToArray()));
     }
 
     public void Write(string command, params string[] escapedArguments)
     {
-        Write(new[] { command }.Concat(escapedArguments.Select(x => x.SingleQuote())));
+        Write(new[]
+        {
+            command
+        }.Concat(escapedArguments.Select(x => x.SingleQuote())));
     }
 
     public void Write(IEnumerable<string> escapedTokens)

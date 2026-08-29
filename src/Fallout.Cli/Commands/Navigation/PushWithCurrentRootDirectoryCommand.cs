@@ -1,7 +1,6 @@
-using Fallout.Common;
 using System.Threading.Tasks;
+using Fallout.Common;
 using Fallout.Common.IO;
-using Fallout.Common.Utilities;
 
 namespace Fallout.Cli.Commands.Navigation;
 

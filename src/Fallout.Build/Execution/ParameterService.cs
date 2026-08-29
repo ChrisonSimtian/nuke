@@ -28,6 +28,7 @@ internal partial class ParameterService
     }
 
     private ArgumentParser ArgumentsParser => argumentParserProvider.Invoke();
+
     private IReadOnlyDictionary<string, string> Variables => environmentVariablesProvider.Invoke();
 
     public static bool IsParameter(string value)
@@ -77,17 +78,20 @@ internal partial class ParameterService
         IEnumerable<(string Text, object Object)> TryGetFromValueProvider()
         {
             if (attribute.ValueProviderMember == null)
+            {
                 return null;
+            }
 
             var valueProviderType = attribute.ValueProviderType ?? instance.GetType();
             var valueProvider = valueProviderType
                 .GetMember(attribute.ValueProviderMember, All)
                 .SingleOrDefault()
                 .NotNull($"No single provider '{valueProviderType.Name}.{member.Name}' found");
+
             Assert.True(valueProvider.GetMemberType() == typeof(IEnumerable<string>),
                 $"Value provider '{valueProvider.Name}' must be of type '{typeof(IEnumerable<string>).GetDisplayShortName()}'");
 
-            return valueProvider.GetValue<IEnumerable<string>>(instance).Select(x => (x, (object) x));
+            return valueProvider.GetValue<IEnumerable<string>>(instance).Select(x => (x, (object)x));
         }
 
         IEnumerable<(string Text, object Object)> TryGetFromEnumerationClass() =>
@@ -102,6 +106,7 @@ internal partial class ParameterService
                 : Nullable.GetUnderlyingType(memberType) is { } underlyingType && underlyingType.IsEnum
                     ? underlyingType
                     : null;
+
             return enumType != null
                 ? enumType.GetEnumNames().Select(x => (x, Enum.Parse(enumType, x)))
                 : null;
@@ -190,13 +195,20 @@ internal partial class ParameterService
             var alternativeValues = Variables
                 .Where(x => GetTrimmedName(x.Key).EqualsOrdinalIgnoreCase(trimmedVariableName) ||
                             GetTrimmedName(x.Key).EqualsOrdinalIgnoreCase($"NUKE{trimmedVariableName}")).ToList();
+
             if (alternativeValues.Count > 1)
+            {
                 Log.Warning("Could not resolve {VariableName} since multiple values are provided", variableName);
+            }
 
             if (alternativeValues.Count == 1)
+            {
                 value = alternativeValues.Single().Value;
+            }
             else
+            {
                 return destinationType.GetDefaultValue();
+            }
         }
 
         try
@@ -205,7 +217,13 @@ internal partial class ParameterService
         }
         catch (Exception ex)
         {
-            Assert.Fail(new[] { ex.Message, $"Resolving parameter '{variableName}' failed. Environment variable was:", value }.JoinNewLine());
+            Assert.Fail(new[]
+            {
+                ex.Message,
+                $"Resolving parameter '{variableName}' failed. Environment variable was:",
+                value
+            }.JoinNewLine());
+
             // ReSharper disable once HeuristicUnreachableCode
             return null;
         }

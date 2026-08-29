@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Fallout.Common.Utilities;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Fallout.Common.Execution.Theming;
 
-public class AnsiConsoleHostTheme : AnsiConsoleTheme, IHostTheme
+public class AnsiConsoleHostTheme(
+    string successCode,
+    IReadOnlyDictionary<ConsoleThemeStyle, string> styles)
+    : AnsiConsoleTheme(styles), IHostTheme
 {
     public static IHostTheme Default256AnsiColorTheme => new AnsiConsoleHostTheme(
         "\u001B[32;1m",
@@ -30,18 +32,8 @@ public class AnsiConsoleHostTheme : AnsiConsoleTheme, IHostTheme
             [ConsoleThemeStyle.LevelFatal] = "\u001B[38;5;231;1m\u001B[48;5;196m"
         });
 
-    private readonly string successCode;
-    private readonly IReadOnlyDictionary<ConsoleThemeStyle, string> styles;
+    private readonly IReadOnlyDictionary<ConsoleThemeStyle, string> styles = styles;
     private const string AnsiStyleReset = "\u001B[0m";
-
-    public AnsiConsoleHostTheme(
-        string successCode,
-        IReadOnlyDictionary<ConsoleThemeStyle, string> styles)
-        : base(styles)
-    {
-        this.successCode = successCode;
-        this.styles = styles;
-    }
 
     public void WriteSuccess(string text)
     {

@@ -40,10 +40,10 @@ internal class HandlePlanRequestsAttribute : BuildExtensionAttributeBase, IOnBui
 
         // Workaround for https://github.com/dotnet/corefx/issues/10361
         Process.Start(new ProcessStartInfo
-                      {
-                          FileName = HtmlFile,
-                          UseShellExecute = true
-                      });
+        {
+            FileName = HtmlFile,
+            UseShellExecute = true
+        });
     }
 
     // ReSharper disable once CognitiveComplexity
@@ -54,22 +54,32 @@ internal class HandlePlanRequestsAttribute : BuildExtensionAttributeBase, IOnBui
         {
             var dependencies = Build.ExecutableTargets.Where(x => x.AllDependencies.Contains(executableTarget)).ToList();
             if (dependencies.Count == 0)
+            {
                 builder.AppendLine(executableTarget.Name);
+            }
             else
             {
                 foreach (var dependency in dependencies)
                 {
                     if (dependency.ExecutionDependencies.Contains(executableTarget))
+                    {
                         builder.AppendLine($"{executableTarget.Name} --> {dependency.Name}");
+                    }
                     else if (dependency.OrderDependencies.Contains(executableTarget))
+                    {
                         builder.AppendLine($"{executableTarget.Name} -.-> {dependency.Name}");
+                    }
                     else if (dependency.TriggerDependencies.Contains(executableTarget))
+                    {
                         builder.AppendLine($"{executableTarget.Name} ==> {dependency.Name}");
+                    }
                 }
             }
 
-            if (executableTarget.Listed == false)
+            if (!executableTarget.Listed)
+            {
                 builder.AppendLine($"class {executableTarget.Name} unlisted");
+            }
         }
 
         return builder.ToString();
@@ -82,21 +92,31 @@ internal class HandlePlanRequestsAttribute : BuildExtensionAttributeBase, IOnBui
 
         // When not hovering anything, highlight the default plan
         var defaultPlan = executableTargets.Where(x => x.IsDefault)
-            .SelectMany(x => ExecutionPlanner.GetExecutionPlan(executableTargets, new[] { x.Name }))
+            .SelectMany(x => ExecutionPlanner.GetExecutionPlan(executableTargets, new[]
+            {
+                x.Name
+            }))
             .Distinct().ToList();
+
         defaultPlan.ForEach(x => builder.AppendLine($@"  $(""#{x.Name}"").addClass('highlight');"));
 
         foreach (var executableTarget in executableTargets)
         {
-            var executionPlan = ExecutionPlanner.GetExecutionPlan(executableTargets, new[] { executableTarget.Name });
+            var executionPlan = ExecutionPlanner.GetExecutionPlan(executableTargets, new[]
+            {
+                executableTarget.Name
+            });
+
             builder
                 .AppendLine($@"  $(""#{executableTarget.Name}"").hover(")
                 .AppendLine("    function() {");
+
             executableTargets.ForEach(x => builder.AppendLine($@"        $(""#{x.Name}"").removeClass('highlight');"));
             executionPlan.ForEach(x => builder.AppendLine($@"        $(""#{x.Name}"").addClass('highlight');"));
             builder
                 .AppendLine("    },")
                 .AppendLine("    function() {");
+
             executionPlan.ForEach(x => builder.AppendLine($@"        $(""#{x.Name}"").removeClass('highlight');"));
             defaultPlan.ForEach(x => builder.AppendLine($@"        $(""#{x.Name}"").addClass('highlight');"));
             builder

@@ -1,10 +1,9 @@
 using System;
 using System.Reflection;
-using FluentAssertions;
 using Fallout.Common.Execution;
-using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.ValueInjection;
+using FluentAssertions;
 using Serilog.Events;
 using Serilog.Parsing;
 using Xunit;
@@ -83,7 +82,7 @@ public class BuildContextSpecs
         {
             NuGetToolPathResolver.EmbeddedPackagesDirectory = "/packages";
             NuGetToolPathResolver.NuGetPackagesConfigFile = "/packages.config";
-            NpmToolPathResolver.NpmPackageJsonFile = (AbsolutePath)"/npm/package.json";
+            NpmToolPathResolver.NpmPackageJsonFile = "/npm/package.json";
         }
 
         NuGetToolPathResolver.EmbeddedPackagesDirectory.Should().BeNull();
@@ -99,7 +98,9 @@ public class BuildContextSpecs
         var subject = new Subject();
 
         using (BuildContext.Activate())
+        {
             ValueInjectionUtility.TryGetValue(() => subject.Value).Should().Be("1");
+        }
 
         // The context's teardown cleared the cache, so this read re-injects rather than replaying the
         // value the previous run computed.
@@ -130,7 +131,9 @@ public class BuildContextSpecs
         var sentinel = $"build-context-teardown-{Guid.NewGuid()}";
 
         using (BuildContext.Activate())
+        {
             sink.Emit(CreateLogEvent(sentinel));
+        }
 
         // Leaving the scope disposes the context, whose teardown clears the shared in-memory sink so a
         // subsequent run in the same process starts clean. Assert on the sentinel specifically so a
