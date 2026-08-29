@@ -27,7 +27,7 @@ internal sealed partial class SlnXmlSerializer : SingleFileSerializerBase<SlnxSe
     /// <inheritdoc/>
     public override ISerializerModelExtension CreateModelExtension()
     {
-        return this.CreateModelExtension(new SlnxSerializerSettings()
+        return CreateModelExtension(new SlnxSerializerSettings
         {
             // For new documents want to do standard indentation.
             PreserveWhitespace = false,
@@ -42,13 +42,15 @@ internal sealed partial class SlnXmlSerializer : SingleFileSerializerBase<SlnxSe
         return new SlnXmlModelExtension(this, settings);
     }
 
-    private protected override Task<SolutionModel> ReadModelAsync(string? fullPath, Stream reader, CancellationToken cancellationToken)
+    private protected override Task<SolutionModel> ReadModelAsync(string? fullPath, Stream reader,
+        CancellationToken cancellationToken)
     {
-        Reader parser = new Reader(fullPath, reader);
+        Reader parser = new(fullPath, reader);
         return Task.FromResult(parser.Parse());
     }
 
-    private protected override Task WriteModelAsync(string? fullPath, SolutionModel model, Stream writerStream, CancellationToken cancellationToken)
+    private protected override Task WriteModelAsync(string? fullPath, SolutionModel model, Stream writerStream,
+        CancellationToken cancellationToken)
     {
         return Writer.SaveAsync(fullPath, model, writerStream);
     }

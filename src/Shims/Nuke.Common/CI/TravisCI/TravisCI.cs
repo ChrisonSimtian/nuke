@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.TravisCI;
 
 public static class TravisCI
 {
-    public static global::Fallout.Common.CI.TravisCI.TravisCI Instance
-        => global::Fallout.Common.CI.TravisCI.TravisCI.Instance;
+    public static Fallout.Common.CI.TravisCI.TravisCI Instance
+        => Fallout.Common.CI.TravisCI.TravisCI.Instance;
 }

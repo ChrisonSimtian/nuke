@@ -1,9 +1,9 @@
 using System;
-using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Fallout.Cli.Prompts;
@@ -49,19 +49,27 @@ internal sealed class SetupCommand : IFalloutCommand
 
         #region Basic
 
-        var falloutLatestReleaseVersion = NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: false);
-        var falloutLatestPrereleaseVersion = NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: true);
-        var falloutLatestLocalVersion = NuGetPackageResolver.GetGlobalInstalledPackage(FalloutCommonPackageId, version: null, packagesConfigFile: null)
+        var falloutLatestReleaseVersion =
+            NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: false);
+
+        var falloutLatestPrereleaseVersion =
+            NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: true);
+
+        var falloutLatestLocalVersion = NuGetPackageResolver
+            .GetGlobalInstalledPackage(FalloutCommonPackageId, version: null, packagesConfigFile: null)
             ?.Version.ToString();
 
         if (rootDirectory == null)
+        {
             rootDirectory = WorkingDirectory.FindParentOrSelf(x => x.ContainsDirectory(".git") || x.ContainsDirectory(".svn"));
+        }
 
         if (rootDirectory == null)
         {
             Host.Warning("Could not find root directory. Falling back to working directory ...");
             rootDirectory = WorkingDirectory;
         }
+
         prompts.ShowInput("deciduous_tree", "Root directory", rootDirectory);
 
         var buildProjectName = prompts.PromptForInput("How should the project be named?", "_build");
@@ -83,9 +91,10 @@ internal sealed class SetupCommand : IFalloutCommand
                 .Where(x => x.Item2 != null)
                 .Distinct(x => x.Item2)
                 .Select(x => (x.Item2, $"{x.Item2} ({x.Item1})")).ToArray());
+
         prompts.ShowInput("gem_stone", "Fallout.Common version", falloutVersion);
 
-        var solutionFile = (AbsolutePath) prompts.PromptForChoice(
+        var solutionFile = (AbsolutePath)prompts.PromptForChoice(
             "Which solution should be the default?",
             choices: new DirectoryInfo(rootDirectory)
                 .EnumerateFiles("*", SearchOption.AllDirectories)
@@ -93,7 +102,9 @@ internal sealed class SetupCommand : IFalloutCommand
                 .OrderByDescending(x => x.FullName)
                 .Select(x => (x, rootDirectory.GetRelativePathTo(x.FullName).ToString()))
                 .Concat((null, "None")).ToArray())?.FullName;
-        prompts.ShowInput("toolbox", "Default solution", solutionFile != null ? rootDirectory.GetRelativePathTo(solutionFile) : "<none>");
+
+        prompts.ShowInput("toolbox", "Default solution",
+            solutionFile != null ? rootDirectory.GetRelativePathTo(solutionFile) : "<none>");
 
         #endregion
 
@@ -119,14 +130,21 @@ internal sealed class SetupCommand : IFalloutCommand
                 var solutionDocument = XDocument.Load(solutionFile);
                 scaffolder.UpdateSolutionXmlFileContent(solutionDocument, buildProjectFileRelative);
 
-                var settings = new XmlWriterSettings { OmitXmlDeclaration = true, Indent = true };
+                var settings = new XmlWriterSettings
+                {
+                    OmitXmlDeclaration = true,
+                    Indent = true
+                };
+
                 using var writer = XmlWriter.Create(solutionFile, settings);
                 solutionDocument.Save(writer);
             }
             else
             {
                 var solutionFileContent = solutionFile.ReadAllLines().ToList();
-                scaffolder.UpdateSolutionFileContent(solutionFileContent, buildProjectFileRelative, buildProjectGuid, buildProjectName);
+                scaffolder.UpdateSolutionFileContent(solutionFileContent, buildProjectFileRelative, buildProjectGuid,
+                    buildProjectName);
+
                 solutionFile.WriteAllLines(solutionFileContent, Encoding.UTF8);
             }
         }

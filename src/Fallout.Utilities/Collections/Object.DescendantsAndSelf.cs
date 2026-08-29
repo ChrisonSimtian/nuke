@@ -17,7 +17,9 @@ public static partial class EnumerableExtensions
         yield return obj;
 
         foreach (var p in obj.Descendants(selector, traverse))
+        {
             yield return p;
+        }
     }
 
     /// <summary>
@@ -29,14 +31,20 @@ public static partial class EnumerableExtensions
         Func<T, bool> traverse = null)
     {
         if (traverse != null && !traverse(obj))
+        {
             yield break;
+        }
 
         var next = selector(obj);
         if (traverse == null && Equals(next, default(T)))
+        {
             yield break;
+        }
 
         foreach (var nextOrDescendant in next.DescendantsAndSelf(selector, traverse))
+        {
             yield return nextOrDescendant;
+        }
     }
 
     /// <summary>
@@ -49,8 +57,10 @@ public static partial class EnumerableExtensions
     {
         yield return obj;
 
-        foreach (var p in Descendants(obj, selector, traverse))
+        foreach (var p in obj.Descendants(selector, traverse))
+        {
             yield return p;
+        }
     }
 
     /// <summary>
@@ -63,6 +73,8 @@ public static partial class EnumerableExtensions
     {
         foreach (var child in selector(obj).Where(x => traverse == null || traverse(x)))
         foreach (var childOrDescendant in child.DescendantsAndSelf(selector, traverse))
+        {
             yield return childOrDescendant;
+        }
     }
 }

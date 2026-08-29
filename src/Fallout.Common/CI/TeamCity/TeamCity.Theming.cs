@@ -8,6 +8,7 @@ namespace Fallout.Common.CI.TeamCity;
 public partial class TeamCity
 {
     internal override IHostTheme Theme => AnsiConsoleHostTheme.Default256AnsiColorTheme;
+
     internal override string OutputTemplate => Logging.StandardOutputTemplate;
 
     protected internal override IDisposable WriteBlock(string text)
@@ -30,7 +31,9 @@ public partial class TeamCity
     protected internal override bool FilterMessage(string message)
     {
         if (!message.ContainsOrdinalIgnoreCase("##teamcity["))
+        {
             return false;
+        }
 
         Console.WriteLine(message);
         return true;

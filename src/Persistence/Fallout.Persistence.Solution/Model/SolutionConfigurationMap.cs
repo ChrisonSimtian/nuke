@@ -19,33 +19,37 @@ internal sealed partial class SolutionConfigurationMap
     internal SolutionConfigurationMap(SolutionModel solutionModel)
     {
         this.solutionModel = solutionModel;
-        this.buildTypesIndex = new Dictionary<string, int>(solutionModel.BuildTypes.Count);
+        buildTypesIndex = new Dictionary<string, int>(solutionModel.BuildTypes.Count);
         for (int i = 0; i < solutionModel.BuildTypes.Count; i++)
         {
-            this.buildTypesIndex.Add(solutionModel.BuildTypes[i], i);
+            buildTypesIndex.Add(solutionModel.BuildTypes[i], i);
         }
 
-        this.platformsIndex = new Dictionary<string, int>(solutionModel.Platforms.Count);
+        platformsIndex = new Dictionary<string, int>(solutionModel.Platforms.Count);
         for (int i = 0; i < solutionModel.Platforms.Count; i++)
         {
-            this.platformsIndex.Add(PlatformNames.Canonical(solutionModel.Platforms[i]), i);
+            platformsIndex.Add(PlatformNames.Canonical(solutionModel.Platforms[i]), i);
         }
 
-        this.matrixSize = this.BuildTypesCount * this.PlatformsCount;
+        matrixSize = BuildTypesCount * PlatformsCount;
     }
 
-    internal int BuildTypesCount => this.buildTypesIndex.Count;
+    internal int BuildTypesCount => buildTypesIndex.Count;
 
-    internal int PlatformsCount => this.platformsIndex.Count;
+    internal int PlatformsCount => platformsIndex.Count;
 
     internal int GetBuildTypeIndex(string buildType)
     {
-        return !string.IsNullOrEmpty(buildType) && this.buildTypesIndex.TryGetValue(buildType, out int index) ? index : ScopedRules.All;
+        return !string.IsNullOrEmpty(buildType) && buildTypesIndex.TryGetValue(buildType, out int index)
+            ? index
+            : ScopedRules.All;
     }
 
     internal int GetPlatformIndex(string platform)
     {
-        return !string.IsNullOrEmpty(platform) && this.platformsIndex.TryGetValue(PlatformNames.Canonical(platform), out int index) ? index : ScopedRules.All;
+        return !string.IsNullOrEmpty(platform) && platformsIndex.TryGetValue(PlatformNames.Canonical(platform), out int index)
+            ? index
+            : ScopedRules.All;
     }
 
     /// <summary>
@@ -61,8 +65,8 @@ internal sealed partial class SolutionConfigurationMap
 
         foreach (ConfigurationRule rule in projectModel.ProjectConfigurationRules.GetStructEnumerable())
         {
-            int buildTypeIndex = this.GetBuildTypeIndex(rule.SolutionBuildType);
-            int platformIndex = this.GetPlatformIndex(rule.SolutionPlatform);
+            int buildTypeIndex = GetBuildTypeIndex(rule.SolutionBuildType);
+            int platformIndex = GetPlatformIndex(rule.SolutionPlatform);
 
             if ((!string.IsNullOrEmpty(rule.SolutionBuildType) && buildTypeIndex < 0) ||
                 (!string.IsNullOrEmpty(rule.SolutionPlatform) && platformIndex < 0))
@@ -70,7 +74,7 @@ internal sealed partial class SolutionConfigurationMap
                 continue;
             }
 
-            this.ApplyRules(in projectMappings, new ScopedRules(buildTypeIndex, platformIndex, [rule]));
+            ApplyRules(in projectMappings, new ScopedRules(buildTypeIndex, platformIndex, [rule]));
         }
     }
 
@@ -80,16 +84,16 @@ internal sealed partial class SolutionConfigurationMap
     /// </summary>
     internal (string SlnKey, SolutionConfigIndex Index)[] CreateMatrixAnnotation()
     {
-        (string SlnKey, SolutionConfigIndex Index)[] ret = new (string SlnKey, SolutionConfigIndex Index)[this.matrixSize];
-        for (int buildTypeIndex = 0; buildTypeIndex < this.solutionModel.BuildTypes.Count; buildTypeIndex++)
+        (string SlnKey, SolutionConfigIndex Index)[] ret = new (string SlnKey, SolutionConfigIndex Index)[matrixSize];
+        for (int buildTypeIndex = 0; buildTypeIndex < solutionModel.BuildTypes.Count; buildTypeIndex++)
         {
-            string buildType = this.solutionModel.BuildTypes[buildTypeIndex];
+            string buildType = solutionModel.BuildTypes[buildTypeIndex];
 
-            for (int platformIndex = 0; platformIndex < this.solutionModel.Platforms.Count; platformIndex++)
+            for (int platformIndex = 0; platformIndex < solutionModel.Platforms.Count; platformIndex++)
             {
-                string platform = this.solutionModel.Platforms[platformIndex];
+                string platform = solutionModel.Platforms[platformIndex];
 
-                SolutionConfigIndex idx = new SolutionConfigIndex(this, buildTypeIndex, platformIndex);
+                SolutionConfigIndex idx = new(this, buildTypeIndex, platformIndex);
                 ret[idx.MatrixIndex] = ($"{buildType}|{platform}", idx);
             }
         }
@@ -103,44 +107,44 @@ internal sealed partial class SolutionConfigurationMap
     /// </summary>
     internal void DistillProjectConfigurations()
     {
-        foreach (SolutionProjectModel projectModel in this.solutionModel.SolutionProjects)
+        foreach (SolutionProjectModel projectModel in solutionModel.SolutionProjects)
         {
             // Cache list of all project configurations for all solution configuration mappings.
-            this.GetProjectConfigMap(projectModel, out SolutionToProjectMappings mappings, out bool supportsConfigs);
+            GetProjectConfigMap(projectModel, out SolutionToProjectMappings mappings, out bool supportsConfigs);
             if (supportsConfigs)
             {
-                this.perProjectCurrent.Add(projectModel, mappings);
+                perProjectCurrent.Add(projectModel, mappings);
             }
 
             // Converts cached mappings into simpler rules.
-            projectModel.ProjectConfigurationRules = this.CreateProjectRules(projectModel);
+            projectModel.ProjectConfigurationRules = CreateProjectRules(projectModel);
         }
     }
 
-    private SolutionConfigIndex ToIndex(int iBuildType, int iPlatform) => new SolutionConfigIndex(this, iBuildType, iPlatform);
+    private SolutionConfigIndex ToIndex(int iBuildType, int iPlatform) => new(this, iBuildType, iPlatform);
 
     // This should only be called from ConfigIndex
     private string BuildTypeFromIndex(SolutionConfigIndex index)
     {
-        if (index.MatrixIndex < 0 || index.MatrixIndex >= this.matrixSize)
+        if (index.MatrixIndex < 0 || index.MatrixIndex >= matrixSize)
         {
             throw new ArgumentOutOfRangeException(nameof(index));
         }
 
-        int config = index.MatrixIndex / this.PlatformsCount;
-        return this.solutionModel.BuildTypes[config];
+        int config = index.MatrixIndex / PlatformsCount;
+        return solutionModel.BuildTypes[config];
     }
 
     // This should only be called from ConfigIndex
     private string PlatformFromIndex(SolutionConfigIndex index)
     {
-        if (index.MatrixIndex < 0 || index.MatrixIndex >= this.matrixSize)
+        if (index.MatrixIndex < 0 || index.MatrixIndex >= matrixSize)
         {
             throw new ArgumentOutOfRangeException(nameof(index));
         }
 
-        int plat = index.MatrixIndex % this.PlatformsCount;
-        return this.solutionModel.Platforms[plat];
+        int plat = index.MatrixIndex % PlatformsCount;
+        return solutionModel.Platforms[plat];
     }
 
     /// <summary>
@@ -164,9 +168,12 @@ internal sealed partial class SolutionConfigurationMap
 #if DEBUG
             this.projectModel = projectModel;
 #endif
-            this.mappings = new ProjectConfigMapping[configMap.matrixSize];
+            mappings = new ProjectConfigMapping[configMap.matrixSize];
 
-            ConfigurationRuleFollower projectTypeRules = configMap.solutionModel.ProjectTypeTable.GetProjectConfigurationRules(projectModel, excludeProjectSpecificRules: true);
+            ConfigurationRuleFollower projectTypeRules =
+                configMap.solutionModel.ProjectTypeTable.GetProjectConfigurationRules(projectModel,
+                    excludeProjectSpecificRules: true);
+
             isConfigurable = projectTypeRules.GetIsBuildable() ?? true;
 
             for (int iPlatform = 0; iPlatform < configMap.PlatformsCount; iPlatform++)
@@ -179,26 +186,30 @@ internal sealed partial class SolutionConfigurationMap
 
                     bool build = projectTypeRules.GetIsBuildable(solutionBuildType, solutionPlatform) ?? true;
                     bool deploy = projectTypeRules.GetIsDeployable(solutionBuildType, solutionPlatform) ?? false;
-                    string projectBuildType = projectTypeRules.GetProjectBuildType(solutionBuildType, solutionPlatform) ?? solutionBuildType;
-                    string projectPlatform = projectTypeRules.GetProjectPlatform(solutionBuildType, solutionPlatform) ?? solutionPlatform;
+                    string projectBuildType = projectTypeRules.GetProjectBuildType(solutionBuildType, solutionPlatform) ??
+                                              solutionBuildType;
+
+                    string projectPlatform = projectTypeRules.GetProjectPlatform(solutionBuildType, solutionPlatform) ??
+                                             solutionPlatform;
 
                     this[configMap.ToIndex(iBuildType, iPlatform)] =
-                        new ProjectConfigMapping(projectBuildType, projectPlatform, !forceExclude && build, !forceExclude && deploy);
+                        new ProjectConfigMapping(projectBuildType, projectPlatform, !forceExclude && build,
+                            !forceExclude && deploy);
                 }
             }
         }
 
         internal ProjectConfigMapping this[SolutionConfigIndex index]
         {
-            get => this.mappings[index.MatrixIndex];
-            set => this.mappings[index.MatrixIndex] = value;
+            get => mappings[index.MatrixIndex];
+            set => mappings[index.MatrixIndex] = value;
         }
 
 #if DEBUG
         /// <inheritdoc/>
         public override string ToString()
         {
-            return this.projectModel.DisplayName ?? string.Empty;
+            return projectModel.DisplayName ?? string.Empty;
         }
 #endif
     }
@@ -208,9 +219,7 @@ internal sealed partial class SolutionConfigurationMap
     /// </summary>
     internal readonly struct SolutionConfigIndex
     {
-        private readonly int index;
-
-        public SolutionConfigIndex() => this.index = -1;
+        public SolutionConfigIndex() => MatrixIndex = -1;
 
         internal SolutionConfigIndex(SolutionConfigurationMap map, string buildType, string platform)
             : this(map, map.GetBuildTypeIndex(buildType), map.GetPlatformIndex(platform))
@@ -220,10 +229,10 @@ internal sealed partial class SolutionConfigurationMap
         internal SolutionConfigIndex(SolutionConfigurationMap map, int buildType, int platForm)
         {
             bool unknown = buildType < 0 || buildType >= map.BuildTypesCount || platForm < 0 || platForm >= map.PlatformsCount;
-            this.index = unknown ? -1 : (buildType * map.PlatformsCount) + platForm;
+            MatrixIndex = unknown ? -1 : buildType * map.PlatformsCount + platForm;
         }
 
-        internal int MatrixIndex => this.index;
+        internal int MatrixIndex { get; }
 
         internal string BuildType(SolutionConfigurationMap map) => map.BuildTypeFromIndex(this);
 

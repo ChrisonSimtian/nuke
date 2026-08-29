@@ -1,4 +1,4 @@
-using Fallout.Migrate.Analyzers;
+using Fallout.Common.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
@@ -20,7 +20,7 @@ internal static class AnalyzerTestHarness
     // reference Fallout.* to fire" guard. Without this every test would silently
     // pass because the guard short-circuits.
     public static readonly MetadataReference FalloutMarkerReference =
-        MetadataReference.CreateFromFile(typeof(global::Fallout.Common.Utilities.CompletionUtility).Assembly.Location);
+        MetadataReference.CreateFromFile(typeof(CompletionUtility).Assembly.Location);
 }
 
 internal sealed class AnalyzerSpecs : CSharpAnalyzerTest<NukeMigrationAnalyzer, DefaultVerifier>

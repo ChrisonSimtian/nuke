@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common;
+﻿using Fallout.Common;
 using Fallout.Common.Tools.GitVersion;
 
 namespace Fallout.Components;

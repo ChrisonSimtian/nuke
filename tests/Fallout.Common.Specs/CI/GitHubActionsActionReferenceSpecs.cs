@@ -1,5 +1,4 @@
 using System;
-using Fallout.Common.CI;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.CI.GitHubActions.Configuration;
 using Fallout.Common.Execution;
@@ -101,8 +100,8 @@ public class GitHubActionsActionReferenceSpecs
     }
 
     [Theory]
-    [InlineData("actions/checkout")]         // a complete reference missing its version
-    [InlineData("releases/v1")]              // a bare ref that reads like an owner/repo
+    [InlineData("actions/checkout")] // a complete reference missing its version
+    [InlineData("releases/v1")] // a bare ref that reads like an owner/repo
     public void Slash_without_a_ref_is_rejected_as_ambiguous(string value)
     {
         var act = () => GitHubActionsActionReference.Resolve(GitHubActionsDefaults.CheckoutAction, value, Origin);
@@ -111,9 +110,9 @@ public class GitHubActionsActionReferenceSpecs
     }
 
     [Theory]
-    [InlineData("my-org/checkout # pinned by @ops-team")]  // the '@' lives in the comment, not the ref
-    [InlineData("# v7.1.0")]                               // comment only, no reference at all
-    [InlineData("actions/checkout@")]                      // '@' with nothing after it
+    [InlineData("my-org/checkout # pinned by @ops-team")] // the '@' lives in the comment, not the ref
+    [InlineData("# v7.1.0")] // comment only, no reference at all
+    [InlineData("actions/checkout@")] // '@' with nothing after it
     [InlineData("@")]
     public void Reference_without_a_usable_ref_throws(string value)
     {
@@ -150,10 +149,25 @@ public class GitHubActionsActionReferenceSpecs
     [Fact]
     public void Each_step_resolves_against_its_own_default()
     {
-        new GitHubActionsCheckoutStep { Uses = "v8" }.Uses.Should().Be("actions/checkout@v8");
-        new GitHubActionsCacheStep { Uses = "v4" }.Uses.Should().Be("actions/cache@v4");
-        new GitHubActionsArtifactStep { Uses = "v8" }.Uses.Should().Be("actions/upload-artifact@v8");
-        new GitHubActionsRunStep { SetupDotNetAction = "v7" }.SetupDotNetAction.Should().Be("actions/setup-dotnet@v7");
+        new GitHubActionsCheckoutStep
+        {
+            Uses = "v8"
+        }.Uses.Should().Be("actions/checkout@v8");
+
+        new GitHubActionsCacheStep
+        {
+            Uses = "v4"
+        }.Uses.Should().Be("actions/cache@v4");
+
+        new GitHubActionsArtifactStep
+        {
+            Uses = "v8"
+        }.Uses.Should().Be("actions/upload-artifact@v8");
+
+        new GitHubActionsRunStep
+        {
+            SetupDotNetAction = "v7"
+        }.SetupDotNetAction.Should().Be("actions/setup-dotnet@v7");
     }
 
     [Fact]
@@ -168,7 +182,10 @@ public class GitHubActionsActionReferenceSpecs
     [Fact]
     public void Resetting_a_step_to_null_restores_its_default()
     {
-        var step = new GitHubActionsCheckoutStep { Uses = "v8" };
+        var step = new GitHubActionsCheckoutStep
+        {
+            Uses = "v8"
+        };
 
         step.Uses = null;
 
@@ -181,10 +198,10 @@ public class GitHubActionsActionReferenceSpecs
     public void Cache_override_is_validated_even_when_no_cache_step_is_emitted()
     {
         var act = () => GenerateWorkflow(attribute =>
-                                         {
-                                             attribute.CacheKeyFiles = new string[0];
-                                             attribute.CacheAction = "actions/cache";
-                                         });
+        {
+            attribute.CacheKeyFiles = new string[0];
+            attribute.CacheAction = "actions/cache";
+        });
 
         act.Should().Throw<ArgumentException>().WithMessage($"*{nameof(GitHubActionsAttribute.CacheAction)}*");
     }
@@ -193,10 +210,10 @@ public class GitHubActionsActionReferenceSpecs
     public void Artifact_override_is_validated_even_when_artifacts_are_disabled()
     {
         var act = () => GenerateWorkflow(attribute =>
-                                         {
-                                             attribute.PublishArtifacts = false;
-                                             attribute.UploadArtifactAction = "my-org/upload-artifact";
-                                         });
+        {
+            attribute.PublishArtifacts = false;
+            attribute.UploadArtifactAction = "my-org/upload-artifact";
+        });
 
         act.Should().Throw<ArgumentException>()
             .WithMessage($"*{nameof(GitHubActionsAttribute.UploadArtifactAction)}*");
@@ -215,12 +232,12 @@ public class GitHubActionsActionReferenceSpecs
     public void Well_formed_overrides_do_not_throw()
     {
         var act = () => GenerateWorkflow(attribute =>
-                                         {
-                                             attribute.CheckoutAction = "@releases/v1";
-                                             attribute.CacheAction = "v4";
-                                             attribute.SetupDotNetAction = "actions/setup-dotnet@v7";
-                                             attribute.UploadArtifactAction = $"my-org/upload-artifact@{Sha} # v7.1.0";
-                                         });
+        {
+            attribute.CheckoutAction = "@releases/v1";
+            attribute.CacheAction = "v4";
+            attribute.SetupDotNetAction = "actions/setup-dotnet@v7";
+            attribute.UploadArtifactAction = $"my-org/upload-artifact@{Sha} # v7.1.0";
+        });
 
         act.Should().NotThrow();
     }
@@ -236,12 +253,19 @@ public class GitHubActionsActionReferenceSpecs
         var relevantTargets = ExecutableTargetFactory.CreateAll(build, x => x.Compile);
 
         var attribute = new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
-                        {
-                            On = new[] { GitHubActionsTrigger.Push },
-                            InvokedTargets = new[] { nameof(ConfigurationGenerationSpecs.TestBuild.Test) }
-                        };
+        {
+            On = new[]
+            {
+                GitHubActionsTrigger.Push
+            },
+            InvokedTargets = new[]
+            {
+                nameof(ConfigurationGenerationSpecs.TestBuild.Test)
+            }
+        };
+
         configureAttribute(attribute);
-        ((ConfigurationAttributeBase)attribute).Build = build;
+        attribute.Build = build;
 
         attribute.GetConfiguration(relevantTargets);
     }

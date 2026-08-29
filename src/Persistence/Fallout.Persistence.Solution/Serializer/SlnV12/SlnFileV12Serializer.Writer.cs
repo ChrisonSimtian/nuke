@@ -25,9 +25,10 @@ internal partial class SlnFileV12Serializer
 
             // Only support unicode based encodings. Note ASCII is a subset of UTF8, if ASCII fails switch to UTF8 with BOM.
             // This should hopefully stop propagating solutions that rely on Windows language.
-            Encoding encoding = formatEncoding ?? Encoding.GetEncoding(Encoding.ASCII.CodePage, new EncoderExceptionFallback(), new DecoderExceptionFallback());
+            Encoding encoding = formatEncoding ?? Encoding.GetEncoding(Encoding.ASCII.CodePage, new EncoderExceptionFallback(),
+                new DecoderExceptionFallback());
 
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new())
             using (TextWriter memoryWriter = new StreamWriter(memoryStream, encoding))
             {
                 // First copy the model to memory, if any exceptions occur this
@@ -52,8 +53,8 @@ internal partial class SlnFileV12Serializer
             }
 
             // emits "Microsoft Visual Studio Solution File, Format Version 12.00";
-            writer.Write(SlnConstants.SLNFileHeaderNoVersion);            //  Microsoft Visual Studio Solution File, Format Version
-            writer.WriteLine(SlnConstants.SLNFileHeaderVersion);          //  Microsoft Visual Studio Solution File, Format Version 12.00
+            writer.Write(SlnConstants.SLNFileHeaderNoVersion); //  Microsoft Visual Studio Solution File, Format Version
+            writer.WriteLine(SlnConstants.SLNFileHeaderVersion); //  Microsoft Visual Studio Solution File, Format Version 12.00
 
             VisualStudioProperties vsProperties = model.VisualStudioProperties;
             string? openWithVS = vsProperties.OpenWith;
@@ -66,32 +67,32 @@ internal partial class SlnFileV12Serializer
             string? vsVersion = vsProperties.Version?.ToString();
             if (!string.IsNullOrEmpty(vsVersion))
             {
-                writer.Write(SlnConstants.TagVisualStudioVersion);  // VisualStudioVersion
-                writer.Write(SlnConstants.TagAssignValue);          // VisualStudioVersion =
-                writer.WriteLine(vsVersion);                        // VisualStudioVersion = [ver]
+                writer.Write(SlnConstants.TagVisualStudioVersion); // VisualStudioVersion
+                writer.Write(SlnConstants.TagAssignValue); // VisualStudioVersion =
+                writer.WriteLine(vsVersion); // VisualStudioVersion = [ver]
             }
 
             string? minVsVersion = vsProperties.MinimumVersion?.ToString();
             if (!string.IsNullOrEmpty(minVsVersion))
             {
-                writer.Write(SlnConstants.TagMinimumVisualStudioVersion);   // MinimumVisualStudioVersion
-                writer.Write(SlnConstants.TagAssignValue);                  // MinimumVisualStudioVersion =
-                writer.WriteLine(minVsVersion);                             // MinimumVisualStudioVersion = [ver]
+                writer.Write(SlnConstants.TagMinimumVisualStudioVersion); // MinimumVisualStudioVersion
+                writer.Write(SlnConstants.TagAssignValue); // MinimumVisualStudioVersion =
+                writer.WriteLine(minVsVersion); // MinimumVisualStudioVersion = [ver]
             }
 
             foreach (SolutionItemModel item in model.SolutionItems)
             {
-                this.WriteProject(item);
+                WriteProject(item);
             }
 
-            writer.WriteLine(SlnConstants.TagGlobal);          // Global
+            writer.WriteLine(SlnConstants.TagGlobal); // Global
 
             foreach (SolutionPropertyBag section in model.GetSlnProperties())
             {
-                this.WritePropertyMap(isSolution: true, section);
+                WritePropertyMap(isSolution: true, section);
             }
 
-            writer.WriteLine(SlnConstants.TagEndGlobal);      // EndGlobal
+            writer.WriteLine(SlnConstants.TagEndGlobal); // EndGlobal
         }
 
         private static bool ShouldWriteExtraHeaderLine(Encoding encoding)
@@ -102,10 +103,11 @@ internal partial class SlnFileV12Serializer
 
         private void WritePropertyMap(bool isSolution, SolutionPropertyBag map)
         {
-            this.WritePropertyMap(map.Id, isSolution, map.Scope, map);
+            WritePropertyMap(map.Id, isSolution, map.Scope, map);
         }
 
-        private void WritePropertyMap(string id, bool isSolution, PropertiesScope scope, IReadOnlyDictionary<string, string> properties)
+        private void WritePropertyMap(string id, bool isSolution, PropertiesScope scope,
+            IReadOnlyDictionary<string, string> properties)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -118,11 +120,11 @@ internal partial class SlnFileV12Serializer
                 return;
             }
 
-            using (this.WriteSectionHeader(isSolution, id, scope))
+            using (WriteSectionHeader(isSolution, id, scope))
             {
                 foreach ((string propName, string propValue) in properties)
                 {
-                    this.WriteProperty(propName, propValue);
+                    WriteProperty(propName, propValue);
                 }
             }
         }
@@ -130,7 +132,9 @@ internal partial class SlnFileV12Serializer
         private void WriteProject(SolutionItemModel item)
         {
             // For solution folders, path is just the display name again.
-            string path = item is SolutionProjectModel project ? PathExtensions.ConvertModelToBackslashPath(project.FilePath) : item.ActualDisplayName;
+            string path = item is SolutionProjectModel project
+                ? PathExtensions.ConvertModelToBackslashPath(project.FilePath)
+                : item.ActualDisplayName;
 
             if (item.TypeId == Guid.Empty)
             {
@@ -149,20 +153,20 @@ internal partial class SlnFileV12Serializer
                 throw new InvalidOperationException("Missing essential property Id on project");
             }
 
-            writer.Write(SlnConstants.TagProject);          // Project
-            writer.Write(@"(""");                           // Project("
-            writer.Write(item.TypeId.ToSlnString());        // Project("[type]
-            writer.Write(@""") = """);                      // Project("[type]") = ")
-            writer.Write(item.ActualDisplayName);           // Project("[type]") = "[dispName])
-            writer.Write(SlnConstants.TagQuoteCommaQuote);  // Project("[type]") = "[dispName]", "
-            writer.Write(path);                             // Project("[type]") = "[dispName]", "[relpath]
-            writer.Write(SlnConstants.TagQuoteCommaQuote);  // Project("[type]") = "[dispName]", "[relpath]", "
-            writer.Write(item.Id.ToSlnString());            // Project("[type]") = "[dispName]", "[relpath]", "[guid]
-            writer.WriteLine('\"');                         // Project("[type]") = "[dispName]", "[relpath]", "[guid]"
+            writer.Write(SlnConstants.TagProject); // Project
+            writer.Write(@"("""); // Project("
+            writer.Write(item.TypeId.ToSlnString()); // Project("[type]
+            writer.Write(@""") = """); // Project("[type]") = ")
+            writer.Write(item.ActualDisplayName); // Project("[type]") = "[dispName])
+            writer.Write(SlnConstants.TagQuoteCommaQuote); // Project("[type]") = "[dispName]", "
+            writer.Write(path); // Project("[type]") = "[dispName]", "[relpath]
+            writer.Write(SlnConstants.TagQuoteCommaQuote); // Project("[type]") = "[dispName]", "[relpath]", "
+            writer.Write(item.Id.ToSlnString()); // Project("[type]") = "[dispName]", "[relpath]", "[guid]
+            writer.WriteLine('\"'); // Project("[type]") = "[dispName]", "[relpath]", "[guid]"
 
             foreach (SolutionPropertyBag map in item.GetSlnProperties())
             {
-                this.WritePropertyMap(isSolution: false, map);
+                WritePropertyMap(isSolution: false, map);
             }
 
             writer.WriteLine(SlnConstants.TagEndProject); // EndProject
@@ -170,17 +174,16 @@ internal partial class SlnFileV12Serializer
 
         private void WriteProperty(string name, string value)
         {
-            writer.Write("\t\t");      // <tab><tab>
-            writer.Write(name);        // <tab><tab>[propName]
-            writer.Write(" = ");       // <tab><tab>[propName] =
-            writer.WriteLine(value);   // <tab><tab>[propName] = [propValue]
+            writer.Write("\t\t"); // <tab><tab>
+            writer.Write(name); // <tab><tab>[propName]
+            writer.Write(" = "); // <tab><tab>[propName] =
+            writer.WriteLine(value); // <tab><tab>[propName] = [propValue]
         }
 
         private WriteSectionScope WriteSectionHeader(bool isSolution, string id, PropertiesScope scope)
         {
             string sectionTag = isSolution ? "GlobalSection" : "ProjectSection";
-            string sectionScope = scope == PropertiesScope.PostLoad ?
-                isSolution ? "postSolution" : "postProject" :
+            string sectionScope = scope == PropertiesScope.PostLoad ? isSolution ? "postSolution" : "postProject" :
                 isSolution ? "preSolution" : "preProject";
 
             writer.Write('\t');

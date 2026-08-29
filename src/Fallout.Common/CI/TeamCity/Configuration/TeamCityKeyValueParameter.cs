@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Fallout.Common.Utilities;
 
 namespace Fallout.Common.CI.TeamCity.Configuration;
@@ -13,6 +11,7 @@ public class TeamCityKeyValueParameter : TeamCityParameter
     }
 
     public string Key { get; set; }
+
     public string Value { get; set; }
 
     public override void Write(CustomFileWriter writer)

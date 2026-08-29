@@ -6,7 +6,7 @@ using Fallout.Common.Utilities.Collections;
 
 namespace Fallout.Common;
 
-internal class ArgumentParser
+internal class ArgumentParser(IEnumerable<string> arguments)
 {
     public static bool IsArgument(string value)
     {
@@ -31,31 +31,31 @@ internal class ArgumentParser
         return arguments.Split((c, _) =>
                 {
                     if (c == '\"' && !inSingleQuotes && !escaped)
+                    {
                         inDoubleQuotes = !inDoubleQuotes;
+                    }
 
                     if (c == '\'' && !inDoubleQuotes && !escaped)
+                    {
                         inSingleQuotes = !inSingleQuotes;
+                    }
 
                     escaped = c == '\\' && !escaped;
 
                     return c == ' ' && !(inDoubleQuotes || inSingleQuotes);
                 },
                 includeSplitCharacter: true)
-            .Select(x => x.Trim().TrimMatchingDoubleQuotes().TrimMatchingSingleQuotes().Replace("\\\"", "\"").Replace("\\\'", "'"))
+            .Select(x => x.Trim().TrimMatchingDoubleQuotes().TrimMatchingSingleQuotes().Replace("\\\"", "\"")
+                .Replace("\\\'", "'"))
             .Where(x => !string.IsNullOrEmpty(x))
             .ToArray();
     }
 
-    private readonly string[] arguments;
+    private readonly string[] arguments = arguments.ToArray();
 
     public ArgumentParser(string arguments)
         : this(Parse(arguments))
     {
-    }
-
-    public ArgumentParser(IEnumerable<string> arguments)
-    {
-        this.arguments = arguments.ToArray();
     }
 
     public IReadOnlyList<string> Arguments => arguments;
@@ -69,7 +69,9 @@ internal class ArgumentParser
     {
         var index = GetArgumentIndex(argumentName);
         if (index == -1)
+        {
             return destinationType.GetDefaultValue();
+        }
 
         var values = arguments.Skip(index + 1).TakeUntil(IsArgument).ToArray();
         return ConvertArgument(argumentName, values, destinationType, separator);
@@ -79,14 +81,21 @@ internal class ArgumentParser
     {
         var positionalArgumentsCount = arguments.TakeUntil(IsArgument).Count();
         if (position < 0)
+        {
             position = positionalArgumentsCount + position % positionalArgumentsCount;
+        }
 
         if (positionalArgumentsCount <= position)
+        {
             return null;
+        }
 
         return ConvertArgument(
             $"$positional[{position}]",
-            new[] { arguments[position] },
+            new[]
+            {
+                arguments[position]
+            },
             destinationType,
             separator);
     }
@@ -95,7 +104,9 @@ internal class ArgumentParser
     {
         var positionalArguments = Arguments.TakeUntil(IsArgument).ToArray();
         if (positionalArguments.Length == 0)
+        {
             return destinationType.GetDefaultValue();
+        }
 
         return ConvertArgument(
             "$all-positional",
@@ -107,7 +118,8 @@ internal class ArgumentParser
     private int GetArgumentIndex(string argumentName)
     {
         var argumentMemberName = GetArgumentMemberName(argumentName);
-        return Array.FindLastIndex(arguments, x => IsArgument(x) && GetArgumentMemberName(x).EqualsOrdinalIgnoreCase(argumentMemberName));
+        return Array.FindLastIndex(arguments,
+            x => IsArgument(x) && GetArgumentMemberName(x).EqualsOrdinalIgnoreCase(argumentMemberName));
     }
 
     private object ConvertArgument(
@@ -118,6 +130,7 @@ internal class ArgumentParser
     {
         Assert.True(values.Length == 1 || !separator.HasValue || values.All(x => !x.Contains(separator.Value)),
             $"Argumenet '{argumentName}' with value [ {values.JoinCommaSpace()} ] cannot be split with separator '{separator}'");
+
         values = separator.HasValue && values.Any(x => x.Contains(separator.Value))
             ? values.SingleOrDefault()?.Split(separator.Value) ?? new string[0]
             : values;
@@ -129,9 +142,14 @@ internal class ArgumentParser
         catch (Exception ex)
         {
             Assert.Fail(
-                new[] { ex.Message, "Arguments were:" }
+                new[]
+                    {
+                        ex.Message,
+                        "Arguments were:"
+                    }
                     .Concat(arguments.Select((x, i) => $"  [{i}] = {x}"))
                     .JoinNewLine());
+
             // ReSharper disable once HeuristicUnreachableCode
             return null;
         }
@@ -145,7 +163,12 @@ internal class ArgumentParser
         }
         catch (Exception ex)
         {
-            Assert.Fail(new[] { $"Resolving argument '{argumentName}' failed.", ex.Message }.JoinNewLine());
+            Assert.Fail(new[]
+            {
+                $"Resolving argument '{argumentName}' failed.",
+                ex.Message
+            }.JoinNewLine());
+
             // ReSharper disable once HeuristicUnreachableCode
             return null;
         }

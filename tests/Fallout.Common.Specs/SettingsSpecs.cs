@@ -1,12 +1,7 @@
 using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Text.Json;
-using FluentAssertions;
-using Fallout.Common.Tools.MSBuild;
-using Fallout.Common.Tools.OpenCover;
-using Fallout.Common.Tools.Xunit;
+using System.Threading.Tasks;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.CorFlags;
@@ -14,7 +9,11 @@ using Fallout.Common.Tools.Discord;
 using Fallout.Common.Tools.Docker;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.Kubernetes;
+using Fallout.Common.Tools.MSBuild;
+using Fallout.Common.Tools.OpenCover;
+using Fallout.Common.Tools.Xunit;
 using Fallout.Common.Utilities;
+using FluentAssertions;
 using VerifyXunit;
 using Xunit;
 
@@ -176,6 +175,7 @@ public class SettingsSpecs
                 .SetType(DiscordEmbedType.article)
                 .SetAuthor(_ => _
                     .SetName("author-name")));
+
         var result = JsonSerializer.Serialize(message, message.GetType(), Options.SerializerOptions);
 
         return Verifier.Verify(result);

@@ -1,5 +1,4 @@
 using System.IO;
-using Fallout.Common.CI;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.Execution;
 using FluentAssertions;
@@ -17,7 +16,7 @@ public class GitHubActionsDispatchInputSpecs
         var relevantTargets = ExecutableTargetFactory.CreateAll(build, x => x.Compile);
 
         var stream = new MemoryStream();
-        ((ConfigurationAttributeBase)attribute).Build = build;
+        attribute.Build = build;
         attribute.Stream = new StreamWriter(stream, leaveOpen: true);
         attribute.Generate(relevantTargets);
 
@@ -32,22 +31,37 @@ public class GitHubActionsDispatchInputSpecs
     {
 #pragma warning disable FALLOUTOBS001 // comparing the obsolete API against its typed replacement on purpose
         var legacy = Render(new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
-                            {
-                                InvokedTargets = new[] { nameof(ConfigurationGenerationSpecs.TestBuild.Test) },
-                                OnWorkflowDispatchOptionalInputs = new[] { "Opt" },
-                                OnWorkflowDispatchRequiredInputs = new[] { "Req" }
-                            });
+        {
+            InvokedTargets = new[]
+            {
+                nameof(ConfigurationGenerationSpecs.TestBuild.Test)
+            },
+            OnWorkflowDispatchOptionalInputs = new[]
+            {
+                "Opt"
+            },
+            OnWorkflowDispatchRequiredInputs = new[]
+            {
+                "Req"
+            }
+        });
 #pragma warning restore FALLOUTOBS001
 
         var typed = Render(new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
-                           {
-                               InvokedTargets = new[] { nameof(ConfigurationGenerationSpecs.TestBuild.Test) },
-                               Inputs = new[]
-                                        {
-                                            new GitHubActionsInputAttribute("Opt"),
-                                            new GitHubActionsInputAttribute("Req") { Required = true }
-                                        }
-                           });
+        {
+            InvokedTargets = new[]
+            {
+                nameof(ConfigurationGenerationSpecs.TestBuild.Test)
+            },
+            Inputs = new[]
+            {
+                new GitHubActionsInputAttribute("Opt"),
+                new GitHubActionsInputAttribute("Req")
+                {
+                    Required = true
+                }
+            }
+        });
 
         typed.Should().Be(legacy);
     }
@@ -58,13 +72,22 @@ public class GitHubActionsDispatchInputSpecs
     public void Input_scoped_to_a_spaced_workflow_name_is_included()
     {
         var attribute = new TestGitHubActionsAttribute("My Workflow", GitHubActionsImage.UbuntuLatest)
-                        {
-                            InvokedTargets = new[] { nameof(ConfigurationGenerationSpecs.TestBuild.Test) },
-                            Inputs = new[]
-                                     {
-                                         new GitHubActionsInputAttribute("Scoped") { Workflows = new[] { "My Workflow" } }
-                                     }
-                        };
+        {
+            InvokedTargets = new[]
+            {
+                nameof(ConfigurationGenerationSpecs.TestBuild.Test)
+            },
+            Inputs = new[]
+            {
+                new GitHubActionsInputAttribute("Scoped")
+                {
+                    Workflows = new[]
+                    {
+                        "My Workflow"
+                    }
+                }
+            }
+        };
 
         var render = () => Render(attribute);
 

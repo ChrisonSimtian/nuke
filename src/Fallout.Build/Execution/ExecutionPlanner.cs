@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fallout.Common.Utilities;
@@ -29,8 +28,10 @@ internal static class ExecutionPlanner
                 .SelectMany(x => x.Triggers)
                 .Except(executionPlan)
                 .Where(executableTargets.Contains).ToList();
+
             invokedTargets = executionPlan.Concat(additionallyTriggered).ToList();
-        } while (additionallyTriggered.Count > 0);
+        }
+        while (additionallyTriggered.Count > 0);
 
         return executionPlan.ForEachLazy(x => x.Status = ExecutionStatus.Scheduled).ToList();
     }
@@ -67,7 +68,9 @@ internal static class ExecutionPlanner
             if (!(invokedTargets != null && invokedTargets.Contains(executableTarget)) &&
                 !(invokedTargets == null && executableTarget.IsDefault) &&
                 !scheduledTargets.SelectMany(x => x.ExecutionDependencies).Contains(executableTarget))
+            {
                 continue;
+            }
 
             scheduledTargets.Add(executableTarget);
         }

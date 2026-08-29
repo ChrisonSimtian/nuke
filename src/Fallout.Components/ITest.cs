@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Fallout.Common;
@@ -7,12 +6,12 @@ using Fallout.Common.CI.AzurePipelines;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.CI.TeamCity;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.Coverlet;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using Fallout.Solutions;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 namespace Fallout.Components;
@@ -53,7 +52,10 @@ public interface ITest : ICompile, IHasArtifacts
             AzurePipelines.Instance?.PublishTestResults(
                 type: AzurePipelinesTestResultsType.VSTest,
                 title: $"{Path.GetFileNameWithoutExtension(x)} ({AzurePipelines.Instance.StageDisplayName})",
-                files: new string[] { x }));
+                files: new string[]
+                {
+                    x
+                }));
     }
 
     void ReportTestCount()
@@ -107,6 +109,7 @@ public interface ITest : ICompile, IHasArtifacts
             .SetCoverletOutput(TestResultDirectory / $"{v.Name}.xml"));
 
     Configure<DotNetTestSettings> TestSettings => _ => _;
+
     Configure<DotNetTestSettings, Project> TestProjectSettings => (_, v) => _;
 
     IEnumerable<Project> TestProjects { get; }

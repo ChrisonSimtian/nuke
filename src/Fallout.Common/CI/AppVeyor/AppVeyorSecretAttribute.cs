@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Linq;
 
 namespace Fallout.Common.CI.AppVeyor;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class AppVeyorSecretAttribute : Attribute
+public class AppVeyorSecretAttribute(string parameter, string value) : Attribute
 {
-    public AppVeyorSecretAttribute(string parameter, string value)
-    {
-        Parameter = parameter;
-        Value = value;
-    }
+    public string Parameter { get; } = parameter;
 
-    public string Parameter { get; }
-    public string Value { get; }
+    public string Value { get; } = value;
 }

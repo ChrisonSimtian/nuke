@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Fallout.Cli.Commands;
@@ -12,7 +11,7 @@ namespace Fallout.Cli.Specs;
 
 public class CommandDispatcherSpecs
 {
-    private static readonly AbsolutePath SomeRoot = (AbsolutePath)Path.Combine(Path.GetTempPath(), "fallout-dispatch-root");
+    private static readonly AbsolutePath SomeRoot = Path.Combine(Path.GetTempPath(), "fallout-dispatch-root");
     private static readonly AbsolutePath SomeScript = SomeRoot / "build.sh";
 
     [Fact]
@@ -20,7 +19,11 @@ public class CommandDispatcherSpecs
     {
         var run = new RecordingCommand("run");
         var setup = new RecordingCommand("setup");
-        var dispatcher = new CommandDispatcher(new IFalloutCommand[] { run, setup }, new FakePrompts());
+        var dispatcher = new CommandDispatcher(new IFalloutCommand[]
+        {
+            run,
+            setup
+        }, new FakePrompts());
 
         var exitCode = await dispatcher.DispatchAsync([":setup", "alpha", "beta"], SomeRoot, SomeScript);
 
@@ -39,7 +42,10 @@ public class CommandDispatcherSpecs
     public async Task Dispatch_MatchesNameCaseInsensitively(string token)
     {
         var setup = new RecordingCommand("setup");
-        var dispatcher = new CommandDispatcher(new IFalloutCommand[] { setup }, new FakePrompts());
+        var dispatcher = new CommandDispatcher(new IFalloutCommand[]
+        {
+            setup
+        }, new FakePrompts());
 
         await dispatcher.DispatchAsync([token], SomeRoot, SomeScript);
 
@@ -54,7 +60,10 @@ public class CommandDispatcherSpecs
     {
         // Preserves every spelling the historical reflection dispatch accepted.
         var addPackage = new RecordingCommand("add-package");
-        var dispatcher = new CommandDispatcher(new IFalloutCommand[] { addPackage }, new FakePrompts());
+        var dispatcher = new CommandDispatcher(new IFalloutCommand[]
+        {
+            addPackage
+        }, new FakePrompts());
 
         await dispatcher.DispatchAsync([token], SomeRoot, SomeScript);
 
@@ -65,7 +74,10 @@ public class CommandDispatcherSpecs
     public async Task Dispatch_ReturnsCommandExitCode()
     {
         var trigger = new RecordingCommand("trigger", exitCode: 42);
-        var dispatcher = new CommandDispatcher(new IFalloutCommand[] { trigger }, new FakePrompts());
+        var dispatcher = new CommandDispatcher(new IFalloutCommand[]
+        {
+            trigger
+        }, new FakePrompts());
 
         (await dispatcher.DispatchAsync([":trigger"], SomeRoot, SomeScript)).Should().Be(42);
     }
@@ -74,20 +86,27 @@ public class CommandDispatcherSpecs
     public async Task Dispatch_UnknownCommand_ThrowsWithAvailableCommandListing()
     {
         var dispatcher = new CommandDispatcher(
-            new IFalloutCommand[] { new RecordingCommand("run"), new RecordingCommand("setup") },
+            new IFalloutCommand[]
+            {
+                new RecordingCommand("run"),
+                new RecordingCommand("setup")
+            },
             new FakePrompts());
 
         var action = () => dispatcher.DispatchAsync([":bogus"], SomeRoot, SomeScript);
 
         (await action.Should().ThrowAsync<Exception>()
-            .WithMessage("*'bogus' is not supported*"))
+                .WithMessage("*'bogus' is not supported*"))
             .And.Message.Should().ContainAll("- run", "- setup");
     }
 
     [Fact]
     public async Task Dispatch_EmptyCommandToken_Fails()
     {
-        var dispatcher = new CommandDispatcher(new IFalloutCommand[] { new RecordingCommand("run") }, new FakePrompts());
+        var dispatcher = new CommandDispatcher(new IFalloutCommand[]
+        {
+            new RecordingCommand("run")
+        }, new FakePrompts());
 
         var action = () => dispatcher.DispatchAsync([":"], SomeRoot, SomeScript);
 
@@ -99,7 +118,11 @@ public class CommandDispatcherSpecs
     {
         var setup = new RecordingCommand("setup");
         var dispatcher = new CommandDispatcher(
-            new IFalloutCommand[] { new RecordingCommand("run"), setup },
+            new IFalloutCommand[]
+            {
+                new RecordingCommand("run"),
+                setup
+            },
             new FakePrompts(confirm: true));
 
         await dispatcher.DispatchAsync(["whatever"], rootDirectory: null, buildScript: null);
@@ -114,7 +137,11 @@ public class CommandDispatcherSpecs
     {
         var setup = new RecordingCommand("setup");
         var dispatcher = new CommandDispatcher(
-            new IFalloutCommand[] { new RecordingCommand("run"), setup },
+            new IFalloutCommand[]
+            {
+                new RecordingCommand("run"),
+                setup
+            },
             new FakePrompts(confirm: false));
 
         var exitCode = await dispatcher.DispatchAsync(["whatever"], rootDirectory: null, buildScript: null);
@@ -130,7 +157,11 @@ public class CommandDispatcherSpecs
         var buildProject = root.WriteBuildProjectAtConvention();
         var run = new RecordingCommand("run");
         var dispatcher = new CommandDispatcher(
-            new IFalloutCommand[] { run, new RecordingCommand("setup") },
+            new IFalloutCommand[]
+            {
+                run,
+                new RecordingCommand("setup")
+            },
             new FakePrompts());
 
         await dispatcher.DispatchAsync(["compile", "--verbose"], root.Path, buildScript: null);
@@ -151,9 +182,13 @@ public class CommandDispatcherSpecs
         }
 
         public string Name { get; }
+
         public bool WasCalled { get; private set; }
+
         public string[] ReceivedArgs { get; private set; }
+
         public AbsolutePath ReceivedRoot { get; private set; }
+
         public AbsolutePath ReceivedBuildScript { get; private set; }
 
         public Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
@@ -196,7 +231,9 @@ public class CommandDispatcherSpecs
 
         public static TempRoot Create()
         {
-            var dir = (AbsolutePath)System.IO.Path.Combine(System.IO.Path.GetTempPath(), "fallout-dispatch-" + Guid.NewGuid().ToString("N"));
+            var dir = (AbsolutePath)System.IO.Path.Combine(System.IO.Path.GetTempPath(),
+                "fallout-dispatch-" + Guid.NewGuid().ToString("N"));
+
             dir.CreateDirectory();
             return new TempRoot(dir);
         }

@@ -1,7 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.IO;
-using FluentAssertions;
 using Fallout.Common.Git;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
@@ -71,7 +72,9 @@ public class GitRepositorySpecs
         finally
         {
             if (Directory.Exists(tempDir))
+            {
                 Directory.Delete(tempDir, recursive: true);
+            }
         }
     }
 
@@ -129,7 +132,7 @@ public class GitRepositorySpecs
 
     private static void RunGit(string workingDirectory, string arguments)
     {
-        var startInfo = new System.Diagnostics.ProcessStartInfo("git", arguments)
+        var startInfo = new ProcessStartInfo("git", arguments)
         {
             WorkingDirectory = workingDirectory,
             RedirectStandardOutput = true,
@@ -137,7 +140,7 @@ public class GitRepositorySpecs
             UseShellExecute = false
         };
 
-        using var process = System.Diagnostics.Process.Start(startInfo).NotNull();
+        using var process = Process.Start(startInfo).NotNull();
         process.WaitForExit();
         process.ExitCode.Should().Be(0, process.StandardError.ReadToEnd());
     }

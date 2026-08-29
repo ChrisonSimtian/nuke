@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.CodeGeneration.Model;
+﻿namespace Fallout.CodeGeneration.Model;
 
 internal static class RegexPatterns
 {

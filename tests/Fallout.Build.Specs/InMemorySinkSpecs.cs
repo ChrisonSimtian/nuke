@@ -1,6 +1,6 @@
 using System;
-using FluentAssertions;
 using Fallout.Common.Execution;
+using FluentAssertions;
 using Serilog.Events;
 using Serilog.Parsing;
 using Xunit;

@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using Fallout.Common.CI.AppVeyor;
 using Fallout.Common.CI.AzurePipelines;

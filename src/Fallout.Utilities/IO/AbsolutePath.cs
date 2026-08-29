@@ -1,12 +1,12 @@
+#if NET6_0_OR_GREATER
+using System.Text.Json.Serialization;
+using Fallout.Utilities.Converters;
+#endif
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-#if NET6_0_OR_GREATER
-using System.Text.Json.Serialization;
-using Fallout.Utilities.Converters;
-#endif
 using Fallout.Common.Utilities;
 using static Fallout.Common.IO.PathConstruction;
 using TypeConverter = Fallout.Utilities.Converters.TypeConverter;
@@ -58,7 +58,9 @@ public class AbsolutePath : IAbsolutePathHolder, IFormattable
     public static implicit operator AbsolutePath(string path)
     {
         if (path is null)
+        {
             return null;
+        }
 
         Assert.True(HasPathRoot(path), $"Path '{path}' must be rooted");
         return new AbsolutePath(path);
@@ -131,13 +133,19 @@ public class AbsolutePath : IAbsolutePathHolder, IFormattable
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(objA: null, obj))
+        {
             return false;
+        }
 
         if (ReferenceEquals(this, obj))
+        {
             return true;
+        }
 
         if (obj.GetType() != GetType())
+        {
             return false;
+        }
 
         return Equals((AbsolutePath)obj);
     }

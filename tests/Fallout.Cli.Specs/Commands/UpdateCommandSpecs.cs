@@ -1,10 +1,10 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Fallout.Cli.Commands;
 using Fallout.Common.IO;
 using Fallout.Solutions;
 using FluentAssertions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Fallout.Cli.Specs.Commands;
@@ -13,7 +13,8 @@ public class UpdateCommandSpecs
 {
     [Fact]
     public void Command_is_named_update()
-        => new UpdateCommand(new FakeConsolePrompts(), new ConfigurationReader(), new BuildScaffolder()).Name.Should().Be("update");
+        => new UpdateCommand(new FakeConsolePrompts(), new ConfigurationReader(), new BuildScaffolder()).Name.Should()
+            .Be("update");
 
     [Fact]
     public void Updating_the_build_project_retargets_it_to_net10()
@@ -22,6 +23,7 @@ public class UpdateCommandSpecs
         // framework Fallout.Common ships for. Guards against the literal drifting off net10.0.
         var projectFile = (AbsolutePath)Path.Combine(
             Path.GetTempPath(), "fallout-update-" + Guid.NewGuid().ToString("N"), "_build.csproj");
+
         projectFile.Parent.CreateDirectory();
         projectFile.WriteAllText(
             """
@@ -31,6 +33,7 @@ public class UpdateCommandSpecs
               </PropertyGroup>
             </Project>
             """);
+
         try
         {
             var buildProject = ProjectModelTasks.ParseProject(projectFile);
@@ -50,12 +53,17 @@ public class UpdateCommandSpecs
     {
         var dir = (AbsolutePath)Path.Combine(Path.GetTempPath(), "fallout-update-" + Guid.NewGuid().ToString("N"));
         dir.CreateDirectory();
-        var prompts = new FakeConsolePrompts { InvokeConfirmedActions = false };
+        var prompts = new FakeConsolePrompts
+        {
+            InvokeConfirmedActions = false
+        };
+
         try
         {
             // No build script and every confirmation declined → no update steps run, but the command
             // still completes cleanly.
-            (await new UpdateCommand(prompts, new ConfigurationReader(), new BuildScaffolder()).ExecuteAsync([], dir, buildScript: null)).Should().Be(0);
+            (await new UpdateCommand(prompts, new ConfigurationReader(), new BuildScaffolder()).ExecuteAsync([], dir,
+                buildScript: null)).Should().Be(0);
 
             prompts.Completions.Should().Contain("Updates");
         }

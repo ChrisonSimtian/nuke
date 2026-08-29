@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
+using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
-using Serilog;
-using Fallout.Common;
 
 namespace Fallout.Solutions;
 
@@ -67,7 +65,9 @@ public class SolutionAttribute(string relativePath)
     {
         var falloutFile = Build.RootDirectory / Constants.FalloutFileName;
         if (!falloutFile.Exists())
+        {
             return null;
+        }
 
         var solutionFileRelative = falloutFile.ReadAllLines().ElementAtOrDefault(0);
         Assert.True(solutionFileRelative != null && !solutionFileRelative.Contains(value: '\\'),

@@ -12,17 +12,17 @@ namespace Fallout.Persistence.Solution.Serializer.Xml.XmlDecorators;
 internal abstract partial class XmlDecorator
 {
     // CONSIDER: Use StringTable if strings will be kept.
-    internal string? GetXmlAttribute(Keyword keyword) => this.XmlElement.GetAttribute(keyword.ToXmlString()).Trim().NullIfEmpty();
+    internal string? GetXmlAttribute(Keyword keyword) => XmlElement.GetAttribute(keyword.ToXmlString()).Trim().NullIfEmpty();
 
     internal void UpdateXmlAttribute<T>(Keyword keyword, bool isDefault, T value, Func<T, string> toString)
     {
         if (isDefault)
         {
-            this.XmlElement.RemoveAttribute(keyword.ToXmlString());
+            XmlElement.RemoveAttribute(keyword.ToXmlString());
         }
         else
         {
-            this.XmlElement.SetAttribute(keyword.ToXmlString(), toString(value));
+            XmlElement.SetAttribute(keyword.ToXmlString(), toString(value));
         }
     }
 
@@ -30,20 +30,20 @@ internal abstract partial class XmlDecorator
     {
         List<XmlNode> trivia = new(8);
 
-        XmlNode? previous = this.XmlElement.PreviousSibling;
+        XmlNode? previous = XmlElement.PreviousSibling;
         while (previous is XmlWhitespace or XmlComment)
         {
             trivia.Add(previous);
             previous = previous.PreviousSibling;
         }
 
-        trivia.Add(this.XmlElement);
+        trivia.Add(XmlElement);
         return trivia;
     }
 
     internal XmlNode GetFirstTrivia()
     {
-        XmlNode? previous = this.XmlElement.PreviousSibling;
+        XmlNode? previous = XmlElement.PreviousSibling;
         XmlNode? trivia = null;
         while (previous is XmlWhitespace or XmlComment)
         {
@@ -51,20 +51,20 @@ internal abstract partial class XmlDecorator
             previous = previous.PreviousSibling;
         }
 
-        return trivia ?? this.XmlElement;
+        return trivia ?? XmlElement;
     }
 
     internal StringSpan GetNewLineAndIndent()
     {
         // The solution node doesn't have a newline before it, so create one.
-        if (this.ElementName == Keyword.Solution)
+        if (ElementName == Keyword.Solution)
         {
-            return (this.Root.SerializationSettings.NewLine ?? Environment.NewLine).AsSpan();
+            return (Root.SerializationSettings.NewLine ?? Environment.NewLine).AsSpan();
         }
 
-        return this.XmlElement.PreviousSibling is not XmlWhitespace previousWhitespace ?
-            StringSpan.Empty :
-            OnlyOneLine(previousWhitespace.Value.AsSpan());
+        return XmlElement.PreviousSibling is not XmlWhitespace previousWhitespace
+            ? StringSpan.Empty
+            : OnlyOneLine(previousWhitespace.Value.AsSpan());
 
         static StringSpan OnlyOneLine(StringSpan value)
         {

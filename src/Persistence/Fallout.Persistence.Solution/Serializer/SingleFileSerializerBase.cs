@@ -9,7 +9,7 @@ internal abstract class SingleFileSerializerBase<TSettings> : ISolutionSingleFil
 {
     public abstract string Name { get; }
 
-    public string DefaultFileExtension => this.FileExtension;
+    public string DefaultFileExtension => FileExtension;
 
     private protected abstract string FileExtension { get; }
 
@@ -20,18 +20,19 @@ internal abstract class SingleFileSerializerBase<TSettings> : ISolutionSingleFil
     Task<SolutionModel> ISolutionSingleFileSerializer<TSettings>.OpenAsync(Stream reader, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return this.ReadModelAsync(fullPath: null, reader, cancellationToken);
+        return ReadModelAsync(fullPath: null, reader, cancellationToken);
     }
 
-    Task ISolutionSingleFileSerializer<TSettings>.SaveAsync(Stream writer, SolutionModel model, CancellationToken cancellationToken)
+    Task ISolutionSingleFileSerializer<TSettings>.SaveAsync(Stream writer, SolutionModel model,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return this.WriteModelAsync(fullPath: null, model, writer, cancellationToken);
+        return WriteModelAsync(fullPath: null, model, writer, cancellationToken);
     }
 
     bool ISolutionSerializer.IsSupported(string fullPath)
     {
-        return Path.GetExtension(fullPath.AsSpan()).EqualsOrdinalIgnoreCase(this.FileExtension);
+        return Path.GetExtension(fullPath.AsSpan()).EqualsOrdinalIgnoreCase(FileExtension);
     }
 
     async Task<SolutionModel> ISolutionSerializer.OpenAsync(string moniker, CancellationToken cancellationToken)
@@ -40,7 +41,7 @@ internal abstract class SingleFileSerializerBase<TSettings> : ISolutionSingleFil
         // netstandard2.0, so `await using` fails to compile there (CS8417). Synchronous disposal
         // of a local read stream is fine across all target frameworks.
         using FileStream reader = File.OpenRead(moniker);
-        return await this.ReadModelAsync(moniker, reader, cancellationToken);
+        return await ReadModelAsync(moniker, reader, cancellationToken);
     }
 
     async Task ISolutionSerializer.SaveAsync(string moniker, SolutionModel model, CancellationToken cancellationToken)
@@ -54,10 +55,12 @@ internal abstract class SingleFileSerializerBase<TSettings> : ISolutionSingleFil
         // Plain `using` (not `await using`): see OpenAsync — FileStream is not IAsyncDisposable
         // on netstandard2.0 (CS8417). Synchronous disposal of a local write stream is fine here.
         using FileStream writer = File.OpenWrite(moniker);
-        await this.WriteModelAsync(moniker, model, writer, cancellationToken);
+        await WriteModelAsync(moniker, model, writer, cancellationToken);
     }
 
-    private protected abstract Task<SolutionModel> ReadModelAsync(string? fullPath, Stream reader, CancellationToken cancellationToken);
+    private protected abstract Task<SolutionModel> ReadModelAsync(string? fullPath, Stream reader,
+        CancellationToken cancellationToken);
 
-    private protected abstract Task WriteModelAsync(string? fullPath, SolutionModel model, Stream writerStream, CancellationToken cancellationToken);
+    private protected abstract Task WriteModelAsync(string? fullPath, SolutionModel model, Stream writerStream,
+        CancellationToken cancellationToken);
 }

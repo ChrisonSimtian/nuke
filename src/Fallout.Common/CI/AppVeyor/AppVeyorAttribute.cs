@@ -15,10 +15,16 @@ namespace Fallout.Common.CI.AppVeyor;
 /// Interface according to the <a href="https://www.appveyor.com/docs/">official website</a>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class AppVeyorAttribute : ConfigurationAttributeBase
+public class AppVeyorAttribute(
+    string suffix,
+    AppVeyorImage image,
+    params AppVeyorImage[] images)
+    : ConfigurationAttributeBase
 {
-    private readonly string suffix;
-    private readonly AppVeyorImage[] images;
+    private readonly AppVeyorImage[] images = new[]
+    {
+        image
+    }.Concat(images).ToArray();
 
     public AppVeyorAttribute(
         AppVeyorImage image,
@@ -27,38 +33,49 @@ public class AppVeyorAttribute : ConfigurationAttributeBase
     {
     }
 
-    public AppVeyorAttribute(
-        string suffix,
-        AppVeyorImage image,
-        params AppVeyorImage[] images)
-    {
-        this.suffix = suffix;
-        this.images = new[] { image }.Concat(images).ToArray();
-    }
-
     public override string IdPostfix => suffix;
 
     public override Type HostType => typeof(AppVeyor);
+
     public override AbsolutePath ConfigurationFile => Build.RootDirectory / ConfigurationFileName;
-    public override IEnumerable<AbsolutePath> GeneratedFiles => new[] { ConfigurationFile };
+
+    public override IEnumerable<AbsolutePath> GeneratedFiles => new[]
+    {
+        ConfigurationFile
+    };
+
     private string ConfigurationFileName => suffix != null ? $"appveyor.{suffix}.yml" : "appveyor.yml";
 
     public override IEnumerable<string> RelevantTargetNames => InvokedTargets;
+
     public override IEnumerable<string> IrrelevantTargetNames => new string[0];
 
     public AppVeyorService[] Services { get; set; } = new AppVeyorService[0];
+
     public string[] InvokedTargets { get; set; } = new string[0];
+
     public string[] BranchesOnly { get; set; } = new string[0];
+
     public string[] BranchesExcept { get; set; } = new string[0];
+
     public bool SkipTags { get; set; }
+
     public bool SkipBranchesWithPullRequest { get; set; }
+
     public string OnlyCommitsMessage { get; set; }
+
     public string OnlyCommitsAuthor { get; set; }
+
     public string SkipCommitsMessage { get; set; }
+
     public string SkipCommitsAuthor { get; set; }
+
     public string[] Init { get; set; } = new string[0];
+
     public string[] Cache { get; set; } = new string[0];
+
     public string[] Secrets { get; set; }
+
     public bool Submodules { get; set; }
 
     public override CustomFileWriter CreateWriter(StreamWriter streamWriter)
@@ -69,24 +86,24 @@ public class AppVeyorAttribute : ConfigurationAttributeBase
     public override ConfigurationEntity GetConfiguration(IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
         return new AppVeyorConfiguration
-               {
-                   Images = images,
-                   BuildCmdPath = BuildCmdPath,
-                   Services = Services,
-                   Branches = GetBranches(),
-                   SkipTags = SkipTags,
-                   SkipBranchesWithPullRequest = SkipBranchesWithPullRequest,
-                   OnlyCommitsMessage = OnlyCommitsMessage,
-                   OnlyCommitsAuthor = OnlyCommitsAuthor,
-                   SkipCommitsMessage = SkipCommitsMessage,
-                   SkipCommitsAuthor = SkipCommitsAuthor,
-                   InvokedTargets = InvokedTargets,
-                   Init = Init,
-                   Cache = Cache,
-                   Artifacts = GetArtifacts(relevantTargets).ToArray(),
-                   Secrets = GetSecrets(),
-                   Submodules = Submodules
-               };
+        {
+            Images = images,
+            BuildCmdPath = BuildCmdPath,
+            Services = Services,
+            Branches = GetBranches(),
+            SkipTags = SkipTags,
+            SkipBranchesWithPullRequest = SkipBranchesWithPullRequest,
+            OnlyCommitsMessage = OnlyCommitsMessage,
+            OnlyCommitsAuthor = OnlyCommitsAuthor,
+            SkipCommitsMessage = SkipCommitsMessage,
+            SkipCommitsAuthor = SkipCommitsAuthor,
+            InvokedTargets = InvokedTargets,
+            Init = Init,
+            Cache = Cache,
+            Artifacts = GetArtifacts(relevantTargets).ToArray(),
+            Secrets = GetSecrets(),
+            Submodules = Submodules
+        };
     }
 
     private IEnumerable<string> GetArtifacts(IReadOnlyCollection<ExecutableTarget> relevantTargets)
@@ -100,13 +117,15 @@ public class AppVeyorAttribute : ConfigurationAttributeBase
     protected AppVeyorBranches GetBranches()
     {
         if (BranchesOnly.Length == 0 && BranchesExcept.Length == 0)
+        {
             return null;
+        }
 
         return new AppVeyorBranches
-               {
-                   Only = BranchesOnly,
-                   Except = BranchesExcept
-               };
+        {
+            Only = BranchesOnly,
+            Except = BranchesExcept
+        };
     }
 
     private Dictionary<string, string> GetSecrets()

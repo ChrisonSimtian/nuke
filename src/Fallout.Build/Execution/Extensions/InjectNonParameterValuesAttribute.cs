@@ -16,14 +16,20 @@ internal class InjectNonParameterValuesAttribute : BuildExtensionAttributeBase, 
         ValueInjectionUtility.InjectValues(Build, (member, attribute) =>
         {
             if (attribute.GetType() == typeof(ParameterAttribute))
+            {
                 return false;
+            }
 
             if (!Build.GetType().HasCustomAttribute<OnDemandValueInjectionAttribute>() &&
                 !member.HasCustomAttribute<OnDemandAttribute>())
+            {
                 return true;
+            }
 
             if (member.HasCustomAttribute<RequiredAttribute>())
+            {
                 return false;
+            }
 
             var requiredMembers = executionPlan.SelectMany(x => x.DelegateRequirements)
                 .Where(x => x is not Expression<Func<bool>>)

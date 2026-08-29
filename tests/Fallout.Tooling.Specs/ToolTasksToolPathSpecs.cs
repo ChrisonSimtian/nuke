@@ -1,8 +1,5 @@
-using System;
-using System.ComponentModel;
-using System.Linq;
-using FluentAssertions;
 using Fallout.Common.Tooling;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
@@ -41,7 +38,6 @@ public class ToolTasksToolPathSpecs
                 .SetFramework("netcoreapp2.0"))
             .Should().Contain("netcoreapp2.0").And.EndWith("xunit.console.dll");
     }
-
 
     [Fact]
     public void TestFromOverride()

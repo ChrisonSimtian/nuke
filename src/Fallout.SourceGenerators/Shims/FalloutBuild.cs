@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common;
+﻿namespace Fallout.Common;
 
 internal static class FalloutBuild
 {

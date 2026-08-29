@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Fallout.CodeGeneration.Model;
 using Fallout.CodeGeneration.Writers;
@@ -16,7 +15,9 @@ public static class DataClassGenerator
     public static void Run(DataClass dataClass, ToolWriter toolWriter)
     {
         if (dataClass.OmitDataClass)
+        {
             return;
+        }
 
         if (dataClass.IsToolSettingsClass)
         {
@@ -25,47 +26,72 @@ public static class DataClassGenerator
                 CheckMissingValue();
                 CheckMissingSecret();
                 if (dataClass.Properties.Count > 1)
+                {
                     CheckMissingPosition();
+                }
 
                 void CheckMissingValue()
                 {
                     if (property.NoArgument)
+                    {
                         return;
+                    }
 
                     if (property.Format != null && property.Format.Contains("{value}"))
+                    {
                         return;
+                    }
 
-                    if (new[] { "int", "bool" }.Contains(property.Type))
+                    if (new[]
+                        {
+                            "int",
+                            "bool"
+                        }.Contains(property.Type))
+                    {
                         return;
+                    }
 
-                    Log.Warning("Property {ClassName}.{PropertyName} doesn't contain '{{value}}'", property.DataClass.Name, property.Name);
+                    Log.Warning("Property {ClassName}.{PropertyName} doesn't contain '{{value}}'", property.DataClass.Name,
+                        property.Name);
                 }
 
                 void CheckMissingSecret()
                 {
                     if (property.Secret.HasValue)
+                    {
                         return;
+                    }
 
                     if (!property.Name.ContainsOrdinalIgnoreCase("key") &&
                         !property.Name.ContainsOrdinalIgnoreCase("password") &&
                         !property.Name.ContainsOrdinalIgnoreCase("token"))
+                    {
                         return;
+                    }
 
-                    Log.Warning("Property {ClassName}.{PropertyName} should have explicit secret definition", property.DataClass.Name, property.Name);
+                    Log.Warning("Property {ClassName}.{PropertyName} should have explicit secret definition",
+                        property.DataClass.Name, property.Name);
                 }
 
                 void CheckMissingPosition()
                 {
                     if (property.NoArgument)
+                    {
                         return;
+                    }
 
                     if (!property.Format.StartsWith("{"))
+                    {
                         return;
+                    }
 
                     if (property.Position != null)
+                    {
                         return;
+                    }
 
-                    Log.Warning("Property {ClassName}.{PropertyName} does not have a position", property.DataClass.Name, property.Name);
+                    Log.Warning("Property {ClassName}.{PropertyName} does not have a position", property.DataClass.Name,
+                        property.Name);
                 }
             }
         }
@@ -91,15 +117,19 @@ public static class DataClassGenerator
         string GetCommandAttribute()
         {
             if (dataClass is not SettingsClass settingsClass)
+            {
                 return null;
+            }
 
             var commandArguments = new (string Name, string Value)[]
                 {
                     (nameof(CommandAttribute.Type), $"typeof({dataClass.Tool.GetClassName()})"),
-                    (nameof(CommandAttribute.Command), $"nameof({dataClass.Tool.GetClassName()}.{settingsClass.Task.GetTaskMethodName()})"),
+                    (nameof(CommandAttribute.Command),
+                        $"nameof({dataClass.Tool.GetClassName()}.{settingsClass.Task.GetTaskMethodName()})"),
                     (nameof(CommandAttribute.Arguments), settingsClass.Task.DefiniteArgument?.DoubleQuote()),
                 }.Where(x => x.Item2 != null)
                 .Select(x => $"{x.Name} = {x.Value}").JoinCommaSpace();
+
             return $"[Command({commandArguments})]";
         }
     }
@@ -107,19 +137,28 @@ public static class DataClassGenerator
     private static void WritePropertyDeclaration(DataClassWriter writer, Property property)
     {
         if (property.CustomImpl)
+        {
             return;
+        }
 
         var type = GetPropertyType(property);
-        var attributes = new[] { GetArgumentAttribute(), GetJsonPropertyAttribute() }.WhereNotNull();
+        var attributes = new[]
+        {
+            GetArgumentAttribute(),
+            GetJsonPropertyAttribute()
+        }.WhereNotNull();
 
         writer
             .WriteLine($"/// <summary>{property.Help}</summary>")
-            .WriteLine($"{attributes.JoinSpace()} public {type.External} {property.Name} => Get<{type.Internal}>(() => {property.Name});");
+            .WriteLine(
+                $"{attributes.JoinSpace()} public {type.External} {property.Name} => Get<{type.Internal}>(() => {property.Name});");
 
         string GetArgumentAttribute()
         {
             if (property.Format.IsNullOrWhiteSpace())
+            {
                 return null;
+            }
 
             var arguments = new (string Name, string Value)[]
                 {
@@ -128,7 +167,7 @@ public static class DataClassGenerator
                     (nameof(ArgumentAttribute.Secret), property.Secret?.ToString().ToLowerInvariant()),
                     (nameof(ArgumentAttribute.Separator), property.Separator?.DoubleQuote()),
                     (nameof(ArgumentAttribute.QuoteMultiple), property.QuoteMultiple ? bool.TrueString.ToLowerInvariant() : null),
-                    (nameof(ArgumentAttribute.FormatterMethod), property.Formatter?.Apply<string, string>(x => $"nameof({x})")),
+                    (nameof(ArgumentAttribute.FormatterMethod), property.Formatter?.Apply(x => $"nameof({x})")),
                 }.Where(x => x.Item2 != null)
                 .Select(x => $"{x.Name} = {x.Value}").JoinCommaSpace();
 
@@ -138,7 +177,9 @@ public static class DataClassGenerator
         string GetJsonPropertyAttribute()
         {
             if (property.Json.IsNullOrWhiteSpace())
+            {
                 return null;
+            }
 
             return $"[JsonPropertyName({property.Json.DoubleQuote()})]";
         }
@@ -147,7 +188,9 @@ public static class DataClassGenerator
     private static (string External, string Internal) GetPropertyType(Property property)
     {
         if (property.IsList())
+        {
             return ($"IReadOnlyList<{property.GetListValueType()}>", $"List<{property.GetListValueType()}>");
+        }
 
         if (property.IsDictionary())
         {

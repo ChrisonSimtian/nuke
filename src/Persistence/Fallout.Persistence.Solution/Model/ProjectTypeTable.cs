@@ -30,44 +30,49 @@ internal sealed partial class ProjectTypeTable
     private ProjectTypeTable(bool isBuiltIn, List<ProjectType> projectTypes)
     {
         this.isBuiltIn = isBuiltIn;
-        this.projectTypesList = projectTypes;
-        this.fromExtension = new(this.ProjectTypes.Count, StringComparer.OrdinalIgnoreCase);
-        this.fromName = new(this.ProjectTypes.Count, StringComparer.OrdinalIgnoreCase);
-        this.fromProjectTypeId = new(this.ProjectTypes.Count);
+        projectTypesList = projectTypes;
+        fromExtension = new Dictionary<string, ProjectType>(ProjectTypes.Count, StringComparer.OrdinalIgnoreCase);
+        fromName = new Dictionary<string, ProjectType>(ProjectTypes.Count, StringComparer.OrdinalIgnoreCase);
+        fromProjectTypeId = new Dictionary<Guid, ProjectType>(ProjectTypes.Count);
 
         foreach (ProjectType type in projectTypes.GetStructEnumerable())
         {
             if (!type.Extension.IsNullOrEmpty() &&
-                !this.fromExtension.TryAdd(GetExtension(type.Extension), type))
+                !fromExtension.TryAdd(GetExtension(type.Extension), type))
             {
                 string projectType = type.GetDisplayName();
-                throw new SolutionException(string.Format(Errors.DuplicateExtension_Args2, type.Extension, projectType), SolutionErrorType.DuplicateExtension);
+                throw new SolutionException(string.Format(Errors.DuplicateExtension_Args2, type.Extension, projectType),
+                    SolutionErrorType.DuplicateExtension);
             }
 
             if (!type.Name.IsNullOrEmpty())
             {
-                if (!this.fromName.TryAdd(type.Name, type))
+                if (!fromName.TryAdd(type.Name, type))
                 {
                     string projectType = type.GetDisplayName();
-                    throw new SolutionException(string.Format(Errors.DuplicateName_Args2, type.Name, projectType), SolutionErrorType.DuplicateName);
+                    throw new SolutionException(string.Format(Errors.DuplicateName_Args2, type.Name, projectType),
+                        SolutionErrorType.DuplicateName);
                 }
 
                 // If a name isn't provided, it is just to map an extension to a project type.
-                if (type.ProjectTypeId != Guid.Empty && !this.fromProjectTypeId.TryAdd(type.ProjectTypeId, type))
+                if (type.ProjectTypeId != Guid.Empty && !fromProjectTypeId.TryAdd(type.ProjectTypeId, type))
                 {
                     string projectType = type.GetDisplayName();
-                    throw new SolutionException(string.Format(Errors.DuplicateProjectTypeId_Args2, type.ProjectTypeId, projectType), SolutionErrorType.DuplicateProjectTypeId);
+                    throw new SolutionException(
+                        string.Format(Errors.DuplicateProjectTypeId_Args2, type.ProjectTypeId, projectType),
+                        SolutionErrorType.DuplicateProjectTypeId);
                 }
             }
 
             if (string.IsNullOrEmpty(type.Name) && string.IsNullOrEmpty(type.Extension) && type.ProjectTypeId == Guid.Empty)
             {
-                if (this.defaultRules is not null)
+                if (defaultRules is not null)
                 {
-                    throw new SolutionException(Errors.DuplicateDefaultProjectType, SolutionErrorType.DuplicateDefaultProjectType);
+                    throw new SolutionException(Errors.DuplicateDefaultProjectType,
+                        SolutionErrorType.DuplicateDefaultProjectType);
                 }
 
-                this.defaultRules ??= type.ConfigurationRules;
+                defaultRules ??= type.ConfigurationRules;
             }
         }
 
@@ -75,46 +80,48 @@ internal sealed partial class ProjectTypeTable
         {
             if (!type.BasedOn.IsNullOrEmpty())
             {
-                if (this.GetBasedOnType(type) is null)
+                if (GetBasedOnType(type) is null)
                 {
-                    throw new SolutionException(string.Format(Errors.InvalidProjectTypeReference_Args1, type.BasedOn), SolutionErrorType.InvalidProjectTypeReference);
+                    throw new SolutionException(string.Format(Errors.InvalidProjectTypeReference_Args1, type.BasedOn),
+                        SolutionErrorType.InvalidProjectTypeReference);
                 }
 
                 // Check for loops in the BasedOn chain using Floyd's cycle-finding algorithm.
                 ProjectType? currentSlow = type;
-                ProjectType? currentFast = this.GetBasedOnType(type);
+                ProjectType? currentFast = GetBasedOnType(type);
                 while (currentSlow is not null && currentFast is not null)
                 {
-                    if (object.ReferenceEquals(currentSlow, currentFast))
+                    if (ReferenceEquals(currentSlow, currentFast))
                     {
                         string projectType = type.GetDisplayName();
-                        throw new SolutionException(string.Format(Errors.InvalidLoop_Args1, projectType), SolutionErrorType.InvalidLoop);
+                        throw new SolutionException(string.Format(Errors.InvalidLoop_Args1, projectType),
+                            SolutionErrorType.InvalidLoop);
                     }
 
-                    currentSlow = this.GetBasedOnType(currentSlow);
-                    currentFast = this.GetBasedOnType(this.GetBasedOnType(currentFast));
+                    currentSlow = GetBasedOnType(currentSlow);
+                    currentFast = GetBasedOnType(GetBasedOnType(currentFast));
                 }
             }
         }
 
-        this.defaultRules ??= [];
+        defaultRules ??= [];
 
         static string GetExtension(string extension) => extension.StartsWith('.') ? extension : $".{extension}";
     }
 
-    internal IReadOnlyList<ProjectType> ProjectTypes => this.projectTypesList;
+    internal IReadOnlyList<ProjectType> ProjectTypes => projectTypesList;
 
     internal Guid? GetProjectTypeId(string? alias, StringSpan extension)
     {
         return
-            this.GetProjectTypeId(this.GetForName(alias) ?? this.GetForExtension(extension.ToString())) ??
-            (this.isBuiltIn ? null : BuiltInTypes.GetProjectTypeId(alias, extension));
+            GetProjectTypeId(GetForName(alias) ?? GetForExtension(extension.ToString())) ??
+            (isBuiltIn ? null : BuiltInTypes.GetProjectTypeId(alias, extension));
     }
 
     // Figures out what the most concise friendly type name of the project type is, if it fails use the project type id.
     internal string GetConciseType(SolutionProjectModel projectModel)
     {
-        return this.GetConciseType(projectModel.TypeId, projectModel.Type, projectModel.Extension);
+        return GetConciseType(projectModel.TypeId, projectModel.Type, projectModel.Extension);
     }
 
     // Figures out what the most concise friendly type name of the project type is, if it fails use the project type id.
@@ -122,27 +129,30 @@ internal sealed partial class ProjectTypeTable
     {
         // Get TypeId to add to the Project element.
         return
-            !this.TryGetProjectType(typeId, type, extension, out ProjectType? projectType, out bool impliedFromExtension) ? GetTypeFromModel(typeId, type) :
-            !impliedFromExtension ? GetTypeFromProjectType(projectType) :
-            string.Empty;
+            !TryGetProjectType(typeId, type, extension, out ProjectType? projectType, out bool impliedFromExtension)
+                ? GetTypeFromModel(typeId, type)
+                : !impliedFromExtension
+                    ? GetTypeFromProjectType(projectType)
+                    : string.Empty;
 
         string GetTypeFromProjectType(ProjectType projectType) =>
-            projectType.Name.NullIfEmpty() ?? this.GetProjectTypeId(projectType)?.ToString() ?? Guid.Empty.ToString();
+            projectType.Name.NullIfEmpty() ?? GetProjectTypeId(projectType)?.ToString() ?? Guid.Empty.ToString();
 
         static string GetTypeFromModel(Guid typeId, string type) =>
             typeId == Guid.Empty ? type : typeId.ToString();
     }
 
     // Gets all of the configuration rules that apply to the project.
-    internal ConfigurationRuleFollower GetProjectConfigurationRules(SolutionProjectModel projectModel, bool excludeProjectSpecificRules = false)
+    internal ConfigurationRuleFollower GetProjectConfigurationRules(SolutionProjectModel projectModel,
+        bool excludeProjectSpecificRules = false)
     {
         // Rules are ordered most general to most specific.
-        if (this.TryGetProjectType(projectModel, out ProjectType? type, out _))
+        if (TryGetProjectType(projectModel, out ProjectType? type, out _))
         {
-            List<ConfigurationRule> rules = new List<ConfigurationRule>(32);
+            List<ConfigurationRule> rules = new(32);
 
             // Get the default built-in rules.
-            if (!this.isBuiltIn)
+            if (!isBuiltIn)
             {
                 rules.AddRange(BuiltInTypes.defaultRules);
             }
@@ -151,7 +161,7 @@ internal sealed partial class ProjectTypeTable
             GetProjectTypeConfigurationRules(type, rules);
 
             // Get the default rules in the solution. These intentionally are higher priority than type rules.
-            rules.AddRange(this.defaultRules);
+            rules.AddRange(defaultRules);
 
             // Gets the rules defined on this project model.
             if (projectModel.ProjectConfigurationRules is not null && !excludeProjectSpecificRules)
@@ -177,7 +187,7 @@ internal sealed partial class ProjectTypeTable
                 return;
             }
 
-            GetProjectTypeConfigurationRules(this.GetBasedOnType(type), rules);
+            GetProjectTypeConfigurationRules(GetBasedOnType(type), rules);
             rules.AddRange(type.ConfigurationRules);
         }
     }
@@ -187,7 +197,7 @@ internal sealed partial class ProjectTypeTable
         // If the type doesn't have a project type id, keep searching on the BasedOn type.
         while (type is not null && type.ProjectTypeId == Guid.Empty)
         {
-            type = this.GetBasedOnType(type);
+            type = GetBasedOnType(type);
         }
 
         return type?.ProjectTypeId;
@@ -196,10 +206,10 @@ internal sealed partial class ProjectTypeTable
     private ProjectType? GetBasedOnType(ProjectType? type)
     {
         return type is not null && !type.BasedOn.IsNullOrEmpty() &&
-            (this.TryGetProjectType(Guid.Empty, type.BasedOn, null, out ProjectType? basedOnType, out _) ||
-            BuiltInTypes.TryGetProjectType(Guid.Empty, null, type.BasedOn, out basedOnType, out _)) ?
-            basedOnType :
-            null;
+               (TryGetProjectType(Guid.Empty, type.BasedOn, null, out ProjectType? basedOnType, out _) ||
+                BuiltInTypes.TryGetProjectType(Guid.Empty, null, type.BasedOn, out basedOnType, out _))
+            ? basedOnType
+            : null;
     }
 
     private bool TryGetProjectType(
@@ -207,7 +217,7 @@ internal sealed partial class ProjectTypeTable
         [NotNullWhen(true)] out ProjectType? type,
         out bool impliedFromExtension)
     {
-        return this.TryGetProjectType(
+        return TryGetProjectType(
             projectModel.TypeId,
             projectModel.Type,
             projectModel.Extension,
@@ -230,10 +240,10 @@ internal sealed partial class ProjectTypeTable
         }
 
         // Only pick the implied type from the extension if it matches the typeName.
-        type = this.GetForExtension(extension);
+        type = GetForExtension(extension);
         if (type is not null)
         {
-            Guid typeProjectTypeId = this.GetProjectTypeId(type) ?? Guid.Empty;
+            Guid typeProjectTypeId = GetProjectTypeId(type) ?? Guid.Empty;
             if ((projectTypeId == Guid.Empty || typeProjectTypeId == projectTypeId) &&
                 (typeName.IsNullOrEmpty() || StringComparer.OrdinalIgnoreCase.Equals(typeName, type.Name)))
             {
@@ -242,21 +252,21 @@ internal sealed partial class ProjectTypeTable
             }
         }
 
-        type = this.GetForName(typeName);
+        type = GetForName(typeName);
         if (type is not null)
         {
             impliedFromExtension = false;
             return true;
         }
 
-        if (this.fromProjectTypeId.TryGetValue(projectTypeId, out type))
+        if (fromProjectTypeId.TryGetValue(projectTypeId, out type))
         {
             impliedFromExtension = false;
             return true;
         }
 
         // If not found in solution scope, try implicit types.
-        if (!this.isBuiltIn)
+        if (!isBuiltIn)
         {
             if (BuiltInTypes.TryGetProjectType(projectTypeId, typeName, extension, out type, out impliedFromExtension))
             {
@@ -271,11 +281,11 @@ internal sealed partial class ProjectTypeTable
 
     private ProjectType? GetForExtension(string? extension)
     {
-        return !extension.IsNullOrEmpty() && this.fromExtension.TryGetValue(extension, out ProjectType? type) ? type : null;
+        return !extension.IsNullOrEmpty() && fromExtension.TryGetValue(extension, out ProjectType? type) ? type : null;
     }
 
     private ProjectType? GetForName(string? name)
     {
-        return !name.IsNullOrEmpty() && this.fromName.TryGetValue(name, out ProjectType? type) ? type : null;
+        return !name.IsNullOrEmpty() && fromName.TryGetValue(name, out ProjectType? type) ? type : null;
     }
 }

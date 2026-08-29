@@ -2,6 +2,8 @@
 // namespace begins with "Fallout.Build." into the corresponding "Nuke.Build."
 // namespace.
 
-[assembly: Fallout.Migrate.Shims.ShimAllPublicTypesUnder(
+using Fallout.Migrate.Shims;
+
+[assembly: ShimAllPublicTypesUnder(
     fromNamespacePrefix: "Fallout.Build",
     toNamespacePrefix: "Nuke.Build")]

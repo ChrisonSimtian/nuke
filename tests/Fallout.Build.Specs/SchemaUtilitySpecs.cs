@@ -1,11 +1,8 @@
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using Fallout.Common.Execution;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
-using Fallout.Common.Utilities;
 using VerifyXunit;
 using Xunit;
 
@@ -53,39 +50,60 @@ public class SchemaUtilitySpecs
     private class TargetBuild : FalloutBuild, ITargetComponent
     {
         Target RegularTarget => _ => _;
+
         public Target ImplementedTarget => _ => _;
+
         Target ITargetComponent.ExplicitTarget => _ => _;
     }
 
     private interface ITargetComponent : IFalloutBuild
     {
         Target InheritedTarget => _ => _;
+
         Target ImplementedTarget => _ => _;
+
         Target ExplicitTarget => _ => _;
     }
 
     private class ParameterBuild : FalloutBuild, IParameterComponent
     {
-        [Parameter] readonly string RegularParam;
-        [Parameter] [Secret] readonly string SecretParam;
+        [Parameter]
+        readonly string RegularParam;
 
-        [Parameter] readonly bool BooleanParam;
-        [Parameter] readonly bool? NullableBooleanParam;
+        [Parameter]
+        [Secret]
+        readonly string SecretParam;
 
-        [Parameter] readonly string[] StringArrayParam;
-        [Parameter] readonly int[] IntegerArrayParam;
+        [Parameter]
+        readonly bool BooleanParam;
 
-        [Parameter] readonly CustomEnumeration CustomEnumerationParam;
-        [Parameter] readonly CustomEnumeration[] CustomEnumerationArrayParam;
+        [Parameter]
+        readonly bool? NullableBooleanParam;
 
-        [Parameter] readonly ComplexType ComplexTypeParam;
-        [Parameter] readonly ComplexType[] ComplexTypeArrayParam;
+        [Parameter]
+        readonly string[] StringArrayParam;
+
+        [Parameter]
+        readonly int[] IntegerArrayParam;
+
+        [Parameter]
+        readonly CustomEnumeration CustomEnumerationParam;
+
+        [Parameter]
+        readonly CustomEnumeration[] CustomEnumerationArrayParam;
+
+        [Parameter]
+        readonly ComplexType ComplexTypeParam;
+
+        [Parameter]
+        readonly ComplexType[] ComplexTypeArrayParam;
     }
 
     [ParameterPrefix("Component")]
     private interface IParameterComponent : IFalloutBuild
     {
-        [Parameter] string InheritedParam => TryGetValue(() => InheritedParam);
+        [Parameter]
+        string InheritedParam => TryGetValue(() => InheritedParam);
     }
 
     private class ComplexType
@@ -104,8 +122,15 @@ public class SchemaUtilitySpecs
     [TypeConverter(typeof(TypeConverter<CustomEnumeration>))]
     private class CustomEnumeration : Enumeration
     {
-        public static CustomEnumeration Debug = new() { Value = nameof(Debug) };
-        public static CustomEnumeration Release = new() { Value = nameof(Release) };
+        public static CustomEnumeration Debug = new()
+        {
+            Value = nameof(Debug)
+        };
+
+        public static CustomEnumeration Release = new()
+        {
+            Value = nameof(Release)
+        };
 
         public static implicit operator string(CustomEnumeration configuration)
         {
@@ -115,7 +140,8 @@ public class SchemaUtilitySpecs
 
     private class CustomParameterAttributeBuild : FalloutBuild
     {
-        [CustomParameter] readonly ComplexType ComplexTypeParamWithAttribute;
+        [CustomParameter]
+        readonly ComplexType ComplexTypeParamWithAttribute;
     }
 
     private class CustomParameterAttribute : ParameterAttribute;

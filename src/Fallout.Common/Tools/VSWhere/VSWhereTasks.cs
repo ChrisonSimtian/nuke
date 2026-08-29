@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fallout.Common.Tooling;
@@ -15,7 +14,9 @@ partial class VSWhereTasks
     {
         if (options is not VSWhereSettings { UTF8: true, Property: null } vswhereOptions ||
             !vswhereOptions.Format.Equals(VSWhereFormat.json))
+        {
             return null;
+        }
 
         return output.EnsureOnlyStd().StdToJson<VSWhereResult[]>().ToList();
     }

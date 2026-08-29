@@ -5,31 +5,33 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
 using Fallout.CodeGeneration.Model;
 using Fallout.Common;
 using Fallout.Common.Utilities.Net;
+using HtmlAgilityPack;
 using Serilog;
+using Task = System.Threading.Tasks.Task;
 
 namespace Fallout.CodeGeneration;
 
 public static class ReferenceUpdater
 {
-    private static HttpClient client = new();
+    private static readonly HttpClient client = new();
 
     public static void UpdateReferences(string specificationsDirectory, string referencesDirectory = null)
     {
-        UpdateReferences(Directory.GetFiles(specificationsDirectory, "*.json", SearchOption.TopDirectoryOnly), referencesDirectory);
+        UpdateReferences(Directory.GetFiles(specificationsDirectory, "*.json", SearchOption.TopDirectoryOnly),
+            referencesDirectory);
     }
 
     public static void UpdateReferences(IEnumerable<string> specificationFiles, string referencesDirectory = null)
     {
         var tools = specificationFiles.Select(ToolSerializer.Load);
         var updateTasks = tools.SelectMany(x => x.References.Select(y => Update(y, x, referencesDirectory)));
-        System.Threading.Tasks.Task.WaitAll(updateTasks.ToArray());
+        Task.WaitAll(updateTasks.ToArray());
     }
 
-    private static async System.Threading.Tasks.Task Update(string reference, Tool tool, string referencesDirectory)
+    private static async Task Update(string reference, Tool tool, string referencesDirectory)
     {
         var index = tool.References.IndexOf(reference);
         try
@@ -39,6 +41,7 @@ public static class ReferenceUpdater
             var referenceFile = Path.Combine(
                 referencesDirectory,
                 $"{Path.GetFileNameWithoutExtension(tool.SpecificationFile)}.ref.{referenceId}.txt");
+
             var referenceContent = await GetReferenceContent(reference);
             File.WriteAllText(referenceFile, referenceContent);
 
@@ -58,10 +61,13 @@ public static class ReferenceUpdater
 
         var response = await client.CreateRequest(HttpMethod.Get, referenceValues[0])
             .GetResponseAsync();
+
         await response.WriteToFile(tempFile);
 
         if (referenceValues.Length == 1)
+        {
             return File.ReadAllText(tempFile, Encoding.UTF8);
+        }
 
         var document = new HtmlDocument();
         document.Load(tempFile, Encoding.UTF8);

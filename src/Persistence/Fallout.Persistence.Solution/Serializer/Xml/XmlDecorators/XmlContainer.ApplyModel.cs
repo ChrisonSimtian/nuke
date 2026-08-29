@@ -19,8 +19,8 @@ internal abstract partial class XmlContainer
     {
         get
         {
-            List<string> nodeDescriptions = new(this.XmlElement.ChildNodes.Count);
-            foreach (XmlNode xmlNode in this.XmlElement.ChildNodes)
+            List<string> nodeDescriptions = new(XmlElement.ChildNodes.Count);
+            foreach (XmlNode xmlNode in XmlElement.ChildNodes)
             {
                 string value = xmlNode.Value ?? string.Empty;
                 string nodeDescription = xmlNode switch
@@ -38,6 +38,7 @@ internal abstract partial class XmlContainer
                     _ =>
                         $"Unexpected: {xmlNode.GetType().Name} {value}",
                 };
+
                 nodeDescriptions.Add(nodeDescription);
             }
 
@@ -68,7 +69,7 @@ internal abstract partial class XmlContainer
         bool modified = false;
 
         modelItems ??= [];
-        ListBuilderStruct<TDecorator> toRemove = new ListBuilderStruct<TDecorator>();
+        ListBuilderStruct<TDecorator> toRemove = new();
 
 #if DEBUG
 
@@ -76,16 +77,24 @@ internal abstract partial class XmlContainer
         switch (decoratorElementName)
         {
             case Keyword.BuildType: break;
+
             case Keyword.Platform: break;
+
             case Keyword.Property: break;
+
             case Keyword.Project: break;
+
             case Keyword.Folder: break;
+
             case Keyword.Properties: break;
+
             case Keyword.File: break;
+
             case Keyword.Build: break;
+
             case Keyword.Deploy: break;
+
             case Keyword.ProjectType: break;
-            default: break;
         }
 
 #endif
@@ -116,7 +125,7 @@ internal abstract partial class XmlContainer
         // Remove elements that are no longer in the model.
         foreach (TDecorator decoratorItem in toRemove)
         {
-            this.RemoveXmlChild(decoratorItem);
+            RemoveXmlChild(decoratorItem);
             decoratorItems.Remove(decoratorItem);
         }
 
@@ -125,9 +134,11 @@ internal abstract partial class XmlContainer
         foreach ((string itemRef, TModelItem modelItem) in modelItems)
         {
             // Find position to insert before based on general areas and alphabetical order.
-            XmlDecorator? insertBefore = decoratorItems.TryFindNext(itemRef, out TDecorator? insertBeforeLocal) ? insertBeforeLocal : this.FindNextDecorator<TDecorator>();
+            XmlDecorator? insertBefore = decoratorItems.TryFindNext(itemRef, out TDecorator? insertBeforeLocal)
+                ? insertBeforeLocal
+                : FindNextDecorator<TDecorator>();
 
-            TDecorator newDecorator = (TDecorator)this.CreateAndAddChild(decoratorElementName, itemRef, insertBefore);
+            TDecorator newDecorator = (TDecorator)CreateAndAddChild(decoratorElementName, itemRef, insertBefore);
             _ = applyModelToXml?.Invoke(newDecorator, modelItem);
             modified = true;
         }
@@ -152,8 +163,11 @@ internal abstract partial class XmlContainer
         }
 
         // Used to sort the model items so they are inserted in sorted order.
-        static int ComparisonOrdinal((string ItemRef, TModelItem Item) a, (string ItemRef, TModelItem Item) b) => StringComparer.Ordinal.Compare(a.ItemRef, b.ItemRef);
-        static int ComparisonOrdinalIgnoreCase((string ItemRef, TModelItem Item) a, (string ItemRef, TModelItem Item) b) => StringComparer.OrdinalIgnoreCase.Compare(a.ItemRef, b.ItemRef);
+        static int ComparisonOrdinal((string ItemRef, TModelItem Item) a, (string ItemRef, TModelItem Item) b) =>
+            StringComparer.Ordinal.Compare(a.ItemRef, b.ItemRef);
+
+        static int ComparisonOrdinalIgnoreCase((string ItemRef, TModelItem Item) a, (string ItemRef, TModelItem Item) b) =>
+            StringComparer.OrdinalIgnoreCase.Compare(a.ItemRef, b.ItemRef);
     }
 
     // Helper for updates that only update their itemRefs and don't need to make other changes.
@@ -164,7 +178,7 @@ internal abstract partial class XmlContainer
         where TDecorator : XmlDecorator, IItemRefDecorator
     {
         List<(string ItemRef, string Item)>? modelItems = itemRefs?.ToList(itemRefs => (ItemRef: itemRefs, Item: itemRefs));
-        return this.ApplyModelItemsToXml(modelItems, ref decoratorItems, decoratorElementName, applyModelToXml: null);
+        return ApplyModelItemsToXml(modelItems, ref decoratorItems, decoratorElementName, applyModelToXml: null);
     }
 
     #region Manipulate XML
@@ -183,10 +197,10 @@ internal abstract partial class XmlContainer
             _ = node.ParentNode?.RemoveChild(node);
         }
 
-        if (!this.XmlElement.ChildElements().Any())
+        if (!XmlElement.ChildElements().Any())
         {
             // This clears out all child nodes and collapses the element to a self-closing tag.
-            this.XmlElement.IsEmpty = true;
+            XmlElement.IsEmpty = true;
         }
     }
 
@@ -196,43 +210,44 @@ internal abstract partial class XmlContainer
     /// </summary>
     private protected XmlDecorator CreateAndAddChild(Keyword type, string? itemRef, XmlDecorator? insertBefore)
     {
-        XmlElement newElement = this.CreateXmlChild(type, insertBefore);
-        XmlDecorator? newDecorator = this.CreateChildDecorator(newElement, itemRef, validateItemRef: true);
+        XmlElement newElement = CreateXmlChild(type, insertBefore);
+        XmlDecorator? newDecorator = CreateChildDecorator(newElement, itemRef, validateItemRef: true);
         return newDecorator ?? throw new InvalidOperationException("Requested item doesn't not created by child factory.");
     }
 
     private XmlElement CreateXmlChild(Keyword type, XmlDecorator? insertBefore)
     {
-        XmlElement newElement = this.XmlElement.OwnerDocument.CreateElement(type.ToXmlString());
+        XmlElement newElement = XmlElement.OwnerDocument.CreateElement(type.ToXmlString());
 
-        return insertBefore is null ?
-            this.AppendChildWithWhitespace(newElement) :
-            this.InsertBeforeWithWhitespace(newElement, insertBefore);
+        return insertBefore is null
+            ? AppendChildWithWhitespace(newElement)
+            : InsertBeforeWithWhitespace(newElement, insertBefore);
     }
 
     private XmlElement AppendChildWithWhitespace(XmlElement newElement)
     {
-        if (this.Root.SerializationSettings.PreserveWhitespace == true)
+        if (Root.SerializationSettings.PreserveWhitespace == true)
         {
             // This is the whitespace that goes after the last child element. If it exists reuse it, otherwise this
             // indent should be the same at the parent level.
-            if (this.XmlElement.LastChild is not XmlWhitespace afterWhitespace)
+            if (XmlElement.LastChild is not XmlWhitespace afterWhitespace)
             {
-                afterWhitespace = this.XmlElement.OwnerDocument.CreateWhitespace(this.GetNewLineAndIndent().ToString());
-                _ = this.XmlElement.AppendChild(afterWhitespace);
+                afterWhitespace = XmlElement.OwnerDocument.CreateWhitespace(GetNewLineAndIndent().ToString());
+                _ = XmlElement.AppendChild(afterWhitespace);
             }
 
-            _ = this.XmlElement.InsertBefore(newElement, afterWhitespace);
+            _ = XmlElement.InsertBefore(newElement, afterWhitespace);
 
             // This is the new line whitespace between this and the previous element.
             // Just add an indent to the parent level.
-            XmlWhitespace beforeWhitespace = this.XmlElement.OwnerDocument.CreateWhitespace(
-                this.GetNewLineAndIndent().ToString() + this.Root.SerializationSettings.IndentChars);
-            _ = this.XmlElement.InsertBefore(beforeWhitespace, newElement);
+            XmlWhitespace beforeWhitespace = XmlElement.OwnerDocument.CreateWhitespace(
+                GetNewLineAndIndent().ToString() + Root.SerializationSettings.IndentChars);
+
+            _ = XmlElement.InsertBefore(beforeWhitespace, newElement);
         }
         else
         {
-            _ = this.XmlElement.AppendChild(newElement);
+            _ = XmlElement.AppendChild(newElement);
         }
 
         return newElement;
@@ -240,21 +255,22 @@ internal abstract partial class XmlContainer
 
     private XmlElement InsertBeforeWithWhitespace(XmlElement newElement, XmlDecorator insertBefore)
     {
-        if (this.Root.SerializationSettings.PreserveWhitespace == true)
+        if (Root.SerializationSettings.PreserveWhitespace == true)
         {
             XmlNode insertBeforeNode = insertBefore.GetFirstTrivia();
 
-            _ = this.XmlElement.InsertBefore(newElement, insertBeforeNode);
+            _ = XmlElement.InsertBefore(newElement, insertBeforeNode);
 
             // This is the new line whitespace between this and the previous element.
             // Just add an indent to the parent level.
-            XmlWhitespace beforeWhitespace = this.XmlElement.OwnerDocument.CreateWhitespace(
-                this.GetNewLineAndIndent().ToString() + this.Root.SerializationSettings.IndentChars);
-            _ = this.XmlElement.InsertBefore(beforeWhitespace, newElement);
+            XmlWhitespace beforeWhitespace = XmlElement.OwnerDocument.CreateWhitespace(
+                GetNewLineAndIndent().ToString() + Root.SerializationSettings.IndentChars);
+
+            _ = XmlElement.InsertBefore(beforeWhitespace, newElement);
         }
         else
         {
-            _ = this.XmlElement.InsertBefore(newElement, insertBefore.XmlElement);
+            _ = XmlElement.InsertBefore(newElement, insertBefore.XmlElement);
         }
 
         return newElement;

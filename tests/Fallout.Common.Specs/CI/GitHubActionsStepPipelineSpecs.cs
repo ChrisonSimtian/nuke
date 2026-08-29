@@ -10,8 +10,14 @@ namespace Fallout.Common.Specs.CI;
 public class GitHubActionsStepPipelineSpecs
 {
     private static GitHubActionsStepPipeline NewPipeline()
-        => new GitHubActionsStepPipeline("build", GitHubActionsImage.UbuntuLatest,
-            new GitHubActionsStep[] { new GitHubActionsCustomStep { Uses = "actions/checkout@v6" } });
+        => new("build", GitHubActionsImage.UbuntuLatest,
+            new GitHubActionsStep[]
+            {
+                new GitHubActionsCustomStep
+                {
+                    Uses = "actions/checkout@v6"
+                }
+            });
 
     [Fact]
     public void Context_is_exposed()
@@ -27,8 +33,23 @@ public class GitHubActionsStepPipelineSpecs
     public void Inserts_at_one_position_preserve_call_order()
     {
         var pipeline = NewPipeline();
-        pipeline.Insert(GitHubActionsStepPosition.PostRun, new GitHubActionsCustomStep { Name = "first", Run = new[] { "a" } });
-        pipeline.Insert(GitHubActionsStepPosition.PostRun, new GitHubActionsCustomStep { Name = "second", Run = new[] { "b" } });
+        pipeline.Insert(GitHubActionsStepPosition.PostRun, new GitHubActionsCustomStep
+        {
+            Name = "first",
+            Run = new[]
+            {
+                "a"
+            }
+        });
+
+        pipeline.Insert(GitHubActionsStepPosition.PostRun, new GitHubActionsCustomStep
+        {
+            Name = "second",
+            Run = new[]
+            {
+                "b"
+            }
+        });
 
         pipeline.GetInserts(GitHubActionsStepPosition.PostRun).Select(x => x.Name)
             .Should().Equal("first", "second");
@@ -39,10 +60,24 @@ public class GitHubActionsStepPipelineSpecs
     {
         var pipeline = NewPipeline();
         pipeline.Insert(GitHubActionsStepPosition.PreRun, new[]
-                        {
-                            new GitHubActionsCustomStep { Name = "x", Run = new[] { "a" } },
-                            new GitHubActionsCustomStep { Name = "y", Run = new[] { "b" } }
-                        });
+        {
+            new GitHubActionsCustomStep
+            {
+                Name = "x",
+                Run = new[]
+                {
+                    "a"
+                }
+            },
+            new GitHubActionsCustomStep
+            {
+                Name = "y",
+                Run = new[]
+                {
+                    "b"
+                }
+            }
+        });
 
         pipeline.GetInserts(GitHubActionsStepPosition.PreRun).Select(x => x.Name)
             .Should().Equal("x", "y");

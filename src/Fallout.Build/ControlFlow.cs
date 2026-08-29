@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fallout.Common.Utilities;
 using Serilog;
+
 #pragma warning disable CS0618
 
 // ReSharper disable CompareNonConstrainedGenericWithNull
@@ -20,7 +21,8 @@ public static class ControlFlow
         SuppressErrorsIf(condition: true, action, logWarning: logWarning);
     }
 
-    public static T SuppressErrors<T>(Func<T> action, T defaultValue = default, bool includeStackTrace = false, bool logWarning = true)
+    public static T SuppressErrors<T>(Func<T> action, T defaultValue = default, bool includeStackTrace = false,
+        bool logWarning = true)
     {
         return (T)SuppressErrorsIf(condition: true, action, defaultValue, logWarning);
     }
@@ -37,7 +39,9 @@ public static class ControlFlow
         bool logWarning = true)
     {
         if (!condition)
+        {
             return defaultValue;
+        }
 
         try
         {
@@ -46,7 +50,9 @@ public static class ControlFlow
         catch (Exception exception)
         {
             if (logWarning)
+            {
                 Log.Warning(exception.Unwrap(), "Exception was suppressed");
+            }
 
             return defaultValue;
         }
@@ -76,7 +82,9 @@ public static class ControlFlow
                 lastException = exception;
 
                 if (attempt + 1 >= retryAttempts)
+                {
                     break;
+                }
 
                 logAction($"Attempt #{attempt + 1} failed with: {exception.Message}");
                 if (delay != null)
@@ -92,9 +100,9 @@ public static class ControlFlow
         }
 
         Assert.Fail(new[]
-             {
-                 $"Execution failed permanently after {retryAttempts} attempts.",
-                 $"Last attempt failed with: {lastException!.Message}"
-             }.JoinNewLine());
+        {
+            $"Execution failed permanently after {retryAttempts} attempts.",
+            $"Last attempt failed with: {lastException!.Message}"
+        }.JoinNewLine());
     }
 }

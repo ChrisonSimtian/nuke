@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Linq;
+using Fallout.Persistence.Solution.Serializer.SlnV12;
 using Fallout.Persistence.Solution.Serializer.Xml;
 
 namespace Fallout.Persistence.Solution.Model;
@@ -36,15 +37,15 @@ public sealed class SolutionModel : PropertyContainerModel
     /// </summary>
     public SolutionModel()
     {
-        this.visualStudioProperties = new VisualStudioProperties(this);
-        this.StringTable = new StringTable().WithSolutionConstants();
-        this.solutionItemsById = [];
-        this.solutionItems = [];
-        this.solutionProjects = [];
-        this.solutionFolders = [];
-        this.solutionBuildTypes = [];
-        this.solutionPlatforms = [];
-        this.projectTypes = [];
+        visualStudioProperties = new VisualStudioProperties(this);
+        StringTable = new StringTable().WithSolutionConstants();
+        solutionItemsById = [];
+        solutionItems = [];
+        solutionProjects = [];
+        solutionFolders = [];
+        solutionBuildTypes = [];
+        solutionPlatforms = [];
+        projectTypes = [];
     }
 
     /// <summary>
@@ -55,14 +56,14 @@ public sealed class SolutionModel : PropertyContainerModel
     public SolutionModel(SolutionModel solutionModel)
         : base(solutionModel ?? throw new ArgumentNullException(nameof(solutionModel)))
     {
-        this.visualStudioProperties = new VisualStudioProperties(this);
-        this.StringTable = solutionModel.StringTable;
+        visualStudioProperties = new VisualStudioProperties(this);
+        StringTable = solutionModel.StringTable;
         int itemCount = solutionModel.solutionItems.Count;
         int folderCount = solutionModel.solutionItems.Count(x => x is SolutionFolderModel);
-        this.solutionItems = new List<SolutionItemModel>(itemCount);
-        this.solutionItemsById = new Dictionary<Guid, SolutionItemModel>(itemCount);
-        this.solutionFolders = new List<SolutionFolderModel>(folderCount);
-        this.solutionProjects = new List<SolutionProjectModel>(itemCount - folderCount);
+        solutionItems = new List<SolutionItemModel>(itemCount);
+        solutionItemsById = new Dictionary<Guid, SolutionItemModel>(itemCount);
+        solutionFolders = new List<SolutionFolderModel>(folderCount);
+        solutionProjects = new List<SolutionProjectModel>(itemCount - folderCount);
         foreach (SolutionItemModel item in solutionModel.solutionItems)
         {
             SolutionItemModel newItem = item switch
@@ -72,25 +73,25 @@ public sealed class SolutionModel : PropertyContainerModel
                 _ => throw new InvalidOperationException(),
             };
 
-            this.solutionItems.Add(newItem);
-            this.solutionFolders.AddIfNotNull(newItem as SolutionFolderModel);
-            this.solutionProjects.AddIfNotNull(newItem as SolutionProjectModel);
-            this.solutionItemsById[newItem.Id] = newItem;
+            solutionItems.Add(newItem);
+            solutionFolders.AddIfNotNull(newItem as SolutionFolderModel);
+            solutionProjects.AddIfNotNull(newItem as SolutionProjectModel);
+            solutionItemsById[newItem.Id] = newItem;
         }
 
         // Replace the shallow-parent models with the new folders.
-        foreach (SolutionItemModel item in this.solutionItems)
+        foreach (SolutionItemModel item in solutionItems)
         {
             if (item.Parent is not null)
             {
-                item.MoveToFolder(this.FindFolder(item.Parent.ItemRef) ?? throw new InvalidOperationException());
+                item.MoveToFolder(FindFolder(item.Parent.ItemRef) ?? throw new InvalidOperationException());
             }
         }
 
-        this.Description = solutionModel.Description;
-        this.solutionBuildTypes = [.. solutionModel.solutionBuildTypes];
-        this.solutionPlatforms = [.. solutionModel.solutionPlatforms];
-        this.projectTypes = [.. solutionModel.projectTypes];
+        Description = solutionModel.Description;
+        solutionBuildTypes = [.. solutionModel.solutionBuildTypes];
+        solutionPlatforms = [.. solutionModel.solutionPlatforms];
+        projectTypes = [.. solutionModel.projectTypes];
     }
 
     /// <summary>
@@ -115,27 +116,27 @@ public sealed class SolutionModel : PropertyContainerModel
     /// Gets the list of solution items in the solution.
     /// This is all of the solution folders and projects in the solution.
     /// </summary>
-    public IReadOnlyList<SolutionItemModel> SolutionItems => this.solutionItems;
+    public IReadOnlyList<SolutionItemModel> SolutionItems => solutionItems;
 
     /// <summary>
     /// Gets the list of projects in the solution.
     /// </summary>
-    public IReadOnlyList<SolutionProjectModel> SolutionProjects => this.solutionProjects;
+    public IReadOnlyList<SolutionProjectModel> SolutionProjects => solutionProjects;
 
     /// <summary>
     /// Gets the list of solution folders in the solution.
     /// </summary>
-    public IReadOnlyList<SolutionFolderModel> SolutionFolders => this.solutionFolders;
+    public IReadOnlyList<SolutionFolderModel> SolutionFolders => solutionFolders;
 
     /// <summary>
     /// Gets the list of build types in the solution. (e.g Debug/Release).
     /// </summary>
-    public IReadOnlyList<string> BuildTypes => this.solutionBuildTypes;
+    public IReadOnlyList<string> BuildTypes => solutionBuildTypes;
 
     /// <summary>
     /// Gets the list of platforms in the solution. (e.g. x64/Any CPU).
     /// </summary>
-    public IReadOnlyList<string> Platforms => this.solutionPlatforms;
+    public IReadOnlyList<string> Platforms => solutionPlatforms;
 
     /// <summary>
     /// Gets or sets the list of project types in the solution.
@@ -147,12 +148,12 @@ public sealed class SolutionModel : PropertyContainerModel
     /// </remarks>
     public IReadOnlyList<ProjectType> ProjectTypes
     {
-        get => this.projectTypes;
+        get => projectTypes;
         set
         {
-            this.projectTypes.Clear();
-            this.projectTypes.AddRange(value);
-            this.projectTypeTable = null;
+            projectTypes.Clear();
+            projectTypes.AddRange(value);
+            projectTypeTable = null;
         }
     }
 
@@ -160,9 +161,9 @@ public sealed class SolutionModel : PropertyContainerModel
     /// Gets a helper to get and set Visual Studio specific properties.
     /// </summary>
     /// <returns>A helper to get and set Visual Studio properties.</returns>
-    public ref readonly VisualStudioProperties VisualStudioProperties => ref this.visualStudioProperties;
+    public ref readonly VisualStudioProperties VisualStudioProperties => ref visualStudioProperties;
 
-    internal ProjectTypeTable ProjectTypeTable => this.projectTypeTable ??= new ProjectTypeTable(this.projectTypes);
+    internal ProjectTypeTable ProjectTypeTable => projectTypeTable ??= new ProjectTypeTable(projectTypes);
 
     /// <summary>
     /// Gets or adds a solution folder to the solution.
@@ -177,10 +178,11 @@ public sealed class SolutionModel : PropertyContainerModel
         Argument.ThrowIfNullOrEmpty(path, nameof(path));
         if (!path.StartsWith('/') || !path.EndsWith('/'))
         {
-            throw new SolutionArgumentException(string.Format(Errors.InvalidFolderPath_Args1, path), nameof(path), SolutionErrorType.InvalidFolderPath);
+            throw new SolutionArgumentException(string.Format(Errors.InvalidFolderPath_Args1, path), nameof(path),
+                SolutionErrorType.InvalidFolderPath);
         }
 
-        SolutionFolderModel? existingFolder = this.FindFolder(path);
+        SolutionFolderModel? existingFolder = FindFolder(path);
         if (existingFolder is not null)
         {
             return existingFolder;
@@ -193,10 +195,10 @@ public sealed class SolutionModel : PropertyContainerModel
         string? parentItemRef = lastSlash > 0 ? folderPath.Slice(0, lastSlash + 1).ToString() : null;
         StringSpan newName = lastSlash > 0 ? folderPath.Slice(lastSlash + 1) : folderPath.Slice(1);
 
-        SolutionFolderModel folder = this.AddFolder(newName, parentItemRef);
+        SolutionFolderModel folder = AddFolder(newName, parentItemRef);
 
         // Ensure the project type is in the project type table, if it is not already.
-        this.solutionItemsById[folder.Id] = folder;
+        solutionItemsById[folder.Id] = folder;
 
         return folder;
     }
@@ -213,14 +215,16 @@ public sealed class SolutionModel : PropertyContainerModel
     public SolutionProjectModel AddProject(string filePath, string? projectTypeName = null, SolutionFolderModel? folder = null)
     {
         Argument.ThrowIfNullOrEmpty(filePath, nameof(filePath));
-        this.ValidateInModel(folder);
+        ValidateInModel(folder);
 
         Guid projectTypeId =
-            Guid.TryParse(projectTypeName, out Guid projectTypeGuid) ? projectTypeGuid :
-            this.ProjectTypeTable.GetProjectTypeId(projectTypeName, Path.GetExtension(filePath.AsSpan())) ??
-            throw new SolutionArgumentException(string.Format(Errors.InvalidProjectTypeReference_Args1, projectTypeName), nameof(projectTypeName), SolutionErrorType.InvalidProjectTypeReference);
+            Guid.TryParse(projectTypeName, out Guid projectTypeGuid)
+                ? projectTypeGuid
+                : ProjectTypeTable.GetProjectTypeId(projectTypeName, Path.GetExtension(filePath.AsSpan())) ??
+                  throw new SolutionArgumentException(string.Format(Errors.InvalidProjectTypeReference_Args1, projectTypeName),
+                      nameof(projectTypeName), SolutionErrorType.InvalidProjectTypeReference);
 
-        return this.AddProject(filePath, projectTypeName ?? string.Empty, projectTypeId, folder);
+        return AddProject(filePath, projectTypeName ?? string.Empty, projectTypeId, folder);
     }
 
     /// <summary>
@@ -231,9 +235,9 @@ public sealed class SolutionModel : PropertyContainerModel
     public bool RemoveFolder(SolutionFolderModel folder)
     {
         Argument.ThrowIfNull(folder, nameof(folder));
-        this.ValidateInModel(folder);
+        ValidateInModel(folder);
 
-        return this.RemoveFolder(folder, this.SolutionItems.ToArray());
+        return RemoveFolder(folder, SolutionItems.ToArray());
     }
 
     /// <summary>
@@ -244,16 +248,16 @@ public sealed class SolutionModel : PropertyContainerModel
     public bool RemoveProject(SolutionProjectModel project)
     {
         Argument.ThrowIfNull(project, nameof(project));
-        this.ValidateInModel(project);
-        _ = this.solutionProjects.Remove(project);
+        ValidateInModel(project);
+        _ = solutionProjects.Remove(project);
 
         // Remove any dependencies to this project.
-        foreach (SolutionProjectModel existingProject in this.SolutionProjects)
+        foreach (SolutionProjectModel existingProject in SolutionProjects)
         {
             _ = existingProject.RemoveDependency(project);
         }
 
-        return this.RemoveItem(project);
+        return RemoveItem(project);
     }
 
     /// <summary>
@@ -266,10 +270,10 @@ public sealed class SolutionModel : PropertyContainerModel
 
         ValidateName(buildType.AsSpan());
 
-        if (!this.solutionBuildTypes.Contains(buildType, StringComparer.OrdinalIgnoreCase))
+        if (!solutionBuildTypes.Contains(buildType, StringComparer.OrdinalIgnoreCase))
         {
-            buildType = this.StringTable.GetString(buildType);
-            this.solutionBuildTypes.Add(buildType);
+            buildType = StringTable.GetString(buildType);
+            solutionBuildTypes.Add(buildType);
         }
     }
 
@@ -281,7 +285,7 @@ public sealed class SolutionModel : PropertyContainerModel
     public bool RemoveBuildType(string buildType)
     {
         Argument.ThrowIfNullOrEmpty(buildType, nameof(buildType));
-        return this.solutionBuildTypes.Remove(buildType);
+        return solutionBuildTypes.Remove(buildType);
     }
 
     /// <summary>
@@ -294,10 +298,10 @@ public sealed class SolutionModel : PropertyContainerModel
 
         ValidateName(platform.AsSpan());
 
-        if (!this.solutionPlatforms.Contains(platform, StringComparer.OrdinalIgnoreCase))
+        if (!solutionPlatforms.Contains(platform, StringComparer.OrdinalIgnoreCase))
         {
-            platform = this.StringTable.GetString(platform);
-            this.solutionPlatforms.Add(platform);
+            platform = StringTable.GetString(platform);
+            solutionPlatforms.Add(platform);
         }
     }
 
@@ -309,7 +313,7 @@ public sealed class SolutionModel : PropertyContainerModel
     public bool RemovePlatform(string platform)
     {
         Argument.ThrowIfNullOrEmpty(platform, nameof(platform));
-        return this.solutionPlatforms.Remove(platform);
+        return solutionPlatforms.Remove(platform);
     }
 
     /// <summary>
@@ -319,7 +323,7 @@ public sealed class SolutionModel : PropertyContainerModel
     /// <returns>The item if found.</returns>
     public SolutionItemModel? FindItemById(Guid id)
     {
-        return this.solutionItemsById.TryGetValue(id, out SolutionItemModel? item) ? item : null;
+        return solutionItemsById.TryGetValue(id, out SolutionItemModel? item) ? item : null;
     }
 
     /// <summary>
@@ -332,10 +336,11 @@ public sealed class SolutionModel : PropertyContainerModel
         Argument.ThrowIfNullOrEmpty(path, nameof(path));
         if (!path.StartsWith('/') || !path.EndsWith('/'))
         {
-            throw new SolutionArgumentException(string.Format(Errors.InvalidFolderPath_Args1, path), nameof(path), SolutionErrorType.InvalidFolderPath);
+            throw new SolutionArgumentException(string.Format(Errors.InvalidFolderPath_Args1, path), nameof(path),
+                SolutionErrorType.InvalidFolderPath);
         }
 
-        return ModelHelper.FindByItemRef(this.solutionFolders, path);
+        return solutionFolders.FindByItemRef(path);
     }
 
     /// <summary>
@@ -347,7 +352,7 @@ public sealed class SolutionModel : PropertyContainerModel
     {
         Argument.ThrowIfNullOrEmpty(path, nameof(path));
 
-        return ModelHelper.FindByItemRef(this.solutionProjects, path);
+        return solutionProjects.FindByItemRef(path);
     }
 
     /// <summary>
@@ -357,7 +362,7 @@ public sealed class SolutionModel : PropertyContainerModel
     /// </summary>
     public void DistillProjectConfigurations()
     {
-        SolutionConfigurationMap cfgMap = new SolutionConfigurationMap(this);
+        SolutionConfigurationMap cfgMap = new(this);
 
         // Load all of the current rules for the project and recalculate a new
         // set of configuration rules.
@@ -407,12 +412,15 @@ public sealed class SolutionModel : PropertyContainerModel
                         name.EqualsOrdinalIgnoreCase("con") ||
                         name.EqualsOrdinalIgnoreCase("aux") ||
                         name.EqualsOrdinalIgnoreCase("prn");
+
                 case 4:
                     // disallow com? and lpt? where ? can be any number from 1 to 9
                     name = name.TrimEnd("123456789".AsSpan());
                     return name.EqualsOrdinalIgnoreCase("com") || name.EqualsOrdinalIgnoreCase("lpt");
+
                 case 6:
                     return name.EqualsOrdinalIgnoreCase("clock$");
+
                 default:
                     return false;
             }
@@ -426,15 +434,15 @@ public sealed class SolutionModel : PropertyContainerModel
     internal void TrimVisualStudioProperties()
     {
         // Set project id to default.
-        foreach (SolutionItemModel item in this.SolutionItems)
+        foreach (SolutionItemModel item in SolutionItems)
         {
             item.Id = Guid.Empty;
         }
 
-        this.VisualStudioProperties.SolutionId = null;
-        this.visualStudioProperties.OpenWith = null;
+        VisualStudioProperties.SolutionId = null;
+        visualStudioProperties.OpenWith = null;
 
-        this.RemoveObsoleteProperties();
+        RemoveObsoleteProperties();
     }
 
     /// <summary>
@@ -447,7 +455,7 @@ public sealed class SolutionModel : PropertyContainerModel
         // Remove CPS project type ids.
         // This explicitly checks for the built-in CPS type names, so a slnx file can still
         // use the CPS project ids by creating a custom ProjectType.
-        foreach (SolutionProjectModel project in this.SolutionProjects)
+        foreach (SolutionProjectModel project in SolutionProjects)
         {
             // Remove CPS project type that were used by .sln for many years due to a bug.
             if (StringComparer.OrdinalIgnoreCase.Equals(project.Type, "Common C#"))
@@ -464,9 +472,9 @@ public sealed class SolutionModel : PropertyContainerModel
             }
         }
 
-        _ = this.RemoveProperties(Serializer.SlnV12.SectionName.SharedMSBuildProjectFiles);
+        _ = RemoveProperties(SectionName.SharedMSBuildProjectFiles);
 
-        VisualStudioProperties vsProperties = this.VisualStudioProperties;
+        VisualStudioProperties vsProperties = VisualStudioProperties;
         vsProperties.Version = null;
 #pragma warning disable CS0618 // Type or member is obsolete
         vsProperties.HideSolutionNode = null;
@@ -479,23 +487,25 @@ public sealed class SolutionModel : PropertyContainerModel
         }
     }
 
-    internal SolutionProjectModel AddProject(string filePath, string projectTypeName, Guid projectTypeId, SolutionFolderModel? folder)
+    internal SolutionProjectModel AddProject(string filePath, string projectTypeName, Guid projectTypeId,
+        SolutionFolderModel? folder)
     {
-        SolutionProjectModel project = new SolutionProjectModel(this, filePath, projectTypeId, projectTypeName, folder);
+        SolutionProjectModel project = new(this, filePath, projectTypeId, projectTypeName, folder);
 
         // Project is already in the solution.
-        if (this.FindProject(project.FilePath) is not null)
+        if (FindProject(project.FilePath) is not null)
         {
-            throw new SolutionArgumentException(string.Format(Errors.DuplicateProjectPath_Arg1, project.ItemRef), nameof(filePath), SolutionErrorType.DuplicateProjectPath);
+            throw new SolutionArgumentException(string.Format(Errors.DuplicateProjectPath_Arg1, project.ItemRef),
+                nameof(filePath), SolutionErrorType.DuplicateProjectPath);
         }
 
-        this.ValidateProjectName(project);
+        ValidateProjectName(project);
 
-        this.solutionProjects.Add(project);
-        this.solutionItems.Add(project);
+        solutionProjects.Add(project);
+        solutionItems.Add(project);
 
         // Ensure the project type is in the project type table, if it is not already.
-        this.solutionItemsById[project.Id] = project;
+        solutionItemsById[project.Id] = project;
 
         return project;
     }
@@ -512,7 +522,7 @@ public sealed class SolutionModel : PropertyContainerModel
         // Validate the name.
         ValidateName(name.AsSpan());
 
-        return this.AddFolder(name.AsSpan(), parentItemRef: null);
+        return AddFolder(name.AsSpan(), parentItemRef: null);
     }
 
     /// <summary>
@@ -523,22 +533,22 @@ public sealed class SolutionModel : PropertyContainerModel
     /// <returns>Use to scope suspension, call <see cref="IDisposable.Dispose"/> to reenable validation.</returns>
     internal IDisposable SuspendProjectValidation()
     {
-        this.suspendProjectValidation = true;
+        suspendProjectValidation = true;
         return new ValidationScope(this);
     }
 
     internal void ResumeProjectValidation()
     {
-        this.suspendProjectValidation = false;
-        foreach (SolutionProjectModel project in this.solutionProjects)
+        suspendProjectValidation = false;
+        foreach (SolutionProjectModel project in solutionProjects)
         {
-            this.ValidateProjectName(project);
+            ValidateProjectName(project);
         }
     }
 
     internal void ThrowIfProjectValidationSuspended()
     {
-        if (this.suspendProjectValidation)
+        if (suspendProjectValidation)
         {
             throw new InvalidOperationException();
         }
@@ -547,42 +557,42 @@ public sealed class SolutionModel : PropertyContainerModel
     internal bool IsConfigurationImplicit()
     {
         return
-            this.IsBuildTypeImplicit() &&
-            this.IsPlatformImplicit() &&
-            this.ProjectTypeTable.ProjectTypes.Count == 0;
+            IsBuildTypeImplicit() &&
+            IsPlatformImplicit() &&
+            ProjectTypeTable.ProjectTypes.Count == 0;
     }
 
     internal bool IsBuildTypeImplicit()
     {
         // Has 0 build types, or just Debug/Release.
         return
-            this.BuildTypes.Count == 0 ||
-            (this.BuildTypes.Count == 2 &&
-            this.BuildTypes.Contains(BuildTypeNames.Debug) &&
-            this.BuildTypes.Contains(BuildTypeNames.Release));
+            BuildTypes.Count == 0 ||
+            (BuildTypes.Count == 2 &&
+             BuildTypes.Contains(BuildTypeNames.Debug) &&
+             BuildTypes.Contains(BuildTypeNames.Release));
     }
 
     internal bool IsPlatformImplicit()
     {
         return
-            this.Platforms.Count == 0 ||
-            (this.Platforms.Count == 1 &&
-            this.Platforms[0] == PlatformNames.AnySpaceCPU);
+            Platforms.Count == 0 ||
+            (Platforms.Count == 1 &&
+             Platforms[0] == PlatformNames.AnySpaceCPU);
     }
 
     internal void OnUpdateId(SolutionItemModel solutionItemModel, Guid? oldId)
     {
         if (oldId is not null)
         {
-            _ = this.solutionItemsById.Remove(oldId.Value);
+            _ = solutionItemsById.Remove(oldId.Value);
         }
 
-        this.solutionItemsById[solutionItemModel.Id] = solutionItemModel;
+        solutionItemsById[solutionItemModel.Id] = solutionItemModel;
     }
 
     internal void ValidateProjectName(SolutionProjectModel project)
     {
-        if (this.suspendProjectValidation)
+        if (suspendProjectValidation)
         {
             return;
         }
@@ -590,7 +600,7 @@ public sealed class SolutionModel : PropertyContainerModel
         string displayName = project.ActualDisplayName;
         string folderPath = project.Parent?.Path ?? "Root";
 
-        foreach (SolutionProjectModel existingProject in this.SolutionProjects)
+        foreach (SolutionProjectModel existingProject in SolutionProjects)
         {
             if (!ReferenceEquals(existingProject.Parent, project.Parent) || ReferenceEquals(existingProject, project))
             {
@@ -599,7 +609,8 @@ public sealed class SolutionModel : PropertyContainerModel
 
             if (existingProject.ActualDisplayName.Equals(displayName, StringComparison.OrdinalIgnoreCase))
             {
-                throw new SolutionArgumentException(string.Format(Errors.DuplicateProjectName_Arg2, displayName, folderPath), SolutionErrorType.DuplicateProjectName);
+                throw new SolutionArgumentException(string.Format(Errors.DuplicateProjectName_Arg2, displayName, folderPath),
+                    SolutionErrorType.DuplicateProjectName);
             }
         }
     }
@@ -615,16 +626,16 @@ public sealed class SolutionModel : PropertyContainerModel
     // Moves the project to the first position in the solution so that it is used as the default startup project.
     internal void MoveProjectFirst(SolutionProjectModel projectModel)
     {
-        int projectIndex = this.solutionProjects.IndexOf(projectModel);
+        int projectIndex = solutionProjects.IndexOf(projectModel);
         if (projectIndex > 0)
         {
-            (this.solutionProjects[projectIndex], this.solutionProjects[0]) = (this.solutionProjects[0], this.solutionProjects[projectIndex]);
+            (solutionProjects[projectIndex], solutionProjects[0]) = (solutionProjects[0], solutionProjects[projectIndex]);
         }
 
-        int itemIndex = this.solutionItems.IndexOf(projectModel);
+        int itemIndex = solutionItems.IndexOf(projectModel);
         if (itemIndex > 0)
         {
-            (this.solutionItems[itemIndex], this.solutionItems[0]) = (this.solutionItems[0], this.solutionItems[itemIndex]);
+            (solutionItems[itemIndex], solutionItems[0]) = (solutionItems[0], solutionItems[itemIndex]);
         }
     }
 
@@ -635,12 +646,12 @@ public sealed class SolutionModel : PropertyContainerModel
         ValidateName(name);
 
         SolutionFolderModel? parentFolder =
-            parentItemRef is null ? null : this.FindFolder(parentItemRef) ?? this.AddFolder(parentItemRef);
+            parentItemRef is null ? null : FindFolder(parentItemRef) ?? AddFolder(parentItemRef);
 
-        SolutionFolderModel folder = new SolutionFolderModel(this, this.StringTable.GetString(name), parentFolder);
+        SolutionFolderModel folder = new(this, StringTable.GetString(name), parentFolder);
 
-        this.solutionFolders.Add(folder);
-        this.solutionItems.Add(folder);
+        solutionFolders.Add(folder);
+        solutionItems.Add(folder);
 
         return folder;
     }
@@ -649,7 +660,7 @@ public sealed class SolutionModel : PropertyContainerModel
     // Recursive call reuses the solutionItems array to avoid creating a new array for each recursive call.
     private bool RemoveFolder(SolutionFolderModel folder, SolutionItemModel[] solutionItems)
     {
-        _ = this.solutionFolders.Remove(folder);
+        _ = solutionFolders.Remove(folder);
 
         // Remove any children of this folder.
         foreach (SolutionItemModel existingItem in solutionItems)
@@ -658,20 +669,20 @@ public sealed class SolutionModel : PropertyContainerModel
             {
                 _ = existingItem switch
                 {
-                    SolutionFolderModel childFolder => this.RemoveFolder(childFolder, solutionItems),
-                    SolutionProjectModel childProject => this.RemoveProject(childProject),
+                    SolutionFolderModel childFolder => RemoveFolder(childFolder, solutionItems),
+                    SolutionProjectModel childProject => RemoveProject(childProject),
                     _ => throw new InvalidOperationException(),
                 };
             }
         }
 
-        return this.RemoveItem(folder);
+        return RemoveItem(folder);
     }
 
     private bool RemoveItem(SolutionItemModel item)
     {
-        _ = this.solutionItemsById.Remove(item.Id);
-        return this.solutionItems.Remove(item);
+        _ = solutionItemsById.Remove(item.Id);
+        return solutionItems.Remove(item);
     }
 
     private sealed class ValidationScope(SolutionModel model) : IDisposable

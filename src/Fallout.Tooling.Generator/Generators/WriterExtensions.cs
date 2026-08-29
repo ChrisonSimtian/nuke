@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fallout.CodeGeneration.Model;
@@ -15,7 +14,9 @@ public static class WriterExtensions
         where T : IWriterWrapper
     {
         if (!deprecatable.IsDeprecated())
+        {
             return writerWrapper;
+        }
 
         var message = deprecatable.GetDeprecationMessage();
         var obsoleteText = string.IsNullOrEmpty(message) ? string.Empty : $"(\"{message}\")";
@@ -47,6 +48,7 @@ public static class WriterExtensions
         // TODO: point at the Fallout docs site once #41 lands; until then, the README is the authoritative source.
         lines.Add(("This is a <a href=\"https://github.com/Fallout-build/Fallout\">"
                    + "CLI wrapper with fluent API</a> that allows to modify the following arguments:").Paragraph());
+
         lines.AddRange(GetArgumentsList(task.SettingsClass));
 
         return writerWrapper
@@ -56,16 +58,21 @@ public static class WriterExtensions
     public static T WriteInherit<T>(this T writerWrapper, Task task)
         where T : IWriterWrapper
     {
-        return writerWrapper.WriteLine($"/// <inheritdoc cref=\"{task.Tool.GetClassName()}.{task.GetTaskMethodName()}({task.Tool.Namespace}.{task.SettingsClass.Name})\"/>");
+        return writerWrapper.WriteLine(
+            $"/// <inheritdoc cref=\"{task.Tool.GetClassName()}.{task.GetTaskMethodName()}({task.Tool.Namespace}.{task.SettingsClass.Name})\"/>");
     }
 
     private static IEnumerable<string> GetArgumentsList(DataClass dataClass)
     {
         var allDataClasses = dataClass.Tool.Tasks.Select(x => x.SettingsClass).Concat(dataClass.Tool.DataClasses).ToList();
         var typeHierarchy = dataClass.DescendantsAndSelf(x => allDataClasses.FirstOrDefault(y => y.Name == x.BaseClass));
-        var properties = typeHierarchy.SelectMany(x => x.Properties, (x, y) => (Class: x, Property: y)).Where(x => !string.IsNullOrEmpty(x.Property.Format)).ToList();
+        var properties = typeHierarchy.SelectMany(x => x.Properties, (x, y) => (Class: x, Property: y))
+            .Where(x => !string.IsNullOrEmpty(x.Property.Format)).ToList();
+
         if (properties.Count == 0)
+        {
             yield break;
+        }
 
         string GetArgument(Property property)
         {
@@ -75,19 +82,31 @@ public static class WriterExtensions
                 : valueIndex != 0
                     ? property.Format.Substring(startIndex: 0, valueIndex).TrimEnd(':', '=', ' ')
                     : $"&lt;{property.Name.ToInstance()}&gt;";
+
             if (!argument.Any(char.IsLetter))
-                Log.Warning("Format for property {ClassName}.{PropertyName} is all non-letters", property.DataClass.Tool.Name, property.Name);
+            {
+                Log.Warning("Format for property {ClassName}.{PropertyName} is all non-letters", property.DataClass.Tool.Name,
+                    property.Name);
+            }
+
             return argument;
         }
 
         var propertiesWithArgument = properties
-            .Select(x => new { Property = x.Class.Name + "." + x.Property.Name, Argument = GetArgument(x.Property) })
+            .Select(x => new
+            {
+                Property = x.Class.Name + "." + x.Property.Name,
+                Argument = GetArgument(x.Property)
+            })
             .OrderBy(x => !x.Argument.StartsWith("&lt;"))
             .ThenBy(x => x.Argument);
 
         yield return "<ul>";
         foreach (var pair in propertiesWithArgument)
+        {
             yield return $"<li><c>{pair.Argument}</c> via {pair.Property.ToSeeCref()}</li>";
+        }
+
         yield return "</ul>";
     }
 
@@ -105,7 +124,8 @@ public static class WriterExtensions
         return writerWrapper.WriteSummary(GetUsedWithinText(enumeration.Tool));
     }
 
-    public static T WriteSummaryExtension<T>(this T writerWrapper, string actionText, Property property, Property alternativeProperty = null)
+    public static T WriteSummaryExtension<T>(this T writerWrapper, string actionText, Property property,
+        Property alternativeProperty = null)
         where T : IWriterWrapper
     {
         return writerWrapper.WriteSummary(
@@ -129,7 +149,9 @@ public static class WriterExtensions
         lines = lines.Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
         if (lines.Length == 0)
+        {
             return writerWrapper;
+        }
 
         writerWrapper.WriteLine($"/// <summary>{lines.Join(string.Empty)}</summary>");
 

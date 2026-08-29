@@ -38,13 +38,14 @@ internal static class ValueInjectionUtility
             return attribute.TryGetValue(parameter, instance);
         }
 
-        return (T) (valueCache[parameter] = valueCache.GetValueOrDefault(parameter) ?? GetValue());
+        return (T)(valueCache[parameter] = valueCache.GetValueOrDefault(parameter) ?? GetValue());
     }
 
     public static void InjectValues<T>(T instance = default, Func<MemberInfo, Attribute, bool> filter = null)
     {
         filter ??= (_, _) => true;
-        InjectValuesInternal(instance, GetInjectionMembers(instance?.GetType() ?? typeof(T)).Where(x => filter(x.Member, x.Attribute)));
+        InjectValuesInternal(instance,
+            GetInjectionMembers(instance?.GetType() ?? typeof(T)).Where(x => filter(x.Member, x.Attribute)));
     }
 
     private static void InjectValuesInternal<T>(
@@ -59,27 +60,34 @@ internal static class ValueInjectionUtility
         {
             if (member.DeclaringType == typeof(FalloutBuild) &&
                 !new[]
-                 {
-                     nameof(FalloutBuild.Plan),
-                     nameof(FalloutBuild.Help),
-                     nameof(FalloutBuild.Continue),
-                     nameof(FalloutBuild.NoLogo),
-                     nameof(FalloutBuild.Verbosity),
-                     nameof(FalloutBuild.Partition)
-                 }.Contains(member.Name))
+                {
+                    nameof(FalloutBuild.Plan),
+                    nameof(FalloutBuild.Help),
+                    nameof(FalloutBuild.Continue),
+                    nameof(FalloutBuild.NoLogo),
+                    nameof(FalloutBuild.Verbosity),
+                    nameof(FalloutBuild.Partition)
+                }.Contains(member.Name))
+            {
                 continue;
+            }
 
             if (member.ReflectedType.NotNull().IsInterface)
+            {
                 continue;
+            }
 
             attribute.Build = instance as IFalloutBuild;
             var value = attribute.TryGetValue(member, instance);
             if (value == null)
+            {
                 continue;
+            }
 
             var valueType = value.GetType();
             Assert.True(member.GetMemberType().IsAssignableFrom(valueType),
                 $"Member '{member.Name}' must be of type '{valueType.Name}' to get its valued injected from '{attribute.GetType().Name}'");
+
             member.SetValue(instance, value);
         }
     }

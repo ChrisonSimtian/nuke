@@ -28,7 +28,8 @@ internal static class PlatformNames
     internal const string ARM = nameof(ARM);
     internal const string ARM64 = nameof(ARM64);
 
-    internal static string Canonical(string platform) => string.Equals(platform, AnySpaceCPU, StringComparison.OrdinalIgnoreCase) ? AnyCPU : platform;
+    internal static string Canonical(string platform) =>
+        string.Equals(platform, AnySpaceCPU, StringComparison.OrdinalIgnoreCase) ? AnyCPU : platform;
 
     internal static string ToStringKnown(string platform)
     {
@@ -53,6 +54,7 @@ internal static class PlatformNames
             ARM64 => ARM64,
             _ => null,
         };
+
         return value is not null;
     }
 }

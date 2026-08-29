@@ -61,12 +61,21 @@ public abstract class Enumeration
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(objA: null, objB: obj))
+        {
             return false;
+        }
+
         if (ReferenceEquals(this, obj))
+        {
             return true;
+        }
+
         if (obj.GetType() != GetType())
+        {
             return false;
-        return Equals((Enumeration) obj);
+        }
+
+        return Equals((Enumeration)obj);
     }
 
     public override int GetHashCode()
@@ -94,6 +103,7 @@ public abstract class Enumeration
             {
                 var matchingFields = typeof(T).GetFields(ReflectionUtility.Static)
                     .Where(x => x.Name.EqualsOrdinalIgnoreCase(stringValue)).ToList();
+
                 Assert.HasSingleItem(matchingFields);
                 return matchingFields.Single().GetValue(obj: null);
             }

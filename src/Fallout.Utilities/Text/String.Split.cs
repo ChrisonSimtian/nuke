@@ -12,12 +12,16 @@ public static partial class StringExtensions
         for (var i = 0; i < str.Length; i++)
         {
             if (!predicate(str[i], i))
+            {
                 continue;
+            }
 
             yield return str.Substring(next, i - next);
             next = i;
             if (!includeSplitCharacter)
+            {
                 next++;
+            }
         }
 
         yield return str.Substring(next);
@@ -38,7 +42,8 @@ public static partial class StringExtensions
                 if (exclusions.Length > 0 && i >= exclusionIndex)
                 {
                     var currentExclusions = exclusions
-                        .Select(x => (Exclusion: x, Index: str.IndexOf(x, exclusionIndex, StringComparison.InvariantCultureIgnoreCase)))
+                        .Select(x => (Exclusion: x,
+                            Index: str.IndexOf(x, exclusionIndex, StringComparison.InvariantCultureIgnoreCase)))
                         .Where(x => x.Index == i).ToList();
 
                     if (currentExclusions.Any())
@@ -58,7 +63,11 @@ public static partial class StringExtensions
     /// </summary>
     public static string[] SplitLineBreaks(this string str, StringSplitOptions options = StringSplitOptions.None)
     {
-        return str.Split(new[] { "\r\n", "\n" }, options);
+        return str.Split(new[]
+        {
+            "\r\n",
+            "\n"
+        }, options);
     }
 
     /// <summary>
@@ -66,7 +75,11 @@ public static partial class StringExtensions
     /// </summary>
     public static string[] SplitParagraphs(this string str, StringSplitOptions options = StringSplitOptions.None)
     {
-        return str.Split(new[] { "\r\n\r\n", "\n\n" }, options);
+        return str.Split(new[]
+        {
+            "\r\n\r\n",
+            "\n\n"
+        }, options);
     }
 
     /// <summary>
@@ -74,7 +87,10 @@ public static partial class StringExtensions
     /// </summary>
     public static string[] SplitSpace(this string str)
     {
-        return str.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        return str.Split(new[]
+        {
+            ' '
+        }, StringSplitOptions.RemoveEmptyEntries);
     }
 
     /// <summary>

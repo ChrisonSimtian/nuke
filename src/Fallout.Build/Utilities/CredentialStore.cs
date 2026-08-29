@@ -16,7 +16,9 @@ public static class CredentialStore
                     $"delete-generic-password -a {EnvironmentInfo.Variables["LOGNAME"]} -s {name.DoubleQuoteIfNeeded()}",
                     logInvocation: false,
                     logOutput: false).AssertZeroExitCode();
+
                 break;
+
             default:
                 throw new NotSupportedException(EnvironmentInfo.Platform.ToString());
         }
@@ -32,7 +34,9 @@ public static class CredentialStore
                     $"add-generic-password -T \"\" -a {EnvironmentInfo.Variables["LOGNAME"]} -s {name.DoubleQuoteIfNeeded()} -w {password}",
                     logInvocation: false,
                     logOutput: false).AssertZeroExitCode();
+
                 break;
+
             default:
                 throw new NotSupportedException(EnvironmentInfo.Platform.ToString());
         }
@@ -48,10 +52,12 @@ public static class CredentialStore
                     $"find-generic-password -w -a {EnvironmentInfo.Variables["LOGNAME"]} -s {name.DoubleQuoteIfNeeded()}",
                     logInvocation: false,
                     logOutput: false);
+
                 process.WaitForExit();
                 return process.ExitCode == 0
                     ? process.Output.Single().Text
                     : null;
+
             default:
                 return null;
         }
@@ -81,12 +87,15 @@ public static class CredentialStore
     {
         var password = TryGetPassword(legacyName);
         if (password == null)
+        {
             return null;
+        }
 
         Console.Error.WriteLine(
             $"warning FALLOUT003: Found credentials under legacy keychain entry '{legacyName}'. " +
             $"Falling back to legacy entry for this run. Re-run `dotnet fallout :secrets` to migrate to '{newName}'. " +
             "The legacy entry will no longer be read in 11.0.");
+
         return password;
     }
 

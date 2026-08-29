@@ -1,7 +1,5 @@
-using System;
-using System.Linq;
-using FluentAssertions;
 using Fallout.Common.Utilities;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
@@ -19,7 +17,7 @@ public class StringExtensionsSpecs
     [Theory]
     [InlineData("plain", "'plain'")]
     [InlineData("with: colon", "'with: colon'")]
-    [InlineData("Bob's step", "'Bob''s step'")]           // YAML escapes an embedded quote by doubling it
+    [InlineData("Bob's step", "'Bob''s step'")] // YAML escapes an embedded quote by doubling it
     [InlineData("two ' ' quotes", "'two '' '' quotes'")]
     public void TestSingleQuoteYaml(string input, string output)
     {

@@ -1,7 +1,7 @@
 using System;
+using System.Threading.Tasks;
 using Fallout.Cli.Commands;
 using FluentAssertions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Fallout.Cli.Specs.Commands;

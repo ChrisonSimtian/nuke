@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Fallout.Common;
 using Fallout.Common.CI.AzurePipelines;
@@ -17,10 +16,15 @@ namespace Fallout.Components;
 public interface IReportCoverage : ITest, IHasReports, IHasGitRepository
 {
     bool CreateCoverageHtmlReport { get; }
+
     bool ReportToCodecov { get; }
-    [Parameter] [Secret] string CodecovToken => TryGetValue(() => CodecovToken);
+
+    [Parameter]
+    [Secret]
+    string CodecovToken => TryGetValue(() => CodecovToken);
 
     AbsolutePath CoverageReportDirectory => ReportDirectory / "coverage-report";
+
     AbsolutePath CoverageReportArchive => CoverageReportDirectory.WithExtension("zip");
 
     Target ReportCoverage => _ => _

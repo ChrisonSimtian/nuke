@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-
-using Fallout.Common;
 
 namespace Fallout.Solutions;
 
@@ -67,7 +64,9 @@ public static partial class ProjectExtensions
         {
             var property = msbuildProject.GetProperty(name);
             if (property != null)
+            {
                 return property.EvaluatedValue.Split(';');
+            }
         }
 
         return null;

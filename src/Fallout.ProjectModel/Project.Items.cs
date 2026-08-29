@@ -2,8 +2,6 @@
 using System.Linq;
 using Fallout.Common.Utilities;
 
-using Fallout.Common;
-
 namespace Fallout.Solutions;
 
 public static partial class ProjectExtensions
@@ -50,13 +48,15 @@ public static partial class ProjectExtensions
         return project.GetItemMetadata(itemGroupName, metadataName).Select(ReflectionUtility.Convert<T>);
     }
 
-    public static string GetItemMetadataSingleOrDefault(this Project project, string itemGroupName, string includeName, string metadataName)
+    public static string GetItemMetadataSingleOrDefault(this Project project, string itemGroupName, string includeName,
+        string metadataName)
     {
         var items = project.GetMSBuildProject().GetItems(itemGroupName);
         return items.SingleOrDefault(x => x.EvaluatedInclude == includeName)?.GetMetadataValue(metadataName);
     }
 
-    public static T GetItemMetadataSingleOrDefault<T>(this Project project, string itemGroupName, string includeName, string metadataName)
+    public static T GetItemMetadataSingleOrDefault<T>(this Project project, string itemGroupName, string includeName,
+        string metadataName)
     {
         return ReflectionUtility.Convert<T>(project.GetItemMetadataSingleOrDefault(itemGroupName, includeName, metadataName));
     }

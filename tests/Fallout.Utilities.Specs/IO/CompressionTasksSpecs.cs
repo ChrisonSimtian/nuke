@@ -1,8 +1,6 @@
-using System;
 using System.IO;
-using System.Linq;
-using FluentAssertions;
 using Fallout.Common.IO;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -11,6 +9,7 @@ namespace Fallout.Common.Specs;
 public class CompressionTasksSpecs : FileSystemDependentSpecs
 {
     private AbsolutePath RootFile => TestTempDirectory / "root-file";
+
     private AbsolutePath NestedFile => TestTempDirectory / "a" / "b" / "c" / "nested-file";
 
     public CompressionTasksSpecs(ITestOutputHelper testOutputHelper)

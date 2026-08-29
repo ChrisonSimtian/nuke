@@ -16,10 +16,14 @@ public static partial class ReflectionUtility
     public static object Convert(object value, Type destinationType)
     {
         if (destinationType.IsInstanceOfType(value))
+        {
             return value;
+        }
 
         if (destinationType == typeof(string) && value == null)
+        {
             return null;
+        }
 
         try
         {
@@ -37,8 +41,14 @@ public static partial class ReflectionUtility
     // TODO: rename overloads?
     public static object Convert(string value, Type destinationType, char? separator, bool booleanDefault)
     {
-        var values = (separator.HasValue ? value.Split(separator.Value) : new[] { value })
+        var values = (separator.HasValue
+                ? value.Split(separator.Value)
+                : new[]
+                {
+                    value
+                })
             .Where(x => !x.IsNullOrWhiteSpace()).ToArray();
+
         return Convert(values, destinationType, booleanDefault);
     }
 
@@ -51,10 +61,14 @@ public static partial class ReflectionUtility
         if (values.Count == 0)
         {
             if (destinationType.IsArray)
+            {
                 return Array.CreateInstance(elementType, length: 0);
+            }
 
             if (destinationType == typeof(bool) || destinationType == typeof(bool?))
+            {
                 return booleanDefault;
+            }
 
             return null;
         }
@@ -64,6 +78,7 @@ public static partial class ReflectionUtility
         {
             Assert.HasSingleItem(convertedValues,
                 $"Value [ {values.JoinCommaSpace()} ] cannot be assigned to '{destinationType.GetDisplayShortName()}'");
+
             return convertedValues.Single();
         }
 

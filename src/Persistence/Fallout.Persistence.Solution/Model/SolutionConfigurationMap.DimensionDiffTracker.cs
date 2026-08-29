@@ -15,22 +15,22 @@ internal sealed partial class SolutionConfigurationMap
         private bool anyDifferent;
 
         // There was at least one item that was different than the expected value.
-        internal readonly bool HasDifferences => this.differences > 0;
+        internal readonly bool HasDifferences => differences > 0;
 
         // All items are different than expected, but they are the same as each other.
-        internal readonly bool SameDifference => !this.anyDifferent && this.itemsChecked == this.differences && this.itemsChecked > 0;
+        internal readonly bool SameDifference => !anyDifferent && itemsChecked == differences && itemsChecked > 0;
 
         internal void ObserveDifferentValue(T current)
         {
-            this.itemsChecked++;
-            this.differences++;
-            if (this.differences == 1)
+            itemsChecked++;
+            differences++;
+            if (differences == 1)
             {
-                this.firstDifferent = current;
+                firstDifferent = current;
             }
             else
             {
-                this.anyDifferent = this.anyDifferent || !EqualityComparer<T>.Default.Equals(this.firstDifferent, current);
+                anyDifferent = anyDifferent || !EqualityComparer<T>.Default.Equals(firstDifferent, current);
             }
         }
 
@@ -38,36 +38,36 @@ internal sealed partial class SolutionConfigurationMap
         {
             if (!EqualityComparer<T>.Default.Equals(expected, current))
             {
-                this.ObserveDifferentValue(current);
+                ObserveDifferentValue(current);
             }
             else
             {
-                this.itemsChecked++;
+                itemsChecked++;
             }
         }
 
         internal void ClearDifferences()
         {
-            this.differences = 0;
-            this.itemsChecked = 0;
-            this.anyDifferent = false;
-            this.firstDifferent = default!;
+            differences = 0;
+            itemsChecked = 0;
+            anyDifferent = false;
+            firstDifferent = default!;
         }
 
         internal readonly bool TryGetSame(out T sameChanged)
         {
-            sameChanged = this.firstDifferent;
-            return this.SameDifference;
+            sameChanged = firstDifferent;
+            return SameDifference;
         }
 
         internal readonly bool TryGetSame(DimensionDiffTracker<T> alternate, out T sameChanged)
         {
-            if (this.TryGetSame(out sameChanged))
+            if (TryGetSame(out sameChanged))
             {
                 return true;
             }
 
-            if (this.HasDifferences)
+            if (HasDifferences)
             {
                 return alternate.TryGetSame(out sameChanged);
             }

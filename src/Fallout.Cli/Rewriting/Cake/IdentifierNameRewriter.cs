@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Fallout.Common;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.MSBuild;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Fallout.Cli.Rewriting.Cake;
 

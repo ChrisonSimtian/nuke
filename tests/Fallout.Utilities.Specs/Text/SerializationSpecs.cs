@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
-using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using Fallout.Utilities.Text.Yaml;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
@@ -46,21 +42,23 @@ public class SerializationSpecs
     private static Data CreateData(string name)
     {
         return new Data
-               {
-                   String = name,
-                   Number = 5,
-                   Boolean = true,
-                   Nested = new Data
-                            {
-                                Boolean = false
-                            }
-               };
+        {
+            String = name,
+            Number = 5,
+            Boolean = true,
+            Nested = new Data
+            {
+                Boolean = false
+            }
+        };
     }
 
     public class Data
     {
         public string String { get; set; }
+
         public int Number { get; set; }
+
         public bool Boolean { get; set; }
 
         public Data Nested { get; set; }

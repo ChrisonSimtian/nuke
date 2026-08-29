@@ -7,7 +7,7 @@ namespace Fallout.Persistence.Solution.Serializer.Xml;
 
 internal readonly ref struct XmlElementSubElementsEnumerable(XmlNode? element, string? filterByName)
 {
-    public readonly XmlElementSubElements GetEnumerator() => new XmlElementSubElements(element, filterByName);
+    public readonly XmlElementSubElements GetEnumerator() => new(element, filterByName);
 
     internal readonly bool Any()
     {

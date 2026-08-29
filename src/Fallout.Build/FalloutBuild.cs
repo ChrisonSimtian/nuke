@@ -90,32 +90,38 @@ public abstract partial class FalloutBuild : IFalloutBuild
     [Parameter("List of targets to be skipped. Empty list skips all dependencies.",
         Name = SkippedTargetsParameterName,
         Separator = TargetsSeparator)]
-    public IReadOnlyCollection<ExecutableTarget> SkippedTargets => ExecutionPlan.Where(x => x.Status == ExecutionStatus.Skipped).ToList();
+    public IReadOnlyCollection<ExecutableTarget> SkippedTargets =>
+        ExecutionPlan.Where(x => x.Status == ExecutionStatus.Skipped).ToList();
 
     /// <summary>
     /// Gets the list of targets that are scheduled.
     /// </summary>
-    public IReadOnlyCollection<ExecutableTarget> ScheduledTargets => ExecutionPlan.Where(x => x.Status == ExecutionStatus.Scheduled).ToList();
+    public IReadOnlyCollection<ExecutableTarget> ScheduledTargets =>
+        ExecutionPlan.Where(x => x.Status == ExecutionStatus.Scheduled).ToList();
 
     /// <summary>
     /// Gets the list of targets that are running.
     /// </summary>
-    public IReadOnlyCollection<ExecutableTarget> RunningTargets => ExecutionPlan.Where(x => x.Status == ExecutionStatus.Running).ToList();
+    public IReadOnlyCollection<ExecutableTarget> RunningTargets =>
+        ExecutionPlan.Where(x => x.Status == ExecutionStatus.Running).ToList();
 
     /// <summary>
     /// Gets the list of targets that were aborted.
     /// </summary>
-    public IReadOnlyCollection<ExecutableTarget> AbortedTargets => ExecutionPlan.Where(x => x.Status == ExecutionStatus.Aborted).ToList();
+    public IReadOnlyCollection<ExecutableTarget> AbortedTargets =>
+        ExecutionPlan.Where(x => x.Status == ExecutionStatus.Aborted).ToList();
 
     /// <summary>
     /// Gets the list of targets that have failed.
     /// </summary>
-    public IReadOnlyCollection<ExecutableTarget> FailedTargets => ExecutionPlan.Where(x => x.Status == ExecutionStatus.Failed).ToList();
+    public IReadOnlyCollection<ExecutableTarget> FailedTargets =>
+        ExecutionPlan.Where(x => x.Status == ExecutionStatus.Failed).ToList();
 
     /// <summary>
     /// Gets the list of targets that have succeeded.
     /// </summary>
-    public IReadOnlyCollection<ExecutableTarget> SucceededTargets => ExecutionPlan.Where(x => x.Status == ExecutionStatus.Succeeded).ToList();
+    public IReadOnlyCollection<ExecutableTarget> SucceededTargets =>
+        ExecutionPlan.Where(x => x.Status == ExecutionStatus.Succeeded).ToList();
 
     /// <summary>
     /// Gets the list of targets that have been finished (failed or succeeded).
@@ -171,7 +177,9 @@ public abstract partial class FalloutBuild : IFalloutBuild
                 : GlobalFalloutDirectory / "packages"
             : null;
 
-    internal IEnumerable<string> TargetNames => ExecutableTargetFactory.GetTargetProperties(GetType()).Select(x => x.GetDisplayShortName());
+    internal IEnumerable<string> TargetNames =>
+        ExecutableTargetFactory.GetTargetProperties(GetType()).Select(x => x.GetDisplayShortName());
+
     internal IEnumerable<string> HostNames => Host.AvailableTypes.Select(x => x.Name);
 
     public bool IsSucceeding => !IsFailing;
@@ -190,7 +198,8 @@ public abstract partial class FalloutBuild : IFalloutBuild
     /// </summary>
     public int? ExitCode { get; set; }
 
-    private bool IsInterceptorExecution => LegacyEnvironment.Read(InterceptorEnvironmentKey, LegacyInterceptorEnvironmentKey) == "1";
+    private bool IsInterceptorExecution =>
+        LegacyEnvironment.Read(InterceptorEnvironmentKey, LegacyInterceptorEnvironmentKey) == "1";
 
     public void ReportSummary(Configure<Dictionary<string, string>> configurator = null)
     {
@@ -200,7 +209,9 @@ public abstract partial class FalloutBuild : IFalloutBuild
 
     internal void ReportSummary(ExecutableTarget target, Configure<Dictionary<string, string>> configurator)
     {
-        target.SummaryInformation = configurator.InvokeSafe(new Dictionary<string, string>()).ToDictionary(x => x.Key, x => x.Value);
+        target.SummaryInformation =
+            configurator.InvokeSafe(new Dictionary<string, string>()).ToDictionary(x => x.Key, x => x.Value);
+
         ExecuteExtension<IOnTargetSummaryUpdated>(x => x.OnTargetSummaryUpdated(this, target));
     }
 }

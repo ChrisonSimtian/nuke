@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using NuGet.Versioning;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
 using Fallout.Common.Tools.GitHub;
 using Fallout.Common.Utilities;
+using NuGet.Versioning;
 using Serilog;
 
 // ReSharper disable ArgumentsStyleLiteral
@@ -37,7 +37,8 @@ public static class ChangelogTasks
         if (repository.IsGitHubRepository() && changelogPath.FileExists())
         {
             changelogSectionNotes.Add(string.Empty);
-            changelogSectionNotes.Add($"Full changelog at {repository.GetGitHubBrowseUrl(changelogPath, itemType: GitHubItemType.File)}");
+            changelogSectionNotes.Add(
+                $"Full changelog at {repository.GetGitHubBrowseUrl(changelogPath, itemType: GitHubItemType.File)}");
         }
 
         return changelogSectionNotes.JoinNewLine();
@@ -100,7 +101,8 @@ public static class ChangelogTasks
     /// <seealso cref="FinalizeChangelog(ChangeLog,NuGetVersion,GitRepository)"/>
     public static void FinalizeChangelog(ChangeLog changelogFile, NuGetVersion tag, GitRepository repository = null)
     {
-        Log.Information("Finalizing {File} for {Tag} ...", PathConstruction.GetRelativePath(FalloutBuild.RootDirectory, changelogFile.Path), tag);
+        Log.Information("Finalizing {File} for {Tag} ...",
+            PathConstruction.GetRelativePath(FalloutBuild.RootDirectory, changelogFile.Path), tag);
 
         var unreleasedNotes = changelogFile.Unreleased;
         var releaseNotes = changelogFile.ReleaseNotes;
@@ -133,7 +135,8 @@ public static class ChangelogTasks
     /// <seealso cref="FinalizeChangelog(ChangeLog,NuGetVersion,GitRepository)"/>
     public static void FinalizeChangelog(AbsolutePath changelogFile, string tag, GitRepository repository = null)
     {
-        Log.Information("Finalizing {File} for {Tag} ...", PathConstruction.GetRelativePath(FalloutBuild.RootDirectory, changelogFile), tag);
+        Log.Information("Finalizing {File} for {Tag} ...",
+            PathConstruction.GetRelativePath(FalloutBuild.RootDirectory, changelogFile), tag);
 
         var content = changelogFile.ReadAllLines().ToList();
         var sections = GetReleaseSections(content).ToList();
@@ -142,7 +145,9 @@ public static class ChangelogTasks
 
         Assert.True(firstSection.Caption.All(char.IsLetter), "Cannot find a draft section");
         Assert.True(sections.All(x => !x.Caption.EqualsOrdinalIgnoreCase(tag)), $"Tag '{tag}' already exists");
-        Assert.True(firstSection.EndIndex > firstSection.StartIndex, $"Draft section '{firstSection.Caption}' does not contain any information");
+        Assert.True(firstSection.EndIndex > firstSection.StartIndex,
+            $"Draft section '{firstSection.Caption}' does not contain any information");
+
         Assert.True(secondSection == null || NuGetVersion.Parse(tag).CompareTo(NuGetVersion.Parse(secondSection.Caption)) > 0,
             $"Tag '{tag}' is not greater compared to last tag '{secondSection?.Caption}'");
 
@@ -224,7 +229,9 @@ public static class ChangelogTasks
 
         var index = content.FindIndex(IsReleaseHead);
         if (index < 0)
+        {
             yield break;
+        }
 
         while (index < content.Count)
         {
@@ -236,7 +243,7 @@ public static class ChangelogTasks
             }
 
             var caption = GetCaption(line);
-            var nextReleaseHeadIndex = content.FindIndex(index + 1,  x => IsReleaseHead(x) || !IsReleaseContent(x));
+            var nextReleaseHeadIndex = content.FindIndex(index + 1, x => IsReleaseHead(x) || !IsReleaseContent(x));
 
             var releaseData =
                 new ReleaseSection
@@ -268,7 +275,11 @@ public static class ChangelogTasks
             content.Add(string.Empty);
             content.Add($"[{firstSection.Caption}]: {repository.GetGitHubCompareTagToHeadUrl(tag)}");
             for (var i = 1; i + 1 < sections.Count; i++)
-                content.Add($"[{sections[i].Caption}]: {repository.GetGitHubCompareTagsUrl(sections[i].Caption, sections[i + 1].Caption)}");
+            {
+                content.Add(
+                    $"[{sections[i].Caption}]: {repository.GetGitHubCompareTagsUrl(sections[i].Caption, sections[i + 1].Caption)}");
+            }
+
             content.Add($"[{lastSection.Caption}]: {repository.GetGitHubBrowseUrl(branch: lastSection.Caption)}");
         }
     }

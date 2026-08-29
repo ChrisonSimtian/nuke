@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Fallout.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Fallout.Common;
-using Fallout.Common.IO;
 using Serilog;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
@@ -17,7 +16,8 @@ internal class InvocationRewriter : SafeSyntaxRewriter
         {
             new(original: "Does", replacement: nameof(ITargetDefinition.Executes), convert: ConvertLambdaBodyToBlock),
             new(original: "IsDependentOn", replacement: nameof(ITargetDefinition.DependsOn), convert: ConvertStringToIdentifier),
-            new(original: "IsDependeeOf", replacement: nameof(ITargetDefinition.DependentFor), convert: ConvertStringToIdentifier),
+            new(original: "IsDependeeOf", replacement: nameof(ITargetDefinition.DependentFor),
+                convert: ConvertStringToIdentifier),
             new(original: "ContinueOnError", replacement: nameof(ITargetDefinition.ProceedAfterFailure)),
             new(original: "WithCriteria", replacement: RenameWithCriteria, convert: ConvertWithCriteria),
             // Logger
@@ -25,16 +25,16 @@ internal class InvocationRewriter : SafeSyntaxRewriter
             new(original: "Verbose", replacement: $"{nameof(Log)}.{nameof(Log.Debug)}"),
         };
 
-    private static Func<ExpressionSyntax, ExpressionSyntax> ConvertStringToIdentifier = x =>
+    private static readonly Func<ExpressionSyntax, ExpressionSyntax> ConvertStringToIdentifier = x =>
     {
-        var literalExpression = (LiteralExpressionSyntax) x;
+        var literalExpression = (LiteralExpressionSyntax)x;
         var targetName = literalExpression.GetConstantValue<string>();
         return IdentifierName(targetName);
     };
 
-    private static Func<ExpressionSyntax, ExpressionSyntax> ConvertLambdaBodyToBlock = x =>
+    private static readonly Func<ExpressionSyntax, ExpressionSyntax> ConvertLambdaBodyToBlock = x =>
     {
-        var lambdaExpression = (LambdaExpressionSyntax) x;
+        var lambdaExpression = (LambdaExpressionSyntax)x;
         return lambdaExpression.Block != null
             ? lambdaExpression
             : lambdaExpression
@@ -55,11 +55,13 @@ internal class InvocationRewriter : SafeSyntaxRewriter
 
     public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
     {
-        node = (InvocationExpressionSyntax) base.VisitInvocationExpression(node).NotNull();
+        node = (InvocationExpressionSyntax)base.VisitInvocationExpression(node).NotNull();
         var name = node.GetIdentifierName();
         var replacement = Replacements.SingleOrDefault(x => x.Original == name);
         if (replacement == null)
+        {
             return node;
+        }
 
         return node.Expression switch
         {
@@ -103,8 +105,11 @@ internal class InvocationRewriter : SafeSyntaxRewriter
         }
 
         public string Original { get; }
+
         public Func<InvocationExpressionSyntax, string> Replacement { get; }
+
         public Func<InvocationExpressionSyntax, ExpressionSyntax, ExpressionSyntax> Convert { get; }
+
         public Func<ExpressionSyntax[], ExpressionSyntax[]> Reorder { get; }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Fallout.CodeGeneration.Model;
 
 namespace Fallout.CodeGeneration.Writers;
@@ -13,5 +11,6 @@ public class TaskWriter : IWriterWrapper
     }
 
     public Task Task { get; }
+
     public IWriter Writer { get; }
 }

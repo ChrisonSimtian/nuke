@@ -5,8 +5,9 @@
 
 namespace System.Diagnostics.CodeAnalysis
 {
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "Combine .NET Framework adapters")]
-    [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name",
+        Justification = "Combine .NET Framework adapters")]
+    [AttributeUsage(AttributeTargets.Constructor)]
     internal sealed class SetsRequiredMembersAttribute : Attribute
     {
     }
@@ -16,14 +17,17 @@ namespace System.Diagnostics.CodeAnalysis
 namespace System.Runtime.CompilerServices
 #pragma warning restore SA1403 // File may only contain a single namespace
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Combine .NET Framework adapters")]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property,
+        Inherited = false)]
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type",
+        Justification = "Combine .NET Framework adapters")]
     internal sealed class RequiredMemberAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Combine .NET Framework adapters")]
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type",
+        Justification = "Combine .NET Framework adapters")]
     internal sealed class CompilerFeatureRequiredAttribute : Attribute
     {
         public const string RefStructs = nameof(RefStructs);
@@ -31,7 +35,7 @@ namespace System.Runtime.CompilerServices
 
         public CompilerFeatureRequiredAttribute(string featureName)
         {
-            this.FeatureName = featureName;
+            FeatureName = featureName;
         }
 
         public string FeatureName { get; }

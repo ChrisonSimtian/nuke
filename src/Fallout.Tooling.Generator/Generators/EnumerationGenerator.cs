@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Text;
 using Fallout.CodeGeneration.Model;
@@ -12,7 +11,9 @@ public static class EnumerationGenerator
     {
         var values = enumeration.Values.ToArray();
         for (var i = 0; i + 1 < values.Length; i++)
+        {
             values[i] += ",";
+        }
 
         string GetIdentifier(string value)
             => value.Aggregate(

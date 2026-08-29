@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-
 namespace Fallout.Common.Tools.MSBuild;
 
 /// <summary>

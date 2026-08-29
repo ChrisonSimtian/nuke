@@ -1,7 +1,7 @@
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
@@ -25,11 +25,15 @@ internal sealed class CompleteCommand : IFalloutCommand
     private int Execute(string[] args, AbsolutePath rootDirectory)
     {
         if (rootDirectory == null)
+        {
             return 0;
+        }
 
         var words = args.Single();
         if (!words.StartsWithOrdinalIgnoreCase(CommandName))
+        {
             return 0;
+        }
 
         words = words[CommandName.Length..].TrimStart();
 
@@ -47,8 +51,11 @@ internal sealed class CompleteCommand : IFalloutCommand
         var completionItems = IsLegacy(rootDirectory)
             ? completionFile.ReadYaml<Dictionary<string, string[]>>()
             : CompletionUtility.GetItemsFromSchema(buildSchemaFile, GetProfileNames(rootDirectory));
+
         foreach (var item in CompletionUtility.GetRelevantItems(words, completionItems))
+        {
             Console.WriteLine(item);
+        }
 
         return 0;
     }

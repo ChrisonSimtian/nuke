@@ -10,12 +10,12 @@ namespace Nuke.Common.CI.AppVeyor;
 
 public static class AppVeyor
 {
-    public static global::Fallout.Common.CI.AppVeyor.AppVeyor Instance
-        => global::Fallout.Common.CI.AppVeyor.AppVeyor.Instance;
+    public static Fallout.Common.CI.AppVeyor.AppVeyor Instance
+        => Fallout.Common.CI.AppVeyor.AppVeyor.Instance;
 
     public static int MessageLimit
     {
-        get => global::Fallout.Common.CI.AppVeyor.AppVeyor.MessageLimit;
-        set => global::Fallout.Common.CI.AppVeyor.AppVeyor.MessageLimit = value;
+        get => Fallout.Common.CI.AppVeyor.AppVeyor.MessageLimit;
+        set => Fallout.Common.CI.AppVeyor.AppVeyor.MessageLimit = value;
     }
 }

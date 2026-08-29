@@ -58,7 +58,9 @@ public class ConfigurationReaderSpecs
 
         public static TempDir Create()
         {
-            var dir = (AbsolutePath)System.IO.Path.Combine(System.IO.Path.GetTempPath(), "fallout-cfgreader-" + Guid.NewGuid().ToString("N"));
+            var dir = (AbsolutePath)System.IO.Path.Combine(System.IO.Path.GetTempPath(),
+                "fallout-cfgreader-" + Guid.NewGuid().ToString("N"));
+
             dir.CreateDirectory();
             return new TempDir(dir);
         }
@@ -66,7 +68,9 @@ public class ConfigurationReaderSpecs
         public void Dispose()
         {
             if (Directory.Exists(Path))
+            {
                 Directory.Delete(Path, recursive: true);
+            }
         }
     }
 }

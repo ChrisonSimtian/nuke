@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using static Fallout.Common.IO.PathConstruction;
 
 namespace Fallout.Common.IO;

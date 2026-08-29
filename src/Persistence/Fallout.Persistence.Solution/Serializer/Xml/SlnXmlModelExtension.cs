@@ -17,7 +17,7 @@ internal sealed class SlnXmlModelExtension(ISolutionSerializer serializer, SlnxS
     internal SlnXmlModelExtension(ISolutionSerializer serializer, SlnxSerializerSettings settings, SlnxFile root)
         : this(serializer, settings)
     {
-        this.Root = root;
+        Root = root;
     }
 
     /// <inheritdoc/>
@@ -27,11 +27,11 @@ internal sealed class SlnXmlModelExtension(ISolutionSerializer serializer, SlnxS
     public required SlnxSerializerSettings Settings { get; init; } = settings;
 
     /// <inheritdoc/>
-    public bool Tarnished => this.Root?.Tarnished ?? false;
+    public bool Tarnished => Root?.Tarnished ?? false;
 
     internal SlnxFile? Root { get; init; }
 
-    internal string? SolutionFileFullPath => this.Root?.FullPath;
+    internal string? SolutionFileFullPath => Root?.FullPath;
 
-    internal Version? Version => this.Root?.FileVersion;
+    internal Version? Version => Root?.FileVersion;
 }

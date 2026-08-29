@@ -18,40 +18,41 @@ internal sealed partial class XmlSolution
 
         // Attributes
         string description = modelSolution.Description ?? string.Empty;
-        if (!StringComparer.Ordinal.Equals(this.Description, description))
+        if (!StringComparer.Ordinal.Equals(Description, description))
         {
-            this.Description = description;
+            Description = description;
             modified = true;
         }
 
         // Configurations
         // Use the item ref logic to allow only a single "Configurations" element, and use string.Empty as the item ref.
-        modified |= this.ApplyModelItemsToXml<SolutionModel, XmlConfigurations>(
+        modified |= ApplyModelItemsToXml<SolutionModel, XmlConfigurations>(
             modelItems: modelSolution.IsConfigurationImplicit() ? null : [(ItemRef: string.Empty, Item: modelSolution)],
-            ref this.configurationsSingle,
+            ref configurationsSingle,
             Keyword.Configurations,
             applyModelToXml: static (newConfigs, newValue) => newConfigs.ApplyModelToXml(newValue));
 
         // Folders
-        modified |= this.ApplyModelItemsToXml(
+        modified |= ApplyModelItemsToXml(
             modelItems: modelSolution.SolutionFolders.ToList(folder => (folder.ItemRef, Item: folder)),
-            ref this.folders,
+            ref folders,
             Keyword.Folder,
             applyModelToXml: static (newFolder, newValue) => newFolder.ApplyModelToXml(newValue));
 
         // Projects
         List<(string ItemRef, SolutionProjectModel Item)> solutionProjects = modelSolution.SolutionProjects.WhereToList(
             (project, _) => project.Parent is null,
-            (project, _) => (ItemRef: this.Root.ConvertToUserPath(project.ItemRef), Item: project),
+            (project, _) => (ItemRef: Root.ConvertToUserPath(project.ItemRef), Item: project),
             (object?)null);
-        modified |= this.ApplyModelItemsToXml(
+
+        modified |= ApplyModelItemsToXml(
             modelItems: solutionProjects,
-            ref this.rootProjects,
+            ref rootProjects,
             Keyword.Project,
             applyModelToXml: static (newProject, newValue) => newProject.ApplyModelToXml(newValue));
 
         // Properties
-        modified |= this.ApplyModelToXml(modelSolution.Properties);
+        modified |= ApplyModelToXml(modelSolution.Properties);
 
         return modified;
     }

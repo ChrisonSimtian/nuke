@@ -53,7 +53,8 @@ partial class AbsolutePathExtensions
             md5.TransformBlock(pathBytes, inputOffset: 0, inputCount: pathBytes.Length, outputBuffer: pathBytes, outputOffset: 0);
 
             var contentBytes = File.ReadAllBytes(path);
-            md5.TransformBlock(contentBytes, inputOffset: 0, inputCount: contentBytes.Length, outputBuffer: contentBytes, outputOffset: 0);
+            md5.TransformBlock(contentBytes, inputOffset: 0, inputCount: contentBytes.Length, outputBuffer: contentBytes,
+                outputOffset: 0);
         }
 
         md5.TransformFinalBlock(new byte[0], inputOffset: 0, inputCount: 0);

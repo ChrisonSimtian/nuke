@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common.CI.AzurePipelines.Configuration;
+﻿namespace Fallout.Common.CI.AzurePipelines.Configuration;
 
 public abstract class AzurePipelinesStep : ConfigurationEntity
 {

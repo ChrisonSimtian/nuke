@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using NuGet.Versioning;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using Fallout.Common.ValueInjection;
+using NuGet.Versioning;
 
 namespace Fallout.Common.Tooling;
 
@@ -33,6 +32,7 @@ public class LatestMavenVersionAttribute : ValueInjectionAttributeBase
             .Select(NuGetVersion.Parse)
             .OrderByDescending(x => x)
             .FirstOrDefault(x => !x.IsPrerelease || IncludePrerelease);
+
         return member.GetMemberType() == typeof(string)
             ? version?.ToNormalizedString()
             : version;

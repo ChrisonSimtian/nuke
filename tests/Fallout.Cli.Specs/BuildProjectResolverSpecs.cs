@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Fallout.Common.IO;
-using Fallout.Common.Utilities;
 using FluentAssertions;
 using Xunit;
 
@@ -97,7 +96,9 @@ public class BuildProjectResolverSpecs
 
         public static TempRepoRoot Create()
         {
-            var dir = (AbsolutePath)System.IO.Path.Combine(System.IO.Path.GetTempPath(), "fallout-test-" + Guid.NewGuid().ToString("N"));
+            var dir = (AbsolutePath)System.IO.Path.Combine(System.IO.Path.GetTempPath(),
+                "fallout-test-" + Guid.NewGuid().ToString("N"));
+
             dir.CreateDirectory();
             return new TempRepoRoot(dir);
         }
@@ -117,7 +118,9 @@ public class BuildProjectResolverSpecs
         public void Dispose()
         {
             if (Directory.Exists(Path))
+            {
                 Directory.Delete(Path, recursive: true);
+            }
         }
     }
 }

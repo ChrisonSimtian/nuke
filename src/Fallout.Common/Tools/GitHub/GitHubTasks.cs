@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +23,9 @@ public static class GitHubTasks
     static GitHubTasks()
     {
         if (EnvironmentInfo.GetVariable("GITHUB_TOKEN") is { } token)
+        {
             GitHubClient.Credentials = new Credentials(token);
+        }
     }
 
     public static async Task<IEnumerable<(string DownloadUrl, string RelativePath)>> GetGitHubDownloadUrls(
@@ -38,6 +39,7 @@ public static class GitHubTasks
         var relativeDirectory = HasPathRoot(directory)
             ? GetRelativePath(repository.LocalDirectory, directory)
             : directory;
+
         relativeDirectory = (relativeDirectory + "/").TrimStart("/");
 
         branch ??= await repository.GetDefaultBranch();
@@ -60,7 +62,8 @@ public static class GitHubTasks
         return repo.DefaultBranch;
     }
 
-    public static async Task<string> GetLatestRelease(this GitRepository repository, bool includePrerelease = false, bool trimPrefix = false)
+    public static async Task<string> GetLatestRelease(this GitRepository repository, bool includePrerelease = false,
+        bool trimPrefix = false)
     {
         Assert.True(repository.IsGitHubRepository());
         var releases = await GitHubClient.Repository.Release.GetAll(repository.GetGitHubOwner(), repository.GetGitHubName());
@@ -73,7 +76,11 @@ public static class GitHubTasks
         var milestones = await GitHubClient.Issue.Milestone.GetAllForRepository(
             repository.GetGitHubOwner(),
             repository.GetGitHubName(),
-            new MilestoneRequest { State = ItemStateFilter.All });
+            new MilestoneRequest
+            {
+                State = ItemStateFilter.All
+            });
+
         return milestones.FirstOrDefault(x => x.Title == name);
     }
 
@@ -84,7 +91,11 @@ public static class GitHubTasks
         return await GitHubClient.Issue.GetAllForRepository(
             repository.GetGitHubOwner(),
             repository.GetGitHubName(),
-            new RepositoryIssueRequest { State = ItemStateFilter.All, Milestone = milestone.Number.ToString() });
+            new RepositoryIssueRequest
+            {
+                State = ItemStateFilter.All,
+                Milestone = milestone.Number.ToString()
+            });
     }
 
     public static async Task TryCreateGitHubMilestone(this GitRepository repository, string title)
@@ -123,7 +134,10 @@ public static class GitHubTasks
             repository.GetGitHubOwner(),
             repository.GetGitHubName(),
             milestone.Number,
-            new MilestoneUpdate { State = ItemState.Closed });
+            new MilestoneUpdate
+            {
+                State = ItemState.Closed
+            });
     }
 
     public static bool IsGitHubRepository(this GitRepository repository)
@@ -204,10 +218,14 @@ public static class GitHubTasks
             : null;
 
         if (itemType == GitHubItemType.Directory || Directory.Exists(absolutePath) || relativePath == null)
+        {
             return "tree";
+        }
 
         if (itemType == GitHubItemType.File || File.Exists(absolutePath))
+        {
             return "blob";
+        }
 
         return null;
     }
@@ -215,13 +233,19 @@ public static class GitHubTasks
     private static string GetRepositoryRelativePath(string path, GitRepository repository)
     {
         if (path == null)
+        {
             return null;
+        }
 
         if (!Path.IsPathRooted(path))
+        {
             return path;
+        }
 
         var localDirectory = repository.LocalDirectory.NotNull();
-        Assert.True(IsDescendantPath(localDirectory, path), $"Path {path.SingleQuote()} must be descendant of {localDirectory:s}");
+        Assert.True(IsDescendantPath(localDirectory, path),
+            $"Path {path.SingleQuote()} must be descendant of {localDirectory:s}");
+
         return GetRelativePath(localDirectory, path).Replace(oldChar: '\\', newChar: '/');
     }
 }

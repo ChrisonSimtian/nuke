@@ -1,8 +1,8 @@
 using System.Threading;
-using Fallout.Persistence.Solution.Serializer;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
+using Fallout.Persistence.Solution.Serializer;
 
 namespace Fallout.Solutions;
 

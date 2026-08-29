@@ -8,15 +8,19 @@ using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Utilities;
-using Fallout.Common.Utilities.Collections;
+using Serilog;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 namespace Fallout.Components;
 
 public interface IPublish : IPack, ITest
 {
-    [Parameter] string NuGetSource => TryGetValue(() => NuGetSource) ?? "https://api.nuget.org/v3/index.json";
-    [Parameter] [Secret] string NuGetApiKey => TryGetValue(() => NuGetApiKey);
+    [Parameter]
+    string NuGetSource => TryGetValue(() => NuGetSource) ?? "https://api.nuget.org/v3/index.json";
+
+    [Parameter]
+    [Secret]
+    string NuGetApiKey => TryGetValue(() => NuGetApiKey);
 
     /// <summary>
     /// The channels this build publishes to (<c>FALLOUT001</c>). Override to fan a single
@@ -26,7 +30,15 @@ public interface IPublish : IPack, ITest
     /// </summary>
     [Experimental("FALLOUT001")]
     IEnumerable<PublishTarget> PublishTargets =>
-        new[] { new PublishTarget { Name = "default", Source = NuGetSource, ApiKey = NuGetApiKey } };
+        new[]
+        {
+            new PublishTarget
+            {
+                Name = "default",
+                Source = NuGetSource,
+                ApiKey = NuGetApiKey
+            }
+        };
 
     /// <summary>
     /// Names of the configured <see cref="PublishTargets"/> to push to this run (<c>FALLOUT001</c>).
@@ -55,6 +67,7 @@ public interface IPublish : IPack, ITest
     IEnumerable<AbsolutePath> PushPackageFiles => PackagesDirectory.GlobFiles("*.nupkg");
 
     bool PushCompleteOnFailure => true;
+
     int PushDegreeOfParallelism => 5;
 
     Target Publish => _ => _
@@ -90,11 +103,13 @@ public interface IPublish : IPack, ITest
                 var routed = candidates.Where(x => target.Accepts(x.NameWithoutExtension)).ToList();
                 if (routed.Count == 0)
                 {
-                    Serilog.Log.Warning("Publish target {Target}: no packaged files matched its routing rules — skipping.", target.Name);
+                    Log.Warning("Publish target {Target}: no packaged files matched its routing rules — skipping.", target.Name);
                     continue;
                 }
 
-                Serilog.Log.Information("Publish target {Target}: pushing {Count} package(s) → {Source}.", target.Name, routed.Count, target.Source);
+                Log.Information("Publish target {Target}: pushing {Count} package(s) → {Source}.", target.Name, routed.Count,
+                    target.Source);
+
                 DotNetNuGetPush(_ => _
                         .SetSource(target.Source)
                         .SetApiKey(target.ApiKey!)

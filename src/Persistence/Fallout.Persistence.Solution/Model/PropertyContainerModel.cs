@@ -23,10 +23,10 @@ public abstract class PropertyContainerModel
     {
         if (!propertyContainer.properties.IsNullOrEmpty())
         {
-            this.properties = new List<SolutionPropertyBag>(propertyContainer.properties.Count);
+            properties = new List<SolutionPropertyBag>(propertyContainer.properties.Count);
             foreach (SolutionPropertyBag property in propertyContainer.properties)
             {
-                this.properties.Add(new SolutionPropertyBag(property));
+                properties.Add(new SolutionPropertyBag(property));
             }
         }
     }
@@ -34,7 +34,7 @@ public abstract class PropertyContainerModel
     /// <summary>
     /// Gets properties associated with this model.
     /// </summary>
-    public IReadOnlyList<SolutionPropertyBag> Properties => this.properties.IReadOnlyList() ?? [];
+    public IReadOnlyList<SolutionPropertyBag> Properties => properties.IReadOnlyList() ?? [];
 
     /// <summary>
     /// Gets a property bag by its id.
@@ -43,7 +43,7 @@ public abstract class PropertyContainerModel
     /// <returns>The property bag if found.</returns>
     public SolutionPropertyBag? FindProperties(string id)
     {
-        return ModelHelper.FindByItemRef(this.properties, id);
+        return properties.FindByItemRef(id);
     }
 
     /// <summary>
@@ -54,8 +54,8 @@ public abstract class PropertyContainerModel
     /// <returns>The property bag.</returns>
     public SolutionPropertyBag AddProperties(string id, PropertiesScope scope = PropertiesScope.PreLoad)
     {
-        this.properties ??= [];
-        return this.FindProperties(id) ?? this.properties.AddAndReturn(new SolutionPropertyBag(id, scope));
+        properties ??= [];
+        return FindProperties(id) ?? properties.AddAndReturn(new SolutionPropertyBag(id, scope));
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public abstract class PropertyContainerModel
     {
         return
             this.properties is not null &&
-            this.FindProperties(id) is SolutionPropertyBag properties &&
+            FindProperties(id) is SolutionPropertyBag properties &&
             this.properties.Remove(properties);
     }
 }

@@ -10,7 +10,7 @@ namespace Fallout.Persistence.Solution.Model;
 public sealed class StringTable
 {
     // string deduplication facility (we can expect a lot of similar strings in solution files we want to compact while building the model).
-    private readonly HashSet<string> strings = new HashSet<string>(StringComparer.Ordinal);
+    private readonly HashSet<string> strings = new(StringComparer.Ordinal);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StringTable"/> class.
@@ -34,7 +34,7 @@ public sealed class StringTable
         }
 
         // CONSIDER: We could use hashcodes to try to find strings without allocating.
-        return this.GetString(str.ToString());
+        return GetString(str.ToString());
     }
 
     /// <summary>
@@ -56,23 +56,23 @@ public sealed class StringTable
             return string.Empty;
         }
 
-        if (this.strings.TryGetValue(str, out string? result))
+        if (strings.TryGetValue(str, out string? result))
         {
             return result;
         }
 
-        _ = this.strings.Add(str);
+        _ = strings.Add(str);
         return str;
     }
 
     internal void AddString(string str)
     {
-        _ = this.GetString(str);
+        _ = GetString(str);
     }
 
     // Used to test the string table.
     internal bool Contains(string str)
     {
-        return this.strings.Contains(str);
+        return strings.Contains(str);
     }
 }

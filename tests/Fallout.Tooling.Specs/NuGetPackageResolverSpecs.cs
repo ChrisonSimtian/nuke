@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using FluentAssertions;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
@@ -11,6 +11,7 @@ public class NuGetPackageResolverSpecs
     private static AbsolutePath RootDirectory => Constants.TryGetRootDirectoryFrom(EnvironmentInfo.WorkingDirectory).NotNull();
 
     private static AbsolutePath ProjectFile => RootDirectory / "tests" / "Fallout.Tooling.Specs" / "Fallout.Tooling.Specs.csproj";
+
     private static AbsolutePath AssetsFile => ProjectFile.Parent / "obj" / "project.assets.json";
 
     // This version have to match with
@@ -23,7 +24,8 @@ public class NuGetPackageResolverSpecs
     [InlineData("Nuke.Generation.Specifications", false, false, null)]
     [InlineData("Nuke.Generation.Specifications", true, false, "0.1.0-alpha0019")]
     [InlineData("PathConstruction", false, false, "0.1.0")]
-    public async Task TestGetLatestPackageVersion(string packageId, bool includePrereleases, bool includeUnlisted, string expected)
+    public async Task TestGetLatestPackageVersion(string packageId, bool includePrereleases, bool includeUnlisted,
+        string expected)
     {
         var result = await NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases, includeUnlisted);
         result.Should().Be(expected);
@@ -32,7 +34,9 @@ public class NuGetPackageResolverSpecs
     [Fact]
     public void TestGetGlobalInstalledPackage()
     {
-        var result = NuGetPackageResolver.GetGlobalInstalledPackage("xunit.runner.console", version: null, packagesConfigFile: null);
+        var result = NuGetPackageResolver.GetGlobalInstalledPackage("xunit.runner.console", version: null,
+            packagesConfigFile: null);
+
         result.Should().NotBeNull();
         result.Id.Should().Be("xunit.runner.console");
         result.File.Name.Should().EndWith("nupkg");
@@ -42,7 +46,9 @@ public class NuGetPackageResolverSpecs
     [Fact]
     public void TestGetLocalInstalledPackageViaProjectFile()
     {
-        var result = NuGetPackageResolver.GetLocalInstalledPackage("xunit.runner.console", ProjectFile, resolveDependencies: false);
+        var result = NuGetPackageResolver.GetLocalInstalledPackage("xunit.runner.console", ProjectFile,
+            resolveDependencies: false);
+
         result.Should().NotBeNull();
         result.Version.OriginalVersion.Should().Be(XunitConsolePackageVersion);
     }
@@ -50,7 +56,9 @@ public class NuGetPackageResolverSpecs
     [Fact]
     public void TestGetLocalInstalledPackageViaAssetsFile()
     {
-        var result = NuGetPackageResolver.GetLocalInstalledPackage("xunit.runner.console", AssetsFile, resolveDependencies: false);
+        var result = NuGetPackageResolver.GetLocalInstalledPackage("xunit.runner.console", AssetsFile,
+            resolveDependencies: false);
+
         result.Version.OriginalVersion.Should().Be(XunitConsolePackageVersion);
     }
 

@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Fallout.CodeGeneration.Model;
@@ -13,20 +11,30 @@ namespace Fallout.CodeGeneration.Model;
 public class Tool : IDeprecatable
 {
     [JsonPropertyName("$schema")]
-    public string Schema => "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json";
+    public string Schema =>
+        "https://raw.githubusercontent.com/Fallout-build/Fallout/main/src/Fallout.Tooling.Generator/schema.json";
 
-    [JsonIgnore] public string SpecificationFile { get; set; }
-    [JsonIgnore] public string DefaultOutputFile => Path.ChangeExtension(SpecificationFile, "Generated.cs");
-    [JsonIgnore] public string DefaultOutputFileName => Path.GetFileName(DefaultOutputFile);
+    [JsonIgnore]
+    public string SpecificationFile { get; set; }
 
-    [JsonIgnore] public string SourceFile { get; set; }
+    [JsonIgnore]
+    public string DefaultOutputFile => Path.ChangeExtension(SpecificationFile, "Generated.cs");
 
-    [JsonIgnore] public string Namespace { get; set; }
+    [JsonIgnore]
+    public string DefaultOutputFileName => Path.GetFileName(DefaultOutputFile);
 
-    [JsonIgnore] public IDeprecatable Parent => null;
+    [JsonIgnore]
+    public string SourceFile { get; set; }
+
+    [JsonIgnore]
+    public string Namespace { get; set; }
+
+    [JsonIgnore]
+    public IDeprecatable Parent => null;
 
     [Description("Contains all references on which this definition is based on. Allows checking for updates.")]
     public List<string> References { get; set; } = new();
+
     public List<string> Imports { get; set; } = new();
 
     [JsonRequired]

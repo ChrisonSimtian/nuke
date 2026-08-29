@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using FluentAssertions;
 using Fallout.Common.Execution;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs.Execution;
@@ -135,7 +135,8 @@ public class DefaultInterfaceExecutionSpecs
     private interface IParameterInterface
         : IFalloutBuild
     {
-        [Parameter] string StringParameter => TryGetValue(() => StringParameter);
+        [Parameter]
+        string StringParameter => TryGetValue(() => StringParameter);
 
         Target HelloWorld => _ => _
             .Requires(() => StringParameter)
@@ -144,7 +145,9 @@ public class DefaultInterfaceExecutionSpecs
             });
     }
 
-    private class ParameterBuild : FalloutBuild, IParameterInterface { }
+    private class ParameterBuild : FalloutBuild, IParameterInterface
+    {
+    }
 
     private class TestBuild : FalloutBuild, ITestBuild
     {
@@ -186,9 +189,13 @@ public class DefaultInterfaceExecutionSpecs
     private interface ITestBuild
     {
         string Description => DefaultInterfaceExecutionSpecs.Description;
+
         Action Action => DefaultInterfaceExecutionSpecs.Action;
+
         Expression<Func<bool>> Requirement => DefaultInterfaceExecutionSpecs.Requirement;
+
         Func<bool> StaticCondition => DefaultInterfaceExecutionSpecs.StaticCondition;
+
         Func<bool> DynamicCondition => DefaultInterfaceExecutionSpecs.DynamicCondition;
 
         Target A => _ => _

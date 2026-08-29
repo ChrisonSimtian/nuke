@@ -13,7 +13,9 @@ internal class HandleShellCompletionAttribute : BuildExtensionAttributeBase, IOn
     public void OnBuildCreated(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {
         if (BuildServerConfigurationGeneration.IsActive)
+        {
             return;
+        }
 
         if (IsLegacy(Build.RootDirectory))
         {
@@ -24,6 +26,7 @@ internal class HandleShellCompletionAttribute : BuildExtensionAttributeBase, IOn
                     "You can convert to the new-style .nuke directory by calling:",
                     "   fallout :update"
                 }.JoinNewLine());
+
             Environment.Exit(exitCode: -1);
         }
         else if (Build.BuildProjectFile != null)
@@ -36,10 +39,10 @@ internal class HandleShellCompletionAttribute : BuildExtensionAttributeBase, IOn
             if (!parametersFile.Exists())
             {
                 parametersFile.WriteAllText($$"""
-                    {
-                      "$schema": "./{{BuildSchemaFileName}}"
-                    }
-                    """);
+                                              {
+                                                "$schema": "./{{BuildSchemaFileName}}"
+                                              }
+                                              """);
             }
         }
         else if (ParameterService.GetPositionalArgument<string>(0) == ":complete")
@@ -51,12 +54,16 @@ internal class HandleShellCompletionAttribute : BuildExtensionAttributeBase, IOn
             var words = EnvironmentInfo.CommandLineArguments.Skip(2).JoinSpace();
             var relevantCompletionItems = CompletionUtility.GetRelevantItems(words, completionItems);
             foreach (var item in relevantCompletionItems)
+            {
                 Console.WriteLine(item);
+            }
 
             Environment.Exit(exitCode: 0);
         }
 
         if (ParameterService.GetParameter<bool>(CompletionParameterName))
+        {
             Environment.Exit(exitCode: 0);
+        }
     }
 }

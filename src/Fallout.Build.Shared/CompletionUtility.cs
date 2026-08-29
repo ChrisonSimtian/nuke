@@ -30,7 +30,9 @@ public static class CompletionUtility
 
         var parameterProperties = rootElement.GetProperty("definitions").TryGetProperty("FalloutBuild", out var baseSchema)
             ? baseSchema.GetProperty("properties").EnumerateObject()
-                .Concat(rootElement.GetProperty("allOf")[0].TryGetProperty("properties", out var properties) ? properties.EnumerateObject() : [])
+                .Concat(rootElement.GetProperty("allOf")[0].TryGetProperty("properties", out var properties)
+                    ? properties.EnumerateObject()
+                    : [])
             : definitions["build"].Value.GetProperty("properties").EnumerateObject();
 
         return parameterProperties
@@ -42,13 +44,16 @@ public static class CompletionUtility
         string[] GetValues(JsonProperty property)
         {
             if (property.Name == Constants.LoadedLocalProfilesParameterName)
+            {
                 return profileNames.ToArray();
+            }
 
             if (property.Value.TryGetProperty("type", out var typeProperty))
             {
                 var types = typeProperty.ValueKind != JsonValueKind.Array
                     ? [typeProperty.GetString()]
                     : typeProperty.EnumerateArray().Select(x => x.GetString()).ToArray();
+
                 if (types.ContainsAnyOrdinalIgnoreCase("string", "boolean", "integer"))
                 {
                     return property.Value.TryGetProperty("enum", out var enumProperty)
@@ -57,10 +62,14 @@ public static class CompletionUtility
                 }
 
                 if (types.Single() == "array")
+                {
                     return GetValues(property.Value.EnumerateObject().Single(x => x.Name == "items"));
+                }
 
                 if (types.Single() == "object")
+                {
                     return null;
+                }
             }
             else if (property.Value.TryGetProperty("$ref", out var refProperty))
             {
@@ -77,7 +86,10 @@ public static class CompletionUtility
         string words,
         IReadOnlyDictionary<string, string[]> completionItems)
     {
-        completionItems = new Dictionary<string, string[]>(completionItems.ToDictionary(x => x.Key, x => x.Value), StringComparer.OrdinalIgnoreCase).AsReadOnly();
+        completionItems =
+            new Dictionary<string, string[]>(completionItems.ToDictionary(x => x.Key, x => x.Value),
+                StringComparer.OrdinalIgnoreCase).AsReadOnly();
+
         var suggestedItems = new List<string>();
 
         ICollection<string> parts = words.Split(separator: ' ');
@@ -90,6 +102,7 @@ public static class CompletionUtility
             var useDashes = currentWord == null ||
                             currentWord.TrimStart('-').Length == 0 ||
                             currentWord.StartsWith("--");
+
             var items = completionItems.Keys
                 .Except(parameters, StringComparer.InvariantCultureIgnoreCase)
                 .Select(x => useDashes
@@ -110,7 +123,9 @@ public static class CompletionUtility
                         new string[0];
 
             if (parameter.EqualsOrdinalIgnoreCase(Constants.InvokedTargetsParameterName))
+            {
                 items = items.Select(x => x.SplitCamelHumpsWithKnownWords().JoinDash());
+            }
 
             AddItems(items);
         }
@@ -120,7 +135,9 @@ public static class CompletionUtility
             foreach (var item in items)
             {
                 if (currentWord == null)
+                {
                     suggestedItems.Add(item);
+                }
                 else if (item.StartsWithOrdinalIgnoreCase(currentWord))
                 {
                     var normalizedItem = item.ReplaceRegex(currentWord, _ => currentWord, RegexOptions.IgnoreCase);
@@ -128,9 +145,13 @@ public static class CompletionUtility
                     {
                         var letters = currentWord.Where(char.IsLetter).ToList();
                         if (letters.All(char.IsUpper))
+                        {
                             normalizedItem = normalizedItem.ToUpperInvariant();
+                        }
                         else if (letters.All(char.IsLower))
+                        {
                             normalizedItem = normalizedItem.ToLowerInvariant();
+                        }
                     }
 
                     suggestedItems.Add(normalizedItem);
@@ -139,12 +160,18 @@ public static class CompletionUtility
         }
 
         if (lastParameter == null)
+        {
             AddTargetsOrValues(Constants.InvokedTargetsParameterName);
+        }
         else if (currentWord != lastParameter)
+        {
             AddTargetsOrValues(lastParameter);
+        }
 
         if (currentWord == null || ArgumentParser.IsArgument(currentWord))
+        {
             AddParameters();
+        }
 
         return suggestedItems;
     }

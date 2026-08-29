@@ -12,25 +12,25 @@ namespace Fallout.Persistence.Solution.Serializer.Xml.XmlDecorators;
 internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
     XmlContainerWithProperties(file, element, Keyword.Solution)
 {
-    private ItemRefList<XmlConfigurations> configurationsSingle = new ItemRefList<XmlConfigurations>();
-    private ItemRefList<XmlFolder> folders = new ItemRefList<XmlFolder>(ignoreCase: true);
-    private ItemRefList<XmlProject> rootProjects = new ItemRefList<XmlProject>(ignoreCase: true);
+    private ItemRefList<XmlConfigurations> configurationsSingle = new();
+    private ItemRefList<XmlFolder> folders = new(ignoreCase: true);
+    private ItemRefList<XmlProject> rootProjects = new(ignoreCase: true);
 
     internal string? Description
     {
-        get => this.GetXmlAttribute(Keyword.Description);
-        set => this.UpdateXmlAttribute(Keyword.Description, value);
+        get => GetXmlAttribute(Keyword.Description);
+        set => UpdateXmlAttribute(Keyword.Description, value);
     }
 
     internal string? Version
     {
-        get => this.GetXmlAttribute(Keyword.Version);
-        set => this.UpdateXmlAttribute(Keyword.Version, value);
+        get => GetXmlAttribute(Keyword.Version);
+        set => UpdateXmlAttribute(Keyword.Version, value);
     }
 
 #if DEBUG
 
-    internal override string DebugDisplay => $"{base.DebugDisplay} RootProjects={this.rootProjects} Folders={this.folders}";
+    internal override string DebugDisplay => $"{base.DebugDisplay} RootProjects={rootProjects} Folders={folders}";
 
 #endif
 
@@ -39,16 +39,16 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
     {
         return elementName switch
         {
-            Keyword.Configurations => new XmlConfigurations(this.Root, element),
-            Keyword.Project => this.CreateProjectDecorator(element, xmlParentFolder: null),
-            Keyword.Folder => new XmlFolder(this.Root, this, element),
+            Keyword.Configurations => new XmlConfigurations(Root, element),
+            Keyword.Project => CreateProjectDecorator(element, xmlParentFolder: null),
+            Keyword.Folder => new XmlFolder(Root, this, element),
             _ => base.ChildDecoratorFactory(element, elementName),
         };
     }
 
     internal XmlProject CreateProjectDecorator(XmlElement element, XmlFolder? xmlParentFolder)
     {
-        return new XmlProject(this.Root, xmlParentFolder, element);
+        return new XmlProject(Root, xmlParentFolder, element);
     }
 
     /// <inheritdoc/>
@@ -57,13 +57,15 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
         switch (childDecorator)
         {
             case XmlFolder folder:
-                this.folders.Add(folder);
+                folders.Add(folder);
                 break;
+
             case XmlProject project:
-                this.rootProjects.Add(project);
+                rootProjects.Add(project);
                 break;
+
             case XmlConfigurations configurations:
-                this.configurationsSingle.Add(configurations);
+                configurationsSingle.Add(configurations);
                 break;
         }
 
@@ -75,9 +77,9 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
     {
         return typeof(TDecorator).Name switch
         {
-            nameof(XmlConfigurations) => this.folders.FirstOrDefault() ?? this.FindNextDecorator<XmlFolder>(),
-            nameof(XmlFolder) => this.rootProjects.FirstOrDefault() ?? this.FindNextDecorator<XmlProject>(),
-            nameof(XmlProject) => this.propertyBags.FirstOrDefault(),
+            nameof(XmlConfigurations) => folders.FirstOrDefault() ?? FindNextDecorator<XmlFolder>(),
+            nameof(XmlFolder) => rootProjects.FirstOrDefault() ?? FindNextDecorator<XmlProject>(),
+            nameof(XmlProject) => propertyBags.FirstOrDefault(),
             _ => null,
         };
     }
@@ -87,40 +89,42 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
     internal SolutionModel ToModel()
     {
         // Ensure the file version is supported.
-        string? fileVersion = this.Version;
+        string? fileVersion = Version;
         if (!fileVersion.IsNullOrEmpty())
         {
             try
             {
-                this.Root.FileVersion = new Version(fileVersion);
+                Root.FileVersion = new Version(fileVersion);
             }
             catch (Exception ex) when (SolutionException.ShouldWrap(ex))
             {
-                throw SolutionException.Create(ex, this, string.Format(Errors.InvalidVersion_Args1, fileVersion), SolutionErrorType.InvalidVersion);
+                throw SolutionException.Create(ex, this, string.Format(Errors.InvalidVersion_Args1, fileVersion),
+                    SolutionErrorType.InvalidVersion);
             }
 
-            if (this.Root.FileVersion.Major > SlnxFile.CurrentVersion)
+            if (Root.FileVersion.Major > SlnxFile.CurrentVersion)
             {
-                throw SolutionException.Create(string.Format(Errors.UnsupportedVersion_Args1, fileVersion), this, SolutionErrorType.UnsupportedVersion);
+                throw SolutionException.Create(string.Format(Errors.UnsupportedVersion_Args1, fileVersion), this,
+                    SolutionErrorType.UnsupportedVersion);
             }
         }
 
-        SolutionModel solutionModel = new SolutionModel
+        SolutionModel solutionModel = new()
         {
-            StringTable = this.Root.StringTable,
-            Description = this.Description,
+            StringTable = Root.StringTable,
+            Description = Description,
 
             // Project types are loaded earlier when parsing the XML since they are needed to resolve projects.
-            ProjectTypes = this.Root.ProjectTypes.ProjectTypes,
+            ProjectTypes = Root.ProjectTypes.ProjectTypes,
         };
 
-        List<(XmlProject, SolutionProjectModel)> newProjects = new List<(XmlProject, SolutionProjectModel)>(this.rootProjects.ItemsCount);
-        foreach (XmlProject project in this.rootProjects.GetItems())
+        List<(XmlProject, SolutionProjectModel)> newProjects = new(rootProjects.ItemsCount);
+        foreach (XmlProject project in rootProjects.GetItems())
         {
             newProjects.Add((project, project.AddToModel(solutionModel)));
         }
 
-        foreach (XmlFolder folder in this.folders.GetItems())
+        foreach (XmlFolder folder in folders.GetItems())
         {
             folder.AddToModel(solutionModel, newProjects);
         }
@@ -131,7 +135,7 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
             xmlProject.AddDependenciesToModel(solutionModel, modelProject);
         }
 
-        foreach (XmlConfigurations configurations in this.configurationsSingle.GetItems())
+        foreach (XmlConfigurations configurations in configurationsSingle.GetItems())
         {
             configurations.AddToModel(solutionModel);
         }
@@ -150,7 +154,7 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
             solutionModel.AddPlatform(PlatformNames.AnySpaceCPU);
         }
 
-        foreach (XmlProperties properties in this.propertyBags.GetItems())
+        foreach (XmlProperties properties in propertyBags.GetItems())
         {
             properties.AddToModel(solutionModel);
         }
@@ -163,7 +167,7 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
     /// </summary>
     internal ProjectTypeTable GetProjectTypeTable()
     {
-        foreach (XmlConfigurations xmlConfigurations in this.configurationsSingle.GetItems())
+        foreach (XmlConfigurations xmlConfigurations in configurationsSingle.GetItems())
         {
             ProjectTypeTable? propertyTypeTable = xmlConfigurations.GetProjectTypeTable();
             if (propertyTypeTable is not null)
@@ -180,7 +184,7 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
     // Try to figure out indentation and line ending default from the XML.
     internal bool TryGetFormatting(out StringSpan newLine, out StringSpan indent)
     {
-        foreach (XmlDecorator decorator in this.folders.GetItems())
+        foreach (XmlDecorator decorator in folders.GetItems())
         {
             if (TryDecorator(decorator, newLine: out newLine, indent: out indent))
             {
@@ -188,7 +192,7 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
             }
         }
 
-        foreach (XmlDecorator decorator in this.rootProjects.GetItems())
+        foreach (XmlDecorator decorator in rootProjects.GetItems())
         {
             if (TryDecorator(decorator, newLine: out newLine, indent: out indent))
             {
@@ -196,7 +200,7 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
             }
         }
 
-        foreach (XmlDecorator decorator in this.propertyBags.GetItems())
+        foreach (XmlDecorator decorator in propertyBags.GetItems())
         {
             if (TryDecorator(decorator, newLine: out newLine, indent: out indent))
             {
@@ -204,7 +208,7 @@ internal sealed partial class XmlSolution(SlnxFile file, XmlElement element) :
             }
         }
 
-        foreach (XmlConfigurations configurations in this.configurationsSingle.GetItems())
+        foreach (XmlConfigurations configurations in configurationsSingle.GetItems())
         {
             if (TryDecorator(configurations, newLine: out newLine, indent: out indent))
             {

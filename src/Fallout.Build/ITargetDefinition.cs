@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -65,12 +64,16 @@ public interface ITargetDefinition
     /// <summary>
     ///   Adds a set of conditions that will be checked before executing this target.
     /// </summary>
-    ITargetDefinition OnlyWhenDynamic(Func<bool> condition, [CallerArgumentExpression("condition")] string conditionExpression = null);
+    ITargetDefinition OnlyWhenDynamic(Func<bool> condition,
+        [CallerArgumentExpression("condition")]
+        string conditionExpression = null);
 
     /// <summary>
     ///   Adds a set of conditions that will be checked prior to build execution.
     /// </summary>
-    ITargetDefinition OnlyWhenStatic(Func<bool> condition, [CallerArgumentExpression("condition")] string conditionExpression = null);
+    ITargetDefinition OnlyWhenStatic(Func<bool> condition,
+        [CallerArgumentExpression("condition")]
+        string conditionExpression = null);
 
     /// <summary>
     ///   Adds a required parameter that will be checked prior to build execution.

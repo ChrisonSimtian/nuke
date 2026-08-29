@@ -22,29 +22,49 @@ internal class TargetDefinition : ITargetDefinition
     }
 
     public PropertyInfo Target { get; }
+
     public string Name => Target.GetDisplayShortName();
+
     public IFalloutBuild Build { get; }
 
     internal Func<bool> Intercept { get; set; }
 
     internal string Description { get; set; }
+
     internal List<(string Text, Func<bool> Delegate)> DynamicConditions { get; } = new();
+
     internal List<(string Text, Func<bool> Delegate)> StaticConditions { get; } = new();
+
     internal List<LambdaExpression> DelegateRequirements { get; } = new();
+
     internal List<ToolRequirement> ToolRequirements { get; } = new();
+
     internal List<Delegate> DependsOnTargets { get; } = new();
+
     internal List<Delegate> DependentForTargets { get; } = new();
+
     internal List<Action> Actions { get; } = new();
+
     internal DependencyBehavior DependencyBehavior { get; private set; }
+
     internal bool IsProceedAfterFailure { get; private set; }
+
     internal bool IsAssuredAfterFailure { get; private set; }
+
     internal bool IsInternal { get; private set; }
+
     internal List<Delegate> BeforeTargets { get; } = new();
+
     internal List<Delegate> AfterTargets { get; } = new();
+
     internal List<Delegate> TriggersTargets { get; } = new();
+
     internal List<Delegate> TriggeredByTargets { get; } = new();
+
     internal int? PartitionSize { get; private set; }
+
     internal List<string> ArtifactProducts { get; } = new();
+
     internal LookupTable<Target, string[]> ArtifactDependencies { get; } = new();
 
     ITargetDefinition ITargetDefinition.Description(string description)
@@ -77,7 +97,7 @@ internal class TargetDefinition : ITargetDefinition
 
     public ITargetDefinition DependsOn<T>(params Func<T, Target>[] targets)
     {
-        return DependsOn(GetTargetsOrShorthand<T>(targets.Select(x => x((T) Build)).ToArray()));
+        return DependsOn(GetTargetsOrShorthand<T>(targets.Select(x => x((T)Build)).ToArray()));
     }
 
     public ITargetDefinition TryDependsOn<T>(params Func<T, Target>[] targets)
@@ -93,7 +113,7 @@ internal class TargetDefinition : ITargetDefinition
 
     public ITargetDefinition DependentFor<T>(params Func<T, Target>[] targets)
     {
-        return DependentFor(GetTargetsOrShorthand<T>(targets.Select(x => x((T) Build)).ToArray()));
+        return DependentFor(GetTargetsOrShorthand<T>(targets.Select(x => x((T)Build)).ToArray()));
     }
 
     public ITargetDefinition TryDependentFor<T>(params Func<T, Target>[] targets)
@@ -113,14 +133,16 @@ internal class TargetDefinition : ITargetDefinition
         return this;
     }
 
-    public ITargetDefinition Requires<T>(Expression<Func<T>> parameterRequirement, params Expression<Func<T>>[] parameterRequirements)
+    public ITargetDefinition Requires<T>(Expression<Func<T>> parameterRequirement,
+        params Expression<Func<T>>[] parameterRequirements)
         where T : class
     {
         DelegateRequirements.AddRange(parameterRequirement.Concat(parameterRequirements));
         return this;
     }
 
-    public ITargetDefinition Requires<T>(Expression<Func<T?>> parameterRequirement, params Expression<Func<T?>>[] parameterRequirements)
+    public ITargetDefinition Requires<T>(Expression<Func<T?>> parameterRequirement,
+        params Expression<Func<T?>>[] parameterRequirements)
         where T : struct
     {
         DelegateRequirements.AddRange(parameterRequirement.Concat(parameterRequirements));
@@ -153,6 +175,7 @@ internal class TargetDefinition : ITargetDefinition
             .Select(x => x.GetMemberInfo())
             .Select(x => x.GetCustomAttribute<ToolInjectionAttributeBase>().NotNull().GetRequirement(x))
             .WhereNotNull();
+
         ToolRequirements.AddRange(requirements);
         return this;
     }
@@ -171,7 +194,7 @@ internal class TargetDefinition : ITargetDefinition
 
     public ITargetDefinition Before<T>(params Func<T, Target>[] targets)
     {
-        return Before(GetTargetsOrShorthand<T>(targets.Select(x => x((T) Build)).ToArray()));
+        return Before(GetTargetsOrShorthand<T>(targets.Select(x => x((T)Build)).ToArray()));
     }
 
     public ITargetDefinition TryBefore<T>(params Func<T, Target>[] targets)
@@ -187,7 +210,7 @@ internal class TargetDefinition : ITargetDefinition
 
     public ITargetDefinition After<T>(params Func<T, Target>[] targets)
     {
-        return After(GetTargetsOrShorthand<T>(targets.Select(x => x((T) Build)).ToArray()));
+        return After(GetTargetsOrShorthand<T>(targets.Select(x => x((T)Build)).ToArray()));
     }
 
     public ITargetDefinition TryAfter<T>(params Func<T, Target>[] targets)
@@ -203,7 +226,7 @@ internal class TargetDefinition : ITargetDefinition
 
     public ITargetDefinition Triggers<T>(params Func<T, Target>[] targets)
     {
-        return Triggers(GetTargetsOrShorthand<T>(targets.Select(x => x((T) Build)).ToArray()));
+        return Triggers(GetTargetsOrShorthand<T>(targets.Select(x => x((T)Build)).ToArray()));
     }
 
     public ITargetDefinition TryTriggers<T>(params Func<T, Target>[] targets)
@@ -219,7 +242,7 @@ internal class TargetDefinition : ITargetDefinition
 
     public ITargetDefinition TriggeredBy<T>(params Func<T, Target>[] targets)
     {
-        return TriggeredBy(GetTargetsOrShorthand<T>(targets.Select(x => x((T) Build)).ToArray()));
+        return TriggeredBy(GetTargetsOrShorthand<T>(targets.Select(x => x((T)Build)).ToArray()));
     }
 
     public ITargetDefinition TryTriggeredBy<T>(params Func<T, Target>[] targets)
@@ -250,6 +273,7 @@ internal class TargetDefinition : ITargetDefinition
         Assert.True(baseMembers.Count > 0,
             $"Target '{Target.DeclaringType}.{Target.Name}' does not have any base members."
             + $" To inherit from an interface default implementation, use {nameof(Inherit)}<T> instead.");
+
         Inherit(baseMembers.Pop().GetValueNonVirtual<Target>(Build));
         return this;
     }
@@ -264,7 +288,11 @@ internal class TargetDefinition : ITargetDefinition
     {
         var properties = targets.Length > 0
             ? targets.Select(x => x.GetMemberInfo())
-            : new[] { GetSingleTargetProperty<T>("shorthand inheritance") };
+            : new[]
+            {
+                GetSingleTargetProperty<T>("shorthand inheritance")
+            };
+
         Inherit(properties.Select(x => x.GetValueNonVirtual<Target>(Build)).ToArray());
         return this;
     }
@@ -283,7 +311,7 @@ internal class TargetDefinition : ITargetDefinition
 
     public ITargetDefinition Consumes<T>(params Func<T, Target>[] targets)
     {
-        return Consumes(GetTargetsOrShorthand<T>(targets.Select(x => x((T) Build)).ToArray()));
+        return Consumes(GetTargetsOrShorthand<T>(targets.Select(x => x((T)Build)).ToArray()));
     }
 
     public ITargetDefinition Consumes(Target target, params string[] artifacts)
@@ -294,7 +322,7 @@ internal class TargetDefinition : ITargetDefinition
 
     public ITargetDefinition Consumes<T>(Func<T, Target> target, params string[] artifacts)
     {
-        return Consumes(target.Invoke((T) Build), artifacts);
+        return Consumes(target.Invoke((T)Build), artifacts);
     }
 
     public ITargetDefinition Consumes<T>(params string[] artifacts)
@@ -306,8 +334,12 @@ internal class TargetDefinition : ITargetDefinition
         where T : IFalloutBuild
     {
         Assert.True(Build is T, $"'{Build.GetType().Name}' must implement context '{typeof(T).Name}'");
-        var setup = (Setup) GetSingleTargetProperty<T>("context dependency (missing setup)", targetType: typeof(Setup)).GetValue(Build);
-        var cleanup = (Cleanup) GetSingleTargetProperty<T>("context dependency (missing cleanup)", targetType: typeof(Cleanup)).GetValue(Build);
+        var setup = (Setup)GetSingleTargetProperty<T>("context dependency (missing setup)", targetType: typeof(Setup))
+            .GetValue(Build);
+
+        var cleanup = (Cleanup)GetSingleTargetProperty<T>("context dependency (missing cleanup)", targetType: typeof(Cleanup))
+            .GetValue(Build);
+
         DependsOnTargets.Add(setup);
         BeforeTargets.Add(cleanup);
         return this;
@@ -324,17 +356,24 @@ internal class TargetDefinition : ITargetDefinition
     {
         return targets.Length > 0
             ? targets
-            : new[] { (Target) GetSingleTargetProperty<T>("shorthand dependency").GetValue(Build) };
+            : new[]
+            {
+                (Target)GetSingleTargetProperty<T>("shorthand dependency").GetValue(Build)
+            };
     }
 
     private PropertyInfo GetSingleTargetProperty<T>(string kind, Type targetType = null)
     {
         var interfaceTargets = typeof(T).GetProperties(ReflectionUtility.Instance)
             .Where(x => x.PropertyType == (targetType ?? typeof(Target))).ToList();
+
         if (interfaceTargets.Count != 1)
         {
             Assert.Fail($"Target '{Target.DeclaringType}.{Target.Name}' cannot have {kind} on component '{typeof(T).Name}'."
-                .Concat(new[] { interfaceTargets.Count > 1 ? "Too many relevant targets:" : "No relevant targets." })
+                .Concat(new[]
+                {
+                    interfaceTargets.Count > 1 ? "Too many relevant targets:" : "No relevant targets."
+                })
                 .Concat(interfaceTargets.Select(x => $"  - {x.Name}")).JoinNewLine());
         }
 

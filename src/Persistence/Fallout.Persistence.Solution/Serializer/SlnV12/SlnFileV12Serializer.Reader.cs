@@ -43,7 +43,8 @@ internal sealed partial class SlnFileV12Serializer
             Property,
         }
 
-        internal ValueTask<SolutionModel> ParseAsync(ISolutionSerializer serializer, string? fullPath, CancellationToken cancellationToken)
+        internal ValueTask<SolutionModel> ParseAsync(ISolutionSerializer serializer, string? fullPath,
+            CancellationToken cancellationToken)
         {
             Version? vsVersion = null;
             Version? minVsVersion = null;
@@ -58,12 +59,16 @@ internal sealed partial class SlnFileV12Serializer
             bool inGlobal = false;
             bool inGlobalSection = false;
 
-            SolutionModel solutionModel = new SolutionModel();
+            SolutionModel solutionModel = new();
 
-            this.lineNumber = 0;
-            if (!this.TryParseFormatLine())
+            lineNumber = 0;
+            if (!TryParseFormatLine())
             {
-                throw new SolutionException(Errors.NotSolution, SolutionErrorType.NotSolution) { File = fullPath, Line = this.lineNumber };
+                throw new SolutionException(Errors.NotSolution, SolutionErrorType.NotSolution)
+                {
+                    File = fullPath,
+                    Line = lineNumber
+                };
             }
 
             // Some property bags need to be loaded after all projects have been resolved.
@@ -78,7 +83,7 @@ internal sealed partial class SlnFileV12Serializer
             {
                 using (solutionModel.SuspendProjectValidation())
                 {
-                    while (this.ReadLine(out StringTokenizer tokenizer))
+                    while (ReadLine(out StringTokenizer tokenizer))
                     {
                         cancellationToken.ThrowIfCancellationRequested();
 
@@ -90,64 +95,68 @@ internal sealed partial class SlnFileV12Serializer
                         switch (lineType)
                         {
                             case LineType.Project:
-                                this.TarnishIf(inProject);
+                                TarnishIf(inProject);
                                 inProject = true;
-                                currentProject = this.ReadProjectInfo(solutionModel, ref tokenizer, fixedProjectIds);
+                                currentProject = ReadProjectInfo(solutionModel, ref tokenizer, fixedProjectIds);
                                 break;
 
                             case LineType.EndProject:
-                                this.TarnishIf(!inProject);
+                                TarnishIf(!inProject);
                                 inProject = false;
-                                this.TarnishIf(!AddProjectProperties(currentProject, currentPropertyBag, delayLoadProperties));
+                                TarnishIf(!AddProjectProperties(currentProject, currentPropertyBag, delayLoadProperties));
                                 currentPropertyBag = null;
                                 currentProject = null;
                                 break;
 
                             case LineType.Global:
-                                this.TarnishIf(inProject);
+                                TarnishIf(inProject);
                                 inGlobal = true;
                                 break;
 
                             case LineType.EndGlobal:
-                                this.TarnishIf(!inGlobal);
+                                TarnishIf(!inGlobal);
                                 inGlobal = false;
-                                this.TarnishIf(!solutionModel.AddSlnProperties(currentPropertyBag));
+                                TarnishIf(!solutionModel.AddSlnProperties(currentPropertyBag));
                                 currentPropertyBag = null;
                                 break;
 
                             case LineType.ProjectSection:
-                                this.TarnishIf(!inProject);
+                                TarnishIf(!inProject);
                                 inProjectSection = true;
                                 bool checkOnly = currentProject is null;
-                                currentPropertyBag = this.ReadPropertyBag(ref tokenizer, isSolution: false, checkOnly);
+                                currentPropertyBag = ReadPropertyBag(ref tokenizer, isSolution: false, checkOnly);
                                 break;
 
                             case LineType.EndProjectSection:
-                                this.TarnishIf(!inProject || !inProjectSection);
+                                TarnishIf(!inProject || !inProjectSection);
                                 inProjectSection = false;
-                                this.TarnishIf(!AddProjectProperties(currentProject, currentPropertyBag, delayLoadProperties));
+                                TarnishIf(!AddProjectProperties(currentProject, currentPropertyBag, delayLoadProperties));
                                 currentPropertyBag = null;
                                 break;
 
                             case LineType.GlobalSection:
-                                this.TarnishIf(!inGlobal);
+                                TarnishIf(!inGlobal);
                                 inGlobalSection = true;
-                                currentPropertyBag = this.ReadPropertyBag(ref tokenizer, isSolution: true, checkOnly: false);
+                                currentPropertyBag = ReadPropertyBag(ref tokenizer, isSolution: true, checkOnly: false);
                                 break;
 
                             case LineType.EndGlobalSection:
-                                this.TarnishIf(!inGlobal || !inGlobalSection);
+                                TarnishIf(!inGlobal || !inGlobalSection);
                                 inGlobalSection = false;
-                                this.TarnishIf(!solutionModel.AddSlnProperties(currentPropertyBag));
+                                TarnishIf(!solutionModel.AddSlnProperties(currentPropertyBag));
                                 currentPropertyBag = null;
                                 break;
 
                             case LineType.VisualStudioVersion:
-                                vsVersion = SlnV12Extensions.TryParseVSVersion(tokenizer.NextToken(SlnConstants.VersionSeparators));
+                                vsVersion = SlnV12Extensions.TryParseVSVersion(
+                                    tokenizer.NextToken(SlnConstants.VersionSeparators));
+
                                 break;
 
                             case LineType.MinimumVisualStudioVersion:
-                                minVsVersion = SlnV12Extensions.TryParseVSVersion(tokenizer.NextToken(SlnConstants.VersionSeparators));
+                                minVsVersion =
+                                    SlnV12Extensions.TryParseVSVersion(tokenizer.NextToken(SlnConstants.VersionSeparators));
+
                                 break;
 
                             case LineType.CommentLine:
@@ -162,7 +171,7 @@ internal sealed partial class SlnFileV12Serializer
                             case LineType.Property:
                                 if (currentPropertyBag is null)
                                 {
-                                    this.TarnishIf(true);
+                                    TarnishIf(true);
                                     break;
                                 }
 
@@ -190,19 +199,19 @@ internal sealed partial class SlnFileV12Serializer
                                 break;
 
                             default:
-                                this.TarnishIf(true);
+                                TarnishIf(true);
                                 break;
                         }
                     }
 
                     // After this point the line number doesn't reflect where an error originated from.
-                    this.lineNumber = null;
+                    lineNumber = null;
 
                     // The project dependencies properties require the projects to all be loaded,
                     // so they are processed after the model has added all of the projects.
                     foreach ((SolutionItemModel item, SolutionPropertyBag properties) in delayLoadProperties)
                     {
-                        this.TarnishIf(!item.AddSlnProperties(properties));
+                        TarnishIf(!item.AddSlnProperties(properties));
                     }
 
                     foreach ((Guid newId, SolutionProjectModel duplicateProject) in fixedProjectIds)
@@ -222,14 +231,23 @@ internal sealed partial class SlnFileV12Serializer
                     vsProperties.Version = vsVersion;
                     solutionModel.SerializerExtension = new SlnV12ModelExtension(
                         serializer,
-                        new SlnV12SerializerSettings() { Encoding = GetSlnFileEncoding(reader) },
+                        new SlnV12SerializerSettings
+                        {
+                            Encoding = GetSlnFileEncoding(reader)
+                        },
                         fullPath)
-                    { Tarnished = this.tarnished };
+                    {
+                        Tarnished = tarnished
+                    };
                 }
             }
             catch (Exception ex) when (SolutionException.ShouldWrap(ex))
             {
-                throw new SolutionException(ex.Message, ex, SolutionErrorType.Undefined) { File = fullPath, Line = this.lineNumber };
+                throw new SolutionException(ex.Message, ex, SolutionErrorType.Undefined)
+                {
+                    File = fullPath,
+                    Line = lineNumber
+                };
             }
 
             return new ValueTask<SolutionModel>(solutionModel);
@@ -285,9 +303,11 @@ internal sealed partial class SlnFileV12Serializer
         {
             firstComment = firstComment.Trim();
             return
-                firstComment.IsEmpty ? null :
-                firstComment.StartsWith(SlnConstants.OpenWithPrefix) ? firstComment.Slice(SlnConstants.OpenWithPrefix.Length).ToString().NullIfEmpty() :
-                null;
+                firstComment.IsEmpty
+                    ? null
+                    : firstComment.StartsWith(SlnConstants.OpenWithPrefix)
+                        ? firstComment.Slice(SlnConstants.OpenWithPrefix.Length).ToString().NullIfEmpty()
+                        : null;
         }
 
         // determine the line time and advance the scan position.
@@ -384,7 +404,8 @@ internal sealed partial class SlnFileV12Serializer
 
                 case 'M':
                     // MinimumVisualStudioVersion
-                    if (allowSolutionProperties && first == 0 && tokenizer.SliceIfStartsWith(SlnConstants.TagMinimumVisualStudioVersion))
+                    if (allowSolutionProperties && first == 0 &&
+                        tokenizer.SliceIfStartsWith(SlnConstants.TagMinimumVisualStudioVersion))
                     {
                         return LineType.MinimumVisualStudioVersion;
                     }
@@ -422,7 +443,7 @@ internal sealed partial class SlnFileV12Serializer
 
         private bool TryParseFormatLine()
         {
-            if (!this.ReadLine(out StringTokenizer tokenizer))
+            if (!ReadLine(out StringTokenizer tokenizer))
             {
                 return false;
             }
@@ -430,7 +451,7 @@ internal sealed partial class SlnFileV12Serializer
             // skips first line if empty. (happen if UTF8 bom is used by writer)
             if (tokenizer.IsEmpty)
             {
-                if (!this.ReadLine(out tokenizer))
+                if (!ReadLine(out tokenizer))
                 {
                     return false;
                 }
@@ -439,7 +460,7 @@ internal sealed partial class SlnFileV12Serializer
             if (tokenizer.Current.IndexOf(SlnConstants.SLNFileHeaderNoVersion) < 0)
             {
                 // first line may contain file format signature, sp parsers will try the second line as well.
-                if (!this.ReadLine(out tokenizer) || tokenizer.Current.IndexOf(SlnConstants.SLNFileHeaderNoVersion) < 0)
+                if (!ReadLine(out tokenizer) || tokenizer.Current.IndexOf(SlnConstants.SLNFileHeaderNoVersion) < 0)
                 {
                     return false;
                 }
@@ -476,9 +497,15 @@ internal sealed partial class SlnFileV12Serializer
                 fileVersionMaj = versionPath.Slice(0, dotIndex).ToString();
             }
 
-            if (string.IsNullOrEmpty(fileVersionMaj) || !int.TryParse(fileVersionMaj, out int fileVer) || fileVer > MaxFileVersion)
+            if (string.IsNullOrEmpty(fileVersionMaj) || !int.TryParse(fileVersionMaj, out int fileVer) ||
+                fileVer > MaxFileVersion)
             {
-                throw new SolutionException(string.Format(Errors.UnsupportedVersion_Args1, fileVersionMaj), SolutionErrorType.UnsupportedVersion) { File = fullPath, Line = this.lineNumber };
+                throw new SolutionException(string.Format(Errors.UnsupportedVersion_Args1, fileVersionMaj),
+                    SolutionErrorType.UnsupportedVersion)
+                {
+                    File = fullPath,
+                    Line = lineNumber
+                };
             }
 
             return true;
@@ -490,7 +517,7 @@ internal sealed partial class SlnFileV12Serializer
             do
             {
                 string? line = reader.ReadLine();
-                this.lineNumber++;
+                lineNumber++;
                 lineScanner = new StringTokenizer(line ?? string.Empty);
                 if (line is null)
                 {
@@ -511,13 +538,14 @@ internal sealed partial class SlnFileV12Serializer
             // We have to keep that behaviour, only slight difference  will allow space in adition to tab at the end of name
             // With all wierd syntaxes old will accepet, it will not accept ProjectSection( Foo )  (but will do ) ProjectSection(  Foo) ...
             StringSpan sectionName = tokenizer.NextToken(SlnConstants.SectionSeparators2).Trim();
-            this.SolutionAssert(!sectionName.IsEmpty, Errors.MissingSectionName);
+            SolutionAssert(!sectionName.IsEmpty, Errors.MissingSectionName);
             StringSpan sectionScopeStr = tokenizer.NextToken(SlnConstants.SectionSeparators).Trim();
-            this.SolutionAssert(TryParseScope(sectionScopeStr, isSolution, out PropertiesScope scope), Errors.InvalidScope);
+            SolutionAssert(TryParseScope(sectionScopeStr, isSolution, out PropertiesScope scope), Errors.InvalidScope);
             return checkOnly ? null : new SolutionPropertyBag(sectionName.ToString(), scope);
         }
 
-        private SolutionItemModel ReadProjectInfo(SolutionModel solution, ref StringTokenizer tokenizer, List<(Guid NewId, SolutionProjectModel DuplicateProject)> fixedProjectIds)
+        private SolutionItemModel ReadProjectInfo(SolutionModel solution, ref StringTokenizer tokenizer,
+            List<(Guid NewId, SolutionProjectModel DuplicateProject)> fixedProjectIds)
         {
             // Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App1", "App1\App1.csproj", "{B0D4AB54-EB86-4C88-A2A4-C55D0C200244}"
             //         ^  <- this is tokenizer pos.
@@ -528,7 +556,7 @@ internal sealed partial class SlnFileV12Serializer
             if (!Guid.TryParse(projectType.ToString(), out Guid projectTypeId))
             {
                 projectTypeId = Guid.Empty;
-                this.tarnished = true;
+                tarnished = true;
             }
 
             // this just skips up to Display's name "App1" first quote, position at 'A". The TrimStart is extension to allow spaces before ')';
@@ -536,19 +564,19 @@ internal sealed partial class SlnFileV12Serializer
             StringSpan skip = tokenizer.NextToken(SlnConstants.DoubleQuote).TrimStart();
 
             // and do the check for factory guid. ends with ').
-            this.SolutionAssert(!skip.IsEmpty && skip[0] == ')', Errors.SyntaxError);
+            SolutionAssert(!skip.IsEmpty && skip[0] == ')', Errors.SyntaxError);
 
             StringSpan displayName = tokenizer.NextToken(SlnConstants.DoubleQuote);
-            this.SolutionAssert(!displayName.IsEmpty, Errors.MissingDisplayName);
+            SolutionAssert(!displayName.IsEmpty, Errors.MissingDisplayName);
             skip = tokenizer.NextToken(SlnConstants.DoubleQuote).TrimStart();
-            this.SolutionAssert(!skip.IsEmpty && skip[0] == ',', Errors.SyntaxError);
+            SolutionAssert(!skip.IsEmpty && skip[0] == ',', Errors.SyntaxError);
             StringSpan relativePath = tokenizer.NextToken(SlnConstants.DoubleQuote);
-            this.SolutionAssert(!relativePath.IsEmpty, Errors.MissingPath);
+            SolutionAssert(!relativePath.IsEmpty, Errors.MissingPath);
 
             // no comma check errata for this so any text between "relPath"{*}"uniqueiId" is valid.
             StringSpan projectUniqueId = tokenizer.NextToken(SlnConstants.ProjectSeparators);
-            this.SolutionAssert(!projectUniqueId.IsEmpty, Errors.MissingProjectId);
-            this.TarnishIf(!Guid.TryParse(projectUniqueId.ToString(), out Guid projectId));
+            SolutionAssert(!projectUniqueId.IsEmpty, Errors.MissingProjectId);
+            TarnishIf(!Guid.TryParse(projectUniqueId.ToString(), out Guid projectId));
 
             SolutionItemModel? duplicateItem = solution.FindItemById(projectId);
 
@@ -562,7 +590,7 @@ internal sealed partial class SlnFileV12Serializer
                 if (duplicateItem is not null)
                 {
                     projectId = Guid.NewGuid();
-                    this.tarnished = true;
+                    tarnished = true;
                 }
 
                 folder.Id = projectId;
@@ -577,12 +605,12 @@ internal sealed partial class SlnFileV12Serializer
                 if (duplicateItem is SolutionFolderModel duplicateFolder)
                 {
                     duplicateFolder.Id = Guid.NewGuid();
-                    this.tarnished = true;
+                    tarnished = true;
                 }
                 else if (duplicateItem is SolutionProjectModel duplicateProject)
                 {
                     projectId = CreateNewProjectId(solution, path);
-                    this.tarnished = true;
+                    tarnished = true;
 
                     // Record the new project id so it's configuration can be duplicated.
                     fixedProjectIds.Add((projectId, duplicateProject));
@@ -611,7 +639,7 @@ internal sealed partial class SlnFileV12Serializer
         // In these scenarios old parser would ignore the line (potentially throw aways some data) and move on.
         private void TarnishIf(bool tarnish)
         {
-            this.tarnished |= tarnish;
+            tarnished |= tarnish;
         }
 
         // Validate condition, that if false would make so the old parser will give up and report failure and reject the solution file.
@@ -622,7 +650,11 @@ internal sealed partial class SlnFileV12Serializer
                 return;
             }
 
-            throw new SolutionException(message, SolutionErrorType.Undefined) { File = fullPath, Line = this.lineNumber };
+            throw new SolutionException(message, SolutionErrorType.Undefined)
+            {
+                File = fullPath,
+                Line = lineNumber
+            };
         }
     }
 }

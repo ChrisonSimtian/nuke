@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -23,7 +22,7 @@ public static partial class StringExtensions
 
     public static string ReplaceUnicode(this string str)
     {
-        return unicodeRegex.Replace(str, m => ((char) int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString());
+        return unicodeRegex.Replace(str, m => ((char)int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString());
     }
 
     public static string ReplaceKnownWords(this string str)

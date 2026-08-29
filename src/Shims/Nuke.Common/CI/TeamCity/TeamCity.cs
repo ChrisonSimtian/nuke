@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.TeamCity;
 
 public static class TeamCity
 {
-    public static global::Fallout.Common.CI.TeamCity.TeamCity Instance
-        => global::Fallout.Common.CI.TeamCity.TeamCity.Instance;
+    public static Fallout.Common.CI.TeamCity.TeamCity Instance
+        => Fallout.Common.CI.TeamCity.TeamCity.Instance;
 }

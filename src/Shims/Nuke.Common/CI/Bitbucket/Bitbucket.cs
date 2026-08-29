@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.Bitbucket;
 
 public static class Bitbucket
 {
-    public static global::Fallout.Common.CI.Bitbucket.Bitbucket Instance
-        => global::Fallout.Common.CI.Bitbucket.Bitbucket.Instance;
+    public static Fallout.Common.CI.Bitbucket.Bitbucket Instance
+        => Fallout.Common.CI.Bitbucket.Bitbucket.Instance;
 }

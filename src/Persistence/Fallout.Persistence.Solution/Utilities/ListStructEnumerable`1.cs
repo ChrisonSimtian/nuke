@@ -17,32 +17,32 @@ internal readonly ref struct ListStructEnumerable<T>(List<T>? list)
 
 internal readonly ref struct ReadOnlyListStructEnumerable<T>(IReadOnlyList<T>? list)
 {
-    public ReadOnlyListStructEnumerator<T> GetEnumerator() => new ReadOnlyListStructEnumerator<T>(list);
+    public ReadOnlyListStructEnumerator<T> GetEnumerator() => new(list);
 }
 
 internal ref struct ReadOnlyListStructEnumerator<T>(IReadOnlyList<T>? list)
 {
     private int index = -1;
 
-    public readonly T Current => list![this.index];
+    public readonly T Current => list![index];
 
-    public bool MoveNext() => ++this.index < (list?.Count ?? 0);
+    public bool MoveNext() => ++index < (list?.Count ?? 0);
 }
 
 internal readonly ref struct ReadOnlyListStructReverseEnumerable<T>(IReadOnlyList<T>? list)
 {
-    public ReadOnlyListStructReverseEnumerator<T> GetEnumerator() => new ReadOnlyListStructReverseEnumerator<T>(list);
+    public ReadOnlyListStructReverseEnumerator<T> GetEnumerator() => new(list);
 }
 
 internal ref struct ReadOnlyListStructReverseEnumerator<T>(IReadOnlyList<T>? list)
 {
     private int index = list?.Count ?? 0;
 
-    public readonly T Current => list![this.index];
+    public readonly T Current => list![index];
 
     public bool MoveNext()
     {
-        this.index--;
-        return this.index >= 0;
+        index--;
+        return index >= 0;
     }
 }

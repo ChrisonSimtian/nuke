@@ -16,9 +16,14 @@ public static partial class AbsolutePathExtensions
     public static bool Exists(this AbsolutePath path, [CallerArgumentExpression("path")] string expression = null)
     {
         if (expression.EndsWithAnyOrdinalIgnoreCase("file", "executable", "exe", "script", "archive"))
+        {
             return path.FileExists();
+        }
+
         if (expression.EndsWithAnyOrdinalIgnoreCase("directory", "dir", "folder"))
+        {
             return path.DirectoryExists();
+        }
 
         throw new ArgumentException($"Cannot infer from argument '{expression}' if either file or directory must exist");
     }
@@ -51,7 +56,8 @@ public static partial class AbsolutePathExtensions
     /// <summary>
     /// Indicates whether the directory contains a directory (<c>*</c> as wildcard) using <see cref="SearchOption.TopDirectoryOnly"/>.
     /// </summary>
-    public static bool ContainsDirectory(this AbsolutePath path, string pattern, SearchOption options = SearchOption.TopDirectoryOnly)
+    public static bool ContainsDirectory(this AbsolutePath path, string pattern,
+        SearchOption options = SearchOption.TopDirectoryOnly)
     {
         Assert.DirectoryExists(path);
         return path.ToDirectoryInfo().GetDirectories(pattern, options).Any();

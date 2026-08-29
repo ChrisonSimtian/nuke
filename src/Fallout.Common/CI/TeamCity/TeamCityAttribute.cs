@@ -8,7 +8,6 @@ using System.Reflection;
 using Fallout.Common.CI.TeamCity.Configuration;
 using Fallout.Common.Execution;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 using Fallout.Common.ValueInjection;
@@ -19,9 +18,17 @@ namespace Fallout.Common.CI.TeamCity;
 public class TeamCityAttribute : ChainedConfigurationAttributeBase
 {
     public override Type HostType => typeof(TeamCity);
+
     public override AbsolutePath ConfigurationFile => TeamcityDirectory / "settings.kts";
-    public override IEnumerable<AbsolutePath> GeneratedFiles => new[] { PomFile, ConfigurationFile };
+
+    public override IEnumerable<AbsolutePath> GeneratedFiles => new[]
+    {
+        PomFile,
+        ConfigurationFile
+    };
+
     private AbsolutePath TeamcityDirectory => Build.RootDirectory / ".teamcity";
+
     private AbsolutePath PomFile => TeamcityDirectory / "pom.xml";
 
     public override IEnumerable<string> RelevantTargetNames => new string[0]
@@ -32,15 +39,27 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
     public string Version { get; set; } = "2021.2";
 
     public string Description { get; set; }
+
     public bool CleanCheckoutDirectory { get; set; } = true;
 
     public string[] VcsTriggerBranchFilters { get; set; } = new string[0];
-    public string[] VcsTriggerRules { get; set; } = { "+:**" };
+
+    public string[] VcsTriggerRules { get; set; } =
+    {
+        "+:**"
+    };
+
     public string[] VcsTriggeredTargets { get; set; } = new string[0];
 
     public bool NightlyBuildAlways { get; set; } = true;
+
     public string[] NightlyTriggerBranchFilters { get; set; } = new string[0];
-    public string[] NightlyTriggerRules { get; set; } = { "+:**" };
+
+    public string[] NightlyTriggerRules { get; set; } =
+    {
+        "+:**"
+    };
+
     public string[] NightlyTriggeredTargets { get; set; } = new string[0];
 
     public string[] ManuallyTriggeredTargets { get; set; } = new string[0];
@@ -62,10 +81,10 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
     public override ConfigurationEntity GetConfiguration(IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
         return new TeamCityConfiguration
-               {
-                   Version = Version,
-                   Project = GetProject(relevantTargets)
-               };
+        {
+            Version = Version,
+            Project = GetProject(relevantTargets)
+        };
     }
 
     public override void SerializeState()
@@ -83,18 +102,19 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
         var vcsRoot = GetVcsRoot();
         var lookupTable = new LookupTable<ExecutableTarget, TeamCityBuildType>();
         var buildTypes = relevantTargets
-            .SelectMany(x => GetBuildTypes(x, vcsRoot, lookupTable, relevantTargets), (x, y) => (ExecutableTarget: x, BuildType: y))
+            .SelectMany(x => GetBuildTypes(x, vcsRoot, lookupTable, relevantTargets),
+                (x, y) => (ExecutableTarget: x, BuildType: y))
             .ForEachLazy(x => lookupTable.Add(x.ExecutableTarget, x.BuildType))
             .Select(x => x.BuildType).ToArray();
 
         var parameters = GetGlobalParameters(relevantTargets);
 
         return new TeamCityProject
-               {
-                   VcsRoot = vcsRoot,
-                   BuildTypes = buildTypes,
-                   Parameters = parameters.ToArray()
-               };
+        {
+            VcsRoot = vcsRoot,
+            BuildTypes = buildTypes,
+            Parameters = parameters.ToArray()
+        };
     }
 
     protected virtual IEnumerable<TeamCityBuildType> GetBuildTypes(
@@ -111,55 +131,72 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
             from dependency in x.ArtifactDependencies
             let rules = dependency.Select(GetArtifactRule).ToArray()
             select new TeamCityArtifactDependency
-                   {
-                       BuildType = buildTypes[dependency.Key].Single(y => y.Partition == null),
-                       ArtifactRules = rules
-                   }).ToArray<TeamCityDependency>();
+            {
+                BuildType = buildTypes[dependency.Key].Single(y => y.Partition == null),
+                ArtifactRules = rules
+            }).ToArray<TeamCityDependency>();
 
         var snapshotDependencies = GetTargetDependencies(executableTarget)
             .SelectMany(x => buildTypes[x])
             .Where(x => x.Partition == null)
             .Select(x => new TeamCitySnapshotDependency
-                         {
-                             BuildType = x,
-                             FailureAction = TeamCityDependencyFailureAction.FailToStart,
-                             CancelAction = TeamCityDependencyFailureAction.Cancel
-                         }).ToArray<TeamCityDependency>();
+            {
+                BuildType = x,
+                FailureAction = TeamCityDependencyFailureAction.FailToStart,
+                CancelAction = TeamCityDependencyFailureAction.Cancel
+            }).ToArray<TeamCityDependency>();
 
         if (isPartitioned)
         {
             var totalPartitions = executableTarget.PartitionSize.Value;
             for (var i = 0; i < totalPartitions; i++)
             {
-                var partition = new Partition { Part = i + 1, Total = totalPartitions };
+                var partition = new Partition
+                {
+                    Part = i + 1,
+                    Total = totalPartitions
+                };
+
                 yield return new TeamCityBuildType
-                             {
-                                 Id = $"{executableTarget.Name}_P{partition.Part}T{partition.Total}",
-                                 Name = $"{executableTarget.Name} {partition}",
-                                 Description = executableTarget.Description,
-                                 BuildCmdPath = BuildCmdPath,
-                                 ArtifactRules = artifactRules,
-                                 Partition = partition,
-                                 InvokedTargets = chainLinkTargets.Select(x => x.Name).ToArray(),
-                                 VcsRoot = new TeamCityBuildTypeVcsRoot { Root = vcsRoot, CleanCheckoutDirectory = CleanCheckoutDirectory },
-                                 Dependencies = snapshotDependencies.Concat(artifactDependencies).ToArray()
-                             };
+                {
+                    Id = $"{executableTarget.Name}_P{partition.Part}T{partition.Total}",
+                    Name = $"{executableTarget.Name} {partition}",
+                    Description = executableTarget.Description,
+                    BuildCmdPath = BuildCmdPath,
+                    ArtifactRules = artifactRules,
+                    Partition = partition,
+                    InvokedTargets = chainLinkTargets.Select(x => x.Name).ToArray(),
+                    VcsRoot = new TeamCityBuildTypeVcsRoot
+                    {
+                        Root = vcsRoot,
+                        CleanCheckoutDirectory = CleanCheckoutDirectory
+                    },
+                    Dependencies = snapshotDependencies.Concat(artifactDependencies).ToArray()
+                };
             }
 
-            artifactRules = new[] { "**/*" };
+            artifactRules = new[]
+            {
+                "**/*"
+            };
+
             snapshotDependencies = buildTypes[executableTarget]
                 .Select(x => new TeamCitySnapshotDependency
-                             {
-                                 BuildType = x,
-                                 FailureAction = TeamCityDependencyFailureAction.AddProblem,
-                                 CancelAction = TeamCityDependencyFailureAction.Cancel
-                             }).ToArray<TeamCityDependency>();
+                {
+                    BuildType = x,
+                    FailureAction = TeamCityDependencyFailureAction.AddProblem,
+                    CancelAction = TeamCityDependencyFailureAction.Cancel
+                }).ToArray<TeamCityDependency>();
+
             artifactDependencies = buildTypes[executableTarget]
                 .Select(x => new TeamCityArtifactDependency
-                             {
-                                 BuildType = x,
-                                 ArtifactRules = new[] { "**/*" }
-                             }).ToArray<TeamCityDependency>();
+                {
+                    BuildType = x,
+                    ArtifactRules = new[]
+                    {
+                        "**/*"
+                    }
+                }).ToArray<TeamCityDependency>();
         }
 
         var parameters = executableTarget.DelegateRequirements
@@ -168,28 +205,29 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
             .Concat(new TeamCityKeyValueParameter(
                 "teamcity.ui.runButton.caption",
                 executableTarget.Name.SplitCamelHumpsWithKnownWords().JoinSpace())).ToArray();
+
         var triggers = GetTriggers(executableTarget, buildTypes).ToArray();
 
         yield return new TeamCityBuildType
-                     {
-                         Id = executableTarget.Name,
-                         Name = executableTarget.Name,
-                         Description = executableTarget.Description,
-                         BuildCmdPath = BuildCmdPath,
-                         VcsRoot = new TeamCityBuildTypeVcsRoot
-                                   {
-                                       Root = vcsRoot,
-                                       ShowDependenciesChanges = isPartitioned,
-                                       CleanCheckoutDirectory = CleanCheckoutDirectory
-                                   },
-                         IsComposite = isPartitioned,
-                         IsDeployment = ManuallyTriggeredTargets.Contains(executableTarget.Name),
-                         InvokedTargets = chainLinkTargets.Select(x => x.Name).ToArray(),
-                         ArtifactRules = artifactRules,
-                         Dependencies = snapshotDependencies.Concat(artifactDependencies).ToArray(),
-                         Parameters = parameters,
-                         Triggers = triggers
-                     };
+        {
+            Id = executableTarget.Name,
+            Name = executableTarget.Name,
+            Description = executableTarget.Description,
+            BuildCmdPath = BuildCmdPath,
+            VcsRoot = new TeamCityBuildTypeVcsRoot
+            {
+                Root = vcsRoot,
+                ShowDependenciesChanges = isPartitioned,
+                CleanCheckoutDirectory = CleanCheckoutDirectory
+            },
+            IsComposite = isPartitioned,
+            IsDeployment = ManuallyTriggeredTargets.Contains(executableTarget.Name),
+            InvokedTargets = chainLinkTargets.Select(x => x.Name).ToArray(),
+            ArtifactRules = artifactRules,
+            Dependencies = snapshotDependencies.Concat(artifactDependencies).ToArray(),
+            Parameters = parameters,
+            Triggers = triggers
+        };
     }
 
     protected virtual IEnumerable<TeamCityTrigger> GetTriggers(
@@ -199,30 +237,30 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
         if (VcsTriggeredTargets.Contains(executableTarget.Name))
         {
             yield return new TeamCityVcsTrigger
-                         {
-                             BranchFilters = VcsTriggerBranchFilters,
-                             TriggerRules = VcsTriggerRules
-                         };
+            {
+                BranchFilters = VcsTriggerBranchFilters,
+                TriggerRules = VcsTriggerRules
+            };
         }
 
         if (NightlyTriggeredTargets.Contains(executableTarget.Name))
         {
             yield return new TeamCityScheduledTrigger
-                         {
-                             BranchFilters = NightlyTriggerBranchFilters,
-                             TriggerRules = NightlyTriggerRules,
-                             EnableQueueOptimization = true,
-                             WithPendingChangesOnly = false,
-                             TriggerBuildAlways = NightlyBuildAlways
-                         };
+            {
+                BranchFilters = NightlyTriggerBranchFilters,
+                TriggerRules = NightlyTriggerRules,
+                EnableQueueOptimization = true,
+                WithPendingChangesOnly = false,
+                TriggerBuildAlways = NightlyBuildAlways
+            };
         }
 
         foreach (var triggerDependency in executableTarget.TriggerDependencies)
         {
             yield return new TeamCityFinishBuildTrigger
-                         {
-                             BuildType = buildTypes[triggerDependency].Single(x => x.Partition == null)
-                         };
+            {
+                BuildType = buildTypes[triggerDependency].Single(x => x.Partition == null)
+            };
         }
     }
 
@@ -249,6 +287,7 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
     {
         var guids = Build.GetType().GetCustomAttributes<TeamCityTokenAttribute>()
             .ToDictionary(x => x.Name, x => $"credentialsJSON:{Guid.Parse(x.Guid):D}");
+
         return ImportSecrets.Select(x =>
             new TeamCityConfigurationParameter
             {
@@ -275,42 +314,55 @@ public class TeamCityAttribute : ChainedConfigurationAttributeBase
         var defaultValue = !member.HasCustomAttribute<SecretAttribute>() ? member.GetValue(Build) : default(string);
         // TODO: enumerables of ...
         if (defaultValue != null &&
-            (memberType.IsAssignableTo(typeof(IAbsolutePathHolder))))
+            memberType.IsAssignableTo(typeof(IAbsolutePathHolder)))
+        {
             defaultValue = Build.RootDirectory.GetUnixRelativePathTo(defaultValue.ToString());
+        }
 
         TeamCityParameterType GetParameterType()
         {
             if (member.HasCustomAttribute<SecretAttribute>())
+            {
                 return TeamCityParameterType.Password;
+            }
+
             if (memberType == typeof(bool))
+            {
                 return TeamCityParameterType.Checkbox;
+            }
+
             if (valueSet != null)
+            {
                 return TeamCityParameterType.Select;
+            }
+
             return TeamCityParameterType.Text;
         }
 
         return new TeamCityConfigurationParameter
-               {
-                   // TODO: #555 - Should this use ParameterService.GetParameterMemberName(member) ?
-                   Name = ParameterService.GetParameterMemberName(member),
-                   Description = attribute.Description,
-                   Options = valueSet?.ToDictionary(x => x.Item1, x => x.Item2),
-                   Type = GetParameterType(),
-                   DefaultValue = memberType.IsArray && defaultValue is IEnumerable enumerable
-                       ? enumerable.Cast<object>().Select(x => x.ToString()).Join(valueSeparator)
-                       : defaultValue?.ToString(),
-                   Display = required ? TeamCityParameterDisplay.Prompt : TeamCityParameterDisplay.Normal,
-                   AllowMultiple = memberType.IsArray && valueSet is not null,
-                   ValueSeparator = valueSeparator
-               };
+        {
+            // TODO: #555 - Should this use ParameterService.GetParameterMemberName(member) ?
+            Name = ParameterService.GetParameterMemberName(member),
+            Description = attribute.Description,
+            Options = valueSet?.ToDictionary(x => x.Item1, x => x.Item2),
+            Type = GetParameterType(),
+            DefaultValue = memberType.IsArray && defaultValue is IEnumerable enumerable
+                ? enumerable.Cast<object>().Select(x => x.ToString()).Join(valueSeparator)
+                : defaultValue?.ToString(),
+            Display = required ? TeamCityParameterDisplay.Prompt : TeamCityParameterDisplay.Normal,
+            AllowMultiple = memberType.IsArray && valueSet is not null,
+            ValueSeparator = valueSeparator
+        };
     }
 
     protected virtual string GetArtifactRule(string source)
     {
         if (!Build.RootDirectory.Contains(source))
+        {
             return source;
+        }
 
-        var relativeSource = (string) GetUnixRelativePath(Build.RootDirectory, source);
+        var relativeSource = (string)GetUnixRelativePath(Build.RootDirectory, source);
         var target = relativeSource.TakeWhile(x => x != '*').Reverse().SkipWhile(x => x != '/').Reverse();
         return $"{relativeSource} => {new string(target.ToArray()).TrimEnd('/')}";
     }

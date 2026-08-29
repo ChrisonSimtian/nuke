@@ -4,8 +4,8 @@
 // consumer's perspective.
 
 using Fallout.Common;
-using Fallout.Common.IO;
 using Fallout.Common.ProjectModel;
+using Serilog;
 
 internal class Build : FalloutBuild
 {
@@ -17,7 +17,7 @@ internal class Build : FalloutBuild
     private Target Default => _ => _
         .Executes(() =>
         {
-            Serilog.Log.Information("hello from fallout consumer (pinned nuget 11.0.8)");
-            Serilog.Log.Information("solution name: {Name}", Solution?.Name ?? "<unbound>");
+            Log.Information("hello from fallout consumer (pinned nuget 11.0.8)");
+            Log.Information("solution name: {Name}", Solution?.Name ?? "<unbound>");
         });
 }

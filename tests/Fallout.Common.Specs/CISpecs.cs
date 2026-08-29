@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using FluentAssertions;
 using Fallout.Common.CI;
 using Fallout.Common.CI.AppVeyor;
 using Fallout.Common.CI.AzurePipelines;
@@ -12,6 +11,7 @@ using Fallout.Common.CI.GitLab;
 using Fallout.Common.CI.Jenkins;
 using Fallout.Common.CI.TeamCity;
 using Fallout.Common.CI.TravisCI;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs;
@@ -75,7 +75,11 @@ public class CISpecs
         var instance = CreateInstance(type);
 
         return type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Select(x => new[] { x, instance }).ToArray();
+            .Select(x => new[]
+            {
+                x,
+                instance
+            }).ToArray();
     }
 
     private static void AssertProperty(object instance, PropertyInfo property)
@@ -94,11 +98,16 @@ public class CISpecs
         // reference types and nullable value types; require non-null on plain value types.
         var allowsNull = !property.PropertyType.IsValueType
                          || Nullable.GetUnderlyingType(property.PropertyType) != null;
+
         if (!allowsNull)
+        {
             value.Should().NotBeNull();
+        }
 
         if (value is not string strValue || property.GetCustomAttribute<NoConvertAttribute>() != null)
+        {
             return;
+        }
 
         bool.TryParse(strValue, out _).Should().BeFalse("boolean");
         long.TryParse(strValue, out _).Should().BeFalse("long");
@@ -110,14 +119,17 @@ public class CISpecs
 
     private static object CreateInstance(Type type)
     {
-        var bindingFlags = BindingFlags.CreateInstance | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.OptionalParamBinding;
-        return Activator.CreateInstance(type, bindingFlags, binder: null, args: new object[0], culture: CultureInfo.CurrentCulture);
+        var bindingFlags = BindingFlags.CreateInstance | BindingFlags.NonPublic | BindingFlags.Instance |
+                           BindingFlags.OptionalParamBinding;
+
+        return Activator.CreateInstance(type, bindingFlags, binder: null, args: new object[0],
+            culture: CultureInfo.CurrentCulture);
     }
 
     private static bool IsRunning(Type type)
     {
         var property = type.GetProperty($"IsRunning{type.Name}", BindingFlags.NonPublic | BindingFlags.Static).NotNull();
-        return (bool) property.GetValue(obj: null);
+        return (bool)property.GetValue(obj: null);
     }
 
     private class CITheoryAttribute : TheoryAttribute

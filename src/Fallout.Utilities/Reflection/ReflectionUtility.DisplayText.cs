@@ -32,31 +32,35 @@ public static partial class ReflectionUtility
     internal static string GetDisplayShortName(this Type type, IList<string> tupleNames)
     {
         var aliases = new Dictionary<Type, string>
-                      {
-                          { typeof(byte), "byte" },
-                          { typeof(sbyte), "sbyte" },
-                          { typeof(short), "short" },
-                          { typeof(ushort), "ushort" },
-                          { typeof(int), "int" },
-                          { typeof(uint), "uint" },
-                          { typeof(long), "long" },
-                          { typeof(ulong), "ulong" },
-                          { typeof(float), "float" },
-                          { typeof(double), "double" },
-                          { typeof(decimal), "decimal" },
-                          { typeof(object), "object" },
-                          { typeof(bool), "bool" },
-                          { typeof(char), "char" },
-                          { typeof(string), "string" },
-                          { typeof(void), "void" }
-                      };
+        {
+            { typeof(byte), "byte" },
+            { typeof(sbyte), "sbyte" },
+            { typeof(short), "short" },
+            { typeof(ushort), "ushort" },
+            { typeof(int), "int" },
+            { typeof(uint), "uint" },
+            { typeof(long), "long" },
+            { typeof(ulong), "ulong" },
+            { typeof(float), "float" },
+            { typeof(double), "double" },
+            { typeof(decimal), "decimal" },
+            { typeof(object), "object" },
+            { typeof(bool), "bool" },
+            { typeof(char), "char" },
+            { typeof(string), "string" },
+            { typeof(void), "void" }
+        };
 
         if (aliases.TryGetValue(type, out var alias))
+        {
             return alias;
+        }
 
         var underlyingType = Nullable.GetUnderlyingType(type);
         if (underlyingType != null)
+        {
             return $"{underlyingType.GetDisplayShortName(tupleNames)}?";
+        }
 
         if (type.IsGenericType)
         {
@@ -80,7 +84,9 @@ public static partial class ReflectionUtility
         }
 
         if (type.IsArray)
+        {
             return $"{type.GetElementType().GetDisplayShortName(tupleNames)}[{','.Repeat(type.GetArrayRank() - 1)}]";
+        }
 
         return type.Name;
     }
@@ -101,6 +107,7 @@ public static partial class ReflectionUtility
                     : parameter.ParameterType.IsByRef
                         ? "ref "
                         : string.Empty;
+
         var defaultValue = parameter.HasDefaultValue ? $" = {parameter.DefaultValue ?? "null"}" : string.Empty;
 
         return $"{modifier}{parameterType} {parameter.Name}{defaultValue}";
@@ -109,7 +116,9 @@ public static partial class ReflectionUtility
     public static string GetDisplayText(this MemberInfo member)
     {
         if (member is Type type)
+        {
             return type.GetDisplayShortName();
+        }
 
         var parameterList = member is MethodBase methodBase
             ? $"({methodBase.GetParameters().Select(x => x.GetDisplayText()).JoinCommaSpace()})"
@@ -121,6 +130,7 @@ public static partial class ReflectionUtility
                 .Cast<TupleElementNamesAttribute>()
                 .FirstOrDefault()
             : member.GetCustomAttribute<TupleElementNamesAttribute>();
+
         var memberType = member is not ConstructorInfo
             ? $" : {member.GetMemberType().GetDisplayShortName(tupleNamesAttribute?.TransformNames.ToList())}"
             : string.Empty;

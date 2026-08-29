@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,7 +27,10 @@ public class TestGitHubActionsAttribute : GitHubActionsAttribute, ITestConfigura
 
     protected override IEnumerable<GitHubActionsInputAttribute> DeclaredInputs => Inputs;
 
-    protected override ISet<string> DeclaredWorkflowNames => (WorkflowNames ?? new[] { IdPostfix }).ToHashSet();
+    protected override ISet<string> DeclaredWorkflowNames => (WorkflowNames ?? new[]
+    {
+        IdPostfix
+    }).ToHashSet();
 
     protected override StreamWriter CreateStream()
     {

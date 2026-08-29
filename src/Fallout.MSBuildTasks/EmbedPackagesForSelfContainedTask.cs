@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 namespace Fallout.MSBuildTasks;
 
@@ -26,6 +25,7 @@ public class EmbedPackagesForSelfContainedTask : ContextAwareTask
             .Where(x => !x.Id.StartsWithOrdinalIgnoreCase("microsoft.netcore.app.runtime"))
             .Where(x => Directory.GetDirectories(x.Directory, "tools").Any())
             .Select(x => new TaskItem(x.File)).ToArray<ITaskItem>();
+
         return true;
     }
 }

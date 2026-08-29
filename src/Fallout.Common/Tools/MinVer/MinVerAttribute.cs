@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Fallout.Common.CI.AppVeyor;
 using Fallout.Common.CI.AzurePipelines;
 using Fallout.Common.CI.TeamCity;
@@ -15,6 +13,7 @@ namespace Fallout.Common.Tools.MinVer;
 public class MinVerAttribute : ValueInjectionAttributeBase
 {
     public string Framework { get; set; }
+
     public bool UpdateBuildNumber { get; set; }
 
     public override object GetValue(MemberInfo member, object instance)

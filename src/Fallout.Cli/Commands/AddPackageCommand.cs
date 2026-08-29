@@ -3,26 +3,17 @@ using System.Threading.Tasks;
 using Fallout.Common;
 using Fallout.Common.Execution;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
+using Fallout.Solutions;
 
 namespace Fallout.Cli.Commands;
 
 /// <summary>
 /// <c>fallout :add-package</c>: adds (or upgrades) a NuGet package reference in the build project.
 /// </summary>
-internal sealed class AddPackageCommand : IFalloutCommand
+internal sealed class AddPackageCommand(IConfigurationReader configuration, IPackageManager packages) : IFalloutCommand
 {
-    private readonly IConfigurationReader configuration;
-    private readonly IPackageManager packages;
-
-    public AddPackageCommand(IConfigurationReader configuration, IPackageManager packages)
-    {
-        this.configuration = configuration;
-        this.packages = packages;
-    }
-
     public string Name => "add-package";
 
     public async Task<int> ExecuteAsync(string[] args, AbsolutePath rootDirectory, AbsolutePath buildScript)
@@ -36,20 +27,24 @@ internal sealed class AddPackageCommand : IFalloutCommand
             (EnvironmentInfo.GetNamedArgument<string>("version") ??
              args.ElementAtOrDefault(1) ??
              await NuGetVersionResolver.GetLatestVersion(packageId, includePrereleases: false) ??
-             NuGetPackageResolver.GetGlobalInstalledPackage(packageId, version: null, packagesConfigFile: null)?.Version.ToString())
+             NuGetPackageResolver.GetGlobalInstalledPackage(packageId, version: null, packagesConfigFile: null)?.Version
+                 .ToString())
             .NotNull("packageVersion != null");
 
-        var configuration = this.configuration.Read(buildScript, evaluate: true);
-        var buildProjectFile = configuration[ConfigurationReader.BuildProjectFileKey];
+        var configuration1 = configuration.Read(buildScript, evaluate: true);
+        var buildProjectFile = configuration1[ConfigurationReader.BuildProjectFileKey];
         Host.Information($"Installing {packageId}/{packageVersion} to {buildProjectFile} ...");
         packages.AddOrReplacePackage(packageId, packageVersion, PackageManager.DownloadType, buildProjectFile);
         DotNetTasks.DotNet($"restore {buildProjectFile}");
 
         var installedPackage = NuGetPackageResolver.GetGlobalInstalledPackage(packageId, packageVersion, packagesConfigFile: null)
             .NotNull("installedPackage != null");
+
         var hasToolsDirectory = installedPackage.Directory.GlobDirectories("tools").Any();
         if (!hasToolsDirectory)
+        {
             packages.AddOrReplacePackage(packageId, packageVersion, PackageManager.ReferenceType, buildProjectFile);
+        }
 
         Host.Information($"Done installing {packageId}/{packageVersion} to {buildProjectFile}");
         return 0;

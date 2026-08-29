@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Fallout.Common.Execution;
 using Fallout.Common.IO;
+using Serilog;
 
 namespace Fallout.Build.Execution.Extensions;
 
@@ -31,7 +32,7 @@ internal class SerializeBuildGraphAttribute : BuildExtensionAttributeBase, IOnBu
         catch (Exception exception)
         {
             // Emission is a convenience for editor tooling — never let it break a build.
-            Serilog.Log.Verbose(exception, "Failed to emit {GraphFileName}", GraphFileName);
+            Log.Verbose(exception, "Failed to emit {GraphFileName}", GraphFileName);
         }
     }
 

@@ -42,9 +42,25 @@ using Fallout.Components;
     CheckoutRef = "${{ github.head_ref }}",
     // PRs targeting develop, main, or any release/* / support/* branch — all
     // long-lived and protected; all require the ubuntu-latest check.
-    OnPullRequestBranches = new[] { DevelopBranch, MainBranch, ReleaseBranchPattern, SupportBranchPattern },
-    OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
-    InvokedTargets = new[] { nameof(VerifyGeneratedTools), nameof(ITest.Test), nameof(IPack.Pack) },
+    OnPullRequestBranches = new[]
+    {
+        DevelopBranch,
+        MainBranch,
+        ReleaseBranchPattern,
+        SupportBranchPattern
+    },
+    OnPullRequestExcludePaths = new[]
+    {
+        "docs/**",
+        ".assets/**",
+        "**/*.md"
+    },
+    InvokedTargets = new[]
+    {
+        nameof(VerifyGeneratedTools),
+        nameof(ITest.Test),
+        nameof(IPack.Pack)
+    },
     PublishArtifacts = false)]
 [GitHubActions(
     "build-cross-platform",
@@ -53,13 +69,30 @@ using Fallout.Components;
     FetchDepth = 0,
     ConcurrencyGroup = "${{ github.workflow }}-${{ github.ref }}",
     ConcurrencyCancelInProgress = true,
-    OnPushTags = new[] { "v*" },
+    OnPushTags = new[]
+    {
+        "v*"
+    },
     // main is the production trunk now (ADR-0009). A PR into it is always a
     // release/vX.Y GA merge or a hotfix, so it belongs on this release-intent gate,
     // alongside release/* and support/*.
-    OnPullRequestBranches = new[] { MainBranch, ReleaseBranchPattern, SupportBranchPattern },
-    OnPullRequestExcludePaths = new[] { "docs/**", ".assets/**", "**/*.md" },
-    InvokedTargets = new[] { nameof(ITest.Test), nameof(IPack.Pack) },
+    OnPullRequestBranches = new[]
+    {
+        MainBranch,
+        ReleaseBranchPattern,
+        SupportBranchPattern
+    },
+    OnPullRequestExcludePaths = new[]
+    {
+        "docs/**",
+        ".assets/**",
+        "**/*.md"
+    },
+    InvokedTargets = new[]
+    {
+        nameof(ITest.Test),
+        nameof(IPack.Pack)
+    },
     PublishArtifacts = false)]
 partial class Build
 {

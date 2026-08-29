@@ -20,18 +20,26 @@ internal static class DelegateRequirementService
         {
             if (requirement is Expression<Func<bool>> boolExpression)
                 // TODO: same as HasSkippingCondition.GetSkipReason
+            {
                 Assert.True(boolExpression.Compile().Invoke(), $"Target '{target.Name}' requires '{requirement.Body}'");
+            }
             else if (IsMemberNullOrEmpty(requirement.GetMemberInfo(), build, target))
-                Assert.Fail($"Target '{target.Name}' requires member '{GetMemberName(requirement.GetMemberInfo())}' to be not null or empty");
+            {
+                Assert.Fail(
+                    $"Target '{target.Name}' requires member '{GetMemberName(requirement.GetMemberInfo())}' to be not null or empty");
+            }
         }
 
         var requiredMembers = ValueInjectionUtility.GetInjectionMembers(build.GetType())
             .Select(x => x.Member)
             .Where(x => x.HasCustomAttribute<RequiredAttribute>());
+
         foreach (var member in requiredMembers)
         {
             if (IsMemberNullOrEmpty(member, build))
+            {
                 Assert.Fail($"Member '{GetMemberName(member)}' is required to be not null or empty");
+            }
         }
     }
 
@@ -46,7 +54,9 @@ internal static class DelegateRequirementService
             $"Member '{GetMemberName(member)}' is required {from}but not marked with an injection attribute.");
 
         if (build.Host is Terminal)
+        {
             TryInjectValueInteractive(member, build);
+        }
 
         return member.GetMemberType() != typeof(string)
             ? member.GetValue(build) == null
@@ -56,14 +66,19 @@ internal static class DelegateRequirementService
     private static void TryInjectValueInteractive(MemberInfo member, IFalloutBuild build)
     {
         if (!member.HasCustomAttribute<ParameterAttribute>())
+        {
             return;
+        }
 
         if (member is PropertyInfo property && !property.CanWrite)
+        {
             return;
+        }
 
         var memberType = member.GetMemberType();
         var nameOrDescription = ParameterService.GetParameterDescription(member) ??
                                 ParameterService.GetParameterMemberName(member);
+
         var text = $"{nameOrDescription.TrimEnd('.')}:";
 
         while (member.GetValue(build) == null)

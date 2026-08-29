@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Fallout.Common.Tools.MSBuild;
 
 namespace Fallout.Common.CI.TeamCity;

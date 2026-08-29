@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common;
+﻿using Fallout.Common;
 using Fallout.Solutions;
 
 namespace Fallout.Components;
 
 public interface IHasSolution : IFalloutBuild
 {
-    [Solution] [Required] Solution Solution => TryGetValue(() => Solution);
+    [Solution]
+    [Required]
+    Solution Solution => TryGetValue(() => Solution);
 }

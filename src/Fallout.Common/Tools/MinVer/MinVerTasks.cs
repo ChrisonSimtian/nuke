@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Fallout.Common.Tooling;
 
@@ -17,12 +16,22 @@ partial class MinVerTasks
 public record MinVer(string MinVerVersion)
 {
     public string MinVerMajor => MinVerVersion.Split('.')[0];
+
     public string MinVerMinor => MinVerVersion.Split('.')[1];
+
     public string MinVerPatch => MinVerVersion.Split('.')[2].Split('-')[0].Split('+')[0];
-    public string MinVerPreRelease => MinVerVersion.Split('+')[0].Contains('-') ? MinVerVersion.Split('+')[0].Split(['-',], count: 2)[1] : null;
+
+    public string MinVerPreRelease => MinVerVersion.Split('+')[0].Contains('-')
+        ? MinVerVersion.Split('+')[0].Split(['-',], count: 2)[1]
+        : null;
+
     public string MinVerBuildMetadata => MinVerVersion.Contains('+') ? MinVerVersion.Split(['+',], count: 2)[1] : null;
+
     public string AssemblyVersion => $"{MinVerMajor}.0.0.0";
+
     public string FileVersion => $"{MinVerMajor}.{MinVerMinor}.{MinVerPatch}.0";
+
     public string PackageVersion => MinVerVersion;
+
     public string Version => MinVerVersion;
 }

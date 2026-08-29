@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Fallout.Common.Tooling;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using Fallout.Common.Tooling;
 using static Fallout.Common.IO.PathConstruction;
 
 namespace Fallout.MSBuildTasks;
@@ -32,9 +31,13 @@ public class PackPackageToolsTask : ContextAwareTask
 
     private IEnumerable<ITaskItem> GetFiles(string packageId, string packageVersion)
     {
-        var packageToolsDirectory =  Path.Combine(NuGetPackageRoot, packageId.ToLowerInvariant(), packageVersion.ToLowerInvariant(), "tools");
+        var packageToolsDirectory = Path.Combine(NuGetPackageRoot, packageId.ToLowerInvariant(),
+            packageVersion.ToLowerInvariant(), "tools");
+
         if (!Directory.Exists(packageToolsDirectory))
+        {
             yield break;
+        }
 
         foreach (var file in Directory.GetFiles(packageToolsDirectory, "*", SearchOption.AllDirectories))
         {
@@ -47,6 +50,7 @@ public class PackPackageToolsTask : ContextAwareTask
                     "any",
                     packageId,
                     GetRelativePath(packageToolsDirectory, file)));
+
             yield return taskItem;
         }
     }

@@ -95,7 +95,9 @@ public partial class Host
     protected internal virtual void WriteErrorsAndWarnings()
     {
         if (Logging.InMemorySink.Instance.LogEvents.Count == 0)
+        {
             return;
+        }
 
         // TODO: move to Logging
         using (WriteBlock("Errors & Warnings"))
@@ -191,9 +193,13 @@ public partial class Host
     {
         Debug();
         if (build.IsSucceeding)
+        {
             Success($"Build succeeded on {DateTime.Now.ToString(CultureInfo.CurrentCulture)}. ＼（＾ᴗ＾）／");
+        }
         else
+        {
             Error($"Build failed on {DateTime.Now.ToString(CultureInfo.CurrentCulture)}. (╯°□°）╯︵ ┻━┻");
+        }
     }
 
     internal class LogEventSink : ILogEventSink
@@ -208,9 +214,13 @@ public partial class Host
         public void Emit(LogEvent logEvent)
         {
             if (logEvent.Level is LogEventLevel.Warning)
+            {
                 host.ReportWarning(logEvent.RenderMessage(), logEvent.Exception?.ToString());
+            }
             else if (logEvent.Level is LogEventLevel.Error or LogEventLevel.Fatal)
+            {
                 host.ReportError(logEvent.RenderMessage(), logEvent.Exception?.ToString());
+            }
         }
     }
 }

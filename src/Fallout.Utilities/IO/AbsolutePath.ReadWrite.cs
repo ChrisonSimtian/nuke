@@ -65,7 +65,12 @@ partial class AbsolutePathExtensions
         bool? eofLineBreak = null)
     {
         if (eofLineBreak ?? DefaultEofLineBreak)
-            lines = lines.Concat(new[] { string.Empty }).ToArray();
+        {
+            lines = lines.Concat(new[]
+            {
+                string.Empty
+            }).ToArray();
+        }
 
         return path.WriteAllText(lines.JoinNewLine(platformFamily ?? DefaultLineBreakType), encoding);
     }

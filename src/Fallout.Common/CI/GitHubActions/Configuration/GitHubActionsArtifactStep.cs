@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common.Utilities;
+﻿using Fallout.Common.Utilities;
 
 namespace Fallout.Common.CI.GitHubActions.Configuration;
 
@@ -19,7 +17,9 @@ public class GitHubActionsArtifactStep : GitHubActionsStep
     } = GitHubActionsDefaults.UploadArtifactAction;
 
     public string Name { get; set; }
+
     public string Path { get; set; }
+
     public string Condition { get; set; }
 
     public override void Write(CustomFileWriter writer)

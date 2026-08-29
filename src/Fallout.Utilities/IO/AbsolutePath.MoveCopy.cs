@@ -118,10 +118,14 @@ partial class AbsolutePathExtensions
         Assert.True(source.DirectoryExists() || source.FileExists());
 
         if (source.DirectoryExists())
-            return MoveDirectory(source, target, policy, createDirectories, deleteRemainingFiles);
+        {
+            return source.MoveDirectory(target, policy, createDirectories, deleteRemainingFiles);
+        }
 
         if (source.FileExists())
-            return MoveFile(source, target, policy, createDirectories);
+        {
+            return source.MoveFile(target, policy, createDirectories);
+        }
 
         throw new Exception("Unreachable");
     }
@@ -141,10 +145,14 @@ partial class AbsolutePathExtensions
         Assert.True(source.DirectoryExists() || (excludeDirectory == null && excludeFile == null));
 
         if (source.DirectoryExists())
-            return CopyDirectory(source, target, policy, excludeDirectory, excludeFile, createDirectories);
+        {
+            return source.CopyDirectory(target, policy, excludeDirectory, excludeFile, createDirectories);
+        }
 
         if (source.FileExists())
-            return CopyFile(source, target, policy, createDirectories);
+        {
+            return source.CopyFile(target, policy, createDirectories);
+        }
 
         throw new Exception("Unreachable");
     }
@@ -182,17 +190,23 @@ partial class AbsolutePathExtensions
         Action action)
     {
         if (File.Exists(target) && !Permitted())
+        {
             return source;
+        }
 
         if (createDirectories)
+        {
             target.Parent.CreateDirectory();
+        }
 
         action.Invoke();
         return target;
 
         bool Permitted()
         {
-            var filePolicies = ExistsPolicy.FileFail | ExistsPolicy.FileSkip | ExistsPolicy.FileOverwrite | ExistsPolicy.FileOverwriteIfNewer;
+            var filePolicies = ExistsPolicy.FileFail | ExistsPolicy.FileSkip | ExistsPolicy.FileOverwrite |
+                               ExistsPolicy.FileOverwriteIfNewer;
+
             return (policy & filePolicies) switch
             {
                 ExistsPolicy.FileFail => throw new Exception($"File '{target}' already exists"),
@@ -217,7 +231,9 @@ partial class AbsolutePathExtensions
             source.GetFiles().ForEach(x => x.MoveFile(target / source.GetRelativePathTo(x), policy));
 
             if (!source.ToDirectoryInfo().EnumerateFileSystemInfos().Any() || deleteRemainingFiles)
+            {
                 source.DeleteDirectory();
+            }
         });
     }
 
@@ -231,7 +247,9 @@ partial class AbsolutePathExtensions
     {
         return HandleDirectory(source, target, policy, createDirectories, () =>
         {
-            source.GetDirectories().WhereNot(excludeDirectory).ForEach(x => x.CopyDirectory(target / source.GetRelativePathTo(x), policy, excludeDirectory, excludeFile));
+            source.GetDirectories().WhereNot(excludeDirectory).ForEach(x =>
+                x.CopyDirectory(target / source.GetRelativePathTo(x), policy, excludeDirectory, excludeFile));
+
             source.GetFiles().WhereNot(excludeFile).ForEach(x => x.CopyFile(target / source.GetRelativePathTo(x), policy));
         });
     }
@@ -245,11 +263,15 @@ partial class AbsolutePathExtensions
     {
         Assert.DirectoryExists(source);
         Assert.False(source.Contains(target), $"Target directory '{target}' must not be in source directory '{source}'");
-        Assert.True(!Directory.Exists(target) || (policy.HasFlag(ExistsPolicy.DirectoryMerge) && !policy.HasFlag(ExistsPolicy.DirectoryFail)),
+        Assert.True(
+            !Directory.Exists(target) ||
+            (policy.HasFlag(ExistsPolicy.DirectoryMerge) && !policy.HasFlag(ExistsPolicy.DirectoryFail)),
             "Policy disallows merging directories");
 
         if (createDirectories)
+        {
             target.CreateDirectory();
+        }
 
         action.Invoke();
         return target;

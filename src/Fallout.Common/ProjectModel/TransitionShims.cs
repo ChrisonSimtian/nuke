@@ -28,15 +28,15 @@ namespace Fallout.Common.ProjectModel;
 /// remarks — shallow by design; run <c>fallout-migrate</c> for a complete rewrite.
 /// </summary>
 public class Solution(SolutionModel model, AbsolutePath path = null)
-    : global::Fallout.Solutions.Solution(model, path)
+    : Solutions.Solution(model, path)
 {
     // C# does not inherit user-defined conversion operators onto a subclass, so the
     // canonical Solution's string / AbsolutePath coercions would silently disappear
     // on the shim. Re-expose them so `string s = Solution;` and `AbsolutePath p = Solution;`
     // keep working. The parameter type (shim Solution) is more specific than the
     // canonical's, so these win over the inherited operators without ambiguity.
-    public static implicit operator string(Solution solution) => (global::Fallout.Solutions.Solution)solution;
-    public static implicit operator AbsolutePath(Solution solution) => (global::Fallout.Solutions.Solution)solution;
+    public static implicit operator string(Solution solution) => (Solutions.Solution)solution;
+    public static implicit operator AbsolutePath(Solution solution) => (Solutions.Solution)solution;
 }
 
 /// <summary>
@@ -45,7 +45,7 @@ public class Solution(SolutionModel model, AbsolutePath path = null)
 /// the shim <see cref="Solution"/> above resolves correctly.
 /// </summary>
 public class SolutionAttribute(string relativePath)
-    : global::Fallout.Solutions.SolutionAttribute(relativePath)
+    : Solutions.SolutionAttribute(relativePath)
 {
     public SolutionAttribute()
         : this(relativePath: null)

@@ -14,9 +14,11 @@ public class GenerateBuildServerConfigurationsAttribute
     {
         var configurationId = ParameterService.GetParameter<string>(ConfigurationParameterName);
         if (configurationId == null)
+        {
             return;
+        }
 
-        Assert.NotNull(Build.RootDirectory);
+        Build.RootDirectory.NotNull();
 
         var generator = GetGenerators(Build)
             .Where(x => x.Id == configurationId)

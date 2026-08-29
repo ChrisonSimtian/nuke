@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common.Tooling;
+﻿using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
 
 namespace Fallout.Common.CI.TeamCity;
@@ -13,6 +11,7 @@ public static class DotNetTestSettingsExtensions
         var teamcityPackage = NuGetPackageResolver
             .GetLocalInstalledPackage("TeamCity.Dotnet.Integration", NuGetToolPathResolver.NuGetPackagesConfigFile)
             .NotNull("teamcityPackage != null");
+
         var loggerPath = teamcityPackage.Directory / "build" / "_common" / "vstest15";
         Assert.DirectoryExists(loggerPath);
         return toolSettings

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Serilog;
+
 #pragma warning disable SYSLIB0014
 
 namespace Fallout.Common.IO;
@@ -60,7 +61,9 @@ public static class FtpTasks
     {
         var parentPath = GetParentPath(path);
         if (parentPath != path)
+        {
             FtpMakeDirectory(parentPath);
+        }
 
         var request = WebRequest.Create(path);
         request.Method = WebRequestMethods.Ftp.MakeDirectory;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common.CI.AzurePipelines;
+﻿namespace Fallout.Common.CI.AzurePipelines;
 
 public enum AzurePipelinesCodeCoverageToolType
 {

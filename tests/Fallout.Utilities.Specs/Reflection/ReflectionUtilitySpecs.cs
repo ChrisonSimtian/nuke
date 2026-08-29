@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using FluentAssertions;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs.Execution;

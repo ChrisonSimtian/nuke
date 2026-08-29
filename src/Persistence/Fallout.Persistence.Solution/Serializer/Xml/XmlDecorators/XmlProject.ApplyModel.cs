@@ -13,41 +13,42 @@ internal sealed partial class XmlProject
         bool modified = false;
 
         // Attributes
-        string type = this.Root.ProjectTypes.GetConciseType(modelProject);
-        if (!StringComparer.Ordinal.Equals(this.Type, type))
+        string type = Root.ProjectTypes.GetConciseType(modelProject);
+        if (!StringComparer.Ordinal.Equals(Type, type))
         {
-            this.Type = type.NullIfEmpty();
+            Type = type.NullIfEmpty();
             modified = true;
         }
 
         string? displayName =
-            modelProject.DisplayName is null || StringExtensions.EqualsOrdinal(this.DefaultDisplayName, modelProject.ActualDisplayName) ?
-            null :
-            modelProject.DisplayName;
-        if (!StringComparer.Ordinal.Equals(this.DisplayName, displayName))
+            modelProject.DisplayName is null || DefaultDisplayName.EqualsOrdinal(modelProject.ActualDisplayName)
+                ? null
+                : modelProject.DisplayName;
+
+        if (!StringComparer.Ordinal.Equals(DisplayName, displayName))
         {
-            this.DisplayName = displayName;
+            DisplayName = displayName;
             modified = true;
         }
 
         Guid id = modelProject.IsDefaultId ? Guid.Empty : modelProject.Id;
-        if (this.Id != id)
+        if (Id != id)
         {
-            this.Id = id;
+            Id = id;
             modified = true;
         }
 
         // BuildDependencies
-        modified |= this.ApplyModelItemsToXml(
-            itemRefs: modelProject.Dependencies?.ToList(dependencyProject => this.Root.ConvertToUserPath(dependencyProject.FilePath)),
-            decoratorItems: ref this.buildDependencies,
+        modified |= ApplyModelItemsToXml(
+            itemRefs: modelProject.Dependencies?.ToList(dependencyProject => Root.ConvertToUserPath(dependencyProject.FilePath)),
+            decoratorItems: ref buildDependencies,
             decoratorElementName: Keyword.BuildDependency);
 
         // Configurations
-        modified |= this.configurationRules.ApplyModelToXml(this, modelProject.ProjectConfigurationRules);
+        modified |= configurationRules.ApplyModelToXml(this, modelProject.ProjectConfigurationRules);
 
         // Properties
-        modified |= this.ApplyModelToXml(modelProject.Properties);
+        modified |= ApplyModelToXml(modelProject.Properties);
 
         return modified;
     }

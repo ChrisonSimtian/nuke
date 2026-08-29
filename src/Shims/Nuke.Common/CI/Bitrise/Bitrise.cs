@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.Bitrise;
 
 public static class Bitrise
 {
-    public static global::Fallout.Common.CI.Bitrise.Bitrise Instance
-        => global::Fallout.Common.CI.Bitrise.Bitrise.Instance;
+    public static Fallout.Common.CI.Bitrise.Bitrise Instance
+        => Fallout.Common.CI.Bitrise.Bitrise.Instance;
 }

@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Text.Json;
-using FluentAssertions;
+using System.Threading.Tasks;
 using Fallout.Common.Tooling;
-using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using FluentAssertions;
 using VerifyXunit;
 using Xunit;
 
@@ -18,9 +16,13 @@ public class OptionsSpecs
 {
     // ReSharper disable UnassignedGetOnlyAutoProperty
     private string ScalarValue { get; }
+
     private List<int> ListValue { get; }
+
     private ReadOnlyDictionary<string, string> DictionaryValue { get; }
+
     private LookupTable<string, string> LookupValue { get; }
+
     private Options NestedValue { get; }
     // ReSharper restore UnassignedGetOnlyAutoProperty
 
@@ -54,14 +56,28 @@ public class OptionsSpecs
     {
         new Options().Modify(x =>
         {
-            x.Set(() => ListValue, new[] { 1, 2, 3 });
+            x.Set(() => ListValue, new[]
+            {
+                1,
+                2,
+                3
+            });
+
             x.Get<List<int>>(() => ListValue).Should().Equal(1, 2, 3);
 
-            x.AddCollection(() => ListValue, [4, 5]);
-            x.Get<List<int>>(() => ListValue).Should().EndWith(new[] { 4, 5 });
+            x.AddCollection(() => ListValue, 4, 5);
+            x.Get<List<int>>(() => ListValue).Should().EndWith(new[]
+            {
+                4,
+                5
+            });
 
-            x.RemoveCollection(() => ListValue, [2, 4]);
-            x.Get<List<int>>(() => ListValue).Should().NotContain(new[] { 2, 4 });
+            x.RemoveCollection(() => ListValue, 2, 4);
+            x.Get<List<int>>(() => ListValue).Should().NotContain(new[]
+            {
+                2,
+                4
+            });
 
             x.ClearCollection(() => ListValue);
             x.Get<List<int>>(() => ListValue).Should().BeEmpty();
@@ -94,7 +110,11 @@ public class OptionsSpecs
         {
             x.SetLookup(() => LookupValue, "key", "value1", "value2");
             x.Get<LookupTable<string, string>>(() => LookupValue).Should()
-                .Contain(x => x.Key == "key" && x.SequenceEqual(new[] { "value1", "value2" }));
+                .Contain(x => x.Key == "key" && x.SequenceEqual(new[]
+                {
+                    "value1",
+                    "value2"
+                }));
 
             x.AddLookup(() => LookupValue, "key", "value3");
             x.AddLookup(() => LookupValue, "key2", "value1");
@@ -120,9 +140,27 @@ public class OptionsSpecs
                 new Options().Modify(y =>
                 {
                     y.Set(() => ScalarValue, "scalar-value");
-                    y.Set(() => ListValue, new[] { 1, 2, 3 });
-                    y.Set(() => DictionaryValue, new Dictionary<string, object> { ["key"] = "value" });
-                    y.Set(() => LookupValue, new LookupTable<string, int> { ["key"] = new[] { 1, 2, 3 } });
+                    y.Set(() => ListValue, new[]
+                    {
+                        1,
+                        2,
+                        3
+                    });
+
+                    y.Set(() => DictionaryValue, new Dictionary<string, object>
+                    {
+                        ["key"] = "value"
+                    });
+
+                    y.Set(() => LookupValue, new LookupTable<string, int>
+                    {
+                        ["key"] = new[]
+                        {
+                            1,
+                            2,
+                            3
+                        }
+                    });
                 }));
 
             IOptions nested = x.Get<Options>(() => NestedValue);
@@ -138,9 +176,28 @@ public class OptionsSpecs
     {
         IOptions options = new Options();
         options.Set(() => ScalarValue, "scalar-value");
-        options.Set(() => ListValue, new[] { 1, 2, 3 });
-        options.Set(() => DictionaryValue, new Dictionary<string, object> { ["key"] = "value" });
-        options.Set(() => LookupValue, new LookupTable<string, int> { ["key"] = new[] { 1, 2, 3 } });
+        options.Set(() => ListValue, new[]
+        {
+            1,
+            2,
+            3
+        });
+
+        options.Set(() => DictionaryValue, new Dictionary<string, object>
+        {
+            ["key"] = "value"
+        });
+
+        options.Set(() => LookupValue, new LookupTable<string, int>
+        {
+            ["key"] = new[]
+            {
+                1,
+                2,
+                3
+            }
+        });
+
         options.Set(() => NestedValue, options);
 
         return Verifier.Verify(JsonSerializer.Serialize(options, options.GetType(), Options.SerializerOptions));
@@ -151,8 +208,12 @@ public class OptionsSpecs
 public class CustomEnumeration : Enumeration
 {
     public static CustomEnumeration Quiet = "quiet";
+
     public static implicit operator CustomEnumeration(string value)
     {
-        return new CustomEnumeration { Value = value };
+        return new CustomEnumeration
+        {
+            Value = value
+        };
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Fallout.Common.CI.Jenkins;
 
@@ -20,6 +18,7 @@ public class Jenkins : Host, IBuildServer
     }
 
     string IBuildServer.Branch => GitBranch ?? BranchName;
+
     string IBuildServer.Commit => GitCommit;
 
     /// <summary>

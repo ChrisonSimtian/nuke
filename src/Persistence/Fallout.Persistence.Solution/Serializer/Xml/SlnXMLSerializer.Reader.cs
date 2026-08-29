@@ -9,7 +9,7 @@ namespace Fallout.Persistence.Solution.Serializer.Xml;
 
 internal sealed partial class SlnXmlSerializer
 {
-    private sealed partial class Reader
+    private sealed class Reader
     {
         private readonly string? fullPath;
         private readonly XmlDocument xmlDocument;
@@ -21,13 +21,17 @@ internal sealed partial class SlnXmlSerializer
             // We ideally want to preserver whitespace, but if this is on
             // we need to manually handle preserving all indenting and new lines
             // when elements are added or removed.
-            this.xmlDocument = new LineInfoXmlDocument() { PreserveWhitespace = true };
-            this.xmlDocument.Load(readerStream);
+            xmlDocument = new LineInfoXmlDocument
+            {
+                PreserveWhitespace = true
+            };
+
+            xmlDocument.Load(readerStream);
         }
 
         internal SolutionModel Parse()
         {
-            SlnxFile slnxFile = new SlnxFile(this.xmlDocument, new SlnxSerializerSettings(), null, this.fullPath);
+            SlnxFile slnxFile = new(xmlDocument, new SlnxSerializerSettings(), null, fullPath);
             return slnxFile.ToModel();
         }
     }

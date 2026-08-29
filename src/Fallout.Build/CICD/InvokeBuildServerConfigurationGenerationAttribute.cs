@@ -15,20 +15,29 @@ public class InvokeBuildServerConfigurationGenerationAttribute
     public void OnBuildCreated(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {
         if (Build.IsServerBuild || Build.IsInterceptorExecution)
+        {
             return;
+        }
 
         var hasConfigurationChanged = GetGenerators(Build)
             .Where(x => x.AutoGenerate)
             .AsParallel()
             .Select(HasConfigurationChanged).ToList();
+
         if (hasConfigurationChanged.All(x => !x))
+        {
             return;
+        }
 
         if (Build.Help)
+        {
             return;
+        }
 
         if (Console.IsInputRedirected)
+        {
             return;
+        }
 
         Host.Information("Press any key to continue ...");
         Console.ReadKey();
@@ -55,7 +64,9 @@ public class InvokeBuildServerConfigurationGenerationAttribute
             .Select(x => Build.RootDirectory.GetRelativePathTo(x)).ToList();
 
         if (changedFiles.Count == 0)
+        {
             return false;
+        }
 
         // TODO: multi-line logging
         Log.Warning("Configuration files for {Configuration} have changed.", generator.DisplayName);

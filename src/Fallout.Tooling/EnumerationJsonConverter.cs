@@ -1,9 +1,7 @@
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Fallout.Common.Utilities;
 
 namespace Fallout.Common.Tooling;
 
@@ -31,7 +29,10 @@ internal class EnumerationJsonConverterFactory : JsonConverterFactory
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType == JsonTokenType.Null)
+            {
                 return null;
+            }
+
             var raw = reader.GetString();
             var converter = TypeDescriptor.GetConverter(typeToConvert);
             return (T)converter.ConvertFromInvariantString(raw);
@@ -40,9 +41,13 @@ internal class EnumerationJsonConverterFactory : JsonConverterFactory
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
             if (value is null)
+            {
                 writer.WriteNullValue();
+            }
             else
+            {
                 writer.WriteStringValue((string)value);
+            }
         }
 
         public override T ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

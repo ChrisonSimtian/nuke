@@ -13,26 +13,26 @@ public class RealWorldSmokeSpecs
     // Stand-in declarations so the test compilation can resolve the legacy
     // Nuke.* namespace structure used in pre-rename consumer code.
     private const string LegacyNukeStub = """
-        namespace Nuke.Common
-        {
-            public class NukeBuild { public static int Execute<T>(System.Linq.Expressions.Expression<System.Func<T, object>> defaultTarget) => 0; }
-            public class Target { }
-            namespace ProjectModel { public class Solution { } }
-            namespace Tools.DotNet { public static class DotNetTasks { } }
-        }
-        namespace Nuke.Components { public interface IPack { } }
-        """;
+                                          namespace Nuke.Common
+                                          {
+                                              public class NukeBuild { public static int Execute<T>(System.Linq.Expressions.Expression<System.Func<T, object>> defaultTarget) => 0; }
+                                              public class Target { }
+                                              namespace ProjectModel { public class Solution { } }
+                                              namespace Tools.DotNet { public static class DotNetTasks { } }
+                                          }
+                                          namespace Nuke.Components { public interface IPack { } }
+                                          """;
 
     private const string TargetFalloutStub = """
-        namespace Fallout.Common
-        {
-            public class FalloutBuild { public static int Execute<T>(System.Linq.Expressions.Expression<System.Func<T, object>> defaultTarget) => 0; }
-            public class Target { }
-            namespace ProjectModel { public class Solution { } }
-            namespace Tools.DotNet { public static class DotNetTasks { } }
-        }
-        namespace Fallout.Components { public interface IPack { } }
-        """;
+                                             namespace Fallout.Common
+                                             {
+                                                 public class FalloutBuild { public static int Execute<T>(System.Linq.Expressions.Expression<System.Func<T, object>> defaultTarget) => 0; }
+                                                 public class Target { }
+                                                 namespace ProjectModel { public class Solution { } }
+                                                 namespace Tools.DotNet { public static class DotNetTasks { } }
+                                             }
+                                             namespace Fallout.Components { public interface IPack { } }
+                                             """;
 
     [Fact]
     public async Task RewritesRealisticPreRenameBuildClass()
@@ -44,39 +44,43 @@ public class RealWorldSmokeSpecs
         //   - fully-qualified Nuke.Common.ProjectModel.Solution as a type
         //   - bare reference to a Components interface from Nuke.Components
         var source = $$"""
-            using {|FALLOUT004:Nuke.Common|};
-            using {|FALLOUT004:Nuke.Common.ProjectModel|};
-            using {|FALLOUT004:Nuke.Components|};
-            using static {|FALLOUT004:Nuke.Common.Tools.DotNet.DotNetTasks|};
+                       using {|FALLOUT004:Nuke.Common|};
+                       using {|FALLOUT004:Nuke.Common.ProjectModel|};
+                       using {|FALLOUT004:Nuke.Components|};
+                       using static {|FALLOUT004:Nuke.Common.Tools.DotNet.DotNetTasks|};
 
-            partial class Build : {|FALLOUT004:NukeBuild|}, {|FALLOUT004:Nuke.Components.IPack|}
-            {
-                public static int Main() => Execute<Build>(x => null);
+                       partial class Build : {|FALLOUT004:NukeBuild|}, {|FALLOUT004:Nuke.Components.IPack|}
+                       {
+                           public static int Main() => Execute<Build>(x => null);
 
-                {|FALLOUT004:Nuke.Common.ProjectModel.Solution|} _solution;
-            }
+                           {|FALLOUT004:Nuke.Common.ProjectModel.Solution|} _solution;
+                       }
 
-            {{LegacyNukeStub}}
-            {{TargetFalloutStub}}
-            """;
+                       {{LegacyNukeStub}}
+                       {{TargetFalloutStub}}
+                       """;
 
         var fixedSource = $$"""
-            using Fallout.Common;
-            using Fallout.Common.ProjectModel;
-            using Fallout.Components;
-            using static Fallout.Common.Tools.DotNet.DotNetTasks;
+                            using Fallout.Common;
+                            using Fallout.Common.ProjectModel;
+                            using Fallout.Components;
+                            using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
-            partial class Build : FalloutBuild, Fallout.Components.IPack
-            {
-                public static int Main() => Execute<Build>(x => null);
+                            partial class Build : FalloutBuild, Fallout.Components.IPack
+                            {
+                                public static int Main() => Execute<Build>(x => null);
 
-                Fallout.Common.ProjectModel.Solution _solution;
-            }
+                                Fallout.Common.ProjectModel.Solution _solution;
+                            }
 
-            {{LegacyNukeStub}}
-            {{TargetFalloutStub}}
-            """;
+                            {{LegacyNukeStub}}
+                            {{TargetFalloutStub}}
+                            """;
 
-        await new CodeFixSpecs { TestCode = source, FixedCode = fixedSource }.RunAsync();
+        await new CodeFixSpecs
+        {
+            TestCode = source,
+            FixedCode = fixedSource
+        }.RunAsync();
     }
 }

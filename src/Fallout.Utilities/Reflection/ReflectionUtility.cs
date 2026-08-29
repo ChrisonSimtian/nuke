@@ -40,7 +40,10 @@ public static partial class ReflectionUtility
     public static bool IsCollectionLike(this Type type)
     {
         return type != typeof(string) &&
-               new[] { type }.Concat(type.GetInterfaces())
+               new[]
+                   {
+                       type
+                   }.Concat(type.GetInterfaces())
                    .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
     }
 
@@ -169,10 +172,12 @@ public static partial class ReflectionUtility
             .SelectMany(x => x.GetMembers(bindingFlags))
             .Where(filter)
             .Where(x => type.GetMember(x.Name).SingleOrDefault() == null).ToLookup(x => x.GetDisplayShortName());
+
         var classMembers = type
             .GetMembers(bindingFlags)
             .Where(filter)
             .Where(x => !x.IsExplicit()).ToDictionary(x => x.Name);
+
         var removeMembers = new List<MemberInfo>();
 
         foreach (var interfaceMembers in interfaceMembersByName)
@@ -184,7 +189,8 @@ public static partial class ReflectionUtility
             if (filterQuasiOverridden && classMember == null && interfaceMembers.Count() > 1)
             {
                 var orderedProperties = interfaceMembers
-                    .TSort(x => interfaceMembers.Where(y => y.DeclaringType.NotNull().IsAssignableFrom(x.DeclaringType))).ToList();
+                    .TSort(x => interfaceMembers.Where(y => y.DeclaringType.NotNull().IsAssignableFrom(x.DeclaringType)))
+                    .ToList();
 
                 var mostBaseType = orderedProperties.First().DeclaringType.NotNull();
                 var derivedTypes = orderedProperties.Skip(1).Select(x => x.DeclaringType);
@@ -202,12 +208,18 @@ public static partial class ReflectionUtility
             // }
 
             Assert.True(allowAmbiguity || interfaceMembers.Count() == 1 || classMember != null,
-                new[] { $"{memberType} '{memberName}' must be implemented explicitly because it is inherited from multiple interfaces:" }
+                new[]
+                    {
+                        $"{memberType} '{memberName}' must be implemented explicitly because it is inherited from multiple interfaces:"
+                    }
                     .Concat(interfaceMembers.Select(x => $" - {x.DeclaringType.NotNull().Name}"))
                     .JoinNewLine());
 
             Assert.True(allowAmbiguity || classMember == null || classMember.IsPublic(),
-                new[] { $"{memberType} '{memberName}' must be marked public to override inherited member from:" }
+                new[]
+                    {
+                        $"{memberType} '{memberName}' must be marked public to override inherited member from:"
+                    }
                     .Concat(interfaceMembers.Select(x => $" - {x.DeclaringType.NotNull().Name}"))
                     .JoinNewLine());
         }

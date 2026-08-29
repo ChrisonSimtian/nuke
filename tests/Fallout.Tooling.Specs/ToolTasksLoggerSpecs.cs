@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
 using Fallout.Common.Tooling;
+using FluentAssertions;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -37,8 +36,22 @@ public class ToolTasksLoggerSpecs
 
         _logEvents.Should().BeEquivalentTo(
         [
-            new { Level = LogEventLevel.Debug, MessageTemplate = new { Text = "debug" } },
-            new { Level = LogEventLevel.Error, MessageTemplate = new { Text = "warning: some text" } },
+            new
+            {
+                Level = LogEventLevel.Debug,
+                MessageTemplate = new
+                {
+                    Text = "debug"
+                }
+            },
+            new
+            {
+                Level = LogEventLevel.Error,
+                MessageTemplate = new
+                {
+                    Text = "warning: some text"
+                }
+            },
         ]);
     }
 
@@ -58,10 +71,38 @@ public class ToolTasksLoggerSpecs
 
         _logEvents.Should().BeEquivalentTo(
         [
-            new { Level = LogEventLevel.Debug, MessageTemplate = new { Text = "debug" } },
-            new { Level = LogEventLevel.Warning, MessageTemplate = new { Text = "warning: some text" } },
-            new { Level = LogEventLevel.Error, MessageTemplate = new { Text = "SomeFile.cs error: more info" } },
-            new { Level = LogEventLevel.Error, MessageTemplate = new { Text = "AnotherFile.cs error: more info" } },
+            new
+            {
+                Level = LogEventLevel.Debug,
+                MessageTemplate = new
+                {
+                    Text = "debug"
+                }
+            },
+            new
+            {
+                Level = LogEventLevel.Warning,
+                MessageTemplate = new
+                {
+                    Text = "warning: some text"
+                }
+            },
+            new
+            {
+                Level = LogEventLevel.Error,
+                MessageTemplate = new
+                {
+                    Text = "SomeFile.cs error: more info"
+                }
+            },
+            new
+            {
+                Level = LogEventLevel.Error,
+                MessageTemplate = new
+                {
+                    Text = "AnotherFile.cs error: more info"
+                }
+            },
         ]);
     }
 
@@ -79,8 +120,22 @@ public class ToolTasksLoggerSpecs
 
         _logEvents.Should().BeEquivalentTo(
         [
-            new { Level = LogEventLevel.Debug, MessageTemplate = new { Text = "debug" } },
-            new { Level = LogEventLevel.Warning, MessageTemplate = new { Text = "warning: some text" } },
+            new
+            {
+                Level = LogEventLevel.Debug,
+                MessageTemplate = new
+                {
+                    Text = "debug"
+                }
+            },
+            new
+            {
+                Level = LogEventLevel.Warning,
+                MessageTemplate = new
+                {
+                    Text = "warning: some text"
+                }
+            },
         ]);
     }
 
@@ -97,7 +152,14 @@ public class ToolTasksLoggerSpecs
 
         _logEvents.Should().BeEquivalentTo(
         [
-            new { Level = LogEventLevel.Debug, MessageTemplate = new { Text = "debug" } },
+            new
+            {
+                Level = LogEventLevel.Debug,
+                MessageTemplate = new
+                {
+                    Text = "debug"
+                }
+            },
         ]);
     }
 }

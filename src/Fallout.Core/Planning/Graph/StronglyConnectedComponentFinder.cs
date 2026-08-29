@@ -22,7 +22,9 @@ internal class StronglyConnectedComponentFinder<T>
         foreach (var v in graph)
         {
             if (v.Index < 0)
+            {
                 StrongConnect(v);
+            }
         }
 
         return stronglyConnectedComponents;
@@ -49,7 +51,9 @@ internal class StronglyConnectedComponentFinder<T>
         }
 
         if (v.LowLink != v.Index)
+        {
             return;
+        }
 
         var scc = new StronglyConnectedComponent<T>();
         Vertex<T> w2;
@@ -57,7 +61,8 @@ internal class StronglyConnectedComponentFinder<T>
         {
             w2 = stack.Pop();
             scc.Add(w2);
-        } while (v != w2);
+        }
+        while (v != w2);
 
         stronglyConnectedComponents.Add(scc);
     }

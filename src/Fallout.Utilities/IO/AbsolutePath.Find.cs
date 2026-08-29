@@ -15,7 +15,6 @@ partial class AbsolutePathExtensions
         return path.NotNull().Descendants(x => x.Parent).FirstOrDefault(predicate);
     }
 
-
     /// <summary>
     /// Finds the first parent (starting with self) that fulfills the condition.
     /// </summary>

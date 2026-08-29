@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
@@ -10,20 +8,35 @@ namespace Fallout.Common.CI.AppVeyor.Configuration;
 public class AppVeyorConfiguration : ConfigurationEntity
 {
     public AppVeyorImage[] Images { get; set; }
+
     public string BuildCmdPath { get; set; }
+
     public AppVeyorService[] Services { get; set; }
+
     public AppVeyorBranches Branches { get; set; }
+
     public string[] Init { get; set; }
+
     public string[] Cache { get; set; }
+
     public bool Submodules { get; set; }
+
     public string[] InvokedTargets { get; set; }
+
     public string[] Artifacts { get; set; }
+
     public bool SkipTags { get; set; }
+
     public bool SkipBranchesWithPullRequest { get; set; }
+
     public string OnlyCommitsMessage { get; set; }
+
     public string OnlyCommitsAuthor { get; set; }
+
     public string SkipCommitsMessage { get; set; }
+
     public string SkipCommitsAuthor { get; set; }
+
     public Dictionary<string, string> Secrets { get; set; }
 
     // ReSharper disable once CognitiveComplexity
@@ -41,6 +54,7 @@ public class AppVeyorConfiguration : ConfigurationEntity
             {
                 Services.ForEach(x => writer.WriteLine($"- {x.GetValue().ToLowerInvariant()}"));
             }
+
             writer.WriteLine();
         }
 
@@ -50,6 +64,7 @@ public class AppVeyorConfiguration : ConfigurationEntity
             {
                 Branches.Write(writer);
             }
+
             writer.WriteLine();
         }
 
@@ -61,18 +76,28 @@ public class AppVeyorConfiguration : ConfigurationEntity
             SkipCommitsAuthor != null)
         {
             if (SkipTags)
+            {
                 writer.WriteLine("skip_tags: true");
+            }
+
             if (SkipBranchesWithPullRequest)
+            {
                 writer.WriteLine("skip_branch_with_pr: true");
+            }
 
             if (OnlyCommitsMessage != null || OnlyCommitsAuthor != null)
             {
                 using (writer.WriteBlock("only_commits:"))
                 {
                     if (OnlyCommitsMessage != null)
+                    {
                         writer.WriteLine($"message: {OnlyCommitsMessage}");
+                    }
+
                     if (OnlyCommitsAuthor != null)
+                    {
                         writer.WriteLine($"author: {OnlyCommitsAuthor}");
+                    }
                 }
             }
 
@@ -81,9 +106,14 @@ public class AppVeyorConfiguration : ConfigurationEntity
                 using (writer.WriteBlock("skip_commits:"))
                 {
                     if (SkipCommitsMessage != null)
+                    {
                         writer.WriteLine($"message: {SkipCommitsMessage}");
+                    }
+
                     if (SkipCommitsAuthor != null)
+                    {
                         writer.WriteLine($"author: {SkipCommitsAuthor}");
+                    }
                 }
             }
 
@@ -96,6 +126,7 @@ public class AppVeyorConfiguration : ConfigurationEntity
             {
                 Init.ForEach(x => writer.WriteLine($"- {x}"));
             }
+
             writer.WriteLine();
         }
 
@@ -105,6 +136,7 @@ public class AppVeyorConfiguration : ConfigurationEntity
             {
                 writer.WriteLine("- git submodule update --init --recursive");
             }
+
             writer.WriteLine();
         }
 

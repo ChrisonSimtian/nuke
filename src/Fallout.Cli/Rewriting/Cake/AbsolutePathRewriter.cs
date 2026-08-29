@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Fallout.Cli.Rewriting.Cake;
 
@@ -14,9 +14,11 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
 {
     public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
     {
-        var reducedFieldDeclaration = (FieldDeclarationSyntax) base.VisitFieldDeclaration(node).NotNull();
+        var reducedFieldDeclaration = (FieldDeclarationSyntax)base.VisitFieldDeclaration(node).NotNull();
         if (reducedFieldDeclaration == node)
+        {
             return node;
+        }
 
         var variableDeclarator = reducedFieldDeclaration.GetSingleDeclarator();
         return SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(nameof(AbsolutePath)), variableDeclarator.Identifier)
@@ -30,23 +32,36 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
         var textTokens = node.Contents.OfType<InterpolatedStringTextSyntax>().Select(x => x.TextToken.Text).ToList();
         if (textTokens.All(x => !x.Contains("/")) ||
             textTokens.Any(x => x.ContainsAnyOrdinalIgnoreCase("<", ">", ":", " -")))
+        {
             return node;
+        }
 
         if (node.Parent is BinaryExpressionSyntax)
+        {
             return node;
+        }
 
         if (node.Parent?.Parent?.Parent is InvocationExpressionSyntax invocationExpression &&
             invocationExpression.GetIdentifierName().EqualsAnyOrdinalIgnoreCase("SelectNodes", "SelectSingleNode", "Append"))
+        {
             return node;
+        }
 
         var str = node.ToString();
         var index = str.IndexOf('*');
         if (index == -1)
-            return CreateAbsolutePathExpression(new[] { SyntaxFactory.ParseExpression(str.Replace("/", "\" / $\"")) });
+        {
+            return CreateAbsolutePathExpression(new[]
+            {
+                SyntaxFactory.ParseExpression(str.Replace("/", "\" / $\""))
+            });
+        }
 
         var lastPathSeparatorIndex = str[..index].LastIndexOf('/');
         if (lastPathSeparatorIndex < 0)
+        {
             return node;
+        }
 
         var absolutePart = str[..lastPathSeparatorIndex] + "\"";
         var wildcardPart = "\"" + str[(lastPathSeparatorIndex + 1)..];
@@ -56,7 +71,10 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
                     SyntaxKind.SimpleMemberAccessExpression,
                     node.Contents.First() is InterpolationSyntax
                         ? SyntaxFactory.ParseExpression(absolutePart)
-                        : SyntaxFactory.ParenthesizedExpression(CreateAbsolutePathExpression(new[] { SyntaxFactory.ParseExpression(absolutePart) })),
+                        : SyntaxFactory.ParenthesizedExpression(CreateAbsolutePathExpression(new[]
+                        {
+                            SyntaxFactory.ParseExpression(absolutePart)
+                        })),
                     SyntaxFactory.IdentifierName(GetGlobbingMethod(node, wildcardPart.Split("/")))))
             .WithArguments(wildcardPart.TrimMatchingDoubleQuotes().ToLiteralExpression());
 
@@ -88,24 +106,34 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
         if (node.Token.Value is not string ||
             !node.Token.ValueText.Contains('/') ||
             node.Token.ValueText.ContainsAnyOrdinalIgnoreCase("<", ">", ":", " -"))
+        {
             return node;
+        }
 
         if (node.Parent is BinaryExpressionSyntax)
+        {
             return node;
+        }
 
         if (node.Parent?.Parent?.Parent is InvocationExpressionSyntax invocationExpression &&
             invocationExpression.GetIdentifierName().EqualsAnyOrdinalIgnoreCase("SelectNodes", "SelectSingleNode", "Append"))
+        {
             return node;
+        }
 
         var parts = node.Token.ValueText.Split('/', StringSplitOptions.RemoveEmptyEntries).Where(x => x != ".").ToList();
         var nonWildcardParts = parts.TakeWhile(x => !x.Contains('*')).ToList();
         var wildcardParts = parts.Skip(nonWildcardParts.Count).ToList();
 
         var literalExpressions =
-            nonWildcardParts.Select(x => SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, SyntaxFactory.Literal(x)));
+            nonWildcardParts.Select(x =>
+                SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, SyntaxFactory.Literal(x)));
+
         var absolutePathExpression = CreateAbsolutePathExpression(literalExpressions);
         if (wildcardParts.Count == 0)
+        {
             return absolutePathExpression;
+        }
 
         return SyntaxFactory.InvocationExpression(
                 SyntaxFactory.MemberAccessExpression(
@@ -118,9 +146,9 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
     private string GetGlobbingMethod(SyntaxNode node, IEnumerable<string> wildcardparts = null)
     {
         return (wildcardparts?.LastOrDefault()?.Contains(".") ?? false) ||
-               node.Parent?.Parent?.Parent is InvocationExpressionSyntax invocationExpression &&
-               (invocationExpression.GetIdentifierName() == "GetFiles" ||
-                invocationExpression.GetIdentifierName() == "CopyFiles")
+               (node.Parent?.Parent?.Parent is InvocationExpressionSyntax invocationExpression &&
+                (invocationExpression.GetIdentifierName() == "GetFiles" ||
+                 invocationExpression.GetIdentifierName() == "CopyFiles"))
             ? "GlobFiles"
             : "GlobDirectories";
     }
@@ -129,15 +157,19 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
     // File(expr)           => expr
     public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
     {
-        node = (InvocationExpressionSyntax) base.VisitInvocationExpression(node).NotNull();
+        node = (InvocationExpressionSyntax)base.VisitInvocationExpression(node).NotNull();
 
         if (node.GetIdentifierName() == "MakeAbsolute" ||
             node.GetIdentifierName() == "Directory" ||
             node.GetIdentifierName() == "File")
+        {
             return node.GetSingleArgument<ExpressionSyntax>();
+        }
 
         if (node.GetIdentifierName() == "Combine")
+        {
             return CreateAbsolutePathExpression(node.Arguments());
+        }
 
         if (node.GetIdentifierName() == "GetFiles")
         {
@@ -145,6 +177,7 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
                 .Aggregate(
                     node.Arguments().FirstOrDefault()?.ToFullString(),
                     (f, s) => f + ".Concat(" + s.ToFullString() + ")");
+
             return SyntaxFactory.ParseExpression(expr);
             // return InvocationExpression(
             //     MemberAccessExpression(
@@ -173,7 +206,7 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
     private ExpressionSyntax CreateAbsolutePathExpression(IEnumerable<ExpressionSyntax> parts)
     {
         return parts.Aggregate(
-            (ExpressionSyntax) SyntaxFactory.IdentifierName("RootDirectory"),
+            (ExpressionSyntax)SyntaxFactory.IdentifierName("RootDirectory"),
             (left, right) => SyntaxFactory.BinaryExpression(SyntaxKind.DivideExpression, left, right));
     }
 
@@ -189,9 +222,11 @@ internal class AbsolutePathRewriter : SafeSyntaxRewriter
 
     public override SyntaxNode VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
     {
-        node = (MemberAccessExpressionSyntax) base.VisitMemberAccessExpression(node).NotNull();
+        node = (MemberAccessExpressionSyntax)base.VisitMemberAccessExpression(node).NotNull();
         if (node.GetIdentifierName() != "FullPath")
+        {
             return node;
+        }
 
         return node.Expression;
     }

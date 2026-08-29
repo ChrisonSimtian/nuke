@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-
 namespace Fallout.Common.Tooling;
 
 public static class ToolResolver
@@ -27,7 +24,9 @@ public static class ToolResolver
     {
         var toolPath = ToolPathResolver.TryGetEnvironmentExecutable($"{name.ToUpperInvariant()}_EXE");
         if (toolPath == null)
+        {
             return null;
+        }
 
         return GetTool(toolPath);
     }

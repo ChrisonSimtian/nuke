@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 
 namespace Fallout.Common.CI.TravisCI;
 

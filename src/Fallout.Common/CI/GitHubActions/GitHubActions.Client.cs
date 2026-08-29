@@ -13,7 +13,10 @@ public partial class GitHubActions
     {
         await httpClient.Value
             .CreateRequest(HttpMethod.Post, $"repos/{Repository}/issues/{issue}/comments")
-            .WithJsonContent(new { body = text })
+            .WithJsonContent(new
+            {
+                body = text
+            })
             .GetResponseAsync();
     }
 

@@ -16,13 +16,13 @@ public sealed class SolutionProjectModel : SolutionItemModel
     private List<SolutionProjectModel>? dependencies;
     private List<ConfigurationRule>? projectConfigurationRules;
 
-    [SetsRequiredMembers]
-    internal SolutionProjectModel(SolutionModel solutionModel, string filePath, Guid typeId, string type, SolutionFolderModel? parent)
+    internal SolutionProjectModel(SolutionModel solutionModel, string filePath, Guid typeId, string type,
+        SolutionFolderModel? parent)
         : base(solutionModel, parent)
     {
         this.typeId = typeId;
         this.type = type;
-        this.FilePath = filePath;
+        FilePath = filePath;
     }
 
     /// <summary>
@@ -34,23 +34,23 @@ public sealed class SolutionProjectModel : SolutionItemModel
     internal SolutionProjectModel(SolutionModel solutionModel, SolutionProjectModel projectModel)
         : base(solutionModel, projectModel)
     {
-        this.typeId = projectModel.TypeId;
-        this.type = projectModel.Type;
-        this.FilePath = projectModel.FilePath;
-        this.DisplayName = projectModel.DisplayName;
+        typeId = projectModel.TypeId;
+        type = projectModel.Type;
+        FilePath = projectModel.FilePath;
+        DisplayName = projectModel.DisplayName;
         if (projectModel.dependencies is not null)
         {
-            this.dependencies = [.. projectModel.dependencies];
+            dependencies = [.. projectModel.dependencies];
         }
 
         if (projectModel.projectConfigurationRules is not null)
         {
-            this.projectConfigurationRules = [.. projectModel.projectConfigurationRules];
+            projectConfigurationRules = [.. projectModel.projectConfigurationRules];
         }
     }
 
     /// <inheritdoc/>
-    public override Guid TypeId => this.typeId;
+    public override Guid TypeId => typeId;
 
     /// <summary>
     /// Gets or sets the project type.
@@ -60,7 +60,7 @@ public sealed class SolutionProjectModel : SolutionItemModel
     /// </summary>
     public string Type
     {
-        get => this.type;
+        get => type;
 
         set
         {
@@ -74,13 +74,13 @@ public sealed class SolutionProjectModel : SolutionItemModel
 
                 // Type looks like a project type id and try to lookup the type name.
                 this.typeId = typeId;
-                this.type = this.Solution.ProjectTypeTable.GetConciseType(this.typeId, string.Empty, this.Extension);
+                type = Solution.ProjectTypeTable.GetConciseType(this.typeId, string.Empty, Extension);
             }
             else
             {
                 // Type looks like a name, lookup the project type id and simplify name if possible.
-                this.typeId = this.Solution.ProjectTypeTable.GetProjectTypeId(value, this.Extension.AsSpan()) ?? Guid.Empty;
-                this.type = this.Solution.ProjectTypeTable.GetConciseType(this.typeId, value, this.Extension);
+                this.typeId = Solution.ProjectTypeTable.GetProjectTypeId(value, Extension.AsSpan()) ?? Guid.Empty;
+                type = Solution.ProjectTypeTable.GetConciseType(this.typeId, value, Extension);
             }
         }
     }
@@ -90,32 +90,33 @@ public sealed class SolutionProjectModel : SolutionItemModel
     /// </summary>
     public string FilePath
     {
-        get => this.filePath;
+        get => filePath;
 
         [MemberNotNull(nameof(filePath), nameof(Extension))]
         set
         {
-            if (!StringComparer.OrdinalIgnoreCase.Equals(this.filePath, value) || this.Extension is null)
+            if (!StringComparer.OrdinalIgnoreCase.Equals(filePath, value) || Extension is null)
             {
-                if (this.Solution.FindProject(value) is not null)
+                if (Solution.FindProject(value) is not null)
                 {
-                    throw new SolutionArgumentException(string.Format(Errors.DuplicateItemRef_Args2, value, "Project"), nameof(value), SolutionErrorType.DuplicateItemRef);
+                    throw new SolutionArgumentException(string.Format(Errors.DuplicateItemRef_Args2, value, "Project"),
+                        nameof(value), SolutionErrorType.DuplicateItemRef);
                 }
 
-                string oldPath = this.filePath!;
-                string oldExtension = this.Extension!;
+                string oldPath = filePath!;
+                string oldExtension = Extension!;
                 try
                 {
-                    this.filePath = value;
-                    this.Extension = this.Solution.StringTable.GetString(PathExtensions.GetExtension(value));
-                    this.OnItemRefChanged();
+                    filePath = value;
+                    Extension = Solution.StringTable.GetString(PathExtensions.GetExtension(value));
+                    OnItemRefChanged();
 
-                    this.Solution.ValidateProjectName(this);
+                    Solution.ValidateProjectName(this);
                 }
                 catch (Exception)
                 {
-                    this.filePath = oldPath;
-                    this.Extension = oldExtension;
+                    filePath = oldPath;
+                    Extension = oldExtension;
                     throw;
                 }
             }
@@ -145,13 +146,13 @@ public sealed class SolutionProjectModel : SolutionItemModel
         {
             // If the project has a file name, use that as the display name.
             // This historically takes precedence over the DisplayName property.
-            StringSpan fileName = PathExtensions.GetStandardDisplayName(this.FilePath.AsSpan());
+            StringSpan fileName = PathExtensions.GetStandardDisplayName(FilePath.AsSpan());
             if (fileName.IsEmpty)
             {
-                return this.DisplayName ?? string.Empty;
+                return DisplayName ?? string.Empty;
             }
 
-            return this.Solution.StringTable.GetString(fileName);
+            return Solution.StringTable.GetString(fileName);
         }
     }
 
@@ -162,7 +163,7 @@ public sealed class SolutionProjectModel : SolutionItemModel
     /// Project to project dependencies are normally stored in the project file itself,
     /// this is used for solution level dependencies.
     /// </remarks>
-    public IReadOnlyList<SolutionProjectModel>? Dependencies => this.dependencies;
+    public IReadOnlyList<SolutionProjectModel>? Dependencies => dependencies;
 
     /// <summary>
     /// Gets or sets a list of configuration rules for this project.
@@ -170,12 +171,12 @@ public sealed class SolutionProjectModel : SolutionItemModel
     /// </summary>
     public IReadOnlyList<ConfigurationRule>? ProjectConfigurationRules
     {
-        get => this.projectConfigurationRules;
-        set => this.projectConfigurationRules = value is null ? null : [.. value];
+        get => projectConfigurationRules;
+        set => projectConfigurationRules = value is null ? null : [.. value];
     }
 
     /// <inheritdoc/>
-    internal override string ItemRef => this.FilePath;
+    internal override string ItemRef => FilePath;
 
     /// <summary>
     /// Gets the project configuration for the given solution configuration.
@@ -186,12 +187,17 @@ public sealed class SolutionProjectModel : SolutionItemModel
     /// The project configuration for the given solution configuration.
     /// BuildType and Platform will be null if the configuration information is missing.
     /// </returns>
-    public (string? BuildType, string? Platform, bool Build, bool Deploy) GetProjectConfiguration(string solutionBuildType, string solutionPlatform)
+    public (string? BuildType, string? Platform, bool Build, bool Deploy) GetProjectConfiguration(string solutionBuildType,
+        string solutionPlatform)
     {
-        ConfigurationRuleFollower projectTypeRules = this.Solution.ProjectTypeTable.GetProjectConfigurationRules(this);
+        ConfigurationRuleFollower projectTypeRules = Solution.ProjectTypeTable.GetProjectConfigurationRules(this);
 
-        string? buildType = MissingToNull(projectTypeRules.GetProjectBuildType(solutionBuildType, solutionPlatform) ?? solutionBuildType);
-        string? platform = MissingToNull(projectTypeRules.GetProjectPlatform(solutionBuildType, solutionPlatform) ?? solutionPlatform);
+        string? buildType =
+            MissingToNull(projectTypeRules.GetProjectBuildType(solutionBuildType, solutionPlatform) ?? solutionBuildType);
+
+        string? platform =
+            MissingToNull(projectTypeRules.GetProjectPlatform(solutionBuildType, solutionPlatform) ?? solutionPlatform);
+
         bool build = projectTypeRules.GetIsBuildable(solutionBuildType, solutionPlatform) ?? true;
         bool deploy = projectTypeRules.GetIsDeployable(solutionBuildType, solutionPlatform) ?? false;
 
@@ -207,18 +213,19 @@ public sealed class SolutionProjectModel : SolutionItemModel
     public void AddDependency(SolutionProjectModel dependency)
     {
         Argument.ThrowIfNull(dependency, nameof(dependency));
-        this.Solution.ValidateInModel(dependency);
+        Solution.ValidateInModel(dependency);
 
         if (ReferenceEquals(dependency, this))
         {
-            throw new SolutionArgumentException(string.Format(Errors.InvalidLoop_Args1, dependency.ItemRef), nameof(dependency), SolutionErrorType.InvalidLoop);
+            throw new SolutionArgumentException(string.Format(Errors.InvalidLoop_Args1, dependency.ItemRef), nameof(dependency),
+                SolutionErrorType.InvalidLoop);
         }
 
-        this.dependencies ??= [];
+        dependencies ??= [];
 
-        if (!this.dependencies.Contains(dependency))
+        if (!dependencies.Contains(dependency))
         {
-            this.dependencies.Add(dependency);
+            dependencies.Add(dependency);
         }
     }
 
@@ -230,11 +237,11 @@ public sealed class SolutionProjectModel : SolutionItemModel
     public bool RemoveDependency(SolutionProjectModel dependency)
     {
         Argument.ThrowIfNull(dependency, nameof(dependency));
-        this.Solution.ValidateInModel(dependency);
+        Solution.ValidateInModel(dependency);
 
         return
-            this.dependencies is not null &&
-            this.dependencies.Remove(dependency);
+            dependencies is not null &&
+            dependencies.Remove(dependency);
     }
 
     /// <summary>
@@ -244,12 +251,12 @@ public sealed class SolutionProjectModel : SolutionItemModel
     public void AddProjectConfigurationRule(ConfigurationRule rule)
     {
         Argument.ThrowIfNull(rule, nameof(rule));
-        this.projectConfigurationRules ??= [];
-        this.projectConfigurationRules.Add(rule);
+        projectConfigurationRules ??= [];
+        projectConfigurationRules.Add(rule);
     }
 
     private protected override Guid GetDefaultId()
     {
-        return DefaultIdGenerator.CreateIdFrom(this.FilePath);
+        return DefaultIdGenerator.CreateIdFrom(FilePath);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Fallout.Common.Tooling;
 
@@ -25,7 +24,7 @@ public class Process2 : IProcess
 
     public string WorkingDirectory => process.StartInfo.WorkingDirectory;
 
-    public IReadOnlyCollection<Output> Output { get; private set; }
+    public IReadOnlyCollection<Output> Output { get; }
 
     public int ExitCode => process.ExitCode;
 
@@ -49,7 +48,10 @@ public class Process2 : IProcess
         // use process.StartTime
         var hasExited = process.WaitForExit(timeout ?? -1);
         if (!hasExited)
+        {
             process.Kill();
+        }
+
         return hasExited;
     }
 }

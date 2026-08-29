@@ -26,14 +26,22 @@ internal static class SectionName
     internal static string InternKnownSectionName(string sectionName)
     {
         return
-            StringComparer.OrdinalIgnoreCase.Equals(sectionName, SolutionProperties) ? SolutionProperties :
-            StringComparer.OrdinalIgnoreCase.Equals(sectionName, ExtensibilityGlobals) ? ExtensibilityGlobals :
-            StringComparer.OrdinalIgnoreCase.Equals(sectionName, NestedProjects) ? NestedProjects :
-            StringComparer.OrdinalIgnoreCase.Equals(sectionName, SolutionConfigurationPlatforms) ? SolutionConfigurationPlatforms :
-            StringComparer.OrdinalIgnoreCase.Equals(sectionName, ProjectConfigurationPlatforms) ? ProjectConfigurationPlatforms :
-            StringComparer.OrdinalIgnoreCase.Equals(sectionName, SharedMSBuildProjectFiles) ? SharedMSBuildProjectFiles :
-            StringComparer.OrdinalIgnoreCase.Equals(sectionName, ProjectDependencies) ? ProjectDependencies :
-            StringComparer.OrdinalIgnoreCase.Equals(sectionName, SolutionItems) ? SolutionItems :
-            sectionName;
+            StringComparer.OrdinalIgnoreCase.Equals(sectionName, SolutionProperties)
+                ? SolutionProperties
+                : StringComparer.OrdinalIgnoreCase.Equals(sectionName, ExtensibilityGlobals)
+                    ? ExtensibilityGlobals
+                    : StringComparer.OrdinalIgnoreCase.Equals(sectionName, NestedProjects)
+                        ? NestedProjects
+                        : StringComparer.OrdinalIgnoreCase.Equals(sectionName, SolutionConfigurationPlatforms)
+                            ? SolutionConfigurationPlatforms
+                            : StringComparer.OrdinalIgnoreCase.Equals(sectionName, ProjectConfigurationPlatforms)
+                                ? ProjectConfigurationPlatforms
+                                : StringComparer.OrdinalIgnoreCase.Equals(sectionName, SharedMSBuildProjectFiles)
+                                    ? SharedMSBuildProjectFiles
+                                    : StringComparer.OrdinalIgnoreCase.Equals(sectionName, ProjectDependencies)
+                                        ? ProjectDependencies
+                                        : StringComparer.OrdinalIgnoreCase.Equals(sectionName, SolutionItems)
+                                            ? SolutionItems
+                                            : sectionName;
     }
 }

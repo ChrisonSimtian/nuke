@@ -14,7 +14,9 @@ internal class HandleReSharperSurrogateArgumentsAttribute : BuildExtensionAttrib
     public void OnBuildCreated(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {
         if (!ReSharperSurrogateFile.Exists())
+        {
             return;
+        }
 
         var argumentLines = ReSharperSurrogateFile.ReadAllLines();
         var lastWriteTime = File.GetLastWriteTime(ReSharperSurrogateFile);

@@ -14,9 +14,9 @@ internal static class PathExtensions
     [return: NotNullIfNotNull(nameof(persistencePath))]
     internal static string? ConvertBackslashToModel(string? persistencePath)
     {
-        return persistencePath.IsNullOrEmpty() || IsWindows || !persistencePath.Contains('\\') ?
-            persistencePath :
-            persistencePath.Replace('\\', Path.DirectorySeparatorChar);
+        return persistencePath.IsNullOrEmpty() || IsWindows || !persistencePath.Contains('\\')
+            ? persistencePath
+            : persistencePath.Replace('\\', Path.DirectorySeparatorChar);
     }
 
     [return: NotNullIfNotNull(nameof(persistencePath))]
@@ -24,25 +24,25 @@ internal static class PathExtensions
     {
         char altSlash = IsWindows ? Path.AltDirectorySeparatorChar : '\\';
 
-        return persistencePath.IsNullOrEmpty() || !persistencePath.Contains(altSlash) || IsUri(persistencePath) ?
-            persistencePath :
-            persistencePath.Replace(altSlash, Path.DirectorySeparatorChar);
+        return persistencePath.IsNullOrEmpty() || !persistencePath.Contains(altSlash) || IsUri(persistencePath)
+            ? persistencePath
+            : persistencePath.Replace(altSlash, Path.DirectorySeparatorChar);
     }
 
     [return: NotNullIfNotNull(nameof(modelPath))]
     internal static string? ConvertModelToBackslashPath(string? modelPath)
     {
-        return modelPath is null || IsWindows || !modelPath.Contains(Path.DirectorySeparatorChar) || IsUri(modelPath) ?
-            modelPath :
-            modelPath.Replace(Path.DirectorySeparatorChar, '\\');
+        return modelPath is null || IsWindows || !modelPath.Contains(Path.DirectorySeparatorChar) || IsUri(modelPath)
+            ? modelPath
+            : modelPath.Replace(Path.DirectorySeparatorChar, '\\');
     }
 
     [return: NotNullIfNotNull(nameof(modelPath))]
     internal static string? ConvertModelToForwardSlashPath(string? modelPath)
     {
-        return modelPath is null || !IsWindows || !modelPath.Contains(Path.DirectorySeparatorChar) || IsUri(modelPath) ?
-            modelPath :
-            modelPath.Replace(Path.DirectorySeparatorChar, '/');
+        return modelPath is null || !IsWindows || !modelPath.Contains(Path.DirectorySeparatorChar) || IsUri(modelPath)
+            ? modelPath
+            : modelPath.Replace(Path.DirectorySeparatorChar, '/');
     }
 
     internal static StringSpan GetStandardDisplayName(string filePath)
@@ -76,5 +76,6 @@ internal static class PathExtensions
 
 #endif
 
-    private static bool IsUri(StringSpan filePath) => !filePath.IsEmpty && filePath.Contains("://".AsSpan(), StringComparison.Ordinal);
+    private static bool IsUri(StringSpan filePath) =>
+        !filePath.IsEmpty && filePath.Contains("://".AsSpan(), StringComparison.Ordinal);
 }

@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using FluentAssertions;
 using Fallout.Common.Execution;
+using FluentAssertions;
 using Xunit;
 
 namespace Fallout.Common.Specs.Execution;
@@ -49,11 +49,11 @@ public class ExecutableTargetFactorySpecs
 
     private class TestBuild : FalloutBuild
     {
-        public string Description = "description";
-        public Action Action = () => { };
-        public Expression<Func<bool>> Requirement = () => true;
-        public Func<bool> StaticCondition = () => true;
-        public Func<bool> DynamicCondition = () => false;
+        public readonly string Description = "description";
+        public readonly Action Action = () => { };
+        public readonly Expression<Func<bool>> Requirement = () => true;
+        public readonly Func<bool> StaticCondition = () => true;
+        public readonly Func<bool> DynamicCondition = () => false;
 
         public Target A => _ => _
             .Description(Description)
@@ -111,6 +111,7 @@ public class ExecutableTargetFactorySpecs
             .Executes(() => { });
 
         Target AbstractSharedTarget { get; }
+
         Target ExplicitSharedTarget => _ => _.Description("WRONG");
     }
 
@@ -131,6 +132,7 @@ public class ExecutableTargetFactorySpecs
             .DependsOn(SpecificTarget);
 
         public abstract Target AbstractSharedTarget { get; }
+
         Target ITestSharedBuild.ExplicitSharedTarget => _ => _.Description("RIGHT");
     }
 
@@ -138,8 +140,11 @@ public class ExecutableTargetFactorySpecs
         : IFalloutBuild
     {
         Target ExplicitTargetWithDefault => _ => _.Description("WRONG");
+
         Target ExplicitTargetWithoutDefault { get; }
+
         Target TargetWithDefault => _ => _.Description("RIGHT");
+
         Target ExplicitTarget => _ => _;
     }
 
@@ -156,7 +161,9 @@ public class ExecutableTargetFactorySpecs
         public override Target AbstractSharedTarget => _ => _.Description("RIGHT");
 
         Target IAnotherSharedBuild.ExplicitTargetWithDefault => _ => _.Description("RIGHT");
+
         Target IAnotherSharedBuild.ExplicitTargetWithoutDefault => _ => _.Description("RIGHT");
+
         Target IAnotherSharedBuild.ExplicitTarget => _ => _;
     }
 }

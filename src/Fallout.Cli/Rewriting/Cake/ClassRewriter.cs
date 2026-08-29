@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.MSBuild;
 using Fallout.Common.Tools.NuGet;
 using Fallout.Common.Tools.SignTool;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Fallout.Cli.Rewriting.Cake;
@@ -57,24 +57,42 @@ internal class ClassRewriter : SafeSyntaxRewriter
 
     public override SyntaxNode VisitCompilationUnit(CompilationUnitSyntax node)
     {
-        node = (CompilationUnitSyntax) base.VisitCompilationUnit(node).NotNull();
+        node = (CompilationUnitSyntax)base.VisitCompilationUnit(node).NotNull();
 
         var defaultTargetField = node.Members.OfType<FieldDeclarationSyntax>()
             .SingleOrDefault(x => x.GetSingleDeclarator().Identifier.Text == defaultTargetFieldName);
+
         if (defaultTargetField != null)
         {
             var literalExpression = defaultTargetField.GetSingleDeclarator().Initializer?.Value as LiteralExpressionSyntax;
             var defaultTarget = literalExpression.GetConstantValue<string>();
-            var mainMethodDeclaration = ParseMemberDeclaration($"public static int Main() => Execute<Build>(x => x.{defaultTarget});");
-            node = node.WithMembers(List(new[] { mainMethodDeclaration }.Concat(node.Members.Except(new[] { defaultTargetField }))));
+            var mainMethodDeclaration =
+                ParseMemberDeclaration($"public static int Main() => Execute<Build>(x => x.{defaultTarget});");
+
+            node = node.WithMembers(List(new[]
+            {
+                mainMethodDeclaration
+            }.Concat(node.Members.Except(new[]
+            {
+                defaultTargetField
+            }))));
         }
         else if (defaultTargetName != null)
         {
-            var mainMethodDeclaration = ParseMemberDeclaration($"public static int Main() => Execute<Build>(x => x.{defaultTargetName});");
-            node = node.WithMembers(List(new[] { mainMethodDeclaration }.Concat(node.Members)));
+            var mainMethodDeclaration =
+                ParseMemberDeclaration($"public static int Main() => Execute<Build>(x => x.{defaultTargetName});");
+
+            node = node.WithMembers(List(new[]
+            {
+                mainMethodDeclaration
+            }.Concat(node.Members)));
         }
 
-        var baseTypes = SeparatedList(new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName(nameof(FalloutBuild))) });
+        var baseTypes = SeparatedList(new BaseTypeSyntax[]
+        {
+            SimpleBaseType(ParseTypeName(nameof(FalloutBuild)))
+        });
+
         var classDeclaration = ClassDeclaration("Build")
             .WithBaseList(BaseList(baseTypes))
             .WithMembers(List(node.Members.Where(x => x != defaultTargetField)));
@@ -93,33 +111,46 @@ internal class ClassRewriter : SafeSyntaxRewriter
 
         return CompilationUnit()
             .WithUsings(List(namespaceUsings.Concat(staticUsings)))
-            .WithMembers(List(new MemberDeclarationSyntax[] { classDeclaration }));
+            .WithMembers(List(new MemberDeclarationSyntax[]
+            {
+                classDeclaration
+            }));
     }
 
     public override SyntaxNode VisitGlobalStatement(GlobalStatementSyntax node)
     {
-        node = (GlobalStatementSyntax) base.VisitGlobalStatement(node).NotNull();
+        node = (GlobalStatementSyntax)base.VisitGlobalStatement(node).NotNull();
 
         if (node.Statement is not ExpressionStatementSyntax expressionStatement)
+        {
             return node
                 .WithLeadingTrivia(BeginMultilineComment)
                 .WithTrailingTrivia(EndMultilineComment);
+        }
 
         var invocationExpression = expressionStatement.Expression as InvocationExpressionSyntax;
         var identifierName = invocationExpression?.GetIdentifierName();
         if (identifierName == "Setup" ||
             identifierName == "Teardown")
+        {
             return node
                 .WithLeadingTrivia(BeginMultilineComment)
                 .WithTrailingTrivia(EndMultilineComment);
+        }
 
         if (identifierName == "RunTarget")
         {
             var expression = invocationExpression.GetSingleArgument<ExpressionSyntax>();
             if (expression is IdentifierNameSyntax targetIdentifier)
+            {
                 defaultTargetFieldName = targetIdentifier.Identifier.Text;
+            }
+
             if (expression is LiteralExpressionSyntax literalExpression)
+            {
                 defaultTargetName = literalExpression.GetConstantValue<string>();
+            }
+
             return null;
         }
 

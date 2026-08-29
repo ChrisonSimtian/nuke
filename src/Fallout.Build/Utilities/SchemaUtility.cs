@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
 using Fallout.Common.ValueInjection;
@@ -55,8 +53,12 @@ public static class SchemaUtility
             .Select(x => x.GetDisplayShortName())
             .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
             .ToList();
+
         ctx.Definitions["ExecutableTarget"] = targetNames.Count == 0
-            ? new JsonObject { ["type"] = "string" }
+            ? new JsonObject
+            {
+                ["type"] = "string"
+            }
             : StringEnumSchema(targetNames);
 
         // Reflected, not hardcoded: the list used to be spelled out here and drifted from the enum
@@ -94,7 +96,9 @@ public static class SchemaUtility
         }
 
         if (userProperties != null)
+        {
             userSchema["properties"] = userProperties;
+        }
 
         // BuildProjectFile is read by the Fallout global tool's in-tool runner from .fallout/parameters.json
         // (see Fallout.Cli.BuildProjectResolver). It's not a [Parameter] on the build itself, but we
@@ -103,14 +107,27 @@ public static class SchemaUtility
         baseProperties["BuildProjectFile"] = new JsonObject
         {
             ["type"] = new JsonArray("null", "string"),
-            ["description"] = "Path to the build project (.csproj) relative to the repository root. Defaults to 'build/_build.csproj' when unset. Read by the Fallout global tool's in-tool runner."
+            ["description"] =
+                "Path to the build project (.csproj) relative to the repository root. Defaults to 'build/_build.csproj' when unset. Read by the Fallout global tool's in-tool runner."
         };
 
         // Force the framework parameters Skip/Target to reference the ExecutableTarget definition.
         if (baseProperties[InvokedTargetsParameterName] is JsonObject targetProp)
-            targetProp["items"] = new JsonObject { ["$ref"] = DefinitionsPrefix + "ExecutableTarget" };
+        {
+            targetProp["items"] = new JsonObject
+            {
+                ["$ref"] = DefinitionsPrefix + "ExecutableTarget"
+            };
+        }
+
         if (baseProperties[SkippedTargetsParameterName] is JsonObject skipProp)
-            skipProp["items"] = new JsonObject { ["$ref"] = DefinitionsPrefix + "ExecutableTarget" };
+        {
+            skipProp["items"] = new JsonObject
+            {
+                ["$ref"] = DefinitionsPrefix + "ExecutableTarget"
+            };
+        }
+
         ReplaceWithRef(baseProperties, nameof(FalloutBuild.Host), "Host");
         ReplaceWithRef(baseProperties, nameof(FalloutBuild.Verbosity), "Verbosity");
 
@@ -121,11 +138,22 @@ public static class SchemaUtility
         // were added — JsonObject preserves insertion order — so we move complex types to the front.
         var orderedDefinitions = new JsonObject();
         foreach (var kvp in ctx.Definitions.Where(x => !IsWellKnownDefinition(x.Key)))
+        {
             orderedDefinitions[kvp.Key] = kvp.Value;
-        foreach (var key in new[] { "Host", "ExecutableTarget", "Verbosity", nameof(FalloutBuild) })
+        }
+
+        foreach (var key in new[]
+                 {
+                     "Host",
+                     "ExecutableTarget",
+                     "Verbosity",
+                     nameof(FalloutBuild)
+                 })
         {
             if (ctx.Definitions.TryGetValue(key, out var value))
+            {
                 orderedDefinitions[key] = value;
+            }
         }
 
         return new JsonObject
@@ -134,7 +162,10 @@ public static class SchemaUtility
             ["definitions"] = orderedDefinitions,
             ["allOf"] = new JsonArray(
                 userSchema,
-                new JsonObject { ["$ref"] = DefinitionsPrefix + nameof(FalloutBuild) })
+                new JsonObject
+                {
+                    ["$ref"] = DefinitionsPrefix + nameof(FalloutBuild)
+                })
         };
     }
 
@@ -145,20 +176,30 @@ public static class SchemaUtility
         {
             schema.Remove(key);
             if (key == "items")
+            {
                 ordered["description"] = description;
+            }
+
             ordered[key] = value;
         }
+
         return ordered;
     }
 
     private static void ReplaceWithRef(JsonObject properties, string propertyName, string definitionName)
     {
         if (properties[propertyName] is not JsonObject existing)
+        {
             return;
+        }
+
         var description = existing["description"]?.GetValue<string>();
         var replacement = new JsonObject();
         if (description != null)
+        {
             replacement["description"] = description;
+        }
+
         replacement["$ref"] = DefinitionsPrefix + definitionName;
         properties[propertyName] = replacement;
     }
@@ -185,7 +226,10 @@ public static class SchemaUtility
         var attributeType = member.GetCustomAttribute<ParameterAttribute>().NotNull().GetType();
         var schema = attributeType == typeof(ParameterAttribute)
             ? SchemaForType(memberType, ctx)
-            : new JsonObject { ["type"] = "string" };
+            : new JsonObject
+            {
+                ["type"] = "string"
+            };
 
         var description = ParameterService.GetParameterDescription(member);
         if (description != null)
@@ -203,7 +247,9 @@ public static class SchemaUtility
         }
 
         if (member.HasCustomAttribute<SecretAttribute>())
+        {
             schema["default"] = "Secrets must be entered via 'fallout :secrets [profile]'";
+        }
 
         // Override-with-enumeration: parameters with a value set become string enums (or array-of-string-enums).
         var valueSet = ParameterService.GetParameterValueSet(member, build)?.Select(x => x.Text).ToList();
@@ -211,11 +257,19 @@ public static class SchemaUtility
         {
             var collection = memberType.IsCollectionLike();
             var enumSchema = collection
-                ? new JsonObject { ["type"] = "array", ["items"] = StringEnumSchema(valueSet) }
+                ? new JsonObject
+                {
+                    ["type"] = "array",
+                    ["items"] = StringEnumSchema(valueSet)
+                }
                 : StringEnumSchema(valueSet);
+
             // Preserve the description we just set.
             if (schema["description"] is JsonNode desc)
+            {
                 enumSchema["description"] = desc.GetValue<string>();
+            }
+
             schema = enumSchema;
         }
 
@@ -232,27 +286,70 @@ public static class SchemaUtility
     {
         var nullableUnderlying = Nullable.GetUnderlyingType(type);
         if (nullableUnderlying != null)
+        {
             return SchemaForType(nullableUnderlying, ctx);
+        }
 
-        if (type == typeof(bool)) return new JsonObject { ["type"] = "boolean" };
-        if (type == typeof(string)) return new JsonObject { ["type"] = "string" };
+        if (type == typeof(bool))
+        {
+            return new JsonObject
+            {
+                ["type"] = "boolean"
+            };
+        }
+
+        if (type == typeof(string))
+        {
+            return new JsonObject
+            {
+                ["type"] = "string"
+            };
+        }
+
         if (type == typeof(int) || type == typeof(long) || type == typeof(short) || type == typeof(byte))
-            return new JsonObject { ["type"] = "integer", ["format"] = type == typeof(long) ? "int64" : "int32" };
+        {
+            return new JsonObject
+            {
+                ["type"] = "integer",
+                ["format"] = type == typeof(long) ? "int64" : "int32"
+            };
+        }
+
         if (type == typeof(double) || type == typeof(float) || type == typeof(decimal))
-            return new JsonObject { ["type"] = "number" };
+        {
+            return new JsonObject
+            {
+                ["type"] = "number"
+            };
+        }
 
         // AbsolutePath, Solution, Project — anything with a string-roundtripping TypeConverter — renders as a plain string.
         if (HasStringTypeConverter(type))
-            return new JsonObject { ["type"] = "string" };
+        {
+            return new JsonObject
+            {
+                ["type"] = "string"
+            };
+        }
 
         if (typeof(Enumeration).IsAssignableFrom(type))
+        {
             return BuildEnumerationSchema(type);
+        }
 
         if (type.IsEnum)
+        {
             return StringEnumSchema(Enum.GetNames(type));
+        }
 
         if (type.IsArray)
-            return new JsonObject { ["type"] = "array", ["items"] = SchemaForType(type.GetElementType()!, ctx) };
+        {
+            return new JsonObject
+            {
+                ["type"] = "array",
+                ["items"] = SchemaForType(type.GetElementType()!, ctx)
+            };
+        }
 
         if (type.IsGenericType)
         {
@@ -260,7 +357,11 @@ public static class SchemaUtility
             if (def == typeof(IReadOnlyList<>) || def == typeof(IReadOnlyCollection<>) ||
                 def == typeof(List<>) || def == typeof(IEnumerable<>))
             {
-                return new JsonObject { ["type"] = "array", ["items"] = SchemaForType(type.GetGenericArguments()[0], ctx) };
+                return new JsonObject
+                {
+                    ["type"] = "array",
+                    ["items"] = SchemaForType(type.GetGenericArguments()[0], ctx)
+                };
             }
         }
 
@@ -275,6 +376,7 @@ public static class SchemaUtility
             .Where(f => enumerationType.IsAssignableFrom(f.FieldType))
             .Select(f => f.Name)
             .ToList();
+
         return StringEnumSchema(values);
     }
 
@@ -294,7 +396,10 @@ public static class SchemaUtility
         // ref in `oneOf: [{"type": "null"}, {"$ref": ...}]`. Reference types appear directly via $ref.
         // The Nullable handling at the caller adds the null sibling if needed for value types; reference
         // types stay plain $ref.
-        return new JsonObject { ["$ref"] = DefinitionsPrefix + name };
+        return new JsonObject
+        {
+            ["$ref"] = DefinitionsPrefix + name
+        };
     }
 
     private static JsonObject BuildObjectSchema(Type type, SchemaContext ctx)
@@ -333,17 +438,28 @@ public static class SchemaUtility
                 return new JsonObject
                 {
                     ["oneOf"] = new JsonArray(
-                        new JsonObject { ["type"] = "null" },
-                        new JsonObject { ["$ref"] = refNode.GetValue<string>() })
+                        new JsonObject
+                        {
+                            ["type"] = "null"
+                        },
+                        new JsonObject
+                        {
+                            ["$ref"] = refNode.GetValue<string>()
+                        })
                 };
             }
+
             if (schema["type"] is JsonValue typeValue)
             {
                 var typeName = typeValue.GetValue<string>();
                 if (typeName == "array")
+                {
                     schema["type"] = new JsonArray("array", "null");
+                }
                 else if (typeName != "object")
+                {
                     schema["type"] = new JsonArray("null", typeName);
+                }
             }
         }
 
@@ -357,27 +473,40 @@ public static class SchemaUtility
         foreach (var field in type.GetFields(bindingFlags))
         {
             if (field.IsPrivate || field.IsStatic || field.IsInitOnly || field.IsLiteral)
+            {
                 continue;
+            }
+
             yield return (field.Name, field.FieldType, field);
         }
 
         foreach (var property in type.GetProperties(bindingFlags))
         {
             if (property.GetMethod is null || property.GetMethod.IsPrivate || property.GetMethod.IsStatic)
+            {
                 continue;
+            }
+
             yield return (property.Name, property.PropertyType, property);
         }
     }
 
     private static bool HasStringTypeConverter(Type type)
     {
-        if (type == typeof(string)) return false;
+        if (type == typeof(string))
+        {
+            return false;
+        }
+
         // The AbsolutePath / Solution / Project / Configuration story: any user-declared
         // [TypeConverter] that can deserialize from a string round-trips through a string in JSON.
         // (Most converters skip overriding CanConvertTo(string) because the base ToString fallback
         // is sufficient, so we don't enforce the symmetric check.)
         if (type.GetCustomAttribute<TypeConverterAttribute>(inherit: true) is null)
+        {
             return false;
+        }
+
         try
         {
             return TypeDescriptor.GetConverter(type)?.CanConvertFrom(typeof(string)) ?? false;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -63,7 +61,9 @@ partial class EnvironmentInfo
         get
         {
             if (!IsLinux)
+            {
                 return false;
+            }
 
             try
             {
@@ -91,13 +91,19 @@ partial class EnvironmentInfo
         get
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
                 return PlatformFamily.OSX;
+            }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
                 return PlatformFamily.Linux;
+            }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
                 return PlatformFamily.Windows;
+            }
 
             return PlatformFamily.Unknown;
         }

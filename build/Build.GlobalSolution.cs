@@ -1,23 +1,24 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Fallout.Common;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Tools.GitHub;
-using Fallout.Common.Utilities;
+using Fallout.Solutions;
 using Fallout.Utilities.Text.Yaml;
 using static Fallout.Common.ControlFlow;
 using static Fallout.Common.Tools.Git.GitTasks;
 
 partial class Build
 {
-    [Parameter] readonly bool UseHttps;
+    [Parameter]
+    readonly bool UseHttps;
 
     AbsolutePath GlobalSolution => RootDirectory / "fallout-global.sln";
+
     AbsolutePath ExternalRepositoriesDirectory => RootDirectory / "external";
+
     AbsolutePath ExternalRepositoriesFile => ExternalRepositoriesDirectory / "repositories.yml";
 
     IEnumerable<Fallout.Solutions.Solution> ExternalSolutions
@@ -38,7 +39,9 @@ partial class Build
                 var origin = UseHttps ? repository.HttpsUrl : repository.SshUrl;
 
                 if (!Directory.Exists(repositoryDirectory))
+                {
                     Git($"clone {origin} {repositoryDirectory} --progress");
+                }
                 else
                 {
                     SuppressErrors(() => Git($"remote add origin {origin}", repositoryDirectory));

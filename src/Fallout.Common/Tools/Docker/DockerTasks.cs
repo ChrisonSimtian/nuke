@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Fallout.Common.Tooling;
+﻿using Fallout.Common.Tooling;
 using Serilog.Events;
 
 namespace Fallout.Common.Tools.Docker;

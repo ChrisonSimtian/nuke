@@ -38,7 +38,9 @@ public class ConsoleUtility
     public static string PromptForInput(string question, string defaultValue)
     {
         if (IsInterrupted)
+        {
             return defaultValue;
+        }
 
         Host.Information(question);
 
@@ -63,12 +65,19 @@ public class ConsoleUtility
 
             key = ConsoleWrapper.ReadKey(intercept: true);
             if (IsValidInputKey(key))
+            {
                 input.Append(key.KeyChar);
+            }
             else if (key.Key == ConsoleKey.Backspace && input.Length > 0)
+            {
                 input.Remove(input.Length - 1, length: 1);
+            }
             else if (key.Key == InterruptKey)
+            {
                 IsInterrupted = true;
-        } while (key.Key is not (ConfirmationKey or InterruptKey));
+            }
+        }
+        while (key.Key is not (ConfirmationKey or InterruptKey));
 
         var result = input.Length > 0 ? input.ToString() : defaultValue;
         ConsoleWrapper.CursorLeft = 0;
@@ -80,7 +89,9 @@ public class ConsoleUtility
     public static T PromptForChoice<T>(string question, params (T Value, string Description)[] options)
     {
         if (IsInterrupted)
+        {
             return options.First().Value;
+        }
 
         var selection = 0;
         ConsoleKey key;
@@ -99,17 +110,25 @@ public class ConsoleUtility
 
             key = ConsoleWrapper.ReadKey(intercept: true).Key;
             if (key == ConsoleKey.UpArrow)
+            {
                 selection--;
+            }
             else if (key == ConsoleKey.DownArrow)
+            {
                 selection++;
+            }
             else if (key == InterruptKey)
+            {
                 IsInterrupted = true;
+            }
 
             selection = Math.Max(val1: 0, Math.Min(options.Length - 1, selection));
 
             ConsoleWrapper.CursorTop -= options.Length;
             foreach (var unused in options)
+            {
                 ConsoleWrapper.WriteLine(' '.Repeat(BufferWidth));
+            }
 
             ConsoleWrapper.CursorTop -= options.Length;
         }
@@ -133,8 +152,8 @@ public class ConsoleUtility
                 if (secret.Length > 0)
                 {
                     var charsToRemove =
-                        (key.Modifiers & ConsoleModifiers.Control) != 0 && !EnvironmentInfo.IsOsx ||
-                        (key.Modifiers & ConsoleModifiers.Alt) != 0 && EnvironmentInfo.IsOsx
+                        ((key.Modifiers & ConsoleModifiers.Control) != 0 && !EnvironmentInfo.IsOsx) ||
+                        ((key.Modifiers & ConsoleModifiers.Alt) != 0 && EnvironmentInfo.IsOsx)
                             ? secret.Length
                             : 1;
 

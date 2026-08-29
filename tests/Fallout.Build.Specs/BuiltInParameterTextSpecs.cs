@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -22,7 +21,10 @@ public class BuiltInParameterTextSpecs
         {
             var data = new TheoryData<string, string>();
             foreach (var (name, description) in GetBuiltInParameters())
+            {
                 data.Add(name, description);
+            }
+
             return data;
         }
     }

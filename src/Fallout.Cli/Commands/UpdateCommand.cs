@@ -1,17 +1,17 @@
-using System.IO;
-using System.Threading.Tasks;
 using System.Linq;
 using System.Text.Json.Nodes;
-using NuGet.Versioning;
+using System.Threading.Tasks;
 using Fallout.Cli.Prompts;
 using Fallout.Common;
 using Fallout.Common.Execution;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Utilities;
+using Fallout.Solutions;
+using NuGet.Versioning;
 using static Fallout.Common.Constants;
+using Project = Microsoft.Build.Evaluation.Project;
 
 namespace Fallout.Cli.Commands;
 
@@ -38,7 +38,7 @@ internal sealed class UpdateCommand : IFalloutCommand
         ToolBanner.Print();
         Logging.Configure();
 
-        Assert.NotNull(rootDirectory);
+        rootDirectory.NotNull();
 
         if (buildScript != null)
         {
@@ -73,29 +73,33 @@ internal sealed class UpdateCommand : IFalloutCommand
         var previousPackageVersion = await UpdateFalloutCommonPackageAsync(buildProject);
 
         if (previousPackageVersion.MinVersion >= NuGetVersion.Parse("0.23.5"))
+        {
             RemoveLegacyFileIncludes(buildProject);
+        }
 
         buildProject.Save();
     }
 
-    internal static void UpdateTargetFramework(Microsoft.Build.Evaluation.Project buildProject)
+    internal static void UpdateTargetFramework(Project buildProject)
     {
         buildProject.SetProperty("TargetFramework", "net10.0");
     }
 
-    private static async Task<FloatRange> UpdateFalloutCommonPackageAsync(Microsoft.Build.Evaluation.Project buildProject)
+    private static async Task<FloatRange> UpdateFalloutCommonPackageAsync(Project buildProject)
     {
         var packageItem = buildProject.Items.SingleOrDefault(x => x.EvaluatedInclude == FalloutCommonPackageId).NotNull();
         var previousPackageVersion = FloatRange.Parse(packageItem.GetMetadataValue("Version"));
 
         var latestPackageVersion = await NuGetVersionResolver.GetLatestVersion(FalloutCommonPackageId, includePrereleases: false);
         if (!previousPackageVersion.Satisfies(NuGetVersion.Parse(latestPackageVersion)))
+        {
             packageItem.SetMetadataValue("Version", latestPackageVersion);
+        }
 
         return previousPackageVersion;
     }
 
-    private static void RemoveLegacyFileIncludes(Microsoft.Build.Evaluation.Project buildProject)
+    private static void RemoveLegacyFileIncludes(Project buildProject)
     {
         var legacyIncludes =
             new[]
@@ -122,7 +126,9 @@ internal sealed class UpdateCommand : IFalloutCommand
                 var itemGroupElement = x.Parent;
                 itemGroupElement.RemoveChild(x);
                 if (itemGroupElement.Children.Count == 0)
+                {
                     itemGroupElement.Parent.RemoveChild(itemGroupElement);
+                }
             });
     }
 
@@ -130,7 +136,9 @@ internal sealed class UpdateCommand : IFalloutCommand
     {
         var configurationFile = rootDirectory / FalloutDirectoryName;
         if (!configurationFile.Exists())
+        {
             return;
+        }
 
         var solutionFile = rootDirectory / configurationFile.ReadAllLines().FirstOrDefault(x => !x.IsNullOrEmpty());
         configurationFile.DeleteFile();
@@ -139,15 +147,21 @@ internal sealed class UpdateCommand : IFalloutCommand
         Host.Warning($"The previous {FalloutFileName} file was transformed to a {FalloutDirectoryName} directory.");
         Host.Warning($"The .tmp directory can be cleared, as it is moved to {FalloutDirectoryName}/temp as well.");
         if (solutionFile != null)
-            Host.Warning($"Verify the property referencing the solution has the same name as the member with the {nameof(SolutionAttribute)}.");
+        {
+            Host.Warning(
+                $"Verify the property referencing the solution has the same name as the member with the {nameof(SolutionAttribute)}.");
+        }
     }
 
     private static void UpdateGlobalJsonFile(AbsolutePath rootDirectory)
     {
         var latestInstalledSdk = DotNetTasks.DotNet("--list-sdks", logInvocation: false, logOutput: false)
             .LastOrDefault().Text?.Split(" ").First();
+
         if (latestInstalledSdk == null)
+        {
             return;
+        }
 
         var globalJsonFile = rootDirectory / "global.json";
         var jobject = globalJsonFile.Existing()?.ReadJsonObject() ?? new JsonObject();

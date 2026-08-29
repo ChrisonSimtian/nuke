@@ -21,13 +21,19 @@ public class ConsoleOutputCharacterSpecs
     /// <summary>Leading spaces on the logo's tagline lines.</summary>
     private const int TaglineIndent = 21;
 
-    public static TheoryData<string> BlankTexts => new() { null, string.Empty, " ", "   " };
+    public static TheoryData<string> BlankTexts => new()
+    {
+        null,
+        string.Empty,
+        " ",
+        "   "
+    };
 
     [Theory]
     [MemberData(nameof(BlankTexts))]
     public void The_ansi_theme_renders_blank_text_as_an_empty_string(string text)
     {
-        var theme = (IHostTheme)AnsiConsoleHostTheme.Default256AnsiColorTheme;
+        var theme = AnsiConsoleHostTheme.Default256AnsiColorTheme;
 
         theme.FormatInformation(text).Should().BeEmpty();
     }
@@ -36,7 +42,7 @@ public class ConsoleOutputCharacterSpecs
     [MemberData(nameof(BlankTexts))]
     public void The_system_theme_renders_blank_text_as_an_empty_string(string text)
     {
-        var theme = (IHostTheme)SystemConsoleHostTheme.DefaultSystemColorTheme;
+        var theme = SystemConsoleHostTheme.DefaultSystemColorTheme;
 
         theme.FormatInformation(text).Should().BeEmpty();
     }
@@ -44,8 +50,8 @@ public class ConsoleOutputCharacterSpecs
     [Fact]
     public void The_two_themes_agree_on_blank_text()
     {
-        var ansi = (IHostTheme)AnsiConsoleHostTheme.Default256AnsiColorTheme;
-        var system = (IHostTheme)SystemConsoleHostTheme.DefaultSystemColorTheme;
+        var ansi = AnsiConsoleHostTheme.Default256AnsiColorTheme;
+        var system = SystemConsoleHostTheme.DefaultSystemColorTheme;
 
         ansi.FormatInformation(text: null).Should().Be(system.FormatInformation(text: null));
     }
@@ -53,7 +59,7 @@ public class ConsoleOutputCharacterSpecs
     [Fact]
     public void Blank_themed_output_carries_no_zero_width_space()
     {
-        var theme = (IHostTheme)AnsiConsoleHostTheme.Default256AnsiColorTheme;
+        var theme = AnsiConsoleHostTheme.Default256AnsiColorTheme;
 
         theme.FormatInformation(text: null).Should().NotContain(ZeroWidthSpace);
     }

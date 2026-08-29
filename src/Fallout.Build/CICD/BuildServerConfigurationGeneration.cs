@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-
 namespace Fallout.Common.CI;
 
 public static class BuildServerConfigurationGeneration

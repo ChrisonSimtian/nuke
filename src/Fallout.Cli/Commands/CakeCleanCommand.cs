@@ -27,7 +27,9 @@ internal sealed class CakeCleanCommand : IFalloutCommand
         cakeFiles.ForEach(x => Host.Debug($"  - {x}"));
 
         if (prompts.PromptForConfirmation("Delete?"))
+        {
             cakeFiles.ForEach(x => x.DeleteFile());
+        }
 
         return 0;
     }

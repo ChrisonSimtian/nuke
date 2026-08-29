@@ -50,6 +50,7 @@ public static class MastodonTasks
                     media_ids = mediaIds.ToArray()
                 })
             .GetResponseAsync();
+
         response.AssertSuccessfulStatusCode();
     }
 }

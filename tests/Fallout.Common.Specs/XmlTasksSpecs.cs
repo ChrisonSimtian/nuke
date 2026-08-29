@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
-using FluentAssertions;
 using Fallout.Common.IO;
+using FluentAssertions;
 using VerifyXunit;
 using Xunit;
 
@@ -17,7 +17,9 @@ public class XmlTasksSpecs : IDisposable
     public void Dispose()
     {
         if (File.Exists(_tempFile))
+        {
             File.Delete(_tempFile);
+        }
     }
 
     [Fact]

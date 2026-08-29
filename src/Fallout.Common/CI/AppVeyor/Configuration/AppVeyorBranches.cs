@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 
@@ -8,6 +6,7 @@ namespace Fallout.Common.CI.AppVeyor.Configuration;
 public class AppVeyorBranches : ConfigurationEntity
 {
     public string[] Only { get; set; }
+
     public string[] Except { get; set; }
 
     public override void Write(CustomFileWriter writer)

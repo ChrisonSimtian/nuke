@@ -25,14 +25,14 @@ internal partial class SlnXmlSerializer
             bool convertingFromSln = model.SerializerExtension is SlnV12ModelExtension;
 
             SlnxSerializerSettings xmlSerializerSettings = modelExtension?.Settings ??
-                new SlnxSerializerSettings()
-                {
-                    // For new documents want to do standard indentation.
-                    PreserveWhitespace = false,
-                    IndentChars = "  ",
-                    NewLine = Environment.NewLine,
-                    TrimVisualStudioProperties = convertingFromSln,
-                };
+                                                           new SlnxSerializerSettings
+                                                           {
+                                                               // For new documents want to do standard indentation.
+                                                               PreserveWhitespace = false,
+                                                               IndentChars = "  ",
+                                                               NewLine = Environment.NewLine,
+                                                               TrimVisualStudioProperties = convertingFromSln,
+                                                           };
 
             if (xmlSerializerSettings.TrimVisualStudioProperties == true)
             {
@@ -52,9 +52,9 @@ internal partial class SlnXmlSerializer
             _ = root.ApplyModel(model);
 
             // Always use UTF-8 without BOM
-            UTF8Encoding encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+            UTF8Encoding encoding = new(encoderShouldEmitUTF8Identifier: false);
 
-            using (MemoryStream memoryStream = new MemoryStream(10 * 1024))
+            using (MemoryStream memoryStream = new(10 * 1024))
             using (TextWriter textWriter = new StreamWriter(memoryStream, encoding))
             using (XmlWriter xmlWriter = CreateXmlWriter(xmlSerializerSettings, textWriter))
             {
@@ -77,7 +77,7 @@ internal partial class SlnXmlSerializer
 
             static XmlWriter CreateXmlWriter(SlnxSerializerSettings settings, TextWriter writer)
             {
-                XmlWriterSettings xmlWriterSettings = new XmlWriterSettings()
+                XmlWriterSettings xmlWriterSettings = new()
                 {
                     Async = true,
                     OmitXmlDeclaration = true,
@@ -109,9 +109,13 @@ internal partial class SlnXmlSerializer
                 }
             }
 
-            static SlnxFile CreateNewSlnFile(string? fullPath, SlnxSerializerSettings xmlSerializerSettings, StringTable stringTable)
+            static SlnxFile CreateNewSlnFile(string? fullPath, SlnxSerializerSettings xmlSerializerSettings,
+                StringTable stringTable)
             {
-                XmlDocument xmlDocument = new LineInfoXmlDocument() { PreserveWhitespace = xmlSerializerSettings.PreserveWhitespace ?? false, };
+                XmlDocument xmlDocument = new LineInfoXmlDocument
+                {
+                    PreserveWhitespace = xmlSerializerSettings.PreserveWhitespace ?? false,
+                };
 
                 XmlElement slnElement = xmlDocument.CreateElement(Keyword.Solution.ToXmlString());
                 _ = xmlDocument.AppendChild(slnElement);

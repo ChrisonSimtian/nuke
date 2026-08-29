@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,10 +17,14 @@ public interface ICreateGitHubRelease : IHasGitRepository, IHasChangelog
 {
     const string GitHubRelease = nameof(GitHubRelease);
 
-    [Parameter] [Secret] string GitHubToken => TryGetValue(() => GitHubToken) ?? GitHubActions.Instance?.Token;
+    [Parameter]
+    [Secret]
+    string GitHubToken => TryGetValue(() => GitHubToken) ?? GitHubActions.Instance?.Token;
 
     string Name { get; }
+
     bool Prerelease => false;
+
     bool Draft => false;
 
     IEnumerable<AbsolutePath> AssetFiles { get; }
@@ -44,7 +47,6 @@ public interface ICreateGitHubRelease : IHasGitRepository, IHasChangelog
                             Draft = Draft,
                             Body = ChangelogTasks.ExtractChangelogSectionNotes(ChangelogFile).JoinNewLine()
                         });
-
                 }
                 catch
                 {
@@ -63,11 +65,12 @@ public interface ICreateGitHubRelease : IHasGitRepository, IHasChangelog
             {
                 await using var assetFile = File.OpenRead(x);
                 var asset = new ReleaseAssetUpload
-                            {
-                                FileName = x.Name,
-                                ContentType = "application/octet-stream",
-                                RawData = assetFile
-                            };
+                {
+                    FileName = x.Name,
+                    ContentType = "application/octet-stream",
+                    RawData = assetFile
+                };
+
                 await GitHubTasks.GitHubClient.Repository.Release.UploadAsset(release, asset);
             }).ToArray();
 

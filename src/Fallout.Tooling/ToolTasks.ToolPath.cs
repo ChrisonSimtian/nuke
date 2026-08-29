@@ -17,10 +17,14 @@ public abstract partial class ToolTasks
     protected internal string GetToolPathInternal(ToolOptions options = null)
     {
         if (options?.ProcessToolPath != null)
+        {
             return options.ProcessToolPath;
+        }
 
         if (ToolPathResolver.TryGetEnvironmentExecutable(ToolPathOverrideVariableName) is { } environmentExecutable)
+        {
             return environmentExecutable;
+        }
 
         return GetToolPath(options);
     }
@@ -30,9 +34,13 @@ public abstract partial class ToolTasks
         var toolType = GetType();
         var attribute = toolType.GetCustomAttribute<ToolAttribute>();
         if (attribute != null)
+        {
             return attribute.GetToolPath(options);
+        }
 
-        Assert.Fail($"Unable to resolve tool path for {toolType.Name}. Set via {nameof(ToolOptionsExtensions.SetProcessToolPath)}.");
+        Assert.Fail(
+            $"Unable to resolve tool path for {toolType.Name}. Set via {nameof(ToolOptionsExtensions.SetProcessToolPath)}.");
+
         return null;
     }
 
@@ -71,6 +79,7 @@ public class PathToolAttribute : ToolAttribute
 public class NpmToolAttribute : ToolAttribute
 {
     public string Id { get; set; }
+
     public string Executable { get; set; }
 
     internal override string GetToolPath(ToolOptions options)
@@ -102,6 +111,7 @@ public class AptGetToolAttribute : ToolAttribute
 public class NuGetToolAttribute : ToolAttribute
 {
     public string Id { get; set; }
+
     public string Executable { get; set; }
 
     internal override string GetToolPath(ToolOptions options)
@@ -129,5 +139,6 @@ public interface IToolOptionsWithFramework
 public static class ToolOptionsWithFrameworkExtensions
 {
     [Builder(Type = typeof(IToolOptionsWithFramework), Property = nameof(IToolOptionsWithFramework.Framework))]
-    public static T SetFramework<T>(this T o, string v) where T : Options, IToolOptionsWithFramework => o.Modify(b => b.Set(() => o.Framework, v));
+    public static T SetFramework<T>(this T o, string v) where T : Options, IToolOptionsWithFramework =>
+        o.Modify(b => b.Set(() => o.Framework, v));
 }

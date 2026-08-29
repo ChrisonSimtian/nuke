@@ -21,11 +21,14 @@ public static partial class ReflectionUtility
     public static MemberInfo GetMemberInfo(this LambdaExpression expression)
     {
         if (expression.Body is MethodCallExpression methodCallExpression)
+        {
             return methodCallExpression.Method;
+        }
 
         var memberExpression = expression.Body is not UnaryExpression unaryExpression
-            ? (MemberExpression) expression.Body
-            : (MemberExpression) unaryExpression.Operand;
+            ? (MemberExpression)expression.Body
+            : (MemberExpression)unaryExpression.Operand;
+
         return memberExpression.Member;
     }
 

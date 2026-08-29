@@ -14,6 +14,7 @@ public class LogErrorAsStandard : Attribute;
 public class LogLevelPattern(LogEventLevel level, string pattern) : Attribute
 {
     public LogEventLevel Level { get; } = level;
+
     public string Pattern { get; } = pattern;
 }
 
@@ -28,7 +29,9 @@ public abstract partial class ToolTasks
     protected internal virtual partial Action<OutputType, string> GetLogger(ToolOptions options)
     {
         if (options?.ProcessLogger != null)
+        {
             return options.ProcessLogger;
+        }
 
         var toolType = GetType();
         var levelProvider = toolType.GetCustomAttributes<LogLevelPattern>()
@@ -45,11 +48,17 @@ public abstract partial class ToolTasks
         {
             var patternLevel = levelProvider.Select(x => x.Invoke(text)).FirstOrDefault(x => x != null);
             if (patternLevel != null)
+            {
                 Log.Write(patternLevel.Value, text);
+            }
             else if (type == OutputType.Err && !errorAsStandard)
+            {
                 Log.Error(text);
+            }
             else
+            {
                 Log.Write(defaultLevel, text);
+            }
         };
     }
 }

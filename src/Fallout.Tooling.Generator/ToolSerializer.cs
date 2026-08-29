@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -9,7 +9,6 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Fallout.CodeGeneration.Model;
 using Fallout.Common.IO;
-using Fallout.Common.Utilities;
 using Serilog;
 
 namespace Fallout.CodeGeneration;
@@ -31,7 +30,10 @@ public static class ToolSerializer
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
         TypeInfoResolver = new DefaultJsonTypeInfoResolver
         {
-            Modifiers = { ApplySerializationFilters }
+            Modifiers =
+            {
+                ApplySerializationFilters
+            }
         }
     };
 
@@ -64,15 +66,19 @@ public static class ToolSerializer
     //   Value-type defaults and null reference values are handled by DefaultIgnoreCondition.WhenWritingDefault.
     private static void ApplySerializationFilters(JsonTypeInfo typeInfo)
     {
-        var readOnlyProperties = new System.Collections.Generic.List<JsonPropertyInfo>();
+        var readOnlyProperties = new List<JsonPropertyInfo>();
         foreach (var jsonProperty in typeInfo.Properties)
         {
             if (jsonProperty.AttributeProvider is not PropertyInfo declared)
+            {
                 continue;
+            }
 
             // Tool.Schema is intentionally read-only but must serialize.
             if (typeInfo.Type == typeof(Tool) && declared.Name == nameof(Tool.Schema))
+            {
                 continue;
+            }
 
             var getter = declared.GetGetMethod(nonPublic: true);
             var setter = declared.GetSetMethod(nonPublic: true);
@@ -88,13 +94,18 @@ public static class ToolSerializer
                 readOnlyProperties.Add(jsonProperty);
             }
         }
+
         foreach (var p in readOnlyProperties)
+        {
             typeInfo.Properties.Remove(p);
+        }
 
         foreach (var jsonProperty in typeInfo.Properties)
         {
             if (jsonProperty.AttributeProvider is not PropertyInfo declared)
+            {
                 continue;
+            }
 
             var propertyName = declared.Name;
             var propertyType = declared.PropertyType;
@@ -113,7 +124,11 @@ public static class ToolSerializer
             {
                 jsonProperty.ShouldSerialize = (_, value) =>
                 {
-                    if (value is not IEnumerable enumerable) return false;
+                    if (value is not IEnumerable enumerable)
+                    {
+                        return false;
+                    }
+
                     var enumerator = enumerable.GetEnumerator();
                     try { return enumerator.MoveNext(); }
                     finally { (enumerator as IDisposable)?.Dispose(); }

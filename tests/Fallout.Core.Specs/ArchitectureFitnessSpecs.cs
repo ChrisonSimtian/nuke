@@ -1,7 +1,6 @@
-using System.Linq;
 using System.Reflection;
-using FluentAssertions;
 using Fallout.Core.Planning;
+using FluentAssertions;
 using NetArchTest.Rules;
 using Xunit;
 

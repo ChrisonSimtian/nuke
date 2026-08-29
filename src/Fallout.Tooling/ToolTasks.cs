@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Fallout.Common.Tooling;
 
@@ -10,7 +9,10 @@ public abstract partial class ToolTasks
 
     protected virtual partial string GetToolPath(ToolOptions options = null);
     protected virtual partial IReadOnlyCollection<Output> Run<T>(T options = null) where T : ToolOptions, new();
-    protected virtual partial (TResult Result, IReadOnlyCollection<Output> Output) Run<TOptions, TResult>(TOptions options = null) where TOptions : ToolOptions, new();
+
+    protected virtual partial (TResult Result, IReadOnlyCollection<Output> Output) Run<TOptions, TResult>(TOptions options = null)
+        where TOptions : ToolOptions, new();
+
     protected virtual partial Func<ToolOptions, IProcess, object> GetExitHandler(ToolOptions options = null);
 
     protected virtual T PreProcess<T>(T options) where T : ToolOptions => options;

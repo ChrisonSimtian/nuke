@@ -1,8 +1,6 @@
 using System;
-using Fallout.Common.CI;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.Execution;
-using Fallout.Common.Tooling;
 using FluentAssertions;
 using Xunit;
 
@@ -21,7 +19,10 @@ public class GitHubActionsEnvValidationSpecs
     [InlineData("KEY:value")]
     public void Malformed_env_entry_throws(string badEntry)
     {
-        var act = () => GetConfiguration(new[] { badEntry });
+        var act = () => GetConfiguration(new[]
+        {
+            badEntry
+        });
 
         act.Should().Throw<ArgumentException>();
     }
@@ -32,7 +33,10 @@ public class GitHubActionsEnvValidationSpecs
     [InlineData("EMPTY_VALUE:")]
     public void Well_formed_env_entry_does_not_throw(string goodEntry)
     {
-        var act = () => GetConfiguration(new[] { goodEntry });
+        var act = () => GetConfiguration(new[]
+        {
+            goodEntry
+        });
 
         act.Should().NotThrow();
     }
@@ -40,7 +44,11 @@ public class GitHubActionsEnvValidationSpecs
     [Fact]
     public void Malformed_entry_after_a_valid_one_still_throws()
     {
-        var act = () => GetConfiguration(new[] { "GOOD: 1", "BAD" });
+        var act = () => GetConfiguration(new[]
+        {
+            "GOOD: 1",
+            "BAD"
+        });
 
         act.Should().Throw<ArgumentException>();
     }
@@ -51,12 +59,19 @@ public class GitHubActionsEnvValidationSpecs
         var relevantTargets = ExecutableTargetFactory.CreateAll(build, x => x.Compile);
 
         var attribute = new TestGitHubActionsAttribute(GitHubActionsImage.UbuntuLatest)
-                        {
-                            On = new[] { GitHubActionsTrigger.Push },
-                            InvokedTargets = new[] { nameof(ConfigurationGenerationSpecs.TestBuild.Test) },
-                            Env = env
-                        };
-        ((ConfigurationAttributeBase)attribute).Build = build;
+        {
+            On = new[]
+            {
+                GitHubActionsTrigger.Push
+            },
+            InvokedTargets = new[]
+            {
+                nameof(ConfigurationGenerationSpecs.TestBuild.Test)
+            },
+            Env = env
+        };
+
+        attribute.Build = build;
 
         attribute.GetConfiguration(relevantTargets);
     }

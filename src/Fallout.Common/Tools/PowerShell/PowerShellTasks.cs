@@ -1,5 +1,4 @@
-﻿using System;
-using Fallout.Common.Tooling;
+﻿using Fallout.Common.Tooling;
 
 namespace Fallout.Common.Tools.PowerShell;
 

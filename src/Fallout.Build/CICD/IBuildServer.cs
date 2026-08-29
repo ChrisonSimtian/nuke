@@ -1,5 +1,4 @@
-﻿
-namespace Fallout.Common.CI;
+﻿namespace Fallout.Common.CI;
 
 public interface IBuildServer
 {

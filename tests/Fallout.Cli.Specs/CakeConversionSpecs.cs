@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
-using NuGet.Versioning;
 using Fallout.Common;
 using Fallout.Common.IO;
+using FluentAssertions;
+using NuGet.Versioning;
 using VerifyXunit;
 using Xunit;
 
@@ -34,11 +34,15 @@ public class CakeConversionSpecs
         packages.Should().Contain((PackageManager.ReferenceType, "SharpZipLib", "1.2.0"));
         packages.Should().Contain(x => x.Id == "TeamCity.Dotnet.Integration" &&
                                        NuGetVersion.Parse(x.Version) > NuGetVersion.Parse("1.0.10"));
+
         packages.Should().NotContain(x => x.Id.Contains("Cake"));
     }
 
     private static AbsolutePath CakeScriptsDirectory => RootDirectory / "tests" / "Fallout.Cli.Specs" / "cake-scripts";
 
     public static IEnumerable<object[]> CakeFileNames
-        => CakeScriptsDirectory.GlobFiles(CakeConverter.FilePattern).Select(x => new object[] { x });
+        => CakeScriptsDirectory.GlobFiles(CakeConverter.FilePattern).Select(x => new object[]
+        {
+            x
+        });
 }

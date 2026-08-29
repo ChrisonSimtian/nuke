@@ -9,6 +9,7 @@ using static Fallout.Common.Tools.Git.GitTasks;
 partial class Build
 {
     AbsolutePath ContributorsFile => RootDirectory / "CONTRIBUTORS.md";
+
     AbsolutePath ContributorsCacheFile => TemporaryDirectory / "contributors.dat";
 
     Target UpdateContributors => _ => _
@@ -16,15 +17,23 @@ partial class Build
         {
             var previousContributors = ContributorsCacheFile.Existing()?.ReadAllLines() ?? new string[0];
 
-            var repositoryDirectories = new[] { RootDirectory / ".git" }
+            var repositoryDirectories = new[]
+                {
+                    RootDirectory / ".git"
+                }
                 .Concat(ExternalRepositoriesDirectory.GlobDirectories("*/.git"));
+
             var contributors = repositoryDirectories
                 .SelectMany(x => Git(@"log --pretty=""%an|%ae%n%cn|%ce""", workingDirectory: x, logOutput: false))
                 .Select(x => x.Text)
                 .Distinct().ToList()
                 .Select(x => x.Split('|'))
                 .ForEachLazy(x => Assert.Count(x, length: 2))
-                .Select(x => new { Name = x[0], Email = x[1] }).ToList();
+                .Select(x => new
+                {
+                    Name = x[0],
+                    Email = x[1]
+                }).ToList();
 
             var newContributors = contributors.Where(x => !previousContributors.Contains(x.Email));
 
@@ -32,6 +41,7 @@ partial class Build
             {
                 var content = (ContributorsFile.Existing()?.ReadAllLines() ?? new string[0])
                     .Concat($"- {newContributor.Name}").OrderBy(x => x);
+
                 ContributorsFile.WriteAllLines(content, Encoding.Default);
                 Git($"add {ContributorsFile}");
 

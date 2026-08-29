@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Fallout.Common.Utilities;
 
 namespace Fallout.Common.CI.AzurePipelines.Configuration;

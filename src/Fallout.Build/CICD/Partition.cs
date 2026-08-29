@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 
 namespace Fallout.Common.CI;
 
 [TypeConverter(typeof(TypeConverter))]
 public class Partition
 {
-    public static Partition Single { get; } = new() { Part = 1, Total = 1 };
+    public static Partition Single { get; } = new()
+    {
+        Part = 1,
+        Total = 1
+    };
 
     public int Part { get; set; }
+
     public int Total { get; set; }
 
     public class TypeConverter : System.ComponentModel.TypeConverter
@@ -27,10 +31,10 @@ public class Partition
             {
                 var values = stringValue.Split('/');
                 return new Partition
-                       {
-                           Part = int.Parse(values[0]),
-                           Total = int.Parse(values[1])
-                       };
+                {
+                    Part = int.Parse(values[0]),
+                    Total = int.Parse(values[1])
+                };
             }
 
             return base.ConvertFrom(context, culture, value);
@@ -48,7 +52,10 @@ public class Partition
         foreach (var item in enumerable)
         {
             if (i == Part - 1)
+            {
                 yield return item;
+            }
+
             i = (i + 1) % Total;
         }
     }

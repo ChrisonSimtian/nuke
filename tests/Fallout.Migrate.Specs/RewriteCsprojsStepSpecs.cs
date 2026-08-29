@@ -312,8 +312,9 @@ public class RewriteCsprojsStepSpecs : IDisposable
                                </ItemGroup>
                              </Project>
                              """;
+
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -341,7 +342,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -367,7 +368,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -392,7 +393,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -417,15 +418,15 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
 
         buildCsproj.Should()
-          .Contain("<PkgVersion>10.1.0</PkgVersion>")
-          .And.Contain("<FalloutVersion>")
-          .And.Contain("$(FalloutVersion)", Exactly.Once());
+            .Contain("<PkgVersion>10.1.0</PkgVersion>")
+            .And.Contain("<FalloutVersion>")
+            .And.Contain("$(FalloutVersion)", Exactly.Once());
     }
 
     [Fact]
@@ -441,7 +442,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -468,7 +469,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();

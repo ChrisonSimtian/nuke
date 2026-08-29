@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Fallout.Common;
-using Fallout.Solutions;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using Fallout.Solutions;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 namespace Fallout.Components;
@@ -72,6 +70,7 @@ public interface ICompile : IRestore, IHasConfiguration
             .SetInformationalVersion(o.Versioning.AssemblyInformationalVersion));
 
     Configure<DotNetBuildSettings> CompileSettings => _ => _;
+
     Configure<DotNetPublishSettings> PublishSettings => _ => _;
 
     IEnumerable<(Project Project, string Framework)> PublishConfigurations

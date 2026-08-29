@@ -20,7 +20,9 @@ public static class SpaceAutomationCustomWriterExtensions
     public static void WriteArray(this CustomFileWriter writer, string property, string[] values)
     {
         if (!values?.Any() ?? true)
+        {
             return;
+        }
 
         if (values.Length <= 1)
         {
@@ -32,7 +34,9 @@ public static class SpaceAutomationCustomWriterExtensions
         using (writer.Indent())
         {
             foreach (var value in values)
+            {
                 writer.WriteLine(value);
+            }
         }
 
         writer.WriteLine("\"\"\"");

@@ -1,10 +1,9 @@
-using System;
 using System.Linq;
+using Fallout.Common.IO;
+using Fallout.Common.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Fallout.Common.IO;
-using Fallout.Common.Utilities;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Fallout.Cli.Rewriting.Cake;
@@ -14,12 +13,16 @@ internal class ParameterRewriter : SafeSyntaxRewriter
     public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
     {
         if (node.Parent is not CompilationUnitSyntax)
+        {
             return node;
+        }
 
         var variableDeclarator = node.GetSingleDeclarator();
         var invocationExpression = variableDeclarator.Initializer?.Value as InvocationExpressionSyntax;
         if (invocationExpression?.GetIdentifierName() != "Argument")
+        {
             return node;
+        }
 
         var originalNode = node;
         var resolutionName = invocationExpression.GetArgumentAt<LiteralExpressionSyntax>(0).GetConstantValue<string>();
@@ -32,10 +35,18 @@ internal class ParameterRewriter : SafeSyntaxRewriter
         {
             var attribute = Attribute(IdentifierName(name));
             if (argument != null)
+            {
                 attribute = attribute.WithArgumentList(AttributeArgumentList(
-                    SeparatedList(new[] { AttributeArgument(argument.ToLiteralExpression()) })));
+                    SeparatedList(new[]
+                    {
+                        AttributeArgument(argument.ToLiteralExpression())
+                    })));
+            }
 
-            return AttributeList(SeparatedList(new[] { attribute }));
+            return AttributeList(SeparatedList(new[]
+            {
+                attribute
+            }));
         }
 
         node = node.WithoutTrivia();
@@ -46,11 +57,13 @@ internal class ParameterRewriter : SafeSyntaxRewriter
                     .EqualsOrdinalIgnoreCase(variableDeclarator.Identifier.Text)
                     ? resolutionName
                     : null));
+
         node = node.WithDeclaration(
             node.Declaration.WithType(
                 variableDeclarator.Identifier.Text.ContainsAnyOrdinalIgnoreCase("path", "dir", "file")
                     ? ParseTypeName(nameof(AbsolutePath))
                     : invocationExpression.GetSingleGenericArgumentOrNull() ?? defaultValue.GetExpressionType()));
+
         node = node.WithDeclaration(
             node.Declaration
                 .WithVariables(
@@ -58,10 +71,13 @@ internal class ParameterRewriter : SafeSyntaxRewriter
                         .Select(x => x.WithInitializer(nonDefaultValue != null
                             ? EqualsValueClause(nonDefaultValue)
                             : null)))));
+
         node = node.WithModifiers(TokenList(Token(SyntaxKind.ReadOnlyKeyword)));
 
         if (variableDeclarator.Identifier.Text.ContainsAnyOrdinalIgnoreCase("password", "key", "token", "secret", "credentials"))
+        {
             node = node.AddAttributeLists(CreateAttributeListWith("Secret"));
+        }
 
         return node.WithTriviaFrom(originalNode);
     }

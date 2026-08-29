@@ -42,9 +42,9 @@ internal abstract partial class XmlContainer(SlnxFile root, XmlElement element, 
     {
         base.UpdateFromXml();
 
-        foreach (XmlElement childXmlElement in this.XmlElement.ChildElements())
+        foreach (XmlElement childXmlElement in XmlElement.ChildElements())
         {
-            _ = this.CreateChildDecorator(childXmlElement);
+            _ = CreateChildDecorator(childXmlElement);
         }
     }
 
@@ -54,7 +54,7 @@ internal abstract partial class XmlContainer(SlnxFile root, XmlElement element, 
     /// </summary>
     private XmlDecorator? CreateChildDecorator(XmlElement xmlElement, string? itemRef = null, bool validateItemRef = false)
     {
-        XmlDecorator? xmlDecorator = this.ChildDecoratorFactory(xmlElement, Keywords.ToKeyword(xmlElement.Name));
+        XmlDecorator? xmlDecorator = ChildDecoratorFactory(xmlElement, Keywords.ToKeyword(xmlElement.Name));
         if (xmlDecorator is null)
         {
             return null;
@@ -67,11 +67,12 @@ internal abstract partial class XmlContainer(SlnxFile root, XmlElement element, 
 
         if (validateItemRef && !xmlDecorator.IsValid())
         {
-            throw new SolutionArgumentException(string.Format(Errors.InvalidItemRef_Args2, itemRef, xmlDecorator.ElementName), SolutionErrorType.InvalidItemRef);
+            throw new SolutionArgumentException(string.Format(Errors.InvalidItemRef_Args2, itemRef, xmlDecorator.ElementName),
+                SolutionErrorType.InvalidItemRef);
         }
 
         xmlDecorator.UpdateFromXml();
-        this.OnNewChildDecoratorAdded(xmlDecorator);
+        OnNewChildDecoratorAdded(xmlDecorator);
         return xmlDecorator;
     }
 

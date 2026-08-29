@@ -36,7 +36,8 @@ public static class ConfigureExtensions
             completeOnFailure);
     }
 
-    public static IReadOnlyCollection<(TOptions Options, TResult Result, IReadOnlyCollection<Output> Output)> Invoke<TOptions, TResult>(
+    public static IReadOnlyCollection<(TOptions Options, TResult Result, IReadOnlyCollection<Output> Output)> Invoke<TOptions,
+        TResult>(
         this CombinatorialConfigure<TOptions> configurator,
         Func<TOptions, (TResult Result, IReadOnlyCollection<Output> Output)> executor,
         int degreeOfParallelism,
@@ -60,7 +61,9 @@ public static class ConfigureExtensions
         bool completeOnFailure)
         where TOptions : ToolOptions, new()
     {
-        var invocations = new ConcurrentBag<(TOptions Options, Action<OutputType, string> Logger, TResult Result, Exception Exception)>();
+        var invocations =
+            new ConcurrentBag<(TOptions Options, Action<OutputType, string> Logger, TResult Result, Exception Exception)>();
+
         try
         {
             configurator(new TOptions())
@@ -78,12 +81,16 @@ public static class ConfigureExtensions
                         invocations.Add((x, x.GetLogger(), default, exception));
 
                         if (!completeOnFailure)
+                        {
                             throw;
+                        }
                     }
                 });
 
             if (invocations.Any(x => x.Exception != null))
+            {
                 throw new AggregateException(invocations.Select(x => x.Exception).WhereNotNull());
+            }
 
             return invocations.Select(x => x.Result).ToList();
         }

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
+using Fallout.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Fallout.Common;
 
 namespace Fallout.Cli.Rewriting.Cake;
 

@@ -78,7 +78,9 @@ public static class TopoSort
             foreach (var dependency in dependencies(node))
             {
                 if (vertexByNode.TryGetValue(dependency, out var dependencyVertex))
+                {
                     vertex.Dependencies.Add(dependencyVertex);
+                }
             }
         }
 
@@ -87,8 +89,11 @@ public static class TopoSort
             .Cycles()
             .Select(scc => (IReadOnlyList<T>)scc.Select(v => v.Value).ToList())
             .ToList();
+
         if (cycles.Count > 0)
+        {
             return new PlanResult<T>(Array.Empty<T>(), cycles, Array.Empty<T>());
+        }
 
         // Peel roots — vertices nothing remaining depends on — one at a time. On an acyclic graph
         // this always terminates with at least one root per step.
@@ -99,7 +104,9 @@ public static class TopoSort
         {
             var independents = graph.Where(x => !graph.Any(y => y.Dependencies.Contains(x))).ToList();
             if (strict && ambiguousStep.Count == 0 && independents.Count > 1)
+            {
                 ambiguousStep = independents.Select(x => x.Value).ToList();
+            }
 
             var independent = independents.First();
             graph.Remove(independent);

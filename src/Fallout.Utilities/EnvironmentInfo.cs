@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 
@@ -11,6 +10,7 @@ namespace Fallout.Common;
 public static partial class EnvironmentInfo
 {
     public static string NewLine => Environment.NewLine;
+
     public static string MachineName => Environment.MachineName;
 
     /// <summary>

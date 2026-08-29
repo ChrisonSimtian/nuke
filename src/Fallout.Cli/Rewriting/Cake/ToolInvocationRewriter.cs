@@ -1,15 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Fallout.Common;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.MSBuild;
 using Fallout.Common.Tools.NuGet;
 using Fallout.Common.Tools.SignTool;
 using Fallout.Common.Utilities.Collections;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Fallout.Cli.Rewriting.Cake;
@@ -19,32 +18,62 @@ internal class ToolInvocationRewriter : SafeSyntaxRewriter
     private static IEnumerable<ReplacementData> Replacements =>
         new ReplacementData[]
         {
-            new(original: "DotNetCoreRestore", replacement: nameof(DotNetTasks.DotNetRestore), positionals: new[] { "ProjectFile" }),
-            new(original: "DotNetCoreBuild", replacement: nameof(DotNetTasks.DotNetBuild), positionals: new[] { "ProjectFile" }),
-            new(original: "DotNetCoreTest", replacement: nameof(DotNetTasks.DotNetTest), positionals: new[] { "ProjectFile" }),
-            new(original: "DotNetCorePack", replacement: nameof(DotNetTasks.DotNetPack), positionals: new[] { "ProjectFile" }),
-            new(original: "DotNetCorePublish", replacement: nameof(DotNetTasks.DotNetPublish), positionals: new[] { "Project" }),
-            new(original: "Sign", replacement: nameof(SignToolTasks.SignTool), positionals: new[] { "Files" }),
-            new(original: "NuGetRestore", replacement: nameof(NuGetTasks.NuGetRestore), positionals: new[] { "TargetPath" }),
-            new(original: "NuGetPack", replacement: nameof(NuGetTasks.NuGetPack), positionals: new[] { "TargetPath" }),
-            new(original: "MSBuild", replacement: nameof(MSBuildTasks.MSBuild), positionals: new[] { "TargetPath" }),
+            new(original: "DotNetCoreRestore", replacement: nameof(DotNetTasks.DotNetRestore), positionals: new[]
+            {
+                "ProjectFile"
+            }),
+            new(original: "DotNetCoreBuild", replacement: nameof(DotNetTasks.DotNetBuild), positionals: new[]
+            {
+                "ProjectFile"
+            }),
+            new(original: "DotNetCoreTest", replacement: nameof(DotNetTasks.DotNetTest), positionals: new[]
+            {
+                "ProjectFile"
+            }),
+            new(original: "DotNetCorePack", replacement: nameof(DotNetTasks.DotNetPack), positionals: new[]
+            {
+                "ProjectFile"
+            }),
+            new(original: "DotNetCorePublish", replacement: nameof(DotNetTasks.DotNetPublish), positionals: new[]
+            {
+                "Project"
+            }),
+            new(original: "Sign", replacement: nameof(SignToolTasks.SignTool), positionals: new[]
+            {
+                "Files"
+            }),
+            new(original: "NuGetRestore", replacement: nameof(NuGetTasks.NuGetRestore), positionals: new[]
+            {
+                "TargetPath"
+            }),
+            new(original: "NuGetPack", replacement: nameof(NuGetTasks.NuGetPack), positionals: new[]
+            {
+                "TargetPath"
+            }),
+            new(original: "MSBuild", replacement: nameof(MSBuildTasks.MSBuild), positionals: new[]
+            {
+                "TargetPath"
+            }),
         };
 
     public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
     {
-        node = (InvocationExpressionSyntax) base.VisitInvocationExpression(node).NotNull();
+        node = (InvocationExpressionSyntax)base.VisitInvocationExpression(node).NotNull();
         var identifierName = node.GetIdentifierName();
         var replacement = Replacements.SingleOrDefault(x => x.Original == identifierName);
         if (replacement == null)
+        {
             return node;
+        }
 
         var arguments = new List<(string Name, ExpressionSyntax Value)>();
         var settings = node.GetArgumentAt<ObjectCreationExpressionSyntax>(replacement.Positionals.Length);
 
         node.Arguments().Take(replacement.Positionals.Length)
             .ForEach((x, i) => arguments.Add((replacement.Positionals[i], x)));
+
         settings?.Initializer?.Expressions.Cast<AssignmentExpressionSyntax>()
-            .ForEach(x => arguments.Add((((IdentifierNameSyntax) x.Left).Identifier.Text, x.Right)));
+            .ForEach(x => arguments.Add((((IdentifierNameSyntax)x.Left).Identifier.Text, x.Right)));
 
         ExpressionSyntax expr = IdentifierName("_");
         foreach (var (name, value) in arguments)
@@ -88,8 +117,11 @@ internal class ToolInvocationRewriter : SafeSyntaxRewriter
         }
 
         public string Original { get; }
+
         public string Replacement { get; }
+
         public string[] Positionals { get; }
+
         public Dictionary<string, string> Renames { get; }
     }
 }

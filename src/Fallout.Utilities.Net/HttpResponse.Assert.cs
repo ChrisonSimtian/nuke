@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
@@ -31,11 +30,14 @@ public static partial class HttpResponseExtensions
     /// <summary>
     /// Asserts the status code of an HTTP response.
     /// </summary>
-    public static HttpResponseInspector AssertStatusCode(this HttpResponseInspector inspector, Func<HttpStatusCode, string> errorSelector)
+    public static HttpResponseInspector AssertStatusCode(this HttpResponseInspector inspector,
+        Func<HttpStatusCode, string> errorSelector)
     {
         var response = inspector.Response;
         if (errorSelector.Invoke(response.StatusCode) is { } error)
+        {
             throw new HttpResponseException(error);
+        }
 
         return inspector;
     }
@@ -52,11 +54,14 @@ public static partial class HttpResponseExtensions
     /// <summary>
     /// Asserts an HTTP response.
     /// </summary>
-    public static HttpResponseInspector AssertResponse(this HttpResponseInspector inspector, Func<HttpResponseMessage, string> errorSelector)
+    public static HttpResponseInspector AssertResponse(this HttpResponseInspector inspector,
+        Func<HttpResponseMessage, string> errorSelector)
     {
         var response = inspector.Response;
         if (errorSelector.Invoke(response) is { } error)
+        {
             throw new HttpResponseException(error);
+        }
 
         return inspector;
     }

@@ -15,16 +15,23 @@ public abstract class ConfigurationAttributeBase : Attribute, IConfigurationGene
     public IFalloutBuild Build { get; internal set; }
 
     public string DisplayName => HostType.Name + (string.IsNullOrEmpty(IdPostfix) ? string.Empty : $" ({IdPostfix})");
+
     public string HostName => HostType.Name;
+
     public string Id => HostName + (string.IsNullOrEmpty(IdPostfix) ? string.Empty : $"_{IdPostfix}");
+
     public virtual string IdPostfix => string.Empty;
 
     public bool AutoGenerate { get; set; } = true;
+
     public abstract Type HostType { get; }
+
     public abstract AbsolutePath ConfigurationFile { get; }
+
     public abstract IEnumerable<AbsolutePath> GeneratedFiles { get; }
 
     public abstract IEnumerable<string> RelevantTargetNames { get; }
+
     public abstract IEnumerable<string> IrrelevantTargetNames { get; }
 
     public abstract CustomFileWriter CreateWriter(StreamWriter streamWriter);
@@ -43,9 +50,13 @@ public abstract class ConfigurationAttributeBase : Attribute, IConfigurationGene
     public void Generate(IReadOnlyCollection<ExecutableTarget> executableTargets)
     {
         var relevantTargets = RelevantTargetNames
-            .SelectMany(x => ExecutionPlanner.GetExecutionPlan(executableTargets, new[] { x }))
+            .SelectMany(x => ExecutionPlanner.GetExecutionPlan(executableTargets, new[]
+            {
+                x
+            }))
             .Distinct()
             .Where(x => !IrrelevantTargetNames.Contains(x.Name)).ToList();
+
         var configuration = GetConfiguration(relevantTargets);
 
         using var stream = CreateStream();
@@ -57,7 +68,9 @@ public abstract class ConfigurationAttributeBase : Attribute, IConfigurationGene
         writer.WriteComment();
         writer.WriteComment("    - To turn off auto-generation set:");
         writer.WriteComment();
-        writer.WriteComment($"        [{GetType().Name.TrimEnd(nameof(Attribute))} ({nameof(IConfigurationGenerator.AutoGenerate)} = false)]");
+        writer.WriteComment(
+            $"        [{GetType().Name.TrimEnd(nameof(Attribute))} ({nameof(IConfigurationGenerator.AutoGenerate)} = false)]");
+
         writer.WriteComment();
         writer.WriteComment("    - To trigger manual generation invoke:");
         writer.WriteComment();

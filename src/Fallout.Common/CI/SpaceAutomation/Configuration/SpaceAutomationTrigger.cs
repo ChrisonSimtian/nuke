@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Fallout.Common.CI.SpaceAutomation.Configuration;
+﻿namespace Fallout.Common.CI.SpaceAutomation.Configuration;
 
 public abstract class SpaceAutomationTrigger : ConfigurationEntity
 {

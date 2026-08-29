@@ -28,7 +28,9 @@ public partial class GitHubActions
     protected internal override bool FilterMessage(string message)
     {
         if (!message.StartsWith("::") && !message.StartsWith("##["))
+        {
             return false;
+        }
 
         Console.WriteLine(message);
         return true;

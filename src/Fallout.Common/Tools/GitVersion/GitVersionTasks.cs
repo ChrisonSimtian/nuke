@@ -18,7 +18,8 @@ partial class GitVersionTasks
         }
         catch (Exception exception)
         {
-            throw new Exception($"Cannot parse {nameof(GitVersion)} output:".Concat(output.Select(x => x.Text)).JoinNewLine(), exception);
+            throw new Exception($"Cannot parse {nameof(GitVersion)} output:".Concat(output.Select(x => x.Text)).JoinNewLine(),
+                exception);
         }
     }
 }
@@ -31,11 +32,11 @@ public record GitVersion(
     string PreReleaseTagWithDash,
     string PreReleaseLabel,
     string PreReleaseLabelWithDash,
-    [property: JsonConverter(typeof(NumberToStringJsonConverter))] 
+    [property: JsonConverter(typeof(NumberToStringJsonConverter))]
     string PreReleaseNumber,
-    [property: JsonConverter(typeof(NumberToStringJsonConverter))] 
+    [property: JsonConverter(typeof(NumberToStringJsonConverter))]
     string WeightedPreReleaseNumber,
-    [property: JsonConverter(typeof(NumberToStringJsonConverter))] 
+    [property: JsonConverter(typeof(NumberToStringJsonConverter))]
     string BuildMetaData,
     string BuildMetaDataPadded,
     string FullBuildMetaData,
@@ -56,7 +57,7 @@ public record GitVersion(
     string NuGetPreReleaseTagV2,
     string NuGetPreReleaseTag,
     string VersionSourceSha,
-    [property: JsonConverter(typeof(NumberToStringJsonConverter))] 
+    [property: JsonConverter(typeof(NumberToStringJsonConverter))]
     string CommitsSinceVersionSource,
     string CommitsSinceVersionSourcePadded,
     int? UncommittedChanges,

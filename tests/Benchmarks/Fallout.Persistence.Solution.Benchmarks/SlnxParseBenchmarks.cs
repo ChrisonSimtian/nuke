@@ -13,7 +13,7 @@ namespace Fallout.Persistence.Solution.Benchmarks;
 // Each iteration measures `serializer.OpenAsync(path, ct)` end-to-end on a
 // pre-staged temp .slnx file. Fixture generation is in `[GlobalSetup]` so
 // its cost is excluded from measurements.
-[MemoryDiagnoser]                           // alloc + GC pressure are interesting alongside time
+[MemoryDiagnoser] // alloc + GC pressure are interesting alongside time
 [BenchmarkCategory("slnx", "parse")]
 public class SlnxParseBenchmarks
 {
@@ -36,7 +36,9 @@ public class SlnxParseBenchmarks
     public void Cleanup()
     {
         if (File.Exists(_fixturePath))
+        {
             File.Delete(_fixturePath);
+        }
     }
 
     [Benchmark]

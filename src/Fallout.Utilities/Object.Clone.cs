@@ -1,7 +1,5 @@
-using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Fallout.Common.Utilities;
@@ -19,6 +17,6 @@ public static partial class ObjectExtensions
         using var memoryStream = new MemoryStream();
         serializer.WriteObject(memoryStream, obj);
         memoryStream.Seek(offset: 0, loc: SeekOrigin.Begin);
-        return (T) serializer.ReadObject(memoryStream);
+        return (T)serializer.ReadObject(memoryStream);
     }
 }

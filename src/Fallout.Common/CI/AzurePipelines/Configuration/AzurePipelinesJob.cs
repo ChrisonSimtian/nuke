@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities;
@@ -9,10 +8,15 @@ namespace Fallout.Common.CI.AzurePipelines.Configuration;
 public class AzurePipelinesJob : ConfigurationEntity
 {
     public string Name { get; set; }
+
     public string DisplayName { get; set; }
+
     public AzurePipelinesImage? Image { get; set; }
+
     public AzurePipelinesJob[] Dependencies { get; set; }
+
     public int Parallel { get; set; }
+
     public AzurePipelinesStep[] Steps { get; set; }
 
     public override void Write(CustomFileWriter writer)

@@ -8,9 +8,18 @@ namespace Fallout.Common.CI.GitHubActions;
 /// </summary>
 public enum GitHubActionsInputType
 {
-    [EnumValue("string")] String,
-    [EnumValue("boolean")] Boolean,
-    [EnumValue("number")] Number,
-    [EnumValue("choice")] Choice,
-    [EnumValue("environment")] Environment
+    [EnumValue("string")]
+    String,
+
+    [EnumValue("boolean")]
+    Boolean,
+
+    [EnumValue("number")]
+    Number,
+
+    [EnumValue("choice")]
+    Choice,
+
+    [EnumValue("environment")]
+    Environment
 }

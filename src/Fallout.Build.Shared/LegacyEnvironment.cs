@@ -21,11 +21,15 @@ internal static class LegacyEnvironment
     {
         var preferred = Environment.GetEnvironmentVariable(preferredName);
         if (!string.IsNullOrEmpty(preferred))
+        {
             return preferred;
+        }
 
         var legacy = Environment.GetEnvironmentVariable(legacyName);
         if (string.IsNullOrEmpty(legacy))
+        {
             return null;
+        }
 
         WarnOnce(legacyName, preferredName);
         return legacy;
@@ -37,10 +41,14 @@ internal static class LegacyEnvironment
     public static string ReadFromVariables(IReadOnlyDictionary<string, string> variables, string preferredName, string legacyName)
     {
         if (variables.TryGetValue(preferredName, out var preferred) && !string.IsNullOrEmpty(preferred))
+        {
             return preferred;
+        }
 
         if (!variables.TryGetValue(legacyName, out var legacy) || string.IsNullOrEmpty(legacy))
+        {
             return null;
+        }
 
         WarnOnce(legacyName, preferredName);
         return legacy;
@@ -51,7 +59,9 @@ internal static class LegacyEnvironment
         lock (WarnedLegacyKeysLock)
         {
             if (!WarnedLegacyKeys.Add(legacyName))
+            {
                 return;
+            }
         }
 
         Console.Error.WriteLine(

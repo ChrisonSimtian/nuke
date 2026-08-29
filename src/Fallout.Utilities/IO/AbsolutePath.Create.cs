@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 
 namespace Fallout.Common.IO;
 
@@ -33,10 +32,14 @@ public static partial class AbsolutePathExtensions
     public static AbsolutePath TouchFile(this AbsolutePath path, DateTime? time = null, bool createDirectories = true)
     {
         if (createDirectories)
+        {
             path.Parent.CreateDirectory();
+        }
 
         if (!File.Exists(path))
+        {
             File.WriteAllBytes(path, new byte[0]);
+        }
 
         File.SetLastWriteTime(path, time ?? DateTime.Now);
 

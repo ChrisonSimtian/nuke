@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,21 +56,21 @@ public static class ToolGenerator
     private static IEnumerable<string> GetNamespaceImports(Tool tool)
     {
         return new[]
-               {
-                   "Fallout.Common",
-                   "Fallout.Common.Tooling",
-                   "Fallout.Common.Tools",
-                   "Fallout.Common.Utilities.Collections",
-                   "System",
-                   "System.Collections.Generic",
-                   "System.Collections.ObjectModel",
-                   "System.ComponentModel",
-                   "System.Diagnostics.CodeAnalysis",
-                   "System.IO",
-                   "System.Linq",
-                   "System.Text",
-                   "System.Text.Json.Serialization"
-               }
+            {
+                "Fallout.Common",
+                "Fallout.Common.Tooling",
+                "Fallout.Common.Tools",
+                "Fallout.Common.Utilities.Collections",
+                "System",
+                "System.Collections.Generic",
+                "System.Collections.ObjectModel",
+                "System.ComponentModel",
+                "System.Diagnostics.CodeAnalysis",
+                "System.IO",
+                "System.Linq",
+                "System.Text",
+                "System.Text.Json.Serialization"
+            }
             .Concat(tool.Imports ?? new List<string>())
             .OrderBy(x => x);
     }

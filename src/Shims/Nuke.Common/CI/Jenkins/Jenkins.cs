@@ -6,6 +6,6 @@ namespace Nuke.Common.CI.Jenkins;
 
 public static class Jenkins
 {
-    public static global::Fallout.Common.CI.Jenkins.Jenkins Instance
-        => global::Fallout.Common.CI.Jenkins.Jenkins.Instance;
+    public static Fallout.Common.CI.Jenkins.Jenkins Instance
+        => Fallout.Common.CI.Jenkins.Jenkins.Instance;
 }

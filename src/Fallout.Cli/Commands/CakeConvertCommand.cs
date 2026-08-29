@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 using Fallout.Cli.Prompts;
 using Fallout.Common;
 using Fallout.Common.Execution;
 using Fallout.Common.IO;
-using Fallout.Solutions;
 using Fallout.Common.Utilities;
+using Fallout.Solutions;
 using static Fallout.Common.EnvironmentInfo;
 
 namespace Fallout.Cli.Commands;
@@ -57,7 +57,10 @@ internal sealed class CakeConvertCommand : IFalloutCommand
 
         Host.Debug();
         if (!prompts.PromptForConfirmation("Continue?"))
+        {
             return 0;
+        }
+
         Host.Debug();
 
         if (buildScript == null &&
@@ -83,7 +86,9 @@ internal sealed class CakeConvertCommand : IFalloutCommand
         {
             var packages = CakeConverter.GetCakeFiles().SelectMany(x => CakeConverter.GetPackages(x.ReadAllText()));
             foreach (var package in packages)
+            {
                 this.packages.AddOrReplacePackage(package.Id, package.Version, package.Type, buildProjectFile);
+            }
         }
 
         return 0;

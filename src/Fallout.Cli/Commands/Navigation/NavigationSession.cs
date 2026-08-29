@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Fallout.Common;
 using Fallout.Common.IO;
-using Fallout.Common.Utilities;
 using static Fallout.Common.Constants;
 
 namespace Fallout.Cli.Commands.Navigation;
@@ -34,7 +33,11 @@ internal static class NavigationSession
     {
         try
         {
-            var content = SessionFile.Existing()?.ReadAllLines().ToList() ?? new List<string> { null };
+            var content = SessionFile.Existing()?.ReadAllLines().ToList() ?? new List<string>
+            {
+                null
+            };
+
             content[0] = directoryProvider.Invoke();
             content.Insert(index: 1, EnvironmentInfo.WorkingDirectory);
             SessionFile.WriteAllLines(content);

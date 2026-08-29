@@ -30,10 +30,10 @@ public class RewriteCsFilesStepSpecs : IDisposable
     public async Task Nuke_using_directives_are_rewritten_to_fallout()
     {
         (tempDirectory / "Build.cs").WriteAllText("""
-                                                   using Nuke.Common;
-                                                   using Nuke.Common.IO;
-                                                   using Fallout.Common;
-                                                   """);
+                                                  using Nuke.Common;
+                                                  using Nuke.Common.IO;
+                                                  using Fallout.Common;
+                                                  """);
 
         await new RewriteCsFilesStep().ExecuteAsync(context, summary);
 

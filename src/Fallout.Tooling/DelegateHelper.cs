@@ -24,7 +24,10 @@ public static class DelegateHelper
         var newDictionary = dictionary?.ToDictionary(x => x.Key, x => x.Value) ?? new Dictionary<string, object>();
         var collectionAsString = CollectionToString(values, separator);
         if (!string.IsNullOrWhiteSpace(collectionAsString))
+        {
             newDictionary[key] = collectionAsString;
+        }
+
         return newDictionary;
     }
 
@@ -55,10 +58,14 @@ public static class DelegateHelper
         return newDictionary;
     }
 
-    private static List<TValue> ParseCollection<TValue>(IReadOnlyDictionary<string, object> dictionary, string key, string separator)
+    private static List<TValue> ParseCollection<TValue>(IReadOnlyDictionary<string, object> dictionary, string key,
+        string separator)
     {
         if (dictionary?.TryGetValue(key, out var value) != true)
+        {
             return [];
+        }
+
         // STJ round-tripping IReadOnlyDictionary<string, object> deserializes values as JsonElement,
         // not as primitive strings like Newtonsoft did. Coerce both shapes back to string here.
         var stringValue = value switch
@@ -68,6 +75,7 @@ public static class DelegateHelper
             null => null,
             _ => value.ToString()
         };
+
         return (stringValue?.Split([separator], StringSplitOptions.RemoveEmptyEntries) ?? [])
             .Select(ReflectionUtility.Convert<TValue>).ToList();
     }

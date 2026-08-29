@@ -1,9 +1,8 @@
-using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using Humanizer;
 using Fallout.Common;
+using Humanizer;
 
 namespace Fallout.CodeGeneration.Generators;
 
@@ -109,7 +108,7 @@ public static class StringExtensions
 
     public static string Paragraph(this string text)
     {
-        return text == null || text.StartsWith("<p>") && text.EndsWith("</p>")
+        return text == null || (text.StartsWith("<p>") && text.EndsWith("</p>"))
             ? text
             : $"<p>{text}</p>";
     }
