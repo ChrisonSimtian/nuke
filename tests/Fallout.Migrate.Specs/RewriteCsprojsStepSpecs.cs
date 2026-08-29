@@ -313,7 +313,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              </Project>
                              """;
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -341,7 +341,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -367,7 +367,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -392,7 +392,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -417,7 +417,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -441,7 +441,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -468,7 +468,7 @@ public class RewriteCsprojsStepSpecs : IDisposable
                              """;
 
         (tempDirectory / "build" / "_build.csproj").WriteAllText(input);
-        
+
         await new RewriteCsprojsStep().ExecuteAsync(context, summary);
 
         var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
@@ -478,5 +478,73 @@ public class RewriteCsprojsStepSpecs : IDisposable
             .And.Contain("<FalloutVersion>11.0.0</FalloutVersion>")
             .And.Contain("$(FalloutVersion)", Exactly.Once())
             .And.Contain("$(PkgVersion)");
+    }
+
+    [Fact]
+    public async Task Correctly_adds_nuget_framework_package_version_pin()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                               </PropertyGroup>
+                               <ItemGroup>
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+
+        context.FalloutVersion = "10.4.2";
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should().Be("""
+                                <Project Sdk="Microsoft.NET.Sdk">
+                                  <PropertyGroup>
+                                  </PropertyGroup>
+                                  <ItemGroup>
+
+                                    <!-- fallout-migrate:delete-at-v11:start -->
+                                    <!-- Pin the NuGet.Framework version, so .NET 10.0.400 does not cause the build to fail. -->
+                                    <PackageReference Include="NuGet.Framework" Version="7.9.0" />
+                                    <!-- fallout-migrate:delete-at-v11:end -->
+                                  </ItemGroup>
+                                </Project>
+                                """);
+    }
+
+    [Fact]
+    public async Task Removes_nuget_framework_package_version_pin_on_v11()
+    {
+        const string input = """
+                            <Project Sdk="Microsoft.NET.Sdk">
+                              <PropertyGroup>
+                              </PropertyGroup>
+                              <ItemGroup>
+
+                                <!-- fallout-migrate:delete-at-v11:start -->
+                                <!-- Pin the NuGet.Framework version, so .NET 10.0.400 does not cause the build to fail. -->
+                                <PackageReference Include="NuGet.Framework" Version="7.9.0" />
+                                <!-- fallout-migrate:delete-at-v11:end -->
+                              </ItemGroup>
+                            </Project>
+                            """;
+
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+
+        context.FalloutVersion = "11.0.0";
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should().Be("""
+                                <Project Sdk="Microsoft.NET.Sdk">
+                                  <PropertyGroup>
+                                  </PropertyGroup>
+                                  <ItemGroup>
+                                  </ItemGroup>
+                                </Project>
+                                """);
     }
 }
