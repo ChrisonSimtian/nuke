@@ -52,7 +52,9 @@ else
     export PATH="$DOTNET_DIRECTORY:$PATH"
 fi
 
-echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)"
+# Provisioning chatter goes to standard error, so standard output carries only what the build
+# itself writes. That is what lets `./build.sh --describe | jq` work.
+echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)" >&2
 
-"$DOTNET_EXE" tool restore
+"$DOTNET_EXE" tool restore >&2
 exec "$DOTNET_EXE" fallout "$@"

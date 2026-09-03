@@ -11,6 +11,7 @@
     Debug,
     Release
   ],
+  Describe: [],
   Help: [],
   Host: [
     Rider,
@@ -19,6 +20,7 @@
     VSCode
   ],
   IntegerArrayParam: [],
+  Json: [],
   NoLogo: [],
   NullableBooleanParam: [],
   Partition: [],

@@ -1,6 +1,7 @@
 ﻿{
   "version": 1,
   "falloutVersion": "2026.1.0-preview.42",
+  "toolRequirements": [],
   "targets": [
     {
       "name": "Compile",
@@ -15,6 +16,18 @@
       "triggeredBy": [],
       "triggers": [
         "Publish"
+      ],
+      "toolRequirements": [
+        {
+          "kind": "nuget",
+          "packageId": "GitVersion.Tool",
+          "version": "5.12.0"
+        },
+        {
+          "kind": "path",
+          "packageId": "git",
+          "version": null
+        }
       ]
     },
     {
@@ -28,7 +41,8 @@
       "triggeredBy": [
         "Test"
       ],
-      "triggers": []
+      "triggers": [],
+      "toolRequirements": []
     },
     {
       "name": "Restore",
@@ -39,7 +53,8 @@
       "dependsOn": [],
       "after": [],
       "triggeredBy": [],
-      "triggers": []
+      "triggers": [],
+      "toolRequirements": []
     },
     {
       "name": "Test",
@@ -54,7 +69,9 @@
         "Restore"
       ],
       "triggeredBy": [],
-      "triggers": []
+      "triggers": [],
+      "toolRequirements": []
     }
-  ]
+  ],
+  "parameters": []
 }

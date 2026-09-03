@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Fallout.Build.Execution.Extensions;
+using Fallout.Common;
 using Fallout.Common.Execution;
+using Fallout.Common.Tooling;
+using Fallout.Common.ValueInjection;
 using FluentAssertions;
 using VerifyXunit;
 using Xunit;
@@ -40,6 +44,10 @@ public class BuildGraphUtilitySpecs
         test.OrderDependencies.Add(restore);
         publish.TriggerDependencies.Add(test);
         compile.Triggers.Add(publish);
+
+        // Two kinds, one carrying a version and one not, so the projection covers both shapes.
+        compile.ToolRequirements.Add(new NuGetPackageRequirement("GitVersion.Tool", "5.12.0"));
+        compile.ToolRequirements.Add(new PathToolRequirement("git"));
 
         // Deliberately unsorted so the ordinal ordering guarantee is exercised.
         return new[] { test, publish, compile, restore };
@@ -137,13 +145,13 @@ public class BuildGraphUtilitySpecs
         using var doc = JsonDocument.Parse(BuildGraphUtility.GetJsonString(SampleGraph(), SampleVersion));
 
         doc.RootElement.EnumerateObject().Select(x => x.Name)
-            .Should().Equal("version", "falloutVersion", "targets");
+            .Should().Equal("version", "falloutVersion", "toolRequirements", "targets", "parameters");
 
         var firstTarget = doc.RootElement.GetProperty("targets").EnumerateArray().First();
         firstTarget.EnumerateObject().Select(x => x.Name)
             .Should().Equal(
                 "name", "description", "declaredIn", "default", "listed",
-                "dependsOn", "after", "triggeredBy", "triggers");
+                "dependsOn", "after", "triggeredBy", "triggers", "toolRequirements");
     }
 
     [Theory]
@@ -157,6 +165,97 @@ public class BuildGraphUtilitySpecs
         BuildGraphUtility.NormalizeVersion(input).Should().Be(expected);
     }
 
+    [Fact]
+    public void Tool_requirements_are_projected_with_their_kind()
+    {
+        ModelFor("Compile").ToolRequirements.Should().Equal(
+            new BuildGraphUtility.ToolRequirementModel("nuget", "GitVersion.Tool", "5.12.0"),
+            new BuildGraphUtility.ToolRequirementModel("path", "git", Version: null));
+    }
+
+    [Fact]
+    public void Targets_without_tool_requirements_emit_an_empty_list()
+    {
+        ModelFor("Restore").ToolRequirements.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Build_level_requirements_are_projected_at_the_document_root()
+    {
+        // [Requires<T>] targets Class/Interface only, so a build-level requirement can never appear
+        // on a target and would be missing from the document entirely if not projected separately.
+        var model = BuildGraphUtility.GetModel(
+            SampleGraph(),
+            SampleVersion,
+            new MemberInfo[0],
+            new ToolRequirement[] { new NuGetPackageRequirement("GitVersion.Tool", "5.12.0") });
+
+        model.ToolRequirements.Should().Equal(
+            new BuildGraphUtility.ToolRequirementModel("nuget", "GitVersion.Tool", "5.12.0"));
+    }
+
+    [Fact]
+    public void A_generic_parameter_type_is_named_without_assembly_or_runtime_version()
+    {
+        // Type.FullName would emit List`1[[System.String, System.Private.CoreLib, Version=...]],
+        // putting the running runtime into the contract and churning it on every SDK bump.
+        var type = ParameterModelFor("tags").Type;
+
+        type.Should().Be("System.Collections.Generic.List<System.String>");
+        type.Should().NotContain("Version=").And.NotContain("PublicKeyToken");
+    }
+
+    [Fact]
+    public void Parameters_are_projected_without_leaking_secret_values()
+    {
+        var apiKey = ParameterModelFor("nuget-api-key");
+
+        apiKey.Required.Should().BeTrue();
+        apiKey.Secret.Should().BeTrue();
+        apiKey.Type.Should().Be("System.String");
+        apiKey.DeclaredIn.Should().Be(nameof(SampleParameterBuild));
+        // ParameterService trims the trailing period; --help re-appends it when rendering.
+        apiKey.Description.Should().Be("API key for nuget.org");
+        apiKey.Default.Should().BeNull("a secret's value must never reach the emitted model");
+    }
+
+    [Fact]
+    public void Nullable_value_type_parameters_report_their_underlying_clr_type()
+    {
+        ParameterModelFor("retries").Type.Should().Be("System.Int32");
+    }
+
+    [Fact]
+    public void Inherited_built_in_parameters_are_projected_alongside_the_build_s_own()
+    {
+        var names = SampleParameters().Select(x => x.Name).ToList();
+
+        names.Should().Contain("nuget-api-key").And.Contain("no-logo");
+    }
+
+    [Fact]
+    public void Parameters_are_ordered_by_name_ordinally()
+    {
+        var names = SampleParameters().Select(x => x.Name).ToList();
+
+        names.Should().BeInAscendingOrder(StringComparer.Ordinal);
+    }
+
+    [Fact]
+    public void A_graph_projected_without_parameter_members_emits_an_empty_list()
+    {
+        BuildGraphUtility.GetModel(SampleGraph(), SampleVersion).Parameters.Should().BeEmpty();
+    }
+
+    private static BuildGraphUtility.ParameterModel ParameterModelFor(string name)
+        => SampleParameters().Single(x => x.Name == name);
+
+    private static IReadOnlyList<BuildGraphUtility.ParameterModel> SampleParameters()
+        => BuildGraphUtility.GetModel(
+            SampleGraph(),
+            SampleVersion,
+            ValueInjectionUtility.GetParameterMembers(typeof(SampleParameterBuild), includeUnlisted: false)).Parameters;
+
     private static BuildGraphUtility.TargetModel ModelFor(string name)
         => BuildGraphUtility.GetModel(SampleGraph(), SampleVersion).Targets.Single(x => x.Name == name);
 
@@ -167,5 +266,18 @@ public class BuildGraphUtilitySpecs
     private class SampleBuild
     {
         public object Compile => null;
+    }
+
+    // Private readonly fields are the idiomatic parameter declaration — see DuplicateParameterSpecs.
+    private class SampleParameterBuild : FalloutBuild
+    {
+        [Parameter("API key for nuget.org.")] [Required] [Secret]
+        private readonly string NuGetApiKey;
+
+        [Parameter("How often to retry.")]
+        private readonly int? Retries;
+
+        [Parameter("Tags to apply.")]
+        private readonly List<string> Tags;
     }
 }

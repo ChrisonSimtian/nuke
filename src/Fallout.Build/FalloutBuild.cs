@@ -126,13 +126,25 @@ public abstract partial class FalloutBuild : IFalloutBuild
     /// Gets a value whether to show the execution plan (HTML).
     /// </summary>
     [Parameter("Shows the execution plan (HTML).")]
-    public bool Plan { get; }
+    public bool Plan { get; internal set; }
 
     /// <summary>
     /// Gets a value whether to show the help text for this build assembly.
     /// </summary>
     [Parameter("Shows the help text for this build assembly.")]
     public bool Help { get; }
+
+    /// <summary>
+    /// Gets a value whether to print the build model as JSON and exit without executing anything.
+    /// </summary>
+    [Parameter("Prints the build model as JSON and exits without executing any target.")]
+    public bool Describe { get; internal set; }
+
+    /// <summary>
+    /// Gets a value whether read-only requests emit machine-readable JSON on standard output.
+    /// </summary>
+    [Parameter("Emits machine-readable JSON on standard output for read-only requests (--plan).")]
+    public bool Json { get; internal set; }
 
     /// <summary>
     /// Gets a value whether to display the Fallout logo.

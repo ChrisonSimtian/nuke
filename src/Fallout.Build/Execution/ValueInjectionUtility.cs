@@ -62,6 +62,8 @@ internal static class ValueInjectionUtility
                  {
                      nameof(FalloutBuild.Plan),
                      nameof(FalloutBuild.Help),
+                     nameof(FalloutBuild.Describe),
+                     nameof(FalloutBuild.Json),
                      nameof(FalloutBuild.Continue),
                      nameof(FalloutBuild.NoLogo),
                      nameof(FalloutBuild.Verbosity),

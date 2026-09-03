@@ -4,7 +4,9 @@ Param(
     [string[]]$BuildArguments
 )
 
-Write-Output "PowerShell $($PSVersionTable.PSEdition) version $($PSVersionTable.PSVersion)"
+# Provisioning chatter goes to standard error, so standard output carries only what the build
+# itself writes. That is what lets `./build.ps1 --describe | ConvertFrom-Json` work.
+[Console]::Error.WriteLine("PowerShell $($PSVersionTable.PSEdition) version $($PSVersionTable.PSVersion)")
 
 Set-StrictMode -Version 2.0; $ErrorActionPreference = "Stop"; $ConfirmPreference = "None"; trap { Write-Error $_ -ErrorAction Continue; exit 1 }
 $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
@@ -59,7 +61,8 @@ else {
     $env:PATH = "$DotNetDirectory;$env:PATH"
 }
 
-Write-Output "Microsoft (R) .NET SDK version $(& $env:DOTNET_EXE --version)"
+[Console]::Error.WriteLine("Microsoft (R) .NET SDK version $(& $env:DOTNET_EXE --version)")
 
-ExecSafe { & $env:DOTNET_EXE tool restore }
+# PowerShell has no `1>&2`, so the restore's output is pumped to standard error explicitly.
+ExecSafe { & $env:DOTNET_EXE tool restore 2>&1 | ForEach-Object { [Console]::Error.WriteLine($_) } }
 ExecSafe { & $env:DOTNET_EXE fallout $BuildArguments }

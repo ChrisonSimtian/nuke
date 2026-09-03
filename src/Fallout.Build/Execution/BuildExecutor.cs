@@ -15,6 +15,13 @@ namespace Fallout.Common.Execution;
 /// </summary>
 internal static class BuildExecutor
 {
+    /// <summary>
+    /// Reason recorded when <c>--skip</c> names a target. Shared with
+    /// <see cref="BuildIntrospectionService" /> so the predicted plan and the executed one describe
+    /// a skip identically.
+    /// </summary>
+    internal const string SkippedViaParameterReason = "via parameter";
+
     // NOTE: no IFalloutBuild because of BuildAttemptFile + WriteTarget
     private static AbsolutePath BuildAttemptFile => Constants.GetBuildAttemptFile(FalloutBuild.RootDirectory);
 
@@ -25,7 +32,7 @@ internal static class BuildExecutor
             skippedTargets = skippedTargets.Select(x => x.Replace("-", string.Empty)).ToArray();
             build.ExecutionPlan
                 .Where(x => skippedTargets.Count == 0 || skippedTargets.Contains(x.Name, StringComparer.OrdinalIgnoreCase))
-                .ForEach(x => MarkTargetSkipped(build, x, reason: "via parameter"));
+                .ForEach(x => MarkTargetSkipped(build, x, reason: SkippedViaParameterReason));
         }
 
         build.ExecutionPlan.ForEach(x => CheckConditions(build, x, x.StaticConditions));

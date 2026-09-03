@@ -44,11 +44,41 @@ internal static class BuildManager
         using var context = BuildContext.Activate();
         var build = new T();
 
+        // Resolved once, then reused by the gate, the failure path and Finish(). Declared out here
+        // so those last two still have it; null means the run failed before the request could even
+        // be determined, which is an ordinary failure and reported as one.
+        BuildIntrospectionService introspection = null;
+
         try
         {
+            introspection = BuildIntrospectionService.For(build);
+
             Logging.Configure(build);
 
             build.ExecutableTargets = ExecutableTargetFactory.CreateAll(build, defaultTargetExpressions);
+
+            // A read-only introspection request short-circuits before ANY extension runs and long
+            // before EnsureToolRequirements. That single gate is what makes "changes nothing, runs
+            // nothing" structural: IOnBuildCreated alone rewrites .fallout/build.schema.json
+            // (HandleShellCompletionAttribute) and can block on Console.ReadKey
+            // (UpdateNotificationAttribute), which would deadlock a piped consumer.
+            if (introspection.IsRequestedForRun)
+            {
+                var invokedTargets = ParameterService.GetParameter<string[]>(() => build.InvokedTargets);
+                build.ExecutionPlan = ExecutionPlanner.GetExecutionPlan(build.ExecutableTargets, invokedTargets);
+
+                // Newline-terminated, matching SchemaUtility's emitted JSON and the usual
+                // expectation that a document written to a pipe ends with one.
+                Console.Out.WriteLine(
+                    introspection.GetDocument(
+                        build,
+                        build.ExecutableTargets,
+                        build.ExecutionPlan,
+                        invokedTargets,
+                        ParameterService.GetParameter<string[]>(() => build.SkippedTargets)));
+                return build.ExitCode ??= 0;
+            }
+
             build.ExecuteExtension<IOnBuildCreated>(x => x.OnBuildCreated(build.ExecutableTargets));
 
             NuGetToolPathResolver.EmbeddedPackagesDirectory = build.EmbeddedPackagesDirectory;
@@ -77,6 +107,18 @@ internal static class BuildManager
         catch (Exception exception)
         {
             exception = exception.Unwrap();
+
+            // An introspection request promised JSON on standard output; a failure on the way to
+            // emitting the document has to keep that promise rather than switch to human prose.
+            if (introspection is { IsRequestedForRun: true })
+            {
+                // Nothing is logged here on purpose: Serilog's console sink writes to standard
+                // output, so a log line would land inside the document a consumer is parsing. The
+                // envelope carries the kind and message instead.
+                Console.Out.WriteLine(introspection.GetErrorJson(exception));
+                return build.ExitCode ??= ErrorExitCode;
+            }
+
             if (exception is not TargetExecutionException)
             {
                 Log.Verbose(exception, "Target-unrelated exception was thrown");
@@ -95,7 +137,9 @@ internal static class BuildManager
 
         void Finish()
         {
-            if (build.ExecutionPlan == null)
+            // The plan is resolved before the introspection short-circuit returns, so guarding on
+            // it alone would print the outcome tables over the emitted document.
+            if (build.ExecutionPlan == null || introspection is { IsRequestedForRun: true })
                 return;
 
             foreach (var target in build.ExecutionPlan)

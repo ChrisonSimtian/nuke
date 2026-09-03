@@ -1,6 +1,7 @@
 ﻿{
   BuildProjectFile: [],
   Continue: [],
+  Describe: [],
   Help: [],
   Host: [
     Rider,
@@ -8,6 +9,7 @@
     VisualStudio,
     VSCode
   ],
+  Json: [],
   NoLogo: [],
   Partition: [],
   Plan: [],
