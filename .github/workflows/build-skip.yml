@@ -28,8 +28,13 @@ name: build
 # Mirrors build.yml. This job does real work now, so rapid pushes to a docs PR
 # would otherwise stack concurrent builds, which is the cost this file exists to
 # avoid in the first place.
+#
+# The group is a literal, NOT ${{ github.workflow }}: that expands to the workflow
+# `name:`, which is `build` in both this file and build.yml on purpose. A PR that
+# touches code AND a doc fires both workflows, and a shared group plus
+# cancel-in-progress would let whichever starts second cancel the other.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: build-skip-${{ github.ref }}
   cancel-in-progress: true
 
 on:
