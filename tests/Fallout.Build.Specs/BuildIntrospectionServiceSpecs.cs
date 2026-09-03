@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using Fallout.Common;
 using Fallout.Common.Execution;
+using Fallout.Common.Tooling;
 using FluentAssertions;
 using Xunit;
 
@@ -18,25 +19,36 @@ public class BuildIntrospectionServiceSpecs
 {
     private const string SampleVersion = "2026.1.0-preview.42";
 
+    // The flags a run resolves once, restated here so each spec builds the service the way
+    // BuildManager does. Version is pinned so the asserted document never moves with the assembly.
+    private static BuildIntrospectionService Describing()
+        => new(describe: true, planAsJson: false, SampleVersion);
+
+    private static BuildIntrospectionService Planning()
+        => new(describe: false, planAsJson: true, SampleVersion);
+
+    private static bool IsRequestedFor(FalloutBuild build)
+        => BuildIntrospectionService.For(build).IsRequestedForRun;
+
     [Fact]
     public void Describe_is_requested_by_the_describe_flag_alone()
     {
-        BuildIntrospectionService.IsRequested(new SampleBuild { Describe = true }).Should().BeTrue();
+        IsRequestedFor(new SampleBuild { Describe = true }).Should().BeTrue();
     }
 
     [Fact]
     public void Plan_json_is_requested_only_when_both_flags_are_set()
     {
         // --plan on its own keeps its existing behaviour: the HTML graph, opened in a browser.
-        BuildIntrospectionService.IsRequested(new SampleBuild { Plan = true }).Should().BeFalse();
-        BuildIntrospectionService.IsRequested(new SampleBuild { Json = true }).Should().BeFalse();
-        BuildIntrospectionService.IsRequested(new SampleBuild { Plan = true, Json = true }).Should().BeTrue();
+        IsRequestedFor(new SampleBuild { Plan = true }).Should().BeFalse();
+        IsRequestedFor(new SampleBuild { Json = true }).Should().BeFalse();
+        IsRequestedFor(new SampleBuild { Plan = true, Json = true }).Should().BeTrue();
     }
 
     [Fact]
     public void An_ordinary_run_requests_no_introspection()
     {
-        BuildIntrospectionService.IsRequested(new SampleBuild()).Should().BeFalse();
+        IsRequestedFor(new SampleBuild()).Should().BeFalse();
     }
 
     [Theory]
@@ -60,8 +72,7 @@ public class BuildIntrospectionServiceSpecs
     [Fact]
     public void Describe_document_carries_targets_and_parameters_and_parses_as_json()
     {
-        var json = BuildIntrospectionService.GetDescribeJson(
-            new SampleBuild(), SampleGraph(), SampleVersion);
+        var json = Describing().GetDescribeJson(new SampleBuild(), SampleGraph());
 
         using var document = JsonDocument.Parse(json);
         var root = document.RootElement;
@@ -77,8 +88,7 @@ public class BuildIntrospectionServiceSpecs
     [Fact]
     public void Describe_document_projects_the_build_s_own_parameters()
     {
-        var json = BuildIntrospectionService.GetDescribeJson(
-            new SampleBuild(), SampleGraph(), SampleVersion);
+        var json = Describing().GetDescribeJson(new SampleBuild(), SampleGraph());
 
         using var document = JsonDocument.Parse(json);
         var names = document.RootElement.GetProperty("parameters").EnumerateArray()
@@ -95,7 +105,7 @@ public class BuildIntrospectionServiceSpecs
         var compile = new ExecutableTarget { Name = "Compile", Invoked = true };
         compile.StaticConditions.Add(("IsServerBuild", () => { evaluated = true; return true; }));
 
-        var json = BuildIntrospectionService.GetPlanJson(
+        var json = Planning().GetPlanJson(
             new[] { "Compile" }, new[] { restore, compile }, skippedTargets: null);
 
         using var document = JsonDocument.Parse(json);
@@ -125,7 +135,7 @@ public class BuildIntrospectionServiceSpecs
         var restore = new ExecutableTarget { Name = "Restore" };
         var compile = new ExecutableTarget { Name = "Compile" };
 
-        var json = BuildIntrospectionService.GetPlanJson(
+        var json = Planning().GetPlanJson(
             new[] { "Compile" }, new[] { restore, compile }, new[] { "re-store" });
 
         using var document = JsonDocument.Parse(json);
@@ -139,7 +149,7 @@ public class BuildIntrospectionServiceSpecs
     [Fact]
     public void An_empty_skip_list_skips_every_target_except_the_invoked_ones()
     {
-        var json = BuildIntrospectionService.GetPlanJson(
+        var json = Planning().GetPlanJson(
             new[] { "Compile" },
             new[]
             {
@@ -160,7 +170,7 @@ public class BuildIntrospectionServiceSpecs
     {
         // BuildExecutor.MarkTargetSkipped only skips when !target.Invoked, so naming an invoked
         // target in --skip does not stop it running. The predicted plan has to say the same.
-        var json = BuildIntrospectionService.GetPlanJson(
+        var json = Planning().GetPlanJson(
             new[] { "Compile" },
             new[] { new ExecutableTarget { Name = "Compile", Invoked = true } },
             new[] { "Compile" });
@@ -174,7 +184,7 @@ public class BuildIntrospectionServiceSpecs
     [Fact]
     public void Error_envelope_names_the_exception_kind_and_message()
     {
-        var json = BuildIntrospectionService.GetErrorJson(new InvalidOperationException("boom"));
+        var json = Planning().GetErrorJson(new InvalidOperationException("boom"));
 
         using var document = JsonDocument.Parse(json);
         var root = document.RootElement;
@@ -183,6 +193,22 @@ public class BuildIntrospectionServiceSpecs
         var error = root.GetProperty("error");
         error.GetProperty("kind").GetString().Should().Be(nameof(InvalidOperationException));
         error.GetProperty("message").GetString().Should().Be("boom");
+    }
+
+    [Fact]
+    public void Describe_document_carries_the_build_s_class_level_tool_requirements()
+    {
+        // Regression guard for a gap the old shape hid. The specs used to call a version-taking
+        // overload that projected targets and parameters but NOT BuildRequirements, so the document
+        // asserted here was not the one production emitted and this projection went uncovered.
+        // Both now go down one path, and a class-level [Requires<T>] reaches the document.
+        var json = Describing().GetDescribeJson(new RequiringBuild(), SampleGraph());
+
+        using var document = JsonDocument.Parse(json);
+        var requirements = document.RootElement.GetProperty("toolRequirements");
+
+        requirements.EnumerateArray().Select(x => x.GetProperty("packageId").GetString())
+            .Should().Equal("GitVersion.Tool");
     }
 
     private static IReadOnlyCollection<ExecutableTarget> SampleGraph()
@@ -198,4 +224,14 @@ public class BuildIntrospectionServiceSpecs
         [Parameter("An API key.")]
         private readonly string ApiKey;
     }
+
+    // A stand-in tool: the specs project references Fallout.Build, not the generated wrappers in
+    // Fallout.Common, and [Requires<T>] only needs T to carry a ToolAttribute.
+    [NuGetTool(Id = "GitVersion.Tool")]
+    private class FakeTool : IRequireNuGetPackage;
+
+    // [Requires<T>] targets Class/Interface only, so this is the sole way a build-level tool
+    // requirement can reach the describe document.
+    [Requires<FakeTool>(Version = "5.12.0")]
+    private class RequiringBuild : FalloutBuild;
 }

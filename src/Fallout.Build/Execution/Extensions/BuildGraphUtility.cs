@@ -116,9 +116,20 @@ internal static class BuildGraphUtility
 
     /// <summary>Serializes the whole model for a build: targets, parameters, build-level requirements.</summary>
     internal static string GetJsonString(IFalloutBuild build, IReadOnlyCollection<ExecutableTarget> targets)
+        => GetJsonString(build, targets, GetFalloutVersion());
+
+    /// <summary>
+    /// As above, with the version supplied instead of read off the running assembly, so a caller
+    /// that needs a deterministic document gets one down the SAME path production uses — the
+    /// parameters and the build-level requirements included.
+    /// </summary>
+    internal static string GetJsonString(
+        IFalloutBuild build,
+        IReadOnlyCollection<ExecutableTarget> targets,
+        string falloutVersion)
         => GetModel(
                 targets,
-                GetFalloutVersion(),
+                falloutVersion,
                 ValueInjectionUtility.GetParameterMembers(build.GetType(), includeUnlisted: false),
                 BuildRequirements(build))
             .ToJson(SerializerOptions);

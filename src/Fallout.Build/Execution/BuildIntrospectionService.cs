@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.Json;
 using Fallout.Build.Execution.Extensions;
 using Fallout.Common.Utilities;
 using Fallout.Common.ValueInjection;
@@ -20,7 +18,15 @@ namespace Fallout.Common.Execution;
 /// extension — where <c>--help</c> and <c>--plan</c> live — could not honour "runs no external tool".
 /// </para>
 /// </summary>
-internal static class BuildIntrospectionService
+/// <remarks>
+/// One instance per run, resolved once by <see cref="For" />, rather than a static class. The
+/// request is asked three times during a run — at the gate, on the failure path, and before the
+/// outcome tables — and answering it from ambient <see cref="ParameterService" /> state on each
+/// call made those three independent reads of process-global state that nothing kept in agreement.
+/// Holding the version on the instance also lets a caller supply it, so a spec asserts the document
+/// production emits rather than a parallel one assembled for the test.
+/// </remarks>
+internal sealed class BuildIntrospectionService
 {
     /// <summary>
     /// Version of the <c>--plan --json</c> document. Deliberately its own constant rather than
@@ -33,7 +39,24 @@ internal static class BuildIntrospectionService
     /// <summary>Version of the error envelope, separate for the same reason.</summary>
     internal const int ErrorSchemaVersion = 1;
 
-    /// <summary>Whether this invocation is a read-only introspection request rather than a build.</summary>
+    private readonly bool describe;
+    private readonly bool planAsJson;
+    private readonly string falloutVersion;
+
+    /// <param name="describe">Whether <c>--describe</c> was requested.</param>
+    /// <param name="planAsJson">Whether <c>--plan</c> and <c>--json</c> were both requested.</param>
+    /// <param name="falloutVersion">
+    /// The version stamped into the describe document. Passed in rather than read inside, so a spec
+    /// can assert an exact document without the running assembly's version leaking into it.
+    /// </param>
+    internal BuildIntrospectionService(bool describe, bool planAsJson, string falloutVersion)
+    {
+        this.describe = describe;
+        this.planAsJson = planAsJson;
+        this.falloutVersion = falloutVersion;
+    }
+
+    /// <summary>Resolves the request for a run, once.</summary>
     /// <remarks>
     /// Each flag is read from the injected property OR straight from the arguments, because this is
     /// asked <em>before</em> value injection has run: InjectParameterValuesAttribute is itself an
@@ -41,9 +64,11 @@ internal static class BuildIntrospectionService
     /// the property here would make every request look like an ordinary build.
     /// </remarks>
     // --plan alone keeps its existing meaning (the HTML graph); only --json redirects it here.
-    internal static bool IsRequested(FalloutBuild build)
-        => Flag(build.Describe, nameof(FalloutBuild.Describe)) ||
-           (Flag(build.Plan, nameof(FalloutBuild.Plan)) && Flag(build.Json, nameof(FalloutBuild.Json)));
+    internal static BuildIntrospectionService For(FalloutBuild build)
+        => new(
+            Flag(build.Describe, nameof(FalloutBuild.Describe)),
+            Flag(build.Plan, nameof(FalloutBuild.Plan)) && Flag(build.Json, nameof(FalloutBuild.Json)),
+            BuildGraphUtility.GetFalloutVersion());
 
     private static bool Flag(bool injected, string parameterName)
         => injected || ParameterService.GetParameter<bool>(parameterName);
@@ -51,8 +76,8 @@ internal static class BuildIntrospectionService
     /// <summary>
     /// Whether raw command-line arguments request introspection, for callers that must decide
     /// before a build process exists — the CLI, which has to know where to send the build step's
-    /// own output. Shares this type with the property-based overload so the two entry points
-    /// cannot disagree about what counts as a read-only request.
+    /// own output. Static because there is no run yet to hang an instance off, and it lives on this
+    /// type so the two entry points cannot disagree about what counts as a read-only request.
     /// </summary>
     internal static bool IsRequested(IReadOnlyCollection<string> arguments)
         => HasFlag(arguments, nameof(FalloutBuild.Describe)) ||
@@ -64,24 +89,26 @@ internal static class BuildIntrospectionService
             x.StartsWith("-", StringComparison.Ordinal) &&
             x.TrimStart('-').Replace("-", string.Empty).EqualsOrdinalIgnoreCase(parameterName));
 
-    /// <summary>The document for whichever request <see cref="IsRequested" /> matched.</summary>
-    internal static string GetDocument(
+    /// <summary>Whether this invocation is a read-only introspection request rather than a build.</summary>
+    internal bool IsRequestedForRun => describe || planAsJson;
+
+    /// <summary>The document for whichever request <see cref="IsRequestedForRun" /> matched.</summary>
+    internal string GetDocument(
         FalloutBuild build,
         IReadOnlyCollection<ExecutableTarget> targets,
-        IReadOnlyCollection<ExecutableTarget> plan)
-        => Flag(build.Describe, nameof(FalloutBuild.Describe))
+        IReadOnlyCollection<ExecutableTarget> plan,
+        IReadOnlyCollection<string> invokedTargets,
+        IReadOnlyCollection<string> skippedTargets)
+        => describe
             ? GetDescribeJson(build, targets)
-            : GetPlanJson(
-                ParameterService.GetParameter<string[]>(() => build.InvokedTargets) ?? new string[0],
-                plan,
-                ParameterService.GetParameter<string[]>(() => build.SkippedTargets));
+            : GetPlanJson(invokedTargets ?? new string[0], plan, skippedTargets);
 
     /// <summary>
     /// The resolved execution plan: what <em>would</em> run, in order, and what gates each entry.
     /// Conditions are reported as their declared text and never evaluated — they are user delegates,
     /// and running them would contradict "invokes no target".
     /// </summary>
-    internal static string GetPlanJson(
+    internal string GetPlanJson(
         IReadOnlyCollection<string> invokedTargets,
         IReadOnlyCollection<ExecutableTarget> plan,
         IReadOnlyCollection<string> skippedTargets)
@@ -115,27 +142,16 @@ internal static class BuildIntrospectionService
     }
 
     /// <summary>The whole build model: targets, dependency edges, tool requirements, parameters.</summary>
-    internal static string GetDescribeJson(
+    internal string GetDescribeJson(
         FalloutBuild build,
         IReadOnlyCollection<ExecutableTarget> targets)
-        => BuildGraphUtility.GetJsonString(build, targets);
-
-    /// <summary>Overload taking an explicit version, so the document can be asserted deterministically.</summary>
-    internal static string GetDescribeJson(
-        FalloutBuild build,
-        IReadOnlyCollection<ExecutableTarget> targets,
-        string falloutVersion)
-        => BuildGraphUtility.GetModel(
-                targets,
-                falloutVersion,
-                ValueInjectionUtility.GetParameterMembers(build.GetType(), includeUnlisted: false))
-            .ToJson(BuildGraphUtility.SerializerOptions);
+        => BuildGraphUtility.GetJsonString(build, targets, falloutVersion);
 
     /// <summary>
     /// The failure form of both documents, so a consumer parsing standard output gets JSON whether
     /// the request succeeded or the build threw on its way to being described.
     /// </summary>
-    internal static string GetErrorJson(Exception exception)
+    internal string GetErrorJson(Exception exception)
         => new ErrorModel(
                 ErrorSchemaVersion,
                 new ErrorDetailModel(exception.GetType().Name, exception.Message))
