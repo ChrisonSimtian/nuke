@@ -8,12 +8,17 @@ using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using Fallout.Utilities.Text.Yaml;
 using Serilog;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 using static Fallout.Common.Tools.Git.GitTasks;
 
 partial class Build
 {
     AbsolutePath DocsWebsiteDirectory => RootDirectory / "docs" / "website";
+
+    AbsolutePath LlmsTxtFile => RootDirectory / "docs" / "llms.txt";
 
     // The public site is built from docs/website by the separate Fallout-build/docs.fallout.build
     // Docusaurus repository, which serves the pages under a /docs/ route prefix. Verified against
@@ -23,17 +28,138 @@ partial class Build
     // regenerates it.
     const string DocsBaseUrl = "https://docs.fallout.build/docs/";
 
+    const int MaxDescriptionLength = 200;
+
     // Docusaurus orders pages by a numeric prefix on the directory and file name, and strips that
     // prefix from the served URL. So 01-getting-started/01-installation.md is served at
     // /docs/getting-started/installation.
-    static readonly Regex OrderPrefix = new(@"^(?<order>\d+)-", RegexOptions.Compiled);
+    static readonly Regex orderPrefix = new(@"^(?<order>\d+)-", RegexOptions.Compiled);
 
-    static string StripOrderPrefix(string segment) => OrderPrefix.Replace(segment, string.Empty);
+    // Inline markdown links render as "[text](url)". Only the text belongs in a one-line summary.
+    static readonly Regex inlineLink = new(@"\[(?<text>[^\]]+)\]\([^)]+\)", RegexOptions.Compiled);
 
-    static int GetOrder(string segment)
+    // Deserialized rather than hand-parsed, so quoting, escaping and block scalars follow the YAML
+    // spec instead of a line regex. Underscored, not the repo-default camelCase builder, because
+    // Docusaurus spells its keys 'sidebar_position'.
+    static readonly DeserializerBuilder frontmatterDeserializer = new DeserializerBuilder()
+        .WithNamingConvention(UnderscoredNamingConvention.Instance)
+        .IgnoreUnmatchedProperties();
+
+    /// <param name="IsPrimary">
+    /// Whether the site places this page in its sidebar. Only meaningful for the pages at the root
+    /// of docs/website, which have no section to sort them: introduction.md declares a
+    /// 'sidebar_position' and badge.md does not, and that is exactly the split between a link that
+    /// belongs in the main body and one that belongs under "Optional".
+    /// </param>
+    sealed record DocPage(
+        string Title,
+        string Description,
+        string Url,
+        string Section,
+        int SectionOrder,
+        int Order,
+        bool IsPrimary);
+
+    // Only the three keys this index reads. Docusaurus accepts many more (tags, slug, keywords,
+    // hide_title...), so unmatched ones are ignored rather than failing a page that adds one.
+    sealed record Frontmatter
     {
-        var match = OrderPrefix.Match(segment);
-        return match.Success ? int.Parse(match.Groups["order"].Value) : int.MaxValue;
+        public string Title { get; init; }
+
+        public string Description { get; init; }
+
+        public int? SidebarPosition { get; init; }
+    }
+
+    Target GenerateLlmsTxt => _ => _
+        .Executes(() =>
+        {
+            var pages = ReadDocPages();
+            LlmsTxtFile.WriteAllText(RenderLlmsTxt(pages));
+
+            Log.Information("Wrote {File} with {Count} pages", RootDirectory.GetUnixRelativePathTo(LlmsTxtFile), pages.Count);
+        });
+
+    // CI gate, in the shape of VerifyGeneratedTools: GenerateLlmsTxt only runs when a contributor
+    // remembers to invoke it, so a page added under docs/website without regenerating would merge
+    // with docs/llms.txt silently missing it. `Requires` is asserted for the whole scheduled plan
+    // before any target runs, so the "start clean" check below still fires before GenerateLlmsTxt
+    // regenerates anything; the explicit re-check afterward catches drift with a message pointing
+    // at the fix.
+    //
+    // Wired into BOTH workflows on purpose. build.yml ignores docs/**, so on its own it would never
+    // fire on the change that actually invalidates the file; build-skip.yml is the workflow that
+    // handles those PRs, and it runs this target for exactly that reason.
+    Target VerifyLlmsTxt => _ => _
+        .Requires(() => GitHasCleanWorkingCopy())
+        .DependsOn(GenerateLlmsTxt)
+        .Executes(() =>
+        {
+            Assert.True(
+                GitHasCleanWorkingCopy(),
+                "docs/llms.txt is out of sync with docs/website. Run './build.ps1 GenerateLlmsTxt' "
+                + "locally and commit the result.");
+        });
+
+    // Docusaurus routes both .md and .mdx, and excludes anything whose file or directory name
+    // starts with an underscore (**/_*.md, **/_*/**). docs/website/_snippets/ exists for exactly
+    // that reason, so indexing it would emit URLs the site never serves.
+    IReadOnlyList<DocPage> ReadDocPages()
+    {
+        return DocsWebsiteDirectory.GlobFiles("**/*.md", "**/*.mdx")
+            .Where(x => !DocsWebsiteDirectory.GetUnixRelativePathTo(x).ToString()
+                .Split('/')
+                .Any(segment => segment.StartsWith('_')))
+            .Select(ReadPage)
+            .OrderBy(x => x.SectionOrder)
+            .ThenBy(x => x.Order)
+            // Ordinal, not the culture-sensitive default: docs/llms.txt is verified byte for byte,
+            // so a contributor on another culture must not regenerate a differently ordered file
+            // and trip VerifyLlmsTxt with no real drift.
+            .ThenBy(x => x.Title, StringComparer.Ordinal)
+            .ToList();
+    }
+
+    DocPage ReadPage(AbsolutePath file)
+    {
+        var lines = file.ReadAllLines();
+        var frontmatterEnd = GetFrontmatterEnd(lines);
+        var frontmatter = ReadFrontmatter(lines, frontmatterEnd);
+
+        // Docusaurus falls back to the first H1 when a page declares no 'title', and docs/website
+        // has a page that relies on it: badge.md carries no frontmatter at all and is served as
+        // "Badge". Rejecting it would refuse a page the site renders correctly, so the fallback
+        // matches Docusaurus. A page with neither still fails, because that leaves no link text.
+        var title = frontmatter.Title.IsNullOrWhiteSpace()
+            ? GetFirstHeading(lines, frontmatterEnd)
+            : frontmatter.Title;
+        Assert.NotNullOrWhiteSpace(
+            title,
+            $"{DocsWebsiteDirectory.GetUnixRelativePathTo(file)} has neither a 'title' in its "
+            + "frontmatter nor a top-level heading. One of the two is needed: it is the link text "
+            + "in docs/llms.txt.");
+
+        var description = frontmatter.Description.IsNullOrWhiteSpace()
+            ? GetFirstProseParagraph(lines, frontmatterEnd)
+            : frontmatter.Description;
+
+        var relative = DocsWebsiteDirectory.GetUnixRelativePathTo(file).ToString();
+        var segments = relative.Split('/');
+        var isNested = segments.Length > 1;
+
+        return new DocPage(
+            Title: title,
+            Description: Summarize(description),
+            Url: ToPublicUrl(file),
+            // Root-level pages have no section, so they are rendered either above the first one or
+            // under "Optional", depending on IsPrimary.
+            Section: isNested ? ToSectionTitle(segments[0]) : null,
+            SectionOrder: isNested ? GetOrder(segments[0]) : int.MaxValue,
+            // Docusaurus lets a page's own 'sidebar_position' override the numeric filename prefix,
+            // and docs/website uses it: 07-ide has no prefixes, and rider.md declares position 1 to
+            // sort first. Reading only the prefix would order that section by title instead.
+            Order: frontmatter.SidebarPosition ?? GetOrder(segments[^1]),
+            IsPrimary: isNested || frontmatter.SidebarPosition.HasValue);
     }
 
     string ToPublicUrl(AbsolutePath page)
@@ -72,67 +198,28 @@ partial class Build
             .JoinSpace();
     }
 
-    /// <param name="IsPrimary">
-    /// Whether the site places this page in its sidebar. Only meaningful for the pages at the root
-    /// of docs/website, which have no section to sort them: introduction.md declares a
-    /// 'sidebar_position' and badge.md does not, and that is exactly the split between a link that
-    /// belongs in the main body and one that belongs under "Optional".
-    /// </param>
-    sealed record DocPage(
-        string Title,
-        string Description,
-        string Url,
-        string Section,
-        int SectionOrder,
-        int Order,
-        bool IsPrimary);
-
-    const int MaxDescriptionLength = 200;
-
-    // Inline markdown links render as "[text](url)". Only the text belongs in a one-line summary.
-    static readonly Regex InlineLink = new(@"\[(?<text>[^\]]+)\]\([^)]+\)", RegexOptions.Compiled);
-
-    static readonly Regex FrontmatterEntry = new(@"^(?<key>[a-zA-Z_]+):\s*(?<value>.*)$", RegexOptions.Compiled);
-
-    DocPage ReadPage(AbsolutePath file)
+    static int GetFrontmatterEnd(string[] lines)
     {
-        var lines = file.ReadAllLines();
-        var frontmatterEnd = GetFrontmatterEnd(lines);
-        var frontmatter = ReadFrontmatter(lines, frontmatterEnd);
+        if (lines.Length == 0 || lines[0].Trim() != "---")
+            return 0;
 
-        // Docusaurus falls back to the first H1 when a page declares no 'title', and docs/website
-        // has a page that relies on it: badge.md carries no frontmatter at all and is served as
-        // "Badge". Rejecting it would refuse a page the site renders correctly, so the fallback
-        // matches Docusaurus. A page with neither still fails, because that leaves no link text.
-        var title = frontmatter.GetValueOrDefault("title") ?? GetFirstHeading(lines, frontmatterEnd);
-        Assert.NotNullOrWhiteSpace(
-            title,
-            $"{DocsWebsiteDirectory.GetUnixRelativePathTo(file)} has neither a 'title' in its "
-            + "frontmatter nor a top-level heading. One of the two is needed: it is the link text "
-            + "in docs/llms.txt.");
+        var end = Array.FindIndex(lines, startIndex: 1, x => x.Trim() == "---");
+        // An opened but unclosed block is malformed. Returning 0 would hand the delimiter and the
+        // key/value lines to the prose reader and ship them as a description, so fail instead: a
+        // wrong entry in a generated index is worse than a build that says what is wrong.
+        Assert.True(end >= 0, "Frontmatter is opened with '---' but never closed.");
+        return end + 1;
+    }
 
-        var description = frontmatter.GetValueOrDefault("description")
-                          ?? GetFirstProseParagraph(lines, frontmatterEnd);
+    static Frontmatter ReadFrontmatter(string[] lines, int frontmatterEnd)
+    {
+        // frontmatterEnd is one past the closing '---', so the block itself is lines 1..end-2.
+        // 0 means the page opens with no frontmatter at all; badge.md is one such page.
+        if (frontmatterEnd == 0)
+            return new Frontmatter();
 
-        var relative = DocsWebsiteDirectory.GetUnixRelativePathTo(file).ToString();
-        var segments = relative.Split('/');
-        var isNested = segments.Length > 1;
-
-        return new DocPage(
-            Title: title,
-            Description: Summarize(description),
-            Url: ToPublicUrl(file),
-            // Root-level pages have no section, so they are rendered either above the first one or
-            // under "Optional", depending on IsPrimary.
-            Section: isNested ? ToSectionTitle(segments[0]) : null,
-            SectionOrder: isNested ? GetOrder(segments[0]) : int.MaxValue,
-            // Docusaurus lets a page's own 'sidebar_position' override the numeric filename prefix,
-            // and docs/website uses it: 07-ide has no prefixes, and rider.md declares position 1 to
-            // sort first. Reading only the prefix would order that section by title instead.
-            Order: frontmatter.TryGetValue("sidebar_position", out var position) && int.TryParse(position, out var parsed)
-                ? parsed
-                : GetOrder(segments[^1]),
-            IsPrimary: isNested || frontmatter.ContainsKey("sidebar_position"));
+        var yaml = lines[1..(frontmatterEnd - 1)].JoinNewLine();
+        return yaml.GetYaml<Frontmatter>(frontmatterDeserializer) ?? new Frontmatter();
     }
 
     // Starts after the frontmatter and ignores fenced code, because "# terminal-command" is used as
@@ -150,43 +237,6 @@ partial class Build
         }
 
         return null;
-    }
-
-    static int GetFrontmatterEnd(string[] lines)
-    {
-        if (lines.Length == 0 || lines[0].Trim() != "---")
-            return 0;
-
-        var end = Array.FindIndex(lines, startIndex: 1, x => x.Trim() == "---");
-        // An opened but unclosed block is malformed. Returning 0 would hand the delimiter and the
-        // key/value lines to the prose reader and ship them as a description, so fail instead: a
-        // wrong entry in a generated index is worse than a build that says what is wrong.
-        Assert.True(end >= 0, "Frontmatter is opened with '---' but never closed.");
-        return end + 1;
-    }
-
-    static Dictionary<string, string> ReadFrontmatter(string[] lines, int frontmatterEnd)
-    {
-        var entries = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        for (var i = 1; i < Math.Max(frontmatterEnd - 1, 1); i++)
-        {
-            var match = FrontmatterEntry.Match(lines[i]);
-            if (!match.Success)
-                continue;
-
-            var value = match.Groups["value"].Value.Trim().TrimMatchingDoubleQuotes().Trim('\'');
-
-            // ">" and "|" open a YAML block scalar whose text sits on the following lines. This
-            // parser is line-based, so it would store the indicator itself and render
-            // "- [Title](url): >". Treat the key as absent and let the prose fallback handle it.
-            if (value is ">" or "|" or ">-" or "|-")
-                continue;
-
-            if (!value.IsNullOrWhiteSpace())
-                entries[match.Groups["key"].Value] = value;
-        }
-
-        return entries;
     }
 
     // Only introduction.md declares a 'description', so for the other 36 pages the summary falls
@@ -218,7 +268,13 @@ partial class Build
                           !trimmed.StartsWith(":::") &&
                           !trimmed.StartsWith('#') &&
                           !trimmed.StartsWith('|') &&
-                          !trimmed.StartsWith('!');
+                          !trimmed.StartsWith('!') &&
+                          // A page opening with a list or a quote has no lead paragraph to take.
+                          // "- "/"* " and not '-'/'*', so a '---' rule or a '**bold**' lead-in
+                          // is still read as the prose it is.
+                          !trimmed.StartsWith("- ") &&
+                          !trimmed.StartsWith("* ") &&
+                          !trimmed.StartsWith('>');
 
             if (isProse)
                 paragraph.Add(trimmed);
@@ -234,7 +290,7 @@ partial class Build
         if (text.IsNullOrWhiteSpace())
             return null;
 
-        var flattened = InlineLink.Replace(text, "${text}").Trim();
+        var flattened = inlineLink.Replace(text, "${text}").Trim();
         if (flattened.Length <= MaxDescriptionLength)
             return flattened;
 
@@ -242,27 +298,6 @@ partial class Build
         var cut = flattened.LastIndexOf(' ', MaxDescriptionLength);
         return flattened[..(cut > 0 ? cut : MaxDescriptionLength)].TrimEnd(',', ';', ':', '.') + "...";
     }
-
-    // Docusaurus routes both .md and .mdx, and excludes anything whose file or directory name
-    // starts with an underscore (**/_*.md, **/_*/**). docs/website/_snippets/ exists for exactly
-    // that reason, so indexing it would emit URLs the site never serves.
-    IReadOnlyList<DocPage> ReadDocPages()
-    {
-        return DocsWebsiteDirectory.GlobFiles("**/*.md", "**/*.mdx")
-            .Where(x => !DocsWebsiteDirectory.GetUnixRelativePathTo(x).ToString()
-                .Split('/')
-                .Any(segment => segment.StartsWith('_')))
-            .Select(ReadPage)
-            .OrderBy(x => x.SectionOrder)
-            .ThenBy(x => x.Order)
-            // Ordinal, not the culture-sensitive default: docs/llms.txt is verified byte for byte,
-            // so a contributor on another culture must not regenerate a differently ordered file
-            // and trip VerifyLlmsTxt with no real drift.
-            .ThenBy(x => x.Title, StringComparer.Ordinal)
-            .ToList();
-    }
-
-    AbsolutePath LlmsTxtFile => RootDirectory / "docs" / "llms.txt";
 
     // https://llmstxt.org: an H1, an optional blockquote summary, then H2 sections of link lines.
     // A list may also sit between the blockquote and the first H2, which is where the pages that
@@ -322,32 +357,11 @@ partial class Build
             : $"- [{page.Title}]({page.Url}): {page.Description}";
     }
 
-    Target GenerateLlmsTxt => _ => _
-        .Executes(() =>
-        {
-            var pages = ReadDocPages();
-            LlmsTxtFile.WriteAllText(RenderLlmsTxt(pages));
+    static string StripOrderPrefix(string segment) => orderPrefix.Replace(segment, string.Empty);
 
-            Log.Information("Wrote {File} with {Count} pages", RootDirectory.GetUnixRelativePathTo(LlmsTxtFile), pages.Count);
-        });
-
-    // CI gate, in the shape of VerifyGeneratedTools: GenerateLlmsTxt only runs when a contributor
-    // remembers to invoke it, so a page added under docs/website without regenerating would merge
-    // with docs/llms.txt silently missing it. `Requires` is asserted for the whole scheduled plan
-    // before any target runs, so the "start clean" check below still fires before GenerateLlmsTxt
-    // regenerates anything; the explicit re-check afterward catches drift with a message pointing
-    // at the fix.
-    //
-    // Wired into BOTH workflows on purpose. build.yml ignores docs/**, so on its own it would never
-    // fire on the change that actually invalidates the file; build-skip.yml is the workflow that
-    // handles those PRs, and it runs this target for exactly that reason.
-    Target VerifyLlmsTxt => _ => _
-        .Requires(() => GitHasCleanWorkingCopy())
-        .DependsOn(GenerateLlmsTxt)
-        .Executes(() =>
-        {
-            Assert.True(
-                GitHasCleanWorkingCopy(),
-                "docs/llms.txt is out of sync with docs/website. Run './build.ps1 GenerateLlmsTxt' locally and commit the result.");
-        });
+    static int GetOrder(string segment)
+    {
+        var match = orderPrefix.Match(segment);
+        return match.Success ? int.Parse(match.Groups["order"].Value) : int.MaxValue;
+    }
 }
