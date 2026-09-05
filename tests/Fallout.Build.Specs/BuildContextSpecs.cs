@@ -44,6 +44,52 @@ public class BuildContextSpecs
     }
 
     [Fact]
+    public void Parameter_service_facade_resolves_the_current_contexts_instance()
+    {
+        using var context = BuildContext.Activate();
+
+        // FT-4 (#309): the static facade is a pointer at the running context, not its own singleton.
+        ParameterService.Instance.Should().BeSameAs(context.Parameters);
+    }
+
+    [Fact]
+    public void Parameter_service_facade_falls_back_to_an_ambient_instance_outside_a_run()
+    {
+        BuildContext.Current.Should().BeNull();
+
+        // Nothing to route to outside a run, so the facade hands back a stable process-wide instance
+        // rather than throwing — this is the path the fallback exists for.
+        ParameterService.Instance.Should().NotBeNull();
+        ParameterService.Instance.Should().BeSameAs(ParameterService.Instance);
+    }
+
+    [Fact]
+    public void Each_run_gets_its_own_parameter_service()
+    {
+        ParameterService first;
+        ParameterService second;
+
+        using (var context = BuildContext.Activate())
+            first = context.Parameters;
+        using (var context = BuildContext.Activate())
+            second = context.Parameters;
+
+        second.Should().NotBeSameAs(first);
+    }
+
+    [Fact]
+    public void Parameter_service_state_does_not_leak_into_the_next_run()
+    {
+        using (BuildContext.Activate())
+            ParameterService.Instance.ArgumentsFromCommitMessageService = new ArgumentParser(["-arg", "value"]);
+
+        // The mutable per-run fields (commit-message args, args-from-files) died with the previous
+        // context — the whole point of moving the service off a process-global singleton.
+        using (BuildContext.Activate())
+            ParameterService.Instance.ArgumentsFromCommitMessageService.Should().BeNull();
+    }
+
+    [Fact]
     public void Disposing_a_superseded_context_leaves_the_newer_one_current()
     {
         var first = BuildContext.Activate();
