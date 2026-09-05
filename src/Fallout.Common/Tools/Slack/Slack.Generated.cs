@@ -18,6 +18,7 @@ namespace Fallout.Common.Tools.Slack;
 
 #region SlackMessage
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class SlackMessage : Options
 {
@@ -43,6 +44,7 @@ public partial class SlackMessage : Options
 #endregion
 #region SlackMessageAttachment
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class SlackMessageAttachment : Options
 {
@@ -86,6 +88,7 @@ public partial class SlackMessageAttachment : Options
 #endregion
 #region SlackMessageField
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class SlackMessageField : Options
 {
@@ -99,6 +102,7 @@ public partial class SlackMessageField : Options
 #endregion
 #region SlackMessageAction
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class SlackMessageAction : Options
 {
@@ -116,6 +120,7 @@ public partial class SlackMessageAction : Options
 #endregion
 #region SlackMessageConfirmation
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class SlackMessageConfirmation : Options
 {
@@ -131,6 +136,7 @@ public partial class SlackMessageConfirmation : Options
 #endregion
 #region SlackMessageExtensions
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SlackMessageExtensions
 {
@@ -237,6 +243,7 @@ public static partial class SlackMessageExtensions
 #endregion
 #region SlackMessageAttachmentExtensions
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SlackMessageAttachmentExtensions
 {
@@ -439,6 +446,7 @@ public static partial class SlackMessageAttachmentExtensions
 #endregion
 #region SlackMessageFieldExtensions
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SlackMessageFieldExtensions
 {
@@ -479,6 +487,7 @@ public static partial class SlackMessageFieldExtensions
 #endregion
 #region SlackMessageActionExtensions
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SlackMessageActionExtensions
 {
@@ -529,6 +538,7 @@ public static partial class SlackMessageActionExtensions
 #endregion
 #region SlackMessageConfirmationExtensions
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SlackMessageConfirmationExtensions
 {
@@ -569,6 +579,7 @@ public static partial class SlackMessageConfirmationExtensions
 #region SlackMessageActionStyle
 /// <summary>Used within <see cref="SlackTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<SlackMessageActionStyle>))]
 public partial class SlackMessageActionStyle : Enumeration

@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Xunit;
 
 /// <summary><p>xUnit.net is a free, open source, community-focused unit testing tool for the .NET Framework. Written by the original inventor of NUnit v2, xUnit.net is the latest technology for unit testing C#, F#, VB.NET and other .NET languages. xUnit.net works with ReSharper, CodeRush, TestDriven.NET and Xamarin. It is part of the <a href="https://www.dotnetfoundation.org/">.NET Foundation</a>, and operates under their <a href="https://www.dotnetfoundation.org/code-of-conduct">code of conduct</a>. It is licensed under <a href="https://opensource.org/licenses/Apache-2.0">Apache 2</a> (an OSI approved license).</p><p>For more details, visit the <a href="https://xunit.github.io">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId)]
 public partial class XunitTasks : ToolTasks, IRequireNuGetPackage
@@ -35,6 +36,7 @@ public partial class XunitTasks : ToolTasks, IRequireNuGetPackage
 }
 #region Xunit2Settings
 /// <inheritdoc cref="XunitTasks.Xunit2(Fallout.Common.Tools.Xunit.Xunit2Settings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(XunitTasks), Command = nameof(XunitTasks.Xunit2))]
 public partial class Xunit2Settings : ToolOptions, IToolOptionsWithFramework
@@ -87,6 +89,7 @@ public partial class Xunit2Settings : ToolOptions, IToolOptionsWithFramework
 #endregion
 #region Xunit2SettingsExtensions
 /// <inheritdoc cref="XunitTasks.Xunit2(Fallout.Common.Tools.Xunit.Xunit2Settings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class Xunit2SettingsExtensions
 {
@@ -469,6 +472,7 @@ public static partial class Xunit2SettingsExtensions
 #region Xunit2ReporterType
 /// <summary>Used within <see cref="XunitTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<Xunit2ReporterType>))]
 public partial class Xunit2ReporterType : Enumeration
@@ -487,6 +491,7 @@ public partial class Xunit2ReporterType : Enumeration
 #region Xunit2ResultFormat
 /// <summary>Used within <see cref="XunitTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<Xunit2ResultFormat>))]
 public partial class Xunit2ResultFormat : Enumeration
@@ -504,6 +509,7 @@ public partial class Xunit2ResultFormat : Enumeration
 #region Xunit2ParallelOption
 /// <summary>Used within <see cref="XunitTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<Xunit2ParallelOption>))]
 public partial class Xunit2ParallelOption : Enumeration
@@ -521,6 +527,7 @@ public partial class Xunit2ParallelOption : Enumeration
 #region Xunit2AppDomainMode
 /// <summary>Used within <see cref="XunitTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<Xunit2AppDomainMode>))]
 public partial class Xunit2AppDomainMode : Enumeration

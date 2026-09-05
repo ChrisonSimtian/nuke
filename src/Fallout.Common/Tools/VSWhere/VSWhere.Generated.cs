@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.VSWhere;
 
 /// <summary><p>VSWhere is designed to be a redistributable, single-file executable that can be used in build or deployment scripts to find where Visual Studio - or other products in the Visual Studio family - is located.</p><p>For more details, visit the <a href="https://github.com/Microsoft/vswhere">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class VSWhereTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class VSWhereTasks : ToolTasks, IRequireNuGetPackage
 }
 #region VSWhereSettings
 /// <inheritdoc cref="VSWhereTasks.VSWhere(Fallout.Common.Tools.VSWhere.VSWhereSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(VSWhereTasks), Command = nameof(VSWhereTasks.VSWhere))]
 public partial class VSWhereSettings : ToolOptions
@@ -68,6 +70,7 @@ public partial class VSWhereSettings : ToolOptions
 #endregion
 #region VSWhereCatalog
 /// <summary>Used within <see cref="VSWhereTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class VSWhereCatalog : Options
 {
@@ -109,6 +112,7 @@ public partial class VSWhereCatalog : Options
 #endregion
 #region VSWhereResult
 /// <summary>Used within <see cref="VSWhereTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class VSWhereResult : Options
 {
@@ -152,6 +156,7 @@ public partial class VSWhereResult : Options
 #endregion
 #region VSWhereSettingsExtensions
 /// <inheritdoc cref="VSWhereTasks.VSWhere(Fallout.Common.Tools.VSWhere.VSWhereSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class VSWhereSettingsExtensions
 {
@@ -349,6 +354,7 @@ public static partial class VSWhereSettingsExtensions
 #region VSWhereFormat
 /// <summary>Used within <see cref="VSWhereTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<VSWhereFormat>))]
 public partial class VSWhereFormat : Enumeration

@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.DotCover;
 
 /// <summary><p>dotCover is a .NET unit testing and code coverage tool that works right in Visual Studio, helps you know to what extent your code is covered with unit tests, provides great ways to visualize code coverage, and is Continuous Integration ready. dotCover calculates and reports statement-level code coverage in applications targeting .NET Framework, Silverlight, and .NET Core.</p><p>For more details, visit the <a href="https://www.jetbrains.com/dotcover">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId)]
 public partial class DotCoverTasks : ToolTasks, IRequireNuGetPackage
@@ -77,6 +78,7 @@ public partial class DotCoverTasks : ToolTasks, IRequireNuGetPackage
 }
 #region DotCoverAnalyseSettings
 /// <inheritdoc cref="DotCoverTasks.DotCoverAnalyse(Fallout.Common.Tools.DotCover.DotCoverAnalyseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotCoverTasks), Command = nameof(DotCoverTasks.DotCoverAnalyse), Arguments = "analyse")]
 public partial class DotCoverAnalyseSettings : ToolOptions
@@ -123,6 +125,7 @@ public partial class DotCoverAnalyseSettings : ToolOptions
 #endregion
 #region DotCoverCoverSettings
 /// <inheritdoc cref="DotCoverTasks.DotCoverCover(Fallout.Common.Tools.DotCover.DotCoverCoverSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotCoverTasks), Command = nameof(DotCoverTasks.DotCoverCover), Arguments = "cover")]
 public partial class DotCoverCoverSettings : ToolOptions
@@ -167,6 +170,7 @@ public partial class DotCoverCoverSettings : ToolOptions
 #endregion
 #region DotCoverCoverDotNetSettings
 /// <inheritdoc cref="DotCoverTasks.DotCoverCoverDotNet(Fallout.Common.Tools.DotCover.DotCoverCoverDotNetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotCoverTasks), Command = nameof(DotCoverTasks.DotCoverCoverDotNet), Arguments = "dotnet")]
 public partial class DotCoverCoverDotNetSettings : ToolOptions
@@ -209,6 +213,7 @@ public partial class DotCoverCoverDotNetSettings : ToolOptions
 #endregion
 #region DotCoverDeleteSettings
 /// <inheritdoc cref="DotCoverTasks.DotCoverDelete(Fallout.Common.Tools.DotCover.DotCoverDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotCoverTasks), Command = nameof(DotCoverTasks.DotCoverDelete), Arguments = "delete")]
 public partial class DotCoverDeleteSettings : ToolOptions
@@ -223,6 +228,7 @@ public partial class DotCoverDeleteSettings : ToolOptions
 #endregion
 #region DotCoverMergeSettings
 /// <inheritdoc cref="DotCoverTasks.DotCoverMerge(Fallout.Common.Tools.DotCover.DotCoverMergeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotCoverTasks), Command = nameof(DotCoverTasks.DotCoverMerge), Arguments = "merge")]
 public partial class DotCoverMergeSettings : ToolOptions
@@ -241,6 +247,7 @@ public partial class DotCoverMergeSettings : ToolOptions
 #endregion
 #region DotCoverReportSettings
 /// <inheritdoc cref="DotCoverTasks.DotCoverReport(Fallout.Common.Tools.DotCover.DotCoverReportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotCoverTasks), Command = nameof(DotCoverTasks.DotCoverReport), Arguments = "report")]
 public partial class DotCoverReportSettings : ToolOptions
@@ -261,6 +268,7 @@ public partial class DotCoverReportSettings : ToolOptions
 #endregion
 #region DotCoverZipSettings
 /// <inheritdoc cref="DotCoverTasks.DotCoverZip(Fallout.Common.Tools.DotCover.DotCoverZipSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DotCoverTasks), Command = nameof(DotCoverTasks.DotCoverZip), Arguments = "zip")]
 public partial class DotCoverZipSettings : ToolOptions
@@ -277,6 +285,7 @@ public partial class DotCoverZipSettings : ToolOptions
 #endregion
 #region DotCoverAnalyseSettingsExtensions
 /// <inheritdoc cref="DotCoverTasks.DotCoverAnalyse(Fallout.Common.Tools.DotCover.DotCoverAnalyseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotCoverAnalyseSettingsExtensions
 {
@@ -565,6 +574,7 @@ public static partial class DotCoverAnalyseSettingsExtensions
 #endregion
 #region DotCoverCoverSettingsExtensions
 /// <inheritdoc cref="DotCoverTasks.DotCoverCover(Fallout.Common.Tools.DotCover.DotCoverCoverSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotCoverCoverSettingsExtensions
 {
@@ -836,6 +846,7 @@ public static partial class DotCoverCoverSettingsExtensions
 #endregion
 #region DotCoverCoverDotNetSettingsExtensions
 /// <inheritdoc cref="DotCoverTasks.DotCoverCoverDotNet(Fallout.Common.Tools.DotCover.DotCoverCoverDotNetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotCoverCoverDotNetSettingsExtensions
 {
@@ -1099,6 +1110,7 @@ public static partial class DotCoverCoverDotNetSettingsExtensions
 #endregion
 #region DotCoverDeleteSettingsExtensions
 /// <inheritdoc cref="DotCoverTasks.DotCoverDelete(Fallout.Common.Tools.DotCover.DotCoverDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotCoverDeleteSettingsExtensions
 {
@@ -1145,6 +1157,7 @@ public static partial class DotCoverDeleteSettingsExtensions
 #endregion
 #region DotCoverMergeSettingsExtensions
 /// <inheritdoc cref="DotCoverTasks.DotCoverMerge(Fallout.Common.Tools.DotCover.DotCoverMergeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotCoverMergeSettingsExtensions
 {
@@ -1207,6 +1220,7 @@ public static partial class DotCoverMergeSettingsExtensions
 #endregion
 #region DotCoverReportSettingsExtensions
 /// <inheritdoc cref="DotCoverTasks.DotCoverReport(Fallout.Common.Tools.DotCover.DotCoverReportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotCoverReportSettingsExtensions
 {
@@ -1286,6 +1300,7 @@ public static partial class DotCoverReportSettingsExtensions
 #endregion
 #region DotCoverZipSettingsExtensions
 /// <inheritdoc cref="DotCoverTasks.DotCoverZip(Fallout.Common.Tools.DotCover.DotCoverZipSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DotCoverZipSettingsExtensions
 {
@@ -1326,6 +1341,7 @@ public static partial class DotCoverZipSettingsExtensions
 #region DotCoverReportType
 /// <summary>Used within <see cref="DotCoverTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DotCoverReportType>))]
 public partial class DotCoverReportType : Enumeration

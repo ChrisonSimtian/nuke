@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.NSwag;
 
 /// <summary><p>The project combines the functionality of Swashbuckle (Swagger generation) and AutoRest (client generation) in one toolchain. This way a lot of incompatibilites can be avoided and features which are not well described by the Swagger specification or JSON Schema are better supported (e.g. <a href="https://github.com/NJsonSchema/NJsonSchema/wiki/Inheritance">inheritance</a>, <a href="https://github.com/NJsonSchema/NJsonSchema/wiki/Enums">enum</a> and reference handling). The NSwag project heavily uses <a href="http://njsonschema.org/">NJsonSchema for .NET</a> for JSON Schema handling and C#/TypeScript class/interface generation.</p><p>For more details, visit the <a href="https://github.com/RSuter/NSwag">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class NSwagTasks : ToolTasks, IRequireNuGetPackage
@@ -162,6 +163,7 @@ public partial class NSwagTasks : ToolTasks, IRequireNuGetPackage
 }
 #region NSwagVersionSettings
 /// <inheritdoc cref="NSwagTasks.NSwagVersion(Fallout.Common.Tools.NSwag.NSwagVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagVersion), Arguments = "version")]
 public partial class NSwagVersionSettings : ToolOptions, IToolOptionsWithFramework
@@ -170,6 +172,7 @@ public partial class NSwagVersionSettings : ToolOptions, IToolOptionsWithFramewo
 #endregion
 #region NSwagListTypesSettings
 /// <inheritdoc cref="NSwagTasks.NSwagListTypes(Fallout.Common.Tools.NSwag.NSwagListTypesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagListTypes), Arguments = "list-types")]
 public partial class NSwagListTypesSettings : ToolOptions, IToolOptionsWithFramework
@@ -190,6 +193,7 @@ public partial class NSwagListTypesSettings : ToolOptions, IToolOptionsWithFrame
 #endregion
 #region NSwagListWebApiControllersSettings
 /// <inheritdoc cref="NSwagTasks.NSwagListWebApiControllers(Fallout.Common.Tools.NSwag.NSwagListWebApiControllersSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagListWebApiControllers), Arguments = "list-controllers")]
 public partial class NSwagListWebApiControllersSettings : ToolOptions, IToolOptionsWithFramework
@@ -210,6 +214,7 @@ public partial class NSwagListWebApiControllersSettings : ToolOptions, IToolOpti
 #endregion
 #region NSwagTypesToOpenApiSettings
 /// <inheritdoc cref="NSwagTasks.NSwagTypesToOpenApi(Fallout.Common.Tools.NSwag.NSwagTypesToOpenApiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagTypesToOpenApi), Arguments = "types2openapi")]
 public partial class NSwagTypesToOpenApiSettings : ToolOptions, IToolOptionsWithFramework
@@ -230,6 +235,7 @@ public partial class NSwagTypesToOpenApiSettings : ToolOptions, IToolOptionsWith
 #endregion
 #region NSwagTypesToSwaggerSettings
 /// <inheritdoc cref="NSwagTasks.NSwagTypesToSwagger(Fallout.Common.Tools.NSwag.NSwagTypesToSwaggerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagTypesToSwagger), Arguments = "types2swagger")]
 public partial class NSwagTypesToSwaggerSettings : ToolOptions, IToolOptionsWithFramework
@@ -270,6 +276,7 @@ public partial class NSwagTypesToSwaggerSettings : ToolOptions, IToolOptionsWith
 #endregion
 #region NSwagWebApiToOpenApiSettings
 /// <inheritdoc cref="NSwagTasks.NSwagWebApiToOpenApi(Fallout.Common.Tools.NSwag.NSwagWebApiToOpenApiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagWebApiToOpenApi), Arguments = "webapi2openapi")]
 public partial class NSwagWebApiToOpenApiSettings : ToolOptions, IToolOptionsWithFramework
@@ -356,6 +363,7 @@ public partial class NSwagWebApiToOpenApiSettings : ToolOptions, IToolOptionsWit
 #endregion
 #region NSwagWebApiToSwaggerSettings
 /// <inheritdoc cref="NSwagTasks.NSwagWebApiToSwagger(Fallout.Common.Tools.NSwag.NSwagWebApiToSwaggerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagWebApiToSwagger), Arguments = "webapi2swagger")]
 public partial class NSwagWebApiToSwaggerSettings : ToolOptions, IToolOptionsWithFramework
@@ -456,6 +464,7 @@ public partial class NSwagWebApiToSwaggerSettings : ToolOptions, IToolOptionsWit
 #endregion
 #region NSwagAspNetCoreToOpenApiSettings
 /// <inheritdoc cref="NSwagTasks.NSwagAspNetCoreToOpenApi(Fallout.Common.Tools.NSwag.NSwagAspNetCoreToOpenApiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagAspNetCoreToOpenApi), Arguments = "aspnetcore2openapi")]
 public partial class NSwagAspNetCoreToOpenApiSettings : ToolOptions, IToolOptionsWithFramework
@@ -542,6 +551,7 @@ public partial class NSwagAspNetCoreToOpenApiSettings : ToolOptions, IToolOption
 #endregion
 #region NSwagAspNetCoreToSwaggerSettings
 /// <inheritdoc cref="NSwagTasks.NSwagAspNetCoreToSwagger(Fallout.Common.Tools.NSwag.NSwagAspNetCoreToSwaggerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagAspNetCoreToSwagger), Arguments = "aspnetcore2swagger")]
 public partial class NSwagAspNetCoreToSwaggerSettings : ToolOptions, IToolOptionsWithFramework
@@ -648,6 +658,7 @@ public partial class NSwagAspNetCoreToSwaggerSettings : ToolOptions, IToolOption
 #endregion
 #region NSwagCreateDocumentSettings
 /// <inheritdoc cref="NSwagTasks.NSwagCreateDocument(Fallout.Common.Tools.NSwag.NSwagCreateDocumentSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagCreateDocument), Arguments = "new")]
 public partial class NSwagCreateDocumentSettings : ToolOptions, IToolOptionsWithFramework
@@ -656,6 +667,7 @@ public partial class NSwagCreateDocumentSettings : ToolOptions, IToolOptionsWith
 #endregion
 #region NSwagExecuteDocumentSettings
 /// <inheritdoc cref="NSwagTasks.NSwagExecuteDocument(Fallout.Common.Tools.NSwag.NSwagExecuteDocumentSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagExecuteDocument), Arguments = "run")]
 public partial class NSwagExecuteDocumentSettings : ToolOptions, IToolOptionsWithFramework
@@ -668,6 +680,7 @@ public partial class NSwagExecuteDocumentSettings : ToolOptions, IToolOptionsWit
 #endregion
 #region NSwagJsonSchemaToCSharpSettings
 /// <inheritdoc cref="NSwagTasks.NSwagJsonSchemaToCSharp(Fallout.Common.Tools.NSwag.NSwagJsonSchemaToCSharpSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagJsonSchemaToCSharp), Arguments = "jsonschema2csclient")]
 public partial class NSwagJsonSchemaToCSharpSettings : ToolOptions, IToolOptionsWithFramework
@@ -704,6 +717,7 @@ public partial class NSwagJsonSchemaToCSharpSettings : ToolOptions, IToolOptions
 #endregion
 #region NSwagJsonSchemaToTypeScriptSettings
 /// <inheritdoc cref="NSwagTasks.NSwagJsonSchemaToTypeScript(Fallout.Common.Tools.NSwag.NSwagJsonSchemaToTypeScriptSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagJsonSchemaToTypeScript), Arguments = "jsonschema2tsclient")]
 public partial class NSwagJsonSchemaToTypeScriptSettings : ToolOptions, IToolOptionsWithFramework
@@ -722,6 +736,7 @@ public partial class NSwagJsonSchemaToTypeScriptSettings : ToolOptions, IToolOpt
 #endregion
 #region NSwagOpenApiToCSharpClientSettings
 /// <inheritdoc cref="NSwagTasks.NSwagOpenApiToCSharpClient(Fallout.Common.Tools.NSwag.NSwagOpenApiToCSharpClientSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagOpenApiToCSharpClient), Arguments = "openapi2csclient")]
 public partial class NSwagOpenApiToCSharpClientSettings : ToolOptions, IToolOptionsWithFramework
@@ -834,6 +849,7 @@ public partial class NSwagOpenApiToCSharpClientSettings : ToolOptions, IToolOpti
 #endregion
 #region NSwagSwaggerToCSharpClientSettings
 /// <inheritdoc cref="NSwagTasks.NSwagSwaggerToCSharpClient(Fallout.Common.Tools.NSwag.NSwagSwaggerToCSharpClientSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagSwaggerToCSharpClient), Arguments = "swagger2csclient")]
 public partial class NSwagSwaggerToCSharpClientSettings : ToolOptions, IToolOptionsWithFramework
@@ -1000,6 +1016,7 @@ public partial class NSwagSwaggerToCSharpClientSettings : ToolOptions, IToolOpti
 #endregion
 #region NSwagOpenApiToCSharpControllerSettings
 /// <inheritdoc cref="NSwagTasks.NSwagOpenApiToCSharpController(Fallout.Common.Tools.NSwag.NSwagOpenApiToCSharpControllerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagOpenApiToCSharpController), Arguments = "openapi2cscontroller")]
 public partial class NSwagOpenApiToCSharpControllerSettings : ToolOptions, IToolOptionsWithFramework
@@ -1112,6 +1129,7 @@ public partial class NSwagOpenApiToCSharpControllerSettings : ToolOptions, ITool
 #endregion
 #region NSwagSwaggerToCSharpControllerSettings
 /// <inheritdoc cref="NSwagTasks.NSwagSwaggerToCSharpController(Fallout.Common.Tools.NSwag.NSwagSwaggerToCSharpControllerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagSwaggerToCSharpController), Arguments = "swagger2cscontroller")]
 public partial class NSwagSwaggerToCSharpControllerSettings : ToolOptions, IToolOptionsWithFramework
@@ -1240,6 +1258,7 @@ public partial class NSwagSwaggerToCSharpControllerSettings : ToolOptions, ITool
 #endregion
 #region NSwagOpenApiToTypeScriptClientSettings
 /// <inheritdoc cref="NSwagTasks.NSwagOpenApiToTypeScriptClient(Fallout.Common.Tools.NSwag.NSwagOpenApiToTypeScriptClientSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagOpenApiToTypeScriptClient), Arguments = "openapi2tsclient")]
 public partial class NSwagOpenApiToTypeScriptClientSettings : ToolOptions, IToolOptionsWithFramework
@@ -1264,6 +1283,7 @@ public partial class NSwagOpenApiToTypeScriptClientSettings : ToolOptions, ITool
 #endregion
 #region NSwagSwaggerToTypeScriptClientSettings
 /// <inheritdoc cref="NSwagTasks.NSwagSwaggerToTypeScriptClient(Fallout.Common.Tools.NSwag.NSwagSwaggerToTypeScriptClientSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NSwagTasks), Command = nameof(NSwagTasks.NSwagSwaggerToTypeScriptClient), Arguments = "swagger2tsclient")]
 public partial class NSwagSwaggerToTypeScriptClientSettings : ToolOptions, IToolOptionsWithFramework
@@ -1382,6 +1402,7 @@ public partial class NSwagSwaggerToTypeScriptClientSettings : ToolOptions, ITool
 #endregion
 #region NSwagVersionSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagVersion(Fallout.Common.Tools.NSwag.NSwagVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagVersionSettingsExtensions
 {
@@ -1389,6 +1410,7 @@ public static partial class NSwagVersionSettingsExtensions
 #endregion
 #region NSwagListTypesSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagListTypes(Fallout.Common.Tools.NSwag.NSwagListTypesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagListTypesSettingsExtensions
 {
@@ -1492,6 +1514,7 @@ public static partial class NSwagListTypesSettingsExtensions
 #endregion
 #region NSwagListWebApiControllersSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagListWebApiControllers(Fallout.Common.Tools.NSwag.NSwagListWebApiControllersSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagListWebApiControllersSettingsExtensions
 {
@@ -1595,6 +1618,7 @@ public static partial class NSwagListWebApiControllersSettingsExtensions
 #endregion
 #region NSwagTypesToOpenApiSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagTypesToOpenApi(Fallout.Common.Tools.NSwag.NSwagTypesToOpenApiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagTypesToOpenApiSettingsExtensions
 {
@@ -1689,6 +1713,7 @@ public static partial class NSwagTypesToOpenApiSettingsExtensions
 #endregion
 #region NSwagTypesToSwaggerSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagTypesToSwagger(Fallout.Common.Tools.NSwag.NSwagTypesToSwaggerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagTypesToSwaggerSettingsExtensions
 {
@@ -1923,6 +1948,7 @@ public static partial class NSwagTypesToSwaggerSettingsExtensions
 #endregion
 #region NSwagWebApiToOpenApiSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagWebApiToOpenApi(Fallout.Common.Tools.NSwag.NSwagWebApiToOpenApiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagWebApiToOpenApiSettingsExtensions
 {
@@ -2431,6 +2457,7 @@ public static partial class NSwagWebApiToOpenApiSettingsExtensions
 #endregion
 #region NSwagWebApiToSwaggerSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagWebApiToSwagger(Fallout.Common.Tools.NSwag.NSwagWebApiToSwaggerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagWebApiToSwaggerSettingsExtensions
 {
@@ -3052,6 +3079,7 @@ public static partial class NSwagWebApiToSwaggerSettingsExtensions
 #endregion
 #region NSwagAspNetCoreToOpenApiSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagAspNetCoreToOpenApi(Fallout.Common.Tools.NSwag.NSwagAspNetCoreToOpenApiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagAspNetCoreToOpenApiSettingsExtensions
 {
@@ -3560,6 +3588,7 @@ public static partial class NSwagAspNetCoreToOpenApiSettingsExtensions
 #endregion
 #region NSwagAspNetCoreToSwaggerSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagAspNetCoreToSwagger(Fallout.Common.Tools.NSwag.NSwagAspNetCoreToSwaggerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagAspNetCoreToSwaggerSettingsExtensions
 {
@@ -4190,6 +4219,7 @@ public static partial class NSwagAspNetCoreToSwaggerSettingsExtensions
 #endregion
 #region NSwagCreateDocumentSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagCreateDocument(Fallout.Common.Tools.NSwag.NSwagCreateDocumentSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagCreateDocumentSettingsExtensions
 {
@@ -4197,6 +4227,7 @@ public static partial class NSwagCreateDocumentSettingsExtensions
 #endregion
 #region NSwagExecuteDocumentSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagExecuteDocument(Fallout.Common.Tools.NSwag.NSwagExecuteDocumentSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagExecuteDocumentSettingsExtensions
 {
@@ -4229,6 +4260,7 @@ public static partial class NSwagExecuteDocumentSettingsExtensions
 #endregion
 #region NSwagJsonSchemaToCSharpSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagJsonSchemaToCSharp(Fallout.Common.Tools.NSwag.NSwagJsonSchemaToCSharpSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagJsonSchemaToCSharpSettingsExtensions
 {
@@ -4381,6 +4413,7 @@ public static partial class NSwagJsonSchemaToCSharpSettingsExtensions
 #endregion
 #region NSwagJsonSchemaToTypeScriptSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagJsonSchemaToTypeScript(Fallout.Common.Tools.NSwag.NSwagJsonSchemaToTypeScriptSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagJsonSchemaToTypeScriptSettingsExtensions
 {
@@ -4443,6 +4476,7 @@ public static partial class NSwagJsonSchemaToTypeScriptSettingsExtensions
 #endregion
 #region NSwagOpenApiToCSharpClientSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagOpenApiToCSharpClient(Fallout.Common.Tools.NSwag.NSwagOpenApiToCSharpClientSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagOpenApiToCSharpClientSettingsExtensions
 {
@@ -5124,6 +5158,7 @@ public static partial class NSwagOpenApiToCSharpClientSettingsExtensions
 #endregion
 #region NSwagSwaggerToCSharpClientSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagSwaggerToCSharpClient(Fallout.Common.Tools.NSwag.NSwagSwaggerToCSharpClientSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagSwaggerToCSharpClientSettingsExtensions
 {
@@ -6171,6 +6206,7 @@ public static partial class NSwagSwaggerToCSharpClientSettingsExtensions
 #endregion
 #region NSwagOpenApiToCSharpControllerSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagOpenApiToCSharpController(Fallout.Common.Tools.NSwag.NSwagOpenApiToCSharpControllerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagOpenApiToCSharpControllerSettingsExtensions
 {
@@ -6852,6 +6888,7 @@ public static partial class NSwagOpenApiToCSharpControllerSettingsExtensions
 #endregion
 #region NSwagSwaggerToCSharpControllerSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagSwaggerToCSharpController(Fallout.Common.Tools.NSwag.NSwagSwaggerToCSharpControllerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagSwaggerToCSharpControllerSettingsExtensions
 {
@@ -7624,6 +7661,7 @@ public static partial class NSwagSwaggerToCSharpControllerSettingsExtensions
 #endregion
 #region NSwagOpenApiToTypeScriptClientSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagOpenApiToTypeScriptClient(Fallout.Common.Tools.NSwag.NSwagOpenApiToTypeScriptClientSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagOpenApiToTypeScriptClientSettingsExtensions
 {
@@ -7710,6 +7748,7 @@ public static partial class NSwagOpenApiToTypeScriptClientSettingsExtensions
 #endregion
 #region NSwagSwaggerToTypeScriptClientSettingsExtensions
 /// <inheritdoc cref="NSwagTasks.NSwagSwaggerToTypeScriptClient(Fallout.Common.Tools.NSwag.NSwagSwaggerToTypeScriptClientSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NSwagSwaggerToTypeScriptClientSettingsExtensions
 {
@@ -8452,6 +8491,7 @@ public static partial class NSwagSwaggerToTypeScriptClientSettingsExtensions
 #region SchemaType
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<SchemaType>))]
 public partial class SchemaType : Enumeration
@@ -8468,6 +8508,7 @@ public partial class SchemaType : Enumeration
 #region PropertyNameHandling
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PropertyNameHandling>))]
 public partial class PropertyNameHandling : Enumeration
@@ -8484,6 +8525,7 @@ public partial class PropertyNameHandling : Enumeration
 #region ReferenceTypeNullHandling
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<ReferenceTypeNullHandling>))]
 public partial class ReferenceTypeNullHandling : Enumeration
@@ -8499,6 +8541,7 @@ public partial class ReferenceTypeNullHandling : Enumeration
 #region EnumHandling
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<EnumHandling>))]
 public partial class EnumHandling : Enumeration
@@ -8515,6 +8558,7 @@ public partial class EnumHandling : Enumeration
 #region OperationGenerationMode
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<OperationGenerationMode>))]
 public partial class OperationGenerationMode : Enumeration
@@ -8534,6 +8578,7 @@ public partial class OperationGenerationMode : Enumeration
 #region CSharpClassStyle
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CSharpClassStyle>))]
 public partial class CSharpClassStyle : Enumeration
@@ -8551,6 +8596,7 @@ public partial class CSharpClassStyle : Enumeration
 #region CSharpControllerStyle
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CSharpControllerStyle>))]
 public partial class CSharpControllerStyle : Enumeration
@@ -8566,6 +8612,7 @@ public partial class CSharpControllerStyle : Enumeration
 #region CSharpControllerTarget
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CSharpControllerTarget>))]
 public partial class CSharpControllerTarget : Enumeration
@@ -8581,6 +8628,7 @@ public partial class CSharpControllerTarget : Enumeration
 #region CSharpControllerRouteNamingStrategy
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<CSharpControllerRouteNamingStrategy>))]
 public partial class CSharpControllerRouteNamingStrategy : Enumeration
@@ -8596,6 +8644,7 @@ public partial class CSharpControllerRouteNamingStrategy : Enumeration
 #region TypeScriptTemplate
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<TypeScriptTemplate>))]
 public partial class TypeScriptTemplate : Enumeration
@@ -8616,6 +8665,7 @@ public partial class TypeScriptTemplate : Enumeration
 #region PromiseType
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PromiseType>))]
 public partial class PromiseType : Enumeration
@@ -8631,6 +8681,7 @@ public partial class PromiseType : Enumeration
 #region HttpClass
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<HttpClass>))]
 public partial class HttpClass : Enumeration
@@ -8646,6 +8697,7 @@ public partial class HttpClass : Enumeration
 #region InjectionTokenType
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<InjectionTokenType>))]
 public partial class InjectionTokenType : Enumeration
@@ -8661,6 +8713,7 @@ public partial class InjectionTokenType : Enumeration
 #region TypeScriptDateTimeType
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<TypeScriptDateTimeType>))]
 public partial class TypeScriptDateTimeType : Enumeration
@@ -8678,6 +8731,7 @@ public partial class TypeScriptDateTimeType : Enumeration
 #region TypeScriptNullValue
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<TypeScriptNullValue>))]
 public partial class TypeScriptNullValue : Enumeration
@@ -8693,6 +8747,7 @@ public partial class TypeScriptNullValue : Enumeration
 #region TypeScriptTypeStyle
 /// <summary>Used within <see cref="NSwagTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<TypeScriptTypeStyle>))]
 public partial class TypeScriptTypeStyle : Enumeration

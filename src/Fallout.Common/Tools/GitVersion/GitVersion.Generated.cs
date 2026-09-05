@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.GitVersion;
 
 /// <summary><p>GitVersion is a tool to help you achieve Semantic Versioning on your project.</p><p>For more details, visit the <a href="http://gitversion.readthedocs.io/en/stable/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class GitVersionTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class GitVersionTasks : ToolTasks, IRequireNuGetPackage
 }
 #region GitVersionSettings
 /// <inheritdoc cref="GitVersionTasks.GitVersion(Fallout.Common.Tools.GitVersion.GitVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(GitVersionTasks), Command = nameof(GitVersionTasks.GitVersion))]
 public partial class GitVersionSettings : ToolOptions, IToolOptionsWithFramework
@@ -92,6 +94,7 @@ public partial class GitVersionSettings : ToolOptions, IToolOptionsWithFramework
 #endregion
 #region GitVersionSettingsExtensions
 /// <inheritdoc cref="GitVersionTasks.GitVersion(Fallout.Common.Tools.GitVersion.GitVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class GitVersionSettingsExtensions
 {
@@ -379,6 +382,7 @@ public static partial class GitVersionSettingsExtensions
 #region GitVersionOutput
 /// <summary>Used within <see cref="GitVersionTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<GitVersionOutput>))]
 public partial class GitVersionOutput : Enumeration
@@ -394,6 +398,7 @@ public partial class GitVersionOutput : Enumeration
 #region GitVersionVerbosity
 /// <summary>Used within <see cref="GitVersionTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<GitVersionVerbosity>))]
 public partial class GitVersionVerbosity : Enumeration

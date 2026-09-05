@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Npm;
 
 /// <summary><p>npm is the package manager for the Node JavaScript platform. It puts modules in place so that node can find them, and manages dependency conflicts intelligently.<para/>It is extremely configurable to support a wide variety of use cases. Most commonly, it is used to publish, discover, install, and develop node programs.</p><p>For more details, visit the <a href="https://www.npmjs.com/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class NpmTasks : ToolTasks, IRequirePathTool
@@ -49,6 +50,7 @@ public partial class NpmTasks : ToolTasks, IRequirePathTool
 }
 #region NpmCiSettings
 /// <inheritdoc cref="NpmTasks.NpmCi(Fallout.Common.Tools.Npm.NpmCiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NpmTasks), Command = nameof(NpmTasks.NpmCi), Arguments = "ci")]
 public partial class NpmCiSettings : ToolOptions
@@ -57,6 +59,7 @@ public partial class NpmCiSettings : ToolOptions
 #endregion
 #region NpmInstallSettings
 /// <inheritdoc cref="NpmTasks.NpmInstall(Fallout.Common.Tools.Npm.NpmInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NpmTasks), Command = nameof(NpmTasks.NpmInstall), Arguments = "install")]
 public partial class NpmInstallSettings : ToolOptions
@@ -91,6 +94,7 @@ public partial class NpmInstallSettings : ToolOptions
 #endregion
 #region NpmRunSettings
 /// <inheritdoc cref="NpmTasks.NpmRun(Fallout.Common.Tools.Npm.NpmRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NpmTasks), Command = nameof(NpmTasks.NpmRun), Arguments = "run")]
 public partial class NpmRunSettings : ToolOptions
@@ -103,6 +107,7 @@ public partial class NpmRunSettings : ToolOptions
 #endregion
 #region NpmCiSettingsExtensions
 /// <inheritdoc cref="NpmTasks.NpmCi(Fallout.Common.Tools.Npm.NpmCiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NpmCiSettingsExtensions
 {
@@ -110,6 +115,7 @@ public static partial class NpmCiSettingsExtensions
 #endregion
 #region NpmInstallSettingsExtensions
 /// <inheritdoc cref="NpmTasks.NpmInstall(Fallout.Common.Tools.Npm.NpmInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NpmInstallSettingsExtensions
 {
@@ -326,6 +332,7 @@ public static partial class NpmInstallSettingsExtensions
 #endregion
 #region NpmRunSettingsExtensions
 /// <inheritdoc cref="NpmTasks.NpmRun(Fallout.Common.Tools.Npm.NpmRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NpmRunSettingsExtensions
 {
@@ -365,6 +372,7 @@ public static partial class NpmRunSettingsExtensions
 #region NpmOnlyMode
 /// <summary>Used within <see cref="NpmTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NpmOnlyMode>))]
 public partial class NpmOnlyMode : Enumeration

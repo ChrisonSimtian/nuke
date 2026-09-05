@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Netlify;
 
 /// <summary><p>Netlify’s command line interface (CLI) lets you configure <a href="https://docs.netlify.com/cli/get-started/#continuous-deployment">continuous deployment</a> straight from the command line. You can use Netlify CLI to <a href="https://docs.netlify.com/cli/get-started/#run-a-local-development-environment">run a local development server</a> that you can share with others, <a href="https://docs.netlify.com/cli/get-started/#run-builds-locally">run a local build and plugins</a>, and <a href="https://docs.netlify.com/cli/get-started/#manual-deploys">deploy your site</a>.</p><p>For more details, visit the <a href="https://docs.netlify.com/cli/get-started/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class NetlifyTasks : ToolTasks, IRequirePathTool
@@ -49,6 +50,7 @@ public partial class NetlifyTasks : ToolTasks, IRequirePathTool
 }
 #region NetlifyDeploySettings
 /// <inheritdoc cref="NetlifyTasks.NetlifyDeploy(Fallout.Common.Tools.Netlify.NetlifyDeploySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NetlifyTasks), Command = nameof(NetlifyTasks.NetlifyDeploy), Arguments = "netlify deploy")]
 public partial class NetlifyDeploySettings : ToolOptions
@@ -91,6 +93,7 @@ public partial class NetlifyDeploySettings : ToolOptions
 #endregion
 #region NetlifySitesCreateSettings
 /// <inheritdoc cref="NetlifyTasks.NetlifySitesCreate(Fallout.Common.Tools.Netlify.NetlifySitesCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NetlifyTasks), Command = nameof(NetlifyTasks.NetlifySitesCreate), Arguments = "netlify sites:create")]
 public partial class NetlifySitesCreateSettings : ToolOptions
@@ -113,6 +116,7 @@ public partial class NetlifySitesCreateSettings : ToolOptions
 #endregion
 #region NetlifySitesDeleteSettings
 /// <inheritdoc cref="NetlifyTasks.NetlifySitesDelete(Fallout.Common.Tools.Netlify.NetlifySitesDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NetlifyTasks), Command = nameof(NetlifyTasks.NetlifySitesDelete), Arguments = "netlify sites:delete")]
 public partial class NetlifySitesDeleteSettings : ToolOptions
@@ -131,6 +135,7 @@ public partial class NetlifySitesDeleteSettings : ToolOptions
 #endregion
 #region NetlifyDeploySettingsExtensions
 /// <inheritdoc cref="NetlifyTasks.NetlifyDeploy(Fallout.Common.Tools.Netlify.NetlifyDeploySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NetlifyDeploySettingsExtensions
 {
@@ -337,6 +342,7 @@ public static partial class NetlifyDeploySettingsExtensions
 #endregion
 #region NetlifySitesCreateSettingsExtensions
 /// <inheritdoc cref="NetlifyTasks.NetlifySitesCreate(Fallout.Common.Tools.Netlify.NetlifySitesCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NetlifySitesCreateSettingsExtensions
 {
@@ -427,6 +433,7 @@ public static partial class NetlifySitesCreateSettingsExtensions
 #endregion
 #region NetlifySitesDeleteSettingsExtensions
 /// <inheritdoc cref="NetlifyTasks.NetlifySitesDelete(Fallout.Common.Tools.Netlify.NetlifySitesDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NetlifySitesDeleteSettingsExtensions
 {

@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.OpenCover;
 
 /// <summary><p>OpenCover is a code coverage tool for .NET 2 and above (Windows OSs only - no MONO), with support for 32 and 64 processes and covers both branch and sequence points.</p><p>For more details, visit the <a href="https://github.com/OpenCover/opencover">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class OpenCoverTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class OpenCoverTasks : ToolTasks, IRequireNuGetPackage
 }
 #region OpenCoverSettings
 /// <inheritdoc cref="OpenCoverTasks.OpenCover(Fallout.Common.Tools.OpenCover.OpenCoverSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(OpenCoverTasks), Command = nameof(OpenCoverTasks.OpenCover))]
 public partial class OpenCoverSettings : ToolOptions
@@ -92,6 +94,7 @@ public partial class OpenCoverSettings : ToolOptions
 #endregion
 #region OpenCoverSettingsExtensions
 /// <inheritdoc cref="OpenCoverTasks.OpenCover(Fallout.Common.Tools.OpenCover.OpenCoverSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class OpenCoverSettingsExtensions
 {
@@ -478,6 +481,7 @@ public static partial class OpenCoverSettingsExtensions
 #region OpenCoverVerbosity
 /// <summary>Used within <see cref="OpenCoverTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<OpenCoverVerbosity>))]
 public partial class OpenCoverVerbosity : Enumeration
@@ -499,6 +503,7 @@ public partial class OpenCoverVerbosity : Enumeration
 #region OpenCoverSkipping
 /// <summary>Used within <see cref="OpenCoverTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<OpenCoverSkipping>))]
 public partial class OpenCoverSkipping : Enumeration
@@ -516,6 +521,7 @@ public partial class OpenCoverSkipping : Enumeration
 #region RegistrationType
 /// <summary>Used within <see cref="OpenCoverTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<RegistrationType>))]
 public partial class RegistrationType : Enumeration

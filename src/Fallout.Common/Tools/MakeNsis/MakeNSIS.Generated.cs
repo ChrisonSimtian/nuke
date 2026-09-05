@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.MakeNSIS;
 
 /// <summary><p>NSIS creates installers that are capable of installing, uninstalling, setting system settings, extracting files, etc. Because it's based on script files you can fully control every part of your installer.</p><p>For more details, visit the <a href="https://nsis.sourceforge.io/Docs/Contents.html">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class MakeNSISTasks : ToolTasks, IRequirePathTool
@@ -35,6 +36,7 @@ public partial class MakeNSISTasks : ToolTasks, IRequirePathTool
 }
 #region MakeNSISSettings
 /// <inheritdoc cref="MakeNSISTasks.MakeNSIS(Fallout.Common.Tools.MakeNSIS.MakeNSISSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(MakeNSISTasks), Command = nameof(MakeNSISTasks.MakeNSIS))]
 public partial class MakeNSISSettings : ToolOptions
@@ -71,6 +73,7 @@ public partial class MakeNSISSettings : ToolOptions
 #endregion
 #region MakeNSISSettingsExtensions
 /// <inheritdoc cref="MakeNSISTasks.MakeNSIS(Fallout.Common.Tools.MakeNSIS.MakeNSISSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class MakeNSISSettingsExtensions
 {

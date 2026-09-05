@@ -27,6 +27,7 @@ public static class TaskGenerator
 
         toolWriter
             .WriteSummary(tool)
+            .WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"Fallout.Tooling.Generator\", \"1.0.0\")]")
             .WriteLine("[ExcludeFromCodeCoverage]")
             .WriteLineIfTrue(tool.NuGetPackageId != null && tool.PackageExecutable == null, "[NuGetTool(Id = PackageId)]")
             .WriteLineIfTrue(tool.NuGetPackageId != null && tool.PackageExecutable != null,

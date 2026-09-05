@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.NuGetKeyVaultSignTool;
 
 /// <summary><p>NuGet Key Vault Sign Tool is similar to <c>nuget sign</c>, with the major difference being that it uses Azure Key Vault for performing the signing process. Similar usage configuration like <c>AzureSignTool</c>, except is used to sign nuget package.</p><p>For more details, visit the <a href="https://github.com/novotnyllc/NuGetKeyVaultSignTool">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class NuGetKeyVaultSignToolTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class NuGetKeyVaultSignToolTasks : ToolTasks, IRequireNuGetPackag
 }
 #region NuGetKeyVaultSignToolSettings
 /// <inheritdoc cref="NuGetKeyVaultSignToolTasks.NuGetKeyVaultSignTool(Fallout.Common.Tools.NuGetKeyVaultSignTool.NuGetKeyVaultSignToolSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetKeyVaultSignToolTasks), Command = nameof(NuGetKeyVaultSignToolTasks.NuGetKeyVaultSignTool), Arguments = "sign")]
 public partial class NuGetKeyVaultSignToolSettings : ToolOptions
@@ -70,6 +72,7 @@ public partial class NuGetKeyVaultSignToolSettings : ToolOptions
 #endregion
 #region NuGetKeyVaultSignToolSettingsExtensions
 /// <inheritdoc cref="NuGetKeyVaultSignToolTasks.NuGetKeyVaultSignTool(Fallout.Common.Tools.NuGetKeyVaultSignTool.NuGetKeyVaultSignToolSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetKeyVaultSignToolSettingsExtensions
 {
@@ -200,6 +203,7 @@ public static partial class NuGetKeyVaultSignToolSettingsExtensions
 #region NuGetKeyVaultSignToolDigestAlgorithm
 /// <summary>Used within <see cref="NuGetKeyVaultSignToolTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NuGetKeyVaultSignToolDigestAlgorithm>))]
 public partial class NuGetKeyVaultSignToolDigestAlgorithm : Enumeration

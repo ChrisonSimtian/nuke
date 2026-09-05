@@ -18,6 +18,7 @@ namespace Fallout.Common.Tools.Teams;
 
 #region TeamsMessage
 /// <summary>Used within <see cref="TeamsTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class TeamsMessage : Options
 {
@@ -31,6 +32,7 @@ public partial class TeamsMessage : Options
 #endregion
 #region TeamsMessageExtensions
 /// <summary>Used within <see cref="TeamsTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class TeamsMessageExtensions
 {

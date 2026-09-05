@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.MSBuild;
 
 /// <summary><p>The Microsoft Build Engine is a platform for building applications. This engine, which is also known as MSBuild, provides an XML schema for a project file that controls how the build platform processes and builds software. Visual Studio uses MSBuild, but it doesn't depend on Visual Studio. By invoking msbuild.exe on your project or solution file, you can orchestrate and build products in environments where Visual Studio isn't installed. Visual Studio uses MSBuild to load and build managed projects. The project files in Visual Studio (.csproj,.vbproj, vcxproj, and others) contain MSBuild XML code that executes when you build a project by using the IDE. Visual Studio projects import all the necessary settings and build processes to do typical development work, but you can extend or modify them from within Visual Studio or by using an XML editor.</p><p>For more details, visit the <a href="https://msdn.microsoft.com/en-us/library/ms164311.aspx">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class MSBuildTasks : ToolTasks
 {
@@ -33,6 +34,7 @@ public partial class MSBuildTasks : ToolTasks
 }
 #region MSBuildSettings
 /// <inheritdoc cref="MSBuildTasks.MSBuild(Fallout.Common.Tools.MSBuild.MSBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(MSBuildTasks), Command = nameof(MSBuildTasks.MSBuild))]
 public partial class MSBuildSettings : ToolOptions
@@ -71,6 +73,7 @@ public partial class MSBuildSettings : ToolOptions
 #endregion
 #region MSBuildSettingsExtensions
 /// <inheritdoc cref="MSBuildTasks.MSBuild(Fallout.Common.Tools.MSBuild.MSBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class MSBuildSettingsExtensions
 {
@@ -1066,6 +1069,7 @@ public static partial class MSBuildSettingsExtensions
 #region MSBuildToolsVersion
 /// <summary>Used within <see cref="MSBuildTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<MSBuildToolsVersion>))]
 public partial class MSBuildToolsVersion : Enumeration
@@ -1085,6 +1089,7 @@ public partial class MSBuildToolsVersion : Enumeration
 #region MSBuildVerbosity
 /// <summary>Used within <see cref="MSBuildTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<MSBuildVerbosity>))]
 public partial class MSBuildVerbosity : Enumeration
@@ -1103,6 +1108,7 @@ public partial class MSBuildVerbosity : Enumeration
 #region MSBuildTargetPlatform
 /// <summary>Used within <see cref="MSBuildTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<MSBuildTargetPlatform>))]
 public partial class MSBuildTargetPlatform : Enumeration
@@ -1121,6 +1127,7 @@ public partial class MSBuildTargetPlatform : Enumeration
 #region MSBuildSymbolPackageFormat
 /// <summary>Used within <see cref="MSBuildTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<MSBuildSymbolPackageFormat>))]
 public partial class MSBuildSymbolPackageFormat : Enumeration
@@ -1136,6 +1143,7 @@ public partial class MSBuildSymbolPackageFormat : Enumeration
 #region RuntimeIdentifiers
 /// <summary>Used within <see cref="MSBuildTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<RuntimeIdentifiers>))]
 public partial class RuntimeIdentifiers : Enumeration
@@ -1168,6 +1176,7 @@ public partial class RuntimeIdentifiers : Enumeration
 #region Platform
 /// <summary>Used within <see cref="MSBuildTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<Platform>))]
 public partial class Platform : Enumeration
@@ -1187,6 +1196,7 @@ public partial class Platform : Enumeration
 #region TargetFramework
 /// <summary>Used within <see cref="MSBuildTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<TargetFramework>))]
 public partial class TargetFramework : Enumeration
@@ -1240,6 +1250,7 @@ public partial class TargetFramework : Enumeration
 #region InstallFrom
 /// <summary>Used within <see cref="MSBuildTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<InstallFrom>))]
 public partial class InstallFrom : Enumeration

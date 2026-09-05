@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.StaticWebApps;
 
 /// <summary><p>The Static Web Apps CLI, also known as SWA CLI, serves as a local development tool for <a href="https://docs.microsoft.com/azure/static-web-apps">Azure Static Web Apps</a>. It can:<ul><li>Serve static app assets, or proxy to your app dev server</li><li>Serve API requests, or proxy to APIs running in Azure Functions Core Tools</li><li>Emulate authentication and authorization</li><li>Emulate Static Web Apps configuration, including routing</li></ul></p><p>For more details, visit the <a href="https://docs.microsoft.com/en-us/azure/static-web-apps/local-development">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NpmTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class StaticWebAppsTasks : ToolTasks, IRequireNpmPackage
@@ -43,6 +44,7 @@ public partial class StaticWebAppsTasks : ToolTasks, IRequireNpmPackage
 }
 #region StaticWebAppsStartSettings
 /// <inheritdoc cref="StaticWebAppsTasks.StaticWebAppsStart(Fallout.Common.Tools.StaticWebApps.StaticWebAppsStartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(StaticWebAppsTasks), Command = nameof(StaticWebAppsTasks.StaticWebAppsStart), Arguments = "start")]
 public partial class StaticWebAppsStartSettings : ToolOptions
@@ -75,6 +77,7 @@ public partial class StaticWebAppsStartSettings : ToolOptions
 #endregion
 #region StaticWebAppsDeploySettings
 /// <inheritdoc cref="StaticWebAppsTasks.StaticWebAppsDeploy(Fallout.Common.Tools.StaticWebApps.StaticWebAppsDeploySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(StaticWebAppsTasks), Command = nameof(StaticWebAppsTasks.StaticWebAppsDeploy), Arguments = "deploy")]
 public partial class StaticWebAppsDeploySettings : ToolOptions
@@ -95,6 +98,7 @@ public partial class StaticWebAppsDeploySettings : ToolOptions
 #endregion
 #region StaticWebAppsStartSettingsExtensions
 /// <inheritdoc cref="StaticWebAppsTasks.StaticWebAppsStart(Fallout.Common.Tools.StaticWebApps.StaticWebAppsStartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class StaticWebAppsStartSettingsExtensions
 {
@@ -207,6 +211,7 @@ public static partial class StaticWebAppsStartSettingsExtensions
 #endregion
 #region StaticWebAppsDeploySettingsExtensions
 /// <inheritdoc cref="StaticWebAppsTasks.StaticWebAppsDeploy(Fallout.Common.Tools.StaticWebApps.StaticWebAppsDeploySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class StaticWebAppsDeploySettingsExtensions
 {

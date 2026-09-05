@@ -1,0 +1,55 @@
+﻿namespace Fallout.Common.Utilities.Net
+{
+    public static class HttpClientExtensions
+    {
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder CreateRequest(this System.Net.Http.HttpClient client, System.Net.Http.HttpMethod method, string relativeUri) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder CreateRequest(this System.Net.Http.HttpClient client, System.Net.Http.HttpMethod method, string baseAddress, string relativeUri) { }
+    }
+    public class HttpRequestBuilder
+    {
+        public HttpRequestBuilder(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request) { }
+        public System.Net.Http.HttpClient Client { get; }
+        public System.Net.Http.HttpRequestMessage Request { get; }
+    }
+    public static class HttpRequestExtensions
+    {
+        public static System.Net.Http.MultipartFormDataContent AddStreamContent(this System.Net.Http.MultipartFormDataContent data, string name, System.IO.Stream content, string filename, string mediaType = null) { }
+        public static System.Net.Http.MultipartFormDataContent AddStringContent(this System.Net.Http.MultipartFormDataContent data, string name, string content) { }
+        public static Fallout.Common.Utilities.Net.HttpResponseInspector GetResponse(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder) { }
+        public static System.Threading.Tasks.Task<Fallout.Common.Utilities.Net.HttpResponseInspector> GetResponseAsync(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, System.Threading.CancellationToken cancellationToken = default) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder WithAuthentication(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, string scheme, string parameter) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder WithBasicAuthentication(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, string username, string password) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder WithBearerAuthentication(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, string bearerToken) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder WithFormUrlEncodedContent(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, System.Collections.Generic.IDictionary<string, string> dictionary) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder WithJsonContent<T>(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, T obj) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder WithJsonContent<T>(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, T obj, System.Text.Json.JsonSerializerOptions options) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder WithMultipartFormDataContent(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, System.Func<System.Net.Http.MultipartFormDataContent, System.Net.Http.MultipartFormDataContent> configurator) { }
+        public static Fallout.Common.Utilities.Net.HttpRequestBuilder WithStringContent(this Fallout.Common.Utilities.Net.HttpRequestBuilder builder, string content, string mediaType) { }
+    }
+    [System.Serializable]
+    public class HttpResponseException : System.Exception
+    {
+        public HttpResponseException() { }
+        public HttpResponseException(string message) { }
+        protected HttpResponseException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public HttpResponseException(string message, System.Exception inner) { }
+    }
+    public static class HttpResponseExtensions
+    {
+        public static Fallout.Common.Utilities.Net.HttpResponseInspector AssertResponse(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector, System.Func<System.Net.Http.HttpResponseMessage, string> errorSelector) { }
+        public static Fallout.Common.Utilities.Net.HttpResponseInspector AssertStatusCode(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector, System.Func<System.Net.HttpStatusCode, string> errorSelector) { }
+        public static Fallout.Common.Utilities.Net.HttpResponseInspector AssertStatusCode(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector, System.Net.HttpStatusCode status, System.Func<System.Net.Http.HttpResponseMessage, string> errorSelector = null) { }
+        public static Fallout.Common.Utilities.Net.HttpResponseInspector AssertSuccessfulStatusCode(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector) { }
+        public static System.Threading.Tasks.Task<T> GetBodyAsJson<T>(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector) { }
+        public static System.Threading.Tasks.Task<T> GetBodyAsJson<T>(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector, System.Text.Json.JsonSerializerOptions options) { }
+        public static System.Threading.Tasks.Task<System.Text.Json.Nodes.JsonObject> GetBodyAsJsonObject(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector) { }
+        public static System.Threading.Tasks.Task<System.Text.Json.Nodes.JsonObject> GetBodyAsJsonObject(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector, System.Text.Json.Nodes.JsonNodeOptions options) { }
+        public static System.Threading.Tasks.Task WriteToFile(this Fallout.Common.Utilities.Net.HttpResponseInspector inspector, Fallout.Common.IO.AbsolutePath path, System.IO.FileMode mode = 1) { }
+    }
+    public class HttpResponseInspector
+    {
+        public HttpResponseInspector(System.Net.Http.HttpResponseMessage response) { }
+        public System.Net.Http.HttpResponseMessage Response { get; }
+        public System.Threading.Tasks.Task<string> GetBodyAsync() { }
+    }
+}

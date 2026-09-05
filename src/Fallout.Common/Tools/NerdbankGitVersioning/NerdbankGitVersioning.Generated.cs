@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.NerdbankGitVersioning;
 
 /// <summary><p>For more details, visit the <a href="https://github.com/AArnott/Nerdbank.GitVersioning">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class NerdbankGitVersioningTasks : ToolTasks, IRequireNuGetPackage
@@ -78,6 +79,7 @@ public partial class NerdbankGitVersioningTasks : ToolTasks, IRequireNuGetPackag
 }
 #region NerdbankGitVersioningInstallSettings
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningInstall(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NerdbankGitVersioningTasks), Command = nameof(NerdbankGitVersioningTasks.NerdbankGitVersioningInstall), Arguments = "install")]
 public partial class NerdbankGitVersioningInstallSettings : ToolOptions
@@ -92,6 +94,7 @@ public partial class NerdbankGitVersioningInstallSettings : ToolOptions
 #endregion
 #region NerdbankGitVersioningGetVersionSettings
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningGetVersion(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningGetVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NerdbankGitVersioningTasks), Command = nameof(NerdbankGitVersioningTasks.NerdbankGitVersioningGetVersion), Arguments = "get-version")]
 public partial class NerdbankGitVersioningGetVersionSettings : ToolOptions
@@ -110,6 +113,7 @@ public partial class NerdbankGitVersioningGetVersionSettings : ToolOptions
 #endregion
 #region NerdbankGitVersioningSetVersionSettings
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningSetVersion(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningSetVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NerdbankGitVersioningTasks), Command = nameof(NerdbankGitVersioningTasks.NerdbankGitVersioningSetVersion), Arguments = "set-version")]
 public partial class NerdbankGitVersioningSetVersionSettings : ToolOptions
@@ -122,6 +126,7 @@ public partial class NerdbankGitVersioningSetVersionSettings : ToolOptions
 #endregion
 #region NerdbankGitVersioningTagSettings
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningTag(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningTagSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NerdbankGitVersioningTasks), Command = nameof(NerdbankGitVersioningTasks.NerdbankGitVersioningTag), Arguments = "tag")]
 public partial class NerdbankGitVersioningTagSettings : ToolOptions
@@ -134,6 +139,7 @@ public partial class NerdbankGitVersioningTagSettings : ToolOptions
 #endregion
 #region NerdbankGitVersioningGetCommitsSettings
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningGetCommits(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningGetCommitsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NerdbankGitVersioningTasks), Command = nameof(NerdbankGitVersioningTasks.NerdbankGitVersioningGetCommits), Arguments = "get-commits")]
 public partial class NerdbankGitVersioningGetCommitsSettings : ToolOptions
@@ -148,6 +154,7 @@ public partial class NerdbankGitVersioningGetCommitsSettings : ToolOptions
 #endregion
 #region NerdbankGitVersioningCloudSettings
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningCloud(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningCloudSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NerdbankGitVersioningTasks), Command = nameof(NerdbankGitVersioningTasks.NerdbankGitVersioningCloud), Arguments = "cloud")]
 public partial class NerdbankGitVersioningCloudSettings : ToolOptions
@@ -170,6 +177,7 @@ public partial class NerdbankGitVersioningCloudSettings : ToolOptions
 #endregion
 #region NerdbankGitVersioningPrepareReleaseSettings
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningPrepareRelease(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningPrepareReleaseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NerdbankGitVersioningTasks), Command = nameof(NerdbankGitVersioningTasks.NerdbankGitVersioningPrepareRelease), Arguments = "prepare-release")]
 public partial class NerdbankGitVersioningPrepareReleaseSettings : ToolOptions
@@ -186,6 +194,7 @@ public partial class NerdbankGitVersioningPrepareReleaseSettings : ToolOptions
 #endregion
 #region NerdbankGitVersioningInstallSettingsExtensions
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningInstall(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NerdbankGitVersioningInstallSettingsExtensions
 {
@@ -232,6 +241,7 @@ public static partial class NerdbankGitVersioningInstallSettingsExtensions
 #endregion
 #region NerdbankGitVersioningGetVersionSettingsExtensions
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningGetVersion(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningGetVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NerdbankGitVersioningGetVersionSettingsExtensions
 {
@@ -279,6 +289,7 @@ public static partial class NerdbankGitVersioningGetVersionSettingsExtensions
 #endregion
 #region NerdbankGitVersioningSetVersionSettingsExtensions
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningSetVersion(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningSetVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NerdbankGitVersioningSetVersionSettingsExtensions
 {
@@ -302,6 +313,7 @@ public static partial class NerdbankGitVersioningSetVersionSettingsExtensions
 #endregion
 #region NerdbankGitVersioningTagSettingsExtensions
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningTag(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningTagSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NerdbankGitVersioningTagSettingsExtensions
 {
@@ -325,6 +337,7 @@ public static partial class NerdbankGitVersioningTagSettingsExtensions
 #endregion
 #region NerdbankGitVersioningGetCommitsSettingsExtensions
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningGetCommits(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningGetCommitsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NerdbankGitVersioningGetCommitsSettingsExtensions
 {
@@ -365,6 +378,7 @@ public static partial class NerdbankGitVersioningGetCommitsSettingsExtensions
 #endregion
 #region NerdbankGitVersioningCloudSettingsExtensions
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningCloud(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningCloudSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NerdbankGitVersioningCloudSettingsExtensions
 {
@@ -455,6 +469,7 @@ public static partial class NerdbankGitVersioningCloudSettingsExtensions
 #endregion
 #region NerdbankGitVersioningPrepareReleaseSettingsExtensions
 /// <inheritdoc cref="NerdbankGitVersioningTasks.NerdbankGitVersioningPrepareRelease(Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioningPrepareReleaseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NerdbankGitVersioningPrepareReleaseSettingsExtensions
 {
@@ -495,6 +510,7 @@ public static partial class NerdbankGitVersioningPrepareReleaseSettingsExtension
 #region NerdbankGitVersioningFormat
 /// <summary>Used within <see cref="NerdbankGitVersioningTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NerdbankGitVersioningFormat>))]
 public partial class NerdbankGitVersioningFormat : Enumeration
@@ -510,6 +526,7 @@ public partial class NerdbankGitVersioningFormat : Enumeration
 #region NerdbankGitVersioningCISystem
 /// <summary>Used within <see cref="NerdbankGitVersioningTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NerdbankGitVersioningCISystem>))]
 public partial class NerdbankGitVersioningCISystem : Enumeration

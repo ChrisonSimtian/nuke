@@ -1,0 +1,207 @@
+﻿namespace Fallout.Components
+{
+    [System.ComponentModel.TypeConverter(typeof(Fallout.Common.Tooling.Enumeration.TypeConverter<Fallout.Components.Configuration>))]
+    public class Configuration : Fallout.Common.Tooling.Enumeration
+    {
+        public static Fallout.Components.Configuration Debug;
+        public static Fallout.Components.Configuration Release;
+        public Configuration() { }
+        public static string op_Implicit(Fallout.Components.Configuration configuration) { }
+    }
+    public interface ICompile : Fallout.Common.IFalloutBuild, Fallout.Components.IHasConfiguration, Fallout.Components.IHasSolution, Fallout.Components.IRestore
+    {
+        Fallout.Common.Target Compile { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetBuildSettings> CompileSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetBuildSettings> CompileSettingsBase { get; }
+        [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "Project",
+                "Framework"})]
+        System.Collections.Generic.IEnumerable<System.ValueTuple<Fallout.Solutions.Project, string>> PublishConfigurations { get; }
+        int PublishDegreeOfParallelism { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetPublishSettings> PublishSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetPublishSettings> PublishSettingsBase { get; }
+    }
+    [Fallout.Common.ParameterPrefix("GitHubRelease")]
+    public interface ICreateGitHubRelease : Fallout.Common.IFalloutBuild, Fallout.Components.IHasChangelog, Fallout.Components.IHasGitRepository
+    {
+        System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> AssetFiles { get; }
+        Fallout.Common.Target CreateGitHubRelease { get; }
+        bool Draft { get; }
+        [Fallout.Common.Parameter(null)]
+        [Fallout.Common.Secret]
+        string GitHubToken { get; }
+        string Name { get; }
+        bool Prerelease { get; }
+    }
+    public interface IGlobalTool : Fallout.Common.IFalloutBuild
+    {
+        string GlobalToolPackageName { get; }
+        string GlobalToolVersion { get; }
+        Fallout.Common.Target InstallGlobalTool { get; }
+        Fallout.Common.Target PackGlobalTool { get; }
+        Fallout.Common.Target UninstallGlobalTool { get; }
+    }
+    public interface IHasArtifacts : Fallout.Common.IFalloutBuild
+    {
+        Fallout.Common.IO.AbsolutePath ArtifactsDirectory { get; }
+    }
+    public interface IHasChangelog : Fallout.Common.IFalloutBuild
+    {
+        string ChangelogFile { get; }
+        string NuGetReleaseNotes { get; }
+    }
+    public interface IHasConfiguration : Fallout.Common.IFalloutBuild
+    {
+        [Fallout.Common.Parameter(null)]
+        Fallout.Components.Configuration Configuration { get; }
+    }
+    public interface IHasGitRepository : Fallout.Common.IFalloutBuild
+    {
+        [Fallout.Common.Git.GitRepository]
+        [Fallout.Common.Required]
+        Fallout.Common.Git.GitRepository GitRepository { get; }
+    }
+    public interface IHasGitVersion : Fallout.Common.IFalloutBuild
+    {
+        [Fallout.Common.Required]
+        [Fallout.Common.Tools.GitVersion.GitVersion(Framework="net8.0", NoFetch=true)]
+        Fallout.Common.Tools.GitVersion.GitVersion Versioning { get; }
+    }
+    public interface IHasNerdbankGitVersioning : Fallout.Common.IFalloutBuild
+    {
+        [Fallout.Common.Required]
+        [Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioning]
+        Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioning Versioning { get; }
+    }
+    public interface IHasReports : Fallout.Common.IFalloutBuild, Fallout.Components.IHasArtifacts
+    {
+        Fallout.Common.IO.AbsolutePath ReportDirectory { get; }
+    }
+    public interface IHasSolution : Fallout.Common.IFalloutBuild
+    {
+        [Fallout.Common.Required]
+        [Fallout.Solutions.Solution]
+        Fallout.Solutions.Solution Solution { get; }
+    }
+    [Fallout.Common.ParameterPrefix("Twitter")]
+    public interface IHasTwitterCredentials : Fallout.Common.IFalloutBuild
+    {
+        [Fallout.Common.Parameter(null)]
+        [Fallout.Common.Secret]
+        string AccessToken { get; }
+        [Fallout.Common.Parameter(null)]
+        [Fallout.Common.Secret]
+        string AccessTokenSecret { get; }
+        [Fallout.Common.Parameter(null)]
+        [Fallout.Common.Secret]
+        string ConsumerKey { get; }
+        [Fallout.Common.Parameter(null)]
+        [Fallout.Common.Secret]
+        string ConsumerSecret { get; }
+    }
+    public interface IPack : Fallout.Common.IFalloutBuild, Fallout.Components.ICompile, Fallout.Components.IHasArtifacts, Fallout.Components.IHasConfiguration, Fallout.Components.IHasSolution, Fallout.Components.IRestore
+    {
+        Fallout.Common.Target Pack { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetPackSettings> PackSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetPackSettings> PackSettingsBase { get; }
+        Fallout.Common.IO.AbsolutePath PackagesDirectory { get; }
+    }
+    public interface IPublish : Fallout.Common.IFalloutBuild, Fallout.Components.ICompile, Fallout.Components.IHasArtifacts, Fallout.Components.IHasConfiguration, Fallout.Components.IHasSolution, Fallout.Components.IPack, Fallout.Components.IRestore, Fallout.Components.ITest
+    {
+        [Fallout.Common.Parameter(null)]
+        [Fallout.Common.Secret]
+        string NuGetApiKey { get; }
+        [Fallout.Common.Parameter(null)]
+        string NuGetSource { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetNuGetPushSettings> PackagePushSettings { get; }
+        Fallout.Common.Target Publish { get; }
+        [System.Diagnostics.CodeAnalysis.Experimental("FALLOUT001")]
+        System.Collections.Generic.IEnumerable<Fallout.Components.PublishTarget> PublishTargets { get; }
+        [Fallout.Common.Parameter("Publish only to these named targets (default: all configured PublishTargets).")]
+        [System.Diagnostics.CodeAnalysis.Experimental("FALLOUT001")]
+        string[] PublishTo { get; }
+        bool PushCompleteOnFailure { get; }
+        int PushDegreeOfParallelism { get; }
+        System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> PushPackageFiles { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetNuGetPushSettings> PushSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetNuGetPushSettings> PushSettingsBase { get; }
+    }
+    public interface IReportCoverage : Fallout.Common.IFalloutBuild, Fallout.Components.ICompile, Fallout.Components.IHasArtifacts, Fallout.Components.IHasConfiguration, Fallout.Components.IHasGitRepository, Fallout.Components.IHasReports, Fallout.Components.IHasSolution, Fallout.Components.IRestore, Fallout.Components.ITest
+    {
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Codecov.CodecovSettings> CodecovSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Codecov.CodecovSettings> CodecovSettingsBase { get; }
+        [Fallout.Common.Parameter(null)]
+        [Fallout.Common.Secret]
+        string CodecovToken { get; }
+        Fallout.Common.IO.AbsolutePath CoverageReportArchive { get; }
+        Fallout.Common.IO.AbsolutePath CoverageReportDirectory { get; }
+        bool CreateCoverageHtmlReport { get; }
+        Fallout.Common.Target ReportCoverage { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.ReportGenerator.ReportGeneratorSettings> ReportGeneratorSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.ReportGenerator.ReportGeneratorSettings> ReportGeneratorSettingsBase { get; }
+        bool ReportToCodecov { get; }
+        void UploadCoverageData();
+    }
+    public interface IRestore : Fallout.Common.IFalloutBuild, Fallout.Components.IHasSolution
+    {
+        [Fallout.Common.Parameter("Ignore unreachable sources during Restore")]
+        bool IgnoreFailedSources { get; }
+        Fallout.Common.Target Restore { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetRestoreSettings> RestoreSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetRestoreSettings> RestoreSettingsBase { get; }
+    }
+    [Fallout.Common.ParameterPrefix("SignPath")]
+    public interface ISignPackages : Fallout.Common.IFalloutBuild
+    {
+        [Fallout.Common.Parameter(null)]
+        [Fallout.Common.Secret]
+        string ApiToken { get; }
+        [Fallout.Common.Parameter(null)]
+        Fallout.Components.ISignPackages.SignPathSettings Settings { get; }
+        Fallout.Common.Target SignPackages { get; }
+        System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> SignPathPackages { get; }
+        bool SignPathReplacePackages { get; }
+        Fallout.Common.IO.AbsolutePath SignPathRequestArchive { get; }
+        Fallout.Common.IO.AbsolutePath SignPathRequestDirectory { get; }
+        Fallout.Common.IO.AbsolutePath SignPathResponseArchive { get; }
+        Fallout.Common.IO.AbsolutePath SignPathResponseDirectory { get; }
+        Fallout.Common.IO.AbsolutePath SignPathTemporaryDirectory { get; }
+        public class SignPathSettings : System.IEquatable<Fallout.Components.ISignPackages.SignPathSettings>
+        {
+            public SignPathSettings(string OrganizationId, string ProjectSlug, string PolicySlug) { }
+            public string OrganizationId { get; init; }
+            public string PolicySlug { get; init; }
+            public string ProjectSlug { get; init; }
+        }
+    }
+    public interface ITest : Fallout.Common.IFalloutBuild, Fallout.Components.ICompile, Fallout.Components.IHasArtifacts, Fallout.Components.IHasConfiguration, Fallout.Components.IHasSolution, Fallout.Components.IRestore
+    {
+        Fallout.Common.Target Test { get; }
+        int TestDegreeOfParallelism { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetTestSettings, Fallout.Solutions.Project> TestProjectSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetTestSettings, Fallout.Solutions.Project> TestProjectSettingsBase { get; }
+        System.Collections.Generic.IEnumerable<Fallout.Solutions.Project> TestProjects { get; }
+        Fallout.Common.IO.AbsolutePath TestResultDirectory { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetTestSettings> TestSettings { get; }
+        Fallout.Common.Tooling.Configure<Fallout.Common.Tools.DotNet.DotNetTestSettings> TestSettingsBase { get; }
+        void ReportTestCount();
+        void ReportTestResults();
+    }
+    public static class PublishPackageRouter
+    {
+        public static bool GlobMatches(string pattern, string value) { }
+        public static bool MatchesAny(System.Collections.Generic.IEnumerable<string> patterns, string value) { }
+        public static System.Collections.Generic.IEnumerable<string> Route(Fallout.Components.PublishTarget target, System.Collections.Generic.IEnumerable<string> packageNames) { }
+    }
+    public sealed class PublishTarget
+    {
+        public PublishTarget() { }
+        public string? ApiKey { get; init; }
+        public System.Collections.Generic.IReadOnlyList<string> ExcludePackages { get; init; }
+        public System.Collections.Generic.IReadOnlyList<string> IncludePackages { get; init; }
+        public required string Name { get; init; }
+        public bool SkipDuplicate { get; init; }
+        public required string Source { get; init; }
+        public bool Accepts(string packageName) { }
+    }
+}

@@ -17,6 +17,7 @@ public static class DataClassExtensionGenerator
             .WriteLine($"#region {dataClass.Name}Extensions")
             .WriteSummary(dataClass)
             .WriteObsoleteAttributeWhenObsolete(dataClass)
+            .WriteLine("[System.CodeDom.Compiler.GeneratedCode(\"Fallout.Tooling.Generator\", \"1.0.0\")]")
             .WriteLine("[ExcludeFromCodeCoverage]")
             .WriteLine($"public static partial class {dataClass.Name}Extensions")
             .WriteBlock(w => w.ForEach(dataClass.Properties, WriteMethods))

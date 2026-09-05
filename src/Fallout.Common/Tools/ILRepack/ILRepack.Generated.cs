@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.ILRepack;
 
 /// <summary><p>ILRepack is meant at replacing <a href="https://github.com/dotnet/ILMerge">ILMerge</a> / <a href="https://evain.net/blog/articles/2006/11/06/an-introduction-to-mono-merge">Mono.Merge</a>.<para/>The former being closed-source (<a href="https://github.com/Microsoft/ILMerge">now open-sourced</a>), impossible to customize, slow, resource consuming and many more. The later being deprecated, unsupported, and based on an old version of Mono.Cecil.<para/>Here we're using latest (slightly modified) Cecil sources (0.9), you can find the fork <a href="https://github.com/gluck/cecil">here</a>. Mono.Posix is also required (build only, it gets merged afterwards) for executable bit set on target file.</p><p>For more details, visit the <a href="https://github.com/gluck/il-repack#readme">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class ILRepackTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class ILRepackTasks : ToolTasks, IRequireNuGetPackage
 }
 #region ILRepackSettings
 /// <inheritdoc cref="ILRepackTasks.ILRepack(Fallout.Common.Tools.ILRepack.ILRepackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(ILRepackTasks), Command = nameof(ILRepackTasks.ILRepack))]
 public partial class ILRepackSettings : ToolOptions
@@ -98,6 +100,7 @@ public partial class ILRepackSettings : ToolOptions
 #endregion
 #region ILRepackSettingsExtensions
 /// <inheritdoc cref="ILRepackTasks.ILRepack(Fallout.Common.Tools.ILRepack.ILRepackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class ILRepackSettingsExtensions
 {
@@ -487,6 +490,7 @@ public static partial class ILRepackSettingsExtensions
 #region ILRepackTarget
 /// <summary>Used within <see cref="ILRepackTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<ILRepackTarget>))]
 public partial class ILRepackTarget : Enumeration

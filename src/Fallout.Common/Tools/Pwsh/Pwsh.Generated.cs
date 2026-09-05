@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Pwsh;
 
 /// <summary><p>PowerShell is a cross-platform task automation solution made up of a command-line shell, a scripting language, and a configuration management framework. PowerShell runs on Windows, Linux, and macOS.</p><p>For more details, visit the <a href="https://docs.microsoft.com/en-us/powershell/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class PwshTasks : ToolTasks, IRequirePathTool
@@ -35,6 +36,7 @@ public partial class PwshTasks : ToolTasks, IRequirePathTool
 }
 #region PwshSettings
 /// <inheritdoc cref="PwshTasks.Pwsh(Fallout.Common.Tools.Pwsh.PwshSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PwshTasks), Command = nameof(PwshTasks.Pwsh))]
 public partial class PwshSettings : ToolOptions
@@ -91,6 +93,7 @@ public partial class PwshSettings : ToolOptions
 #endregion
 #region PwshSettingsExtensions
 /// <inheritdoc cref="PwshTasks.Pwsh(Fallout.Common.Tools.Pwsh.PwshSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PwshSettingsExtensions
 {
@@ -405,6 +408,7 @@ public static partial class PwshSettingsExtensions
 #region PwshExecutionPolicy
 /// <summary>Used within <see cref="PwshTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PwshExecutionPolicy>))]
 public partial class PwshExecutionPolicy : Enumeration
@@ -425,6 +429,7 @@ public partial class PwshExecutionPolicy : Enumeration
 #region PwshInOutFormat
 /// <summary>Used within <see cref="PwshTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PwshInOutFormat>))]
 public partial class PwshInOutFormat : Enumeration
@@ -440,6 +445,7 @@ public partial class PwshInOutFormat : Enumeration
 #region PwshWindowStyle
 /// <summary>Used within <see cref="PwshTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PwshWindowStyle>))]
 public partial class PwshWindowStyle : Enumeration

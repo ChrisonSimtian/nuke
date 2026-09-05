@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Kubernetes;
 
 /// <summary><p>For more details, visit the <a href="https://kubernetes.io/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class KubernetesTasks : ToolTasks, IRequirePathTool
@@ -343,6 +344,7 @@ public partial class KubernetesTasks : ToolTasks, IRequirePathTool
 }
 #region KubernetesApiResourcesSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesApiResources(Fallout.Common.Tools.Kubernetes.KubernetesApiResourcesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesApiResources), Arguments = "api-resources")]
 public partial class KubernetesApiResourcesSettings : KubernetesOptionsBase
@@ -363,6 +365,7 @@ public partial class KubernetesApiResourcesSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesDrainSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesDrain(Fallout.Common.Tools.Kubernetes.KubernetesDrainSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesDrain), Arguments = "drain")]
 public partial class KubernetesDrainSettings : KubernetesOptionsBase
@@ -387,6 +390,7 @@ public partial class KubernetesDrainSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesRunSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesRun(Fallout.Common.Tools.Kubernetes.KubernetesRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesRun), Arguments = "run")]
 public partial class KubernetesRunSettings : KubernetesOptionsBase
@@ -473,6 +477,7 @@ public partial class KubernetesRunSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesGetSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesGet(Fallout.Common.Tools.Kubernetes.KubernetesGetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesGet), Arguments = "get")]
 public partial class KubernetesGetSettings : KubernetesOptionsBase
@@ -529,6 +534,7 @@ public partial class KubernetesGetSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesVersionSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesVersion(Fallout.Common.Tools.Kubernetes.KubernetesVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesVersion), Arguments = "version")]
 public partial class KubernetesVersionSettings : KubernetesOptionsBase
@@ -543,6 +549,7 @@ public partial class KubernetesVersionSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesTopSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesTop(Fallout.Common.Tools.Kubernetes.KubernetesTopSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesTop), Arguments = "top")]
 public partial class KubernetesTopSettings : KubernetesOptionsBase
@@ -551,6 +558,7 @@ public partial class KubernetesTopSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesConfigSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesConfig(Fallout.Common.Tools.Kubernetes.KubernetesConfigSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesConfig), Arguments = "config")]
 public partial class KubernetesConfigSettings : KubernetesOptionsBase
@@ -559,6 +567,7 @@ public partial class KubernetesConfigSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesExecSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesExec(Fallout.Common.Tools.Kubernetes.KubernetesExecSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesExec), Arguments = "exec")]
 public partial class KubernetesExecSettings : KubernetesOptionsBase
@@ -581,6 +590,7 @@ public partial class KubernetesExecSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesRollingUpdateSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesRollingUpdate(Fallout.Common.Tools.Kubernetes.KubernetesRollingUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesRollingUpdate), Arguments = "rolling-update")]
 public partial class KubernetesRollingUpdateSettings : KubernetesOptionsBase
@@ -617,6 +627,7 @@ public partial class KubernetesRollingUpdateSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesLabelSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesLabel(Fallout.Common.Tools.Kubernetes.KubernetesLabelSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesLabel), Arguments = "label")]
 public partial class KubernetesLabelSettings : KubernetesOptionsBase
@@ -659,6 +670,7 @@ public partial class KubernetesLabelSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesAnnotateSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesAnnotate(Fallout.Common.Tools.Kubernetes.KubernetesAnnotateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesAnnotate), Arguments = "annotate")]
 public partial class KubernetesAnnotateSettings : KubernetesOptionsBase
@@ -699,6 +711,7 @@ public partial class KubernetesAnnotateSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesDeleteSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesDelete(Fallout.Common.Tools.Kubernetes.KubernetesDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesDelete), Arguments = "delete")]
 public partial class KubernetesDeleteSettings : KubernetesOptionsBase
@@ -737,6 +750,7 @@ public partial class KubernetesDeleteSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesExposeSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesExpose(Fallout.Common.Tools.Kubernetes.KubernetesExposeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesExpose), Arguments = "expose")]
 public partial class KubernetesExposeSettings : KubernetesOptionsBase
@@ -789,6 +803,7 @@ public partial class KubernetesExposeSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesOptionsSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesOptions(Fallout.Common.Tools.Kubernetes.KubernetesOptionsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesOptions), Arguments = "options")]
 public partial class KubernetesOptionsSettings : KubernetesOptionsBase
@@ -797,6 +812,7 @@ public partial class KubernetesOptionsSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesAttachSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesAttach(Fallout.Common.Tools.Kubernetes.KubernetesAttachSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesAttach), Arguments = "attach")]
 public partial class KubernetesAttachSettings : KubernetesOptionsBase
@@ -815,6 +831,7 @@ public partial class KubernetesAttachSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesProxySettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesProxy(Fallout.Common.Tools.Kubernetes.KubernetesProxySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesProxy), Arguments = "proxy")]
 public partial class KubernetesProxySettings : KubernetesOptionsBase
@@ -845,6 +862,7 @@ public partial class KubernetesProxySettings : KubernetesOptionsBase
 #endregion
 #region KubernetesAlphaSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesAlpha(Fallout.Common.Tools.Kubernetes.KubernetesAlphaSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesAlpha), Arguments = "alpha")]
 public partial class KubernetesAlphaSettings : KubernetesOptionsBase
@@ -853,6 +871,7 @@ public partial class KubernetesAlphaSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesSettings
 /// <inheritdoc cref="KubernetesTasks.Kubernetes(Fallout.Common.Tools.Kubernetes.KubernetesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.Kubernetes), Arguments = "kubectl")]
 public partial class KubernetesSettings : KubernetesOptionsBase
@@ -861,6 +880,7 @@ public partial class KubernetesSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesCompletionSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesCompletion(Fallout.Common.Tools.Kubernetes.KubernetesCompletionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesCompletion), Arguments = "completion")]
 public partial class KubernetesCompletionSettings : KubernetesOptionsBase
@@ -869,6 +889,7 @@ public partial class KubernetesCompletionSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesPatchSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesPatch(Fallout.Common.Tools.Kubernetes.KubernetesPatchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesPatch), Arguments = "patch")]
 public partial class KubernetesPatchSettings : KubernetesOptionsBase
@@ -899,6 +920,7 @@ public partial class KubernetesPatchSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesReplaceSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesReplace(Fallout.Common.Tools.Kubernetes.KubernetesReplaceSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesReplace), Arguments = "replace")]
 public partial class KubernetesReplaceSettings : KubernetesOptionsBase
@@ -931,6 +953,7 @@ public partial class KubernetesReplaceSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesTaintSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesTaint(Fallout.Common.Tools.Kubernetes.KubernetesTaintSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesTaint), Arguments = "taint")]
 public partial class KubernetesTaintSettings : KubernetesOptionsBase
@@ -957,6 +980,7 @@ public partial class KubernetesTaintSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesDescribeSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesDescribe(Fallout.Common.Tools.Kubernetes.KubernetesDescribeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesDescribe), Arguments = "describe")]
 public partial class KubernetesDescribeSettings : KubernetesOptionsBase
@@ -979,6 +1003,7 @@ public partial class KubernetesDescribeSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesSetSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesSet(Fallout.Common.Tools.Kubernetes.KubernetesSetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesSet), Arguments = "set")]
 public partial class KubernetesSetSettings : KubernetesOptionsBase
@@ -989,6 +1014,7 @@ public partial class KubernetesSetSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesAuthSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesAuth(Fallout.Common.Tools.Kubernetes.KubernetesAuthSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesAuth), Arguments = "auth")]
 public partial class KubernetesAuthSettings : KubernetesOptionsBase
@@ -999,6 +1025,7 @@ public partial class KubernetesAuthSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesCertificateSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesCertificate(Fallout.Common.Tools.Kubernetes.KubernetesCertificateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesCertificate), Arguments = "certificate")]
 public partial class KubernetesCertificateSettings : KubernetesOptionsBase
@@ -1009,6 +1036,7 @@ public partial class KubernetesCertificateSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesRolloutSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesRollout(Fallout.Common.Tools.Kubernetes.KubernetesRolloutSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesRollout), Arguments = "rollout")]
 public partial class KubernetesRolloutSettings : KubernetesOptionsBase
@@ -1019,6 +1047,7 @@ public partial class KubernetesRolloutSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesApplySettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesApply(Fallout.Common.Tools.Kubernetes.KubernetesApplySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesApply), Arguments = "apply")]
 public partial class KubernetesApplySettings : KubernetesOptionsBase
@@ -1067,6 +1096,7 @@ public partial class KubernetesApplySettings : KubernetesOptionsBase
 #endregion
 #region KubernetesApplyKustomizeSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesApplyKustomize(Fallout.Common.Tools.Kubernetes.KubernetesApplyKustomizeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesApplyKustomize), Arguments = "apply -k")]
 public partial class KubernetesApplyKustomizeSettings : KubernetesOptionsBase
@@ -1117,6 +1147,7 @@ public partial class KubernetesApplyKustomizeSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesCordonSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesCordon(Fallout.Common.Tools.Kubernetes.KubernetesCordonSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesCordon), Arguments = "cordon")]
 public partial class KubernetesCordonSettings : KubernetesOptionsBase
@@ -1131,6 +1162,7 @@ public partial class KubernetesCordonSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesCpSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesCp(Fallout.Common.Tools.Kubernetes.KubernetesCpSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesCp), Arguments = "cp")]
 public partial class KubernetesCpSettings : KubernetesOptionsBase
@@ -1145,6 +1177,7 @@ public partial class KubernetesCpSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesApiVersionsSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesApiVersions(Fallout.Common.Tools.Kubernetes.KubernetesApiVersionsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesApiVersions), Arguments = "api-versions")]
 public partial class KubernetesApiVersionsSettings : KubernetesOptionsBase
@@ -1153,6 +1186,7 @@ public partial class KubernetesApiVersionsSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesUncordonSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesUncordon(Fallout.Common.Tools.Kubernetes.KubernetesUncordonSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesUncordon), Arguments = "uncordon")]
 public partial class KubernetesUncordonSettings : KubernetesOptionsBase
@@ -1167,6 +1201,7 @@ public partial class KubernetesUncordonSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesAutoscaleSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesAutoscale(Fallout.Common.Tools.Kubernetes.KubernetesAutoscaleSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesAutoscale), Arguments = "autoscale")]
 public partial class KubernetesAutoscaleSettings : KubernetesOptionsBase
@@ -1201,6 +1236,7 @@ public partial class KubernetesAutoscaleSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesPluginSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesPlugin(Fallout.Common.Tools.Kubernetes.KubernetesPluginSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesPlugin), Arguments = "plugin")]
 public partial class KubernetesPluginSettings : KubernetesOptionsBase
@@ -1211,6 +1247,7 @@ public partial class KubernetesPluginSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesClusterInfoSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesClusterInfo(Fallout.Common.Tools.Kubernetes.KubernetesClusterInfoSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesClusterInfo), Arguments = "cluster-info")]
 public partial class KubernetesClusterInfoSettings : KubernetesOptionsBase
@@ -1219,6 +1256,7 @@ public partial class KubernetesClusterInfoSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesWaitSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesWait(Fallout.Common.Tools.Kubernetes.KubernetesWaitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesWait), Arguments = "wait")]
 public partial class KubernetesWaitSettings : KubernetesOptionsBase
@@ -1245,6 +1283,7 @@ public partial class KubernetesWaitSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesConvertSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesConvert(Fallout.Common.Tools.Kubernetes.KubernetesConvertSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesConvert), Arguments = "convert")]
 public partial class KubernetesConvertSettings : KubernetesOptionsBase
@@ -1269,6 +1308,7 @@ public partial class KubernetesConvertSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesCreateSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesCreate(Fallout.Common.Tools.Kubernetes.KubernetesCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesCreate), Arguments = "create")]
 public partial class KubernetesCreateSettings : KubernetesOptionsBase
@@ -1305,6 +1345,7 @@ public partial class KubernetesCreateSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesPortForwardSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesPortForward(Fallout.Common.Tools.Kubernetes.KubernetesPortForwardSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesPortForward), Arguments = "port-forward")]
 public partial class KubernetesPortForwardSettings : KubernetesOptionsBase
@@ -1319,6 +1360,7 @@ public partial class KubernetesPortForwardSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesRunContainerSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesRunContainer(Fallout.Common.Tools.Kubernetes.KubernetesRunContainerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesRunContainer), Arguments = "run-container")]
 public partial class KubernetesRunContainerSettings : KubernetesOptionsBase
@@ -1403,6 +1445,7 @@ public partial class KubernetesRunContainerSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesEditSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesEdit(Fallout.Common.Tools.Kubernetes.KubernetesEditSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesEdit), Arguments = "edit")]
 public partial class KubernetesEditSettings : KubernetesOptionsBase
@@ -1435,6 +1478,7 @@ public partial class KubernetesEditSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesScaleSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesScale(Fallout.Common.Tools.Kubernetes.KubernetesScaleSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesScale), Arguments = "scale")]
 public partial class KubernetesScaleSettings : KubernetesOptionsBase
@@ -1467,6 +1511,7 @@ public partial class KubernetesScaleSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesExplainSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesExplain(Fallout.Common.Tools.Kubernetes.KubernetesExplainSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesExplain), Arguments = "explain")]
 public partial class KubernetesExplainSettings : KubernetesOptionsBase
@@ -1481,6 +1526,7 @@ public partial class KubernetesExplainSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesLogsSettings
 /// <inheritdoc cref="KubernetesTasks.KubernetesLogs(Fallout.Common.Tools.Kubernetes.KubernetesLogsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(KubernetesTasks), Command = nameof(KubernetesTasks.KubernetesLogs), Arguments = "logs")]
 public partial class KubernetesLogsSettings : KubernetesOptionsBase
@@ -1515,6 +1561,7 @@ public partial class KubernetesLogsSettings : KubernetesOptionsBase
 #endregion
 #region KubernetesOptionsBase
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class KubernetesOptionsBase : ToolOptions
 {
@@ -1568,6 +1615,7 @@ public partial class KubernetesOptionsBase : ToolOptions
 #endregion
 #region KubernetesApiResourcesSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesApiResources(Fallout.Common.Tools.Kubernetes.KubernetesApiResourcesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesApiResourcesSettingsExtensions
 {
@@ -1665,6 +1713,7 @@ public static partial class KubernetesApiResourcesSettingsExtensions
 #endregion
 #region KubernetesDrainSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesDrain(Fallout.Common.Tools.Kubernetes.KubernetesDrainSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesDrainSettingsExtensions
 {
@@ -1772,6 +1821,7 @@ public static partial class KubernetesDrainSettingsExtensions
 #endregion
 #region KubernetesRunSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesRun(Fallout.Common.Tools.Kubernetes.KubernetesRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesRunSettingsExtensions
 {
@@ -2265,6 +2315,7 @@ public static partial class KubernetesRunSettingsExtensions
 #endregion
 #region KubernetesGetSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesGet(Fallout.Common.Tools.Kubernetes.KubernetesGetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesGetSettingsExtensions
 {
@@ -2635,6 +2686,7 @@ public static partial class KubernetesGetSettingsExtensions
 #endregion
 #region KubernetesVersionSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesVersion(Fallout.Common.Tools.Kubernetes.KubernetesVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesVersionSettingsExtensions
 {
@@ -2684,6 +2736,7 @@ public static partial class KubernetesVersionSettingsExtensions
 #endregion
 #region KubernetesTopSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesTop(Fallout.Common.Tools.Kubernetes.KubernetesTopSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesTopSettingsExtensions
 {
@@ -2691,6 +2744,7 @@ public static partial class KubernetesTopSettingsExtensions
 #endregion
 #region KubernetesConfigSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesConfig(Fallout.Common.Tools.Kubernetes.KubernetesConfigSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesConfigSettingsExtensions
 {
@@ -2698,6 +2752,7 @@ public static partial class KubernetesConfigSettingsExtensions
 #endregion
 #region KubernetesExecSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesExec(Fallout.Common.Tools.Kubernetes.KubernetesExecSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesExecSettingsExtensions
 {
@@ -2794,6 +2849,7 @@ public static partial class KubernetesExecSettingsExtensions
 #endregion
 #region KubernetesRollingUpdateSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesRollingUpdate(Fallout.Common.Tools.Kubernetes.KubernetesRollingUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesRollingUpdateSettingsExtensions
 {
@@ -2964,6 +3020,7 @@ public static partial class KubernetesRollingUpdateSettingsExtensions
 #endregion
 #region KubernetesLabelSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesLabel(Fallout.Common.Tools.Kubernetes.KubernetesLabelSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesLabelSettingsExtensions
 {
@@ -3227,6 +3284,7 @@ public static partial class KubernetesLabelSettingsExtensions
 #endregion
 #region KubernetesAnnotateSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesAnnotate(Fallout.Common.Tools.Kubernetes.KubernetesAnnotateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesAnnotateSettingsExtensions
 {
@@ -3473,6 +3531,7 @@ public static partial class KubernetesAnnotateSettingsExtensions
 #endregion
 #region KubernetesDeleteSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesDelete(Fallout.Common.Tools.Kubernetes.KubernetesDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesDeleteSettingsExtensions
 {
@@ -3702,6 +3761,7 @@ public static partial class KubernetesDeleteSettingsExtensions
 #endregion
 #region KubernetesExposeSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesExpose(Fallout.Common.Tools.Kubernetes.KubernetesExposeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesExposeSettingsExtensions
 {
@@ -3945,6 +4005,7 @@ public static partial class KubernetesExposeSettingsExtensions
 #endregion
 #region KubernetesOptionsSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesOptions(Fallout.Common.Tools.Kubernetes.KubernetesOptionsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesOptionsSettingsExtensions
 {
@@ -3952,6 +4013,7 @@ public static partial class KubernetesOptionsSettingsExtensions
 #endregion
 #region KubernetesAttachSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesAttach(Fallout.Common.Tools.Kubernetes.KubernetesAttachSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesAttachSettingsExtensions
 {
@@ -4032,6 +4094,7 @@ public static partial class KubernetesAttachSettingsExtensions
 #endregion
 #region KubernetesProxySettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesProxy(Fallout.Common.Tools.Kubernetes.KubernetesProxySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesProxySettingsExtensions
 {
@@ -4136,6 +4199,7 @@ public static partial class KubernetesProxySettingsExtensions
 #endregion
 #region KubernetesAlphaSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesAlpha(Fallout.Common.Tools.Kubernetes.KubernetesAlphaSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesAlphaSettingsExtensions
 {
@@ -4143,6 +4207,7 @@ public static partial class KubernetesAlphaSettingsExtensions
 #endregion
 #region KubernetesSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.Kubernetes(Fallout.Common.Tools.Kubernetes.KubernetesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesSettingsExtensions
 {
@@ -4150,6 +4215,7 @@ public static partial class KubernetesSettingsExtensions
 #endregion
 #region KubernetesCompletionSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesCompletion(Fallout.Common.Tools.Kubernetes.KubernetesCompletionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesCompletionSettingsExtensions
 {
@@ -4157,6 +4223,7 @@ public static partial class KubernetesCompletionSettingsExtensions
 #endregion
 #region KubernetesPatchSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesPatch(Fallout.Common.Tools.Kubernetes.KubernetesPatchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesPatchSettingsExtensions
 {
@@ -4327,6 +4394,7 @@ public static partial class KubernetesPatchSettingsExtensions
 #endregion
 #region KubernetesReplaceSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesReplace(Fallout.Common.Tools.Kubernetes.KubernetesReplaceSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesReplaceSettingsExtensions
 {
@@ -4508,6 +4576,7 @@ public static partial class KubernetesReplaceSettingsExtensions
 #endregion
 #region KubernetesTaintSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesTaint(Fallout.Common.Tools.Kubernetes.KubernetesTaintSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesTaintSettingsExtensions
 {
@@ -4647,6 +4716,7 @@ public static partial class KubernetesTaintSettingsExtensions
 #endregion
 #region KubernetesDescribeSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesDescribe(Fallout.Common.Tools.Kubernetes.KubernetesDescribeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesDescribeSettingsExtensions
 {
@@ -4776,6 +4846,7 @@ public static partial class KubernetesDescribeSettingsExtensions
 #endregion
 #region KubernetesSetSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesSet(Fallout.Common.Tools.Kubernetes.KubernetesSetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesSetSettingsExtensions
 {
@@ -4806,6 +4877,7 @@ public static partial class KubernetesSetSettingsExtensions
 #endregion
 #region KubernetesAuthSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesAuth(Fallout.Common.Tools.Kubernetes.KubernetesAuthSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesAuthSettingsExtensions
 {
@@ -4821,6 +4893,7 @@ public static partial class KubernetesAuthSettingsExtensions
 #endregion
 #region KubernetesCertificateSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesCertificate(Fallout.Common.Tools.Kubernetes.KubernetesCertificateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesCertificateSettingsExtensions
 {
@@ -4851,6 +4924,7 @@ public static partial class KubernetesCertificateSettingsExtensions
 #endregion
 #region KubernetesRolloutSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesRollout(Fallout.Common.Tools.Kubernetes.KubernetesRolloutSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesRolloutSettingsExtensions
 {
@@ -4881,6 +4955,7 @@ public static partial class KubernetesRolloutSettingsExtensions
 #endregion
 #region KubernetesApplySettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesApply(Fallout.Common.Tools.Kubernetes.KubernetesApplySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesApplySettingsExtensions
 {
@@ -5195,6 +5270,7 @@ public static partial class KubernetesApplySettingsExtensions
 #endregion
 #region KubernetesApplyKustomizeSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesApplyKustomize(Fallout.Common.Tools.Kubernetes.KubernetesApplyKustomizeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesApplyKustomizeSettingsExtensions
 {
@@ -5517,6 +5593,7 @@ public static partial class KubernetesApplyKustomizeSettingsExtensions
 #endregion
 #region KubernetesCordonSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesCordon(Fallout.Common.Tools.Kubernetes.KubernetesCordonSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesCordonSettingsExtensions
 {
@@ -5557,6 +5634,7 @@ public static partial class KubernetesCordonSettingsExtensions
 #endregion
 #region KubernetesCpSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesCp(Fallout.Common.Tools.Kubernetes.KubernetesCpSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesCpSettingsExtensions
 {
@@ -5588,6 +5666,7 @@ public static partial class KubernetesCpSettingsExtensions
 #endregion
 #region KubernetesApiVersionsSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesApiVersions(Fallout.Common.Tools.Kubernetes.KubernetesApiVersionsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesApiVersionsSettingsExtensions
 {
@@ -5595,6 +5674,7 @@ public static partial class KubernetesApiVersionsSettingsExtensions
 #endregion
 #region KubernetesUncordonSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesUncordon(Fallout.Common.Tools.Kubernetes.KubernetesUncordonSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesUncordonSettingsExtensions
 {
@@ -5635,6 +5715,7 @@ public static partial class KubernetesUncordonSettingsExtensions
 #endregion
 #region KubernetesAutoscaleSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesAutoscale(Fallout.Common.Tools.Kubernetes.KubernetesAutoscaleSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesAutoscaleSettingsExtensions
 {
@@ -5806,6 +5887,7 @@ public static partial class KubernetesAutoscaleSettingsExtensions
 #endregion
 #region KubernetesPluginSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesPlugin(Fallout.Common.Tools.Kubernetes.KubernetesPluginSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesPluginSettingsExtensions
 {
@@ -5821,6 +5903,7 @@ public static partial class KubernetesPluginSettingsExtensions
 #endregion
 #region KubernetesClusterInfoSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesClusterInfo(Fallout.Common.Tools.Kubernetes.KubernetesClusterInfoSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesClusterInfoSettingsExtensions
 {
@@ -5828,6 +5911,7 @@ public static partial class KubernetesClusterInfoSettingsExtensions
 #endregion
 #region KubernetesWaitSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesWait(Fallout.Common.Tools.Kubernetes.KubernetesWaitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesWaitSettingsExtensions
 {
@@ -5949,6 +6033,7 @@ public static partial class KubernetesWaitSettingsExtensions
 #endregion
 #region KubernetesConvertSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesConvert(Fallout.Common.Tools.Kubernetes.KubernetesConvertSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesConvertSettingsExtensions
 {
@@ -6071,6 +6156,7 @@ public static partial class KubernetesConvertSettingsExtensions
 #endregion
 #region KubernetesCreateSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesCreate(Fallout.Common.Tools.Kubernetes.KubernetesCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesCreateSettingsExtensions
 {
@@ -6292,6 +6378,7 @@ public static partial class KubernetesCreateSettingsExtensions
 #endregion
 #region KubernetesPortForwardSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesPortForward(Fallout.Common.Tools.Kubernetes.KubernetesPortForwardSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesPortForwardSettingsExtensions
 {
@@ -6347,6 +6434,7 @@ public static partial class KubernetesPortForwardSettingsExtensions
 #endregion
 #region KubernetesRunContainerSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesRunContainer(Fallout.Common.Tools.Kubernetes.KubernetesRunContainerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesRunContainerSettingsExtensions
 {
@@ -6832,6 +6920,7 @@ public static partial class KubernetesRunContainerSettingsExtensions
 #endregion
 #region KubernetesEditSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesEdit(Fallout.Common.Tools.Kubernetes.KubernetesEditSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesEditSettingsExtensions
 {
@@ -7037,6 +7126,7 @@ public static partial class KubernetesEditSettingsExtensions
 #endregion
 #region KubernetesScaleSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesScale(Fallout.Common.Tools.Kubernetes.KubernetesScaleSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesScaleSettingsExtensions
 {
@@ -7191,6 +7281,7 @@ public static partial class KubernetesScaleSettingsExtensions
 #endregion
 #region KubernetesExplainSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesExplain(Fallout.Common.Tools.Kubernetes.KubernetesExplainSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesExplainSettingsExtensions
 {
@@ -7246,6 +7337,7 @@ public static partial class KubernetesExplainSettingsExtensions
 #endregion
 #region KubernetesLogsSettingsExtensions
 /// <inheritdoc cref="KubernetesTasks.KubernetesLogs(Fallout.Common.Tools.Kubernetes.KubernetesLogsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesLogsSettingsExtensions
 {
@@ -7417,6 +7509,7 @@ public static partial class KubernetesLogsSettingsExtensions
 #endregion
 #region KubernetesOptionsBaseExtensions
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class KubernetesOptionsBaseExtensions
 {
@@ -7669,6 +7762,7 @@ public static partial class KubernetesOptionsBaseExtensions
 #region KubernetesApiResourcesOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesApiResourcesOutput>))]
 public partial class KubernetesApiResourcesOutput : Enumeration
@@ -7684,6 +7778,7 @@ public partial class KubernetesApiResourcesOutput : Enumeration
 #region KubernetesRunOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesRunOutput>))]
 public partial class KubernetesRunOutput : Enumeration
@@ -7706,6 +7801,7 @@ public partial class KubernetesRunOutput : Enumeration
 #region KubernetesGetOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesGetOutput>))]
 public partial class KubernetesGetOutput : Enumeration
@@ -7724,6 +7820,7 @@ public partial class KubernetesGetOutput : Enumeration
 #region KubernetesRollingUpdateOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesRollingUpdateOutput>))]
 public partial class KubernetesRollingUpdateOutput : Enumeration
@@ -7746,6 +7843,7 @@ public partial class KubernetesRollingUpdateOutput : Enumeration
 #region KubernetesLabelOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesLabelOutput>))]
 public partial class KubernetesLabelOutput : Enumeration
@@ -7768,6 +7866,7 @@ public partial class KubernetesLabelOutput : Enumeration
 #region KubernetesAnnotateOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesAnnotateOutput>))]
 public partial class KubernetesAnnotateOutput : Enumeration
@@ -7790,6 +7889,7 @@ public partial class KubernetesAnnotateOutput : Enumeration
 #region KubernetesExposeOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesExposeOutput>))]
 public partial class KubernetesExposeOutput : Enumeration
@@ -7812,6 +7912,7 @@ public partial class KubernetesExposeOutput : Enumeration
 #region KubernetesPatchOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesPatchOutput>))]
 public partial class KubernetesPatchOutput : Enumeration
@@ -7834,6 +7935,7 @@ public partial class KubernetesPatchOutput : Enumeration
 #region KubernetesPatchType
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesPatchType>))]
 public partial class KubernetesPatchType : Enumeration
@@ -7850,6 +7952,7 @@ public partial class KubernetesPatchType : Enumeration
 #region KubernetesReplaceOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesReplaceOutput>))]
 public partial class KubernetesReplaceOutput : Enumeration
@@ -7872,6 +7975,7 @@ public partial class KubernetesReplaceOutput : Enumeration
 #region KubernetesTaintOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesTaintOutput>))]
 public partial class KubernetesTaintOutput : Enumeration
@@ -7894,6 +7998,7 @@ public partial class KubernetesTaintOutput : Enumeration
 #region KubernetesApplyOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesApplyOutput>))]
 public partial class KubernetesApplyOutput : Enumeration
@@ -7916,6 +8021,7 @@ public partial class KubernetesApplyOutput : Enumeration
 #region KubernetesAutoscaleOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesAutoscaleOutput>))]
 public partial class KubernetesAutoscaleOutput : Enumeration
@@ -7938,6 +8044,7 @@ public partial class KubernetesAutoscaleOutput : Enumeration
 #region KubernetesWaitOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesWaitOutput>))]
 public partial class KubernetesWaitOutput : Enumeration
@@ -7960,6 +8067,7 @@ public partial class KubernetesWaitOutput : Enumeration
 #region KubernetesConvertOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesConvertOutput>))]
 public partial class KubernetesConvertOutput : Enumeration
@@ -7982,6 +8090,7 @@ public partial class KubernetesConvertOutput : Enumeration
 #region KubernetesCreateOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesCreateOutput>))]
 public partial class KubernetesCreateOutput : Enumeration
@@ -8004,6 +8113,7 @@ public partial class KubernetesCreateOutput : Enumeration
 #region KubernetesRunContainerOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesRunContainerOutput>))]
 public partial class KubernetesRunContainerOutput : Enumeration
@@ -8026,6 +8136,7 @@ public partial class KubernetesRunContainerOutput : Enumeration
 #region KubernetesEditOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesEditOutput>))]
 public partial class KubernetesEditOutput : Enumeration
@@ -8048,6 +8159,7 @@ public partial class KubernetesEditOutput : Enumeration
 #region KubernetesScaleOutput
 /// <summary>Used within <see cref="KubernetesTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<KubernetesScaleOutput>))]
 public partial class KubernetesScaleOutput : Enumeration

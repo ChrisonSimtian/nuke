@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.AzureSignTool;
 
 /// <summary><p>Azure Sign Tool is similar to <c>signtool</c> in the Windows SDK, with the major difference being that it uses Azure Key Vault for performing the signing process. The usage is like <c>signtool</c>, except with a limited set of options for signing and options for authenticating to Azure Key Vault.</p><p>For more details, visit the <a href="https://github.com/vcsjones/AzureSignTool">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class AzureSignToolTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class AzureSignToolTasks : ToolTasks, IRequireNuGetPackage
 }
 #region AzureSignToolSettings
 /// <inheritdoc cref="AzureSignToolTasks.AzureSignTool(Fallout.Common.Tools.AzureSignTool.AzureSignToolSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(AzureSignToolTasks), Command = nameof(AzureSignToolTasks.AzureSignTool), Arguments = "sign")]
 public partial class AzureSignToolSettings : ToolOptions
@@ -90,6 +92,7 @@ public partial class AzureSignToolSettings : ToolOptions
 #endregion
 #region AzureSignToolSettingsExtensions
 /// <inheritdoc cref="AzureSignToolTasks.AzureSignTool(Fallout.Common.Tools.AzureSignTool.AzureSignToolSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class AzureSignToolSettingsExtensions
 {
@@ -375,6 +378,7 @@ public static partial class AzureSignToolSettingsExtensions
 #region AzureSignToolDigestAlgorithm
 /// <summary>Used within <see cref="AzureSignToolTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<AzureSignToolDigestAlgorithm>))]
 public partial class AzureSignToolDigestAlgorithm : Enumeration

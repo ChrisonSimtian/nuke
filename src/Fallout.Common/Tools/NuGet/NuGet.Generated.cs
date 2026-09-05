@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.NuGet;
 
 /// <summary><p>The NuGet Command Line Interface (CLI) provides the full extent of NuGet functionality to install, create, publish, and manage packages.</p><p>For more details, visit the <a href="https://docs.microsoft.com/en-us/nuget/tools/nuget-exe-cli-reference">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class NuGetTasks : ToolTasks, IRequireNuGetPackage
@@ -120,6 +121,7 @@ public partial class NuGetTasks : ToolTasks, IRequireNuGetPackage
 }
 #region NuGetPushSettings
 /// <inheritdoc cref="NuGetTasks.NuGetPush(Fallout.Common.Tools.NuGet.NuGetPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetPush), Arguments = "push")]
 public partial class NuGetPushSettings : ToolOptions
@@ -152,6 +154,7 @@ public partial class NuGetPushSettings : ToolOptions
 #endregion
 #region NuGetDeleteSettings
 /// <inheritdoc cref="NuGetTasks.NuGetDelete(Fallout.Common.Tools.NuGet.NuGetDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetDelete), Arguments = "delete")]
 public partial class NuGetDeleteSettings : ToolOptions
@@ -178,6 +181,7 @@ public partial class NuGetDeleteSettings : ToolOptions
 #endregion
 #region NuGetSignSettings
 /// <inheritdoc cref="NuGetTasks.NuGetSign(Fallout.Common.Tools.NuGet.NuGetSignSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetSign), Arguments = "sign")]
 public partial class NuGetSignSettings : ToolOptions
@@ -218,6 +222,7 @@ public partial class NuGetSignSettings : ToolOptions
 #endregion
 #region NuGetVerifySettings
 /// <inheritdoc cref="NuGetTasks.NuGetVerify(Fallout.Common.Tools.NuGet.NuGetVerifySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetVerify), Arguments = "verify")]
 public partial class NuGetVerifySettings : ToolOptions
@@ -238,6 +243,7 @@ public partial class NuGetVerifySettings : ToolOptions
 #endregion
 #region NuGetPackSettings
 /// <inheritdoc cref="NuGetTasks.NuGetPack(Fallout.Common.Tools.NuGet.NuGetPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetPack), Arguments = "pack")]
 public partial class NuGetPackSettings : ToolOptions
@@ -286,6 +292,7 @@ public partial class NuGetPackSettings : ToolOptions
 #endregion
 #region NuGetRestoreSettings
 /// <inheritdoc cref="NuGetTasks.NuGetRestore(Fallout.Common.Tools.NuGet.NuGetRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetRestore), Arguments = "restore")]
 public partial class NuGetRestoreSettings : ToolOptions
@@ -332,6 +339,7 @@ public partial class NuGetRestoreSettings : ToolOptions
 #endregion
 #region NuGetInstallSettings
 /// <inheritdoc cref="NuGetTasks.NuGetInstall(Fallout.Common.Tools.NuGet.NuGetInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetInstall), Arguments = "install")]
 public partial class NuGetInstallSettings : ToolOptions
@@ -376,6 +384,7 @@ public partial class NuGetInstallSettings : ToolOptions
 #endregion
 #region NuGetSourcesAddSettings
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesAdd(Fallout.Common.Tools.NuGet.NuGetSourcesAddSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetSourcesAdd), Arguments = "sources add")]
 public partial class NuGetSourcesAddSettings : ToolOptions
@@ -402,6 +411,7 @@ public partial class NuGetSourcesAddSettings : ToolOptions
 #endregion
 #region NuGetSourcesUpdateSettings
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesUpdate(Fallout.Common.Tools.NuGet.NuGetSourcesUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetSourcesUpdate), Arguments = "sources update")]
 public partial class NuGetSourcesUpdateSettings : ToolOptions
@@ -428,6 +438,7 @@ public partial class NuGetSourcesUpdateSettings : ToolOptions
 #endregion
 #region NuGetSourcesRemoveSettings
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesRemove(Fallout.Common.Tools.NuGet.NuGetSourcesRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetSourcesRemove), Arguments = "sources remove")]
 public partial class NuGetSourcesRemoveSettings : ToolOptions
@@ -446,6 +457,7 @@ public partial class NuGetSourcesRemoveSettings : ToolOptions
 #endregion
 #region NuGetSourcesEnableSettings
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesEnable(Fallout.Common.Tools.NuGet.NuGetSourcesEnableSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetSourcesEnable), Arguments = "sources enable")]
 public partial class NuGetSourcesEnableSettings : ToolOptions
@@ -464,6 +476,7 @@ public partial class NuGetSourcesEnableSettings : ToolOptions
 #endregion
 #region NuGetSourcesDisableSettings
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesDisable(Fallout.Common.Tools.NuGet.NuGetSourcesDisableSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetSourcesDisable), Arguments = "sources disable")]
 public partial class NuGetSourcesDisableSettings : ToolOptions
@@ -482,6 +495,7 @@ public partial class NuGetSourcesDisableSettings : ToolOptions
 #endregion
 #region NuGetSourcesListSettings
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesList(Fallout.Common.Tools.NuGet.NuGetSourcesListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NuGetTasks), Command = nameof(NuGetTasks.NuGetSourcesList), Arguments = "sources list")]
 public partial class NuGetSourcesListSettings : ToolOptions
@@ -500,6 +514,7 @@ public partial class NuGetSourcesListSettings : ToolOptions
 #endregion
 #region NuGetPushSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetPush(Fallout.Common.Tools.NuGet.NuGetPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetPushSettingsExtensions
 {
@@ -639,6 +654,7 @@ public static partial class NuGetPushSettingsExtensions
 #endregion
 #region NuGetDeleteSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetDelete(Fallout.Common.Tools.NuGet.NuGetDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetDeleteSettingsExtensions
 {
@@ -745,6 +761,7 @@ public static partial class NuGetDeleteSettingsExtensions
 #endregion
 #region NuGetSignSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetSign(Fallout.Common.Tools.NuGet.NuGetSignSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetSignSettingsExtensions
 {
@@ -907,6 +924,7 @@ public static partial class NuGetSignSettingsExtensions
 #endregion
 #region NuGetVerifySettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetVerify(Fallout.Common.Tools.NuGet.NuGetVerifySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetVerifySettingsExtensions
 {
@@ -980,6 +998,7 @@ public static partial class NuGetVerifySettingsExtensions
 #endregion
 #region NuGetPackSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetPack(Fallout.Common.Tools.NuGet.NuGetPackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetPackSettingsExtensions
 {
@@ -1245,6 +1264,7 @@ public static partial class NuGetPackSettingsExtensions
 #endregion
 #region NuGetRestoreSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetRestore(Fallout.Common.Tools.NuGet.NuGetRestoreSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetRestoreSettingsExtensions
 {
@@ -1512,6 +1532,7 @@ public static partial class NuGetRestoreSettingsExtensions
 #endregion
 #region NuGetInstallSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetInstall(Fallout.Common.Tools.NuGet.NuGetInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetInstallSettingsExtensions
 {
@@ -1771,6 +1792,7 @@ public static partial class NuGetInstallSettingsExtensions
 #endregion
 #region NuGetSourcesAddSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesAdd(Fallout.Common.Tools.NuGet.NuGetSourcesAddSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetSourcesAddSettingsExtensions
 {
@@ -1877,6 +1899,7 @@ public static partial class NuGetSourcesAddSettingsExtensions
 #endregion
 #region NuGetSourcesUpdateSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesUpdate(Fallout.Common.Tools.NuGet.NuGetSourcesUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetSourcesUpdateSettingsExtensions
 {
@@ -1983,6 +2006,7 @@ public static partial class NuGetSourcesUpdateSettingsExtensions
 #endregion
 #region NuGetSourcesRemoveSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesRemove(Fallout.Common.Tools.NuGet.NuGetSourcesRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetSourcesRemoveSettingsExtensions
 {
@@ -2048,6 +2072,7 @@ public static partial class NuGetSourcesRemoveSettingsExtensions
 #endregion
 #region NuGetSourcesEnableSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesEnable(Fallout.Common.Tools.NuGet.NuGetSourcesEnableSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetSourcesEnableSettingsExtensions
 {
@@ -2113,6 +2138,7 @@ public static partial class NuGetSourcesEnableSettingsExtensions
 #endregion
 #region NuGetSourcesDisableSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesDisable(Fallout.Common.Tools.NuGet.NuGetSourcesDisableSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetSourcesDisableSettingsExtensions
 {
@@ -2178,6 +2204,7 @@ public static partial class NuGetSourcesDisableSettingsExtensions
 #endregion
 #region NuGetSourcesListSettingsExtensions
 /// <inheritdoc cref="NuGetTasks.NuGetSourcesList(Fallout.Common.Tools.NuGet.NuGetSourcesListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NuGetSourcesListSettingsExtensions
 {
@@ -2244,6 +2271,7 @@ public static partial class NuGetSourcesListSettingsExtensions
 #region NuGetVerbosity
 /// <summary>Used within <see cref="NuGetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NuGetVerbosity>))]
 public partial class NuGetVerbosity : Enumeration
@@ -2260,6 +2288,7 @@ public partial class NuGetVerbosity : Enumeration
 #region PackageSaveMode
 /// <summary>Used within <see cref="NuGetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PackageSaveMode>))]
 public partial class PackageSaveMode : Enumeration
@@ -2275,6 +2304,7 @@ public partial class PackageSaveMode : Enumeration
 #region NuGetMSBuildVersion
 /// <summary>Used within <see cref="NuGetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NuGetMSBuildVersion>))]
 public partial class NuGetMSBuildVersion : Enumeration
@@ -2291,6 +2321,7 @@ public partial class NuGetMSBuildVersion : Enumeration
 #region NuGetSymbolPackageFormat
 /// <summary>Used within <see cref="NuGetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NuGetSymbolPackageFormat>))]
 public partial class NuGetSymbolPackageFormat : Enumeration
@@ -2306,6 +2337,7 @@ public partial class NuGetSymbolPackageFormat : Enumeration
 #region NuGetSourcesListFormat
 /// <summary>Used within <see cref="NuGetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NuGetSourcesListFormat>))]
 public partial class NuGetSourcesListFormat : Enumeration
@@ -2321,6 +2353,7 @@ public partial class NuGetSourcesListFormat : Enumeration
 #region DependencyVersion
 /// <summary>Used within <see cref="NuGetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DependencyVersion>))]
 public partial class DependencyVersion : Enumeration
@@ -2339,6 +2372,7 @@ public partial class DependencyVersion : Enumeration
 #region NuGetSignHashAlgorithm
 /// <summary>Used within <see cref="NuGetTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NuGetSignHashAlgorithm>))]
 public partial class NuGetSignHashAlgorithm : Enumeration

@@ -1,0 +1,13 @@
+﻿namespace Fallout.Utilities.Text.Yaml
+{
+    public static class YamlExtensions
+    {
+        public static YamlDotNet.Serialization.DeserializerBuilder DefaultDeserializerBuilder;
+        public static YamlDotNet.Serialization.SerializerBuilder DefaultSerializerBuilder;
+        public static T GetYaml<T>(this string content, YamlDotNet.Serialization.DeserializerBuilder deserializerBuilder = null) { }
+        public static T ReadYaml<T>(this Fallout.Common.IO.AbsolutePath path, YamlDotNet.Serialization.DeserializerBuilder deserializerBuilder = null) { }
+        public static string ToYaml<T>(this T obj, YamlDotNet.Serialization.SerializerBuilder serializerBuilder = null) { }
+        public static Fallout.Common.IO.AbsolutePath UpdateYaml<T>(this Fallout.Common.IO.AbsolutePath path, System.Action<T> update, YamlDotNet.Serialization.DeserializerBuilder deserializerBuilder = null, YamlDotNet.Serialization.SerializerBuilder serializerBuilder = null) { }
+        public static Fallout.Common.IO.AbsolutePath WriteYaml<T>(this Fallout.Common.IO.AbsolutePath path, T obj, YamlDotNet.Serialization.SerializerBuilder serializerBuilder = null) { }
+    }
+}

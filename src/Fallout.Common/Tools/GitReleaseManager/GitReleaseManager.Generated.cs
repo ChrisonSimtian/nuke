@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.GitReleaseManager;
 
 /// <summary><p>GitReleaseManager is a tool that will help create a set of release notes for your application/product. It does this using the collection of issues which are stored on the GitHub Issue Tracker for your application/product.<para/>By inspecting the issues that have been assigned to a particular milestone, GitReleaseManager creates a set of release notes, in markdown format, which are then used to create a Release on GitHub.<para/>In addition to creating a Release, GitReleaseManager can be used to publish a release, close a milestone, and also to export the complete set of release notes for your application/product.</p><p>For more details, visit the <a href="https://gitreleasemanager.readthedocs.io">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class GitReleaseManagerTasks : ToolTasks, IRequireNuGetPackage
@@ -64,6 +65,7 @@ public partial class GitReleaseManagerTasks : ToolTasks, IRequireNuGetPackage
 }
 #region GitReleaseManagerAddAssetsSettings
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerAddAssets(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerAddAssetsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(GitReleaseManagerTasks), Command = nameof(GitReleaseManagerTasks.GitReleaseManagerAddAssets), Arguments = "addasset")]
 public partial class GitReleaseManagerAddAssetsSettings : ToolOptions
@@ -90,6 +92,7 @@ public partial class GitReleaseManagerAddAssetsSettings : ToolOptions
 #endregion
 #region GitReleaseManagerCloseSettings
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerClose(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerCloseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(GitReleaseManagerTasks), Command = nameof(GitReleaseManagerTasks.GitReleaseManagerClose), Arguments = "close")]
 public partial class GitReleaseManagerCloseSettings : ToolOptions
@@ -114,6 +117,7 @@ public partial class GitReleaseManagerCloseSettings : ToolOptions
 #endregion
 #region GitReleaseManagerCreateSettings
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerCreate(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(GitReleaseManagerTasks), Command = nameof(GitReleaseManagerTasks.GitReleaseManagerCreate), Arguments = "create")]
 public partial class GitReleaseManagerCreateSettings : ToolOptions
@@ -148,6 +152,7 @@ public partial class GitReleaseManagerCreateSettings : ToolOptions
 #endregion
 #region GitReleaseManagerExportSettings
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerExport(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(GitReleaseManagerTasks), Command = nameof(GitReleaseManagerTasks.GitReleaseManagerExport), Arguments = "export")]
 public partial class GitReleaseManagerExportSettings : ToolOptions
@@ -174,6 +179,7 @@ public partial class GitReleaseManagerExportSettings : ToolOptions
 #endregion
 #region GitReleaseManagerPublishSettings
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerPublish(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerPublishSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(GitReleaseManagerTasks), Command = nameof(GitReleaseManagerTasks.GitReleaseManagerPublish), Arguments = "publish")]
 public partial class GitReleaseManagerPublishSettings : ToolOptions
@@ -198,6 +204,7 @@ public partial class GitReleaseManagerPublishSettings : ToolOptions
 #endregion
 #region GitReleaseManagerAddAssetsSettingsExtensions
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerAddAssets(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerAddAssetsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class GitReleaseManagerAddAssetsSettingsExtensions
 {
@@ -292,6 +299,7 @@ public static partial class GitReleaseManagerAddAssetsSettingsExtensions
 #endregion
 #region GitReleaseManagerCloseSettingsExtensions
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerClose(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerCloseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class GitReleaseManagerCloseSettingsExtensions
 {
@@ -363,6 +371,7 @@ public static partial class GitReleaseManagerCloseSettingsExtensions
 #endregion
 #region GitReleaseManagerCreateSettingsExtensions
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerCreate(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class GitReleaseManagerCreateSettingsExtensions
 {
@@ -498,6 +507,7 @@ public static partial class GitReleaseManagerCreateSettingsExtensions
 #endregion
 #region GitReleaseManagerExportSettingsExtensions
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerExport(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class GitReleaseManagerExportSettingsExtensions
 {
@@ -577,6 +587,7 @@ public static partial class GitReleaseManagerExportSettingsExtensions
 #endregion
 #region GitReleaseManagerPublishSettingsExtensions
 /// <inheritdoc cref="GitReleaseManagerTasks.GitReleaseManagerPublish(Fallout.Common.Tools.GitReleaseManager.GitReleaseManagerPublishSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class GitReleaseManagerPublishSettingsExtensions
 {

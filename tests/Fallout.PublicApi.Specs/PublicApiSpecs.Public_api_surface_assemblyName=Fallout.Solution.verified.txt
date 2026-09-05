@@ -1,0 +1,63 @@
+﻿namespace Fallout.Solutions
+{
+    public interface IProjectContainer
+    {
+        Fallout.Solutions.IProjectContainer Parent { get; }
+        System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.Project> Projects { get; }
+        System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.SolutionFolder> SolutionFolders { get; }
+    }
+    public class Project : Fallout.Solutions.SolutionItem, Fallout.Common.IO.IAbsolutePathHolder
+    {
+        public Project(Fallout.Persistence.Solution.Model.SolutionProjectModel model, Fallout.Solutions.Solution solution) { }
+        public Fallout.Common.IO.AbsolutePath Directory { get; }
+        public string FileName { get; }
+        public Fallout.Common.IO.AbsolutePath Path { get; }
+        public string RelativePath { get; }
+        public Fallout.Persistence.Solution.Model.SolutionProjectModel GetModel() { }
+        public static string op_Implicit(Fallout.Solutions.Project project) { }
+        public static Fallout.Common.IO.AbsolutePath op_Implicit(Fallout.Solutions.Project project) { }
+    }
+    public static class ProjectContainerExtensions
+    {
+        public static Fallout.Solutions.Project GetProject(this Fallout.Solutions.IProjectContainer container, string name) { }
+        public static Fallout.Solutions.SolutionFolder GetSolutionFolder(this Fallout.Solutions.IProjectContainer container, string name) { }
+    }
+    public class Solution : Fallout.Common.IO.IAbsolutePathHolder, Fallout.Solutions.IProjectContainer
+    {
+        public Solution(Fallout.Persistence.Solution.Model.SolutionModel model, Fallout.Common.IO.AbsolutePath path = null) { }
+        public System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.Project> AllProjects { get; }
+        public System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.SolutionFolder> AllSolutionFolders { get; }
+        public Fallout.Common.IO.AbsolutePath Directory { get; }
+        public string FileName { get; }
+        public string Name { get; }
+        public Fallout.Common.IO.AbsolutePath Path { get; set; }
+        public System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.Project> Projects { get; }
+        public System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.SolutionFolder> SolutionFolders { get; }
+        public System.Collections.Generic.IEnumerable<Fallout.Solutions.Project> GetAllProjects(string wildcardPattern) { }
+        public Fallout.Persistence.Solution.Model.SolutionModel GetModel() { }
+        public void Save(Fallout.Common.IO.AbsolutePath path = null) { }
+        public static string op_Implicit(Fallout.Solutions.Solution solution) { }
+        public static Fallout.Common.IO.AbsolutePath op_Implicit(Fallout.Solutions.Solution solution) { }
+    }
+    public class SolutionFolder : Fallout.Solutions.SolutionItem, Fallout.Solutions.IProjectContainer
+    {
+        public SolutionFolder(Fallout.Persistence.Solution.Model.SolutionFolderModel model, Fallout.Solutions.Solution solution) { }
+        public System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.Project> Projects { get; }
+        public System.Collections.Generic.IReadOnlyCollection<Fallout.Solutions.SolutionFolder> SolutionFolders { get; }
+        public Fallout.Persistence.Solution.Model.SolutionFolderModel GetModel() { }
+    }
+    public class SolutionItem
+    {
+        public SolutionItem(Fallout.Persistence.Solution.Model.SolutionItemModel model, Fallout.Solutions.Solution solution) { }
+        public string Name { get; }
+        public Fallout.Solutions.IProjectContainer Parent { get; }
+        public Fallout.Solutions.Solution Solution { get; }
+        public override string ToString() { }
+    }
+    public static class SolutionModelExtensions
+    {
+        public static Fallout.Solutions.Solution ReadSolution(this Fallout.Common.IO.AbsolutePath path) { }
+        public static Fallout.Solutions.Solution ReadSolution<T>(this Fallout.Common.IO.AbsolutePath path)
+            where T : Fallout.Solutions.Solution { }
+    }
+}

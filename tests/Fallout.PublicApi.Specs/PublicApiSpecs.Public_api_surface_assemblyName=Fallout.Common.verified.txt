@@ -1,0 +1,2367 @@
+﻿namespace Fallout.Common.CI.AppVeyor
+{
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class AppVeyor : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public static int MessageLimit;
+        public string AccountName { get; }
+        public string ApiUrl { get; }
+        public string BuildFolder { get; }
+        public int BuildId { get; }
+        public int BuildNumber { get; }
+        public string BuildVersion { get; }
+        public string BuildWorkerImage { get; }
+        public Fallout.Common.Tooling.Tool Cli { get; }
+        public string Configuration { get; }
+        public bool ForcedBuild { get; }
+        public string JobId { get; }
+        public string JobName { get; }
+        public int JobNumber { get; }
+        public string Platform { get; }
+        public int ProjectId { get; }
+        public string ProjectName { get; }
+        public string ProjectSlug { get; }
+        public string PullRequestHeadCommit { get; }
+        public string PullRequestHeadRepositoryBranch { get; }
+        public string PullRequestHeadRepositoryName { get; }
+        public int? PullRequestNumber { get; }
+        public string PullRequestTitle { get; }
+        public bool Rebuild { get; }
+        public string RepositoryBranch { get; }
+        public string RepositoryCommitAuthor { get; }
+        public string RepositoryCommitAuthorEmail { get; }
+        public string RepositoryCommitMessage { get; }
+        public string RepositoryCommitMessageExtended { get; }
+        public string RepositoryCommitSha { get; }
+        public System.DateTime RepositoryCommitTimestamp { get; }
+        public string RepositoryName { get; }
+        public string RepositoryProvider { get; }
+        public string RepositoryScm { get; }
+        public bool RepositoryTag { get; }
+        public string RepositoryTagName { get; }
+        public bool ScheduledBuild { get; }
+        public string Url { get; }
+        public new static Fallout.Common.CI.AppVeyor.AppVeyor Instance { get; }
+        public void PushArtifact(string path, string name = null) { }
+        protected override void ReportError(string text, string details = null) { }
+        protected override void ReportWarning(string text, string details = null) { }
+        public void UpdateBuildVersion(string version) { }
+        public void WriteError(string message, string details = null) { }
+        public void WriteInformation(string message, string details = null) { }
+        public void WriteWarning(string message, string details = null) { }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=true)]
+    public class AppVeyorAttribute : Fallout.Common.CI.ConfigurationAttributeBase
+    {
+        public AppVeyorAttribute(Fallout.Common.CI.AppVeyor.AppVeyorImage image, params Fallout.Common.CI.AppVeyor.AppVeyorImage[] images) { }
+        public AppVeyorAttribute(string suffix, Fallout.Common.CI.AppVeyor.AppVeyorImage image, params Fallout.Common.CI.AppVeyor.AppVeyorImage[] images) { }
+        public string[] BranchesExcept { get; set; }
+        public string[] BranchesOnly { get; set; }
+        public string[] Cache { get; set; }
+        public override Fallout.Common.IO.AbsolutePath ConfigurationFile { get; }
+        public override System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> GeneratedFiles { get; }
+        public override System.Type HostType { get; }
+        public override string IdPostfix { get; }
+        public string[] Init { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public override System.Collections.Generic.IEnumerable<string> IrrelevantTargetNames { get; }
+        public string OnlyCommitsAuthor { get; set; }
+        public string OnlyCommitsMessage { get; set; }
+        public override System.Collections.Generic.IEnumerable<string> RelevantTargetNames { get; }
+        public string[] Secrets { get; set; }
+        public Fallout.Common.CI.AppVeyor.AppVeyorService[] Services { get; set; }
+        public bool SkipBranchesWithPullRequest { get; set; }
+        public string SkipCommitsAuthor { get; set; }
+        public string SkipCommitsMessage { get; set; }
+        public bool SkipTags { get; set; }
+        public bool Submodules { get; set; }
+        public override Fallout.Common.Utilities.CustomFileWriter CreateWriter(System.IO.StreamWriter streamWriter) { }
+        protected Fallout.Common.CI.AppVeyor.Configuration.AppVeyorBranches GetBranches() { }
+        public override Fallout.Common.CI.ConfigurationEntity GetConfiguration(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+    }
+    public enum AppVeyorImage
+    {
+        [Fallout.Common.Tooling.EnumValue("Visual Studio 2013")]
+        VisualStudio2013 = 0,
+        [Fallout.Common.Tooling.EnumValue("Visual Studio 2015")]
+        VisualStudio2015 = 1,
+        [Fallout.Common.Tooling.EnumValue("Visual Studio 2017")]
+        VisualStudio2017 = 2,
+        [Fallout.Common.Tooling.EnumValue("Visual Studio 2019")]
+        VisualStudio2019 = 3,
+        [Fallout.Common.Tooling.EnumValue("Visual Studio 2022")]
+        VisualStudio2022 = 4,
+        [Fallout.Common.Tooling.EnumValue("Visual Studio 2022")]
+        VisualStudioLatest = 5,
+        [Fallout.Common.Tooling.EnumValue("Ubuntu1604")]
+        Ubuntu1604 = 6,
+        [Fallout.Common.Tooling.EnumValue("Ubuntu1804")]
+        Ubuntu1804 = 7,
+        [Fallout.Common.Tooling.EnumValue("Ubuntu")]
+        UbuntuLatest = 8,
+        [Fallout.Common.Tooling.EnumValue("MacOs-Mojave")]
+        MacOsMojave = 9,
+        [Fallout.Common.Tooling.EnumValue("MacOs")]
+        MacOsLatest = 10,
+    }
+    public enum AppVeyorMessageCategory
+    {
+        Information = 0,
+        Warning = 1,
+        Error = 2,
+    }
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=true)]
+    public class AppVeyorSecretAttribute : System.Attribute
+    {
+        public AppVeyorSecretAttribute(string parameter, string value) { }
+        public string Parameter { get; }
+        public string Value { get; }
+    }
+    public enum AppVeyorService
+    {
+        MSSQL2008R2SP2 = 0,
+        MSSQL2008R2SP2RS = 1,
+        MSSQL2012SP1 = 2,
+        MSSQL2012SP1RS = 3,
+        MSSQL2014 = 4,
+        MSSQL2014RS = 5,
+        MSSQL2016 = 6,
+        MSSQL2017 = 7,
+        MYSQL = 8,
+        PostgreSQL101 = 9,
+        PostgreSQL = 10,
+        PostgreSQL95 = 11,
+        PostgreSQL94 = 12,
+        PostgreSQL93 = 13,
+        MongoDB = 14,
+        IIS = 15,
+        MSMQ = 16,
+    }
+}
+namespace Fallout.Common.CI.AppVeyor.Configuration
+{
+    public class AppVeyorBranches : Fallout.Common.CI.ConfigurationEntity
+    {
+        public AppVeyorBranches() { }
+        public string[] Except { get; set; }
+        public string[] Only { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class AppVeyorConfiguration : Fallout.Common.CI.ConfigurationEntity
+    {
+        public AppVeyorConfiguration() { }
+        public string[] Artifacts { get; set; }
+        public Fallout.Common.CI.AppVeyor.Configuration.AppVeyorBranches Branches { get; set; }
+        public string BuildCmdPath { get; set; }
+        public string[] Cache { get; set; }
+        public Fallout.Common.CI.AppVeyor.AppVeyorImage[] Images { get; set; }
+        public string[] Init { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public string OnlyCommitsAuthor { get; set; }
+        public string OnlyCommitsMessage { get; set; }
+        public System.Collections.Generic.Dictionary<string, string> Secrets { get; set; }
+        public Fallout.Common.CI.AppVeyor.AppVeyorService[] Services { get; set; }
+        public bool SkipBranchesWithPullRequest { get; set; }
+        public string SkipCommitsAuthor { get; set; }
+        public string SkipCommitsMessage { get; set; }
+        public bool SkipTags { get; set; }
+        public bool Submodules { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public static class AppVeyorCustomWriterExtensions
+    {
+        public static System.IDisposable WriteBlock(this Fallout.Common.Utilities.CustomFileWriter writer, string text) { }
+    }
+}
+namespace Fallout.Common.CI.AzurePipelines
+{
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class AzurePipelines : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public string AccessToken { get; }
+        public string AgentBuildDirectory { get; }
+        public string AgentHomeDirectory { get; }
+        public long AgentId { get; }
+        public Fallout.Common.CI.AzurePipelines.AzurePipelinesJobStatus AgentJobStatus { get; }
+        public string AgentMachineName { get; }
+        public string AgentName { get; }
+        public string AgentWorkFolder { get; }
+        public string ArtifactStagingDirectory { get; }
+        public string BinariesDirectory { get; }
+        public long BuildId { get; }
+        [Fallout.Common.CI.NoConvert]
+        public string BuildNumber { get; }
+        public Fallout.Common.CI.AzurePipelines.AzurePipelinesBuildReason BuildReason { get; }
+        public string BuildUri { get; }
+        public System.Guid CollectionId { get; }
+        public string DefaultWorkingDirectory { get; }
+        public long DefinitionId { get; }
+        public string DefinitionName { get; }
+        public long DefinitionVersion { get; }
+        public string JobDisplayName { get; }
+        public System.Guid JobId { get; }
+        public string PhaseName { get; }
+        public long? PullRequestId { get; }
+        public string PullRequestSourceBranch { get; }
+        public string PullRequestTargetBranch { get; }
+        public string QueuedBy { get; }
+        public System.Guid QueuedById { get; }
+        public bool RepositoryClean { get; }
+        public bool RepositoryGitSubmoduleCheckout { get; }
+        public string RepositoryLocalPath { get; }
+        public string RepositoryName { get; }
+        public Fallout.Common.CI.AzurePipelines.AzurePipelinesRepositoryType RepositoryProvider { get; }
+        public string RepositoryTfvcWorkspace { get; }
+        public string RepositoryUri { get; }
+        public string RequestedFor { get; }
+        public string RequestedForEmail { get; }
+        public System.Guid RequestedForId { get; }
+        public string SourceBranch { get; }
+        public string SourceBranchName { get; }
+        public string SourceDirectory { get; }
+        public string SourceTfvcShelveset { get; }
+        public string SourceVersion { get; }
+        public string StageDisplayName { get; }
+        public string StageName { get; }
+        public string StagingDirectory { get; }
+        public System.Guid TaskInstanceId { get; }
+        public string TeamFoundationCollectionUri { get; }
+        public string TeamProject { get; }
+        public System.Guid TeamProjectId { get; }
+        public string TestResultsDirectory { get; }
+        public new static Fallout.Common.CI.AzurePipelines.AzurePipelines Instance { get; }
+        public void AddBuildTag(string buildTag) { }
+        public void EndGroup(string group) { }
+        protected override bool FilterMessage(string message) { }
+        public void Group(string group) { }
+        public void LogError(string message, string sourcePath = null, string lineNumber = null, string columnNumber = null, string code = null) { }
+        public void LogIssue(Fallout.Common.CI.AzurePipelines.AzurePipelinesIssueType type, string message, string sourcePath = null, string lineNumber = null, string columnNumber = null, string code = null) { }
+        public void LogWarning(string message, string sourcePath = null, string lineNumber = null, string columnNumber = null, string code = null) { }
+        public void PublishCodeCoverage(Fallout.Common.CI.AzurePipelines.AzurePipelinesCodeCoverageToolType coverageTool, string summaryFile, string reportDirectory, params string[] additionalCodeCoverageFiles) { }
+        public void PublishTestResults(string title, Fallout.Common.CI.AzurePipelines.AzurePipelinesTestResultsType type, System.Collections.Generic.IEnumerable<string> files, bool? mergeResults = default, string platform = null, string configuration = null, bool? publishRunAttachments = default) { }
+        protected override void ReportError(string text, string details = null) { }
+        protected override void ReportWarning(string text, string details = null) { }
+        public void SetVariable(string name, string value, bool? isSecret = default, bool? isOutput = default, bool? isReadOnly = default) { }
+        public void UpdateBuildNumber(string buildNumber) { }
+        public void UploadArtifacts(string containerDirectory, string artifactName, string packageDirectory) { }
+        public void UploadLog(string path) { }
+        protected override System.IDisposable WriteBlock(string text) { }
+        public void WriteCommand(string command, string message = null, System.Func<System.Collections.Generic.Dictionary<string, object>, System.Collections.Generic.Dictionary<string, object>> dictionaryConfigurator = null) { }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=true)]
+    public class AzurePipelinesAttribute : Fallout.Common.CI.ChainedConfigurationAttributeBase
+    {
+        public AzurePipelinesAttribute(Fallout.Common.CI.AzurePipelines.AzurePipelinesImage image, params Fallout.Common.CI.AzurePipelines.AzurePipelinesImage[] images) { }
+        public AzurePipelinesAttribute(string suffix, Fallout.Common.CI.AzurePipelines.AzurePipelinesImage image, params Fallout.Common.CI.AzurePipelines.AzurePipelinesImage[] images) { }
+        public string[] CacheKeyFiles { get; set; }
+        public string[] CachePaths { get; set; }
+        public bool Clean { get; set; }
+        protected virtual Fallout.Common.IO.AbsolutePath ConfigurationDirectory { get; }
+        public override Fallout.Common.IO.AbsolutePath ConfigurationFile { get; }
+        public bool EnableAccessToken { get; set; }
+        public int FetchDepth { get; set; }
+        public override System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> GeneratedFiles { get; }
+        public override System.Type HostType { get; }
+        public override string IdPostfix { get; }
+        public string[] ImportSecrets { get; set; }
+        public string[] ImportVariableGroups { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public bool LargeFileStorage { get; set; }
+        public bool? PullRequestsAutoCancel { get; set; }
+        public string[] PullRequestsBranchesExclude { get; set; }
+        public string[] PullRequestsBranchesInclude { get; set; }
+        public bool PullRequestsDisabled { get; set; }
+        public string[] PullRequestsPathsExclude { get; set; }
+        public string[] PullRequestsPathsInclude { get; set; }
+        public override System.Collections.Generic.IEnumerable<string> RelevantTargetNames { get; }
+        public bool Submodules { get; set; }
+        public bool TriggerBatch { get; set; }
+        public string[] TriggerBranchesExclude { get; set; }
+        public string[] TriggerBranchesInclude { get; set; }
+        public bool TriggerDisabled { get; set; }
+        public string[] TriggerPathsExclude { get; set; }
+        public string[] TriggerPathsInclude { get; set; }
+        public string[] TriggerTagsExclude { get; set; }
+        public string[] TriggerTagsInclude { get; set; }
+        public override Fallout.Common.Utilities.CustomFileWriter CreateWriter(System.IO.StreamWriter streamWriter) { }
+        protected virtual string GetArtifact(string artifact) { }
+        public override Fallout.Common.CI.ConfigurationEntity GetConfiguration(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "Key",
+                "Value"})]
+        protected virtual System.Collections.Generic.IEnumerable<System.ValueTuple<string, string>> GetImports() { }
+        protected virtual Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesJob GetJob(Fallout.Common.Execution.ExecutableTarget executableTarget, Fallout.Common.Utilities.Collections.LookupTable<Fallout.Common.Execution.ExecutableTarget, Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesJob> jobs, System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets, Fallout.Common.CI.AzurePipelines.AzurePipelinesImage image) { }
+        protected virtual Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStage GetStage(Fallout.Common.CI.AzurePipelines.AzurePipelinesImage image, System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStep> GetSteps(Fallout.Common.Execution.ExecutableTarget executableTarget, System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets, Fallout.Common.CI.AzurePipelines.AzurePipelinesImage image) { }
+        protected Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesVcsPushTrigger GetVcsPullRequestTrigger() { }
+        protected Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesVcsPushTrigger GetVcsPushTrigger() { }
+    }
+    public enum AzurePipelinesBuildReason
+    {
+        Manual = 0,
+        IndividualCI = 1,
+        BatchedCI = 2,
+        Schedule = 3,
+        ValidateShelveset = 4,
+        CheckInShelveset = 5,
+        PullRequest = 6,
+        ResourceTrigger = 7,
+    }
+    public static class AzurePipelinesCachePaths
+    {
+        public const string Docker = "~/docker";
+        public const string Gradle = "~/.gradle";
+        public const string Npm = "~/.npm";
+        public const string NuGet = "~/.nuget/packages";
+        public const string Nuke = ".fallout/temp";
+    }
+    public enum AzurePipelinesCodeCoverageToolType
+    {
+        JaCoCo = 0,
+        Cobertura = 1,
+    }
+    public enum AzurePipelinesImage
+    {
+        [Fallout.Common.Tooling.EnumValue("windows-2022")]
+        Windows2022 = 0,
+        [Fallout.Common.Tooling.EnumValue("windows-2019")]
+        Windows2019 = 1,
+        [Fallout.Common.Tooling.EnumValue("ubuntu-22.04")]
+        Ubuntu2204 = 2,
+        [Fallout.Common.Tooling.EnumValue("ubuntu-20.04")]
+        Ubuntu2004 = 3,
+        [Fallout.Common.Tooling.EnumValue("macOS-13")]
+        MacOs13 = 4,
+        [Fallout.Common.Tooling.EnumValue("macOS-12")]
+        MacOs12 = 5,
+        [Fallout.Common.Tooling.EnumValue("macOS-11")]
+        MacOs11 = 6,
+        [Fallout.Common.Tooling.EnumValue("windows-latest")]
+        WindowsLatest = 7,
+        [Fallout.Common.Tooling.EnumValue("ubuntu-latest")]
+        UbuntuLatest = 8,
+        [Fallout.Common.Tooling.EnumValue("macOS-latest")]
+        MacOsLatest = 9,
+    }
+    public enum AzurePipelinesIssueType
+    {
+        Warning = 0,
+        Error = 1,
+    }
+    public enum AzurePipelinesJobStatus
+    {
+        Canceled = 0,
+        Failed = 1,
+        Succeeded = 2,
+        SucceededWithIssues = 3,
+    }
+    public enum AzurePipelinesRepositoryType
+    {
+        AzureRepos = 0,
+        TfsVersionControl = 1,
+        Git = 2,
+        GitHub = 3,
+        Svn = 4,
+        TfsGit = 5,
+    }
+    public enum AzurePipelinesTestResultsType
+    {
+        JUnit = 0,
+        NUnit = 1,
+        VSTest = 2,
+        XUnit = 3,
+        CTest = 4,
+    }
+}
+namespace Fallout.Common.CI.AzurePipelines.Configuration
+{
+    public class AzurePipelineCheckoutStep : Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStep
+    {
+        public AzurePipelineCheckoutStep() { }
+        public bool? Clean { get; set; }
+        public int? FetchDepth { get; set; }
+        public bool? IncludeLargeFileStorage { get; set; }
+        public bool? InclueSubmodules { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class AzurePipelinesCacheStep : Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStep
+    {
+        public AzurePipelinesCacheStep() { }
+        public Fallout.Common.CI.AzurePipelines.AzurePipelinesImage Image { get; set; }
+        public string[] KeyFiles { get; set; }
+        public string Path { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class AzurePipelinesCmdStep : Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStep
+    {
+        public AzurePipelinesCmdStep() { }
+        public string BuildCmdPath { get; set; }
+        public System.Collections.Generic.Dictionary<string, string> Imports { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public int? PartitionSize { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class AzurePipelinesConfiguration : Fallout.Common.CI.ConfigurationEntity
+    {
+        public AzurePipelinesConfiguration() { }
+        public Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStage[] Stages { get; set; }
+        public string[] VariableGroups { get; set; }
+        public Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesVcsPushTrigger VcsPullRequestTrigger { get; set; }
+        public Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesVcsPushTrigger VcsPushTrigger { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public static class AzurePipelinesCustomWriterExtensions
+    {
+        public static System.IDisposable WriteBlock(this Fallout.Common.Utilities.CustomFileWriter writer, string text) { }
+    }
+    public class AzurePipelinesDownloadStep : Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStep
+    {
+        public AzurePipelinesDownloadStep() { }
+        public string ArtifactName { get; set; }
+        public string DownloadPath { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class AzurePipelinesJob : Fallout.Common.CI.ConfigurationEntity
+    {
+        public AzurePipelinesJob() { }
+        public Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesJob[] Dependencies { get; set; }
+        public string DisplayName { get; set; }
+        public Fallout.Common.CI.AzurePipelines.AzurePipelinesImage? Image { get; set; }
+        public string Name { get; set; }
+        public int Parallel { get; set; }
+        public Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStep[] Steps { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class AzurePipelinesPublishStep : Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStep
+    {
+        public AzurePipelinesPublishStep() { }
+        public string ArtifactName { get; set; }
+        public string PathToPublish { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class AzurePipelinesStage : Fallout.Common.CI.ConfigurationEntity
+    {
+        public AzurePipelinesStage() { }
+        public Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesStage[] Dependencies { get; set; }
+        public string DisplayName { get; set; }
+        public Fallout.Common.CI.AzurePipelines.AzurePipelinesImage? Image { get; set; }
+        public Fallout.Common.CI.AzurePipelines.Configuration.AzurePipelinesJob[] Jobs { get; set; }
+        public string Name { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public abstract class AzurePipelinesStep : Fallout.Common.CI.ConfigurationEntity
+    {
+        protected AzurePipelinesStep() { }
+    }
+    public class AzurePipelinesVcsPushTrigger : Fallout.Common.CI.ConfigurationEntity
+    {
+        public AzurePipelinesVcsPushTrigger() { }
+        public bool? AutoCancel { get; set; }
+        public bool? Batch { get; set; }
+        public string[] BranchesExclude { get; set; }
+        public string[] BranchesInclude { get; set; }
+        public bool Disabled { get; set; }
+        public string[] PathsExclude { get; set; }
+        public string[] PathsInclude { get; set; }
+        public string[] TagsExclude { get; set; }
+        public string[] TagsInclude { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+}
+namespace Fallout.Common.CI.Bamboo
+{
+    [Fallout.Common.CI.CI]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class Bamboo : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public string AgentHome { get; }
+        public long AgentId { get; }
+        public string AgentWorkingDirectory { get; }
+        public bool BuildFailed { get; }
+        public string BuildKey { get; }
+        public long BuildNumber { get; }
+        public string BuildPlanName { get; }
+        public string BuildResultsKey { get; }
+        public string BuildResultsUrl { get; }
+        public System.DateTime BuildTimeStamp { get; }
+        public string BuildWorkingDirectory { get; }
+        public string PlanKey { get; }
+        public string PlanName { get; }
+        public string PlanResultsUrl { get; }
+        public string PlanStorageTag { get; }
+        public string ShortJobKey { get; }
+        public string ShortJobName { get; }
+        public string ShortPlanKey { get; }
+        public string ShortPlanName { get; }
+        public new static Fallout.Common.CI.Bamboo.Bamboo Instance { get; }
+    }
+}
+namespace Fallout.Common.CI.Bitbucket
+{
+    [Fallout.Common.CI.CI]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class Bitbucket : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public string Bookmark { get; }
+        public string Branch { get; }
+        public long BuildNumber { get; }
+        public string CloneDirectory { get; }
+        public string Commit { get; }
+        public string DeploymentEnvironment { get; }
+        public string DeploymentEnvironmentUuid { get; }
+        public string ExitCode { get; }
+        public string GitHttpOrigin { get; }
+        public string GitSshOrigin { get; }
+        public int ParallelStep { get; }
+        public int ParallelStepCount { get; }
+        public string PipelineUuid { get; }
+        public string ProjectKey { get; }
+        public string ProjectUuid { get; }
+        public string PullRequestDestinationBranch { get; }
+        public int PullRequestId { get; }
+        public string RepositoryFullName { get; }
+        public string RepositorySlug { get; }
+        public string RepositoryUuid { get; }
+        public string StepOidcToken { get; }
+        public string StepTriggererUuid { get; }
+        public string StepUuid { get; }
+        public string Tag { get; }
+        public string Workspace { get; }
+        public new static Fallout.Common.CI.Bitbucket.Bitbucket Instance { get; }
+    }
+}
+namespace Fallout.Common.CI.Bitrise
+{
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class Bitrise : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        [Fallout.Common.CI.NoConvert]
+        public string AppSlug { get; }
+        public string AppTitle { get; }
+        public string AppUrl { get; }
+        public long BuildNumber { get; }
+        [Fallout.Common.CI.NoConvert]
+        public string BuildSlug { get; }
+        public System.DateTime BuildTriggerTimestamp { get; }
+        public string BuildUrl { get; }
+        public string CertificatePassphrase { get; }
+        public string CertificateUrl { get; }
+        public string GitBranch { get; }
+        public string GitCommit { get; }
+        public string GitMessage { get; }
+        public string GitTag { get; }
+        public string ProvisionUrl { get; }
+        public long? PullRequest { get; }
+        public string RepositoryUrl { get; }
+        public new static Fallout.Common.CI.Bitrise.Bitrise Instance { get; }
+    }
+}
+namespace Fallout.Common.CI.GitHubActions.Configuration
+{
+    public class GitHubActionsArtifactStep : Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsStep
+    {
+        public GitHubActionsArtifactStep() { }
+        public string Condition { get; set; }
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class GitHubActionsCacheStep : Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsStep
+    {
+        public GitHubActionsCacheStep() { }
+        public string[] ExcludePatterns { get; set; }
+        public string[] IncludePatterns { get; set; }
+        public string[] KeyFiles { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class GitHubActionsCheckoutStep : Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsStep
+    {
+        public GitHubActionsCheckoutStep() { }
+        public string[] CheckoutWith { get; set; }
+        public uint? FetchDepth { get; set; }
+        public string Filter { get; set; }
+        public bool? Lfs { get; set; }
+        public bool? Progress { get; set; }
+        public string Ref { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsSubmodules? Submodules { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class GitHubActionsConfiguration : Fallout.Common.CI.ConfigurationEntity
+    {
+        public GitHubActionsConfiguration() { }
+        public bool ConcurrencyCancelInProgress { get; set; }
+        public string ConcurrencyGroup { get; set; }
+        public string DefaultShell { get; set; }
+        public Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsDetailedTrigger[] DetailedTriggers { get; set; }
+        public string[] Env { get; set; }
+        public Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsJob[] Jobs { get; set; }
+        public string Name { get; set; }
+        [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "Type",
+                "Permission"})]
+        public System.ValueTuple<Fallout.Common.CI.GitHubActions.GitHubActionsPermissions, string>[] Permissions { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsTrigger[] ShortTriggers { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class GitHubActionsCustomStep : Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsStep
+    {
+        public GitHubActionsCustomStep() { }
+        public bool? ContinueOnError { get; set; }
+        public System.Collections.Generic.Dictionary<string, string> Env { get; set; }
+        public string Id { get; set; }
+        public string If { get; set; }
+        public string Name { get; set; }
+        public string[] Run { get; set; }
+        public string Shell { get; set; }
+        public int? TimeoutMinutes { get; set; }
+        public string Uses { get; set; }
+        public System.Collections.Generic.Dictionary<string, string> With { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public abstract class GitHubActionsDetailedTrigger : Fallout.Common.CI.ConfigurationEntity
+    {
+        protected GitHubActionsDetailedTrigger() { }
+    }
+    public class GitHubActionsJob : Fallout.Common.CI.ConfigurationEntity
+    {
+        public GitHubActionsJob() { }
+        public bool ConcurrencyCancelInProgress { get; set; }
+        public string ConcurrencyGroup { get; set; }
+        public string EnvironmentName { get; set; }
+        public string EnvironmentUrl { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsImage Image { get; set; }
+        public string Name { get; set; }
+        public string[] RunsOnLabels { get; set; }
+        public Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsStep[] Steps { get; set; }
+        public int TimeoutMinutes { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class GitHubActionsRunStep : Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsStep
+    {
+        public GitHubActionsRunStep() { }
+        public System.Collections.Generic.Dictionary<string, string> Imports { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class GitHubActionsScheduledTrigger : Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsDetailedTrigger
+    {
+        public GitHubActionsScheduledTrigger() { }
+        public string Cron { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public abstract class GitHubActionsStep : Fallout.Common.CI.ConfigurationEntity
+    {
+        protected GitHubActionsStep() { }
+    }
+    public class GitHubActionsStepPipeline
+    {
+        public System.Collections.Generic.IReadOnlyList<Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsStep> BuiltInSteps { get; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsImage Image { get; }
+        public string WorkflowName { get; }
+        public void Insert(Fallout.Common.CI.GitHubActions.GitHubActionsStepPosition position, Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsCustomStep step) { }
+        public void Insert(Fallout.Common.CI.GitHubActions.GitHubActionsStepPosition position, System.Collections.Generic.IEnumerable<Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsCustomStep> steps) { }
+    }
+    public class GitHubActionsVcsTrigger : Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsDetailedTrigger
+    {
+        public GitHubActionsVcsTrigger() { }
+        public string[] Branches { get; set; }
+        public string[] BranchesIgnore { get; set; }
+        public string[] ExcludePaths { get; set; }
+        public string[] IncludePaths { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsTrigger Kind { get; set; }
+        public string[] Tags { get; set; }
+        public string[] TagsIgnore { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class GitHubActionsWorkflowDispatchInput
+    {
+        public GitHubActionsWorkflowDispatchInput() { }
+        public string Default { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
+        public string[] Options { get; set; }
+        public bool Required { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsInputType Type { get; set; }
+    }
+    public class GitHubActionsWorkflowDispatchTrigger : Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsDetailedTrigger
+    {
+        public GitHubActionsWorkflowDispatchTrigger() { }
+        public Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsWorkflowDispatchInput[] Inputs { get; set; }
+        [System.Obsolete("Set Inputs instead. Removed in 2027.x.x.", DiagnosticId="FALLOUTOBS001", UrlFormat="https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
+        public string[] OptionalInputs { get; set; }
+        [System.Obsolete("Set Inputs instead. Removed in 2027.x.x.", DiagnosticId="FALLOUTOBS001", UrlFormat="https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
+        public string[] RequiredInputs { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+}
+namespace Fallout.Common.CI.GitHubActions
+{
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class GitHubActions : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public string Action { get; }
+        public string Actor { get; }
+        public string BaseRef { get; }
+        public string EventName { get; }
+        public string EventPath { get; }
+        public System.Text.Json.Nodes.JsonObject GitHubEvent { get; }
+        public string HeadRef { get; }
+        public string Home { get; }
+        public bool IsPullRequest { get; }
+        public string Job { get; }
+        public long JobId { get; }
+        public string PullRequestAction { get; }
+        public int? PullRequestNumber { get; }
+        public string Ref { get; }
+        public string RefName { get; }
+        public string RefType { get; }
+        public string Repository { get; }
+        public string RepositoryOwner { get; }
+        public long RunAttempt { get; }
+        public long RunId { get; }
+        public long RunNumber { get; }
+        public string ServerUrl { get; }
+        public string Sha { get; }
+        public Fallout.Common.IO.AbsolutePath StepSummaryFile { get; }
+        public string Token { get; }
+        public string Workflow { get; }
+        public string Workspace { get; }
+        public new static Fallout.Common.CI.GitHubActions.GitHubActions Instance { get; }
+        public System.Threading.Tasks.Task CreateComment(int issue, string text) { }
+        public void EndGroup(string group) { }
+        protected override bool FilterMessage(string message) { }
+        public void Group(string group) { }
+        protected override void ReportError(string text, string details = null) { }
+        protected override void ReportWarning(string text, string details = null) { }
+        protected override System.IDisposable WriteBlock(string text) { }
+        public void WriteCommand(string command, string message = null, Fallout.Common.Tooling.Configure<System.Collections.Generic.Dictionary<string, object>> dictionaryConfigurator = null) { }
+        public void WriteDebug(string message) { }
+        public void WriteError(string message) { }
+        public void WriteWarning(string message) { }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=true)]
+    public class GitHubActionsAttribute : Fallout.Common.CI.ConfigurationAttributeBase
+    {
+        public GitHubActionsAttribute(string name, Fallout.Common.CI.GitHubActions.GitHubActionsImage image, params Fallout.Common.CI.GitHubActions.GitHubActionsImage[] images) { }
+        public string[] CacheExcludePatterns { get; set; }
+        public string[] CacheIncludePatterns { get; set; }
+        public string[] CacheKeyFiles { get; set; }
+        public string CheckoutRef { get; set; }
+        public string[] CheckoutWith { get; set; }
+        public bool ConcurrencyCancelInProgress { get; set; }
+        public string ConcurrencyGroup { get; set; }
+        public override Fallout.Common.IO.AbsolutePath ConfigurationFile { get; }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.GitHubActions.GitHubActionsInputAttribute> DeclaredInputs { get; }
+        protected virtual System.Collections.Generic.ISet<string> DeclaredWorkflowNames { get; }
+        public string DefaultShell { get; set; }
+        public bool EnableGitHubToken { get; set; }
+        public string[] Env { get; set; }
+        public string EnvironmentName { get; set; }
+        public string EnvironmentUrl { get; set; }
+        public uint FetchDepth { get; set; }
+        public string Filter { get; set; }
+        public override System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> GeneratedFiles { get; }
+        public override System.Type HostType { get; }
+        public override string IdPostfix { get; }
+        public string[] ImportSecrets { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public override System.Collections.Generic.IEnumerable<string> IrrelevantTargetNames { get; }
+        public bool JobConcurrencyCancelInProgress { get; set; }
+        public string JobConcurrencyGroup { get; set; }
+        public bool Lfs { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsTrigger[] On { get; set; }
+        public string OnCronSchedule { get; set; }
+        public string[] OnPullRequestBranches { get; set; }
+        public string[] OnPullRequestExcludePaths { get; set; }
+        public string[] OnPullRequestIncludePaths { get; set; }
+        public string[] OnPullRequestTags { get; set; }
+        public string[] OnPushBranches { get; set; }
+        public string[] OnPushBranchesIgnore { get; set; }
+        public string[] OnPushExcludePaths { get; set; }
+        public string[] OnPushIncludePaths { get; set; }
+        public string[] OnPushTags { get; set; }
+        public string[] OnPushTagsIgnore { get; set; }
+        [System.Obsolete("Use [GitHubActionsInputAttribute] instead. Removed in 2027.x.x.", DiagnosticId="FALLOUTOBS001", UrlFormat="https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
+        public string[] OnWorkflowDispatchOptionalInputs { get; set; }
+        [System.Obsolete("Use [GitHubActionsInputAttribute] instead. Removed in 2027.x.x.", DiagnosticId="FALLOUTOBS001", UrlFormat="https://github.com/Fallout-build/Fallout/blob/main/docs/obsolete_apis.md")]
+        public string[] OnWorkflowDispatchRequiredInputs { get; set; }
+        public bool Progress { get; set; }
+        public bool PublishArtifacts { get; set; }
+        public string PublishCondition { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsPermissions[] ReadPermissions { get; set; }
+        public override System.Collections.Generic.IEnumerable<string> RelevantTargetNames { get; }
+        public string[] RunsOnLabels { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsSubmodules Submodules { get; set; }
+        public int TimeoutMinutes { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsPermissions[] WritePermissions { get; set; }
+        public override Fallout.Common.Utilities.CustomFileWriter CreateWriter(System.IO.StreamWriter streamWriter) { }
+        public override Fallout.Common.CI.ConfigurationEntity GetConfiguration(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "Key",
+                "Value"})]
+        protected virtual System.Collections.Generic.IEnumerable<System.ValueTuple<string, string>> GetImports() { }
+        protected virtual Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsJob GetJobs(Fallout.Common.CI.GitHubActions.GitHubActionsImage image, System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsDetailedTrigger> GetTriggers() { }
+    }
+    public enum GitHubActionsImage
+    {
+        [Fallout.Common.Tooling.EnumValue("windows-2022")]
+        WindowsServer2022 = 0,
+        [Fallout.Common.Tooling.EnumValue("windows-2019")]
+        WindowsServer2019 = 1,
+        [Fallout.Common.Tooling.EnumValue("ubuntu-24.04")]
+        Ubuntu2404 = 2,
+        [Fallout.Common.Tooling.EnumValue("ubuntu-22.04")]
+        Ubuntu2204 = 3,
+        [Fallout.Common.Tooling.EnumValue("ubuntu-20.04")]
+        Ubuntu2004 = 4,
+        [Fallout.Common.Tooling.EnumValue("ubuntu-18.04")]
+        Ubuntu1804 = 5,
+        [Fallout.Common.Tooling.EnumValue("macos-14")]
+        MacOs14 = 6,
+        [Fallout.Common.Tooling.EnumValue("macos-12")]
+        MacOs12 = 7,
+        [Fallout.Common.Tooling.EnumValue("macos-11")]
+        MacOs11 = 8,
+        [Fallout.Common.Tooling.EnumValue("macos-10.15")]
+        MacOs1015 = 9,
+        [Fallout.Common.Tooling.EnumValue("windows-latest")]
+        WindowsLatest = 10,
+        [Fallout.Common.Tooling.EnumValue("ubuntu-latest")]
+        UbuntuLatest = 11,
+        [Fallout.Common.Tooling.EnumValue("macos-latest")]
+        MacOsLatest = 12,
+        [Fallout.Common.Tooling.EnumValue("self-hosted")]
+        SelfHosted = 13,
+    }
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=true)]
+    public class GitHubActionsInputAttribute : System.Attribute
+    {
+        public GitHubActionsInputAttribute(string name) { }
+        public string Default { get; set; }
+        public string Description { get; set; }
+        public string Name { get; }
+        public string[] Options { get; set; }
+        public bool Required { get; set; }
+        public Fallout.Common.CI.GitHubActions.GitHubActionsInputType Type { get; set; }
+        public string[] Workflows { get; set; }
+    }
+    public enum GitHubActionsInputType
+    {
+        [Fallout.Common.Tooling.EnumValue("string")]
+        String = 0,
+        [Fallout.Common.Tooling.EnumValue("boolean")]
+        Boolean = 1,
+        [Fallout.Common.Tooling.EnumValue("number")]
+        Number = 2,
+        [Fallout.Common.Tooling.EnumValue("choice")]
+        Choice = 3,
+        [Fallout.Common.Tooling.EnumValue("environment")]
+        Environment = 4,
+    }
+    public enum GitHubActionsPermissions
+    {
+        [Fallout.Common.Tooling.EnumValue("actions")]
+        Actions = 0,
+        [Fallout.Common.Tooling.EnumValue("checks")]
+        Checks = 1,
+        [Fallout.Common.Tooling.EnumValue("contents")]
+        Contents = 2,
+        [Fallout.Common.Tooling.EnumValue("deployments")]
+        Deployments = 3,
+        [Fallout.Common.Tooling.EnumValue("id-token")]
+        IdToken = 4,
+        [Fallout.Common.Tooling.EnumValue("issues")]
+        Issues = 5,
+        [Fallout.Common.Tooling.EnumValue("discussions")]
+        Discussions = 6,
+        [Fallout.Common.Tooling.EnumValue("packages")]
+        Packages = 7,
+        [Fallout.Common.Tooling.EnumValue("pages")]
+        Pages = 8,
+        [Fallout.Common.Tooling.EnumValue("pull-requests")]
+        PullRequests = 9,
+        [Fallout.Common.Tooling.EnumValue("repository-projects")]
+        RepositoryProjects = 10,
+        [Fallout.Common.Tooling.EnumValue("security-events")]
+        SecurityEvents = 11,
+        [Fallout.Common.Tooling.EnumValue("statuses")]
+        Statuses = 12,
+    }
+    public enum GitHubActionsStepPosition
+    {
+        PostCheckout = 0,
+        PreRun = 1,
+        PostRun = 2,
+        JobEnd = 3,
+    }
+    public enum GitHubActionsSubmodules
+    {
+        False = 0,
+        True = 1,
+        Recursive = 2,
+    }
+    public enum GitHubActionsTrigger
+    {
+        [Fallout.Common.Tooling.EnumValue("push")]
+        Push = 0,
+        [Fallout.Common.Tooling.EnumValue("pull_request")]
+        PullRequest = 1,
+        [Fallout.Common.Tooling.EnumValue("workflow_dispatch")]
+        WorkflowDispatch = 2,
+    }
+    public interface IConfigureGitHubActions
+    {
+        void ConfigureSteps(Fallout.Common.CI.GitHubActions.Configuration.GitHubActionsStepPipeline pipeline);
+    }
+}
+namespace Fallout.Common.CI.GitLab
+{
+    [Fallout.Common.CI.CI]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class GitLab : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public string ApiGraphqlUrl { get; }
+        public string ApiV4Url { get; }
+        public string BuildsDir { get; }
+        public string ChatChannel { get; }
+        public string ChatInput { get; }
+        public string ChatUserId { get; }
+        public bool Ci { get; }
+        public string CommitAuthor { get; }
+        public string CommitBeforeSha { get; }
+        public string CommitBranch { get; }
+        public string CommitDescription { get; }
+        public string CommitMessage { get; }
+        public string CommitRefName { get; }
+        public bool CommitRefProtected { get; }
+        public string CommitRefSlug { get; }
+        public string CommitSha { get; }
+        public string CommitShortSha { get; }
+        public string CommitTag { get; }
+        public string CommitTagMessage { get; }
+        public string CommitTimestamp { get; }
+        public string CommitTitle { get; }
+        public string ConcurrentId { get; }
+        public string ConcurrentProjectId { get; }
+        public string ConfigPath { get; }
+        public bool DebugServices { get; }
+        public bool DebugTrace { get; }
+        public string DefaultBranch { get; }
+        public string DependencyProxyDirectGroupImagePrefix { get; }
+        public string DependencyProxyGroupImagePrefix { get; }
+        public string DependencyProxyPassword { get; }
+        public string DependencyProxyServer { get; }
+        public string DependencyProxyUser { get; }
+        public bool DeployFreeze { get; }
+        public string DeployPassword { get; }
+        public string DeployUser { get; }
+        public bool DisposableEnvironment { get; }
+        public string EnvironmentAction { get; }
+        public string EnvironmentName { get; }
+        public string EnvironmentSlug { get; }
+        public string EnvironmentTier { get; }
+        public string EnvironmentUrl { get; }
+        public string ExternalPullRequestIid { get; }
+        public string ExternalPullRequestSourceBranchName { get; }
+        public string ExternalPullRequestSourceBranchSha { get; }
+        public string ExternalPullRequestSourceRepository { get; }
+        public string ExternalPullRequestTargetBranchName { get; }
+        public string ExternalPullRequestTargetBranchSha { get; }
+        public string ExternalPullRequestTargetRepository { get; }
+        public bool GitLabCi { get; }
+        public string GitLabFeatures { get; }
+        public bool GitLabFipsMode { get; }
+        public string GitLabUserEmail { get; }
+        public long GitLabUserId { get; }
+        public string GitLabUserLogin { get; }
+        public string GitLabUserName { get; }
+        public bool HasOpenRequirements { get; }
+        public long JobId { get; }
+        public string JobImage { get; }
+        [System.Obsolete]
+        public string JobJwt { get; }
+        [System.Obsolete]
+        public string JobJwtV1 { get; }
+        [System.Obsolete]
+        public string JobJwtV2 { get; }
+        public bool JobManual { get; }
+        public string JobName { get; }
+        public string JobNameSlug { get; }
+        public string JobStage { get; }
+        public string JobStartedAt { get; }
+        public string JobStatus { get; }
+        public string JobTimeout { get; }
+        public string JobToken { get; }
+        public string JobUrl { get; }
+        public string Kubeconfig { get; }
+        public bool KubernetesActive { get; }
+        protected override string LogoDimmed { get; }
+        protected override string LogoYellow { get; }
+        public bool MergeRequestApproved { get; }
+        public string MergeRequestAssignees { get; }
+        public string MergeRequestDescription { get; }
+        public bool MergeRequestDescriptionIsTruncated { get; }
+        public string MergeRequestDiffBaseSha { get; }
+        public string MergeRequestDiffId { get; }
+        public string MergeRequestEventType { get; }
+        public string MergeRequestId { get; }
+        public string MergeRequestIid { get; }
+        public string MergeRequestLabels { get; }
+        public string MergeRequestMilestone { get; }
+        public string MergeRequestProjectId { get; }
+        public string MergeRequestProjectPath { get; }
+        public string MergeRequestProjectUrl { get; }
+        public string MergeRequestRefPath { get; }
+        public string MergeRequestSourceBranchName { get; }
+        public bool MergeRequestSourceBranchProtected { get; }
+        public string MergeRequestSourceBranchSha { get; }
+        public string MergeRequestSourceProjectId { get; }
+        public string MergeRequestSourceProjectPath { get; }
+        public string MergeRequestSourceProjectUrl { get; }
+        public bool MergeRequestSquashOnMerge { get; }
+        public string MergeRequestTargetBranchName { get; }
+        public bool MergeRequestTargetBranchProtected { get; }
+        public string MergeRequestTargetBranchSha { get; }
+        public string MergeRequestTitle { get; }
+        public string NodeIndex { get; }
+        public string NodeTotal { get; }
+        public string OpenMergeRequests { get; }
+        public string PagesDomain { get; }
+        public string PagesUrl { get; }
+        public string PipelineCreatedAt { get; }
+        public long PipelineId { get; }
+        public string PipelineIid { get; }
+        public string PipelineName { get; }
+        public string PipelineSource { get; }
+        public bool PipelineTriggered { get; }
+        public string PipelineUrl { get; }
+        public string ProjectClassificationLabel { get; }
+        public string ProjectDescription { get; }
+        public string ProjectDir { get; }
+        public string ProjectDirectory { get; }
+        public long ProjectId { get; }
+        public string ProjectName { get; }
+        public string ProjectNamespace { get; }
+        public string ProjectNamespaceId { get; }
+        public string ProjectPath { get; }
+        public string ProjectPathSlug { get; }
+        public string ProjectRepositoryLanguages { get; }
+        public string ProjectRootNamespace { get; }
+        public string ProjectTitle { get; }
+        public string ProjectUrl { get; }
+        public Fallout.Common.CI.GitLab.GitLabProjectVisibility ProjectVisibility { get; }
+        public string Registry { get; }
+        public string RegistryImage { get; }
+        public string RegistryPassword { get; }
+        public string RegistryUser { get; }
+        public string ReleaseDescription { get; }
+        public string RepositoryUrl { get; }
+        public string RunnerDescription { get; }
+        public string RunnerExecutableArch { get; }
+        public long RunnerId { get; }
+        public string RunnerRevision { get; }
+        public string RunnerShortToken { get; }
+        public string RunnerTags { get; }
+        public string RunnerVersion { get; }
+        public string Server { get; }
+        public string ServerHost { get; }
+        public string ServerName { get; }
+        public string ServerPort { get; }
+        public string ServerProtocol { get; }
+        public string ServerRevision { get; }
+        public string ServerShellSshHost { get; }
+        public string ServerShellSshPort { get; }
+        public string ServerTlsCaFile { get; }
+        public string ServerTlsCertFile { get; }
+        public string ServerTlsKeyFile { get; }
+        public string ServerUrl { get; }
+        public string ServerVersion { get; }
+        public string ServerVersionMajor { get; }
+        public string ServerVersionMinor { get; }
+        public string ServerVersionPatch { get; }
+        public bool SharedEnvironment { get; }
+        public string TemplateRegistryHost { get; }
+        public string TriggerPayload { get; }
+        public new static Fallout.Common.CI.GitLab.GitLab Instance { get; }
+        public void BeginSection(string text, bool collapsed = true) { }
+        public void EndSection(string text) { }
+        protected override System.IDisposable WriteBlock(string text) { }
+    }
+    public enum GitLabProjectVisibility
+    {
+        Private = 0,
+        Internal = 1,
+        Public = 2,
+    }
+}
+namespace Fallout.Common.CI.Jenkins
+{
+    [Fallout.Common.CI.CI]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class Jenkins : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public string BranchName { get; }
+        public string BuilDisplayName { get; }
+        public int BuildNumber { get; }
+        public string BuildTag { get; }
+        public string ChangeId { get; }
+        public int ExecutorNumber { get; }
+        public string GitBranch { get; }
+        public string GitCommit { get; }
+        public string GitPreviousCommit { get; }
+        public string GitPreviousSuccessfulCommit { get; }
+        public string GitUrl { get; }
+        public string JenkinsHome { get; }
+        public string JenkinsServerCookie { get; }
+        public string JobBaseName { get; }
+        public string JobDisplayUrl { get; }
+        public string JobName { get; }
+        public string NodeLabels { get; }
+        public string NodeName { get; }
+        public string RunChangesDisplayUrl { get; }
+        public string RunDisplayUrl { get; }
+        public string Workspace { get; }
+        public new static Fallout.Common.CI.Jenkins.Jenkins Instance { get; }
+    }
+}
+namespace Fallout.Common.CI.SpaceAutomation.Configuration
+{
+    public class SpaceAutomationConfiguration : Fallout.Common.CI.ConfigurationEntity
+    {
+        public SpaceAutomationConfiguration() { }
+        public Fallout.Common.CI.SpaceAutomation.Configuration.SpaceAutomationContainer Container { get; set; }
+        public string Name { get; set; }
+        public string[] RefSpec { get; set; }
+        public int? TimeoutInMinutes { get; set; }
+        public Fallout.Common.CI.SpaceAutomation.Configuration.SpaceAutomationTrigger[] Triggers { get; set; }
+        public string VolumeSize { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class SpaceAutomationContainer : Fallout.Common.CI.ConfigurationEntity
+    {
+        public SpaceAutomationContainer() { }
+        public string BuildScript { get; set; }
+        public string Image { get; set; }
+        public System.Collections.Generic.Dictionary<string, string> Imports { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public Fallout.Common.CI.SpaceAutomation.Configuration.SpaceAutomationResources Resources { get; set; }
+        public bool Submodules { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class SpaceAutomationCronScheduleTrigger : Fallout.Common.CI.SpaceAutomation.Configuration.SpaceAutomationTrigger
+    {
+        public SpaceAutomationCronScheduleTrigger() { }
+        public string CronExpression { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public static class SpaceAutomationCustomWriterExtensions
+    {
+        public static void WriteArray(this Fallout.Common.Utilities.CustomFileWriter writer, string property, string[] values) { }
+        public static System.IDisposable WriteBlock(this Fallout.Common.Utilities.CustomFileWriter writer, string text) { }
+    }
+    public class SpaceAutomationPushTrigger : Fallout.Common.CI.SpaceAutomation.Configuration.SpaceAutomationTrigger
+    {
+        public SpaceAutomationPushTrigger() { }
+        public bool? OnPush { get; set; }
+        public string[] OnPushBranchExcludes { get; set; }
+        public string[] OnPushBranchIncludes { get; set; }
+        public string[] OnPushBranchRegexExcludes { get; set; }
+        public string[] OnPushBranchRegexIncludes { get; set; }
+        public string[] OnPushPathExcludes { get; set; }
+        public string[] OnPushPathIncludes { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class SpaceAutomationResources : Fallout.Common.CI.ConfigurationEntity
+    {
+        public SpaceAutomationResources() { }
+        public string Cpu { get; set; }
+        public string Memory { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public abstract class SpaceAutomationTrigger : Fallout.Common.CI.ConfigurationEntity
+    {
+        protected SpaceAutomationTrigger() { }
+    }
+}
+namespace Fallout.Common.CI.SpaceAutomation
+{
+    [Fallout.Common.CI.CI]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class SpaceAutomation : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public SpaceAutomation() { }
+        public string ApiUrl { get; }
+        public string ClientId { get; }
+        public string ClientSecret { get; }
+        public string ClientToken { get; }
+        public string ExecutionId { get; }
+        public string ExecutionNumber { get; }
+        public string ExecutionUrl { get; }
+        public string FileSharePath { get; }
+        public string GitBranch { get; }
+        public string GitRevision { get; }
+        public string ProjectId { get; }
+        public string ProjectKey { get; }
+        public string RepositoryName { get; }
+        public string StepDataPath { get; }
+        public string WorkDirPath { get; }
+        public new static Fallout.Common.CI.SpaceAutomation.SpaceAutomation Instance { get; }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=true)]
+    public class SpaceAutomationAttribute : Fallout.Common.CI.ConfigurationAttributeBase
+    {
+        public SpaceAutomationAttribute(string name, string image) { }
+        public override Fallout.Common.IO.AbsolutePath ConfigurationFile { get; }
+        public override System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> GeneratedFiles { get; }
+        public override System.Type HostType { get; }
+        public string[] ImportSecrets { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public override System.Collections.Generic.IEnumerable<string> IrrelevantTargetNames { get; }
+        public string OnCronSchedule { get; set; }
+        public bool OnPush { get; set; }
+        public string[] OnPushBranchExcludes { get; set; }
+        public string[] OnPushBranchIncludes { get; set; }
+        public string[] OnPushBranchRegexExcludes { get; set; }
+        public string[] OnPushBranchRegexIncludes { get; set; }
+        public string[] OnPushPathExcludes { get; set; }
+        public string[] OnPushPathIncludes { get; set; }
+        public string[] RefSpec { get; set; }
+        public override System.Collections.Generic.IEnumerable<string> RelevantTargetNames { get; }
+        public string ResourcesCpu { get; set; }
+        public string ResourcesMemory { get; set; }
+        public bool Submodules { get; set; }
+        public int TimeoutInMinutes { get; set; }
+        public string VolumeSize { get; set; }
+        public override Fallout.Common.Utilities.CustomFileWriter CreateWriter(System.IO.StreamWriter streamWriter) { }
+        public override Fallout.Common.CI.ConfigurationEntity GetConfiguration(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        protected virtual Fallout.Common.CI.SpaceAutomation.Configuration.SpaceAutomationContainer GetContainer() { }
+        protected virtual Fallout.Common.CI.SpaceAutomation.Configuration.SpaceAutomationResources GetResources() { }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.SpaceAutomation.Configuration.SpaceAutomationTrigger> GetTriggers() { }
+    }
+}
+namespace Fallout.Common.CI.TeamCity.Configuration
+{
+    public class TeamCityArtifactDependency : Fallout.Common.CI.TeamCity.Configuration.TeamCityDependency
+    {
+        public TeamCityArtifactDependency() { }
+        public string[] ArtifactRules { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityBuildType BuildType { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class TeamCityBuildType : Fallout.Common.CI.ConfigurationEntity
+    {
+        public TeamCityBuildType() { }
+        public string[] ArtifactRules { get; set; }
+        public string BuildCmdPath { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityDependency[] Dependencies { get; set; }
+        public string Description { get; set; }
+        public string Id { get; set; }
+        public string[] InvokedTargets { get; set; }
+        public bool IsComposite { get; set; }
+        public bool IsDeployment { get; set; }
+        public string Name { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityParameter[] Parameters { get; set; }
+        public Fallout.Common.CI.Partition Partition { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityTrigger[] Triggers { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityBuildTypeVcsRoot VcsRoot { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+        public virtual void WriteArtifacts(Fallout.Common.Utilities.CustomFileWriter writer) { }
+        public virtual void WriteDependencies(Fallout.Common.Utilities.CustomFileWriter writer) { }
+        public virtual void WriteParameters(Fallout.Common.Utilities.CustomFileWriter writer) { }
+        public virtual void WriteSteps(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class TeamCityBuildTypeVcsRoot : Fallout.Common.CI.ConfigurationEntity
+    {
+        public TeamCityBuildTypeVcsRoot() { }
+        public bool CleanCheckoutDirectory { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityVcsRoot Root { get; set; }
+        public bool ShowDependenciesChanges { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class TeamCityConfiguration : Fallout.Common.CI.ConfigurationEntity
+    {
+        public TeamCityConfiguration() { }
+        public virtual string[] Header { get; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityProject Project { get; set; }
+        public string Version { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class TeamCityConfigurationParameter : Fallout.Common.CI.TeamCity.Configuration.TeamCityParameter
+    {
+        public TeamCityConfigurationParameter() { }
+        public bool AllowMultiple { get; set; }
+        public string DefaultValue { get; set; }
+        public string Description { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityParameterDisplay Display { get; set; }
+        public string Name { get; set; }
+        public System.Collections.Generic.IReadOnlyDictionary<string, object> Options { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityParameterType Type { get; set; }
+        public string ValueSeparator { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public static class TeamCityCustomWriterExtensions
+    {
+        public static void WriteArray(this Fallout.Common.Utilities.CustomFileWriter writer, string property, string[] values) { }
+        public static System.IDisposable WriteBlock(this Fallout.Common.Utilities.CustomFileWriter writer, string text) { }
+    }
+    public abstract class TeamCityDependency : Fallout.Common.CI.ConfigurationEntity
+    {
+        protected TeamCityDependency() { }
+    }
+    public enum TeamCityDependencyFailureAction
+    {
+        AddProblem = 0,
+        FailToStart = 1,
+        Ignore = 2,
+        Cancel = 3,
+    }
+    public class TeamCityFinishBuildTrigger : Fallout.Common.CI.TeamCity.Configuration.TeamCityTrigger
+    {
+        public TeamCityFinishBuildTrigger() { }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityBuildType BuildType { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class TeamCityKeyValueParameter : Fallout.Common.CI.TeamCity.Configuration.TeamCityParameter
+    {
+        public TeamCityKeyValueParameter(string key, string value) { }
+        public string Key { get; set; }
+        public string Value { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public abstract class TeamCityParameter : Fallout.Common.CI.ConfigurationEntity
+    {
+        protected TeamCityParameter() { }
+    }
+    public enum TeamCityParameterDisplay
+    {
+        Normal = 0,
+        Prompt = 1,
+        Hidden = 2,
+    }
+    public enum TeamCityParameterType
+    {
+        Select = 0,
+        Text = 1,
+        Password = 2,
+        Checkbox = 3,
+    }
+    public class TeamCityProject : Fallout.Common.CI.ConfigurationEntity
+    {
+        public TeamCityProject() { }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityBuildType[] BuildTypes { get; set; }
+        public string Description { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityParameter[] Parameters { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityVcsRoot VcsRoot { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class TeamCityScheduledTrigger : Fallout.Common.CI.TeamCity.Configuration.TeamCityTrigger
+    {
+        public TeamCityScheduledTrigger() { }
+        public string[] BranchFilters { get; set; }
+        public bool EnableQueueOptimization { get; set; }
+        public bool TriggerBuildAlways { get; set; }
+        public string[] TriggerRules { get; set; }
+        public bool WithPendingChangesOnly { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class TeamCitySnapshotDependency : Fallout.Common.CI.TeamCity.Configuration.TeamCityDependency
+    {
+        public TeamCitySnapshotDependency() { }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityBuildType BuildType { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityDependencyFailureAction CancelAction { get; set; }
+        public Fallout.Common.CI.TeamCity.Configuration.TeamCityDependencyFailureAction FailureAction { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public abstract class TeamCityTrigger : Fallout.Common.CI.ConfigurationEntity
+    {
+        protected TeamCityTrigger() { }
+    }
+    public class TeamCityVcsRoot : Fallout.Common.CI.ConfigurationEntity
+    {
+        public TeamCityVcsRoot() { }
+        public string Id { get; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+    public class TeamCityVcsTrigger : Fallout.Common.CI.TeamCity.Configuration.TeamCityTrigger
+    {
+        public TeamCityVcsTrigger() { }
+        public string[] BranchFilters { get; set; }
+        public string[] TriggerRules { get; set; }
+        public override void Write(Fallout.Common.Utilities.CustomFileWriter writer) { }
+    }
+}
+namespace Fallout.Common.CI.TeamCity
+{
+    public static class DotNetBuildSettingsExtensions
+    {
+        public static Fallout.Common.Tools.DotNet.DotNetBuildSettings AddTeamCityLogger(this Fallout.Common.Tools.DotNet.DotNetBuildSettings toolSettings) { }
+    }
+    public static class DotNetTestSettingsExtensions
+    {
+        public static Fallout.Common.Tools.DotNet.DotNetTestSettings AddTeamCityLogger(this Fallout.Common.Tools.DotNet.DotNetTestSettings toolSettings) { }
+    }
+    public static class MSBuildSettingsExtensions
+    {
+        public static Fallout.Common.Tools.MSBuild.MSBuildSettings AddTeamCityLogger(this Fallout.Common.Tools.MSBuild.MSBuildSettings toolSettings) { }
+    }
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class TeamCity : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public string AuthPassword { get; }
+        public string AuthUserId { get; }
+        [Fallout.Common.CI.NoConvert]
+        public string BranchName { get; }
+        public string BuildConfiguration { get; }
+        public long BuildId { get; }
+        [Fallout.Common.CI.NoConvert]
+        public string BuildNumber { get; }
+        public string BuildTypeId { get; }
+        public string BuildVcsNumber { get; }
+        public System.Collections.Generic.IReadOnlyDictionary<string, string> ConfigurationProperties { get; }
+        public bool IsBuildPersonal { get; }
+        public bool IsPullRequest { get; }
+        public string ProjectId { get; }
+        public string ProjectName { get; }
+        public long? PullRequestNumber { get; }
+        public string PullRequestSourceBranch { get; }
+        public string PullRequestTargetBranch { get; }
+        public string PullRequestTitle { get; }
+        public System.Collections.Generic.IReadOnlyCollection<string> RecentlyFailedTests { get; }
+        public System.Collections.Generic.IReadOnlyDictionary<string, string> RunnerProperties { get; }
+        public string ServerUrl { get; }
+        public System.Collections.Generic.IReadOnlyDictionary<string, string> SystemProperties { get; }
+        public string Version { get; }
+        public new static Fallout.Common.CI.TeamCity.TeamCity Instance { get; }
+        public void AddBuildProblem(string description) { }
+        public void AddStatisticValue(string key, string value) { }
+        public void CloseBlock(string name) { }
+        public void DisableServiceMessages() { }
+        public void EnableServiceMessages() { }
+        protected override bool FilterMessage(string message) { }
+        public void FinishCompilation(string compiler) { }
+        public void FinishProgress(string text) { }
+        public void ImportData(Fallout.Common.CI.TeamCity.TeamCityImportType type, string path, Fallout.Common.CI.TeamCity.TeamCityImportTool? tool = default, bool? verbose = default, bool? parseOutOfDate = default, Fallout.Common.CI.TeamCity.TeamCityNoDataPublishedAction? action = default) { }
+        public void OpenBlock(string name, string description = null) { }
+        public void PublishArtifacts(string path) { }
+        protected override void ReportError(string text, string details = null) { }
+        protected override void ReportWarning(string text, string details = null) { }
+        public void SetBuildNumber(string number) { }
+        public void SetBuildStatus(string text, bool prepend = false, bool append = false) { }
+        public void SetConfigurationParameter(string name, string value) { }
+        public void SetEnvironmentVariable(string name, string value) { }
+        public void SetProgress(string text) { }
+        public void SetSystemProperty(string name, string value) { }
+        public void StartCompilation(string compiler) { }
+        public void StartProgress(string text) { }
+        public void Write(System.Collections.Generic.IEnumerable<string> escapedTokens) { }
+        public void Write(string escapedMessage) { }
+        public void Write(string command, System.Func<System.Collections.Generic.Dictionary<string, object>, System.Collections.Generic.Dictionary<string, object>> dictionaryConfigurator) { }
+        public void Write(string command, params string[] escapedArguments) { }
+        protected override System.IDisposable WriteBlock(string text) { }
+        public void WriteError(string text, string errorDetails = null) { }
+        public void WriteFailure(string text) { }
+        public void WriteMessage(string text) { }
+        public void WriteWarning(string text) { }
+    }
+    public class TeamCityAttribute : Fallout.Common.CI.ChainedConfigurationAttributeBase
+    {
+        public TeamCityAttribute() { }
+        public bool CleanCheckoutDirectory { get; set; }
+        public override Fallout.Common.IO.AbsolutePath ConfigurationFile { get; }
+        public string Description { get; set; }
+        public override System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> GeneratedFiles { get; }
+        public override System.Type HostType { get; }
+        public string[] ImportSecrets { get; set; }
+        public string[] ManuallyTriggeredTargets { get; set; }
+        public bool NightlyBuildAlways { get; set; }
+        public string[] NightlyTriggerBranchFilters { get; set; }
+        public string[] NightlyTriggerRules { get; set; }
+        public string[] NightlyTriggeredTargets { get; set; }
+        public override System.Collections.Generic.IEnumerable<string> RelevantTargetNames { get; }
+        public string[] VcsTriggerBranchFilters { get; set; }
+        public string[] VcsTriggerRules { get; set; }
+        public string[] VcsTriggeredTargets { get; set; }
+        public string Version { get; set; }
+        protected override System.IO.StreamWriter CreateStream() { }
+        public override Fallout.Common.Utilities.CustomFileWriter CreateWriter(System.IO.StreamWriter streamWriter) { }
+        protected virtual string GetArtifactRule(string source) { }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.TeamCity.Configuration.TeamCityBuildType> GetBuildTypes(Fallout.Common.Execution.ExecutableTarget executableTarget, Fallout.Common.CI.TeamCity.Configuration.TeamCityVcsRoot vcsRoot, Fallout.Common.Utilities.Collections.LookupTable<Fallout.Common.Execution.ExecutableTarget, Fallout.Common.CI.TeamCity.Configuration.TeamCityBuildType> buildTypes, System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        public override Fallout.Common.CI.ConfigurationEntity GetConfiguration(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.TeamCity.Configuration.TeamCityParameter> GetDefaultParameters() { }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.TeamCity.Configuration.TeamCityParameter> GetGlobalParameters(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        protected virtual Fallout.Common.CI.TeamCity.Configuration.TeamCityParameter GetParameter(System.Reflection.MemberInfo member, bool required) { }
+        protected virtual Fallout.Common.CI.TeamCity.Configuration.TeamCityProject GetProject(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> relevantTargets) { }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.TeamCity.Configuration.TeamCityParameter> GetSecretParameters() { }
+        protected virtual System.Collections.Generic.IEnumerable<Fallout.Common.CI.TeamCity.Configuration.TeamCityTrigger> GetTriggers(Fallout.Common.Execution.ExecutableTarget executableTarget, Fallout.Common.Utilities.Collections.LookupTable<Fallout.Common.Execution.ExecutableTarget, Fallout.Common.CI.TeamCity.Configuration.TeamCityBuildType> buildTypes) { }
+        protected virtual Fallout.Common.CI.TeamCity.Configuration.TeamCityVcsRoot GetVcsRoot() { }
+        public override void SerializeState() { }
+    }
+    public enum TeamCityImportTool
+    {
+        dotcover = 0,
+        partcover = 1,
+        ncover = 2,
+        ncover3 = 3,
+    }
+    public enum TeamCityImportType
+    {
+        junit = 0,
+        surefire = 1,
+        nunit = 2,
+        mstest = 3,
+        vstest = 4,
+        gtest = 5,
+        checkstyle = 6,
+        findBugs = 7,
+        jslint = 8,
+        ReSharperInspectCode = 9,
+        FxCop = 10,
+        pmd = 11,
+        pmdCpd = 12,
+        DotNetDupFinder = 13,
+        dotNetCoverage = 14,
+    }
+    public enum TeamCityNoDataPublishedAction
+    {
+        info = 0,
+        nothing = 1,
+        warning = 2,
+        error = 3,
+    }
+    public enum TeamCityStatus
+    {
+        NORMAL = 0,
+        WARNING = 1,
+        ERROR = 2,
+        FAILURE = 3,
+    }
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=true)]
+    public class TeamCityTokenAttribute : System.Attribute
+    {
+        public TeamCityTokenAttribute(string name, string guid) { }
+        public string Guid { get; }
+        public string Name { get; }
+    }
+}
+namespace Fallout.Common.CI.TravisCI
+{
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class TravisCI : Fallout.Common.Host, Fallout.Common.CI.IBuildServer
+    {
+        public string Branch { get; }
+        public string BuildDir { get; }
+        public long BuildId { get; }
+        public long BuildNumber { get; }
+        public bool Ci { get; }
+        public string Commit { get; }
+        public string CommitMessage { get; }
+        public string CommitRange { get; }
+        public bool ContinousIntegration { get; }
+        public string DartVersion { get; }
+        public Fallout.Common.CI.TravisCI.TravisCIEventType EventType { get; }
+        public string GoVersion { get; }
+        public string HaxeVersion { get; }
+        public string JdkVersion { get; }
+        public long JobId { get; }
+        [Fallout.Common.CI.NoConvert]
+        public string JobNumber { get; }
+        public string JuliaVersion { get; }
+        public string NodeVersion { get; }
+        public string OsName { get; }
+        public string OtpRelease { get; }
+        public string PerlVersion { get; }
+        public string PhpVersion { get; }
+        [Fallout.Common.CI.NoConvert]
+        public string PullRequest { get; }
+        public string PullRequestBranch { get; }
+        public string PullRequestSha { get; }
+        public string PullRequestSlug { get; }
+        public string PythonVersion { get; }
+        public string RVersion { get; }
+        public string RepoSlug { get; }
+        public string RubyVersion { get; }
+        public string RustVersion { get; }
+        public string ScalaVersion { get; }
+        public bool SecureEnvVars { get; }
+        public bool Sudo { get; }
+        public string Tag { get; }
+        public string TestResult { get; }
+        public string XCodeProject { get; }
+        public string XCodeScheme { get; }
+        public string XCodeSdk { get; }
+        public string XCodeWorkspace { get; }
+        public new static Fallout.Common.CI.TravisCI.TravisCI Instance { get; }
+        protected override System.IDisposable WriteBlock(string text) { }
+    }
+    public enum TravisCIEventType
+    {
+        push = 0,
+        pull_request = 1,
+        api = 2,
+        cron = 3,
+    }
+}
+namespace Fallout.Common.ChangeLog
+{
+    public class ChangeLog
+    {
+        public ChangeLog(string path, System.Collections.Generic.IReadOnlyList<Fallout.Common.ChangeLog.ReleaseNotes> releaseNotes) { }
+        public ChangeLog(string path, Fallout.Common.ChangeLog.ReleaseNotes unreleased, System.Collections.Generic.IReadOnlyList<Fallout.Common.ChangeLog.ReleaseNotes> releaseNotes) { }
+        public NuGet.Versioning.NuGetVersion LatestVersion { get; }
+        public Fallout.Common.IO.AbsolutePath Path { get; }
+        public System.Collections.Generic.IReadOnlyList<Fallout.Common.ChangeLog.ReleaseNotes> ReleaseNotes { get; }
+        public Fallout.Common.ChangeLog.ReleaseNotes Unreleased { get; }
+    }
+    public static class ChangelogTasks
+    {
+        public static System.Collections.Generic.IEnumerable<string> ExtractChangelogSectionNotes(Fallout.Common.IO.AbsolutePath changelogFile, string tag = null) { }
+        public static void FinalizeChangelog(Fallout.Common.ChangeLog.ChangeLog changelogFile, NuGet.Versioning.NuGetVersion tag, Fallout.Common.Git.GitRepository repository = null) { }
+        public static void FinalizeChangelog(Fallout.Common.IO.AbsolutePath changelogFile, string tag, Fallout.Common.Git.GitRepository repository = null) { }
+        public static string GetNuGetReleaseNotes(string changelogFile, Fallout.Common.Git.GitRepository repository = null) { }
+        public static Fallout.Common.ChangeLog.ChangeLog ReadChangelog(string changelogFile) { }
+        public static System.Collections.Generic.IReadOnlyList<Fallout.Common.ChangeLog.ReleaseNotes> ReadReleaseNotes(Fallout.Common.IO.AbsolutePath changelogFile) { }
+    }
+    public class ReleaseNotes
+    {
+        public ReleaseNotes(System.Collections.Generic.IReadOnlyList<string> notes, int startIndex, int endIndex) { }
+        public ReleaseNotes(NuGet.Versioning.NuGetVersion version, System.Collections.Generic.IReadOnlyList<string> notes, int startIndex, int endIndex) { }
+        public int EndIndex { get; }
+        public bool IsEmpty { get; }
+        public System.Collections.Generic.IReadOnlyList<string> Notes { get; }
+        public int StartIndex { get; }
+        public bool Unreleased { get; }
+        public NuGet.Versioning.NuGetVersion Version { get; }
+        public override string ToString() { }
+    }
+}
+namespace Fallout.Common.Execution
+{
+    public class CheckPathEnvironmentVariableAttribute : Fallout.Common.Execution.BuildExtensionAttributeBase, Fallout.Common.Execution.IBuildExtension, Fallout.Common.Execution.IOnBuildInitialized
+    {
+        public CheckPathEnvironmentVariableAttribute() { }
+        public void OnBuildInitialized(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> executableTargets, System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> executionPlan) { }
+    }
+    public class HandleSingleFileExecutionAttribute : Fallout.Common.Execution.BuildExtensionAttributeBase, Fallout.Common.Execution.IBuildExtension, Fallout.Common.Execution.IOnBuildCreated
+    {
+        public HandleSingleFileExecutionAttribute() { }
+        public void OnBuildCreated(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> executableTargets) { }
+    }
+}
+namespace Fallout.Common.Git
+{
+    public class GitRepositoryAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public GitRepositoryAttribute() { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+}
+namespace Fallout.Common.Gitter
+{
+    public static class GitterTasks
+    {
+        public static void SendGitterMessage(string message, string roomId, string token) { }
+        public static System.Threading.Tasks.Task SendGitterMessageAsync(string message, string roomId, string token) { }
+    }
+}
+namespace Fallout.Common.IO
+{
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Field)]
+    public class DirectoryGlobbingAttribute : Fallout.Common.IO.FileSystemGlobbingAttributeBase
+    {
+        public DirectoryGlobbingAttribute(params string[] patterns) { }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Field)]
+    public class FileGlobbingAttribute : Fallout.Common.IO.FileSystemGlobbingAttributeBase
+    {
+        public FileGlobbingAttribute(params string[] patterns) { }
+    }
+    public abstract class FileSystemGlobbingAttributeBase : Fallout.Common.ParameterAttribute
+    {
+        protected FileSystemGlobbingAttributeBase(string[] patterns, System.Func<Fallout.Common.IO.AbsolutePath, string[], System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath>> globber) { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+        public override System.Collections.Generic.IEnumerable<System.ValueTuple<string, object>> GetValueSet(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public static class FtpTasks
+    {
+        public static System.Net.NetworkCredential FtpCredentials { get; set; }
+        public static void FtpMakeDirectory(string path) { }
+        public static void FtpUploadDirectoryRecursively(string directory, string hostRoot) { }
+        public static void FtpUploadFile(string file, string hostDestination) { }
+    }
+    public class GlobbingOptionsAttribute : Fallout.Common.Execution.BuildExtensionAttributeBase, Fallout.Common.Execution.IBuildExtension, Fallout.Common.Execution.IOnBuildCreated
+    {
+        public GlobbingOptionsAttribute(Fallout.Common.IO.GlobbingCaseSensitivity caseSensitivity) { }
+        public void OnBuildCreated(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> executableTargets) { }
+    }
+    public static class HttpTasks
+    {
+        public static System.TimeSpan DefaultTimeout;
+        public static void HttpDownloadFile(string uri, string path, System.IO.FileMode mode = 2, Fallout.Common.Tooling.Configure<System.Net.Http.HttpClient> clientConfigurator = null, System.Action<System.Net.Http.Headers.HttpRequestHeaders> headerConfigurator = null) { }
+        public static System.Threading.Tasks.Task HttpDownloadFileAsync(string uri, Fallout.Common.IO.AbsolutePath path, System.IO.FileMode mode = 2, Fallout.Common.Tooling.Configure<System.Net.Http.HttpClient> clientConfigurator = null, System.Action<System.Net.Http.Headers.HttpRequestHeaders> headerConfigurator = null) { }
+        public static string HttpDownloadString(string uri, Fallout.Common.Tooling.Configure<System.Net.Http.HttpClient> clientConfigurator = null, System.Action<System.Net.Http.Headers.HttpRequestHeaders> headerConfigurator = null) { }
+        public static System.Threading.Tasks.Task<string> HttpDownloadStringAsync(string uri, Fallout.Common.Tooling.Configure<System.Net.Http.HttpClient> clientConfigurator = null, System.Action<System.Net.Http.Headers.HttpRequestHeaders> headerConfigurator = null) { }
+    }
+    public static class TextTasks
+    {
+        public static System.Text.UTF8Encoding UTF8NoBom { get; }
+    }
+    public class XmlElementBuilder
+    {
+        public XmlElementBuilder(string name) { }
+        public Fallout.Common.IO.XmlElementBuilder AddChild(System.Xml.Linq.XElement element) { }
+        public Fallout.Common.IO.XmlElementBuilder AddChild(string name, System.Action<Fallout.Common.IO.XmlElementBuilder> configurator = null) { }
+        public System.Xml.Linq.XElement Build() { }
+        public Fallout.Common.IO.XmlElementBuilder SetAttribute(string name, object value) { }
+        public Fallout.Common.IO.XmlElementBuilder SetValue(object value) { }
+        public override string ToString() { }
+        public static System.Xml.Linq.XElement op_Implicit(Fallout.Common.IO.XmlElementBuilder builder) { }
+    }
+    public static class XmlTasks
+    {
+        public static void XmlAdd(string path, string xpath, object content, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static void XmlAdd(string path, string xpath, object content, System.Text.Encoding encoding, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static System.Collections.Generic.IEnumerable<string> XmlPeek(string path, string xpath, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static System.Collections.Generic.IEnumerable<System.Xml.Linq.XElement> XmlPeekElements(string path, string xpath, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static System.Collections.Generic.IEnumerable<System.Xml.Linq.XElement> XmlPeekElementsFromString(string content, string xpath, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static System.Collections.Generic.IEnumerable<string> XmlPeekFromString(string content, string xpath, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static string XmlPeekSingle(string path, string xpath, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static string XmlPeekSingleFromString(string content, string xpath, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static void XmlPoke(string path, string xpath, object value, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+        public static void XmlPoke(string path, string xpath, object value, System.Text.Encoding encoding, [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "prefix",
+                "uri"})] params System.ValueTuple<string, string>[] namespaces) { }
+    }
+}
+namespace Fallout.Common.Tooling
+{
+    public class LatestGitHubReleaseAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public LatestGitHubReleaseAttribute(string identifier) { }
+        public bool IncludePrerelease { get; set; }
+        public string Pattern { get; set; }
+        public bool UseTagName { get; set; }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public class LatestMavenVersionAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public LatestMavenVersionAttribute(string repository, string groupId, string artifactId = null) { }
+        public bool IncludePrerelease { get; set; }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public class LatestMyGetVersionAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public LatestMyGetVersionAttribute(string feed, string package) { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public class LatestNpmVersionAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public LatestNpmVersionAttribute(string packageId) { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public class LatestNuGetVersionAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public LatestNuGetVersionAttribute(string packageId) { }
+        public bool IncludePrerelease { get; set; }
+        public bool IncludeUnlisted { get; set; }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Field)]
+    public class LocalPathAttribute : Fallout.Common.Tooling.ToolInjectionAttributeBase
+    {
+        public LocalPathAttribute(string absoluteOrRelativePath) { }
+        public LocalPathAttribute(string windowsPath, string unixPath) { }
+        public override Fallout.Common.Tooling.ToolRequirement GetRequirement(System.Reflection.MemberInfo member) { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public class NpmPackageAttribute : Fallout.Common.Tooling.ToolInjectionAttributeBase
+    {
+        public NpmPackageAttribute(string packageId, string packageExecutable = null) { }
+        public string Version { get; set; }
+        public override Fallout.Common.Tooling.ToolRequirement GetRequirement(System.Reflection.MemberInfo member) { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Field)]
+    public class NuGetPackageAttribute : Fallout.Common.Tooling.ToolInjectionAttributeBase
+    {
+        public NuGetPackageAttribute(string packageId, string packageExecutable) { }
+        public NuGetPackageAttribute(string packageId, string packageExecutable32, string packageExecutable64) { }
+        public string Framework { get; set; }
+        public string Version { get; set; }
+        public override Fallout.Common.Tooling.ToolRequirement GetRequirement(System.Reflection.MemberInfo member) { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Field)]
+    public class PathVariableAttribute : Fallout.Common.Tooling.ToolInjectionAttributeBase
+    {
+        public PathVariableAttribute(string pathExecutable = null) { }
+        public override Fallout.Common.Tooling.ToolRequirement GetRequirement(System.Reflection.MemberInfo member) { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+}
+namespace Fallout.Common.Tools.AzureKeyVault
+{
+    public class AzureKeyVault
+    {
+        public Azure.Security.KeyVault.Certificates.CertificateClient CertificateClient { get; }
+        public Azure.Security.KeyVault.Keys.KeyClient KeyClient { get; }
+        public Azure.Security.KeyVault.Secrets.SecretClient SecretClient { get; }
+        public System.Threading.Tasks.Task<Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultCertificate> GetCertificate(string certificateName, bool includeKey = true, bool includeSecret = true) { }
+        public System.Threading.Tasks.Task<Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultKey> GetKey(string keyName, string secretName = null) { }
+        public System.Threading.Tasks.Task<string> GetSecret(string secretName) { }
+    }
+    public class AzureKeyVaultAttribute : Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultAttributeBase
+    {
+        public AzureKeyVaultAttribute() { }
+        protected override object GetValue(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration, System.Reflection.MemberInfo member) { }
+    }
+    public abstract class AzureKeyVaultAttributeBase : Fallout.Common.ParameterAttribute
+    {
+        protected AzureKeyVaultAttributeBase() { }
+        public string ConfigurationMemberName { get; set; }
+        protected abstract object GetValue(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration, System.Reflection.MemberInfo member);
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public class AzureKeyVaultCertificate
+    {
+        public AzureKeyVaultCertificate() { }
+        public byte[] Cer { get; }
+        public Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultKey Key { get; }
+        public string Secret { get; }
+        public byte[] X509Thumbprint { get; }
+    }
+    public class AzureKeyVaultCertificateAttribute : Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultAttributeBase
+    {
+        public AzureKeyVaultCertificateAttribute(string certificateName = null) { }
+        public bool IncludeKey { get; set; }
+        public bool IncludeSecret { get; set; }
+        protected override object GetValue(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration, System.Reflection.MemberInfo member) { }
+    }
+    public class AzureKeyVaultConfiguration
+    {
+        public AzureKeyVaultConfiguration() { }
+        public virtual string BaseUrl { get; }
+        public virtual string ClientId { get; }
+        public virtual string ClientSecret { get; }
+        public virtual string TenantId { get; }
+    }
+    public class AzureKeyVaultConfigurationAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public AzureKeyVaultConfigurationAttribute() { }
+        public string BaseUrl { get; set; }
+        public string BaseUrlParameterName { get; set; }
+        public string ClientId { get; set; }
+        public string ClientIdParameterName { get; set; }
+        public string ClientSecretParameterName { get; set; }
+        public string TenantId { get; set; }
+        public string TenantIdParameterName { get; set; }
+        public Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration GetValue(object instance) { }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public class AzureKeyVaultKey
+    {
+        public AzureKeyVaultKey() { }
+        public Azure.Security.KeyVault.Keys.JsonWebKey Key { get; }
+        public string Secret { get; }
+    }
+    public class AzureKeyVaultKeyAttribute : Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultAttributeBase
+    {
+        public AzureKeyVaultKeyAttribute(string keyName = null) { }
+        protected override object GetValue(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration, System.Reflection.MemberInfo member) { }
+    }
+    public class AzureKeyVaultSecretAttribute : Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultAttributeBase
+    {
+        public AzureKeyVaultSecretAttribute(string secretName = null) { }
+        protected override object GetValue(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration, System.Reflection.MemberInfo member) { }
+    }
+    public static class AzureKeyVaultTasks
+    {
+        public static Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultCertificate GetCertificateBundle(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration, string certificateName, bool includeKey = true, bool includeSecret = true) { }
+        public static Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultKey GetKeyBundle(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration, string keyName) { }
+        public static string GetSecret(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration, string secretName) { }
+        public static Fallout.Common.Tools.AzureKeyVault.AzureKeyVault LoadVault(Fallout.Common.Tools.AzureKeyVault.AzureKeyVaultConfiguration configuration) { }
+    }
+}
+namespace Fallout.Common.Tools.Discord
+{
+    public static class DiscordTasks
+    {
+        public static void SendDiscordMessage(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Discord.DiscordMessage> configurator, string webhook) { }
+        public static System.Threading.Tasks.Task SendDiscordMessageAsync(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Discord.DiscordMessage> configurator, string webhook) { }
+    }
+}
+namespace Fallout.Common.Tools.Docker
+{
+    public static class DockerTargetDefinitionExtensions
+    {
+        public static Fallout.Common.ITargetDefinition DockerRun(this Fallout.Common.ITargetDefinition targetDefinition, Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Docker.DockerRunTargetSettings> configurator) { }
+    }
+}
+namespace Fallout.Common.Tools.DotCover
+{
+    public class TeamCitySetDotCoverHomePathAttribute : Fallout.Common.Execution.BuildExtensionAttributeBase, Fallout.Common.Execution.IBuildExtension, Fallout.Common.Execution.IOnBuildInitialized
+    {
+        public TeamCitySetDotCoverHomePathAttribute() { }
+        public void OnBuildInitialized(System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> executableTargets, System.Collections.Generic.IReadOnlyCollection<Fallout.Common.Execution.ExecutableTarget> executionPlan) { }
+    }
+}
+namespace Fallout.Common.Tools.DotNet
+{
+    [System.ComponentModel.TypeConverter(typeof(Fallout.Common.Tooling.Enumeration.TypeConverter<Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier>))]
+    public class DotNetRuntimeIdentifier : Fallout.Common.Tooling.Enumeration
+    {
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier linux_arm;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier linux_arm64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier linux_musl_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier linux_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_10_10_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_10_11_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_10_12_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_10_13_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_10_14_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_10_15_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_11_0_arm64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_11_0_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_12_arm64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_12_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier osx_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier rhel_6_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier rhel_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier tizen;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier tizen_4_0_0;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier tizen_5_0_0;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win10_arm;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win10_arm64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win10_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win10_x86;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win7_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win7_x86;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win81_arm;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win81_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win81_x86;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win_arm;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win_arm64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win_x64;
+        public static Fallout.Common.Tools.DotNet.DotNetRuntimeIdentifier win_x86;
+        public DotNetRuntimeIdentifier() { }
+    }
+    public class DotNetVerbosityMappingAttribute : Fallout.Common.Tooling.VerbosityMappingAttribute
+    {
+        public DotNetVerbosityMappingAttribute() { }
+    }
+}
+namespace Fallout.Common.Tools.GitHub
+{
+    public enum GitHubItemType
+    {
+        Automatic = 0,
+        File = 1,
+        Directory = 2,
+    }
+    public static class GitHubTasks
+    {
+        public static Octokit.GitHubClient GitHubClient;
+        public static System.Threading.Tasks.Task CloseGitHubMilestone(this Fallout.Common.Git.GitRepository repository, string title, bool enableIssueChecks = true) { }
+        public static System.Threading.Tasks.Task CreateGitHubMilestone(this Fallout.Common.Git.GitRepository repository, string title) { }
+        public static System.Threading.Tasks.Task<string> GetDefaultBranch(this Fallout.Common.Git.GitRepository repository) { }
+        public static string GetGitHubBrowseUrl(this Fallout.Common.Git.GitRepository repository, string path = null, string branch = null, Fallout.Common.Tools.GitHub.GitHubItemType itemType = 0) { }
+        public static string GetGitHubCommitUrl(this Fallout.Common.Git.GitRepository repository, string commitSha) { }
+        public static string GetGitHubCompareCommitsUrl(this Fallout.Common.Git.GitRepository repository, string startCommitSha, string endCommitSha) { }
+        public static string GetGitHubCompareTagToHeadUrl(this Fallout.Common.Git.GitRepository repository, string tag) { }
+        public static string GetGitHubCompareTagsUrl(this Fallout.Common.Git.GitRepository repository, string startTag, string endTag) { }
+        public static string GetGitHubDownloadUrl(this Fallout.Common.Git.GitRepository repository, string file, string branch = null) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "DownloadUrl",
+                "RelativePath"})]
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<System.ValueTuple<string, string>>> GetGitHubDownloadUrls(this Fallout.Common.Git.GitRepository repository, string directory = null, string branch = null) { }
+        public static System.Threading.Tasks.Task<Octokit.Milestone> GetGitHubMilestone(this Fallout.Common.Git.GitRepository repository, string name) { }
+        public static System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<Octokit.Issue>> GetGitHubMilestoneIssues(this Fallout.Common.Git.GitRepository repository, string name) { }
+        public static string GetGitHubName(this Fallout.Common.Git.GitRepository repository) { }
+        public static string GetGitHubOwner(this Fallout.Common.Git.GitRepository repository) { }
+        public static System.Threading.Tasks.Task<string> GetLatestRelease(this Fallout.Common.Git.GitRepository repository, bool includePrerelease = false, bool trimPrefix = false) { }
+        public static bool IsGitHubRepository(this Fallout.Common.Git.GitRepository repository) { }
+        public static System.Threading.Tasks.Task TryCreateGitHubMilestone(this Fallout.Common.Git.GitRepository repository, string title) { }
+    }
+}
+namespace Fallout.Common.Tools.GitVersion
+{
+    public class GitVersion : System.IEquatable<Fallout.Common.Tools.GitVersion.GitVersion>
+    {
+        public GitVersion(
+                    int Major,
+                    int Minor,
+                    int Patch,
+                    string PreReleaseTag,
+                    string PreReleaseTagWithDash,
+                    string PreReleaseLabel,
+                    string PreReleaseLabelWithDash,
+                    string PreReleaseNumber,
+                    string WeightedPreReleaseNumber,
+                    string BuildMetaData,
+                    string BuildMetaDataPadded,
+                    string FullBuildMetaData,
+                    string MajorMinorPatch,
+                    string SemVer,
+                    string LegacySemVer,
+                    string LegacySemVerPadded,
+                    string AssemblySemVer,
+                    string AssemblySemFileVer,
+                    string FullSemVer,
+                    string InformationalVersion,
+                    string BranchName,
+                    string EscapedBranchName,
+                    string Sha,
+                    string ShortSha,
+                    string NuGetVersionV2,
+                    string NuGetVersion,
+                    string NuGetPreReleaseTagV2,
+                    string NuGetPreReleaseTag,
+                    string VersionSourceSha,
+                    string CommitsSinceVersionSource,
+                    string CommitsSinceVersionSourcePadded,
+                    int? UncommittedChanges,
+                    string CommitDate) { }
+        public string AssemblySemFileVer { get; init; }
+        public string AssemblySemVer { get; init; }
+        public string BranchName { get; init; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(Fallout.Common.Tools.GitVersion.NumberToStringJsonConverter))]
+        public string BuildMetaData { get; init; }
+        public string BuildMetaDataPadded { get; init; }
+        public string CommitDate { get; init; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(Fallout.Common.Tools.GitVersion.NumberToStringJsonConverter))]
+        public string CommitsSinceVersionSource { get; init; }
+        public string CommitsSinceVersionSourcePadded { get; init; }
+        public string EscapedBranchName { get; init; }
+        public string FullBuildMetaData { get; init; }
+        public string FullSemVer { get; init; }
+        public string InformationalVersion { get; init; }
+        public string LegacySemVer { get; init; }
+        public string LegacySemVerPadded { get; init; }
+        public int Major { get; init; }
+        public string MajorMinorPatch { get; init; }
+        public int Minor { get; init; }
+        public string NuGetPreReleaseTag { get; init; }
+        public string NuGetPreReleaseTagV2 { get; init; }
+        public string NuGetVersion { get; init; }
+        public string NuGetVersionV2 { get; init; }
+        public int Patch { get; init; }
+        public string PreReleaseLabel { get; init; }
+        public string PreReleaseLabelWithDash { get; init; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(Fallout.Common.Tools.GitVersion.NumberToStringJsonConverter))]
+        public string PreReleaseNumber { get; init; }
+        public string PreReleaseTag { get; init; }
+        public string PreReleaseTagWithDash { get; init; }
+        public string SemVer { get; init; }
+        public string Sha { get; init; }
+        public string ShortSha { get; init; }
+        public int? UncommittedChanges { get; init; }
+        public string VersionSourceSha { get; init; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(Fallout.Common.Tools.GitVersion.NumberToStringJsonConverter))]
+        public string WeightedPreReleaseNumber { get; init; }
+    }
+    public class GitVersionAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public GitVersionAttribute() { }
+        public bool DisableOnUnix { get; set; }
+        public string Framework { get; set; }
+        public bool NoCache { get; set; }
+        public bool NoFetch { get; set; }
+        public bool UpdateAssemblyInfo { get; set; }
+        public bool UpdateBuildNumber { get; set; }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+}
+namespace Fallout.Common.Tools.MSBuild
+{
+    public enum MSBuildPlatform
+    {
+        x86 = 0,
+        x64 = 1,
+    }
+    public class MSBuildProject : System.Dynamic.DynamicObject
+    {
+        public bool IsLegacyProject { get; }
+        public bool IsSdkProject { get; }
+        public System.Linq.ILookup<string, string> ItemGroups { get; }
+        public System.Collections.Generic.IReadOnlyDictionary<string, string> Properties { get; }
+    }
+    public static class MSBuildToolPathResolver
+    {
+        public static string Resolve(Fallout.Common.Tools.MSBuild.MSBuildVersion? msBuildVersion = default, Fallout.Common.Tools.MSBuild.MSBuildPlatform? msBuildPlatform = default) { }
+    }
+    public class MSBuildVerbosityMappingAttribute : Fallout.Common.Tooling.VerbosityMappingAttribute
+    {
+        public MSBuildVerbosityMappingAttribute() { }
+    }
+    public enum MSBuildVersion
+    {
+        VS2026 = 0,
+        VS2022 = 1,
+        VS2019 = 2,
+        VS2017 = 3,
+        VS2015 = 4,
+        VS2013 = 5,
+    }
+}
+namespace Fallout.Common.Tools.Mastodon
+{
+    public static class MastodonTasks
+    {
+        public static void SendMastodonMessage(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Mastodon.MastodonStatus> configurator, string instance, string accessToken) { }
+        public static System.Threading.Tasks.Task SendMastodonMessageAsync(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Mastodon.MastodonStatus> configurator, string instance, string accessToken) { }
+    }
+}
+namespace Fallout.Common.Tools.MinVer
+{
+    public class MinVer : System.IEquatable<Fallout.Common.Tools.MinVer.MinVer>
+    {
+        public MinVer(string MinVerVersion) { }
+        public string AssemblyVersion { get; }
+        public string FileVersion { get; }
+        public string MinVerBuildMetadata { get; }
+        public string MinVerMajor { get; }
+        public string MinVerMinor { get; }
+        public string MinVerPatch { get; }
+        public string MinVerPreRelease { get; }
+        public string MinVerVersion { get; init; }
+        public string PackageVersion { get; }
+        public string Version { get; }
+    }
+    public class MinVerAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public MinVerAttribute() { }
+        public string Framework { get; set; }
+        public bool UpdateBuildNumber { get; set; }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+}
+namespace Fallout.Common.Tools.NUnit
+{
+    public class NUnitVerbosityMappingAttribute : Fallout.Common.Tooling.VerbosityMappingAttribute
+    {
+        public NUnitVerbosityMappingAttribute() { }
+    }
+}
+namespace Fallout.Common.Tools.NerdbankGitVersioning
+{
+    public class NerdbankGitVersioning : System.IEquatable<Fallout.Common.Tools.NerdbankGitVersioning.NerdbankGitVersioning>
+    {
+        public NerdbankGitVersioning(
+                    string CloudBuildNumber,
+                    System.Collections.Generic.List<string> BuildMetadataWithCommitId,
+                    string AssemblyVersion,
+                    string AssemblyFileVersion,
+                    string AssemblyInformationalVersion,
+                    bool PublicRelease,
+                    string PrereleaseVersion,
+                    string PrereleaseVersionNoLeadingHyphen,
+                    string SimpleVersion,
+                    int BuildNumber,
+                    int VersionRevision,
+                    string MajorMinorVersion,
+                    int VersionMajor,
+                    int VersionMinor,
+                    string GitCommitId,
+                    string GitCommitIdShort,
+                    System.DateTime GitCommitDate,
+                    int VersionHeight,
+                    int VersionHeightOffset,
+                    string Version,
+                    System.Collections.Generic.List<string> BuildMetadata,
+                    string BuildMetadataFragment,
+                    string NuGetPackageVersion,
+                    string ChocolateyPackageVersion,
+                    string NpmPackageVersion,
+                    string SemVer1,
+                    string SemVer2,
+                    int SemVer1NumericIdentifierPadding) { }
+        public string AssemblyFileVersion { get; init; }
+        public string AssemblyInformationalVersion { get; init; }
+        public string AssemblyVersion { get; init; }
+        public System.Collections.Generic.List<string> BuildMetadata { get; init; }
+        public string BuildMetadataFragment { get; init; }
+        public System.Collections.Generic.List<string> BuildMetadataWithCommitId { get; init; }
+        public int BuildNumber { get; init; }
+        public string ChocolateyPackageVersion { get; init; }
+        public string CloudBuildNumber { get; init; }
+        public System.DateTime GitCommitDate { get; init; }
+        public string GitCommitId { get; init; }
+        public string GitCommitIdShort { get; init; }
+        public string MajorMinorVersion { get; init; }
+        public string NpmPackageVersion { get; init; }
+        public string NuGetPackageVersion { get; init; }
+        public string PrereleaseVersion { get; init; }
+        public string PrereleaseVersionNoLeadingHyphen { get; init; }
+        public bool PublicRelease { get; init; }
+        public string SemVer1 { get; init; }
+        public int SemVer1NumericIdentifierPadding { get; init; }
+        public string SemVer2 { get; init; }
+        public string SimpleVersion { get; init; }
+        public string Version { get; init; }
+        public int VersionHeight { get; init; }
+        public int VersionHeightOffset { get; init; }
+        public int VersionMajor { get; init; }
+        public int VersionMinor { get; init; }
+        public int VersionRevision { get; init; }
+    }
+    public class NerdbankGitVersioningAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public NerdbankGitVersioningAttribute() { }
+        public bool UpdateBuildNumber { get; set; }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+}
+namespace Fallout.Common.Tools.OctoVersion
+{
+    public class OctoVersionAttribute : Fallout.Common.ValueInjection.ValueInjectionAttributeBase
+    {
+        public OctoVersionAttribute() { }
+        public bool AutoDetectBranch { get; set; }
+        public string AutoDetectBranchMember { get; set; }
+        public string Branch { get; set; }
+        public string BranchMember { get; set; }
+        public string Framework { get; set; }
+        public string FullSemVer { get; set; }
+        public string FullSemVerMember { get; set; }
+        public int Major { get; set; }
+        public string MajorMember { get; set; }
+        public int Minor { get; set; }
+        public string MinorMember { get; set; }
+        public int Patch { get; set; }
+        public string PatchMember { get; set; }
+        public bool UpdateBuildNumber { get; set; }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+    public class OctoVersionInfo : System.IEquatable<Fallout.Common.Tools.OctoVersion.OctoVersionInfo>
+    {
+        public OctoVersionInfo(int? Major, int? Minor, int? Patch, string PreReleaseTag, string PreReleaseTagWithDash, string BuildMetaData, string BuildMetadataWithPlus, string MajorMinorPatch, string NuGetCompatiblePreReleaseWithDash, string FullSemVer, string InformationalVersion, string NuGetVersion) { }
+        public string BuildMetaData { get; init; }
+        public string BuildMetadataWithPlus { get; init; }
+        public string FullSemVer { get; init; }
+        public string InformationalVersion { get; init; }
+        public int? Major { get; init; }
+        public string MajorMinorPatch { get; init; }
+        public int? Minor { get; init; }
+        public string NuGetCompatiblePreReleaseWithDash { get; init; }
+        public string NuGetVersion { get; init; }
+        public int? Patch { get; init; }
+        public string PreReleaseTag { get; init; }
+        public string PreReleaseTagWithDash { get; init; }
+    }
+}
+namespace Fallout.Common.Tools.OpenCover
+{
+    public class OpenCoverVerbosityMappingAttribute : Fallout.Common.Tooling.VerbosityMappingAttribute
+    {
+        public OpenCoverVerbosityMappingAttribute() { }
+    }
+}
+namespace Fallout.Common.Tools.ReportGenerator
+{
+    public class ReportGeneratorVerbosityMappingAttribute : Fallout.Common.Tooling.VerbosityMappingAttribute
+    {
+        public ReportGeneratorVerbosityMappingAttribute() { }
+    }
+}
+namespace Fallout.Common.Tools.SignPath
+{
+    public static class SignPathTasks
+    {
+        public static System.TimeSpan DefaultHttpClientTimeout;
+        public static System.TimeSpan ServiceUnavailableRetryTimeoutInSeconds;
+        public static System.TimeSpan UploadAndDownloadRequestTimeout;
+        public static int WaitForCompletionRetryAttempts;
+        public static System.TimeSpan WaitForCompletionRetryTimeout;
+        public static string SignPathApiUrl { get; }
+        public static System.Threading.Tasks.Task DownloadSignedArtifactFromUrl(string apiToken, string signingRequestUrl, Fallout.Common.IO.AbsolutePath outputPath) { }
+        public static string GetSigningRequestUrl(string organizationId, string signingRequestId) { }
+        public static System.Threading.Tasks.Task<string> GetSigningRequestUrlViaAppVeyor(string authToken, string organizationId, string projectSlug, string signingPolicySlug) { }
+    }
+}
+namespace Fallout.Common.Tools.Slack
+{
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [System.Serializable]
+    public class SlackMessageActionButton : Fallout.Common.Tools.Slack.SlackMessageAction
+    {
+        public SlackMessageActionButton() { }
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+        public string Type { get; }
+    }
+    public static class SlackTasks
+    {
+        public static System.Threading.Tasks.Task<string> SendOrUpdateSlackMessage(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Slack.SlackMessage> configurator, string accessToken) { }
+        public static void SendSlackMessage(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Slack.SlackMessage> configurator, string webhook) { }
+        public static System.Threading.Tasks.Task SendSlackMessageAsync(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Slack.SlackMessage> configurator, string webhook) { }
+    }
+}
+namespace Fallout.Common.Tools.Teams
+{
+    public static class TeamsTasks
+    {
+        public static void SendTeamsMessage(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Teams.TeamsMessage> configurator, string webhook) { }
+        public static System.Threading.Tasks.Task SendTeamsMessageAsync(Fallout.Common.Tooling.Configure<Fallout.Common.Tools.Teams.TeamsMessage> configurator, string webhook) { }
+    }
+}
+namespace Fallout.Common.Tools.Twitter
+{
+    public static class TwitterTasks
+    {
+        public static void SendTweet(string message, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret) { }
+        public static System.Threading.Tasks.Task SendTweetAsync(string message, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret) { }
+    }
+}
+namespace Fallout.Common.Tools.Unity.Logging
+{
+    public enum LogLevel
+    {
+        Normal = 0,
+        Warning = 1,
+        Failure = 2,
+        Error = 3,
+    }
+}
+namespace Fallout.Common.Utilities
+{
+    public static class TemplateUtility
+    {
+        public static void AddRegion(System.Collections.Generic.List<string> content, string section, System.Collections.Generic.IEnumerable<string> lines) { }
+        public static System.Linq.ILookup<string, string> ExtractAndRemoveRegions(System.Collections.Generic.List<string> content, string beginPrefix, string endPrefix) { }
+        public static string[] FillTemplate(System.Collections.Generic.IEnumerable<string> template, System.Collections.Generic.IReadOnlyDictionary<string, string> tokens = null) { }
+        public static void FillTemplateDirectoryRecursively(Fallout.Common.IO.AbsolutePath directory, System.Collections.Generic.IReadOnlyDictionary<string, string> tokens = null, System.Func<Fallout.Common.IO.AbsolutePath, bool> excludeDirectory = null, System.Func<Fallout.Common.IO.AbsolutePath, bool> excludeFile = null) { }
+        public static void FillTemplateFile(Fallout.Common.IO.AbsolutePath file, System.Collections.Generic.IReadOnlyDictionary<string, string> tokens = null) { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, string> GetDictionary<T>(T obj)
+            where T :  class { }
+        public static string GetTokenName(string name) { }
+    }
+}
+namespace Fallout.Solutions
+{
+    public class SolutionAttribute : Fallout.Common.ParameterAttribute
+    {
+        public SolutionAttribute() { }
+        public SolutionAttribute(string relativePath) { }
+        public bool FancyNames { get; set; }
+        public bool GenerateProjects { get; set; }
+        public override bool List { get; set; }
+        public override object GetValue(System.Reflection.MemberInfo member, object instance) { }
+    }
+}

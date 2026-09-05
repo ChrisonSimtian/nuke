@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.SignTool;
 
 /// <summary><p>Sign Tool is a command-line tool that digitally signs files, verifies signatures in files, and time-stamps files.</p><p>For more details, visit the <a href="https://docs.microsoft.com/en-us/dotnet/framework/tools/signtool-exe">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class SignToolTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class SignToolTasks : ToolTasks, IRequireNuGetPackage
 }
 #region SignToolSettings
 /// <inheritdoc cref="SignToolTasks.SignTool(Fallout.Common.Tools.SignTool.SignToolSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SignToolTasks), Command = nameof(SignToolTasks.SignTool), Arguments = "sign")]
 public partial class SignToolSettings : ToolOptions
@@ -132,6 +134,7 @@ public partial class SignToolSettings : ToolOptions
 #endregion
 #region SignToolSettingsExtensions
 /// <inheritdoc cref="SignToolTasks.SignTool(Fallout.Common.Tools.SignTool.SignToolSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SignToolSettingsExtensions
 {
@@ -660,6 +663,7 @@ public static partial class SignToolSettingsExtensions
 #region SignToolContentMethod
 /// <summary>Used within <see cref="SignToolTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<SignToolContentMethod>))]
 public partial class SignToolContentMethod : Enumeration
@@ -675,6 +679,7 @@ public partial class SignToolContentMethod : Enumeration
 #region SignToolDigestAlgorithm
 /// <summary>Used within <see cref="SignToolTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<SignToolDigestAlgorithm>))]
 public partial class SignToolDigestAlgorithm : Enumeration

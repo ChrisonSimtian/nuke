@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.CodeMetrics;
 
 /// <summary><p>Code metrics is a set of software measures that provide developers better insight into the code they are developing. By taking advantage of code metrics, developers can understand which types and/or methods should be reworked or more thoroughly tested. Development teams can identify potential risks, understand the current state of a project, and track progress during software development.</p><p>For more details, visit the <a href="https://docs.microsoft.com/en-us/visualstudio/code-quality/code-metrics-values">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class CodeMetricsTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class CodeMetricsTasks : ToolTasks, IRequireNuGetPackage
 }
 #region CodeMetricsSettings
 /// <inheritdoc cref="CodeMetricsTasks.CodeMetrics(Fallout.Common.Tools.CodeMetrics.CodeMetricsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(CodeMetricsTasks), Command = nameof(CodeMetricsTasks.CodeMetrics))]
 public partial class CodeMetricsSettings : ToolOptions
@@ -50,6 +52,7 @@ public partial class CodeMetricsSettings : ToolOptions
 #endregion
 #region CodeMetricsSettingsExtensions
 /// <inheritdoc cref="CodeMetricsTasks.CodeMetrics(Fallout.Common.Tools.CodeMetrics.CodeMetricsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class CodeMetricsSettingsExtensions
 {

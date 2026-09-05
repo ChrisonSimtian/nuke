@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Helm;
 
 /// <summary><p>For more details, visit the <a href="https://helm.sh/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class HelmTasks : ToolTasks, IRequirePathTool
@@ -322,6 +323,7 @@ public partial class HelmTasks : ToolTasks, IRequirePathTool
 }
 #region HelmCompletionSettings
 /// <inheritdoc cref="HelmTasks.HelmCompletion(Fallout.Common.Tools.Helm.HelmCompletionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmCompletion), Arguments = "completion")]
 public partial class HelmCompletionSettings : HelmOptionsBase
@@ -332,6 +334,7 @@ public partial class HelmCompletionSettings : HelmOptionsBase
 #endregion
 #region HelmCreateSettings
 /// <inheritdoc cref="HelmTasks.HelmCreate(Fallout.Common.Tools.Helm.HelmCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmCreate), Arguments = "create")]
 public partial class HelmCreateSettings : HelmOptionsBase
@@ -344,6 +347,7 @@ public partial class HelmCreateSettings : HelmOptionsBase
 #endregion
 #region HelmDeleteSettings
 /// <inheritdoc cref="HelmTasks.HelmDelete(Fallout.Common.Tools.Helm.HelmDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmDelete), Arguments = "delete")]
 public partial class HelmDeleteSettings : HelmOptionsBase
@@ -376,6 +380,7 @@ public partial class HelmDeleteSettings : HelmOptionsBase
 #endregion
 #region HelmDependencyBuildSettings
 /// <inheritdoc cref="HelmTasks.HelmDependencyBuild(Fallout.Common.Tools.Helm.HelmDependencyBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmDependencyBuild), Arguments = "dependency build")]
 public partial class HelmDependencyBuildSettings : HelmOptionsBase
@@ -390,6 +395,7 @@ public partial class HelmDependencyBuildSettings : HelmOptionsBase
 #endregion
 #region HelmDependencyListSettings
 /// <inheritdoc cref="HelmTasks.HelmDependencyList(Fallout.Common.Tools.Helm.HelmDependencyListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmDependencyList), Arguments = "dependency list")]
 public partial class HelmDependencyListSettings : HelmOptionsBase
@@ -400,6 +406,7 @@ public partial class HelmDependencyListSettings : HelmOptionsBase
 #endregion
 #region HelmDependencyUpdateSettings
 /// <inheritdoc cref="HelmTasks.HelmDependencyUpdate(Fallout.Common.Tools.Helm.HelmDependencyUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmDependencyUpdate), Arguments = "dependency update")]
 public partial class HelmDependencyUpdateSettings : HelmOptionsBase
@@ -416,6 +423,7 @@ public partial class HelmDependencyUpdateSettings : HelmOptionsBase
 #endregion
 #region HelmFetchSettings
 /// <inheritdoc cref="HelmTasks.HelmFetch(Fallout.Common.Tools.Helm.HelmFetchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmFetch), Arguments = "fetch")]
 public partial class HelmFetchSettings : HelmOptionsBase
@@ -454,6 +462,7 @@ public partial class HelmFetchSettings : HelmOptionsBase
 #endregion
 #region HelmGetSettings
 /// <inheritdoc cref="HelmTasks.HelmGet(Fallout.Common.Tools.Helm.HelmGetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmGet), Arguments = "get")]
 public partial class HelmGetSettings : HelmOptionsBase
@@ -478,6 +487,7 @@ public partial class HelmGetSettings : HelmOptionsBase
 #endregion
 #region HelmGetHooksSettings
 /// <inheritdoc cref="HelmTasks.HelmGetHooks(Fallout.Common.Tools.Helm.HelmGetHooksSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmGetHooks), Arguments = "get hooks")]
 public partial class HelmGetHooksSettings : HelmOptionsBase
@@ -502,6 +512,7 @@ public partial class HelmGetHooksSettings : HelmOptionsBase
 #endregion
 #region HelmGetManifestSettings
 /// <inheritdoc cref="HelmTasks.HelmGetManifest(Fallout.Common.Tools.Helm.HelmGetManifestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmGetManifest), Arguments = "get manifest")]
 public partial class HelmGetManifestSettings : HelmOptionsBase
@@ -526,6 +537,7 @@ public partial class HelmGetManifestSettings : HelmOptionsBase
 #endregion
 #region HelmGetNotesSettings
 /// <inheritdoc cref="HelmTasks.HelmGetNotes(Fallout.Common.Tools.Helm.HelmGetNotesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmGetNotes), Arguments = "get notes")]
 public partial class HelmGetNotesSettings : HelmOptionsBase
@@ -550,6 +562,7 @@ public partial class HelmGetNotesSettings : HelmOptionsBase
 #endregion
 #region HelmGetValuesSettings
 /// <inheritdoc cref="HelmTasks.HelmGetValues(Fallout.Common.Tools.Helm.HelmGetValuesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmGetValues), Arguments = "get values")]
 public partial class HelmGetValuesSettings : HelmOptionsBase
@@ -578,6 +591,7 @@ public partial class HelmGetValuesSettings : HelmOptionsBase
 #endregion
 #region HelmHistorySettings
 /// <inheritdoc cref="HelmTasks.HelmHistory(Fallout.Common.Tools.Helm.HelmHistorySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmHistory), Arguments = "history")]
 public partial class HelmHistorySettings : HelmOptionsBase
@@ -606,6 +620,7 @@ public partial class HelmHistorySettings : HelmOptionsBase
 #endregion
 #region HelmHomeSettings
 /// <inheritdoc cref="HelmTasks.HelmHome(Fallout.Common.Tools.Helm.HelmHomeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmHome), Arguments = "home")]
 public partial class HelmHomeSettings : HelmOptionsBase
@@ -614,6 +629,7 @@ public partial class HelmHomeSettings : HelmOptionsBase
 #endregion
 #region HelmInitSettings
 /// <inheritdoc cref="HelmTasks.HelmInit(Fallout.Common.Tools.Helm.HelmInitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmInit), Arguments = "init")]
 public partial class HelmInitSettings : HelmOptionsBase
@@ -670,6 +686,7 @@ public partial class HelmInitSettings : HelmOptionsBase
 #endregion
 #region HelmInspectSettings
 /// <inheritdoc cref="HelmTasks.HelmInspect(Fallout.Common.Tools.Helm.HelmInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmInspect), Arguments = "inspect")]
 public partial class HelmInspectSettings : HelmOptionsBase
@@ -700,6 +717,7 @@ public partial class HelmInspectSettings : HelmOptionsBase
 #endregion
 #region HelmInspectChartSettings
 /// <inheritdoc cref="HelmTasks.HelmInspectChart(Fallout.Common.Tools.Helm.HelmInspectChartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmInspectChart), Arguments = "inspect chart")]
 public partial class HelmInspectChartSettings : HelmOptionsBase
@@ -730,6 +748,7 @@ public partial class HelmInspectChartSettings : HelmOptionsBase
 #endregion
 #region HelmInspectReadmeSettings
 /// <inheritdoc cref="HelmTasks.HelmInspectReadme(Fallout.Common.Tools.Helm.HelmInspectReadmeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmInspectReadme), Arguments = "inspect readme")]
 public partial class HelmInspectReadmeSettings : HelmOptionsBase
@@ -756,6 +775,7 @@ public partial class HelmInspectReadmeSettings : HelmOptionsBase
 #endregion
 #region HelmInspectValuesSettings
 /// <inheritdoc cref="HelmTasks.HelmInspectValues(Fallout.Common.Tools.Helm.HelmInspectValuesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmInspectValues), Arguments = "inspect values")]
 public partial class HelmInspectValuesSettings : HelmOptionsBase
@@ -786,6 +806,7 @@ public partial class HelmInspectValuesSettings : HelmOptionsBase
 #endregion
 #region HelmInstallSettings
 /// <inheritdoc cref="HelmTasks.HelmInstall(Fallout.Common.Tools.Helm.HelmInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmInstall), Arguments = "install")]
 public partial class HelmInstallSettings : HelmOptionsBase
@@ -862,6 +883,7 @@ public partial class HelmInstallSettings : HelmOptionsBase
 #endregion
 #region HelmLintSettings
 /// <inheritdoc cref="HelmTasks.HelmLint(Fallout.Common.Tools.Helm.HelmLintSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmLint), Arguments = "lint")]
 public partial class HelmLintSettings : HelmOptionsBase
@@ -884,6 +906,7 @@ public partial class HelmLintSettings : HelmOptionsBase
 #endregion
 #region HelmListSettings
 /// <inheritdoc cref="HelmTasks.HelmList(Fallout.Common.Tools.Helm.HelmListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmList), Arguments = "list")]
 public partial class HelmListSettings : HelmOptionsBase
@@ -936,6 +959,7 @@ public partial class HelmListSettings : HelmOptionsBase
 #endregion
 #region HelmPackageSettings
 /// <inheritdoc cref="HelmTasks.HelmPackage(Fallout.Common.Tools.Helm.HelmPackageSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmPackage), Arguments = "package")]
 public partial class HelmPackageSettings : HelmOptionsBase
@@ -962,6 +986,7 @@ public partial class HelmPackageSettings : HelmOptionsBase
 #endregion
 #region HelmPluginInstallSettings
 /// <inheritdoc cref="HelmTasks.HelmPluginInstall(Fallout.Common.Tools.Helm.HelmPluginInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmPluginInstall), Arguments = "plugin install")]
 public partial class HelmPluginInstallSettings : HelmOptionsBase
@@ -976,6 +1001,7 @@ public partial class HelmPluginInstallSettings : HelmOptionsBase
 #endregion
 #region HelmPluginListSettings
 /// <inheritdoc cref="HelmTasks.HelmPluginList(Fallout.Common.Tools.Helm.HelmPluginListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmPluginList), Arguments = "plugin list")]
 public partial class HelmPluginListSettings : HelmOptionsBase
@@ -984,6 +1010,7 @@ public partial class HelmPluginListSettings : HelmOptionsBase
 #endregion
 #region HelmPluginRemoveSettings
 /// <inheritdoc cref="HelmTasks.HelmPluginRemove(Fallout.Common.Tools.Helm.HelmPluginRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmPluginRemove), Arguments = "plugin remove")]
 public partial class HelmPluginRemoveSettings : HelmOptionsBase
@@ -994,6 +1021,7 @@ public partial class HelmPluginRemoveSettings : HelmOptionsBase
 #endregion
 #region HelmPluginUpdateSettings
 /// <inheritdoc cref="HelmTasks.HelmPluginUpdate(Fallout.Common.Tools.Helm.HelmPluginUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmPluginUpdate), Arguments = "plugin update")]
 public partial class HelmPluginUpdateSettings : HelmOptionsBase
@@ -1004,6 +1032,7 @@ public partial class HelmPluginUpdateSettings : HelmOptionsBase
 #endregion
 #region HelmRepoAddSettings
 /// <inheritdoc cref="HelmTasks.HelmRepoAdd(Fallout.Common.Tools.Helm.HelmRepoAddSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmRepoAdd), Arguments = "repo add")]
 public partial class HelmRepoAddSettings : HelmOptionsBase
@@ -1028,6 +1057,7 @@ public partial class HelmRepoAddSettings : HelmOptionsBase
 #endregion
 #region HelmRepoIndexSettings
 /// <inheritdoc cref="HelmTasks.HelmRepoIndex(Fallout.Common.Tools.Helm.HelmRepoIndexSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmRepoIndex), Arguments = "repo index")]
 public partial class HelmRepoIndexSettings : HelmOptionsBase
@@ -1042,6 +1072,7 @@ public partial class HelmRepoIndexSettings : HelmOptionsBase
 #endregion
 #region HelmRepoListSettings
 /// <inheritdoc cref="HelmTasks.HelmRepoList(Fallout.Common.Tools.Helm.HelmRepoListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmRepoList), Arguments = "repo list")]
 public partial class HelmRepoListSettings : HelmOptionsBase
@@ -1050,6 +1081,7 @@ public partial class HelmRepoListSettings : HelmOptionsBase
 #endregion
 #region HelmRepoRemoveSettings
 /// <inheritdoc cref="HelmTasks.HelmRepoRemove(Fallout.Common.Tools.Helm.HelmRepoRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmRepoRemove), Arguments = "repo remove")]
 public partial class HelmRepoRemoveSettings : HelmOptionsBase
@@ -1060,6 +1092,7 @@ public partial class HelmRepoRemoveSettings : HelmOptionsBase
 #endregion
 #region HelmRepoUpdateSettings
 /// <inheritdoc cref="HelmTasks.HelmRepoUpdate(Fallout.Common.Tools.Helm.HelmRepoUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmRepoUpdate), Arguments = "repo update")]
 public partial class HelmRepoUpdateSettings : HelmOptionsBase
@@ -1070,6 +1103,7 @@ public partial class HelmRepoUpdateSettings : HelmOptionsBase
 #endregion
 #region HelmResetSettings
 /// <inheritdoc cref="HelmTasks.HelmReset(Fallout.Common.Tools.Helm.HelmResetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmReset), Arguments = "reset")]
 public partial class HelmResetSettings : HelmOptionsBase
@@ -1094,6 +1128,7 @@ public partial class HelmResetSettings : HelmOptionsBase
 #endregion
 #region HelmRollbackSettings
 /// <inheritdoc cref="HelmTasks.HelmRollback(Fallout.Common.Tools.Helm.HelmRollbackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmRollback), Arguments = "rollback")]
 public partial class HelmRollbackSettings : HelmOptionsBase
@@ -1132,6 +1167,7 @@ public partial class HelmRollbackSettings : HelmOptionsBase
 #endregion
 #region HelmSearchSettings
 /// <inheritdoc cref="HelmTasks.HelmSearch(Fallout.Common.Tools.Helm.HelmSearchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmSearch), Arguments = "search")]
 public partial class HelmSearchSettings : HelmOptionsBase
@@ -1150,6 +1186,7 @@ public partial class HelmSearchSettings : HelmOptionsBase
 #endregion
 #region HelmServeSettings
 /// <inheritdoc cref="HelmTasks.HelmServe(Fallout.Common.Tools.Helm.HelmServeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmServe), Arguments = "serve")]
 public partial class HelmServeSettings : HelmOptionsBase
@@ -1164,6 +1201,7 @@ public partial class HelmServeSettings : HelmOptionsBase
 #endregion
 #region HelmStatusSettings
 /// <inheritdoc cref="HelmTasks.HelmStatus(Fallout.Common.Tools.Helm.HelmStatusSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmStatus), Arguments = "status")]
 public partial class HelmStatusSettings : HelmOptionsBase
@@ -1190,6 +1228,7 @@ public partial class HelmStatusSettings : HelmOptionsBase
 #endregion
 #region HelmTemplateSettings
 /// <inheritdoc cref="HelmTasks.HelmTemplate(Fallout.Common.Tools.Helm.HelmTemplateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmTemplate), Arguments = "template")]
 public partial class HelmTemplateSettings : HelmOptionsBase
@@ -1224,6 +1263,7 @@ public partial class HelmTemplateSettings : HelmOptionsBase
 #endregion
 #region HelmTestSettings
 /// <inheritdoc cref="HelmTasks.HelmTest(Fallout.Common.Tools.Helm.HelmTestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmTest), Arguments = "test")]
 public partial class HelmTestSettings : HelmOptionsBase
@@ -1252,6 +1292,7 @@ public partial class HelmTestSettings : HelmOptionsBase
 #endregion
 #region HelmUpgradeSettings
 /// <inheritdoc cref="HelmTasks.HelmUpgrade(Fallout.Common.Tools.Helm.HelmUpgradeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmUpgrade), Arguments = "upgrade")]
 public partial class HelmUpgradeSettings : HelmOptionsBase
@@ -1332,6 +1373,7 @@ public partial class HelmUpgradeSettings : HelmOptionsBase
 #endregion
 #region HelmVerifySettings
 /// <inheritdoc cref="HelmTasks.HelmVerify(Fallout.Common.Tools.Helm.HelmVerifySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmVerify), Arguments = "verify")]
 public partial class HelmVerifySettings : HelmOptionsBase
@@ -1344,6 +1386,7 @@ public partial class HelmVerifySettings : HelmOptionsBase
 #endregion
 #region HelmVersionSettings
 /// <inheritdoc cref="HelmTasks.HelmVersion(Fallout.Common.Tools.Helm.HelmVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(HelmTasks), Command = nameof(HelmTasks.HelmVersion), Arguments = "version")]
 public partial class HelmVersionSettings : HelmOptionsBase
@@ -1372,6 +1415,7 @@ public partial class HelmVersionSettings : HelmOptionsBase
 #endregion
 #region HelmOptionsBase
 /// <summary>Used within <see cref="HelmTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class HelmOptionsBase : ToolOptions
 {
@@ -1393,6 +1437,7 @@ public partial class HelmOptionsBase : ToolOptions
 #endregion
 #region HelmCompletionSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmCompletion(Fallout.Common.Tools.Helm.HelmCompletionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmCompletionSettingsExtensions
 {
@@ -1408,6 +1453,7 @@ public static partial class HelmCompletionSettingsExtensions
 #endregion
 #region HelmCreateSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmCreate(Fallout.Common.Tools.Helm.HelmCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmCreateSettingsExtensions
 {
@@ -1431,6 +1477,7 @@ public static partial class HelmCreateSettingsExtensions
 #endregion
 #region HelmDeleteSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmDelete(Fallout.Common.Tools.Helm.HelmDeleteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmDeleteSettingsExtensions
 {
@@ -1594,6 +1641,7 @@ public static partial class HelmDeleteSettingsExtensions
 #endregion
 #region HelmDependencyBuildSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmDependencyBuild(Fallout.Common.Tools.Helm.HelmDependencyBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmDependencyBuildSettingsExtensions
 {
@@ -1634,6 +1682,7 @@ public static partial class HelmDependencyBuildSettingsExtensions
 #endregion
 #region HelmDependencyListSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmDependencyList(Fallout.Common.Tools.Helm.HelmDependencyListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmDependencyListSettingsExtensions
 {
@@ -1649,6 +1698,7 @@ public static partial class HelmDependencyListSettingsExtensions
 #endregion
 #region HelmDependencyUpdateSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmDependencyUpdate(Fallout.Common.Tools.Helm.HelmDependencyUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmDependencyUpdateSettingsExtensions
 {
@@ -1706,6 +1756,7 @@ public static partial class HelmDependencyUpdateSettingsExtensions
 #endregion
 #region HelmFetchSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmFetch(Fallout.Common.Tools.Helm.HelmFetchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmFetchSettingsExtensions
 {
@@ -1884,6 +1935,7 @@ public static partial class HelmFetchSettingsExtensions
 #endregion
 #region HelmGetSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmGet(Fallout.Common.Tools.Helm.HelmGetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmGetSettingsExtensions
 {
@@ -1973,6 +2025,7 @@ public static partial class HelmGetSettingsExtensions
 #endregion
 #region HelmGetHooksSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmGetHooks(Fallout.Common.Tools.Helm.HelmGetHooksSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmGetHooksSettingsExtensions
 {
@@ -2062,6 +2115,7 @@ public static partial class HelmGetHooksSettingsExtensions
 #endregion
 #region HelmGetManifestSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmGetManifest(Fallout.Common.Tools.Helm.HelmGetManifestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmGetManifestSettingsExtensions
 {
@@ -2151,6 +2205,7 @@ public static partial class HelmGetManifestSettingsExtensions
 #endregion
 #region HelmGetNotesSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmGetNotes(Fallout.Common.Tools.Helm.HelmGetNotesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmGetNotesSettingsExtensions
 {
@@ -2240,6 +2295,7 @@ public static partial class HelmGetNotesSettingsExtensions
 #endregion
 #region HelmGetValuesSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmGetValues(Fallout.Common.Tools.Helm.HelmGetValuesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmGetValuesSettingsExtensions
 {
@@ -2354,6 +2410,7 @@ public static partial class HelmGetValuesSettingsExtensions
 #endregion
 #region HelmHistorySettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmHistory(Fallout.Common.Tools.Helm.HelmHistorySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmHistorySettingsExtensions
 {
@@ -2459,6 +2516,7 @@ public static partial class HelmHistorySettingsExtensions
 #endregion
 #region HelmHomeSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmHome(Fallout.Common.Tools.Helm.HelmHomeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmHomeSettingsExtensions
 {
@@ -2466,6 +2524,7 @@ public static partial class HelmHomeSettingsExtensions
 #endregion
 #region HelmInitSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmInit(Fallout.Common.Tools.Helm.HelmInitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmInitSettingsExtensions
 {
@@ -2773,6 +2832,7 @@ public static partial class HelmInitSettingsExtensions
 #endregion
 #region HelmInspectSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmInspect(Fallout.Common.Tools.Helm.HelmInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmInspectSettingsExtensions
 {
@@ -2886,6 +2946,7 @@ public static partial class HelmInspectSettingsExtensions
 #endregion
 #region HelmInspectChartSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmInspectChart(Fallout.Common.Tools.Helm.HelmInspectChartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmInspectChartSettingsExtensions
 {
@@ -2999,6 +3060,7 @@ public static partial class HelmInspectChartSettingsExtensions
 #endregion
 #region HelmInspectReadmeSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmInspectReadme(Fallout.Common.Tools.Helm.HelmInspectReadmeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmInspectReadmeSettingsExtensions
 {
@@ -3096,6 +3158,7 @@ public static partial class HelmInspectReadmeSettingsExtensions
 #endregion
 #region HelmInspectValuesSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmInspectValues(Fallout.Common.Tools.Helm.HelmInspectValuesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmInspectValuesSettingsExtensions
 {
@@ -3209,6 +3272,7 @@ public static partial class HelmInspectValuesSettingsExtensions
 #endregion
 #region HelmInstallSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmInstall(Fallout.Common.Tools.Helm.HelmInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmInstallSettingsExtensions
 {
@@ -3638,6 +3702,7 @@ public static partial class HelmInstallSettingsExtensions
 #endregion
 #region HelmLintSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmLint(Fallout.Common.Tools.Helm.HelmLintSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmLintSettingsExtensions
 {
@@ -3752,6 +3817,7 @@ public static partial class HelmLintSettingsExtensions
 #endregion
 #region HelmListSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmList(Fallout.Common.Tools.Helm.HelmListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmListSettingsExtensions
 {
@@ -4043,6 +4109,7 @@ public static partial class HelmListSettingsExtensions
 #endregion
 #region HelmPackageSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmPackage(Fallout.Common.Tools.Helm.HelmPackageSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmPackageSettingsExtensions
 {
@@ -4164,6 +4231,7 @@ public static partial class HelmPackageSettingsExtensions
 #endregion
 #region HelmPluginInstallSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmPluginInstall(Fallout.Common.Tools.Helm.HelmPluginInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmPluginInstallSettingsExtensions
 {
@@ -4210,6 +4278,7 @@ public static partial class HelmPluginInstallSettingsExtensions
 #endregion
 #region HelmPluginListSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmPluginList(Fallout.Common.Tools.Helm.HelmPluginListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmPluginListSettingsExtensions
 {
@@ -4217,6 +4286,7 @@ public static partial class HelmPluginListSettingsExtensions
 #endregion
 #region HelmPluginRemoveSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmPluginRemove(Fallout.Common.Tools.Helm.HelmPluginRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmPluginRemoveSettingsExtensions
 {
@@ -4247,6 +4317,7 @@ public static partial class HelmPluginRemoveSettingsExtensions
 #endregion
 #region HelmPluginUpdateSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmPluginUpdate(Fallout.Common.Tools.Helm.HelmPluginUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmPluginUpdateSettingsExtensions
 {
@@ -4277,6 +4348,7 @@ public static partial class HelmPluginUpdateSettingsExtensions
 #endregion
 #region HelmRepoAddSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmRepoAdd(Fallout.Common.Tools.Helm.HelmRepoAddSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmRepoAddSettingsExtensions
 {
@@ -4357,6 +4429,7 @@ public static partial class HelmRepoAddSettingsExtensions
 #endregion
 #region HelmRepoIndexSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmRepoIndex(Fallout.Common.Tools.Helm.HelmRepoIndexSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmRepoIndexSettingsExtensions
 {
@@ -4388,6 +4461,7 @@ public static partial class HelmRepoIndexSettingsExtensions
 #endregion
 #region HelmRepoListSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmRepoList(Fallout.Common.Tools.Helm.HelmRepoListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmRepoListSettingsExtensions
 {
@@ -4395,6 +4469,7 @@ public static partial class HelmRepoListSettingsExtensions
 #endregion
 #region HelmRepoRemoveSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmRepoRemove(Fallout.Common.Tools.Helm.HelmRepoRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmRepoRemoveSettingsExtensions
 {
@@ -4410,6 +4485,7 @@ public static partial class HelmRepoRemoveSettingsExtensions
 #endregion
 #region HelmRepoUpdateSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmRepoUpdate(Fallout.Common.Tools.Helm.HelmRepoUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmRepoUpdateSettingsExtensions
 {
@@ -4434,6 +4510,7 @@ public static partial class HelmRepoUpdateSettingsExtensions
 #endregion
 #region HelmResetSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmReset(Fallout.Common.Tools.Helm.HelmResetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmResetSettingsExtensions
 {
@@ -4541,6 +4618,7 @@ public static partial class HelmResetSettingsExtensions
 #endregion
 #region HelmRollbackSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmRollback(Fallout.Common.Tools.Helm.HelmRollbackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmRollbackSettingsExtensions
 {
@@ -4731,6 +4809,7 @@ public static partial class HelmRollbackSettingsExtensions
 #endregion
 #region HelmSearchSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmSearch(Fallout.Common.Tools.Helm.HelmSearchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmSearchSettingsExtensions
 {
@@ -4796,6 +4875,7 @@ public static partial class HelmSearchSettingsExtensions
 #endregion
 #region HelmServeSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmServe(Fallout.Common.Tools.Helm.HelmServeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmServeSettingsExtensions
 {
@@ -4827,6 +4907,7 @@ public static partial class HelmServeSettingsExtensions
 #endregion
 #region HelmStatusSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmStatus(Fallout.Common.Tools.Helm.HelmStatusSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmStatusSettingsExtensions
 {
@@ -4924,6 +5005,7 @@ public static partial class HelmStatusSettingsExtensions
 #endregion
 #region HelmTemplateSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmTemplate(Fallout.Common.Tools.Helm.HelmTemplateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmTemplateSettingsExtensions
 {
@@ -5104,6 +5186,7 @@ public static partial class HelmTemplateSettingsExtensions
 #endregion
 #region HelmTestSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmTest(Fallout.Common.Tools.Helm.HelmTestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmTestSettingsExtensions
 {
@@ -5227,6 +5310,7 @@ public static partial class HelmTestSettingsExtensions
 #endregion
 #region HelmUpgradeSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmUpgrade(Fallout.Common.Tools.Helm.HelmUpgradeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmUpgradeSettingsExtensions
 {
@@ -5699,6 +5783,7 @@ public static partial class HelmUpgradeSettingsExtensions
 #endregion
 #region HelmVerifySettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmVerify(Fallout.Common.Tools.Helm.HelmVerifySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmVerifySettingsExtensions
 {
@@ -5722,6 +5807,7 @@ public static partial class HelmVerifySettingsExtensions
 #endregion
 #region HelmVersionSettingsExtensions
 /// <inheritdoc cref="HelmTasks.HelmVersion(Fallout.Common.Tools.Helm.HelmVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmVersionSettingsExtensions
 {
@@ -5854,6 +5940,7 @@ public static partial class HelmVersionSettingsExtensions
 #endregion
 #region HelmOptionsBaseExtensions
 /// <summary>Used within <see cref="HelmTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class HelmOptionsBaseExtensions
 {
@@ -5927,6 +6014,7 @@ public static partial class HelmOptionsBaseExtensions
 #region HelmOutputFormat
 /// <summary>Used within <see cref="HelmTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<HelmOutputFormat>))]
 public partial class HelmOutputFormat : Enumeration

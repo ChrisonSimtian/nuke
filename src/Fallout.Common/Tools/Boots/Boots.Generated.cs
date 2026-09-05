@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Boots;
 
 /// <summary><p>boots is a .NET global tool for <c>bootstrapping</c> <c>vsix</c> and <c>pkg</c> files.</p><p>For more details, visit the <a href="https://github.com/jonathanpeppers/boots">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class BootsTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class BootsTasks : ToolTasks, IRequireNuGetPackage
 }
 #region BootsSettings
 /// <inheritdoc cref="BootsTasks.Boots(Fallout.Common.Tools.Boots.BootsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(BootsTasks), Command = nameof(BootsTasks.Boots))]
 public partial class BootsSettings : ToolOptions
@@ -60,6 +62,7 @@ public partial class BootsSettings : ToolOptions
 #endregion
 #region BootsSettingsExtensions
 /// <inheritdoc cref="BootsTasks.Boots(Fallout.Common.Tools.Boots.BootsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class BootsSettingsExtensions
 {
@@ -141,6 +144,7 @@ public static partial class BootsSettingsExtensions
 #region BootsProductType
 /// <summary>Used within <see cref="BootsTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<BootsProductType>))]
 public partial class BootsProductType : Enumeration
@@ -158,6 +162,7 @@ public partial class BootsProductType : Enumeration
 #region BootsFileType
 /// <summary>Used within <see cref="BootsTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<BootsFileType>))]
 public partial class BootsFileType : Enumeration

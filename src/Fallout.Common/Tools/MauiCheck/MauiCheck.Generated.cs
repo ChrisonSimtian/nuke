@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.MauiCheck;
 
 /// <summary><p>A dotnet tool for helping set up your .NET MAUI environment.</p><p>For more details, visit the <a href="https://github.com/Redth/dotnet-maui-check">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class MauiCheckTasks : ToolTasks, IRequireNuGetPackage
@@ -43,6 +44,7 @@ public partial class MauiCheckTasks : ToolTasks, IRequireNuGetPackage
 }
 #region MauiCheckSettings
 /// <inheritdoc cref="MauiCheckTasks.MauiCheck(Fallout.Common.Tools.MauiCheck.MauiCheckSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(MauiCheckTasks), Command = nameof(MauiCheckTasks.MauiCheck))]
 public partial class MauiCheckSettings : ToolOptions
@@ -63,6 +65,7 @@ public partial class MauiCheckSettings : ToolOptions
 #endregion
 #region MauiCheckConfigSettings
 /// <inheritdoc cref="MauiCheckTasks.MauiCheckConfig(Fallout.Common.Tools.MauiCheck.MauiCheckConfigSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(MauiCheckTasks), Command = nameof(MauiCheckTasks.MauiCheckConfig), Arguments = "config")]
 public partial class MauiCheckConfigSettings : ToolOptions
@@ -79,6 +82,7 @@ public partial class MauiCheckConfigSettings : ToolOptions
 #endregion
 #region MauiCheckSettingsExtensions
 /// <inheritdoc cref="MauiCheckTasks.MauiCheck(Fallout.Common.Tools.MauiCheck.MauiCheckSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class MauiCheckSettingsExtensions
 {
@@ -185,6 +189,7 @@ public static partial class MauiCheckSettingsExtensions
 #endregion
 #region MauiCheckConfigSettingsExtensions
 /// <inheritdoc cref="MauiCheckTasks.MauiCheckConfig(Fallout.Common.Tools.MauiCheck.MauiCheckConfigSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class MauiCheckConfigSettingsExtensions
 {
@@ -252,6 +257,7 @@ public static partial class MauiCheckConfigSettingsExtensions
 #region MauiCheckDotNetRollForward
 /// <summary>Used within <see cref="MauiCheckTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<MauiCheckDotNetRollForward>))]
 public partial class MauiCheckDotNetRollForward : Enumeration
@@ -274,6 +280,7 @@ public partial class MauiCheckDotNetRollForward : Enumeration
 #region MauiCheckCheckup
 /// <summary>Used within <see cref="MauiCheckTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<MauiCheckCheckup>))]
 public partial class MauiCheckCheckup : Enumeration

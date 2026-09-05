@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.SignClient;
 
 /// <summary><p>Code Signing client for Authenticode, NuGet, VSIX, and more</p><p>For more details, visit the <a href="https://discoverdot.net/projects/sign-service">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class SignClientTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class SignClientTasks : ToolTasks, IRequireNuGetPackage
 }
 #region SignClientSignSettings
 /// <inheritdoc cref="SignClientTasks.SignClientSign(Fallout.Common.Tools.SignClient.SignClientSignSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(SignClientTasks), Command = nameof(SignClientTasks.SignClientSign), Arguments = "sign")]
 public partial class SignClientSignSettings : ToolOptions
@@ -66,6 +68,7 @@ public partial class SignClientSignSettings : ToolOptions
 #endregion
 #region SignClientSignSettingsExtensions
 /// <inheritdoc cref="SignClientTasks.SignClientSign(Fallout.Common.Tools.SignClient.SignClientSignSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class SignClientSignSettingsExtensions
 {

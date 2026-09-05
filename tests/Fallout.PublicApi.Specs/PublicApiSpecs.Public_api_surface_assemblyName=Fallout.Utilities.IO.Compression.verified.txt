@@ -1,0 +1,16 @@
+﻿namespace Fallout.Common.IO
+{
+    public static class CompressionExtensions
+    {
+        public static void CompressTo(this Fallout.Common.IO.AbsolutePath directory, Fallout.Common.IO.AbsolutePath archiveFile, System.Func<Fallout.Common.IO.AbsolutePath, bool> filter = null) { }
+        public static void TarBZip2To(this Fallout.Common.IO.AbsolutePath directory, Fallout.Common.IO.AbsolutePath archiveFile, System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> files, System.IO.FileMode fileMode = 1) { }
+        public static void TarBZip2To(this Fallout.Common.IO.AbsolutePath directory, Fallout.Common.IO.AbsolutePath archiveFile, System.Func<Fallout.Common.IO.AbsolutePath, bool> filter = null, System.IO.FileMode fileMode = 1) { }
+        public static void TarGZipTo(this Fallout.Common.IO.AbsolutePath baseDirectory, Fallout.Common.IO.AbsolutePath archiveFile, System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> files, System.IO.FileMode fileMode = 1) { }
+        public static void TarGZipTo(this Fallout.Common.IO.AbsolutePath directory, Fallout.Common.IO.AbsolutePath archiveFile, System.Func<Fallout.Common.IO.AbsolutePath, bool> filter = null, System.IO.FileMode fileMode = 1) { }
+        public static void UnTarBZip2To(this Fallout.Common.IO.AbsolutePath archiveFile, Fallout.Common.IO.AbsolutePath directory) { }
+        public static void UnTarGZipTo(this Fallout.Common.IO.AbsolutePath archiveFile, Fallout.Common.IO.AbsolutePath directory) { }
+        public static void UnZipTo(this Fallout.Common.IO.AbsolutePath archiveFile, Fallout.Common.IO.AbsolutePath directory) { }
+        public static void UncompressTo(this Fallout.Common.IO.AbsolutePath archiveFile, Fallout.Common.IO.AbsolutePath directory) { }
+        public static void ZipTo(this Fallout.Common.IO.AbsolutePath directory, Fallout.Common.IO.AbsolutePath archiveFile, System.Func<Fallout.Common.IO.AbsolutePath, bool> filter = null, System.IO.Compression.CompressionLevel compressionLevel = 0, System.IO.FileMode fileMode = 1) { }
+    }
+}

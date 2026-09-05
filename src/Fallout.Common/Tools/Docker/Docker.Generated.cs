@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Docker;
 
 /// <summary><p>Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly. With Docker, you can manage your infrastructure in the same ways you manage your applications. By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code and running it in production.</p><p>For more details, visit the <a href="https://www.docker.com/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class DockerTasks : ToolTasks, IRequirePathTool
@@ -1337,6 +1338,7 @@ public partial class DockerTasks : ToolTasks, IRequirePathTool
 }
 #region DockerConfigRmSettings
 /// <inheritdoc cref="DockerTasks.DockerConfigRm(Fallout.Common.Tools.Docker.DockerConfigRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerConfigRm), Arguments = "config rm")]
 public partial class DockerConfigRmSettings : DockerOptionsBase
@@ -1347,6 +1349,7 @@ public partial class DockerConfigRmSettings : DockerOptionsBase
 #endregion
 #region DockerLoadSettings
 /// <inheritdoc cref="DockerTasks.DockerLoad(Fallout.Common.Tools.Docker.DockerLoadSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerLoad), Arguments = "load")]
 public partial class DockerLoadSettings : DockerOptionsBase
@@ -1359,6 +1362,7 @@ public partial class DockerLoadSettings : DockerOptionsBase
 #endregion
 #region DockerContainerPruneSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerPrune(Fallout.Common.Tools.Docker.DockerContainerPruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerPrune), Arguments = "container prune")]
 public partial class DockerContainerPruneSettings : DockerOptionsBase
@@ -1371,6 +1375,7 @@ public partial class DockerContainerPruneSettings : DockerOptionsBase
 #endregion
 #region DockerTrustSettings
 /// <inheritdoc cref="DockerTasks.DockerTrust(Fallout.Common.Tools.Docker.DockerTrustSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrust), Arguments = "trust")]
 public partial class DockerTrustSettings : DockerOptionsBase
@@ -1379,6 +1384,7 @@ public partial class DockerTrustSettings : DockerOptionsBase
 #endregion
 #region DockerStackSettings
 /// <inheritdoc cref="DockerTasks.DockerStack(Fallout.Common.Tools.Docker.DockerStackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStack), Arguments = "stack")]
 public partial class DockerStackSettings : DockerOptionsBase
@@ -1391,6 +1397,7 @@ public partial class DockerStackSettings : DockerOptionsBase
 #endregion
 #region DockerPullSettings
 /// <inheritdoc cref="DockerTasks.DockerPull(Fallout.Common.Tools.Docker.DockerPullSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPull), Arguments = "pull")]
 public partial class DockerPullSettings : DockerOptionsBase
@@ -1409,6 +1416,7 @@ public partial class DockerPullSettings : DockerOptionsBase
 #endregion
 #region DockerTrustSignSettings
 /// <inheritdoc cref="DockerTasks.DockerTrustSign(Fallout.Common.Tools.Docker.DockerTrustSignSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustSign), Arguments = "trust sign IMAGE:TAG")]
 public partial class DockerTrustSignSettings : DockerOptionsBase
@@ -1417,6 +1425,7 @@ public partial class DockerTrustSignSettings : DockerOptionsBase
 #endregion
 #region DockerCheckpointSettings
 /// <inheritdoc cref="DockerTasks.DockerCheckpoint(Fallout.Common.Tools.Docker.DockerCheckpointSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerCheckpoint), Arguments = "checkpoint")]
 public partial class DockerCheckpointSettings : DockerOptionsBase
@@ -1425,6 +1434,7 @@ public partial class DockerCheckpointSettings : DockerOptionsBase
 #endregion
 #region DockerTrustSignerSettings
 /// <inheritdoc cref="DockerTasks.DockerTrustSigner(Fallout.Common.Tools.Docker.DockerTrustSignerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustSigner), Arguments = "trust signer")]
 public partial class DockerTrustSignerSettings : DockerOptionsBase
@@ -1433,6 +1443,7 @@ public partial class DockerTrustSignerSettings : DockerOptionsBase
 #endregion
 #region DockerConfigInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerConfigInspect(Fallout.Common.Tools.Docker.DockerConfigInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerConfigInspect), Arguments = "config inspect")]
 public partial class DockerConfigInspectSettings : DockerOptionsBase
@@ -1447,6 +1458,7 @@ public partial class DockerConfigInspectSettings : DockerOptionsBase
 #endregion
 #region DockerServiceSettings
 /// <inheritdoc cref="DockerTasks.DockerService(Fallout.Common.Tools.Docker.DockerServiceSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerService), Arguments = "service")]
 public partial class DockerServiceSettings : DockerOptionsBase
@@ -1455,6 +1467,7 @@ public partial class DockerServiceSettings : DockerOptionsBase
 #endregion
 #region DockerTrustKeyGenerateSettings
 /// <inheritdoc cref="DockerTasks.DockerTrustKeyGenerate(Fallout.Common.Tools.Docker.DockerTrustKeyGenerateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustKeyGenerate), Arguments = "trust key generate")]
 public partial class DockerTrustKeyGenerateSettings : DockerOptionsBase
@@ -1465,6 +1478,7 @@ public partial class DockerTrustKeyGenerateSettings : DockerOptionsBase
 #endregion
 #region DockerSystemSettings
 /// <inheritdoc cref="DockerTasks.DockerSystem(Fallout.Common.Tools.Docker.DockerSystemSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSystem), Arguments = "system")]
 public partial class DockerSystemSettings : DockerOptionsBase
@@ -1473,6 +1487,7 @@ public partial class DockerSystemSettings : DockerOptionsBase
 #endregion
 #region DockerConfigLsSettings
 /// <inheritdoc cref="DockerTasks.DockerConfigLs(Fallout.Common.Tools.Docker.DockerConfigLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerConfigLs), Arguments = "config ls")]
 public partial class DockerConfigLsSettings : DockerOptionsBase
@@ -1487,6 +1502,7 @@ public partial class DockerConfigLsSettings : DockerOptionsBase
 #endregion
 #region DockerContextUpdateSettings
 /// <inheritdoc cref="DockerTasks.DockerContextUpdate(Fallout.Common.Tools.Docker.DockerContextUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContextUpdate), Arguments = "context update")]
 public partial class DockerContextUpdateSettings : DockerOptionsBase
@@ -1505,6 +1521,7 @@ public partial class DockerContextUpdateSettings : DockerOptionsBase
 #endregion
 #region DockerStackServicesSettings
 /// <inheritdoc cref="DockerTasks.DockerStackServices(Fallout.Common.Tools.Docker.DockerStackServicesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStackServices), Arguments = "stack services")]
 public partial class DockerStackServicesSettings : DockerStackSettings
@@ -1523,6 +1540,7 @@ public partial class DockerStackServicesSettings : DockerStackSettings
 #endregion
 #region DockerContainerPortSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerPort(Fallout.Common.Tools.Docker.DockerContainerPortSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerPort), Arguments = "container port")]
 public partial class DockerContainerPortSettings : DockerOptionsBase
@@ -1535,6 +1553,7 @@ public partial class DockerContainerPortSettings : DockerOptionsBase
 #endregion
 #region DockerRenameSettings
 /// <inheritdoc cref="DockerTasks.DockerRename(Fallout.Common.Tools.Docker.DockerRenameSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerRename), Arguments = "rename")]
 public partial class DockerRenameSettings : DockerOptionsBase
@@ -1547,6 +1566,7 @@ public partial class DockerRenameSettings : DockerOptionsBase
 #endregion
 #region DockerTagSettings
 /// <inheritdoc cref="DockerTasks.DockerTag(Fallout.Common.Tools.Docker.DockerTagSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTag), Arguments = "tag")]
 public partial class DockerTagSettings : DockerOptionsBase
@@ -1559,6 +1579,7 @@ public partial class DockerTagSettings : DockerOptionsBase
 #endregion
 #region DockerSecretInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerSecretInspect(Fallout.Common.Tools.Docker.DockerSecretInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSecretInspect), Arguments = "secret inspect")]
 public partial class DockerSecretInspectSettings : DockerOptionsBase
@@ -1573,6 +1594,7 @@ public partial class DockerSecretInspectSettings : DockerOptionsBase
 #endregion
 #region DockerSecretSettings
 /// <inheritdoc cref="DockerTasks.DockerSecret(Fallout.Common.Tools.Docker.DockerSecretSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSecret), Arguments = "secret")]
 public partial class DockerSecretSettings : DockerOptionsBase
@@ -1581,6 +1603,7 @@ public partial class DockerSecretSettings : DockerOptionsBase
 #endregion
 #region DockerContainerExportSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerExport(Fallout.Common.Tools.Docker.DockerContainerExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerExport), Arguments = "container export")]
 public partial class DockerContainerExportSettings : DockerOptionsBase
@@ -1593,6 +1616,7 @@ public partial class DockerContainerExportSettings : DockerOptionsBase
 #endregion
 #region DockerHistorySettings
 /// <inheritdoc cref="DockerTasks.DockerHistory(Fallout.Common.Tools.Docker.DockerHistorySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerHistory), Arguments = "history")]
 public partial class DockerHistorySettings : DockerOptionsBase
@@ -1611,6 +1635,7 @@ public partial class DockerHistorySettings : DockerOptionsBase
 #endregion
 #region DockerServiceCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerServiceCreate(Fallout.Common.Tools.Docker.DockerServiceCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServiceCreate), Arguments = "service create")]
 public partial class DockerServiceCreateSettings : DockerOptionsBase
@@ -1757,6 +1782,7 @@ public partial class DockerServiceCreateSettings : DockerOptionsBase
 #endregion
 #region DockerServicePsSettings
 /// <inheritdoc cref="DockerTasks.DockerServicePs(Fallout.Common.Tools.Docker.DockerServicePsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServicePs), Arguments = "service ps")]
 public partial class DockerServicePsSettings : DockerOptionsBase
@@ -1777,6 +1803,7 @@ public partial class DockerServicePsSettings : DockerOptionsBase
 #endregion
 #region DockerStopSettings
 /// <inheritdoc cref="DockerTasks.DockerStop(Fallout.Common.Tools.Docker.DockerStopSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStop), Arguments = "stop")]
 public partial class DockerStopSettings : DockerOptionsBase
@@ -1789,6 +1816,7 @@ public partial class DockerStopSettings : DockerOptionsBase
 #endregion
 #region DockerNodeSettings
 /// <inheritdoc cref="DockerTasks.DockerNode(Fallout.Common.Tools.Docker.DockerNodeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNode), Arguments = "node")]
 public partial class DockerNodeSettings : DockerOptionsBase
@@ -1797,6 +1825,7 @@ public partial class DockerNodeSettings : DockerOptionsBase
 #endregion
 #region DockerUpdateSettings
 /// <inheritdoc cref="DockerTasks.DockerUpdate(Fallout.Common.Tools.Docker.DockerUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerUpdate), Arguments = "update")]
 public partial class DockerUpdateSettings : DockerOptionsBase
@@ -1837,6 +1866,7 @@ public partial class DockerUpdateSettings : DockerOptionsBase
 #endregion
 #region DockerPluginCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginCreate(Fallout.Common.Tools.Docker.DockerPluginCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginCreate), Arguments = "plugin create")]
 public partial class DockerPluginCreateSettings : DockerOptionsBase
@@ -1851,6 +1881,7 @@ public partial class DockerPluginCreateSettings : DockerOptionsBase
 #endregion
 #region DockerSystemInfoSettings
 /// <inheritdoc cref="DockerTasks.DockerSystemInfo(Fallout.Common.Tools.Docker.DockerSystemInfoSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSystemInfo), Arguments = "system info")]
 public partial class DockerSystemInfoSettings : DockerOptionsBase
@@ -1861,6 +1892,7 @@ public partial class DockerSystemInfoSettings : DockerOptionsBase
 #endregion
 #region DockerVolumePruneSettings
 /// <inheritdoc cref="DockerTasks.DockerVolumePrune(Fallout.Common.Tools.Docker.DockerVolumePruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerVolumePrune), Arguments = "volume prune")]
 public partial class DockerVolumePruneSettings : DockerOptionsBase
@@ -1873,6 +1905,7 @@ public partial class DockerVolumePruneSettings : DockerOptionsBase
 #endregion
 #region DockerPluginUpgradeSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginUpgrade(Fallout.Common.Tools.Docker.DockerPluginUpgradeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginUpgrade), Arguments = "plugin upgrade")]
 public partial class DockerPluginUpgradeSettings : DockerOptionsBase
@@ -1891,6 +1924,7 @@ public partial class DockerPluginUpgradeSettings : DockerOptionsBase
 #endregion
 #region DockerBuilderPruneSettings
 /// <inheritdoc cref="DockerTasks.DockerBuilderPrune(Fallout.Common.Tools.Docker.DockerBuilderPruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerBuilderPrune), Arguments = "builder prune")]
 public partial class DockerBuilderPruneSettings : DockerOptionsBase
@@ -1899,6 +1933,7 @@ public partial class DockerBuilderPruneSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmJoinTokenSettings
 /// <inheritdoc cref="DockerTasks.DockerSwarmJoinToken(Fallout.Common.Tools.Docker.DockerSwarmJoinTokenSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarmJoinToken), Arguments = "swarm join-token")]
 public partial class DockerSwarmJoinTokenSettings : DockerOptionsBase
@@ -1913,6 +1948,7 @@ public partial class DockerSwarmJoinTokenSettings : DockerOptionsBase
 #endregion
 #region DockerNodeUpdateSettings
 /// <inheritdoc cref="DockerTasks.DockerNodeUpdate(Fallout.Common.Tools.Docker.DockerNodeUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNodeUpdate), Arguments = "node update")]
 public partial class DockerNodeUpdateSettings : DockerOptionsBase
@@ -1931,6 +1967,7 @@ public partial class DockerNodeUpdateSettings : DockerOptionsBase
 #endregion
 #region DockerTrustSignerAddSettings
 /// <inheritdoc cref="DockerTasks.DockerTrustSignerAdd(Fallout.Common.Tools.Docker.DockerTrustSignerAddSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustSignerAdd), Arguments = "trust signer add")]
 public partial class DockerTrustSignerAddSettings : DockerOptionsBase
@@ -1945,6 +1982,7 @@ public partial class DockerTrustSignerAddSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmUpdateSettings
 /// <inheritdoc cref="DockerTasks.DockerSwarmUpdate(Fallout.Common.Tools.Docker.DockerSwarmUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarmUpdate), Arguments = "swarm update")]
 public partial class DockerSwarmUpdateSettings : DockerOptionsBase
@@ -1967,6 +2005,7 @@ public partial class DockerSwarmUpdateSettings : DockerOptionsBase
 #endregion
 #region DockerServiceLogsSettings
 /// <inheritdoc cref="DockerTasks.DockerServiceLogs(Fallout.Common.Tools.Docker.DockerServiceLogsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServiceLogs), Arguments = "service logs")]
 public partial class DockerServiceLogsSettings : DockerOptionsBase
@@ -1995,6 +2034,7 @@ public partial class DockerServiceLogsSettings : DockerOptionsBase
 #endregion
 #region DockerServiceLsSettings
 /// <inheritdoc cref="DockerTasks.DockerServiceLs(Fallout.Common.Tools.Docker.DockerServiceLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServiceLs), Arguments = "service ls")]
 public partial class DockerServiceLsSettings : DockerOptionsBase
@@ -2009,6 +2049,7 @@ public partial class DockerServiceLsSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmUnlockSettings
 /// <inheritdoc cref="DockerTasks.DockerSwarmUnlock(Fallout.Common.Tools.Docker.DockerSwarmUnlockSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarmUnlock), Arguments = "swarm unlock")]
 public partial class DockerSwarmUnlockSettings : DockerOptionsBase
@@ -2017,6 +2058,7 @@ public partial class DockerSwarmUnlockSettings : DockerOptionsBase
 #endregion
 #region DockerNetworkLsSettings
 /// <inheritdoc cref="DockerTasks.DockerNetworkLs(Fallout.Common.Tools.Docker.DockerNetworkLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNetworkLs), Arguments = "network ls")]
 public partial class DockerNetworkLsSettings : DockerOptionsBase
@@ -2033,6 +2075,7 @@ public partial class DockerNetworkLsSettings : DockerOptionsBase
 #endregion
 #region DockerPluginLsSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginLs(Fallout.Common.Tools.Docker.DockerPluginLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginLs), Arguments = "plugin ls")]
 public partial class DockerPluginLsSettings : DockerOptionsBase
@@ -2049,6 +2092,7 @@ public partial class DockerPluginLsSettings : DockerOptionsBase
 #endregion
 #region DockerPluginRmSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginRm(Fallout.Common.Tools.Docker.DockerPluginRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginRm), Arguments = "plugin rm")]
 public partial class DockerPluginRmSettings : DockerOptionsBase
@@ -2061,6 +2105,7 @@ public partial class DockerPluginRmSettings : DockerOptionsBase
 #endregion
 #region DockerImageBuildSettings
 /// <inheritdoc cref="DockerTasks.DockerImageBuild(Fallout.Common.Tools.Docker.DockerImageBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageBuild), Arguments = "image build")]
 public partial class DockerImageBuildSettings : DockerOptionsBase
@@ -2141,6 +2186,7 @@ public partial class DockerImageBuildSettings : DockerOptionsBase
 #endregion
 #region DockerTrustRevokeSettings
 /// <inheritdoc cref="DockerTasks.DockerTrustRevoke(Fallout.Common.Tools.Docker.DockerTrustRevokeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustRevoke), Arguments = "trust revoke")]
 public partial class DockerTrustRevokeSettings : DockerOptionsBase
@@ -2153,6 +2199,7 @@ public partial class DockerTrustRevokeSettings : DockerOptionsBase
 #endregion
 #region DockerRmiSettings
 /// <inheritdoc cref="DockerTasks.DockerRmi(Fallout.Common.Tools.Docker.DockerRmiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerRmi), Arguments = "rmi")]
 public partial class DockerRmiSettings : DockerOptionsBase
@@ -2167,6 +2214,7 @@ public partial class DockerRmiSettings : DockerOptionsBase
 #endregion
 #region DockerNetworkRmSettings
 /// <inheritdoc cref="DockerTasks.DockerNetworkRm(Fallout.Common.Tools.Docker.DockerNetworkRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNetworkRm), Arguments = "network rm")]
 public partial class DockerNetworkRmSettings : DockerOptionsBase
@@ -2177,6 +2225,7 @@ public partial class DockerNetworkRmSettings : DockerOptionsBase
 #endregion
 #region DockerVersionSettings
 /// <inheritdoc cref="DockerTasks.DockerVersion(Fallout.Common.Tools.Docker.DockerVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerVersion), Arguments = "version")]
 public partial class DockerVersionSettings : DockerOptionsBase
@@ -2189,6 +2238,7 @@ public partial class DockerVersionSettings : DockerOptionsBase
 #endregion
 #region DockerSecretCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerSecretCreate(Fallout.Common.Tools.Docker.DockerSecretCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSecretCreate), Arguments = "secret create")]
 public partial class DockerSecretCreateSettings : DockerOptionsBase
@@ -2207,6 +2257,7 @@ public partial class DockerSecretCreateSettings : DockerOptionsBase
 #endregion
 #region DockerServiceRmSettings
 /// <inheritdoc cref="DockerTasks.DockerServiceRm(Fallout.Common.Tools.Docker.DockerServiceRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServiceRm), Arguments = "service rm")]
 public partial class DockerServiceRmSettings : DockerOptionsBase
@@ -2217,6 +2268,7 @@ public partial class DockerServiceRmSettings : DockerOptionsBase
 #endregion
 #region DockerTrustKeyLoadSettings
 /// <inheritdoc cref="DockerTasks.DockerTrustKeyLoad(Fallout.Common.Tools.Docker.DockerTrustKeyLoadSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustKeyLoad), Arguments = "trust key load")]
 public partial class DockerTrustKeyLoadSettings : DockerOptionsBase
@@ -2229,6 +2281,7 @@ public partial class DockerTrustKeyLoadSettings : DockerOptionsBase
 #endregion
 #region DockerSecretRmSettings
 /// <inheritdoc cref="DockerTasks.DockerSecretRm(Fallout.Common.Tools.Docker.DockerSecretRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSecretRm), Arguments = "secret rm")]
 public partial class DockerSecretRmSettings : DockerOptionsBase
@@ -2239,6 +2292,7 @@ public partial class DockerSecretRmSettings : DockerOptionsBase
 #endregion
 #region DockerImageInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerImageInspect(Fallout.Common.Tools.Docker.DockerImageInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageInspect), Arguments = "image inspect")]
 public partial class DockerImageInspectSettings : DockerOptionsBase
@@ -2251,6 +2305,7 @@ public partial class DockerImageInspectSettings : DockerOptionsBase
 #endregion
 #region DockerImageSaveSettings
 /// <inheritdoc cref="DockerTasks.DockerImageSave(Fallout.Common.Tools.Docker.DockerImageSaveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageSave), Arguments = "image save")]
 public partial class DockerImageSaveSettings : DockerOptionsBase
@@ -2263,6 +2318,7 @@ public partial class DockerImageSaveSettings : DockerOptionsBase
 #endregion
 #region DockerTrustKeySettings
 /// <inheritdoc cref="DockerTasks.DockerTrustKey(Fallout.Common.Tools.Docker.DockerTrustKeySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustKey), Arguments = "trust key")]
 public partial class DockerTrustKeySettings : DockerOptionsBase
@@ -2271,6 +2327,7 @@ public partial class DockerTrustKeySettings : DockerOptionsBase
 #endregion
 #region DockerContainerAttachSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerAttach(Fallout.Common.Tools.Docker.DockerContainerAttachSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerAttach), Arguments = "container attach")]
 public partial class DockerContainerAttachSettings : DockerOptionsBase
@@ -2287,6 +2344,7 @@ public partial class DockerContainerAttachSettings : DockerOptionsBase
 #endregion
 #region DockerContextCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerContextCreate(Fallout.Common.Tools.Docker.DockerContextCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContextCreate), Arguments = "context create")]
 public partial class DockerContextCreateSettings : DockerOptionsBase
@@ -2307,6 +2365,7 @@ public partial class DockerContextCreateSettings : DockerOptionsBase
 #endregion
 #region DockerConfigCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerConfigCreate(Fallout.Common.Tools.Docker.DockerConfigCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerConfigCreate), Arguments = "config create")]
 public partial class DockerConfigCreateSettings : DockerOptionsBase
@@ -2323,6 +2382,7 @@ public partial class DockerConfigCreateSettings : DockerOptionsBase
 #endregion
 #region DockerVolumeInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerVolumeInspect(Fallout.Common.Tools.Docker.DockerVolumeInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerVolumeInspect), Arguments = "volume inspect")]
 public partial class DockerVolumeInspectSettings : DockerOptionsBase
@@ -2335,6 +2395,7 @@ public partial class DockerVolumeInspectSettings : DockerOptionsBase
 #endregion
 #region DockerContainerStopSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerStop(Fallout.Common.Tools.Docker.DockerContainerStopSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerStop), Arguments = "container stop")]
 public partial class DockerContainerStopSettings : DockerOptionsBase
@@ -2347,6 +2408,7 @@ public partial class DockerContainerStopSettings : DockerOptionsBase
 #endregion
 #region DockerNetworkPruneSettings
 /// <inheritdoc cref="DockerTasks.DockerNetworkPrune(Fallout.Common.Tools.Docker.DockerNetworkPruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNetworkPrune), Arguments = "network prune")]
 public partial class DockerNetworkPruneSettings : DockerOptionsBase
@@ -2359,6 +2421,7 @@ public partial class DockerNetworkPruneSettings : DockerOptionsBase
 #endregion
 #region DockerManifestInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerManifestInspect(Fallout.Common.Tools.Docker.DockerManifestInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerManifestInspect), Arguments = "manifest inspect")]
 public partial class DockerManifestInspectSettings : DockerOptionsBase
@@ -2375,6 +2438,7 @@ public partial class DockerManifestInspectSettings : DockerOptionsBase
 #endregion
 #region DockerInfoSettings
 /// <inheritdoc cref="DockerTasks.DockerInfo(Fallout.Common.Tools.Docker.DockerInfoSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerInfo), Arguments = "info")]
 public partial class DockerInfoSettings : DockerOptionsBase
@@ -2385,6 +2449,7 @@ public partial class DockerInfoSettings : DockerOptionsBase
 #endregion
 #region DockerCommitSettings
 /// <inheritdoc cref="DockerTasks.DockerCommit(Fallout.Common.Tools.Docker.DockerCommitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerCommit), Arguments = "commit")]
 public partial class DockerCommitSettings : DockerOptionsBase
@@ -2405,6 +2470,7 @@ public partial class DockerCommitSettings : DockerOptionsBase
 #endregion
 #region DockerStackDeploySettings
 /// <inheritdoc cref="DockerTasks.DockerStackDeploy(Fallout.Common.Tools.Docker.DockerStackDeploySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStackDeploy), Arguments = "stack deploy")]
 public partial class DockerStackDeploySettings : DockerOptionsBase
@@ -2427,6 +2493,7 @@ public partial class DockerStackDeploySettings : DockerOptionsBase
 #endregion
 #region DockerServiceScaleSettings
 /// <inheritdoc cref="DockerTasks.DockerServiceScale(Fallout.Common.Tools.Docker.DockerServiceScaleSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServiceScale), Arguments = "service scale")]
 public partial class DockerServiceScaleSettings : DockerOptionsBase
@@ -2437,6 +2504,7 @@ public partial class DockerServiceScaleSettings : DockerOptionsBase
 #endregion
 #region DockerRunSettings
 /// <inheritdoc cref="DockerTasks.DockerRun(Fallout.Common.Tools.Docker.DockerRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerRun), Arguments = "run")]
 public partial class DockerRunSettings : DockerOptionsBase
@@ -2653,6 +2721,7 @@ public partial class DockerRunSettings : DockerOptionsBase
 #endregion
 #region DockerCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerCreate(Fallout.Common.Tools.Docker.DockerCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerCreate), Arguments = "create")]
 public partial class DockerCreateSettings : DockerOptionsBase
@@ -2863,6 +2932,7 @@ public partial class DockerCreateSettings : DockerOptionsBase
 #endregion
 #region DockerServiceUpdateSettings
 /// <inheritdoc cref="DockerTasks.DockerServiceUpdate(Fallout.Common.Tools.Docker.DockerServiceUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServiceUpdate), Arguments = "service update")]
 public partial class DockerServiceUpdateSettings : DockerOptionsBase
@@ -3041,6 +3111,7 @@ public partial class DockerServiceUpdateSettings : DockerOptionsBase
 #endregion
 #region DockerPortSettings
 /// <inheritdoc cref="DockerTasks.DockerPort(Fallout.Common.Tools.Docker.DockerPortSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPort), Arguments = "port")]
 public partial class DockerPortSettings : DockerOptionsBase
@@ -3053,6 +3124,7 @@ public partial class DockerPortSettings : DockerOptionsBase
 #endregion
 #region DockerContainerSettings
 /// <inheritdoc cref="DockerTasks.DockerContainer(Fallout.Common.Tools.Docker.DockerContainerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainer), Arguments = "container")]
 public partial class DockerContainerSettings : DockerOptionsBase
@@ -3061,6 +3133,7 @@ public partial class DockerContainerSettings : DockerOptionsBase
 #endregion
 #region DockerImagePushSettings
 /// <inheritdoc cref="DockerTasks.DockerImagePush(Fallout.Common.Tools.Docker.DockerImagePushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImagePush), Arguments = "image push")]
 public partial class DockerImagePushSettings : DockerOptionsBase
@@ -3075,6 +3148,7 @@ public partial class DockerImagePushSettings : DockerOptionsBase
 #endregion
 #region DockerServiceInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerServiceInspect(Fallout.Common.Tools.Docker.DockerServiceInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServiceInspect), Arguments = "service inspect")]
 public partial class DockerServiceInspectSettings : DockerOptionsBase
@@ -3089,6 +3163,7 @@ public partial class DockerServiceInspectSettings : DockerOptionsBase
 #endregion
 #region DockerNetworkConnectSettings
 /// <inheritdoc cref="DockerTasks.DockerNetworkConnect(Fallout.Common.Tools.Docker.DockerNetworkConnectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNetworkConnect), Arguments = "network connect")]
 public partial class DockerNetworkConnectSettings : DockerOptionsBase
@@ -3113,6 +3188,7 @@ public partial class DockerNetworkConnectSettings : DockerOptionsBase
 #endregion
 #region DockerSecretLsSettings
 /// <inheritdoc cref="DockerTasks.DockerSecretLs(Fallout.Common.Tools.Docker.DockerSecretLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSecretLs), Arguments = "secret ls")]
 public partial class DockerSecretLsSettings : DockerOptionsBase
@@ -3127,6 +3203,7 @@ public partial class DockerSecretLsSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmLeaveSettings
 /// <inheritdoc cref="DockerTasks.DockerSwarmLeave(Fallout.Common.Tools.Docker.DockerSwarmLeaveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarmLeave), Arguments = "swarm leave")]
 public partial class DockerSwarmLeaveSettings : DockerOptionsBase
@@ -3137,6 +3214,7 @@ public partial class DockerSwarmLeaveSettings : DockerOptionsBase
 #endregion
 #region DockerImagesSettings
 /// <inheritdoc cref="DockerTasks.DockerImages(Fallout.Common.Tools.Docker.DockerImagesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImages), Arguments = "images")]
 public partial class DockerImagesSettings : DockerOptionsBase
@@ -3159,6 +3237,7 @@ public partial class DockerImagesSettings : DockerOptionsBase
 #endregion
 #region DockerEngineUpdateSettings
 /// <inheritdoc cref="DockerTasks.DockerEngineUpdate(Fallout.Common.Tools.Docker.DockerEngineUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerEngineUpdate), Arguments = "engine update")]
 public partial class DockerEngineUpdateSettings : DockerOptionsBase
@@ -3175,6 +3254,7 @@ public partial class DockerEngineUpdateSettings : DockerOptionsBase
 #endregion
 #region DockerSystemEventsSettings
 /// <inheritdoc cref="DockerTasks.DockerSystemEvents(Fallout.Common.Tools.Docker.DockerSystemEventsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSystemEvents), Arguments = "system events")]
 public partial class DockerSystemEventsSettings : DockerOptionsBase
@@ -3191,6 +3271,7 @@ public partial class DockerSystemEventsSettings : DockerOptionsBase
 #endregion
 #region DockerInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerInspect(Fallout.Common.Tools.Docker.DockerInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerInspect), Arguments = "inspect")]
 public partial class DockerInspectSettings : DockerOptionsBase
@@ -3207,6 +3288,7 @@ public partial class DockerInspectSettings : DockerOptionsBase
 #endregion
 #region DockerEngineCheckSettings
 /// <inheritdoc cref="DockerTasks.DockerEngineCheck(Fallout.Common.Tools.Docker.DockerEngineCheckSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerEngineCheck), Arguments = "engine check")]
 public partial class DockerEngineCheckSettings : DockerOptionsBase
@@ -3231,6 +3313,7 @@ public partial class DockerEngineCheckSettings : DockerOptionsBase
 #endregion
 #region DockerAttachSettings
 /// <inheritdoc cref="DockerTasks.DockerAttach(Fallout.Common.Tools.Docker.DockerAttachSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerAttach), Arguments = "attach")]
 public partial class DockerAttachSettings : DockerOptionsBase
@@ -3247,6 +3330,7 @@ public partial class DockerAttachSettings : DockerOptionsBase
 #endregion
 #region DockerContainerWaitSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerWait(Fallout.Common.Tools.Docker.DockerContainerWaitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerWait), Arguments = "container wait")]
 public partial class DockerContainerWaitSettings : DockerOptionsBase
@@ -3257,6 +3341,7 @@ public partial class DockerContainerWaitSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmCaSettings
 /// <inheritdoc cref="DockerTasks.DockerSwarmCa(Fallout.Common.Tools.Docker.DockerSwarmCaSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarmCa), Arguments = "swarm ca")]
 public partial class DockerSwarmCaSettings : DockerOptionsBase
@@ -3279,6 +3364,7 @@ public partial class DockerSwarmCaSettings : DockerOptionsBase
 #endregion
 #region DockerEngineSettings
 /// <inheritdoc cref="DockerTasks.DockerEngine(Fallout.Common.Tools.Docker.DockerEngineSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerEngine), Arguments = "engine")]
 public partial class DockerEngineSettings : DockerOptionsBase
@@ -3289,6 +3375,7 @@ public partial class DockerEngineSettings : DockerOptionsBase
 #endregion
 #region DockerSystemPruneSettings
 /// <inheritdoc cref="DockerTasks.DockerSystemPrune(Fallout.Common.Tools.Docker.DockerSystemPruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSystemPrune), Arguments = "system prune")]
 public partial class DockerSystemPruneSettings : DockerOptionsBase
@@ -3305,6 +3392,7 @@ public partial class DockerSystemPruneSettings : DockerOptionsBase
 #endregion
 #region DockerBuilderSettings
 /// <inheritdoc cref="DockerTasks.DockerBuilder(Fallout.Common.Tools.Docker.DockerBuilderSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerBuilder), Arguments = "builder")]
 public partial class DockerBuilderSettings : DockerOptionsBase
@@ -3313,6 +3401,7 @@ public partial class DockerBuilderSettings : DockerOptionsBase
 #endregion
 #region DockerContainerPauseSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerPause(Fallout.Common.Tools.Docker.DockerContainerPauseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerPause), Arguments = "container pause")]
 public partial class DockerContainerPauseSettings : DockerOptionsBase
@@ -3323,6 +3412,7 @@ public partial class DockerContainerPauseSettings : DockerOptionsBase
 #endregion
 #region DockerContainerCommitSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerCommit(Fallout.Common.Tools.Docker.DockerContainerCommitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerCommit), Arguments = "container commit")]
 public partial class DockerContainerCommitSettings : DockerOptionsBase
@@ -3343,6 +3433,7 @@ public partial class DockerContainerCommitSettings : DockerOptionsBase
 #endregion
 #region DockerContextLsSettings
 /// <inheritdoc cref="DockerTasks.DockerContextLs(Fallout.Common.Tools.Docker.DockerContextLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContextLs), Arguments = "context ls")]
 public partial class DockerContextLsSettings : DockerOptionsBase
@@ -3355,6 +3446,7 @@ public partial class DockerContextLsSettings : DockerOptionsBase
 #endregion
 #region DockerContextRmSettings
 /// <inheritdoc cref="DockerTasks.DockerContextRm(Fallout.Common.Tools.Docker.DockerContextRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContextRm), Arguments = "context rm")]
 public partial class DockerContextRmSettings : DockerOptionsBase
@@ -3365,6 +3457,7 @@ public partial class DockerContextRmSettings : DockerOptionsBase
 #endregion
 #region DockerStackPsSettings
 /// <inheritdoc cref="DockerTasks.DockerStackPs(Fallout.Common.Tools.Docker.DockerStackPsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStackPs), Arguments = "stack ps")]
 public partial class DockerStackPsSettings : DockerStackSettings
@@ -3387,6 +3480,7 @@ public partial class DockerStackPsSettings : DockerStackSettings
 #endregion
 #region DockerContainerCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerCreate(Fallout.Common.Tools.Docker.DockerContainerCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerCreate), Arguments = "container create")]
 public partial class DockerContainerCreateSettings : DockerOptionsBase
@@ -3597,6 +3691,7 @@ public partial class DockerContainerCreateSettings : DockerOptionsBase
 #endregion
 #region DockerVolumeCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerVolumeCreate(Fallout.Common.Tools.Docker.DockerVolumeCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerVolumeCreate), Arguments = "volume create")]
 public partial class DockerVolumeCreateSettings : DockerOptionsBase
@@ -3615,6 +3710,7 @@ public partial class DockerVolumeCreateSettings : DockerOptionsBase
 #endregion
 #region DockerPluginSettings
 /// <inheritdoc cref="DockerTasks.DockerPlugin(Fallout.Common.Tools.Docker.DockerPluginSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPlugin), Arguments = "plugin")]
 public partial class DockerPluginSettings : DockerOptionsBase
@@ -3623,6 +3719,7 @@ public partial class DockerPluginSettings : DockerOptionsBase
 #endregion
 #region DockerLoginSettings
 /// <inheritdoc cref="DockerTasks.DockerLogin(Fallout.Common.Tools.Docker.DockerLoginSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerLogin), Arguments = "login")]
 public partial class DockerLoginSettings : DockerOptionsBase
@@ -3637,6 +3734,7 @@ public partial class DockerLoginSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmUnlockKeySettings
 /// <inheritdoc cref="DockerTasks.DockerSwarmUnlockKey(Fallout.Common.Tools.Docker.DockerSwarmUnlockKeySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarmUnlockKey), Arguments = "swarm unlock-key")]
 public partial class DockerSwarmUnlockKeySettings : DockerOptionsBase
@@ -3649,6 +3747,7 @@ public partial class DockerSwarmUnlockKeySettings : DockerOptionsBase
 #endregion
 #region DockerStartSettings
 /// <inheritdoc cref="DockerTasks.DockerStart(Fallout.Common.Tools.Docker.DockerStartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStart), Arguments = "start")]
 public partial class DockerStartSettings : DockerOptionsBase
@@ -3669,6 +3768,7 @@ public partial class DockerStartSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmInitSettings
 /// <inheritdoc cref="DockerTasks.DockerSwarmInit(Fallout.Common.Tools.Docker.DockerSwarmInitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarmInit), Arguments = "swarm init")]
 public partial class DockerSwarmInitSettings : DockerOptionsBase
@@ -3707,6 +3807,7 @@ public partial class DockerSwarmInitSettings : DockerOptionsBase
 #endregion
 #region DockerContainerDiffSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerDiff(Fallout.Common.Tools.Docker.DockerContainerDiffSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerDiff), Arguments = "container diff")]
 public partial class DockerContainerDiffSettings : DockerOptionsBase
@@ -3717,6 +3818,7 @@ public partial class DockerContainerDiffSettings : DockerOptionsBase
 #endregion
 #region DockerContainerRestartSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerRestart(Fallout.Common.Tools.Docker.DockerContainerRestartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerRestart), Arguments = "container restart")]
 public partial class DockerContainerRestartSettings : DockerOptionsBase
@@ -3729,6 +3831,7 @@ public partial class DockerContainerRestartSettings : DockerOptionsBase
 #endregion
 #region DockerConfigSettings
 /// <inheritdoc cref="DockerTasks.DockerConfig(Fallout.Common.Tools.Docker.DockerConfigSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerConfig), Arguments = "config")]
 public partial class DockerConfigSettings : DockerOptionsBase
@@ -3737,6 +3840,7 @@ public partial class DockerConfigSettings : DockerOptionsBase
 #endregion
 #region DockerPluginDisableSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginDisable(Fallout.Common.Tools.Docker.DockerPluginDisableSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginDisable), Arguments = "plugin disable")]
 public partial class DockerPluginDisableSettings : DockerOptionsBase
@@ -3749,6 +3853,7 @@ public partial class DockerPluginDisableSettings : DockerOptionsBase
 #endregion
 #region DockerContainerUnpauseSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerUnpause(Fallout.Common.Tools.Docker.DockerContainerUnpauseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerUnpause), Arguments = "container unpause")]
 public partial class DockerContainerUnpauseSettings : DockerOptionsBase
@@ -3759,6 +3864,7 @@ public partial class DockerContainerUnpauseSettings : DockerOptionsBase
 #endregion
 #region DockerContextImportSettings
 /// <inheritdoc cref="DockerTasks.DockerContextImport(Fallout.Common.Tools.Docker.DockerContextImportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContextImport), Arguments = "context import")]
 public partial class DockerContextImportSettings : DockerOptionsBase
@@ -3771,6 +3877,7 @@ public partial class DockerContextImportSettings : DockerOptionsBase
 #endregion
 #region DockerRmSettings
 /// <inheritdoc cref="DockerTasks.DockerRm(Fallout.Common.Tools.Docker.DockerRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerRm), Arguments = "rm")]
 public partial class DockerRmSettings : DockerOptionsBase
@@ -3787,6 +3894,7 @@ public partial class DockerRmSettings : DockerOptionsBase
 #endregion
 #region DockerDeploySettings
 /// <inheritdoc cref="DockerTasks.DockerDeploy(Fallout.Common.Tools.Docker.DockerDeploySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerDeploy), Arguments = "deploy")]
 public partial class DockerDeploySettings : DockerOptionsBase
@@ -3809,6 +3917,7 @@ public partial class DockerDeploySettings : DockerOptionsBase
 #endregion
 #region DockerNodeRmSettings
 /// <inheritdoc cref="DockerTasks.DockerNodeRm(Fallout.Common.Tools.Docker.DockerNodeRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNodeRm), Arguments = "node rm")]
 public partial class DockerNodeRmSettings : DockerOptionsBase
@@ -3821,6 +3930,7 @@ public partial class DockerNodeRmSettings : DockerOptionsBase
 #endregion
 #region DockerCheckpointRmSettings
 /// <inheritdoc cref="DockerTasks.DockerCheckpointRm(Fallout.Common.Tools.Docker.DockerCheckpointRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerCheckpointRm), Arguments = "checkpoint rm")]
 public partial class DockerCheckpointRmSettings : DockerOptionsBase
@@ -3835,6 +3945,7 @@ public partial class DockerCheckpointRmSettings : DockerOptionsBase
 #endregion
 #region DockerPushSettings
 /// <inheritdoc cref="DockerTasks.DockerPush(Fallout.Common.Tools.Docker.DockerPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPush), Arguments = "push")]
 public partial class DockerPushSettings : DockerOptionsBase
@@ -3849,6 +3960,7 @@ public partial class DockerPushSettings : DockerOptionsBase
 #endregion
 #region DockerNetworkCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerNetworkCreate(Fallout.Common.Tools.Docker.DockerNetworkCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNetworkCreate), Arguments = "network create")]
 public partial class DockerNetworkCreateSettings : DockerOptionsBase
@@ -3891,6 +4003,7 @@ public partial class DockerNetworkCreateSettings : DockerOptionsBase
 #endregion
 #region DockerVolumeLsSettings
 /// <inheritdoc cref="DockerTasks.DockerVolumeLs(Fallout.Common.Tools.Docker.DockerVolumeLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerVolumeLs), Arguments = "volume ls")]
 public partial class DockerVolumeLsSettings : DockerOptionsBase
@@ -3905,6 +4018,7 @@ public partial class DockerVolumeLsSettings : DockerOptionsBase
 #endregion
 #region DockerTrustInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerTrustInspect(Fallout.Common.Tools.Docker.DockerTrustInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustInspect), Arguments = "trust inspect")]
 public partial class DockerTrustInspectSettings : DockerOptionsBase
@@ -3915,6 +4029,7 @@ public partial class DockerTrustInspectSettings : DockerOptionsBase
 #endregion
 #region DockerNetworkInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerNetworkInspect(Fallout.Common.Tools.Docker.DockerNetworkInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNetworkInspect), Arguments = "network inspect")]
 public partial class DockerNetworkInspectSettings : DockerOptionsBase
@@ -3929,6 +4044,7 @@ public partial class DockerNetworkInspectSettings : DockerOptionsBase
 #endregion
 #region DockerEngineActivateSettings
 /// <inheritdoc cref="DockerTasks.DockerEngineActivate(Fallout.Common.Tools.Docker.DockerEngineActivateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerEngineActivate), Arguments = "engine activate")]
 public partial class DockerEngineActivateSettings : DockerOptionsBase
@@ -3953,6 +4069,7 @@ public partial class DockerEngineActivateSettings : DockerOptionsBase
 #endregion
 #region DockerContextUseSettings
 /// <inheritdoc cref="DockerTasks.DockerContextUse(Fallout.Common.Tools.Docker.DockerContextUseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContextUse), Arguments = "context use")]
 public partial class DockerContextUseSettings : DockerOptionsBase
@@ -3963,6 +4080,7 @@ public partial class DockerContextUseSettings : DockerOptionsBase
 #endregion
 #region DockerVolumeRmSettings
 /// <inheritdoc cref="DockerTasks.DockerVolumeRm(Fallout.Common.Tools.Docker.DockerVolumeRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerVolumeRm), Arguments = "volume rm")]
 public partial class DockerVolumeRmSettings : DockerOptionsBase
@@ -3975,6 +4093,7 @@ public partial class DockerVolumeRmSettings : DockerOptionsBase
 #endregion
 #region DockerManifestCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerManifestCreate(Fallout.Common.Tools.Docker.DockerManifestCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerManifestCreate), Arguments = "manifest create")]
 public partial class DockerManifestCreateSettings : DockerOptionsBase
@@ -3987,6 +4106,7 @@ public partial class DockerManifestCreateSettings : DockerOptionsBase
 #endregion
 #region DockerManifestPushSettings
 /// <inheritdoc cref="DockerTasks.DockerManifestPush(Fallout.Common.Tools.Docker.DockerManifestPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerManifestPush), Arguments = "manifest push")]
 public partial class DockerManifestPushSettings : DockerOptionsBase
@@ -4001,6 +4121,7 @@ public partial class DockerManifestPushSettings : DockerOptionsBase
 #endregion
 #region DockerPluginEnableSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginEnable(Fallout.Common.Tools.Docker.DockerPluginEnableSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginEnable), Arguments = "plugin enable")]
 public partial class DockerPluginEnableSettings : DockerOptionsBase
@@ -4013,6 +4134,7 @@ public partial class DockerPluginEnableSettings : DockerOptionsBase
 #endregion
 #region DockerImportSettings
 /// <inheritdoc cref="DockerTasks.DockerImport(Fallout.Common.Tools.Docker.DockerImportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImport), Arguments = "import")]
 public partial class DockerImportSettings : DockerOptionsBase
@@ -4031,6 +4153,7 @@ public partial class DockerImportSettings : DockerOptionsBase
 #endregion
 #region DockerContainerRunSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerRun(Fallout.Common.Tools.Docker.DockerContainerRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerRun), Arguments = "container run")]
 public partial class DockerContainerRunSettings : DockerOptionsBase
@@ -4247,6 +4370,7 @@ public partial class DockerContainerRunSettings : DockerOptionsBase
 #endregion
 #region DockerNodeInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerNodeInspect(Fallout.Common.Tools.Docker.DockerNodeInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNodeInspect), Arguments = "node inspect")]
 public partial class DockerNodeInspectSettings : DockerOptionsBase
@@ -4261,6 +4385,7 @@ public partial class DockerNodeInspectSettings : DockerOptionsBase
 #endregion
 #region DockerSaveSettings
 /// <inheritdoc cref="DockerTasks.DockerSave(Fallout.Common.Tools.Docker.DockerSaveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSave), Arguments = "save")]
 public partial class DockerSaveSettings : DockerOptionsBase
@@ -4273,6 +4398,7 @@ public partial class DockerSaveSettings : DockerOptionsBase
 #endregion
 #region DockerContainerStatsSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerStats(Fallout.Common.Tools.Docker.DockerContainerStatsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerStats), Arguments = "container stats")]
 public partial class DockerContainerStatsSettings : DockerOptionsBase
@@ -4291,6 +4417,7 @@ public partial class DockerContainerStatsSettings : DockerOptionsBase
 #endregion
 #region DockerContainerExecSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerExec(Fallout.Common.Tools.Docker.DockerContainerExecSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerExec), Arguments = "container exec")]
 public partial class DockerContainerExecSettings : DockerOptionsBase
@@ -4321,6 +4448,7 @@ public partial class DockerContainerExecSettings : DockerOptionsBase
 #endregion
 #region DockerNodeLsSettings
 /// <inheritdoc cref="DockerTasks.DockerNodeLs(Fallout.Common.Tools.Docker.DockerNodeLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNodeLs), Arguments = "node ls")]
 public partial class DockerNodeLsSettings : DockerOptionsBase
@@ -4335,6 +4463,7 @@ public partial class DockerNodeLsSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmJoinSettings
 /// <inheritdoc cref="DockerTasks.DockerSwarmJoin(Fallout.Common.Tools.Docker.DockerSwarmJoinSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarmJoin), Arguments = "swarm join")]
 public partial class DockerSwarmJoinSettings : DockerOptionsBase
@@ -4353,6 +4482,7 @@ public partial class DockerSwarmJoinSettings : DockerOptionsBase
 #endregion
 #region DockerContainerLogsSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerLogs(Fallout.Common.Tools.Docker.DockerContainerLogsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerLogs), Arguments = "container logs")]
 public partial class DockerContainerLogsSettings : DockerOptionsBase
@@ -4375,6 +4505,7 @@ public partial class DockerContainerLogsSettings : DockerOptionsBase
 #endregion
 #region DockerCheckpointLsSettings
 /// <inheritdoc cref="DockerTasks.DockerCheckpointLs(Fallout.Common.Tools.Docker.DockerCheckpointLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerCheckpointLs), Arguments = "checkpoint ls")]
 public partial class DockerCheckpointLsSettings : DockerOptionsBase
@@ -4387,6 +4518,7 @@ public partial class DockerCheckpointLsSettings : DockerOptionsBase
 #endregion
 #region DockerContainerKillSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerKill(Fallout.Common.Tools.Docker.DockerContainerKillSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerKill), Arguments = "container kill")]
 public partial class DockerContainerKillSettings : DockerOptionsBase
@@ -4399,6 +4531,7 @@ public partial class DockerContainerKillSettings : DockerOptionsBase
 #endregion
 #region DockerPluginInstallSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginInstall(Fallout.Common.Tools.Docker.DockerPluginInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginInstall), Arguments = "plugin install")]
 public partial class DockerPluginInstallSettings : DockerOptionsBase
@@ -4419,6 +4552,7 @@ public partial class DockerPluginInstallSettings : DockerOptionsBase
 #endregion
 #region DockerImagePruneSettings
 /// <inheritdoc cref="DockerTasks.DockerImagePrune(Fallout.Common.Tools.Docker.DockerImagePruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImagePrune), Arguments = "image prune")]
 public partial class DockerImagePruneSettings : DockerOptionsBase
@@ -4433,6 +4567,7 @@ public partial class DockerImagePruneSettings : DockerOptionsBase
 #endregion
 #region DockerImageImportSettings
 /// <inheritdoc cref="DockerTasks.DockerImageImport(Fallout.Common.Tools.Docker.DockerImageImportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageImport), Arguments = "image import")]
 public partial class DockerImageImportSettings : DockerOptionsBase
@@ -4451,6 +4586,7 @@ public partial class DockerImageImportSettings : DockerOptionsBase
 #endregion
 #region DockerDiffSettings
 /// <inheritdoc cref="DockerTasks.DockerDiff(Fallout.Common.Tools.Docker.DockerDiffSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerDiff), Arguments = "diff")]
 public partial class DockerDiffSettings : DockerOptionsBase
@@ -4461,6 +4597,7 @@ public partial class DockerDiffSettings : DockerOptionsBase
 #endregion
 #region DockerUnpauseSettings
 /// <inheritdoc cref="DockerTasks.DockerUnpause(Fallout.Common.Tools.Docker.DockerUnpauseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerUnpause), Arguments = "unpause")]
 public partial class DockerUnpauseSettings : DockerOptionsBase
@@ -4471,6 +4608,7 @@ public partial class DockerUnpauseSettings : DockerOptionsBase
 #endregion
 #region DockerContainerLsSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerLs(Fallout.Common.Tools.Docker.DockerContainerLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerLs), Arguments = "container ls")]
 public partial class DockerContainerLsSettings : DockerOptionsBase
@@ -4495,6 +4633,7 @@ public partial class DockerContainerLsSettings : DockerOptionsBase
 #endregion
 #region DockerNodePsSettings
 /// <inheritdoc cref="DockerTasks.DockerNodePs(Fallout.Common.Tools.Docker.DockerNodePsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNodePs), Arguments = "node ps")]
 public partial class DockerNodePsSettings : DockerOptionsBase
@@ -4515,6 +4654,7 @@ public partial class DockerNodePsSettings : DockerOptionsBase
 #endregion
 #region DockerContainerTopSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerTop(Fallout.Common.Tools.Docker.DockerContainerTopSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerTop), Arguments = "container top [ps")]
 public partial class DockerContainerTopSettings : DockerOptionsBase
@@ -4527,6 +4667,7 @@ public partial class DockerContainerTopSettings : DockerOptionsBase
 #endregion
 #region DockerContainerRenameSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerRename(Fallout.Common.Tools.Docker.DockerContainerRenameSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerRename), Arguments = "container rename")]
 public partial class DockerContainerRenameSettings : DockerOptionsBase
@@ -4539,6 +4680,7 @@ public partial class DockerContainerRenameSettings : DockerOptionsBase
 #endregion
 #region DockerImageHistorySettings
 /// <inheritdoc cref="DockerTasks.DockerImageHistory(Fallout.Common.Tools.Docker.DockerImageHistorySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageHistory), Arguments = "image history")]
 public partial class DockerImageHistorySettings : DockerOptionsBase
@@ -4557,6 +4699,7 @@ public partial class DockerImageHistorySettings : DockerOptionsBase
 #endregion
 #region DockerPsSettings
 /// <inheritdoc cref="DockerTasks.DockerPs(Fallout.Common.Tools.Docker.DockerPsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPs), Arguments = "ps")]
 public partial class DockerPsSettings : DockerOptionsBase
@@ -4581,6 +4724,7 @@ public partial class DockerPsSettings : DockerOptionsBase
 #endregion
 #region DockerImageTagSettings
 /// <inheritdoc cref="DockerTasks.DockerImageTag(Fallout.Common.Tools.Docker.DockerImageTagSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageTag), Arguments = "image tag")]
 public partial class DockerImageTagSettings : DockerOptionsBase
@@ -4593,6 +4737,7 @@ public partial class DockerImageTagSettings : DockerOptionsBase
 #endregion
 #region DockerExportSettings
 /// <inheritdoc cref="DockerTasks.DockerExport(Fallout.Common.Tools.Docker.DockerExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerExport), Arguments = "export")]
 public partial class DockerExportSettings : DockerOptionsBase
@@ -4605,6 +4750,7 @@ public partial class DockerExportSettings : DockerOptionsBase
 #endregion
 #region DockerNetworkDisconnectSettings
 /// <inheritdoc cref="DockerTasks.DockerNetworkDisconnect(Fallout.Common.Tools.Docker.DockerNetworkDisconnectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNetworkDisconnect), Arguments = "network disconnect")]
 public partial class DockerNetworkDisconnectSettings : DockerOptionsBase
@@ -4619,6 +4765,7 @@ public partial class DockerNetworkDisconnectSettings : DockerOptionsBase
 #endregion
 #region DockerBuilderBuildSettings
 /// <inheritdoc cref="DockerTasks.DockerBuilderBuild(Fallout.Common.Tools.Docker.DockerBuilderBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerBuilderBuild), Arguments = "builder build")]
 public partial class DockerBuilderBuildSettings : DockerOptionsBase
@@ -4699,6 +4846,7 @@ public partial class DockerBuilderBuildSettings : DockerOptionsBase
 #endregion
 #region DockerBuildxBuildSettings
 /// <inheritdoc cref="DockerTasks.DockerBuildxBuild(Fallout.Common.Tools.Docker.DockerBuildxBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerBuildxBuild), Arguments = "buildx build")]
 public partial class DockerBuildxBuildSettings : DockerOptionsBase
@@ -4781,6 +4929,7 @@ public partial class DockerBuildxBuildSettings : DockerOptionsBase
 #endregion
 #region DockerBuildxCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerBuildxCreate(Fallout.Common.Tools.Docker.DockerBuildxCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerBuildxCreate), Arguments = "buildx create")]
 public partial class DockerBuildxCreateSettings : DockerOptionsBase
@@ -4813,6 +4962,7 @@ public partial class DockerBuildxCreateSettings : DockerOptionsBase
 #endregion
 #region DockerStatsSettings
 /// <inheritdoc cref="DockerTasks.DockerStats(Fallout.Common.Tools.Docker.DockerStatsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStats), Arguments = "stats")]
 public partial class DockerStatsSettings : DockerOptionsBase
@@ -4831,6 +4981,7 @@ public partial class DockerStatsSettings : DockerOptionsBase
 #endregion
 #region DockerSearchSettings
 /// <inheritdoc cref="DockerTasks.DockerSearch(Fallout.Common.Tools.Docker.DockerSearchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSearch), Arguments = "search")]
 public partial class DockerSearchSettings : DockerOptionsBase
@@ -4853,6 +5004,7 @@ public partial class DockerSearchSettings : DockerOptionsBase
 #endregion
 #region DockerManifestSettings
 /// <inheritdoc cref="DockerTasks.DockerManifest(Fallout.Common.Tools.Docker.DockerManifestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerManifest), Arguments = "manifest")]
 public partial class DockerManifestSettings : DockerOptionsBase
@@ -4863,6 +5015,7 @@ public partial class DockerManifestSettings : DockerOptionsBase
 #endregion
 #region DockerPluginPushSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginPush(Fallout.Common.Tools.Docker.DockerPluginPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginPush), Arguments = "plugin push")]
 public partial class DockerPluginPushSettings : DockerOptionsBase
@@ -4875,6 +5028,7 @@ public partial class DockerPluginPushSettings : DockerOptionsBase
 #endregion
 #region DockerImageLoadSettings
 /// <inheritdoc cref="DockerTasks.DockerImageLoad(Fallout.Common.Tools.Docker.DockerImageLoadSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageLoad), Arguments = "image load")]
 public partial class DockerImageLoadSettings : DockerOptionsBase
@@ -4887,6 +5041,7 @@ public partial class DockerImageLoadSettings : DockerOptionsBase
 #endregion
 #region DockerSwarmSettings
 /// <inheritdoc cref="DockerTasks.DockerSwarm(Fallout.Common.Tools.Docker.DockerSwarmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSwarm), Arguments = "swarm")]
 public partial class DockerSwarmSettings : DockerOptionsBase
@@ -4895,6 +5050,7 @@ public partial class DockerSwarmSettings : DockerOptionsBase
 #endregion
 #region DockerContainerRmSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerRm(Fallout.Common.Tools.Docker.DockerContainerRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerRm), Arguments = "container rm")]
 public partial class DockerContainerRmSettings : DockerOptionsBase
@@ -4911,6 +5067,7 @@ public partial class DockerContainerRmSettings : DockerOptionsBase
 #endregion
 #region DockerContainerUpdateSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerUpdate(Fallout.Common.Tools.Docker.DockerContainerUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerUpdate), Arguments = "container update")]
 public partial class DockerContainerUpdateSettings : DockerOptionsBase
@@ -4951,6 +5108,7 @@ public partial class DockerContainerUpdateSettings : DockerOptionsBase
 #endregion
 #region DockerPluginSetSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginSet(Fallout.Common.Tools.Docker.DockerPluginSetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginSet), Arguments = "plugin set")]
 public partial class DockerPluginSetSettings : DockerOptionsBase
@@ -4963,6 +5121,7 @@ public partial class DockerPluginSetSettings : DockerOptionsBase
 #endregion
 #region DockerWaitSettings
 /// <inheritdoc cref="DockerTasks.DockerWait(Fallout.Common.Tools.Docker.DockerWaitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerWait), Arguments = "wait")]
 public partial class DockerWaitSettings : DockerOptionsBase
@@ -4973,6 +5132,7 @@ public partial class DockerWaitSettings : DockerOptionsBase
 #endregion
 #region DockerContextExportSettings
 /// <inheritdoc cref="DockerTasks.DockerContextExport(Fallout.Common.Tools.Docker.DockerContextExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContextExport), Arguments = "context export")]
 public partial class DockerContextExportSettings : DockerOptionsBase
@@ -4987,6 +5147,7 @@ public partial class DockerContextExportSettings : DockerOptionsBase
 #endregion
 #region DockerManifestAnnotateSettings
 /// <inheritdoc cref="DockerTasks.DockerManifestAnnotate(Fallout.Common.Tools.Docker.DockerManifestAnnotateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerManifestAnnotate), Arguments = "manifest annotate")]
 public partial class DockerManifestAnnotateSettings : DockerOptionsBase
@@ -5007,6 +5168,7 @@ public partial class DockerManifestAnnotateSettings : DockerOptionsBase
 #endregion
 #region DockerImagePullSettings
 /// <inheritdoc cref="DockerTasks.DockerImagePull(Fallout.Common.Tools.Docker.DockerImagePullSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImagePull), Arguments = "image pull")]
 public partial class DockerImagePullSettings : DockerOptionsBase
@@ -5025,6 +5187,7 @@ public partial class DockerImagePullSettings : DockerOptionsBase
 #endregion
 #region DockerEventsSettings
 /// <inheritdoc cref="DockerTasks.DockerEvents(Fallout.Common.Tools.Docker.DockerEventsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerEvents), Arguments = "events")]
 public partial class DockerEventsSettings : DockerOptionsBase
@@ -5041,6 +5204,7 @@ public partial class DockerEventsSettings : DockerOptionsBase
 #endregion
 #region DockerStackLsSettings
 /// <inheritdoc cref="DockerTasks.DockerStackLs(Fallout.Common.Tools.Docker.DockerStackLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStackLs), Arguments = "stack ls")]
 public partial class DockerStackLsSettings : DockerStackSettings
@@ -5055,6 +5219,7 @@ public partial class DockerStackLsSettings : DockerStackSettings
 #endregion
 #region DockerContainerInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerInspect(Fallout.Common.Tools.Docker.DockerContainerInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerInspect), Arguments = "container inspect")]
 public partial class DockerContainerInspectSettings : DockerOptionsBase
@@ -5069,6 +5234,7 @@ public partial class DockerContainerInspectSettings : DockerOptionsBase
 #endregion
 #region DockerKillSettings
 /// <inheritdoc cref="DockerTasks.DockerKill(Fallout.Common.Tools.Docker.DockerKillSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerKill), Arguments = "kill")]
 public partial class DockerKillSettings : DockerOptionsBase
@@ -5081,6 +5247,7 @@ public partial class DockerKillSettings : DockerOptionsBase
 #endregion
 #region DockerCheckpointCreateSettings
 /// <inheritdoc cref="DockerTasks.DockerCheckpointCreate(Fallout.Common.Tools.Docker.DockerCheckpointCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerCheckpointCreate), Arguments = "checkpoint create")]
 public partial class DockerCheckpointCreateSettings : DockerOptionsBase
@@ -5097,6 +5264,7 @@ public partial class DockerCheckpointCreateSettings : DockerOptionsBase
 #endregion
 #region DockerPauseSettings
 /// <inheritdoc cref="DockerTasks.DockerPause(Fallout.Common.Tools.Docker.DockerPauseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPause), Arguments = "pause")]
 public partial class DockerPauseSettings : DockerOptionsBase
@@ -5107,6 +5275,7 @@ public partial class DockerPauseSettings : DockerOptionsBase
 #endregion
 #region DockerLogsSettings
 /// <inheritdoc cref="DockerTasks.DockerLogs(Fallout.Common.Tools.Docker.DockerLogsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerLogs), Arguments = "logs")]
 public partial class DockerLogsSettings : DockerOptionsBase
@@ -5129,6 +5298,7 @@ public partial class DockerLogsSettings : DockerOptionsBase
 #endregion
 #region DockerContextInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerContextInspect(Fallout.Common.Tools.Docker.DockerContextInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContextInspect), Arguments = "context inspect")]
 public partial class DockerContextInspectSettings : DockerOptionsBase
@@ -5143,6 +5313,7 @@ public partial class DockerContextInspectSettings : DockerOptionsBase
 #endregion
 #region DockerNodePromoteSettings
 /// <inheritdoc cref="DockerTasks.DockerNodePromote(Fallout.Common.Tools.Docker.DockerNodePromoteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNodePromote), Arguments = "node promote")]
 public partial class DockerNodePromoteSettings : DockerOptionsBase
@@ -5153,6 +5324,7 @@ public partial class DockerNodePromoteSettings : DockerOptionsBase
 #endregion
 #region DockerNodeDemoteSettings
 /// <inheritdoc cref="DockerTasks.DockerNodeDemote(Fallout.Common.Tools.Docker.DockerNodeDemoteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNodeDemote), Arguments = "node demote")]
 public partial class DockerNodeDemoteSettings : DockerOptionsBase
@@ -5163,6 +5335,7 @@ public partial class DockerNodeDemoteSettings : DockerOptionsBase
 #endregion
 #region DockerExecSettings
 /// <inheritdoc cref="DockerTasks.DockerExec(Fallout.Common.Tools.Docker.DockerExecSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerExec), Arguments = "exec")]
 public partial class DockerExecSettings : DockerOptionsBase
@@ -5193,6 +5366,7 @@ public partial class DockerExecSettings : DockerOptionsBase
 #endregion
 #region DockerImageRmSettings
 /// <inheritdoc cref="DockerTasks.DockerImageRm(Fallout.Common.Tools.Docker.DockerImageRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageRm), Arguments = "image rm")]
 public partial class DockerImageRmSettings : DockerOptionsBase
@@ -5207,6 +5381,7 @@ public partial class DockerImageRmSettings : DockerOptionsBase
 #endregion
 #region DockerImageSettings
 /// <inheritdoc cref="DockerTasks.DockerImage(Fallout.Common.Tools.Docker.DockerImageSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImage), Arguments = "image")]
 public partial class DockerImageSettings : DockerOptionsBase
@@ -5215,6 +5390,7 @@ public partial class DockerImageSettings : DockerOptionsBase
 #endregion
 #region DockerContextSettings
 /// <inheritdoc cref="DockerTasks.DockerContext(Fallout.Common.Tools.Docker.DockerContextSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContext), Arguments = "context")]
 public partial class DockerContextSettings : DockerOptionsBase
@@ -5223,6 +5399,7 @@ public partial class DockerContextSettings : DockerOptionsBase
 #endregion
 #region DockerVolumeSettings
 /// <inheritdoc cref="DockerTasks.DockerVolume(Fallout.Common.Tools.Docker.DockerVolumeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerVolume), Arguments = "volume")]
 public partial class DockerVolumeSettings : DockerOptionsBase
@@ -5233,6 +5410,7 @@ public partial class DockerVolumeSettings : DockerOptionsBase
 #endregion
 #region DockerContainerStartSettings
 /// <inheritdoc cref="DockerTasks.DockerContainerStart(Fallout.Common.Tools.Docker.DockerContainerStartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerContainerStart), Arguments = "container start")]
 public partial class DockerContainerStartSettings : DockerOptionsBase
@@ -5253,6 +5431,7 @@ public partial class DockerContainerStartSettings : DockerOptionsBase
 #endregion
 #region DockerPluginInspectSettings
 /// <inheritdoc cref="DockerTasks.DockerPluginInspect(Fallout.Common.Tools.Docker.DockerPluginInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerPluginInspect), Arguments = "plugin inspect")]
 public partial class DockerPluginInspectSettings : DockerOptionsBase
@@ -5265,6 +5444,7 @@ public partial class DockerPluginInspectSettings : DockerOptionsBase
 #endregion
 #region DockerLogoutSettings
 /// <inheritdoc cref="DockerTasks.DockerLogout(Fallout.Common.Tools.Docker.DockerLogoutSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerLogout), Arguments = "logout")]
 public partial class DockerLogoutSettings : DockerOptionsBase
@@ -5275,6 +5455,7 @@ public partial class DockerLogoutSettings : DockerOptionsBase
 #endregion
 #region DockerNetworkSettings
 /// <inheritdoc cref="DockerTasks.DockerNetwork(Fallout.Common.Tools.Docker.DockerNetworkSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerNetwork), Arguments = "network")]
 public partial class DockerNetworkSettings : DockerOptionsBase
@@ -5283,6 +5464,7 @@ public partial class DockerNetworkSettings : DockerOptionsBase
 #endregion
 #region DockerImageLsSettings
 /// <inheritdoc cref="DockerTasks.DockerImageLs(Fallout.Common.Tools.Docker.DockerImageLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerImageLs), Arguments = "image ls")]
 public partial class DockerImageLsSettings : DockerOptionsBase
@@ -5305,6 +5487,7 @@ public partial class DockerImageLsSettings : DockerOptionsBase
 #endregion
 #region DockerSystemDfSettings
 /// <inheritdoc cref="DockerTasks.DockerSystemDf(Fallout.Common.Tools.Docker.DockerSystemDfSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerSystemDf), Arguments = "system df")]
 public partial class DockerSystemDfSettings : DockerOptionsBase
@@ -5317,6 +5500,7 @@ public partial class DockerSystemDfSettings : DockerOptionsBase
 #endregion
 #region DockerServiceRollbackSettings
 /// <inheritdoc cref="DockerTasks.DockerServiceRollback(Fallout.Common.Tools.Docker.DockerServiceRollbackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerServiceRollback), Arguments = "service rollback")]
 public partial class DockerServiceRollbackSettings : DockerOptionsBase
@@ -5331,6 +5515,7 @@ public partial class DockerServiceRollbackSettings : DockerOptionsBase
 #endregion
 #region DockerRestartSettings
 /// <inheritdoc cref="DockerTasks.DockerRestart(Fallout.Common.Tools.Docker.DockerRestartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerRestart), Arguments = "restart")]
 public partial class DockerRestartSettings : DockerOptionsBase
@@ -5343,6 +5528,7 @@ public partial class DockerRestartSettings : DockerOptionsBase
 #endregion
 #region DockerTrustSignerRemoveSettings
 /// <inheritdoc cref="DockerTasks.DockerTrustSignerRemove(Fallout.Common.Tools.Docker.DockerTrustSignerRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerTrustSignerRemove), Arguments = "trust signer remove")]
 public partial class DockerTrustSignerRemoveSettings : DockerOptionsBase
@@ -5357,6 +5543,7 @@ public partial class DockerTrustSignerRemoveSettings : DockerOptionsBase
 #endregion
 #region DockerStackRmSettings
 /// <inheritdoc cref="DockerTasks.DockerStackRm(Fallout.Common.Tools.Docker.DockerStackRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerStackRm), Arguments = "stack rm")]
 public partial class DockerStackRmSettings : DockerStackSettings
@@ -5369,6 +5556,7 @@ public partial class DockerStackRmSettings : DockerStackSettings
 #endregion
 #region DockerBuildSettings
 /// <inheritdoc cref="DockerTasks.DockerBuild(Fallout.Common.Tools.Docker.DockerBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(DockerTasks), Command = nameof(DockerTasks.DockerBuild), Arguments = "build")]
 public partial class DockerBuildSettings : DockerOptionsBase
@@ -5449,6 +5637,7 @@ public partial class DockerBuildSettings : DockerOptionsBase
 #endregion
 #region DockerOptionsBase
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DockerOptionsBase : ToolOptions
 {
@@ -5472,6 +5661,7 @@ public partial class DockerOptionsBase : ToolOptions
 #endregion
 #region DockerRunTargetSettings
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public partial class DockerRunTargetSettings : DockerRunSettings
 {
@@ -5493,6 +5683,7 @@ public partial class DockerRunTargetSettings : DockerRunSettings
 #endregion
 #region DockerConfigRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerConfigRm(Fallout.Common.Tools.Docker.DockerConfigRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerConfigRmSettingsExtensions
 {
@@ -5523,6 +5714,7 @@ public static partial class DockerConfigRmSettingsExtensions
 #endregion
 #region DockerLoadSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerLoad(Fallout.Common.Tools.Docker.DockerLoadSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerLoadSettingsExtensions
 {
@@ -5555,6 +5747,7 @@ public static partial class DockerLoadSettingsExtensions
 #endregion
 #region DockerContainerPruneSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerPrune(Fallout.Common.Tools.Docker.DockerContainerPruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerPruneSettingsExtensions
 {
@@ -5587,6 +5780,7 @@ public static partial class DockerContainerPruneSettingsExtensions
 #endregion
 #region DockerTrustSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrust(Fallout.Common.Tools.Docker.DockerTrustSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustSettingsExtensions
 {
@@ -5594,6 +5788,7 @@ public static partial class DockerTrustSettingsExtensions
 #endregion
 #region DockerStackSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStack(Fallout.Common.Tools.Docker.DockerStackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStackSettingsExtensions
 {
@@ -5617,6 +5812,7 @@ public static partial class DockerStackSettingsExtensions
 #endregion
 #region DockerPullSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPull(Fallout.Common.Tools.Docker.DockerPullSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPullSettingsExtensions
 {
@@ -5691,6 +5887,7 @@ public static partial class DockerPullSettingsExtensions
 #endregion
 #region DockerTrustSignSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustSign(Fallout.Common.Tools.Docker.DockerTrustSignSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustSignSettingsExtensions
 {
@@ -5698,6 +5895,7 @@ public static partial class DockerTrustSignSettingsExtensions
 #endregion
 #region DockerCheckpointSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerCheckpoint(Fallout.Common.Tools.Docker.DockerCheckpointSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerCheckpointSettingsExtensions
 {
@@ -5705,6 +5903,7 @@ public static partial class DockerCheckpointSettingsExtensions
 #endregion
 #region DockerTrustSignerSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustSigner(Fallout.Common.Tools.Docker.DockerTrustSignerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustSignerSettingsExtensions
 {
@@ -5712,6 +5911,7 @@ public static partial class DockerTrustSignerSettingsExtensions
 #endregion
 #region DockerConfigInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerConfigInspect(Fallout.Common.Tools.Docker.DockerConfigInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerConfigInspectSettingsExtensions
 {
@@ -5767,6 +5967,7 @@ public static partial class DockerConfigInspectSettingsExtensions
 #endregion
 #region DockerServiceSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerService(Fallout.Common.Tools.Docker.DockerServiceSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceSettingsExtensions
 {
@@ -5774,6 +5975,7 @@ public static partial class DockerServiceSettingsExtensions
 #endregion
 #region DockerTrustKeyGenerateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustKeyGenerate(Fallout.Common.Tools.Docker.DockerTrustKeyGenerateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustKeyGenerateSettingsExtensions
 {
@@ -5789,6 +5991,7 @@ public static partial class DockerTrustKeyGenerateSettingsExtensions
 #endregion
 #region DockerSystemSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSystem(Fallout.Common.Tools.Docker.DockerSystemSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSystemSettingsExtensions
 {
@@ -5796,6 +5999,7 @@ public static partial class DockerSystemSettingsExtensions
 #endregion
 #region DockerConfigLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerConfigLs(Fallout.Common.Tools.Docker.DockerConfigLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerConfigLsSettingsExtensions
 {
@@ -5836,6 +6040,7 @@ public static partial class DockerConfigLsSettingsExtensions
 #endregion
 #region DockerContextUpdateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContextUpdate(Fallout.Common.Tools.Docker.DockerContextUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextUpdateSettingsExtensions
 {
@@ -5883,6 +6088,7 @@ public static partial class DockerContextUpdateSettingsExtensions
 #endregion
 #region DockerStackServicesSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStackServices(Fallout.Common.Tools.Docker.DockerStackServicesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStackServicesSettingsExtensions
 {
@@ -5939,6 +6145,7 @@ public static partial class DockerStackServicesSettingsExtensions
 #endregion
 #region DockerContainerPortSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerPort(Fallout.Common.Tools.Docker.DockerContainerPortSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerPortSettingsExtensions
 {
@@ -5962,6 +6169,7 @@ public static partial class DockerContainerPortSettingsExtensions
 #endregion
 #region DockerRenameSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerRename(Fallout.Common.Tools.Docker.DockerRenameSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerRenameSettingsExtensions
 {
@@ -5985,6 +6193,7 @@ public static partial class DockerRenameSettingsExtensions
 #endregion
 #region DockerTagSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTag(Fallout.Common.Tools.Docker.DockerTagSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTagSettingsExtensions
 {
@@ -6008,6 +6217,7 @@ public static partial class DockerTagSettingsExtensions
 #endregion
 #region DockerSecretInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSecretInspect(Fallout.Common.Tools.Docker.DockerSecretInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSecretInspectSettingsExtensions
 {
@@ -6063,6 +6273,7 @@ public static partial class DockerSecretInspectSettingsExtensions
 #endregion
 #region DockerSecretSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSecret(Fallout.Common.Tools.Docker.DockerSecretSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSecretSettingsExtensions
 {
@@ -6070,6 +6281,7 @@ public static partial class DockerSecretSettingsExtensions
 #endregion
 #region DockerContainerExportSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerExport(Fallout.Common.Tools.Docker.DockerContainerExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerExportSettingsExtensions
 {
@@ -6093,6 +6305,7 @@ public static partial class DockerContainerExportSettingsExtensions
 #endregion
 #region DockerHistorySettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerHistory(Fallout.Common.Tools.Docker.DockerHistorySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerHistorySettingsExtensions
 {
@@ -6167,6 +6380,7 @@ public static partial class DockerHistorySettingsExtensions
 #endregion
 #region DockerServiceCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServiceCreate(Fallout.Common.Tools.Docker.DockerServiceCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceCreateSettingsExtensions
 {
@@ -7008,6 +7222,7 @@ public static partial class DockerServiceCreateSettingsExtensions
 #endregion
 #region DockerServicePsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServicePs(Fallout.Common.Tools.Docker.DockerServicePsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServicePsSettingsExtensions
 {
@@ -7105,6 +7320,7 @@ public static partial class DockerServicePsSettingsExtensions
 #endregion
 #region DockerStopSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStop(Fallout.Common.Tools.Docker.DockerStopSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStopSettingsExtensions
 {
@@ -7143,6 +7359,7 @@ public static partial class DockerStopSettingsExtensions
 #endregion
 #region DockerNodeSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNode(Fallout.Common.Tools.Docker.DockerNodeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNodeSettingsExtensions
 {
@@ -7150,6 +7367,7 @@ public static partial class DockerNodeSettingsExtensions
 #endregion
 #region DockerUpdateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerUpdate(Fallout.Common.Tools.Docker.DockerUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerUpdateSettingsExtensions
 {
@@ -7300,6 +7518,7 @@ public static partial class DockerUpdateSettingsExtensions
 #endregion
 #region DockerPluginCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginCreate(Fallout.Common.Tools.Docker.DockerPluginCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginCreateSettingsExtensions
 {
@@ -7340,6 +7559,7 @@ public static partial class DockerPluginCreateSettingsExtensions
 #endregion
 #region DockerSystemInfoSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSystemInfo(Fallout.Common.Tools.Docker.DockerSystemInfoSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSystemInfoSettingsExtensions
 {
@@ -7355,6 +7575,7 @@ public static partial class DockerSystemInfoSettingsExtensions
 #endregion
 #region DockerVolumePruneSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerVolumePrune(Fallout.Common.Tools.Docker.DockerVolumePruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerVolumePruneSettingsExtensions
 {
@@ -7387,6 +7608,7 @@ public static partial class DockerVolumePruneSettingsExtensions
 #endregion
 #region DockerPluginUpgradeSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginUpgrade(Fallout.Common.Tools.Docker.DockerPluginUpgradeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginUpgradeSettingsExtensions
 {
@@ -7461,6 +7683,7 @@ public static partial class DockerPluginUpgradeSettingsExtensions
 #endregion
 #region DockerBuilderPruneSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerBuilderPrune(Fallout.Common.Tools.Docker.DockerBuilderPruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerBuilderPruneSettingsExtensions
 {
@@ -7468,6 +7691,7 @@ public static partial class DockerBuilderPruneSettingsExtensions
 #endregion
 #region DockerSwarmJoinTokenSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarmJoinToken(Fallout.Common.Tools.Docker.DockerSwarmJoinTokenSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmJoinTokenSettingsExtensions
 {
@@ -7517,6 +7741,7 @@ public static partial class DockerSwarmJoinTokenSettingsExtensions
 #endregion
 #region DockerNodeUpdateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNodeUpdate(Fallout.Common.Tools.Docker.DockerNodeUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNodeUpdateSettingsExtensions
 {
@@ -7594,6 +7819,7 @@ public static partial class DockerNodeUpdateSettingsExtensions
 #endregion
 #region DockerTrustSignerAddSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustSignerAdd(Fallout.Common.Tools.Docker.DockerTrustSignerAddSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustSignerAddSettingsExtensions
 {
@@ -7640,6 +7866,7 @@ public static partial class DockerTrustSignerAddSettingsExtensions
 #endregion
 #region DockerSwarmUpdateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarmUpdate(Fallout.Common.Tools.Docker.DockerSwarmUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmUpdateSettingsExtensions
 {
@@ -7712,6 +7939,7 @@ public static partial class DockerSwarmUpdateSettingsExtensions
 #endregion
 #region DockerServiceLogsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServiceLogs(Fallout.Common.Tools.Docker.DockerServiceLogsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceLogsSettingsExtensions
 {
@@ -7862,6 +8090,7 @@ public static partial class DockerServiceLogsSettingsExtensions
 #endregion
 #region DockerServiceLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServiceLs(Fallout.Common.Tools.Docker.DockerServiceLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceLsSettingsExtensions
 {
@@ -7902,6 +8131,7 @@ public static partial class DockerServiceLsSettingsExtensions
 #endregion
 #region DockerSwarmUnlockSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarmUnlock(Fallout.Common.Tools.Docker.DockerSwarmUnlockSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmUnlockSettingsExtensions
 {
@@ -7909,6 +8139,7 @@ public static partial class DockerSwarmUnlockSettingsExtensions
 #endregion
 #region DockerNetworkLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNetworkLs(Fallout.Common.Tools.Docker.DockerNetworkLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNetworkLsSettingsExtensions
 {
@@ -7966,6 +8197,7 @@ public static partial class DockerNetworkLsSettingsExtensions
 #endregion
 #region DockerPluginLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginLs(Fallout.Common.Tools.Docker.DockerPluginLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginLsSettingsExtensions
 {
@@ -8023,6 +8255,7 @@ public static partial class DockerPluginLsSettingsExtensions
 #endregion
 #region DockerPluginRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginRm(Fallout.Common.Tools.Docker.DockerPluginRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginRmSettingsExtensions
 {
@@ -8070,6 +8303,7 @@ public static partial class DockerPluginRmSettingsExtensions
 #endregion
 #region DockerImageBuildSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageBuild(Fallout.Common.Tools.Docker.DockerImageBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageBuildSettingsExtensions
 {
@@ -8536,6 +8770,7 @@ public static partial class DockerImageBuildSettingsExtensions
 #endregion
 #region DockerTrustRevokeSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustRevoke(Fallout.Common.Tools.Docker.DockerTrustRevokeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustRevokeSettingsExtensions
 {
@@ -8568,6 +8803,7 @@ public static partial class DockerTrustRevokeSettingsExtensions
 #endregion
 #region DockerRmiSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerRmi(Fallout.Common.Tools.Docker.DockerRmiSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerRmiSettingsExtensions
 {
@@ -8632,6 +8868,7 @@ public static partial class DockerRmiSettingsExtensions
 #endregion
 #region DockerNetworkRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNetworkRm(Fallout.Common.Tools.Docker.DockerNetworkRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNetworkRmSettingsExtensions
 {
@@ -8662,6 +8899,7 @@ public static partial class DockerNetworkRmSettingsExtensions
 #endregion
 #region DockerVersionSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerVersion(Fallout.Common.Tools.Docker.DockerVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerVersionSettingsExtensions
 {
@@ -8685,6 +8923,7 @@ public static partial class DockerVersionSettingsExtensions
 #endregion
 #region DockerSecretCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSecretCreate(Fallout.Common.Tools.Docker.DockerSecretCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSecretCreateSettingsExtensions
 {
@@ -8747,6 +8986,7 @@ public static partial class DockerSecretCreateSettingsExtensions
 #endregion
 #region DockerServiceRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServiceRm(Fallout.Common.Tools.Docker.DockerServiceRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceRmSettingsExtensions
 {
@@ -8777,6 +9017,7 @@ public static partial class DockerServiceRmSettingsExtensions
 #endregion
 #region DockerTrustKeyLoadSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustKeyLoad(Fallout.Common.Tools.Docker.DockerTrustKeyLoadSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustKeyLoadSettingsExtensions
 {
@@ -8800,6 +9041,7 @@ public static partial class DockerTrustKeyLoadSettingsExtensions
 #endregion
 #region DockerSecretRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSecretRm(Fallout.Common.Tools.Docker.DockerSecretRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSecretRmSettingsExtensions
 {
@@ -8830,6 +9072,7 @@ public static partial class DockerSecretRmSettingsExtensions
 #endregion
 #region DockerImageInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageInspect(Fallout.Common.Tools.Docker.DockerImageInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageInspectSettingsExtensions
 {
@@ -8868,6 +9111,7 @@ public static partial class DockerImageInspectSettingsExtensions
 #endregion
 #region DockerImageSaveSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageSave(Fallout.Common.Tools.Docker.DockerImageSaveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageSaveSettingsExtensions
 {
@@ -8906,6 +9150,7 @@ public static partial class DockerImageSaveSettingsExtensions
 #endregion
 #region DockerTrustKeySettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustKey(Fallout.Common.Tools.Docker.DockerTrustKeySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustKeySettingsExtensions
 {
@@ -8913,6 +9158,7 @@ public static partial class DockerTrustKeySettingsExtensions
 #endregion
 #region DockerContainerAttachSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerAttach(Fallout.Common.Tools.Docker.DockerContainerAttachSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerAttachSettingsExtensions
 {
@@ -8970,6 +9216,7 @@ public static partial class DockerContainerAttachSettingsExtensions
 #endregion
 #region DockerContextCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContextCreate(Fallout.Common.Tools.Docker.DockerContextCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextCreateSettingsExtensions
 {
@@ -9025,6 +9272,7 @@ public static partial class DockerContextCreateSettingsExtensions
 #endregion
 #region DockerConfigCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerConfigCreate(Fallout.Common.Tools.Docker.DockerConfigCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerConfigCreateSettingsExtensions
 {
@@ -9079,6 +9327,7 @@ public static partial class DockerConfigCreateSettingsExtensions
 #endregion
 #region DockerVolumeInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerVolumeInspect(Fallout.Common.Tools.Docker.DockerVolumeInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerVolumeInspectSettingsExtensions
 {
@@ -9117,6 +9366,7 @@ public static partial class DockerVolumeInspectSettingsExtensions
 #endregion
 #region DockerContainerStopSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerStop(Fallout.Common.Tools.Docker.DockerContainerStopSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerStopSettingsExtensions
 {
@@ -9155,6 +9405,7 @@ public static partial class DockerContainerStopSettingsExtensions
 #endregion
 #region DockerNetworkPruneSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNetworkPrune(Fallout.Common.Tools.Docker.DockerNetworkPruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNetworkPruneSettingsExtensions
 {
@@ -9187,6 +9438,7 @@ public static partial class DockerNetworkPruneSettingsExtensions
 #endregion
 #region DockerManifestInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerManifestInspect(Fallout.Common.Tools.Docker.DockerManifestInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerManifestInspectSettingsExtensions
 {
@@ -9244,6 +9496,7 @@ public static partial class DockerManifestInspectSettingsExtensions
 #endregion
 #region DockerInfoSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerInfo(Fallout.Common.Tools.Docker.DockerInfoSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerInfoSettingsExtensions
 {
@@ -9259,6 +9512,7 @@ public static partial class DockerInfoSettingsExtensions
 #endregion
 #region DockerCommitSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerCommit(Fallout.Common.Tools.Docker.DockerCommitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerCommitSettingsExtensions
 {
@@ -9338,6 +9592,7 @@ public static partial class DockerCommitSettingsExtensions
 #endregion
 #region DockerStackDeploySettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStackDeploy(Fallout.Common.Tools.Docker.DockerStackDeploySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStackDeploySettingsExtensions
 {
@@ -9434,6 +9689,7 @@ public static partial class DockerStackDeploySettingsExtensions
 #endregion
 #region DockerServiceScaleSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServiceScale(Fallout.Common.Tools.Docker.DockerServiceScaleSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceScaleSettingsExtensions
 {
@@ -9458,6 +9714,7 @@ public static partial class DockerServiceScaleSettingsExtensions
 #endregion
 #region DockerRunSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerRun(Fallout.Common.Tools.Docker.DockerRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerRunSettingsExtensions
 {
@@ -10918,6 +11175,7 @@ public static partial class DockerRunSettingsExtensions
 #endregion
 #region DockerCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerCreate(Fallout.Common.Tools.Docker.DockerCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerCreateSettingsExtensions
 {
@@ -12336,6 +12594,7 @@ public static partial class DockerCreateSettingsExtensions
 #endregion
 #region DockerServiceUpdateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServiceUpdate(Fallout.Common.Tools.Docker.DockerServiceUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceUpdateSettingsExtensions
 {
@@ -13518,6 +13777,7 @@ public static partial class DockerServiceUpdateSettingsExtensions
 #endregion
 #region DockerPortSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPort(Fallout.Common.Tools.Docker.DockerPortSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPortSettingsExtensions
 {
@@ -13541,6 +13801,7 @@ public static partial class DockerPortSettingsExtensions
 #endregion
 #region DockerContainerSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainer(Fallout.Common.Tools.Docker.DockerContainerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerSettingsExtensions
 {
@@ -13548,6 +13809,7 @@ public static partial class DockerContainerSettingsExtensions
 #endregion
 #region DockerImagePushSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImagePush(Fallout.Common.Tools.Docker.DockerImagePushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImagePushSettingsExtensions
 {
@@ -13597,6 +13859,7 @@ public static partial class DockerImagePushSettingsExtensions
 #endregion
 #region DockerServiceInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServiceInspect(Fallout.Common.Tools.Docker.DockerServiceInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceInspectSettingsExtensions
 {
@@ -13652,6 +13915,7 @@ public static partial class DockerServiceInspectSettingsExtensions
 #endregion
 #region DockerNetworkConnectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNetworkConnect(Fallout.Common.Tools.Docker.DockerNetworkConnectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNetworkConnectSettingsExtensions
 {
@@ -13783,6 +14047,7 @@ public static partial class DockerNetworkConnectSettingsExtensions
 #endregion
 #region DockerSecretLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSecretLs(Fallout.Common.Tools.Docker.DockerSecretLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSecretLsSettingsExtensions
 {
@@ -13823,6 +14088,7 @@ public static partial class DockerSecretLsSettingsExtensions
 #endregion
 #region DockerSwarmLeaveSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarmLeave(Fallout.Common.Tools.Docker.DockerSwarmLeaveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmLeaveSettingsExtensions
 {
@@ -13847,6 +14113,7 @@ public static partial class DockerSwarmLeaveSettingsExtensions
 #endregion
 #region DockerImagesSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImages(Fallout.Common.Tools.Docker.DockerImagesSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImagesSettingsExtensions
 {
@@ -13946,6 +14213,7 @@ public static partial class DockerImagesSettingsExtensions
 #endregion
 #region DockerEngineUpdateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerEngineUpdate(Fallout.Common.Tools.Docker.DockerEngineUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerEngineUpdateSettingsExtensions
 {
@@ -13985,6 +14253,7 @@ public static partial class DockerEngineUpdateSettingsExtensions
 #endregion
 #region DockerSystemEventsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSystemEvents(Fallout.Common.Tools.Docker.DockerSystemEventsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSystemEventsSettingsExtensions
 {
@@ -14024,6 +14293,7 @@ public static partial class DockerSystemEventsSettingsExtensions
 #endregion
 #region DockerInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerInspect(Fallout.Common.Tools.Docker.DockerInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerInspectSettingsExtensions
 {
@@ -14087,6 +14357,7 @@ public static partial class DockerInspectSettingsExtensions
 #endregion
 #region DockerEngineCheckSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerEngineCheck(Fallout.Common.Tools.Docker.DockerEngineCheckSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerEngineCheckSettingsExtensions
 {
@@ -14194,6 +14465,7 @@ public static partial class DockerEngineCheckSettingsExtensions
 #endregion
 #region DockerAttachSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerAttach(Fallout.Common.Tools.Docker.DockerAttachSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerAttachSettingsExtensions
 {
@@ -14251,6 +14523,7 @@ public static partial class DockerAttachSettingsExtensions
 #endregion
 #region DockerContainerWaitSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerWait(Fallout.Common.Tools.Docker.DockerContainerWaitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerWaitSettingsExtensions
 {
@@ -14281,6 +14554,7 @@ public static partial class DockerContainerWaitSettingsExtensions
 #endregion
 #region DockerSwarmCaSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarmCa(Fallout.Common.Tools.Docker.DockerSwarmCaSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmCaSettingsExtensions
 {
@@ -14371,6 +14645,7 @@ public static partial class DockerSwarmCaSettingsExtensions
 #endregion
 #region DockerEngineSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerEngine(Fallout.Common.Tools.Docker.DockerEngineSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerEngineSettingsExtensions
 {
@@ -14386,6 +14661,7 @@ public static partial class DockerEngineSettingsExtensions
 #endregion
 #region DockerSystemPruneSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSystemPrune(Fallout.Common.Tools.Docker.DockerSystemPruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSystemPruneSettingsExtensions
 {
@@ -14452,6 +14728,7 @@ public static partial class DockerSystemPruneSettingsExtensions
 #endregion
 #region DockerBuilderSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerBuilder(Fallout.Common.Tools.Docker.DockerBuilderSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerBuilderSettingsExtensions
 {
@@ -14459,6 +14736,7 @@ public static partial class DockerBuilderSettingsExtensions
 #endregion
 #region DockerContainerPauseSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerPause(Fallout.Common.Tools.Docker.DockerContainerPauseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerPauseSettingsExtensions
 {
@@ -14489,6 +14767,7 @@ public static partial class DockerContainerPauseSettingsExtensions
 #endregion
 #region DockerContainerCommitSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerCommit(Fallout.Common.Tools.Docker.DockerContainerCommitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerCommitSettingsExtensions
 {
@@ -14568,6 +14847,7 @@ public static partial class DockerContainerCommitSettingsExtensions
 #endregion
 #region DockerContextLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContextLs(Fallout.Common.Tools.Docker.DockerContextLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextLsSettingsExtensions
 {
@@ -14600,6 +14880,7 @@ public static partial class DockerContextLsSettingsExtensions
 #endregion
 #region DockerContextRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContextRm(Fallout.Common.Tools.Docker.DockerContextRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextRmSettingsExtensions
 {
@@ -14630,6 +14911,7 @@ public static partial class DockerContextRmSettingsExtensions
 #endregion
 #region DockerStackPsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStackPs(Fallout.Common.Tools.Docker.DockerStackPsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStackPsSettingsExtensions
 {
@@ -14720,6 +15002,7 @@ public static partial class DockerStackPsSettingsExtensions
 #endregion
 #region DockerContainerCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerCreate(Fallout.Common.Tools.Docker.DockerContainerCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerCreateSettingsExtensions
 {
@@ -16138,6 +16421,7 @@ public static partial class DockerContainerCreateSettingsExtensions
 #endregion
 #region DockerVolumeCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerVolumeCreate(Fallout.Common.Tools.Docker.DockerVolumeCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerVolumeCreateSettingsExtensions
 {
@@ -16209,6 +16493,7 @@ public static partial class DockerVolumeCreateSettingsExtensions
 #endregion
 #region DockerPluginSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPlugin(Fallout.Common.Tools.Docker.DockerPluginSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginSettingsExtensions
 {
@@ -16216,6 +16501,7 @@ public static partial class DockerPluginSettingsExtensions
 #endregion
 #region DockerLoginSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerLogin(Fallout.Common.Tools.Docker.DockerLoginSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerLoginSettingsExtensions
 {
@@ -16247,6 +16533,7 @@ public static partial class DockerLoginSettingsExtensions
 #endregion
 #region DockerSwarmUnlockKeySettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarmUnlockKey(Fallout.Common.Tools.Docker.DockerSwarmUnlockKeySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmUnlockKeySettingsExtensions
 {
@@ -16288,6 +16575,7 @@ public static partial class DockerSwarmUnlockKeySettingsExtensions
 #endregion
 #region DockerStartSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStart(Fallout.Common.Tools.Docker.DockerStartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStartSettingsExtensions
 {
@@ -16376,6 +16664,7 @@ public static partial class DockerStartSettingsExtensions
 #endregion
 #region DockerSwarmInitSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarmInit(Fallout.Common.Tools.Docker.DockerSwarmInitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmInitSettingsExtensions
 {
@@ -16521,6 +16810,7 @@ public static partial class DockerSwarmInitSettingsExtensions
 #endregion
 #region DockerContainerDiffSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerDiff(Fallout.Common.Tools.Docker.DockerContainerDiffSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerDiffSettingsExtensions
 {
@@ -16536,6 +16826,7 @@ public static partial class DockerContainerDiffSettingsExtensions
 #endregion
 #region DockerContainerRestartSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerRestart(Fallout.Common.Tools.Docker.DockerContainerRestartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerRestartSettingsExtensions
 {
@@ -16574,6 +16865,7 @@ public static partial class DockerContainerRestartSettingsExtensions
 #endregion
 #region DockerConfigSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerConfig(Fallout.Common.Tools.Docker.DockerConfigSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerConfigSettingsExtensions
 {
@@ -16581,6 +16873,7 @@ public static partial class DockerConfigSettingsExtensions
 #endregion
 #region DockerPluginDisableSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginDisable(Fallout.Common.Tools.Docker.DockerPluginDisableSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginDisableSettingsExtensions
 {
@@ -16613,6 +16906,7 @@ public static partial class DockerPluginDisableSettingsExtensions
 #endregion
 #region DockerContainerUnpauseSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerUnpause(Fallout.Common.Tools.Docker.DockerContainerUnpauseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerUnpauseSettingsExtensions
 {
@@ -16643,6 +16937,7 @@ public static partial class DockerContainerUnpauseSettingsExtensions
 #endregion
 #region DockerContextImportSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContextImport(Fallout.Common.Tools.Docker.DockerContextImportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextImportSettingsExtensions
 {
@@ -16666,6 +16961,7 @@ public static partial class DockerContextImportSettingsExtensions
 #endregion
 #region DockerRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerRm(Fallout.Common.Tools.Docker.DockerRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerRmSettingsExtensions
 {
@@ -16747,6 +17043,7 @@ public static partial class DockerRmSettingsExtensions
 #endregion
 #region DockerDeploySettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerDeploy(Fallout.Common.Tools.Docker.DockerDeploySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerDeploySettingsExtensions
 {
@@ -16843,6 +17140,7 @@ public static partial class DockerDeploySettingsExtensions
 #endregion
 #region DockerNodeRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNodeRm(Fallout.Common.Tools.Docker.DockerNodeRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNodeRmSettingsExtensions
 {
@@ -16890,6 +17188,7 @@ public static partial class DockerNodeRmSettingsExtensions
 #endregion
 #region DockerCheckpointRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerCheckpointRm(Fallout.Common.Tools.Docker.DockerCheckpointRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerCheckpointRmSettingsExtensions
 {
@@ -16921,6 +17220,7 @@ public static partial class DockerCheckpointRmSettingsExtensions
 #endregion
 #region DockerPushSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPush(Fallout.Common.Tools.Docker.DockerPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPushSettingsExtensions
 {
@@ -16970,6 +17270,7 @@ public static partial class DockerPushSettingsExtensions
 #endregion
 #region DockerNetworkCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNetworkCreate(Fallout.Common.Tools.Docker.DockerNetworkCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNetworkCreateSettingsExtensions
 {
@@ -17245,6 +17546,7 @@ public static partial class DockerNetworkCreateSettingsExtensions
 #endregion
 #region DockerVolumeLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerVolumeLs(Fallout.Common.Tools.Docker.DockerVolumeLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerVolumeLsSettingsExtensions
 {
@@ -17285,6 +17587,7 @@ public static partial class DockerVolumeLsSettingsExtensions
 #endregion
 #region DockerTrustInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustInspect(Fallout.Common.Tools.Docker.DockerTrustInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustInspectSettingsExtensions
 {
@@ -17315,6 +17618,7 @@ public static partial class DockerTrustInspectSettingsExtensions
 #endregion
 #region DockerNetworkInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNetworkInspect(Fallout.Common.Tools.Docker.DockerNetworkInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNetworkInspectSettingsExtensions
 {
@@ -17370,6 +17674,7 @@ public static partial class DockerNetworkInspectSettingsExtensions
 #endregion
 #region DockerEngineActivateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerEngineActivate(Fallout.Common.Tools.Docker.DockerEngineActivateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerEngineActivateSettingsExtensions
 {
@@ -17459,6 +17764,7 @@ public static partial class DockerEngineActivateSettingsExtensions
 #endregion
 #region DockerContextUseSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContextUse(Fallout.Common.Tools.Docker.DockerContextUseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextUseSettingsExtensions
 {
@@ -17474,6 +17780,7 @@ public static partial class DockerContextUseSettingsExtensions
 #endregion
 #region DockerVolumeRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerVolumeRm(Fallout.Common.Tools.Docker.DockerVolumeRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerVolumeRmSettingsExtensions
 {
@@ -17521,6 +17828,7 @@ public static partial class DockerVolumeRmSettingsExtensions
 #endregion
 #region DockerManifestCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerManifestCreate(Fallout.Common.Tools.Docker.DockerManifestCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerManifestCreateSettingsExtensions
 {
@@ -17559,6 +17867,7 @@ public static partial class DockerManifestCreateSettingsExtensions
 #endregion
 #region DockerManifestPushSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerManifestPush(Fallout.Common.Tools.Docker.DockerManifestPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerManifestPushSettingsExtensions
 {
@@ -17608,6 +17917,7 @@ public static partial class DockerManifestPushSettingsExtensions
 #endregion
 #region DockerPluginEnableSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginEnable(Fallout.Common.Tools.Docker.DockerPluginEnableSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginEnableSettingsExtensions
 {
@@ -17631,6 +17941,7 @@ public static partial class DockerPluginEnableSettingsExtensions
 #endregion
 #region DockerImportSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImport(Fallout.Common.Tools.Docker.DockerImportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImportSettingsExtensions
 {
@@ -17693,6 +18004,7 @@ public static partial class DockerImportSettingsExtensions
 #endregion
 #region DockerContainerRunSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerRun(Fallout.Common.Tools.Docker.DockerContainerRunSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerRunSettingsExtensions
 {
@@ -19153,6 +19465,7 @@ public static partial class DockerContainerRunSettingsExtensions
 #endregion
 #region DockerNodeInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNodeInspect(Fallout.Common.Tools.Docker.DockerNodeInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNodeInspectSettingsExtensions
 {
@@ -19208,6 +19521,7 @@ public static partial class DockerNodeInspectSettingsExtensions
 #endregion
 #region DockerSaveSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSave(Fallout.Common.Tools.Docker.DockerSaveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSaveSettingsExtensions
 {
@@ -19246,6 +19560,7 @@ public static partial class DockerSaveSettingsExtensions
 #endregion
 #region DockerContainerStatsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerStats(Fallout.Common.Tools.Docker.DockerContainerStatsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerStatsSettingsExtensions
 {
@@ -19335,6 +19650,7 @@ public static partial class DockerContainerStatsSettingsExtensions
 #endregion
 #region DockerContainerExecSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerExec(Fallout.Common.Tools.Docker.DockerContainerExecSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerExecSettingsExtensions
 {
@@ -19496,6 +19812,7 @@ public static partial class DockerContainerExecSettingsExtensions
 #endregion
 #region DockerNodeLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNodeLs(Fallout.Common.Tools.Docker.DockerNodeLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNodeLsSettingsExtensions
 {
@@ -19536,6 +19853,7 @@ public static partial class DockerNodeLsSettingsExtensions
 #endregion
 #region DockerSwarmJoinSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarmJoin(Fallout.Common.Tools.Docker.DockerSwarmJoinSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmJoinSettingsExtensions
 {
@@ -19583,6 +19901,7 @@ public static partial class DockerSwarmJoinSettingsExtensions
 #endregion
 #region DockerContainerLogsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerLogs(Fallout.Common.Tools.Docker.DockerContainerLogsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerLogsSettingsExtensions
 {
@@ -19673,6 +19992,7 @@ public static partial class DockerContainerLogsSettingsExtensions
 #endregion
 #region DockerCheckpointLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerCheckpointLs(Fallout.Common.Tools.Docker.DockerCheckpointLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerCheckpointLsSettingsExtensions
 {
@@ -19696,6 +20016,7 @@ public static partial class DockerCheckpointLsSettingsExtensions
 #endregion
 #region DockerContainerKillSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerKill(Fallout.Common.Tools.Docker.DockerContainerKillSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerKillSettingsExtensions
 {
@@ -19734,6 +20055,7 @@ public static partial class DockerContainerKillSettingsExtensions
 #endregion
 #region DockerPluginInstallSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginInstall(Fallout.Common.Tools.Docker.DockerPluginInstallSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginInstallSettingsExtensions
 {
@@ -19825,6 +20147,7 @@ public static partial class DockerPluginInstallSettingsExtensions
 #endregion
 #region DockerImagePruneSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImagePrune(Fallout.Common.Tools.Docker.DockerImagePruneSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImagePruneSettingsExtensions
 {
@@ -19874,6 +20197,7 @@ public static partial class DockerImagePruneSettingsExtensions
 #endregion
 #region DockerImageImportSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageImport(Fallout.Common.Tools.Docker.DockerImageImportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageImportSettingsExtensions
 {
@@ -19936,6 +20260,7 @@ public static partial class DockerImageImportSettingsExtensions
 #endregion
 #region DockerDiffSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerDiff(Fallout.Common.Tools.Docker.DockerDiffSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerDiffSettingsExtensions
 {
@@ -19951,6 +20276,7 @@ public static partial class DockerDiffSettingsExtensions
 #endregion
 #region DockerUnpauseSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerUnpause(Fallout.Common.Tools.Docker.DockerUnpauseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerUnpauseSettingsExtensions
 {
@@ -19981,6 +20307,7 @@ public static partial class DockerUnpauseSettingsExtensions
 #endregion
 #region DockerContainerLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerLs(Fallout.Common.Tools.Docker.DockerContainerLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerLsSettingsExtensions
 {
@@ -20097,6 +20424,7 @@ public static partial class DockerContainerLsSettingsExtensions
 #endregion
 #region DockerNodePsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNodePs(Fallout.Common.Tools.Docker.DockerNodePsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNodePsSettingsExtensions
 {
@@ -20194,6 +20522,7 @@ public static partial class DockerNodePsSettingsExtensions
 #endregion
 #region DockerContainerTopSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerTop(Fallout.Common.Tools.Docker.DockerContainerTopSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerTopSettingsExtensions
 {
@@ -20217,6 +20546,7 @@ public static partial class DockerContainerTopSettingsExtensions
 #endregion
 #region DockerContainerRenameSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerRename(Fallout.Common.Tools.Docker.DockerContainerRenameSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerRenameSettingsExtensions
 {
@@ -20240,6 +20570,7 @@ public static partial class DockerContainerRenameSettingsExtensions
 #endregion
 #region DockerImageHistorySettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageHistory(Fallout.Common.Tools.Docker.DockerImageHistorySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageHistorySettingsExtensions
 {
@@ -20314,6 +20645,7 @@ public static partial class DockerImageHistorySettingsExtensions
 #endregion
 #region DockerPsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPs(Fallout.Common.Tools.Docker.DockerPsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPsSettingsExtensions
 {
@@ -20430,6 +20762,7 @@ public static partial class DockerPsSettingsExtensions
 #endregion
 #region DockerImageTagSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageTag(Fallout.Common.Tools.Docker.DockerImageTagSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageTagSettingsExtensions
 {
@@ -20453,6 +20786,7 @@ public static partial class DockerImageTagSettingsExtensions
 #endregion
 #region DockerExportSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerExport(Fallout.Common.Tools.Docker.DockerExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerExportSettingsExtensions
 {
@@ -20476,6 +20810,7 @@ public static partial class DockerExportSettingsExtensions
 #endregion
 #region DockerNetworkDisconnectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNetworkDisconnect(Fallout.Common.Tools.Docker.DockerNetworkDisconnectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNetworkDisconnectSettingsExtensions
 {
@@ -20516,6 +20851,7 @@ public static partial class DockerNetworkDisconnectSettingsExtensions
 #endregion
 #region DockerBuilderBuildSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerBuilderBuild(Fallout.Common.Tools.Docker.DockerBuilderBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerBuilderBuildSettingsExtensions
 {
@@ -20982,6 +21318,7 @@ public static partial class DockerBuilderBuildSettingsExtensions
 #endregion
 #region DockerBuildxBuildSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerBuildxBuild(Fallout.Common.Tools.Docker.DockerBuildxBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerBuildxBuildSettingsExtensions
 {
@@ -21468,6 +21805,7 @@ public static partial class DockerBuildxBuildSettingsExtensions
 #endregion
 #region DockerBuildxCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerBuildxCreate(Fallout.Common.Tools.Docker.DockerBuildxCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerBuildxCreateSettingsExtensions
 {
@@ -21607,6 +21945,7 @@ public static partial class DockerBuildxCreateSettingsExtensions
 #endregion
 #region DockerStatsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStats(Fallout.Common.Tools.Docker.DockerStatsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStatsSettingsExtensions
 {
@@ -21696,6 +22035,7 @@ public static partial class DockerStatsSettingsExtensions
 #endregion
 #region DockerSearchSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSearch(Fallout.Common.Tools.Docker.DockerSearchSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSearchSettingsExtensions
 {
@@ -21777,6 +22117,7 @@ public static partial class DockerSearchSettingsExtensions
 #endregion
 #region DockerManifestSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerManifest(Fallout.Common.Tools.Docker.DockerManifestSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerManifestSettingsExtensions
 {
@@ -21792,6 +22133,7 @@ public static partial class DockerManifestSettingsExtensions
 #endregion
 #region DockerPluginPushSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginPush(Fallout.Common.Tools.Docker.DockerPluginPushSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginPushSettingsExtensions
 {
@@ -21824,6 +22166,7 @@ public static partial class DockerPluginPushSettingsExtensions
 #endregion
 #region DockerImageLoadSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageLoad(Fallout.Common.Tools.Docker.DockerImageLoadSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageLoadSettingsExtensions
 {
@@ -21856,6 +22199,7 @@ public static partial class DockerImageLoadSettingsExtensions
 #endregion
 #region DockerSwarmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSwarm(Fallout.Common.Tools.Docker.DockerSwarmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSwarmSettingsExtensions
 {
@@ -21863,6 +22207,7 @@ public static partial class DockerSwarmSettingsExtensions
 #endregion
 #region DockerContainerRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerRm(Fallout.Common.Tools.Docker.DockerContainerRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerRmSettingsExtensions
 {
@@ -21944,6 +22289,7 @@ public static partial class DockerContainerRmSettingsExtensions
 #endregion
 #region DockerContainerUpdateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerUpdate(Fallout.Common.Tools.Docker.DockerContainerUpdateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerUpdateSettingsExtensions
 {
@@ -22094,6 +22440,7 @@ public static partial class DockerContainerUpdateSettingsExtensions
 #endregion
 #region DockerPluginSetSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginSet(Fallout.Common.Tools.Docker.DockerPluginSetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginSetSettingsExtensions
 {
@@ -22126,6 +22473,7 @@ public static partial class DockerPluginSetSettingsExtensions
 #endregion
 #region DockerWaitSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerWait(Fallout.Common.Tools.Docker.DockerWaitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerWaitSettingsExtensions
 {
@@ -22156,6 +22504,7 @@ public static partial class DockerWaitSettingsExtensions
 #endregion
 #region DockerContextExportSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContextExport(Fallout.Common.Tools.Docker.DockerContextExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextExportSettingsExtensions
 {
@@ -22196,6 +22545,7 @@ public static partial class DockerContextExportSettingsExtensions
 #endregion
 #region DockerManifestAnnotateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerManifestAnnotate(Fallout.Common.Tools.Docker.DockerManifestAnnotateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerManifestAnnotateSettingsExtensions
 {
@@ -22266,6 +22616,7 @@ public static partial class DockerManifestAnnotateSettingsExtensions
 #endregion
 #region DockerImagePullSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImagePull(Fallout.Common.Tools.Docker.DockerImagePullSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImagePullSettingsExtensions
 {
@@ -22340,6 +22691,7 @@ public static partial class DockerImagePullSettingsExtensions
 #endregion
 #region DockerEventsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerEvents(Fallout.Common.Tools.Docker.DockerEventsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerEventsSettingsExtensions
 {
@@ -22379,6 +22731,7 @@ public static partial class DockerEventsSettingsExtensions
 #endregion
 #region DockerStackLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStackLs(Fallout.Common.Tools.Docker.DockerStackLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStackLsSettingsExtensions
 {
@@ -22434,6 +22787,7 @@ public static partial class DockerStackLsSettingsExtensions
 #endregion
 #region DockerContainerInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerInspect(Fallout.Common.Tools.Docker.DockerContainerInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerInspectSettingsExtensions
 {
@@ -22489,6 +22843,7 @@ public static partial class DockerContainerInspectSettingsExtensions
 #endregion
 #region DockerKillSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerKill(Fallout.Common.Tools.Docker.DockerKillSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerKillSettingsExtensions
 {
@@ -22527,6 +22882,7 @@ public static partial class DockerKillSettingsExtensions
 #endregion
 #region DockerCheckpointCreateSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerCheckpointCreate(Fallout.Common.Tools.Docker.DockerCheckpointCreateSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerCheckpointCreateSettingsExtensions
 {
@@ -22575,6 +22931,7 @@ public static partial class DockerCheckpointCreateSettingsExtensions
 #endregion
 #region DockerPauseSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPause(Fallout.Common.Tools.Docker.DockerPauseSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPauseSettingsExtensions
 {
@@ -22605,6 +22962,7 @@ public static partial class DockerPauseSettingsExtensions
 #endregion
 #region DockerLogsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerLogs(Fallout.Common.Tools.Docker.DockerLogsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerLogsSettingsExtensions
 {
@@ -22695,6 +23053,7 @@ public static partial class DockerLogsSettingsExtensions
 #endregion
 #region DockerContextInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContextInspect(Fallout.Common.Tools.Docker.DockerContextInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextInspectSettingsExtensions
 {
@@ -22741,6 +23100,7 @@ public static partial class DockerContextInspectSettingsExtensions
 #endregion
 #region DockerNodePromoteSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNodePromote(Fallout.Common.Tools.Docker.DockerNodePromoteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNodePromoteSettingsExtensions
 {
@@ -22771,6 +23131,7 @@ public static partial class DockerNodePromoteSettingsExtensions
 #endregion
 #region DockerNodeDemoteSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNodeDemote(Fallout.Common.Tools.Docker.DockerNodeDemoteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNodeDemoteSettingsExtensions
 {
@@ -22801,6 +23162,7 @@ public static partial class DockerNodeDemoteSettingsExtensions
 #endregion
 #region DockerExecSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerExec(Fallout.Common.Tools.Docker.DockerExecSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerExecSettingsExtensions
 {
@@ -22962,6 +23324,7 @@ public static partial class DockerExecSettingsExtensions
 #endregion
 #region DockerImageRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageRm(Fallout.Common.Tools.Docker.DockerImageRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageRmSettingsExtensions
 {
@@ -23026,6 +23389,7 @@ public static partial class DockerImageRmSettingsExtensions
 #endregion
 #region DockerImageSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImage(Fallout.Common.Tools.Docker.DockerImageSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageSettingsExtensions
 {
@@ -23033,6 +23397,7 @@ public static partial class DockerImageSettingsExtensions
 #endregion
 #region DockerContextSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContext(Fallout.Common.Tools.Docker.DockerContextSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContextSettingsExtensions
 {
@@ -23040,6 +23405,7 @@ public static partial class DockerContextSettingsExtensions
 #endregion
 #region DockerVolumeSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerVolume(Fallout.Common.Tools.Docker.DockerVolumeSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerVolumeSettingsExtensions
 {
@@ -23055,6 +23421,7 @@ public static partial class DockerVolumeSettingsExtensions
 #endregion
 #region DockerContainerStartSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerContainerStart(Fallout.Common.Tools.Docker.DockerContainerStartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerContainerStartSettingsExtensions
 {
@@ -23143,6 +23510,7 @@ public static partial class DockerContainerStartSettingsExtensions
 #endregion
 #region DockerPluginInspectSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerPluginInspect(Fallout.Common.Tools.Docker.DockerPluginInspectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerPluginInspectSettingsExtensions
 {
@@ -23181,6 +23549,7 @@ public static partial class DockerPluginInspectSettingsExtensions
 #endregion
 #region DockerLogoutSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerLogout(Fallout.Common.Tools.Docker.DockerLogoutSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerLogoutSettingsExtensions
 {
@@ -23196,6 +23565,7 @@ public static partial class DockerLogoutSettingsExtensions
 #endregion
 #region DockerNetworkSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerNetwork(Fallout.Common.Tools.Docker.DockerNetworkSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerNetworkSettingsExtensions
 {
@@ -23203,6 +23573,7 @@ public static partial class DockerNetworkSettingsExtensions
 #endregion
 #region DockerImageLsSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerImageLs(Fallout.Common.Tools.Docker.DockerImageLsSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerImageLsSettingsExtensions
 {
@@ -23302,6 +23673,7 @@ public static partial class DockerImageLsSettingsExtensions
 #endregion
 #region DockerSystemDfSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerSystemDf(Fallout.Common.Tools.Docker.DockerSystemDfSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerSystemDfSettingsExtensions
 {
@@ -23334,6 +23706,7 @@ public static partial class DockerSystemDfSettingsExtensions
 #endregion
 #region DockerServiceRollbackSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerServiceRollback(Fallout.Common.Tools.Docker.DockerServiceRollbackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerServiceRollbackSettingsExtensions
 {
@@ -23383,6 +23756,7 @@ public static partial class DockerServiceRollbackSettingsExtensions
 #endregion
 #region DockerRestartSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerRestart(Fallout.Common.Tools.Docker.DockerRestartSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerRestartSettingsExtensions
 {
@@ -23421,6 +23795,7 @@ public static partial class DockerRestartSettingsExtensions
 #endregion
 #region DockerTrustSignerRemoveSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerTrustSignerRemove(Fallout.Common.Tools.Docker.DockerTrustSignerRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerTrustSignerRemoveSettingsExtensions
 {
@@ -23476,6 +23851,7 @@ public static partial class DockerTrustSignerRemoveSettingsExtensions
 #endregion
 #region DockerStackRmSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerStackRm(Fallout.Common.Tools.Docker.DockerStackRmSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerStackRmSettingsExtensions
 {
@@ -23514,6 +23890,7 @@ public static partial class DockerStackRmSettingsExtensions
 #endregion
 #region DockerBuildSettingsExtensions
 /// <inheritdoc cref="DockerTasks.DockerBuild(Fallout.Common.Tools.Docker.DockerBuildSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerBuildSettingsExtensions
 {
@@ -23980,6 +24357,7 @@ public static partial class DockerBuildSettingsExtensions
 #endregion
 #region DockerOptionsBaseExtensions
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerOptionsBaseExtensions
 {
@@ -24078,6 +24456,7 @@ public static partial class DockerOptionsBaseExtensions
 #endregion
 #region DockerRunTargetSettingsExtensions
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class DockerRunTargetSettingsExtensions
 {
@@ -24169,6 +24548,7 @@ public static partial class DockerRunTargetSettingsExtensions
 #region DockerLogLevel
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerLogLevel>))]
 public partial class DockerLogLevel : Enumeration
@@ -24187,6 +24567,7 @@ public partial class DockerLogLevel : Enumeration
 #region DockerRestartCondition
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerRestartCondition>))]
 public partial class DockerRestartCondition : Enumeration
@@ -24203,6 +24584,7 @@ public partial class DockerRestartCondition : Enumeration
 #region DockerRollbackFailureAction
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerRollbackFailureAction>))]
 public partial class DockerRollbackFailureAction : Enumeration
@@ -24218,6 +24600,7 @@ public partial class DockerRollbackFailureAction : Enumeration
 #region DockerRollbackOrder
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerRollbackOrder>))]
 public partial class DockerRollbackOrder : Enumeration
@@ -24233,6 +24616,7 @@ public partial class DockerRollbackOrder : Enumeration
 #region DockerUpdateFailureAction
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerUpdateFailureAction>))]
 public partial class DockerUpdateFailureAction : Enumeration
@@ -24249,6 +24633,7 @@ public partial class DockerUpdateFailureAction : Enumeration
 #region DockerUpdateOrder
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerUpdateOrder>))]
 public partial class DockerUpdateOrder : Enumeration
@@ -24264,6 +24649,7 @@ public partial class DockerUpdateOrder : Enumeration
 #region DockerAvailability
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerAvailability>))]
 public partial class DockerAvailability : Enumeration
@@ -24280,6 +24666,7 @@ public partial class DockerAvailability : Enumeration
 #region DockerRole
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerRole>))]
 public partial class DockerRole : Enumeration
@@ -24295,6 +24682,7 @@ public partial class DockerRole : Enumeration
 #region DockerResolveImage
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerResolveImage>))]
 public partial class DockerResolveImage : Enumeration
@@ -24311,6 +24699,7 @@ public partial class DockerResolveImage : Enumeration
 #region DockerProgressType
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerProgressType>))]
 public partial class DockerProgressType : Enumeration
@@ -24327,6 +24716,7 @@ public partial class DockerProgressType : Enumeration
 #region DockerDriverType
 /// <summary>Used within <see cref="DockerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<DockerDriverType>))]
 public partial class DockerDriverType : Enumeration

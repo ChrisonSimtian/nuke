@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.MinVer;
 
 /// <summary><p>Minimalistic versioning using Git tags.</p><p>For more details, visit the <a href="https://github.com/adamralph/minver">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class MinVerTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class MinVerTasks : ToolTasks, IRequireNuGetPackage
 }
 #region MinVerSettings
 /// <inheritdoc cref="MinVerTasks.MinVer(Fallout.Common.Tools.MinVer.MinVerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(MinVerTasks), Command = nameof(MinVerTasks.MinVer))]
 public partial class MinVerSettings : ToolOptions, IToolOptionsWithFramework
@@ -56,6 +58,7 @@ public partial class MinVerSettings : ToolOptions, IToolOptionsWithFramework
 #endregion
 #region MinVerSettingsExtensions
 /// <inheritdoc cref="MinVerTasks.MinVer(Fallout.Common.Tools.MinVer.MinVerSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class MinVerSettingsExtensions
 {
@@ -112,6 +115,7 @@ public static partial class MinVerSettingsExtensions
 #region MinVerVerbosity
 /// <summary>Used within <see cref="MinVerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<MinVerVerbosity>))]
 public partial class MinVerVerbosity : Enumeration
@@ -130,6 +134,7 @@ public partial class MinVerVerbosity : Enumeration
 #region MinVerVersionPart
 /// <summary>Used within <see cref="MinVerTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<MinVerVersionPart>))]
 public partial class MinVerVersionPart : Enumeration

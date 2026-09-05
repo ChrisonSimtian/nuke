@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.NUnit;
 
 /// <summary><p>NUnit is a unit-testing framework for all .Net languages. Initially ported from <a href="http://www.junit.org/">JUnit</a>, the current production release, version 3.0, has been completely rewritten with many new features and support for a wide range of .NET platforms.</p><p>For more details, visit the <a href="https://www.nunit.org/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class NUnitTasks : ToolTasks, IRequireNuGetPackage
@@ -36,6 +37,7 @@ public partial class NUnitTasks : ToolTasks, IRequireNuGetPackage
 }
 #region NUnit3Settings
 /// <inheritdoc cref="NUnitTasks.NUnit3(Fallout.Common.Tools.NUnit.NUnit3Settings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(NUnitTasks), Command = nameof(NUnitTasks.NUnit3))]
 public partial class NUnit3Settings : ToolOptions
@@ -120,6 +122,7 @@ public partial class NUnit3Settings : ToolOptions
 #endregion
 #region NUnit3SettingsExtensions
 /// <inheritdoc cref="NUnitTasks.NUnit3(Fallout.Common.Tools.NUnit.NUnit3Settings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class NUnit3SettingsExtensions
 {
@@ -645,6 +648,7 @@ public static partial class NUnit3SettingsExtensions
 #region NUnitProcessType
 /// <summary>Used within <see cref="NUnitTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NUnitProcessType>))]
 public partial class NUnitProcessType : Enumeration
@@ -661,6 +665,7 @@ public partial class NUnitProcessType : Enumeration
 #region NUnitPrincipalPolicy
 /// <summary>Used within <see cref="NUnitTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NUnitPrincipalPolicy>))]
 public partial class NUnitPrincipalPolicy : Enumeration
@@ -677,6 +682,7 @@ public partial class NUnitPrincipalPolicy : Enumeration
 #region NUnitLabelType
 /// <summary>Used within <see cref="NUnitTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NUnitLabelType>))]
 public partial class NUnitLabelType : Enumeration
@@ -697,6 +703,7 @@ public partial class NUnitLabelType : Enumeration
 #region NUnitTraceLevel
 /// <summary>Used within <see cref="NUnitTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<NUnitTraceLevel>))]
 public partial class NUnitTraceLevel : Enumeration

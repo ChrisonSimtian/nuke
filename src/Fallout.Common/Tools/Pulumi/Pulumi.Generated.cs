@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.Pulumi;
 
 /// <summary><p>Pulumi is an <a href="https://github.com/pulumi/pulumi">open source</a> infrastructure as code tool for creating, deploying and managing cloud infrastructure. Pulumi works with traditional infrastructure like VMs, networks, and databases, in addition to modern architectures, including containers, Kubernetes clusters, and serverless functions. Pulumi supports dozens of public, private, and hybrid cloud service providers.</p><p>For more details, visit the <a href="https://www.pulumi.com/">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [PathTool(Executable = PathExecutable)]
 public partial class PulumiTasks : ToolTasks, IRequirePathTool
@@ -210,6 +211,7 @@ public partial class PulumiTasks : ToolTasks, IRequirePathTool
 }
 #region PulumiUpSettings
 /// <inheritdoc cref="PulumiTasks.PulumiUp(Fallout.Common.Tools.Pulumi.PulumiUpSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiUp), Arguments = "up")]
 public partial class PulumiUpSettings : ToolOptions
@@ -288,6 +290,7 @@ public partial class PulumiUpSettings : ToolOptions
 #endregion
 #region PulumiPreviewSettings
 /// <inheritdoc cref="PulumiTasks.PulumiPreview(Fallout.Common.Tools.Pulumi.PulumiPreviewSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiPreview), Arguments = "preview")]
 public partial class PulumiPreviewSettings : ToolOptions
@@ -362,6 +365,7 @@ public partial class PulumiPreviewSettings : ToolOptions
 #endregion
 #region PulumiConfigSettings
 /// <inheritdoc cref="PulumiTasks.PulumiConfig(Fallout.Common.Tools.Pulumi.PulumiConfigSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiConfig), Arguments = "config")]
 public partial class PulumiConfigSettings : ToolOptions
@@ -398,6 +402,7 @@ public partial class PulumiConfigSettings : ToolOptions
 #endregion
 #region PulumiConfigCopySettings
 /// <inheritdoc cref="PulumiTasks.PulumiConfigCopy(Fallout.Common.Tools.Pulumi.PulumiConfigCopySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiConfigCopy), Arguments = "config cp")]
 public partial class PulumiConfigCopySettings : ToolOptions
@@ -430,6 +435,7 @@ public partial class PulumiConfigCopySettings : ToolOptions
 #endregion
 #region PulumiConfigGetSettings
 /// <inheritdoc cref="PulumiTasks.PulumiConfigGet(Fallout.Common.Tools.Pulumi.PulumiConfigGetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiConfigGet), Arguments = "config get")]
 public partial class PulumiConfigGetSettings : ToolOptions
@@ -464,6 +470,7 @@ public partial class PulumiConfigGetSettings : ToolOptions
 #endregion
 #region PulumiConfigRefreshSettings
 /// <inheritdoc cref="PulumiTasks.PulumiConfigRefresh(Fallout.Common.Tools.Pulumi.PulumiConfigRefreshSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiConfigRefresh), Arguments = "config refresh")]
 public partial class PulumiConfigRefreshSettings : ToolOptions
@@ -494,6 +501,7 @@ public partial class PulumiConfigRefreshSettings : ToolOptions
 #endregion
 #region PulumiConfigRemoveSettings
 /// <inheritdoc cref="PulumiTasks.PulumiConfigRemove(Fallout.Common.Tools.Pulumi.PulumiConfigRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiConfigRemove), Arguments = "config rm")]
 public partial class PulumiConfigRemoveSettings : ToolOptions
@@ -526,6 +534,7 @@ public partial class PulumiConfigRemoveSettings : ToolOptions
 #endregion
 #region PulumiConfigSetSettings
 /// <inheritdoc cref="PulumiTasks.PulumiConfigSet(Fallout.Common.Tools.Pulumi.PulumiConfigSetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiConfigSet), Arguments = "config set")]
 public partial class PulumiConfigSetSettings : ToolOptions
@@ -564,6 +573,7 @@ public partial class PulumiConfigSetSettings : ToolOptions
 #endregion
 #region PulumiStackSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStack(Fallout.Common.Tools.Pulumi.PulumiStackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStack), Arguments = "stack")]
 public partial class PulumiStackSettings : ToolOptions
@@ -602,6 +612,7 @@ public partial class PulumiStackSettings : ToolOptions
 #endregion
 #region PulumiStackChangeSecretsProviderSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackChangeSecretsProvider(Fallout.Common.Tools.Pulumi.PulumiStackChangeSecretsProviderSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackChangeSecretsProvider), Arguments = "stack change-secrets-provider")]
 public partial class PulumiStackChangeSecretsProviderSettings : ToolOptions
@@ -632,6 +643,7 @@ public partial class PulumiStackChangeSecretsProviderSettings : ToolOptions
 #endregion
 #region PulumiStackExportSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackExport(Fallout.Common.Tools.Pulumi.PulumiStackExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackExport), Arguments = "stack export")]
 public partial class PulumiStackExportSettings : ToolOptions
@@ -666,6 +678,7 @@ public partial class PulumiStackExportSettings : ToolOptions
 #endregion
 #region PulumiStackGraphSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackGraph(Fallout.Common.Tools.Pulumi.PulumiStackGraphSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackGraph), Arguments = "stack graph")]
 public partial class PulumiStackGraphSettings : ToolOptions
@@ -704,6 +717,7 @@ public partial class PulumiStackGraphSettings : ToolOptions
 #endregion
 #region PulumiStackHistorySettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackHistory(Fallout.Common.Tools.Pulumi.PulumiStackHistorySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackHistory), Arguments = "stack history")]
 public partial class PulumiStackHistorySettings : ToolOptions
@@ -736,6 +750,7 @@ public partial class PulumiStackHistorySettings : ToolOptions
 #endregion
 #region PulumiStackImportSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackImport(Fallout.Common.Tools.Pulumi.PulumiStackImportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackImport), Arguments = "stack import")]
 public partial class PulumiStackImportSettings : ToolOptions
@@ -768,6 +783,7 @@ public partial class PulumiStackImportSettings : ToolOptions
 #endregion
 #region PulumiStackInitSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackInit(Fallout.Common.Tools.Pulumi.PulumiStackInitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackInit), Arguments = "stack init")]
 public partial class PulumiStackInitSettings : ToolOptions
@@ -802,6 +818,7 @@ public partial class PulumiStackInitSettings : ToolOptions
 #endregion
 #region PulumiStackListSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackList(Fallout.Common.Tools.Pulumi.PulumiStackListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackList), Arguments = "stack ls")]
 public partial class PulumiStackListSettings : ToolOptions
@@ -840,6 +857,7 @@ public partial class PulumiStackListSettings : ToolOptions
 #endregion
 #region PulumiStackOutputSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackOutput(Fallout.Common.Tools.Pulumi.PulumiStackOutputSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackOutput), Arguments = "stack output")]
 public partial class PulumiStackOutputSettings : ToolOptions
@@ -874,6 +892,7 @@ public partial class PulumiStackOutputSettings : ToolOptions
 #endregion
 #region PulumiStackRenameSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackRename(Fallout.Common.Tools.Pulumi.PulumiStackRenameSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackRename), Arguments = "stack rename")]
 public partial class PulumiStackRenameSettings : ToolOptions
@@ -904,6 +923,7 @@ public partial class PulumiStackRenameSettings : ToolOptions
 #endregion
 #region PulumiStackRemoveSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackRemove(Fallout.Common.Tools.Pulumi.PulumiStackRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackRemove), Arguments = "stack rm")]
 public partial class PulumiStackRemoveSettings : ToolOptions
@@ -940,6 +960,7 @@ public partial class PulumiStackRemoveSettings : ToolOptions
 #endregion
 #region PulumiStackSelectSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackSelect(Fallout.Common.Tools.Pulumi.PulumiStackSelectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackSelect), Arguments = "stack select")]
 public partial class PulumiStackSelectSettings : ToolOptions
@@ -974,6 +995,7 @@ public partial class PulumiStackSelectSettings : ToolOptions
 #endregion
 #region PulumiStackTagSetSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackTagSet(Fallout.Common.Tools.Pulumi.PulumiStackTagSetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackTagSet), Arguments = "stack tag set")]
 public partial class PulumiStackTagSetSettings : ToolOptions
@@ -1006,6 +1028,7 @@ public partial class PulumiStackTagSetSettings : ToolOptions
 #endregion
 #region PulumiStackTagGetSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackTagGet(Fallout.Common.Tools.Pulumi.PulumiStackTagGetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackTagGet), Arguments = "stack tag get")]
 public partial class PulumiStackTagGetSettings : ToolOptions
@@ -1036,6 +1059,7 @@ public partial class PulumiStackTagGetSettings : ToolOptions
 #endregion
 #region PulumiStackTagRemoveSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackTagRemove(Fallout.Common.Tools.Pulumi.PulumiStackTagRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackTagRemove), Arguments = "stack tag rm")]
 public partial class PulumiStackTagRemoveSettings : ToolOptions
@@ -1066,6 +1090,7 @@ public partial class PulumiStackTagRemoveSettings : ToolOptions
 #endregion
 #region PulumiStackTagListSettings
 /// <inheritdoc cref="PulumiTasks.PulumiStackTagList(Fallout.Common.Tools.Pulumi.PulumiStackTagListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiStackTagList), Arguments = "stack tag ls")]
 public partial class PulumiStackTagListSettings : ToolOptions
@@ -1096,6 +1121,7 @@ public partial class PulumiStackTagListSettings : ToolOptions
 #endregion
 #region PulumiNewSettings
 /// <inheritdoc cref="PulumiTasks.PulumiNew(Fallout.Common.Tools.Pulumi.PulumiNewSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiNew), Arguments = "new")]
 public partial class PulumiNewSettings : ToolOptions
@@ -1148,6 +1174,7 @@ public partial class PulumiNewSettings : ToolOptions
 #endregion
 #region PulumiDestroySettings
 /// <inheritdoc cref="PulumiTasks.PulumiDestroy(Fallout.Common.Tools.Pulumi.PulumiDestroySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(PulumiTasks), Command = nameof(PulumiTasks.PulumiDestroy), Arguments = "destroy")]
 public partial class PulumiDestroySettings : ToolOptions
@@ -1208,6 +1235,7 @@ public partial class PulumiDestroySettings : ToolOptions
 #endregion
 #region PulumiUpSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiUp(Fallout.Common.Tools.Pulumi.PulumiUpSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiUpSettingsExtensions
 {
@@ -1756,6 +1784,7 @@ public static partial class PulumiUpSettingsExtensions
 #endregion
 #region PulumiPreviewSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiPreview(Fallout.Common.Tools.Pulumi.PulumiPreviewSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiPreviewSettingsExtensions
 {
@@ -2279,6 +2308,7 @@ public static partial class PulumiPreviewSettingsExtensions
 #endregion
 #region PulumiConfigSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiConfig(Fallout.Common.Tools.Pulumi.PulumiConfigSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiConfigSettingsExtensions
 {
@@ -2461,6 +2491,7 @@ public static partial class PulumiConfigSettingsExtensions
 #endregion
 #region PulumiConfigCopySettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiConfigCopy(Fallout.Common.Tools.Pulumi.PulumiConfigCopySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiConfigCopySettingsExtensions
 {
@@ -2609,6 +2640,7 @@ public static partial class PulumiConfigCopySettingsExtensions
 #endregion
 #region PulumiConfigGetSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiConfigGet(Fallout.Common.Tools.Pulumi.PulumiConfigGetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiConfigGetSettingsExtensions
 {
@@ -2774,6 +2806,7 @@ public static partial class PulumiConfigGetSettingsExtensions
 #endregion
 #region PulumiConfigRefreshSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiConfigRefresh(Fallout.Common.Tools.Pulumi.PulumiConfigRefreshSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiConfigRefreshSettingsExtensions
 {
@@ -2923,6 +2956,7 @@ public static partial class PulumiConfigRefreshSettingsExtensions
 #endregion
 #region PulumiConfigRemoveSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiConfigRemove(Fallout.Common.Tools.Pulumi.PulumiConfigRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiConfigRemoveSettingsExtensions
 {
@@ -3071,6 +3105,7 @@ public static partial class PulumiConfigRemoveSettingsExtensions
 #endregion
 #region PulumiConfigSetSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiConfigSet(Fallout.Common.Tools.Pulumi.PulumiConfigSetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiConfigSetSettingsExtensions
 {
@@ -3261,6 +3296,7 @@ public static partial class PulumiConfigSetSettingsExtensions
 #endregion
 #region PulumiStackSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStack(Fallout.Common.Tools.Pulumi.PulumiStackSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackSettingsExtensions
 {
@@ -3469,6 +3505,7 @@ public static partial class PulumiStackSettingsExtensions
 #endregion
 #region PulumiStackChangeSecretsProviderSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackChangeSecretsProvider(Fallout.Common.Tools.Pulumi.PulumiStackChangeSecretsProviderSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackChangeSecretsProviderSettingsExtensions
 {
@@ -3609,6 +3646,7 @@ public static partial class PulumiStackChangeSecretsProviderSettingsExtensions
 #endregion
 #region PulumiStackExportSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackExport(Fallout.Common.Tools.Pulumi.PulumiStackExportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackExportSettingsExtensions
 {
@@ -3774,6 +3812,7 @@ public static partial class PulumiStackExportSettingsExtensions
 #endregion
 #region PulumiStackGraphSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackGraph(Fallout.Common.Tools.Pulumi.PulumiStackGraphSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackGraphSettingsExtensions
 {
@@ -3964,6 +4003,7 @@ public static partial class PulumiStackGraphSettingsExtensions
 #endregion
 #region PulumiStackHistorySettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackHistory(Fallout.Common.Tools.Pulumi.PulumiStackHistorySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackHistorySettingsExtensions
 {
@@ -4130,6 +4170,7 @@ public static partial class PulumiStackHistorySettingsExtensions
 #endregion
 #region PulumiStackImportSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackImport(Fallout.Common.Tools.Pulumi.PulumiStackImportSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackImportSettingsExtensions
 {
@@ -4287,6 +4328,7 @@ public static partial class PulumiStackImportSettingsExtensions
 #endregion
 #region PulumiStackInitSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackInit(Fallout.Common.Tools.Pulumi.PulumiStackInitSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackInitSettingsExtensions
 {
@@ -4443,6 +4485,7 @@ public static partial class PulumiStackInitSettingsExtensions
 #endregion
 #region PulumiStackListSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackList(Fallout.Common.Tools.Pulumi.PulumiStackListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackListSettingsExtensions
 {
@@ -4633,6 +4676,7 @@ public static partial class PulumiStackListSettingsExtensions
 #endregion
 #region PulumiStackOutputSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackOutput(Fallout.Common.Tools.Pulumi.PulumiStackOutputSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackOutputSettingsExtensions
 {
@@ -4807,6 +4851,7 @@ public static partial class PulumiStackOutputSettingsExtensions
 #endregion
 #region PulumiStackRenameSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackRename(Fallout.Common.Tools.Pulumi.PulumiStackRenameSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackRenameSettingsExtensions
 {
@@ -4947,6 +4992,7 @@ public static partial class PulumiStackRenameSettingsExtensions
 #endregion
 #region PulumiStackRemoveSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackRemove(Fallout.Common.Tools.Pulumi.PulumiStackRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackRemoveSettingsExtensions
 {
@@ -5138,6 +5184,7 @@ public static partial class PulumiStackRemoveSettingsExtensions
 #endregion
 #region PulumiStackSelectSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackSelect(Fallout.Common.Tools.Pulumi.PulumiStackSelectSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackSelectSettingsExtensions
 {
@@ -5303,6 +5350,7 @@ public static partial class PulumiStackSelectSettingsExtensions
 #endregion
 #region PulumiStackTagSetSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackTagSet(Fallout.Common.Tools.Pulumi.PulumiStackTagSetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackTagSetSettingsExtensions
 {
@@ -5451,6 +5499,7 @@ public static partial class PulumiStackTagSetSettingsExtensions
 #endregion
 #region PulumiStackTagGetSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackTagGet(Fallout.Common.Tools.Pulumi.PulumiStackTagGetSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackTagGetSettingsExtensions
 {
@@ -5591,6 +5640,7 @@ public static partial class PulumiStackTagGetSettingsExtensions
 #endregion
 #region PulumiStackTagRemoveSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackTagRemove(Fallout.Common.Tools.Pulumi.PulumiStackTagRemoveSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackTagRemoveSettingsExtensions
 {
@@ -5731,6 +5781,7 @@ public static partial class PulumiStackTagRemoveSettingsExtensions
 #endregion
 #region PulumiStackTagListSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiStackTagList(Fallout.Common.Tools.Pulumi.PulumiStackTagListSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiStackTagListSettingsExtensions
 {
@@ -5880,6 +5931,7 @@ public static partial class PulumiStackTagListSettingsExtensions
 #endregion
 #region PulumiNewSettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiNew(Fallout.Common.Tools.Pulumi.PulumiNewSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiNewSettingsExtensions
 {
@@ -6168,6 +6220,7 @@ public static partial class PulumiNewSettingsExtensions
 #endregion
 #region PulumiDestroySettingsExtensions
 /// <inheritdoc cref="PulumiTasks.PulumiDestroy(Fallout.Common.Tools.Pulumi.PulumiDestroySettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class PulumiDestroySettingsExtensions
 {
@@ -6543,6 +6596,7 @@ public static partial class PulumiDestroySettingsExtensions
 #region PulumiSecretsProvider
 /// <summary>Used within <see cref="PulumiTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<PulumiSecretsProvider>))]
 public partial class PulumiSecretsProvider : Enumeration

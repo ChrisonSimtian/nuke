@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 namespace Fallout.Common.Tools.OctoVersion;
 
 /// <summary><p>For more details, visit the <a href="https://github.com/OctopusDeploy/OctoVersion">official website</a>.</p></summary>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class OctoVersionTasks : ToolTasks, IRequireNuGetPackage
@@ -43,6 +44,7 @@ public partial class OctoVersionTasks : ToolTasks, IRequireNuGetPackage
 }
 #region OctoVersionGetVersionSettings
 /// <inheritdoc cref="OctoVersionTasks.OctoVersionGetVersion(Fallout.Common.Tools.OctoVersion.OctoVersionGetVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(OctoVersionTasks), Command = nameof(OctoVersionTasks.OctoVersionGetVersion), Arguments = "octoversion")]
 public partial class OctoVersionGetVersionSettings : ToolOptions, IToolOptionsWithFramework
@@ -75,6 +77,7 @@ public partial class OctoVersionGetVersionSettings : ToolOptions, IToolOptionsWi
 #endregion
 #region OctoVersionExecuteSettings
 /// <inheritdoc cref="OctoVersionTasks.OctoVersionExecute(Fallout.Common.Tools.OctoVersion.OctoVersionExecuteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(OctoVersionTasks), Command = nameof(OctoVersionTasks.OctoVersionExecute), Arguments = "octoversion")]
 public partial class OctoVersionExecuteSettings : ToolOptions, IToolOptionsWithFramework
@@ -107,6 +110,7 @@ public partial class OctoVersionExecuteSettings : ToolOptions, IToolOptionsWithF
 #endregion
 #region OctoVersionGetVersionSettingsExtensions
 /// <inheritdoc cref="OctoVersionTasks.OctoVersionGetVersion(Fallout.Common.Tools.OctoVersion.OctoVersionGetVersionSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class OctoVersionGetVersionSettingsExtensions
 {
@@ -249,6 +253,7 @@ public static partial class OctoVersionGetVersionSettingsExtensions
 #endregion
 #region OctoVersionExecuteSettingsExtensions
 /// <inheritdoc cref="OctoVersionTasks.OctoVersionExecute(Fallout.Common.Tools.OctoVersion.OctoVersionExecuteSettings)"/>
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 public static partial class OctoVersionExecuteSettingsExtensions
 {
@@ -392,6 +397,7 @@ public static partial class OctoVersionExecuteSettingsExtensions
 #region OctoVersionOutputFormatter
 /// <summary>Used within <see cref="OctoVersionTasks"/>.</summary>
 [Serializable]
+[System.CodeDom.Compiler.GeneratedCode("Fallout.Tooling.Generator", "1.0.0")]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<OctoVersionOutputFormatter>))]
 public partial class OctoVersionOutputFormatter : Enumeration

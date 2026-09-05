@@ -1,0 +1,26 @@
+﻿namespace Fallout.Solutions
+{
+    public static class ProjectExtensions
+    {
+        public static System.Collections.Generic.IEnumerable<string> GetItemMetadata(this Fallout.Solutions.Project project, string itemGroupName, string metadataName) { }
+        public static System.Collections.Generic.IEnumerable<T> GetItemMetadata<T>(this Fallout.Solutions.Project project, string itemGroupName, string metadataName) { }
+        public static string GetItemMetadataSingleOrDefault(this Fallout.Solutions.Project project, string itemGroupName, string includeName, string metadataName) { }
+        public static T GetItemMetadataSingleOrDefault<T>(this Fallout.Solutions.Project project, string itemGroupName, string includeName, string metadataName) { }
+        public static System.Collections.Generic.IEnumerable<string> GetItems(this Fallout.Solutions.Project project, string itemGroupName) { }
+        public static System.Collections.Generic.IEnumerable<T> GetItems<T>(this Fallout.Solutions.Project project, string itemGroupName) { }
+        public static Microsoft.Build.Evaluation.Project GetMSBuildProject(this Fallout.Solutions.Project project, string configuration = null, string targetFramework = null) { }
+        public static string GetOutputType(this Fallout.Solutions.Project project) { }
+        public static string GetPackageReferenceVersion(this Fallout.Solutions.Project project, string packageId) { }
+        public static string GetProperty(this Fallout.Solutions.Project project, string propertyName) { }
+        public static T GetProperty<T>(this Fallout.Solutions.Project project, string propertyName) { }
+        public static System.Collections.Generic.IReadOnlyCollection<string> GetRuntimeIdentifiers(this Fallout.Solutions.Project project) { }
+        public static System.Collections.Generic.IReadOnlyCollection<string> GetTargetFrameworks(this Fallout.Solutions.Project project) { }
+        public static bool HasPackageReference(this Fallout.Solutions.Project project, string packageId) { }
+    }
+    public static class ProjectModelTasks
+    {
+        [System.Runtime.CompilerServices.ModuleInitializer]
+        public static void Initialize() { }
+        public static Microsoft.Build.Evaluation.Project ParseProject(string projectFile, string configuration = null, string targetFramework = null) { }
+    }
+}

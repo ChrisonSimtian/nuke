@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- The consumer-facing assemblies whose public surface this suite snapshots. Kept in step
+       with the Roslyn PublicApiAnalyzers opt-in list (#530); see the spec for the comparison. -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Fallout.Build.Shared\Fallout.Build.Shared.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.Common\Fallout.Common.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.Components\Fallout.Components.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.Core\Fallout.Core.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.ProjectModel\Fallout.ProjectModel.csproj" />
+    <ProjectReference Include="..\..\src\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.Utilities.IO.Compression\Fallout.Utilities.IO.Compression.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.Utilities.IO.Globbing\Fallout.Utilities.IO.Globbing.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.Utilities.Net\Fallout.Utilities.Net.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.Utilities.Text.Json\Fallout.Utilities.Text.Json.csproj" />
+    <ProjectReference Include="..\..\src\Fallout.Utilities.Text.Yaml\Fallout.Utilities.Text.Yaml.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PublicApiGenerator" />
+  </ItemGroup>
+
+</Project>
