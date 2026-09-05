@@ -242,11 +242,16 @@ public static class Logging
 
     public class InMemorySink : ILogEventSink, IDisposable
     {
-        public static InMemorySink Instance { get; } = new();
+        // FT-6 (#311): the active sink is the per-run one on BuildContext, so one build's warnings and
+        // errors cannot resurface in the next build in the same process. The fallback covers logging
+        // outside a run — process-wide, but with no run for its events to bleed into.
+        private static readonly Lazy<InMemorySink> ambientInstance = new(() => new InMemorySink());
+
+        public static InMemorySink Instance => BuildContext.Current?.LogSink ?? ambientInstance.Value;
 
         private readonly List<LogEvent> logEvents;
 
-        private InMemorySink()
+        internal InMemorySink()
         {
             logEvents = new List<LogEvent>();
         }
@@ -259,7 +264,11 @@ public static class Logging
             logEvents.Add(logEvent);
         }
 
-        /// <summary>Drops accumulated events so a subsequent build in the same process starts clean. FT-1 / #306.</summary>
+        /// <summary>
+        /// Drops accumulated events. Since FT-6 / #311 a run's sink is discarded with its
+        /// <see cref="BuildContext"/>, so this is no longer needed to keep runs from bleeding into each
+        /// other — it stays for explicit resets (and for <see cref="Dispose"/>).
+        /// </summary>
         public void Clear()
         {
             logEvents.Clear();
