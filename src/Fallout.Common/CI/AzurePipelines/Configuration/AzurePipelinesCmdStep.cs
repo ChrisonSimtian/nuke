@@ -28,7 +28,10 @@ public class AzurePipelinesCmdStep : AzurePipelinesStep
 
             using (writer.WriteBlock("inputs:"))
             {
-                writer.WriteLine($"script: './{BuildCmdPath} {arguments}'");
+                // Invoke the `fallout` local tool (cross-platform) rather than the OS-specific build script.
+                // CmdLine@2 runs in the agent's default shell (cmd on Windows, bash elsewhere); `&&` works in
+                // both. See GitHub Actions (dotnet fallout) and issue #516.
+                writer.WriteLine($"script: 'dotnet tool restore && dotnet fallout {arguments}'");
             }
 
             if (Imports.Count > 0)

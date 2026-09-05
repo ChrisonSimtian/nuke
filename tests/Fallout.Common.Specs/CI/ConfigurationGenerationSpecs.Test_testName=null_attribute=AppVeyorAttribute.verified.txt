@@ -31,8 +31,10 @@ install:
   - git submodule update --init --recursive
 
 build_script:
-  - cmd: .\build.cmd Test
-  - sh: ./build.cmd Test
+  - cmd: dotnet tool restore
+  - cmd: dotnet fallout Test
+  - sh: dotnet tool restore
+  - sh: dotnet fallout Test
 
 artifacts:
   - path: 'src/*/obj/**'

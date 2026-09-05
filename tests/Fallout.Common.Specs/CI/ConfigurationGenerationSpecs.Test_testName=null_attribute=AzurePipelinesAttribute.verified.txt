@@ -66,7 +66,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Restore'
             inputs:
-              script: './build.cmd Restore --skip'
+              script: 'dotnet tool restore && dotnet fallout Restore --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               ApiKey: $(ApiKey)
@@ -99,7 +99,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Compile'
             inputs:
-              script: './build.cmd Compile --skip'
+              script: 'dotnet tool restore && dotnet fallout Compile --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               ApiKey: $(ApiKey)
@@ -134,7 +134,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Test'
             inputs:
-              script: './build.cmd Test --skip --partition $(System.JobPositionInPhase)/2'
+              script: 'dotnet tool restore && dotnet fallout Test --skip --partition $(System.JobPositionInPhase)/2'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               ApiKey: $(ApiKey)
@@ -167,7 +167,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Coverage'
             inputs:
-              script: './build.cmd Coverage --skip'
+              script: 'dotnet tool restore && dotnet fallout Coverage --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               ApiKey: $(ApiKey)
@@ -206,7 +206,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Restore'
             inputs:
-              script: './build.cmd Restore --skip'
+              script: 'dotnet tool restore && dotnet fallout Restore --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               ApiKey: $(ApiKey)
@@ -239,7 +239,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Compile'
             inputs:
-              script: './build.cmd Compile --skip'
+              script: 'dotnet tool restore && dotnet fallout Compile --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               ApiKey: $(ApiKey)
@@ -274,7 +274,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Test'
             inputs:
-              script: './build.cmd Test --skip --partition $(System.JobPositionInPhase)/2'
+              script: 'dotnet tool restore && dotnet fallout Test --skip --partition $(System.JobPositionInPhase)/2'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               ApiKey: $(ApiKey)
@@ -307,7 +307,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Coverage'
             inputs:
-              script: './build.cmd Coverage --skip'
+              script: 'dotnet tool restore && dotnet fallout Coverage --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
               ApiKey: $(ApiKey)
