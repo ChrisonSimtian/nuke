@@ -1,0 +1,261 @@
+/* Layout chrome + node/edge styling for the Fallout graph control.
+   Brand tokens come from theme.css; this file only shapes the control. */
+
+.fallout-graph {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+/* ---- header ---- */
+.graph-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+}
+.graph-header .mark {
+    color: var(--fallout-yellow);
+    font-size: 18px;
+    line-height: 1;
+    filter: drop-shadow(0 0 6px var(--fallout-yellow-dim));
+}
+.graph-title {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+.graph-version {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+}
+.graph-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ---- canvas ---- */
+.graph-canvas {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+}
+.react-flow {
+    background: transparent;
+}
+.graph-bg {
+    color: var(--border);
+}
+
+/* ---- node ---- */
+.target-node {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 248px;
+    padding: 10px 14px 10px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+.target-node:hover {
+    border-color: var(--fallout-yellow-line);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+}
+.target-node.is-default {
+    border-color: var(--fallout-yellow-line);
+    box-shadow: 0 0 0 1px var(--fallout-yellow-dim), 0 0 22px var(--fallout-yellow-dim);
+}
+.target-node.is-unlisted {
+    border-style: dashed;
+    opacity: 0.55;
+}
+
+/* status rail on the left edge */
+.status-rail {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--status-queued);
+}
+.status-none .status-rail {
+    background: var(--border);
+}
+.status-running .status-rail {
+    background: var(--status-running);
+}
+.status-succeeded .status-rail {
+    background: var(--status-succeeded);
+}
+.status-failed .status-rail {
+    background: var(--status-failed);
+}
+.status-skipped .status-rail {
+    background: var(--status-skipped);
+}
+.status-queued .status-rail {
+    background: var(--status-queued);
+}
+
+/* status dot / spinner */
+.status-dot {
+    position: relative;
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--status-queued);
+}
+.status-dot.idle {
+    border-color: var(--text-faint);
+}
+.status-succeeded .status-dot {
+    border-color: var(--status-succeeded);
+    background: var(--status-succeeded);
+}
+.status-failed .status-dot {
+    border-color: var(--status-failed);
+    background: var(--status-failed);
+}
+.status-running .status-dot {
+    border-color: var(--fallout-yellow-line);
+}
+.status-running .spinner {
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--fallout-yellow);
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.target-body {
+    min-width: 0;
+    flex: 1;
+}
+.target-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.default-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fallout-yellow);
+    background: var(--fallout-yellow-dim);
+    padding: 1px 6px;
+    border-radius: 999px;
+}
+.target-sub {
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.status-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* connection dots — echo the GitHub handle look but on the Fallout accent */
+.react-flow__handle.target-handle,
+.react-flow__handle.source-handle {
+    width: 7px;
+    height: 7px;
+    background: var(--bg-bottom);
+    border: 2px solid var(--fallout-yellow-line);
+}
+
+/* ---- edges ---- */
+.react-flow__edge.edge-dependsOn .react-flow__edge-path {
+    stroke: var(--edge);
+    stroke-width: 1.5;
+}
+.react-flow__edge.edge-after .react-flow__edge-path {
+    stroke: var(--edge);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 4;
+}
+.react-flow__edge.edge-triggers .react-flow__edge-path {
+    stroke: var(--edge-trigger);
+    stroke-width: 2.5;
+}
+
+/* ---- legend ---- */
+.graph-legend {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 10px 18px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.graph-legend i {
+    display: inline-block;
+    width: 22px;
+    height: 0;
+    margin-right: 7px;
+    vertical-align: middle;
+}
+.graph-legend .k-depends {
+    border-top: 1.5px solid var(--edge);
+}
+.graph-legend .k-after {
+    border-top: 1.5px dashed var(--edge);
+}
+.graph-legend .k-trigger {
+    border-top: 2.5px solid var(--edge-trigger);
+}
+.legend-hint {
+    margin-left: auto;
+    color: var(--text-faint);
+    font-style: italic;
+}
+
+/* React Flow controls, restyled to the dark brand */
+.react-flow__controls {
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.react-flow__controls-button {
+    background: var(--surface-raised);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+.react-flow__controls-button:hover {
+    background: var(--fallout-yellow-dim);
+}
+.react-flow__controls-button svg {
+    fill: var(--text-muted);
+}
