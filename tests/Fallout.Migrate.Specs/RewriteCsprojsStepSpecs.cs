@@ -480,4 +480,116 @@ public class RewriteCsprojsStepSpecs : IDisposable
             .And.Contain("$(FalloutVersion)", Exactly.Once())
             .And.Contain("$(PkgVersion)");
     }
+
+    [Fact]
+    public async Task Correctly_adds_nuget_framework_package_version_pin()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <TargetFramework>net10.0</TargetFramework>
+                               </PropertyGroup>
+                               <ItemGroup>
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+
+        context.FalloutVersion = "10.4.2";
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should().Be("""
+                                <Project Sdk="Microsoft.NET.Sdk">
+                                  <PropertyGroup>
+                                    <TargetFramework>net10.0</TargetFramework>
+                                  </PropertyGroup>
+                                  <ItemGroup>
+
+                                    <!-- fallout-migrate:delete-at-v11:start -->
+                                    <!-- Pin the NuGet.Framework version, so .NET 10.0.400 does not cause the build to fail. -->
+                                    <PackageReference Include="NuGet.Framework" Version="7.9.0" />
+                                    <!-- fallout-migrate:delete-at-v11:end -->
+                                  </ItemGroup>
+                                </Project>
+                                """);
+    }
+
+    [Fact]
+    public async Task Removes_nuget_framework_package_version_pin_on_v11()
+    {
+        const string input = """
+                            <Project Sdk="Microsoft.NET.Sdk">
+                              <PropertyGroup>
+                              </PropertyGroup>
+                              <ItemGroup>
+
+                                <!-- fallout-migrate:delete-at-v11:start -->
+                                <!-- Pin the NuGet.Framework version, so .NET 10.0.400 does not cause the build to fail. -->
+                                <PackageReference Include="NuGet.Framework" Version="7.9.0" />
+                                <!-- fallout-migrate:delete-at-v11:end -->
+                              </ItemGroup>
+                            </Project>
+                            """;
+
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+
+        context.FalloutVersion = "11.0.0";
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        var buildCsproj = (tempDirectory / "build" / "_build.csproj").ReadAllText();
+
+        buildCsproj.Should().Be("""
+                                <Project Sdk="Microsoft.NET.Sdk">
+                                  <PropertyGroup>
+                                  </PropertyGroup>
+                                  <ItemGroup>
+                                  </ItemGroup>
+                                </Project>
+                                """);
+    }
+
+    [Fact]
+    public async Task Does_not_add_nuget_framework_pin_to_a_non_build_csproj()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <TargetFramework>net10.0</TargetFramework>
+                               </PropertyGroup>
+                               <ItemGroup>
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        (tempDirectory / "Lib.csproj").WriteAllText(input, eofLineBreak: false);
+
+        context.FalloutVersion = "10.4.2";
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        (tempDirectory / "Lib.csproj").ReadAllText().Should().Be(input);
+    }
+
+    [Fact]
+    public async Task Does_not_add_nuget_framework_pin_when_the_build_project_targets_netframework()
+    {
+        const string input = """
+                             <Project Sdk="Microsoft.NET.Sdk">
+                               <PropertyGroup>
+                                 <TargetFramework>net48</TargetFramework>
+                               </PropertyGroup>
+                               <ItemGroup>
+                               </ItemGroup>
+                             </Project>
+                             """;
+
+        (tempDirectory / "build" / "_build.csproj").WriteAllText(input, eofLineBreak: false);
+
+        context.FalloutVersion = "10.4.2";
+        await new RewriteCsprojsStep().ExecuteAsync(context, summary);
+
+        (tempDirectory / "build" / "_build.csproj").ReadAllText().Should().Be(input);
+    }
 }
