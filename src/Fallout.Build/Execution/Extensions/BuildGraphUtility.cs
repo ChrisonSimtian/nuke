@@ -74,7 +74,23 @@ internal static class BuildGraphUtility
             SortedNames(target.ExecutionDependencies),
             SortedNames(target.OrderDependencies),
             SortedNames(target.TriggerDependencies),
-            SortedNames(target.Triggers));
+            SortedNames(target.Triggers),
+            ToStatus(target.Status));
+
+    // Projects the internal execution status onto the small vocabulary the graph control
+    // renders. Neutral states (not scheduled, not run, collective grouping) emit null, so a
+    // structural/plan snapshot stays unstyled and only a real run paints the nodes. Additive:
+    // a consumer that predates the field simply ignores it, so this is not a schema break.
+    private static string ToStatus(ExecutionStatus status)
+        => status switch
+        {
+            ExecutionStatus.Scheduled => "queued",
+            ExecutionStatus.Running => "running",
+            ExecutionStatus.Succeeded => "succeeded",
+            ExecutionStatus.Failed or ExecutionStatus.Aborted => "failed",
+            ExecutionStatus.Skipped => "skipped",
+            _ => null,
+        };
 
     // Sorted for deterministic output — the graph carries no execution order, so the display
     // order is irrelevant to consumers and a stable ordering avoids spurious file churn.
@@ -95,5 +111,6 @@ internal static class BuildGraphUtility
         IReadOnlyList<string> DependsOn,
         IReadOnlyList<string> After,
         IReadOnlyList<string> TriggeredBy,
-        IReadOnlyList<string> Triggers);
+        IReadOnlyList<string> Triggers,
+        string Status);
 }

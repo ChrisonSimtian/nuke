@@ -15,7 +15,8 @@
       "triggeredBy": [],
       "triggers": [
         "Publish"
-      ]
+      ],
+      "status": null
     },
     {
       "name": "Publish",
@@ -28,7 +29,8 @@
       "triggeredBy": [
         "Test"
       ],
-      "triggers": []
+      "triggers": [],
+      "status": null
     },
     {
       "name": "Restore",
@@ -39,7 +41,8 @@
       "dependsOn": [],
       "after": [],
       "triggeredBy": [],
-      "triggers": []
+      "triggers": [],
+      "status": null
     },
     {
       "name": "Test",
@@ -54,7 +57,8 @@
         "Restore"
       ],
       "triggeredBy": [],
-      "triggers": []
+      "triggers": [],
+      "status": null
     }
   ]
 }
