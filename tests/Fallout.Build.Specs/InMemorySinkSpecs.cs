@@ -8,54 +8,53 @@ using Xunit;
 namespace Fallout.Common.Specs;
 
 /// <summary>
-/// Covers <see cref="Logging.InMemorySink"/>'s reset added in FT-1 / #306. The sink is a
-/// process-wide singleton, so <c>BuildManager.Execute</c>'s <c>finally</c> calls <c>Clear()</c> to
-/// stop one run's warnings/errors bleeding into the next build in the same process; <c>Dispose()</c>
-/// delegates to the same reset.
+/// Covers <see cref="Logging.InMemorySink"/>'s own reset behaviour (FT-1 / #306). Since FT-6 / #311 a
+/// sink is per-run state owned by a <see cref="BuildContext"/> rather than a process-wide singleton, so
+/// each case exercises its own instance and nothing here needs serialising against other specs. How the
+/// per-run sink is resolved and scoped is covered by <c>BuildContextSpecs</c>.
 /// </summary>
-[Collection(ProcessGlobalStateCollection.Name)]
 public class InMemorySinkSpecs
 {
-    private static readonly Logging.InMemorySink Sink = Logging.InMemorySink.Instance;
-
-    public InMemorySinkSpecs()
-    {
-        // Normalize the shared singleton before each case — prior runs (or a real logging pipeline)
-        // may have left events behind.
-        Sink.Clear();
-    }
+    private readonly Logging.InMemorySink sink = new();
 
     [Fact]
     public void Clear_drops_accumulated_events()
     {
-        Sink.Emit(CreateLogEvent("first"));
-        Sink.Emit(CreateLogEvent("second"));
-        Sink.LogEvents.Should().HaveCount(2);
+        sink.Emit(CreateLogEvent("first"));
+        sink.Emit(CreateLogEvent("second"));
+        sink.LogEvents.Should().HaveCount(2);
 
-        Sink.Clear();
+        sink.Clear();
 
-        Sink.LogEvents.Should().BeEmpty();
+        sink.LogEvents.Should().BeEmpty();
     }
 
     [Fact]
     public void Dispose_drops_accumulated_events()
     {
-        Sink.Emit(CreateLogEvent("only"));
-        Sink.LogEvents.Should().ContainSingle();
+        sink.Emit(CreateLogEvent("only"));
+        sink.LogEvents.Should().ContainSingle();
 
-        Sink.Dispose();
+        sink.Dispose();
 
-        Sink.LogEvents.Should().BeEmpty();
+        sink.LogEvents.Should().BeEmpty();
     }
 
     [Fact]
     public void Clear_on_an_empty_sink_is_a_no_op()
     {
-        Sink.LogEvents.Should().BeEmpty();
+        sink.LogEvents.Should().BeEmpty();
 
-        Sink.Clear();
+        sink.Clear();
 
-        Sink.LogEvents.Should().BeEmpty();
+        sink.LogEvents.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void A_new_sink_starts_empty()
+    {
+        // A run's sink is constructed with its context, so a build never inherits earlier events.
+        new Logging.InMemorySink().LogEvents.Should().BeEmpty();
     }
 
     private static LogEvent CreateLogEvent(string message) =>

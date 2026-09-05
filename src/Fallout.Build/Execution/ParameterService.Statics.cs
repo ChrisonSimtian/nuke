@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using Fallout.Common.Execution;
 using Fallout.Common.Utilities;
 
 namespace Fallout.Common;
 
 internal partial class ParameterService
 {
-    internal static ParameterService Instance = new(
-        () => EnvironmentInfo.ArgumentParser,
-        () => EnvironmentInfo.Variables);
+    // FT-4 (#309): the active service is the per-run one on BuildContext, so a build reads parameters
+    // through the same instance form the specs use and nothing leaks into the next run. The fallback
+    // covers access outside a run — process-wide, but there is no cross-run state to leak there — and
+    // can retire once that path is confirmed dead.
+    private static readonly Lazy<ParameterService> ambientInstance = new(
+        () => new ParameterService(() => EnvironmentInfo.ArgumentParser, () => EnvironmentInfo.Variables));
+
+    internal static ParameterService Instance => BuildContext.Current?.Parameters ?? ambientInstance.Value;
 
     public static T GetParameter<T>(string name, char? separator = null)
     {

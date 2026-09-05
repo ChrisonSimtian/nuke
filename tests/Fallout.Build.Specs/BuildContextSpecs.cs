@@ -12,10 +12,11 @@ namespace Fallout.Common.Specs.Execution;
 
 /// <summary>
 /// Covers <see cref="BuildContext"/> (FT-2 / #307) — the per-run ambient scope that owns the
-/// process-global state a build touches. <see cref="BuildContext.Current"/> is <c>AsyncLocal</c>, so
-/// each case resolves its own context, but the singletons the teardown resets (in-memory sink,
-/// value-injection cache, resolver config) remain process-wide — assertions that touch them key on a
-/// sentinel rather than on the singleton being empty.
+/// process-global state a build touches, plus the services that have since moved onto it (the
+/// parameter service, FT-4 / #309; the in-memory log sink, FT-6 / #311).
+/// <see cref="BuildContext.Current"/> is <c>AsyncLocal</c>, so each case resolves its own context, but
+/// the singletons the teardown still resets (value-injection cache, resolver config) remain
+/// process-wide — assertions that touch those key on a sentinel rather than on the singleton being empty.
 /// </summary>
 [Collection(ProcessGlobalStateCollection.Name)]
 public class BuildContextSpecs
@@ -44,6 +45,85 @@ public class BuildContextSpecs
     }
 
     [Fact]
+    public void Parameter_service_facade_resolves_the_current_contexts_instance()
+    {
+        using var context = BuildContext.Activate();
+
+        // FT-4 (#309): the static facade is a pointer at the running context, not its own singleton.
+        ParameterService.Instance.Should().BeSameAs(context.Parameters);
+    }
+
+    [Fact]
+    public void Parameter_service_facade_falls_back_to_an_ambient_instance_outside_a_run()
+    {
+        BuildContext.Current.Should().BeNull();
+
+        // Nothing to route to outside a run, so the facade hands back a stable process-wide instance
+        // rather than throwing — this is the path the fallback exists for.
+        ParameterService.Instance.Should().NotBeNull();
+        ParameterService.Instance.Should().BeSameAs(ParameterService.Instance);
+    }
+
+    [Fact]
+    public void Each_run_gets_its_own_parameter_service()
+    {
+        ParameterService first;
+        ParameterService second;
+
+        using (var context = BuildContext.Activate())
+            first = context.Parameters;
+        using (var context = BuildContext.Activate())
+            second = context.Parameters;
+
+        second.Should().NotBeSameAs(first);
+    }
+
+    [Fact]
+    public void Parameter_service_state_does_not_leak_into_the_next_run()
+    {
+        using (BuildContext.Activate())
+            ParameterService.Instance.ArgumentsFromCommitMessageService = new ArgumentParser(["-arg", "value"]);
+
+        // The mutable per-run fields (commit-message args, args-from-files) died with the previous
+        // context — the whole point of moving the service off a process-global singleton.
+        using (BuildContext.Activate())
+            ParameterService.Instance.ArgumentsFromCommitMessageService.Should().BeNull();
+    }
+
+    [Fact]
+    public void Log_sink_facade_resolves_the_current_contexts_sink()
+    {
+        using var context = BuildContext.Activate();
+
+        // FT-6 (#311): same seam as the parameter service — the static sink is a pointer at the run.
+        Logging.InMemorySink.Instance.Should().BeSameAs(context.LogSink);
+    }
+
+    [Fact]
+    public void Log_sink_facade_falls_back_to_an_ambient_sink_outside_a_run()
+    {
+        BuildContext.Current.Should().BeNull();
+
+        // Logging outside a run (a CLI command, a spec) has to land somewhere rather than throw.
+        Logging.InMemorySink.Instance.Should().NotBeNull();
+        Logging.InMemorySink.Instance.Should().BeSameAs(Logging.InMemorySink.Instance);
+    }
+
+    [Fact]
+    public void Each_run_gets_its_own_log_sink()
+    {
+        Logging.InMemorySink first;
+        Logging.InMemorySink second;
+
+        using (var context = BuildContext.Activate())
+            first = context.LogSink;
+        using (var context = BuildContext.Activate())
+            second = context.LogSink;
+
+        second.Should().NotBeSameAs(first);
+    }
+
+    [Fact]
     public void Disposing_a_superseded_context_leaves_the_newer_one_current()
     {
         var first = BuildContext.Activate();
@@ -58,20 +138,17 @@ public class BuildContextSpecs
     [Fact]
     public void Disposing_a_superseded_context_leaves_the_shared_state_intact()
     {
-        var sink = Logging.InMemorySink.Instance;
         var sentinel = $"build-context-superseded-{Guid.NewGuid()}";
 
         var first = BuildContext.Activate();
         using var second = BuildContext.Activate();
         NuGetToolPathResolver.EmbeddedPackagesDirectory = sentinel;
-        sink.Emit(CreateLogEvent(sentinel));
 
-        // `second` is the live run and this state belongs to it. The teardown resets are process-wide,
+        // `second` is the live run and this config belongs to it. The teardown resets are process-wide,
         // so a superseded scope disposing out of order must skip them entirely — clearing Current is
         // not the only thing the identity guard protects.
         first.Dispose();
 
-        sink.LogEvents.Should().Contain(x => x.MessageTemplate.Text == sentinel);
         NuGetToolPathResolver.EmbeddedPackagesDirectory.Should().Be(sentinel);
     }
 
@@ -125,20 +202,22 @@ public class BuildContextSpecs
     }
 
     [Fact]
-    public void Dispose_runs_the_per_run_teardown()
+    public void Log_events_do_not_carry_into_the_next_run()
     {
-        var sink = Logging.InMemorySink.Instance;
-        var sentinel = $"build-context-teardown-{Guid.NewGuid()}";
+        var sentinel = $"build-context-log-{Guid.NewGuid()}";
 
         using (BuildContext.Activate())
         {
-            sink.Emit(CreateLogEvent(sentinel));
+            Logging.InMemorySink.Instance.Emit(CreateLogEvent(sentinel));
         }
 
-        // Leaving the scope disposes the context, whose teardown clears the shared in-memory sink so a
-        // subsequent run in the same process starts clean. Assert on the sentinel specifically so a
-        // build emitting on another flow can't make this flaky.
-        sink.LogEvents.Should().NotContain(x => x.MessageTemplate.Text == sentinel);
+        // FT-6 (#311): the sink belonged to the run that just ended and went out of scope with it, so
+        // the next run starts on an empty one. Nothing clears a shared sink — there is no shared sink.
+        // Assert on the sentinel specifically so a build emitting on another flow can't make it flaky.
+        using (BuildContext.Activate())
+        {
+            Logging.InMemorySink.Instance.LogEvents.Should().NotContain(x => x.MessageTemplate.Text == sentinel);
+        }
     }
 
     private static LogEvent CreateLogEvent(string message) =>
