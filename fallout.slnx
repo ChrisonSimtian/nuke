@@ -24,6 +24,7 @@
   <Project Path="src\Shims\Nuke.Common\Nuke.Common.csproj" />
   <Project Path="src\Shims\Nuke.Components\Nuke.Components.csproj" />
   <Project Path="src\Fallout.MSBuildTasks\Fallout.MSBuildTasks.csproj" />
+  <Project Path="src\Fallout.NuGet.Analysis\Fallout.NuGet.Analysis.csproj" />
   <Project Path="src\Fallout.ProjectModel\Fallout.ProjectModel.csproj" />
   <Project Path="src\Persistence\Fallout.Persistence.Solution\Fallout.Persistence.Solution.csproj" />
   <Project Path="src\Persistence\Fallout.Solution\Fallout.Solution.csproj" />
@@ -45,6 +46,7 @@
   <Project Path="tests\Fallout.Migrate.Analyzers.Specs\Fallout.Migrate.Analyzers.Specs.csproj" />
   <Project Path="tests\Nuke.Common.Shim.Specs\Nuke.Common.Shim.Specs.csproj" />
   <Project Path="tests\Nuke.Components.Shim.Specs\Nuke.Components.Shim.Specs.csproj" />
+  <Project Path="tests\Fallout.NuGet.Analysis.Specs\Fallout.NuGet.Analysis.Specs.csproj" />
   <Project Path="tests\Fallout.ProjectModel.Specs\Fallout.ProjectModel.Specs.csproj" />
   <Project Path="tests\Fallout.Solution.Specs\Fallout.Solution.Specs.csproj" />
   <Project Path="tests\Fallout.SourceGenerators.Specs\Fallout.SourceGenerators.Specs.csproj" />
