@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "fallout.globaltool": {
-      "version": "10.4.0-rc.5",
+      "version": "10.4.0",
       "commands": [
         "fallout"
       ]
