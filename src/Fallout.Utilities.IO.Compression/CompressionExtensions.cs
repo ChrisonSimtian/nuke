@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using Fallout.Common.Utilities.Collections;
-using ICSharpCode.SharpZipLib.BZip2;
-using ICSharpCode.SharpZipLib.GZip;
-using ICSharpCode.SharpZipLib.Tar;
-using ICSharpCode.SharpZipLib.Zip;
 using SharpCompress.Common;
 using SharpCompress.Readers;
-using ZipFile = ICSharpCode.SharpZipLib.Zip.ZipFile;
+using SharpCompress.Writers;
+using SharpCompress.Writers.Zip;
+using Fallout.Common.Utilities.Collections;
 
 namespace Fallout.Common.IO;
 
@@ -110,14 +107,16 @@ public static class CompressionExtensions
         filter ??= _ => true;
         List<AbsolutePath> files = directory.GetFiles(depth: int.MaxValue).Where(filter).ToList();
 
-        using FileStream fileStream = File.Open(archiveFile, fileMode, FileAccess.ReadWrite);
-        using ZipArchive zipArchive = new(fileStream, ZipArchiveMode.Create);
+        using var fileStream = File.Open(archiveFile, fileMode, FileAccess.ReadWrite);
+        using var writer = WriterFactory.OpenWriter(
+            fileStream,
+            ArchiveType.Zip,
+            new ZipWriterOptions(CompressionType.Deflate, compressionLevel.ToSharpCompressCompressionLevel()));
 
         void AddFile(AbsolutePath file)
         {
-            RelativePath relativePath = directory.GetRelativePathTo(file);
-            string entryName = ZipEntry.CleanName(relativePath);
-            zipArchive.CreateEntryFromFile(file, entryName, compressionLevel);
+            var entryName = directory.GetUnixRelativePathTo(file);
+            writer.Write(entryName, file);
         }
 
         files.ForEach(AddFile);
@@ -131,22 +130,7 @@ public static class CompressionExtensions
     /// <param name="directory">The directory into which the archive's contents are extracted.</param>
     public static void UnZipTo(this AbsolutePath archiveFile, AbsolutePath directory)
     {
-        using FileStream fileStream = File.OpenRead(archiveFile);
-        using ZipFile zipFile = new(fileStream);
-
-        IEnumerable<ZipEntry> entries = zipFile.Cast<ZipEntry>().Where(x => !x.IsDirectory);
-
-        void HandleEntry(ZipEntry entry)
-        {
-            AbsolutePath file = directory / entry.Name;
-            Directory.CreateDirectory(file.Parent.NotNull());
-
-            using Stream entryStream = zipFile.GetInputStream(entry);
-            using FileStream outputStream = File.Open(file, FileMode.Create);
-            entryStream.CopyTo(outputStream);
-        }
-
-        entries.ForEach(HandleEntry);
+        UncompressArchive(archiveFile, directory);
     }
 
     /// <summary>
@@ -160,8 +144,10 @@ public static class CompressionExtensions
         this AbsolutePath baseDirectory,
         AbsolutePath archiveFile,
         IEnumerable<AbsolutePath> files,
-        FileMode fileMode = FileMode.CreateNew) =>
-        CompressTar(baseDirectory, archiveFile, files.ToList(), fileMode, x => new GZipOutputStream(x));
+        FileMode fileMode = FileMode.CreateNew)
+    {
+        CompressTar(baseDirectory, archiveFile, files.ToList(), fileMode, CompressionType.GZip);
+    }
 
     /// <summary>
     ///     Compresses <paramref name="directory" /> into a gzip-compressed tar archive at <paramref name="archiveFile" />.
@@ -195,8 +181,10 @@ public static class CompressionExtensions
         this AbsolutePath directory,
         AbsolutePath archiveFile,
         IEnumerable<AbsolutePath> files,
-        FileMode fileMode = FileMode.CreateNew) =>
-        CompressTar(directory, archiveFile, files.ToList(), fileMode, x => new BZip2OutputStream(x));
+        FileMode fileMode = FileMode.CreateNew)
+    {
+        CompressTar(directory, archiveFile, files.ToList(), fileMode, CompressionType.BZip2);
+    }
 
     /// <summary>
     ///     Compresses <paramref name="directory" /> into a bzip2-compressed tar archive at <paramref name="archiveFile" />.
@@ -219,41 +207,97 @@ public static class CompressionExtensions
         directory.TarBZip2To(archiveFile, files, fileMode);
     }
 
-    /// <summary>
+	/// <summary>
     ///     Extracts the contents of a gzip-compressed tar archive at <paramref name="archiveFile" /> into <paramref name="directory" />.
     ///     Destination directory is created, and conflicting files are overwritten.
     /// </summary>
     /// <param name="archiveFile">The tar.gz archive file to extract.</param>
     /// <param name="directory">The directory into which the archive's contents are extracted.</param>
-    public static void UnTarGZipTo(this AbsolutePath archiveFile, AbsolutePath directory) =>
-        UncompressTar(archiveFile, directory, x => new GZipInputStream(x));
+    public static void UnTarGZipTo(this AbsolutePath archiveFile, AbsolutePath directory)
+    {
+        UncompressArchive(archiveFile, directory);
+    }
 
-    /// <summary>
+	/// <summary>
     ///     Extracts the contents of a bzip2-compressed tar archive at <paramref name="archiveFile" /> into <paramref name="directory" />.
     ///     Destination directory is created, and conflicting files are overwritten.
     /// </summary>
     /// <param name="archiveFile">The tar.bz2 archive file to extract.</param>
     /// <param name="directory">The directory into which the archive's contents are extracted.</param>
-    public static void UnTarBZip2To(this AbsolutePath archiveFile, AbsolutePath directory) =>
-        UncompressTar(archiveFile, directory, x => new BZip2InputStream(x));
+    public static void UnTarBZip2To(this AbsolutePath archiveFile, AbsolutePath directory)
+    {
+        UncompressArchive(archiveFile, directory);
+    }
 
-    /// <summary>
-    ///     Extracts the contents of an xz-compressed tar archive at <paramref name="archive" /> into <paramref name="directory" />.
+     /// <summary>
+    ///     Extracts the contents of an xz-compressed tar archive at <paramref name="archiveFile" /> into <paramref name="directory" />.
     ///     Destination directory is created, and conflicting files are skipped.
     /// </summary>
-    /// <param name="archive">The tar.xz archive file to extract.</param>
+    /// <param name="archiveFile">The tar.xz archive file to extract.</param>
     /// <param name="directory">The directory into which the archive's contents are extracted.</param>
-    public static void UnTarXzTo(this AbsolutePath archive, AbsolutePath directory)
+    public static void UnTarXzTo(this AbsolutePath archiveFile, AbsolutePath directory)
     {
-        using Stream stream = File.OpenRead(archive);
-        using IReader reader = ReaderFactory.OpenReader(stream);
+        UncompressArchive(archiveFile, directory);
+    }
+
+    /// <summary>
+    ///     Compresses the given <paramref name="files" /> into a tar archive at <paramref name="archiveFile" /> using
+    ///     <paramref name="compressionType" />.
+    /// </summary>
+    /// <param name="baseDirectory">The base directory used to compute the relative entry names of the archived files.</param>
+    /// <param name="archiveFile">The archive file to create.</param>
+    /// <param name="files">The files to add to the archive.</param>
+    /// <param name="fileMode">The <see cref="FileMode" /> used to open the archive file.</param>
+    /// <param name="compressionType">The compression type to use for the archive.</param>
+    private static void CompressTar(
+        AbsolutePath baseDirectory,
+        AbsolutePath archiveFile,
+        IReadOnlyCollection<AbsolutePath> files,
+        FileMode fileMode,
+        CompressionType compressionType)
+    {
+        archiveFile.Parent.CreateDirectory();
+        using var fileStream = File.Open(archiveFile, fileMode, FileAccess.ReadWrite);
+        using var writer = WriterFactory.OpenWriter(fileStream, ArchiveType.Tar, new WriterOptions(compressionType));
+
+        void AddFile(AbsolutePath file)
+        {
+            var entryName = baseDirectory.GetUnixRelativePathTo(file);
+            // ReSharper disable once AccessToDisposedClosure
+            writer.Write(entryName, file);
+        }
+
+        files.ForEach(AddFile);
+    }
+
+    private static SharpCompress.Compressors.Deflate.CompressionLevel ToSharpCompressCompressionLevel(
+        this CompressionLevel compressionLevel)
+    {
+        return compressionLevel switch
+        {
+            CompressionLevel.NoCompression => SharpCompress.Compressors.Deflate.CompressionLevel.None,
+            CompressionLevel.Fastest => SharpCompress.Compressors.Deflate.CompressionLevel.BestSpeed,
+            CompressionLevel.Optimal => SharpCompress.Compressors.Deflate.CompressionLevel.Default,
+            _ => SharpCompress.Compressors.Deflate.CompressionLevel.BestCompression
+        };
+    }
+
+	/// <summary>
+    ///     Extracts the contents of an archive at <paramref name="archiveFile" /> into <paramref name="directory" />.
+    /// </summary>
+    /// <param name="archiveFile">The archive file to extract.</param>
+    /// <param name="directory">The directory into which the archive's contents are extracted.</param>
+    private static void UncompressArchive(AbsolutePath archiveFile, AbsolutePath directory)
+    {
+        using var fileStream = File.OpenRead(archiveFile);
+        using var reader = ReaderFactory.OpenReader(fileStream);
+
+        directory.CreateDirectory();
 
         while (reader.MoveToNextEntry())
         {
             if (reader.Entry.IsDirectory)
-            {
                 continue;
-            }
 
             reader.WriteEntryToDirectory(directory, new ExtractionOptions
             {
@@ -261,56 +305,5 @@ public static class CompressionExtensions
                 Overwrite = true
             });
         }
-    }
-
-    /// <summary>
-    ///     Compresses the given <paramref name="files" /> into a tar archive at <paramref name="archiveFile" />, wrapping the underlying
-    ///     file stream with the compression stream produced by <paramref name="outputStreamFactory" />.
-    /// </summary>
-    /// <param name="baseDirectory">The base directory used to compute the relative entry names of the archived files.</param>
-    /// <param name="archiveFile">The archive file to create.</param>
-    /// <param name="files">The files to add to the archive.</param>
-    /// <param name="fileMode">The <see cref="FileMode" /> used to open the archive file.</param>
-    /// <param name="outputStreamFactory">A factory that wraps the raw archive file stream with the desired compression stream.</param>
-    private static void CompressTar(
-        AbsolutePath baseDirectory,
-        AbsolutePath archiveFile,
-        IReadOnlyCollection<AbsolutePath> files,
-        FileMode fileMode,
-        Func<Stream, Stream> outputStreamFactory)
-    {
-        archiveFile.Parent.CreateDirectory();
-
-        using FileStream fileStream = File.Open(archiveFile, fileMode, FileAccess.ReadWrite);
-        using Stream outputStream = outputStreamFactory(fileStream);
-        using TarArchive tarArchive = TarArchive.CreateOutputTarArchive(outputStream);
-
-        void AddFile(AbsolutePath file)
-        {
-            TarEntry entry = TarEntry.CreateEntryFromFile(file);
-            entry.Name = baseDirectory.GetUnixRelativePathTo(file);
-
-            tarArchive.WriteEntry(entry, false);
-        }
-
-        files.ForEach(AddFile);
-    }
-
-    /// <summary>
-    ///     Extracts the contents of a tar archive at <paramref name="archiveFile" /> into <paramref name="directory" />, wrapping the
-    ///     underlying file stream with the decompression stream produced by <paramref name="inputStreamFactory" />.
-    /// </summary>
-    /// <param name="archiveFile">The archive file to extract.</param>
-    /// <param name="directory">The directory into which the archive's contents are extracted.</param>
-    /// <param name="inputStreamFactory">A factory that wraps the raw archive file stream with the desired decompression stream.</param>
-    private static void UncompressTar(AbsolutePath archiveFile, AbsolutePath directory, Func<Stream, Stream> inputStreamFactory)
-    {
-        using FileStream fileStream = File.OpenRead(archiveFile);
-        using Stream inputStream = inputStreamFactory(fileStream);
-        using TarArchive tarArchive = TarArchive.CreateInputTarArchive(inputStream, null);
-
-        directory.CreateDirectory();
-
-        tarArchive.ExtractContents(directory);
     }
 }
