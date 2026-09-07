@@ -6,16 +6,11 @@ using Xunit.Abstractions;
 
 namespace Fallout.Common.Specs;
 
-public class CompressionTasksSpecs : FileSystemDependentSpecs
+public class CompressionTasksSpecs(ITestOutputHelper testOutputHelper) : FileSystemDependentSpecs(testOutputHelper)
 {
     private AbsolutePath RootFile => TestTempDirectory / "root-file";
 
     private AbsolutePath NestedFile => TestTempDirectory / "a" / "b" / "c" / "nested-file";
-
-    public CompressionTasksSpecs(ITestOutputHelper testOutputHelper)
-        : base(testOutputHelper)
-    {
-    }
 
     [Theory]
     [InlineData("archive.zip")]
